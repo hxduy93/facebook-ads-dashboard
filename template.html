@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Facebook Ads Dashboard — Doscom</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.7/babel.min.js"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  #boot-error { display:none; padding:20px; background:#fee; color:#900; font-family:monospace; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<pre id="boot-error"></pre>
+<script>
+  window.addEventListener("error", function(e) {
+    var el = document.getElementById("boot-error");
+    if (!el) return;
+    el.style.display = "block";
+    el.textContent = "Lỗi load: " + (e.message || e) + "\n" + (e.filename || "") + ":" + (e.lineno || "");
+  });
+  // Sanity check — show which libs loaded
+  window.addEventListener("DOMContentLoaded", function() {
+    var missing = [];
+    if (typeof React === "undefined") missing.push("React");
+    if (typeof ReactDOM === "undefined") missing.push("ReactDOM");
+    if (typeof Recharts === "undefined") missing.push("Recharts");
+    if (typeof Babel === "undefined") missing.push("Babel");
+    if (missing.length) {
+      var el = document.getElementById("boot-error");
+      el.style.display = "block";
+      el.textContent = "Thiếu thư viện: " + missing.join(", ") + "\n\nKiểm tra kết nối internet và mở lại trang.";
+    }
+  });
+</script>
+<script type="text/babel" data-presets="react">
+const { useState, useMemo } = React;
+const {
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer, ReferenceLine
+} = Recharts;
+
+const makeIcon = (emoji) => ({ className = "" } = {}) =>
+  React.createElement("span", { className: "inline-flex items-center justify-center " + className, style: { fontSize: "1em", lineHeight: 1 } }, emoji);
+
+const DollarSign        = makeIcon("💰");
+const Eye               = makeIcon("👁️");
+const MousePointerClick = makeIcon("🖱️");
+const TrendingUp        = makeIcon("📈");
+const TrendingDown      = makeIcon("📉");
+const Target            = makeIcon("🎯");
+const BarChart3         = makeIcon("📊");
+const Calendar          = makeIcon("📅");
+const Package           = makeIcon("📦");
+const Lightbulb         = makeIcon("💡");
+const Award             = makeIcon("🏆");
+const AlertTriangle     = makeIcon("⚠️");
+const Search            = makeIcon("🔍");
+const ExternalLink      = makeIcon("🔗");
+const Globe             = makeIcon("🌐");
+const Spy               = makeIcon("🕵️");
+
+
+// =============================================================
+// DATA — 4 tài khoản Facebook Ads, daily breakdown đến 08/04/2026
+// Conversion = complete_registration (lượt đăng ký hoàn tất)
+// =============================================================
+/*__DATA_PLACEHOLDER__*/
+
+// =============================================================
+// CONSTANTS & HELPERS
+// =============================================================
+// TODAY is computed at page load in Vietnam timezone (UTC+7). DATA is
+// baked into index.html at build time by update_dashboard.py (runs during
+// the Cloudflare Pages build), so TODAY must match that cutoff.
+const TODAY = (() => {
+  const vn = new Date(Date.now() + 7 * 3600 * 1000);
+  return vn.toISOString().slice(0, 10);
+})()
+
+const ACCOUNT_COLOR = {
+  "act_927390616363424": "#3b82f6",
+  "act_764394829882083": "#ef4444",
+  "act_1655506672244826": "#10b981",
+  "act_1449385949897024": "#f59e0b"
+}
+
+const PRODUCT_COLOR = {
+  "D1": "#3b82f6",
+  "Noma911": "#10b981",
+  "DR1": "#f59e0b"
+}
+
+const TIME_FILTERS = [
+  { key: "today",     label: "Hôm nay",       days: 0 },
+  { key: "yesterday", label: "Hôm qua",       days: 1 },
+  { key: "3d",        label: "3 ngày trước",  days: 3 },
+  { key: "7d",        label: "7 ngày trước",  days: 7 },
+  { key: "lastweek",  label: "Tuần trước",    days: 7 },
+  { key: "30d",       label: "1 tháng trước", days: 30 }
+]
+
+const fmtVND = (n) => {
+  if (n == null || isNaN(n)) return "—"
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + " tỷ"
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + " tr"
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + "K"
+  return Math.round(n).toString()
+}
+const fmtNum = (n) => {
+  if (n == null) return "—"
+  return new Intl.NumberFormat("vi-VN").format(Math.round(n))
+}
+const fmtDate = (d) => {
+  const [y, m, day] = d.split("-")
+  return `${day}/${m}`
+}
+
+// Get date range based on filter key.
+// IMPORTANT: all Date math is done in UTC to avoid the browser-local-timezone
+// bug where `new Date("2026-04-09T00:00:00")` in a UTC+7 browser becomes
+// 2026-04-08T17:00Z, causing .toISOString() to return the wrong day.
+function getDateRange(filterKey) {
+  const today = new Date(TODAY + "T00:00:00Z")  // parse as UTC, not local
+  if (filterKey === "today") {
+    return { start: TODAY, end: TODAY }
+  }
+  if (filterKey === "yesterday") {
+    const y = new Date(today); y.setUTCDate(y.getUTCDate() - 1)
+    const ys = y.toISOString().slice(0, 10)
+    return { start: ys, end: ys }
+  }
+  if (filterKey === "lastweek") {
+    // Tuần trước: thứ 2 → chủ nhật của tuần liền trước (theo lịch ISO, tính ở UTC)
+    const dow = today.getUTCDay() // 0=CN, 1=T2, ..., 6=T7
+    const toMon = (dow === 0 ? 6 : dow - 1)
+    const monThis = new Date(today); monThis.setUTCDate(monThis.getUTCDate() - toMon)
+    const monLast = new Date(monThis); monLast.setUTCDate(monLast.getUTCDate() - 7)
+    const sunLast = new Date(monLast); sunLast.setUTCDate(sunLast.getUTCDate() + 6)
+    return { start: monLast.toISOString().slice(0, 10), end: sunLast.toISOString().slice(0, 10) }
+  }
+  const f = TIME_FILTERS.find(f => f.key === filterKey)
+  const start = new Date(today); start.setUTCDate(start.getUTCDate() - (f.days - 1))
+  return { start: start.toISOString().slice(0, 10), end: TODAY }
+}
+
+// Filter daily array by date range
+function filterDaily(daily, range) {
+  return daily.filter(d => d.date >= range.start && d.date <= range.end)
+}
+
+// Sum daily metrics
+function sumDaily(daily) {
+  return daily.reduce((acc, d) => ({
+    spend: acc.spend + (d.spend || 0),
+    impressions: acc.impressions + (d.impressions || 0),
+    clicks: acc.clicks + (d.clicks || 0),
+    reach: acc.reach + (d.reach || 0),
+    registrations: acc.registrations + (d.registrations || 0)
+  }), { spend: 0, impressions: 0, clicks: 0, reach: 0, registrations: 0 })
+}
+
+// =============================================================
+// UI COMPONENTS
+// =============================================================
+function KpiCard({ icon: Icon, label, value, sub, color = "blue" }) {
+  const colors = {
+    blue: "bg-blue-50 text-blue-600 border-blue-200",
+    red: "bg-red-50 text-red-600 border-red-200",
+    green: "bg-emerald-50 text-emerald-600 border-emerald-200",
+    amber: "bg-amber-50 text-amber-600 border-amber-200",
+    purple: "bg-purple-50 text-purple-600 border-purple-200"
+  }
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+      <div className="flex items-start justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1 truncate">{value}</p>
+          {sub && <p className="text-xs text-gray-500 mt-1 truncate">{sub}</p>}
+        </div>
+        <div className={`p-2 rounded-lg border ${colors[color]} flex-shrink-0`}>
+          <Icon className="w-5 h-5" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CompareCard({ title, current, previous, isMoneyMetric, inverseGood }) {
+  const delta = previous ? ((current - previous) / previous * 100) : (current > 0 ? 100 : 0)
+  const good = inverseGood ? delta < 0 : delta > 0
+  const fmt = isMoneyMetric ? (v) => fmtVND(v) + "₫" : fmtNum
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+      <p className="text-sm font-medium text-gray-500 mb-3">{title}</p>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-xs text-gray-400 uppercase">7 ngày gần nhất</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1">{fmt(current)}</p>
+        </div>
+        <div>
+          <p className="text-xs text-gray-400 uppercase">7 ngày trước đó</p>
+          <p className="text-2xl font-bold text-gray-500 mt-1">{fmt(previous)}</p>
+        </div>
+      </div>
+      <div className={`mt-3 inline-flex items-center text-sm font-semibold px-3 py-1 rounded-full ${
+        good ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"
+      }`}>
+        {delta >= 0 ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
+        {delta >= 0 ? "+" : ""}{delta.toFixed(1)}%
+      </div>
+    </div>
+  )
+}
+
+// =============================================================
+// MAIN COMPONENT
+// =============================================================
+function FacebookAdsDashboard() {
+  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors"
+  const [selectedAccount, setSelectedAccount] = useState("all")
+  const [timeFilter, setTimeFilter] = useState("30d")
+
+  const dateRange = useMemo(() => getDateRange(timeFilter), [timeFilter])
+
+  // Filter accounts
+  const accounts = DATA.accounts
+  const filteredAccounts = selectedAccount === "all" ? accounts : accounts.filter(a => a.id === selectedAccount)
+
+  // Aggregate KPIs based on time filter
+  const kpis = useMemo(() => {
+    let totals = { spend: 0, impressions: 0, clicks: 0, reach: 0, registrations: 0 }
+    filteredAccounts.forEach(a => {
+      const t = sumDaily(filterDaily(a.daily, dateRange))
+      Object.keys(totals).forEach(k => totals[k] += t[k])
+    })
+    totals.cpl = totals.registrations ? totals.spend / totals.registrations : 0
+    totals.ctr = totals.impressions ? (totals.clicks / totals.impressions * 100) : 0
+    return totals
+  }, [filteredAccounts, dateRange])
+
+  // 7d vs 7d comparison (always last 7 vs prev 7, regardless of filter)
+  const weekComp = useMemo(() => {
+    const last7Range = getDateRange("7d")
+    const today = new Date(TODAY + "T00:00:00Z")  // UTC — tránh shift timezone
+    const prevStart = new Date(today); prevStart.setUTCDate(prevStart.getUTCDate() - 13)
+    const prevEnd = new Date(today); prevEnd.setUTCDate(prevEnd.getUTCDate() - 7)
+    const prevRange = { start: prevStart.toISOString().slice(0,10), end: prevEnd.toISOString().slice(0,10) }
+    const sumAcrossAccounts = (range) => {
+      let s = { spend: 0, registrations: 0 }
+      filteredAccounts.forEach(a => {
+        const t = sumDaily(filterDaily(a.daily, range))
+        s.spend += t.spend
+        s.registrations += t.registrations
+      })
+      return s
+    }
+    return { last: sumAcrossAccounts(last7Range), prev: sumAcrossAccounts(prevRange) }
+  }, [filteredAccounts])
+
+  // Products data filtered by time + account (account filter doesn't affect products since products span accounts)
+  const productsData = useMemo(() => {
+    const list = Object.entries(DATA.products).map(([name, daily]) => {
+      // If account filter is active, recompute from campaigns
+      let dailyFiltered
+      if (selectedAccount === "all") {
+        dailyFiltered = filterDaily(daily, dateRange)
+      } else {
+        // Aggregate from campaigns of this product in selected account
+        const camps = DATA.campaigns.filter(c => c.product === name && c.account_id === selectedAccount)
+        const map = {}
+        camps.forEach(c => {
+          c.daily.forEach(d => {
+            if (!map[d.date]) map[d.date] = { date: d.date, spend: 0, registrations: 0, impressions: 0, clicks: 0 }
+            map[d.date].spend += d.spend
+            map[d.date].registrations += d.registrations
+            map[d.date].impressions += d.impressions
+            map[d.date].clicks += d.clicks
+          })
+        })
+        const arr = Object.values(map).sort((a, b) => a.date.localeCompare(b.date))
+        dailyFiltered = filterDaily(arr, dateRange)
+      }
+      const totals = sumDaily(dailyFiltered)
+      return { name, daily: dailyFiltered, totals }
+    }).filter(p => p.totals.spend > 0)
+    return list
+  }, [selectedAccount, dateRange])
+
+  // Campaigns filtered by time + account
+  const campaignsFiltered = useMemo(() => {
+    const list = DATA.campaigns
+      .filter(c => selectedAccount === "all" || c.account_id === selectedAccount)
+      .map(c => {
+        const daily = filterDaily(c.daily, dateRange)
+        const t = sumDaily(daily)
+        const cpl = t.registrations ? t.spend / t.registrations : null
+        return { ...c, _daily: daily, _spend: t.spend, _reg: t.registrations, _clicks: t.clicks, _imp: t.impressions, _cpl: cpl }
+      })
+      .filter(c => c._spend > 0)
+    return list
+  }, [selectedAccount, dateRange])
+
+  // Ads filtered
+  const adsFiltered = useMemo(() => {
+    return DATA.ads
+      .filter(a => selectedAccount === "all" || a.account_id === selectedAccount)
+      .map(a => {
+        const daily = filterDaily(a.daily, dateRange)
+        const t = sumDaily(daily)
+        const cpl = t.registrations ? t.spend / t.registrations : null
+        return { ...a, _spend: t.spend, _reg: t.registrations, _clicks: t.clicks, _imp: t.impressions, _cpl: cpl }
+      })
+      .filter(a => a._spend > 0)
+      .sort((a, b) => b._spend - a._spend)
+  }, [selectedAccount, dateRange])
+
+  // Unified per-day dataset for product charts (one row per date, columns per product)
+  const productChartData = useMemo(() => {
+    const dateSet = new Set()
+    productsData.forEach(p => p.daily.forEach(d => dateSet.add(d.date)))
+    const dates = Array.from(dateSet).sort()
+    return dates.map(date => {
+      const row = { date }
+      productsData.forEach(p => {
+        const d = p.daily.find(x => x.date === date)
+        row[p.name + "_reg"] = d ? (d.registrations || 0) : 0
+        row[p.name + "_cpl"] = d && d.registrations ? Math.round(d.spend / d.registrations) : null
+      })
+      return row
+    })
+  }, [productsData])
+
+  // Top spend / worst CPL campaigns
+  const topSpendCamps = [...campaignsFiltered].sort((a, b) => b._spend - a._spend).slice(0, 5)
+  const worstCplCamps = [...campaignsFiltered]
+    .filter(c => c._reg > 0)
+    .sort((a, b) => b._cpl - a._cpl)
+    .slice(0, 5)
+  const noConvCamps = campaignsFiltered.filter(c => c._reg === 0).sort((a, b) => b._spend - a._spend).slice(0, 5)
+
+  const accountName = (id) => accounts.find(a => a.id === id)?.short || id
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER */}
+        <div className="mb-4">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-blue-600 rounded-lg">
+              <BarChart3 className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Dashboard Quảng Cáo Facebook</h1>
+              <p className="text-sm text-gray-500">
+                4 tài khoản · Conversion = lượt đăng ký hoàn tất · Cập nhật {DATA.generated_at}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* MAIN TAB NAVIGATION */}
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="flex gap-1">
+            <button
+              onClick={() => setCurrentView("main")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "main"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              <BarChart3 /> Hiệu suất quảng cáo
+            </button>
+            <button
+              onClick={() => setCurrentView("competitors")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "competitors"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              <Spy /> Theo dõi đối thủ
+              {DATA.known_competitors && DATA.known_competitors.competitors && DATA.known_competitors.competitors.length > 0 && (
+                <span className="ml-1 px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700">
+                  {DATA.known_competitors.competitors.length} đối thủ
+                </span>
+              )}
+            </button>
+          </nav>
+        </div>
+
+        {currentView === "competitors" && (
+          <CompetitorResearch
+            knownData={DATA.known_competitors || { competitors: [], baseline_date: "", snapshots: [], errors: [], fetched_at: "" }}
+          />
+        )}
+
+        {currentView === "main" && (<>
+
+        {/* ACCOUNT SELECTOR */}
+        <div className="mb-3">
+          <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Tài khoản</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedAccount("all")}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                selectedAccount === "all" ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-100"
+              }`}
+            >
+              Tất cả 4 tài khoản
+            </button>
+            {accounts.map(a => (
+              <button
+                key={a.id}
+                onClick={() => setSelectedAccount(a.id)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${
+                  selectedAccount === a.id ? "text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-100"
+                }`}
+                style={selectedAccount === a.id ? { backgroundColor: ACCOUNT_COLOR[a.id] } : {}}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: ACCOUNT_COLOR[a.id] }} />
+                {a.short}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* TIME FILTER */}
+        <div className="mb-6">
+          <p className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1">
+            <Calendar className="w-3 h-3" /> Bộ lọc thời gian
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {TIME_FILTERS.map(f => (
+              <button
+                key={f.key}
+                onClick={() => setTimeFilter(f.key)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  timeFilter === f.key
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-200 hover:bg-blue-50"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+            <div className="px-3 py-2 text-xs text-gray-500 italic">
+              ({dateRange.start === dateRange.end ? fmtDate(dateRange.start) : `${fmtDate(dateRange.start)} → ${fmtDate(dateRange.end)}`})
+            </div>
+          </div>
+        </div>
+
+        {/* KPI SCORECARDS */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <KpiCard
+            icon={DollarSign}
+            label="Tổng chi tiêu"
+            value={fmtVND(kpis.spend) + "₫"}
+            sub={fmtNum(kpis.spend) + " VND"}
+            color="blue"
+          />
+          <KpiCard
+            icon={Eye}
+            label="Impressions"
+            value={fmtNum(kpis.impressions)}
+            sub={`Reach: ${fmtNum(kpis.reach)}`}
+            color="purple"
+          />
+          <KpiCard
+            icon={MousePointerClick}
+            label="Clicks / CTR"
+            value={fmtNum(kpis.clicks)}
+            sub={`CTR ${kpis.ctr.toFixed(2)}%`}
+            color="green"
+          />
+          <KpiCard
+            icon={Target}
+            label="Đăng ký hoàn tất"
+            value={fmtNum(kpis.registrations)}
+            sub={kpis.registrations ? `CPL ${fmtVND(kpis.cpl)}₫` : "Chưa có đăng ký"}
+            color="amber"
+          />
+        </div>
+
+        {/* COMPARISON 7d vs 7d */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <CompareCard
+            title="So sánh chi tiêu — 7 ngày gần nhất vs 7 ngày trước đó"
+            current={weekComp.last.spend}
+            previous={weekComp.prev.spend}
+            isMoneyMetric={true}
+            inverseGood={false}
+          />
+          <CompareCard
+            title="So sánh đăng ký hoàn tất — 7 ngày gần nhất vs 7 ngày trước đó"
+            current={weekComp.last.registrations}
+            previous={weekComp.prev.registrations}
+            isMoneyMetric={false}
+            inverseGood={false}
+          />
+        </div>
+
+        {/* PER-PRODUCT DAILY TABLES */}
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <Package className="w-5 h-5 text-blue-600" />
+            Chi tiêu & đăng ký theo ngày — từng sản phẩm
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {productsData.map(p => (
+              <ProductDailyTable key={p.name} product={p} />
+            ))}
+          </div>
+        </div>
+
+        {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-lg font-semibold text-gray-900 mb-1">Tiến độ đăng ký theo ngày — từng sản phẩm</h2>
+            <p className="text-xs text-gray-500 mb-3">Tổng số đăng ký mỗi ngày, gộp tất cả campaign theo từng sản phẩm</p>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={productChartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={fmtDate} />
+                <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                <Tooltip labelFormatter={fmtDate} contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                {productsData.map(p => (
+                  <Line
+                    key={p.name}
+                    type="monotone"
+                    dataKey={p.name + "_reg"}
+                    name={p.name}
+                    stroke={PRODUCT_COLOR[p.name]}
+                    strokeWidth={2.5}
+                    dot={{ r: 3 }}
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-lg font-semibold text-gray-900 mb-1">Chi phí / mỗi đăng ký (CPL) theo ngày — từng sản phẩm</h2>
+            <p className="text-xs text-gray-500 mb-3">CPL trung bình mỗi ngày, gộp tất cả campaign theo từng sản phẩm</p>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={productChartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={fmtDate} />
+                <YAxis tick={{ fontSize: 11 }} tickFormatter={fmtVND} />
+                <Tooltip
+                  labelFormatter={fmtDate}
+                  formatter={(v) => v != null ? fmtVND(v) + "₫" : "—"}
+                  contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                />
+                <Legend wrapperStyle={{ fontSize: 11 }} />
+                {productsData.map(p => (
+                  <Line
+                    key={p.name}
+                    type="monotone"
+                    dataKey={p.name + "_cpl"}
+                    name={p.name}
+                    stroke={PRODUCT_COLOR[p.name]}
+                    strokeWidth={2.5}
+                    dot={{ r: 3 }}
+                    connectNulls
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* TOP CAMPAIGNS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <Award className="w-5 h-5 text-emerald-600" />
+              Top 5 campaign chi tiêu nhiều nhất
+            </h2>
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-gray-200 text-left text-gray-500">
+                  <th className="py-2 px-1 font-medium">#</th>
+                  <th className="py-2 px-1 font-medium">Campaign</th>
+                  <th className="py-2 px-1 font-medium text-right">Spend</th>
+                  <th className="py-2 px-1 font-medium text-right">Đăng ký</th>
+                  <th className="py-2 px-1 font-medium text-right">CPL</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topSpendCamps.map((c, i) => (
+                  <tr key={c.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-1 text-emerald-700 font-bold">{i + 1}</td>
+                    <td className="py-2 px-1">
+                      <p className="font-medium text-gray-900 truncate max-w-[200px]" title={c.name}>{c.name}</p>
+                      <p className="text-[10px] text-gray-400">{accountName(c.account_id)} · {c.product}</p>
+                    </td>
+                    <td className="py-2 px-1 text-right font-semibold">{fmtVND(c._spend)}₫</td>
+                    <td className="py-2 px-1 text-right font-medium text-emerald-600">{c._reg}</td>
+                    <td className="py-2 px-1 text-right text-gray-600">{c._cpl ? fmtVND(c._cpl) + "₫" : "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h2 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-600" />
+              Top 5 campaign kém hiệu quả nhất (CPL cao nhất)
+            </h2>
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-gray-200 text-left text-gray-500">
+                  <th className="py-2 px-1 font-medium">#</th>
+                  <th className="py-2 px-1 font-medium">Campaign</th>
+                  <th className="py-2 px-1 font-medium text-right">Spend</th>
+                  <th className="py-2 px-1 font-medium text-right">Đăng ký</th>
+                  <th className="py-2 px-1 font-medium text-right">CPL</th>
+                </tr>
+              </thead>
+              <tbody>
+                {worstCplCamps.length === 0 ? (
+                  <tr><td colSpan={5} className="py-4 text-center text-gray-400">Chưa có campaign nào có đăng ký trong khoảng thời gian này</td></tr>
+                ) : worstCplCamps.map((c, i) => (
+                  <tr key={c.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-1 text-red-700 font-bold">{i + 1}</td>
+                    <td className="py-2 px-1">
+                      <p className="font-medium text-gray-900 truncate max-w-[200px]" title={c.name}>{c.name}</p>
+                      <p className="text-[10px] text-gray-400">{accountName(c.account_id)} · {c.product}</p>
+                    </td>
+                    <td className="py-2 px-1 text-right">{fmtVND(c._spend)}₫</td>
+                    <td className="py-2 px-1 text-right text-emerald-600">{c._reg}</td>
+                    <td className="py-2 px-1 text-right font-bold text-red-600">{fmtVND(c._cpl)}₫</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {noConvCamps.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <p className="text-[10px] font-semibold text-gray-500 uppercase mb-1">⚠️ Chi nhiều nhưng 0 đăng ký:</p>
+                <ul className="text-xs text-gray-600 space-y-0.5">
+                  {noConvCamps.slice(0, 3).map(c => (
+                    <li key={c.id} className="truncate">• {c.name} — {fmtVND(c._spend)}₫</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* PERFORMANCE ANALYSIS */}
+        <PerformanceAnalysis
+          kpis={kpis}
+          weekComp={weekComp}
+          productsData={productsData}
+          campaignsFiltered={campaignsFiltered}
+          timeFilter={timeFilter}
+          dateRange={dateRange}
+        />
+
+        {/* AD/VIDEO TABLE — spend & registrations */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Target className="w-5 h-5 text-emerald-600" />
+            Hiệu quả từng video quảng cáo ({adsFiltered.length} video)
+          </h2>
+          <div className="overflow-x-auto" style={{ maxHeight: 500 }}>
+            <table className="w-full text-xs">
+              <thead className="sticky top-0 bg-white z-10">
+                <tr className="border-b border-gray-200 text-left text-gray-500">
+                  <th className="py-2 px-2 font-medium">Video</th>
+                  <th className="py-2 px-2 font-medium text-right">Chi tiêu</th>
+                  <th className="py-2 px-2 font-medium text-right">Đăng ký</th>
+                  <th className="py-2 px-2 font-medium text-right">CPL</th>
+                  <th className="py-2 px-2 font-medium text-right">Clicks</th>
+                  <th className="py-2 px-2 font-medium text-right">% chuyển đổi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adsFiltered.map(a => {
+                  const convRate = a._clicks ? (a._reg / a._clicks * 100) : 0
+                  return (
+                    <tr key={a.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-2 px-2">
+                        <div className="flex items-start gap-2">
+                          <span className="w-1.5 h-8 rounded mt-0.5 flex-shrink-0" style={{ backgroundColor: ACCOUNT_COLOR[a.account_id] }} />
+                          <div className="min-w-0">
+                            <p className="font-medium text-gray-900 truncate max-w-[260px]" title={a.name}>{a.name}</p>
+                            <p className="text-[10px] text-gray-400 truncate max-w-[260px]">
+                              {a.product} · {accountName(a.account_id)} · {a.campaign}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-2 px-2 text-right font-semibold text-gray-900">{fmtVND(a._spend)}₫</td>
+                      <td className="py-2 px-2 text-right font-bold text-emerald-600">{a._reg || "—"}</td>
+                      <td className="py-2 px-2 text-right text-gray-700">{a._cpl ? fmtVND(a._cpl) + "₫" : "—"}</td>
+                      <td className="py-2 px-2 text-right text-gray-500">{fmtNum(a._clicks)}</td>
+                      <td className="py-2 px-2 text-right">
+                        <span className={`${convRate >= 5 ? "text-emerald-600 font-bold" : convRate >= 2 ? "text-blue-600" : "text-gray-400"}`}>
+                          {convRate.toFixed(1)}%
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        </>)}
+
+        {/* FOOTER */}
+        <div className="text-center text-xs text-gray-400 py-4">
+          Dữ liệu Facebook Ads · Conversion = complete_registration · VND
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// =============================================================
+// SUB-COMPONENT: Competitor Research (Chrome-scraped data)
+// =============================================================
+function CompetitorResearch({ knownData }) {
+  return (
+    <div>
+      <KnownCompetitorsView data={knownData} />
+    </div>
+  )
+}
+
+// =============================================================
+// SUB-COMPONENT: Known Competitors (baseline vs current comparison)
+// =============================================================
+function KnownCompetitorsView({ data }) {
+  const [expandedComp, setExpandedComp] = useState(null)
+
+  const competitors = data.competitors || []
+  const baselineDate = data.baseline_date || "—"
+  const snapshots = data.snapshots || []
+  const errors = data.errors || []
+
+  // Empty state
+  if (competitors.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border-2 border-dashed border-gray-300 p-10 text-center">
+        <div className="text-5xl mb-3">🎯</div>
+        <h3 className="font-bold text-gray-900 mb-2">Chưa có đối thủ nào được track</h3>
+        <p className="text-sm text-gray-600 max-w-xl mx-auto">
+          Thêm đối thủ vào file <code className="bg-gray-100 px-1 rounded">known_competitors.json</code> và scrape data qua Chrome.
+        </p>
+      </div>
+    )
+  }
+
+  // Helper: format change with arrow
+  const fmtChange = (baseline, current) => {
+    if (baseline == null || current == null) return { text: "—", color: "text-gray-400" }
+    const diff = current - baseline
+    if (diff > 0) return { text: `+${fmtNum(diff)}`, color: "text-emerald-600" }
+    if (diff < 0) return { text: fmtNum(diff), color: "text-red-600" }
+    return { text: "0", color: "text-gray-400" }
+  }
+
+  return (
+    <div>
+      {/* SUMMARY STATS */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
+        <KpiCard icon={Target} label="Đối thủ đang track" value={fmtNum(competitors.length)} sub="Đang theo dõi" color="purple" />
+        <KpiCard icon={Spy} label="Ngày baseline" value={baselineDate} sub="Lần scrape đầu tiên" color="blue" />
+        <KpiCard icon={TrendingUp} label="Cập nhật lần cuối" value={data.fetched_at || "—"} sub="Lần build gần nhất" color="green" />
+      </div>
+
+      {/* ERRORS */}
+      {errors.length > 0 && (
+        <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-800">
+          <p className="font-bold mb-1">⚠️ {errors.length} lỗi:</p>
+          <ul className="list-disc pl-5">
+            {errors.slice(0, 5).map((e, i) => (
+              <li key={i}>[{e.label}] {(e.message || "").slice(0, 160)}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* COMPETITOR COMPARISON TABLE: Baseline vs Current */}
+      <div className="mb-5 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-gray-100">
+          <h3 className="font-bold text-gray-900 flex items-center gap-2">
+            <BarChart3 /> Bảng so sánh đối thủ — Baseline vs Hiện tại
+          </h3>
+          <p className="text-xs text-gray-500 mt-1">Baseline: {baselineDate} | Click vào đối thủ để xem chi tiết bài viết</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase">
+                <th className="py-3 px-4 text-left font-medium">Đối thủ</th>
+                <th className="py-3 px-3 text-right font-medium">Followers<br/>(Baseline)</th>
+                <th className="py-3 px-3 text-right font-medium">Followers<br/>(Hiện tại)</th>
+                <th className="py-3 px-3 text-right font-medium">Thay đổi</th>
+                <th className="py-3 px-3 text-right font-medium">Top Post<br/>Likes</th>
+                <th className="py-3 px-3 text-right font-medium">Top Post<br/>Comments</th>
+                <th className="py-3 px-3 text-right font-medium">Top Post<br/>Shares</th>
+                <th className="py-3 px-3 text-left font-medium">Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              {competitors.map(comp => {
+                const change = fmtChange(comp.baseline_followers, comp.current_followers)
+                return (
+                  <tr key={comp.page_id} className="border-b border-gray-50 hover:bg-blue-50/30 cursor-pointer" onClick={() => setExpandedComp(expandedComp === comp.page_id ? null : comp.page_id)}>
+                    <td className="py-3 px-4">
+                      <div className="font-semibold text-gray-900">{comp.label}</div>
+                      {comp.category && <div className="text-[10px] text-gray-400">{comp.category}</div>}
+                    </td>
+                    <td className="py-3 px-3 text-right font-medium text-gray-500">{comp.baseline_followers != null ? fmtNum(comp.baseline_followers) : "—"}</td>
+                    <td className="py-3 px-3 text-right font-bold text-gray-900">{comp.current_followers != null ? fmtNum(comp.current_followers) : "—"}</td>
+                    <td className={`py-3 px-3 text-right font-bold ${change.color}`}>{change.text}</td>
+                    <td className="py-3 px-3 text-right">{comp.current_top_post_likes ? fmtNum(comp.current_top_post_likes) : "—"}</td>
+                    <td className="py-3 px-3 text-right">{comp.current_top_post_comments ? fmtNum(comp.current_top_post_comments) : "—"}</td>
+                    <td className="py-3 px-3 text-right">{comp.current_top_post_shares ? fmtNum(comp.current_top_post_shares) : "—"}</td>
+                    <td className="py-3 px-3 text-left">
+                      {comp.website ? (
+                        <a href={`https://${comp.website}`} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline text-xs" onClick={e => e.stopPropagation()}>{comp.website}</a>
+                      ) : "—"}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* COMPETITOR DETAIL CARDS */}
+      <div className="space-y-4">
+        {competitors.map(comp => {
+          const posts = comp.recent_posts || []
+          const isExpanded = expandedComp === comp.page_id
+
+          return (
+            <div key={comp.page_id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
+              {/* Header */}
+              <div className="p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50/50" onClick={() => setExpandedComp(isExpanded ? null : comp.page_id)}>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-bold text-gray-900 text-base">{comp.label}</h3>
+                      {comp.category && <span className="px-2 py-0.5 text-[10px] rounded bg-gray-100 text-gray-600">{comp.category}</span>}
+                      <span className="text-[10px] text-gray-400">{isExpanded ? "▲ Thu gọn" : "▼ Xem chi tiết"}</span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-4 text-xs flex-wrap">
+                      <a href={comp.page_url} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                        <ExternalLink /> Xem Page
+                      </a>
+                      <span className="text-gray-500">👥 {fmtNum(comp.current_followers || 0)} followers</span>
+                      {comp.website && <span className="text-gray-500">🌐 {comp.website}</span>}
+                    </div>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="px-3 py-1.5 bg-purple-50 border border-purple-200 rounded text-xs">
+                      <span className="text-gray-600">Bài viết: </span>
+                      <span className="font-bold text-purple-700">{posts.length}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bio */}
+                {comp.bio && (
+                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 rounded p-2 italic">
+                    {comp.bio}
+                  </div>
+                )}
+
+                {/* Analysis summary */}
+                {comp.analysis && (
+                  <div className="mt-2 text-xs text-blue-800 bg-blue-50 rounded p-2">
+                    <strong>Phân tích:</strong> {comp.analysis}
+                  </div>
+                )}
+              </div>
+
+              {/* Expanded: Recent posts */}
+              {isExpanded && (
+                <div className="p-4">
+                  <h4 className="text-sm font-bold text-gray-800 mb-3">
+                    Bài viết gần nhất ({posts.length} bài)
+                  </h4>
+                  {posts.length === 0 ? (
+                    <p className="text-xs text-gray-400 italic text-center py-4">
+                      Chưa có dữ liệu bài viết. Cần scrape lại qua Chrome.
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {posts.map((post, idx) => (
+                        <div key={idx} className="rounded-lg border border-gray-200 bg-gray-50/40 p-3 text-xs">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="px-2 py-0.5 text-[10px] rounded font-medium bg-blue-100 text-blue-700">Bài #{idx + 1}</span>
+                            {post.date_approx && <span className="text-[10px] text-gray-500">{post.date_approx}</span>}
+                          </div>
+                          <p className="text-gray-700 whitespace-pre-wrap mb-2">{post.content}</p>
+                          {post.product && (
+                            <div className="text-[10px] text-purple-600 mb-1">
+                              <strong>Sản phẩm:</strong> {post.product}
+                            </div>
+                          )}
+                          <div className="flex items-center gap-3 pt-2 border-t border-gray-200 mt-1 text-[10px] text-gray-500">
+                            {post.likes > 0 && <span>👍 {fmtNum(post.likes)}</span>}
+                            {post.comments > 0 && <span>💬 {fmtNum(post.comments)}</span>}
+                            {post.shares > 0 && <span>🔄 {fmtNum(post.shares)}</span>}
+                            {post.landing_page && (
+                              <span className="text-blue-600">🌐 {post.landing_page}</span>
+                            )}
+                          </div>
+                          {post.hashtags && post.hashtags.length > 0 && (
+                            <div className="mt-1 text-[10px] text-blue-500">
+                              {post.hashtags.join(" ")}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* HELP */}
+      <div className="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
+        <p className="text-xs text-purple-900">
+          <strong>💡 Ghi chú:</strong> Dữ liệu đối thủ được thu thập trực tiếp từ fanpage qua Chrome (không qua API).
+          Cột "Baseline" là dữ liệu cố định từ lần scrape đầu tiên ({baselineDate}).
+          Cột "Hiện tại" sẽ cập nhật mỗi lần scrape mới.
+          Để thêm/sửa/xóa đối thủ, edit file <code className="bg-purple-100 px-1 rounded">known_competitors.json</code> và scrape lại.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// =============================================================
+// SUB-COMPONENT: Per-product daily table
+// =============================================================
+function ProductDailyTable({ product }) {
+  const totalCpl = product.totals.registrations ? product.totals.spend / product.totals.registrations : null
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-bold text-gray-900 flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: PRODUCT_COLOR[product.name] }} />
+          {product.name}
+        </h3>
+        <div className="text-right">
+          <p className="text-xs text-gray-500">{product.daily.length} ngày</p>
+        </div>
+      </div>
+      <div className="bg-gray-50 rounded p-2 mb-2 text-xs">
+        <div className="grid grid-cols-3 gap-2">
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase">Spend</p>
+            <p className="font-bold text-gray-900">{fmtVND(product.totals.spend)}₫</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase">Đăng ký</p>
+            <p className="font-bold text-emerald-600">{product.totals.registrations}</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase">CPL</p>
+            <p className="font-bold text-gray-900">{totalCpl ? fmtVND(totalCpl) + "₫" : "—"}</p>
+          </div>
+        </div>
+      </div>
+      <div className="overflow-y-auto" style={{ maxHeight: 280 }}>
+        <table className="w-full text-xs">
+          <thead className="sticky top-0 bg-white">
+            <tr className="border-b border-gray-200 text-gray-500">
+              <th className="py-1.5 px-1 text-left font-medium">Ngày</th>
+              <th className="py-1.5 px-1 text-right font-medium">Chi tiêu</th>
+              <th className="py-1.5 px-1 text-right font-medium">ĐK</th>
+              <th className="py-1.5 px-1 text-right font-medium">CPL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {product.daily.map(d => {
+              const cpl = d.registrations ? d.spend / d.registrations : null
+              return (
+                <tr key={d.date} className="border-b border-gray-50 hover:bg-gray-50">
+                  <td className="py-1.5 px-1 text-gray-700">{fmtDate(d.date)}</td>
+                  <td className="py-1.5 px-1 text-right font-medium text-gray-900">{fmtVND(d.spend)}</td>
+                  <td className="py-1.5 px-1 text-right font-bold text-emerald-600">{d.registrations || "—"}</td>
+                  <td className="py-1.5 px-1 text-right text-gray-600">{cpl ? fmtVND(cpl) : "—"}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// =============================================================
+// SUB-COMPONENT: Performance Analysis (text insights)
+// =============================================================
+function PerformanceAnalysis({ kpis, weekComp, productsData, campaignsFiltered, timeFilter, dateRange }) {
+  const filterLabel = TIME_FILTERS.find(f => f.key === timeFilter)?.label || ""
+
+  // ============ HELPER: split daily array into first half / second half
+  const splitHalves = (daily) => {
+    if (!daily || daily.length < 2) return null
+    const mid = Math.floor(daily.length / 2)
+    const first = daily.slice(0, mid)
+    const second = daily.slice(mid)
+    const sumIt = (arr) => arr.reduce((a, d) => ({
+      spend: a.spend + (d.spend||0),
+      reg: a.reg + (d.registrations||0),
+      clicks: a.clicks + (d.clicks||0),
+      imp: a.imp + (d.impressions||0)
+    }), { spend:0, reg:0, clicks:0, imp:0 })
+    return { first: sumIt(first), second: sumIt(second), days: daily.length }
+  }
+
+  // ============ PRODUCT DEEP-DIVE ANALYSIS
+  const productDiagnoses = productsData.map(p => {
+    const t = p.totals
+    const cpl = t.registrations ? t.spend / t.registrations : null
+    const ctr = t.impressions ? (t.clicks / t.impressions * 100) : 0
+    const cpc = t.clicks ? (t.spend / t.clicks) : 0
+    const cvr = t.clicks ? (t.registrations / t.clicks * 100) : 0  // click → reg
+    const cpm = t.impressions ? (t.spend / t.impressions * 1000) : 0
+
+    // Trend within selected period
+    const halves = splitHalves(p.daily)
+    let trend = null
+    if (halves && halves.days >= 4) {
+      const cpl1 = halves.first.reg ? halves.first.spend / halves.first.reg : null
+      const cpl2 = halves.second.reg ? halves.second.spend / halves.second.reg : null
+      if (cpl1 != null && cpl2 != null) {
+        const delta = ((cpl2 - cpl1) / cpl1 * 100)
+        trend = { cpl1, cpl2, delta, regDelta: halves.second.reg - halves.first.reg }
+      } else if (cpl1 == null && cpl2 != null) {
+        trend = { cpl1: null, cpl2, delta: -100, regDelta: halves.second.reg - halves.first.reg, status: "improving" }
+      } else if (cpl1 != null && cpl2 == null) {
+        trend = { cpl1, cpl2: null, delta: 999, regDelta: halves.second.reg - halves.first.reg, status: "declining" }
+      }
+    }
+
+    // ============ DIAGNOSIS LOGIC
+    // Benchmarks: CTR ≥1.5% tốt, CPL <200K tốt, CVR ≥2% tốt
+    const symptoms = []
+    const actions = []
+    let severity = "good" // good | warn | bad
+
+    if (!t.registrations) {
+      severity = "bad"
+      symptoms.push(`Đã chi ${fmtVND(t.spend)}₫ nhưng chưa có đăng ký nào`)
+      if (ctr < 1) symptoms.push(`CTR rất thấp ${ctr.toFixed(2)}% → creative không hấp dẫn`)
+      if (cpc > 5000) symptoms.push(`CPC cao ${fmtVND(cpc)}₫ → đối tượng cạnh tranh hoặc creative kém`)
+      actions.push("Tạm dừng ngay các campaign đang chạy của sản phẩm này")
+      actions.push("Thay creative mới (hook 3 giây đầu, CTA rõ ràng) trước khi chạy lại")
+      actions.push("Xem lại form đăng ký: số trường, tốc độ tải, mobile UX")
+    } else {
+      // Has conversions — diagnose CPL
+      const isHighCpl = cpl > 300000
+      const isLowCtr = ctr < 1.2
+      const isLowCvr = cvr < 1.5
+      const isGoodCtr = ctr >= 1.5
+      const isGoodCpl = cpl < 200000
+
+      if (isGoodCpl && isGoodCtr) {
+        severity = "good"
+        symptoms.push(`CPL tốt ${fmtVND(cpl)}₫ · CTR khoẻ ${ctr.toFixed(2)}% · CVR ${cvr.toFixed(1)}%`)
+        actions.push("Tăng ngân sách 20–30% để scale, theo dõi CPL không vượt 1.3x")
+        actions.push("Nhân bản campaign sang Lookalike audience để mở rộng quy mô")
+      } else if (isHighCpl && isLowCtr) {
+        severity = "bad"
+        symptoms.push(`CPL cao ${fmtVND(cpl)}₫ + CTR thấp ${ctr.toFixed(2)}% → creative không hút`)
+        actions.push("Refresh creative: thử 3–5 hook khác (pain point, social proof, demo nhanh)")
+        actions.push("Test format mới: video dọc 9:16 ≤15s, carousel so sánh, UGC")
+        actions.push("Thu hẹp/đổi targeting nếu CPM > 80K")
+      } else if (isHighCpl && !isLowCtr && isLowCvr) {
+        severity = "warn"
+        symptoms.push(`CTR ổn ${ctr.toFixed(2)}% nhưng CVR chỉ ${cvr.toFixed(1)}% → click vào nhưng không đăng ký`)
+        actions.push("Vấn đề ở landing page/form, không phải quảng cáo")
+        actions.push("Rút gọn form (≤4 trường), thêm mã giảm/ưu đãi rõ ràng")
+        actions.push("Kiểm tra tốc độ tải mobile, lỗi pixel, redirect")
+      } else if (isHighCpl) {
+        severity = "warn"
+        symptoms.push(`CPL ${fmtVND(cpl)}₫ cao hơn benchmark`)
+        actions.push("A/B test 2 nhóm creative khác phong cách, giữ targeting")
+        actions.push("Đặt CBO + tối ưu cho conversion, để ML phân bổ ngân sách")
+      } else {
+        severity = "good"
+        symptoms.push(`CPL ${fmtVND(cpl)}₫ trong ngưỡng tốt · CTR ${ctr.toFixed(2)}% · CVR ${cvr.toFixed(1)}%`)
+        actions.push("Duy trì creative, scale ngân sách từ từ 15–20%/tuần")
+      }
+
+      // Trend overrides
+      if (trend && trend.delta > 30) {
+        severity = severity === "good" ? "warn" : severity
+        symptoms.push(`⚠️ CPL đang xấu đi: nửa đầu kỳ ${trend.cpl1 ? fmtVND(trend.cpl1) : "—"}₫ → nửa cuối ${trend.cpl2 ? fmtVND(trend.cpl2) : "—"}₫ (+${trend.delta.toFixed(0)}%)`)
+        actions.push("Dấu hiệu audience fatigue: refresh creative trong 3 ngày tới hoặc rotate audience")
+      } else if (trend && trend.delta < -20) {
+        symptoms.push(`📈 CPL đang cải thiện: ${trend.cpl1 ? fmtVND(trend.cpl1) : "—"}₫ → ${trend.cpl2 ? fmtVND(trend.cpl2) : "—"}₫ (${trend.delta.toFixed(0)}%)`)
+        actions.push("Đà tốt — không thay đổi creative, tăng nhẹ budget 10–15%")
+      }
+    }
+
+    return { name: p.name, t, cpl, ctr, cpc, cvr, cpm, trend, severity, symptoms, actions }
+  }).sort((a, b) => (b.t.spend - a.t.spend))
+
+  // ============ CAMPAIGN TREND ANALYSIS
+  const campsWithTrend = campaignsFiltered.map(c => {
+    const halves = splitHalves(c._daily)
+    if (!halves || halves.days < 4) return { ...c, _trend: null }
+    const cpl1 = halves.first.reg ? halves.first.spend / halves.first.reg : null
+    const cpl2 = halves.second.reg ? halves.second.spend / halves.second.reg : null
+    let status = "stable", delta = 0
+    if (cpl1 != null && cpl2 != null) {
+      delta = ((cpl2 - cpl1) / cpl1 * 100)
+      status = delta < -15 ? "improving" : delta > 25 ? "declining" : "stable"
+    } else if (cpl1 == null && cpl2 != null && halves.second.reg > 0) {
+      status = "improving"; delta = -100
+    } else if (cpl1 != null && cpl2 == null && halves.first.reg > 0) {
+      status = "declining"; delta = 999
+    }
+    return { ...c, _trend: { status, delta, cpl1, cpl2, reg1: halves.first.reg, reg2: halves.second.reg } }
+  })
+
+  const improving = campsWithTrend.filter(c => c._trend?.status === "improving" && c._spend > 100000).sort((a,b) => (a._trend.delta - b._trend.delta)).slice(0, 4)
+  const declining = campsWithTrend.filter(c => c._trend?.status === "declining" && c._spend > 100000).sort((a,b) => (b._trend.delta - a._trend.delta)).slice(0, 4)
+
+  // ============ OVERALL STATS
+  const wastedSpend = campaignsFiltered.filter(c => c._reg === 0).reduce((s, c) => s + c._spend, 0)
+  const wastedPct = kpis.spend ? (wastedSpend / kpis.spend * 100) : 0
+  const overallCtr = kpis.impressions ? (kpis.clicks / kpis.impressions * 100) : 0
+  const overallCvr = kpis.clicks ? (kpis.registrations / kpis.clicks * 100) : 0
+  const spendDelta = weekComp.prev.spend ? ((weekComp.last.spend - weekComp.prev.spend) / weekComp.prev.spend * 100) : 0
+  const regDelta = weekComp.prev.registrations ? ((weekComp.last.registrations - weekComp.prev.registrations) / weekComp.prev.registrations * 100) : 0
+
+  // Sản phẩm cần tối ưu (severity bad/warn)
+  const needsFix = productDiagnoses.filter(p => p.severity !== "good")
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <Lightbulb className="w-5 h-5 text-amber-500" />
+        Phân tích hiệu quả & đề xuất tối ưu — {filterLabel}
+        <span className="text-xs font-normal text-gray-400 ml-1">
+          ({dateRange.start === dateRange.end ? fmtDate(dateRange.start) : `${fmtDate(dateRange.start)} → ${fmtDate(dateRange.end)}`})
+        </span>
+      </h2>
+
+      {/* TỔNG QUAN KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-5">
+        <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+          <p className="text-[10px] uppercase font-semibold text-blue-700">Chi tiêu</p>
+          <p className="text-lg font-bold text-blue-900 mt-1">{fmtVND(kpis.spend)}₫</p>
+        </div>
+        <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-100">
+          <p className="text-[10px] uppercase font-semibold text-emerald-700">Đăng ký</p>
+          <p className="text-lg font-bold text-emerald-900 mt-1">{kpis.registrations}</p>
+        </div>
+        <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
+          <p className="text-[10px] uppercase font-semibold text-amber-700">CPL TB</p>
+          <p className="text-lg font-bold text-amber-900 mt-1">{kpis.registrations ? fmtVND(kpis.cpl) + "₫" : "—"}</p>
+        </div>
+        <div className="bg-cyan-50 rounded-lg p-3 border border-cyan-100">
+          <p className="text-[10px] uppercase font-semibold text-cyan-700">CTR</p>
+          <p className="text-lg font-bold text-cyan-900 mt-1">{overallCtr.toFixed(2)}%</p>
+        </div>
+        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
+          <p className="text-[10px] uppercase font-semibold text-indigo-700">CVR (click→ĐK)</p>
+          <p className="text-lg font-bold text-indigo-900 mt-1">{overallCvr.toFixed(2)}%</p>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+          <p className="text-[10px] uppercase font-semibold text-purple-700">% chi hiệu quả</p>
+          <p className="text-lg font-bold text-purple-900 mt-1">{kpis.spend ? (100 - wastedPct).toFixed(0) : "0"}%</p>
+        </div>
+      </div>
+
+      {/* TÓM TẮT XU HƯỚNG TUẦN */}
+      <div className="bg-gradient-to-r from-slate-50 to-blue-50 border border-slate-200 rounded-lg p-4 mb-5">
+        <h3 className="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+          📊 Tổng quan xu hướng (7 ngày gần nhất vs 7 ngày trước đó)
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-700">
+          <div>
+            <span className="font-semibold">Chi tiêu:</span> {fmtVND(weekComp.prev.spend)}₫ → {fmtVND(weekComp.last.spend)}₫{" "}
+            <span className={spendDelta > 0 ? "text-blue-700 font-bold" : "text-orange-700 font-bold"}>
+              ({spendDelta > 0 ? "+" : ""}{spendDelta.toFixed(0)}%)
+            </span>
+          </div>
+          <div>
+            <span className="font-semibold">Đăng ký:</span> {weekComp.prev.registrations} → {weekComp.last.registrations}{" "}
+            <span className={regDelta > 0 ? "text-emerald-700 font-bold" : "text-red-700 font-bold"}>
+              ({regDelta > 0 ? "+" : ""}{regDelta.toFixed(0)}%)
+            </span>
+          </div>
+          <div className="md:col-span-2 text-slate-600 italic mt-1">
+            {regDelta > spendDelta + 10
+              ? "✅ Hiệu quả cải thiện: số đăng ký tăng nhanh hơn chi tiêu — đang scale tốt."
+              : regDelta < spendDelta - 10
+              ? "⚠️ Hiệu quả giảm: chi tăng nhưng đăng ký không theo kịp — kiểm tra audience fatigue và creative."
+              : "Hiệu quả ổn định: tỉ lệ đăng ký/chi tiêu ngang tuần trước."}
+          </div>
+        </div>
+      </div>
+
+      {/* PHÂN TÍCH TỪNG SẢN PHẨM */}
+      <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+        <Package className="w-4 h-4 text-blue-600" />
+        Chẩn đoán & đề xuất tối ưu cho từng sản phẩm
+      </h3>
+      <div className="space-y-3 mb-5">
+        {productDiagnoses.map(p => {
+          const borderColor = p.severity === "good" ? "border-emerald-200 bg-emerald-50/40"
+            : p.severity === "warn" ? "border-amber-200 bg-amber-50/40"
+            : "border-red-200 bg-red-50/40"
+          const badgeColor = p.severity === "good" ? "bg-emerald-100 text-emerald-700"
+            : p.severity === "warn" ? "bg-amber-100 text-amber-700"
+            : "bg-red-100 text-red-700"
+          const badgeText = p.severity === "good" ? "✅ TỐT — SCALE"
+            : p.severity === "warn" ? "⚠️ CẦN ĐIỀU CHỈNH"
+            : "🔴 CẦN HÀNH ĐỘNG NGAY"
+          return (
+            <div key={p.name} className={`rounded-lg border ${borderColor} p-4`}>
+              <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: PRODUCT_COLOR[p.name] }} />
+                  <h4 className="font-bold text-gray-900 text-base">{p.name}</h4>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${badgeColor}`}>{badgeText}</span>
+                </div>
+              </div>
+
+              {/* Metrics row */}
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-3 text-xs">
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">Spend</p>
+                  <p className="font-bold text-gray-900">{fmtVND(p.t.spend)}₫</p>
+                </div>
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">Đăng ký</p>
+                  <p className="font-bold text-emerald-600">{p.t.registrations}</p>
+                </div>
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">CPL</p>
+                  <p className="font-bold text-gray-900">{p.cpl ? fmtVND(p.cpl) + "₫" : "—"}</p>
+                </div>
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">CTR</p>
+                  <p className={`font-bold ${p.ctr >= 1.5 ? "text-emerald-600" : p.ctr >= 1 ? "text-amber-600" : "text-red-600"}`}>{p.ctr.toFixed(2)}%</p>
+                </div>
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">CPC</p>
+                  <p className="font-bold text-gray-900">{fmtVND(p.cpc)}₫</p>
+                </div>
+                <div className="bg-white rounded p-2 border border-gray-100">
+                  <p className="text-[9px] text-gray-500 uppercase">CVR</p>
+                  <p className={`font-bold ${p.cvr >= 2 ? "text-emerald-600" : p.cvr >= 1 ? "text-amber-600" : "text-red-600"}`}>{p.cvr.toFixed(1)}%</p>
+                </div>
+              </div>
+
+              {/* Symptoms */}
+              <div className="mb-2">
+                <p className="text-[10px] uppercase font-semibold text-gray-500 mb-1">🔍 Dấu hiệu chẩn đoán</p>
+                <ul className="text-xs text-gray-700 space-y-0.5 ml-1">
+                  {p.symptoms.map((s, i) => <li key={i}>• {s}</li>)}
+                </ul>
+              </div>
+
+              {/* Actions */}
+              <div>
+                <p className="text-[10px] uppercase font-semibold text-gray-500 mb-1">💡 Đề xuất tối ưu</p>
+                <ul className="text-xs text-gray-800 space-y-0.5 ml-1">
+                  {p.actions.map((a, i) => <li key={i} className="flex gap-1.5"><span className="text-blue-600">→</span><span>{a}</span></li>)}
+                </ul>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* CAMPAIGN TĂNG TRƯỞNG vs SUY GIẢM */}
+      <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+        <TrendingUp className="w-4 h-4 text-blue-600" />
+        Campaign đang tốt lên vs xấu đi (so sánh nửa đầu vs nửa cuối kỳ)
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+        <div className="bg-emerald-50/40 border border-emerald-200 rounded-lg p-4">
+          <h4 className="font-bold text-emerald-800 text-sm mb-2 flex items-center gap-1">
+            <TrendingUp className="w-4 h-4" /> Đang tốt lên ({improving.length})
+          </h4>
+          {improving.length ? (
+            <ul className="text-xs space-y-2">
+              {improving.map(c => (
+                <li key={c.id} className="bg-white rounded p-2 border border-emerald-100">
+                  <p className="font-semibold text-gray-900 truncate" title={c.name}>{c.name}</p>
+                  <p className="text-gray-600 mt-0.5">
+                    CPL {c._trend.cpl1 ? fmtVND(c._trend.cpl1) + "₫" : "—"} → {c._trend.cpl2 ? fmtVND(c._trend.cpl2) + "₫" : "—"}{" "}
+                    <span className="text-emerald-700 font-bold">({c._trend.delta === -100 ? "mới có ĐK" : c._trend.delta.toFixed(0) + "%"})</span>
+                  </p>
+                  <p className="text-[10px] text-gray-500">ĐK: {c._trend.reg1} → {c._trend.reg2} · Spend kỳ: {fmtVND(c._spend)}₫</p>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="text-xs text-gray-500 italic">Chưa có campaign nào cải thiện rõ rệt trong kỳ.</p>}
+          <p className="text-[10px] text-emerald-700 mt-2 italic">→ Cân nhắc tăng budget 15–25% cho các campaign này.</p>
+        </div>
+        <div className="bg-red-50/40 border border-red-200 rounded-lg p-4">
+          <h4 className="font-bold text-red-800 text-sm mb-2 flex items-center gap-1">
+            <TrendingDown className="w-4 h-4" /> Đang xấu đi ({declining.length})
+          </h4>
+          {declining.length ? (
+            <ul className="text-xs space-y-2">
+              {declining.map(c => (
+                <li key={c.id} className="bg-white rounded p-2 border border-red-100">
+                  <p className="font-semibold text-gray-900 truncate" title={c.name}>{c.name}</p>
+                  <p className="text-gray-600 mt-0.5">
+                    CPL {c._trend.cpl1 ? fmtVND(c._trend.cpl1) + "₫" : "—"} → {c._trend.cpl2 ? fmtVND(c._trend.cpl2) + "₫" : "—"}{" "}
+                    <span className="text-red-700 font-bold">(+{c._trend.delta === 999 ? "mất ĐK" : c._trend.delta.toFixed(0) + "%"})</span>
+                  </p>
+                  <p className="text-[10px] text-gray-500">ĐK: {c._trend.reg1} → {c._trend.reg2} · Spend kỳ: {fmtVND(c._spend)}₫</p>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="text-xs text-gray-500 italic">Không có campaign nào xấu đi rõ rệt.</p>}
+          <p className="text-[10px] text-red-700 mt-2 italic">→ Refresh creative hoặc rotate audience trong 2–3 ngày tới.</p>
+        </div>
+      </div>
+
+      {/* CÁC YẾU TỐ ẢNH HƯỞNG */}
+      <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-5">
+        <h3 className="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600" />
+          Các yếu tố đang ảnh hưởng đến hiệu quả
+        </h3>
+        <ul className="text-xs text-slate-700 space-y-1.5">
+          {overallCtr < 1.2 && (
+            <li>• <span className="font-semibold">CTR tổng thấp ({overallCtr.toFixed(2)}%)</span> — creative chưa đủ hấp dẫn so với chuẩn ngành (1.5–2%). Cần làm mới hook và format.</li>
+          )}
+          {overallCtr >= 1.5 && overallCvr < 1.5 && (
+            <li>• <span className="font-semibold">CTR tốt nhưng CVR thấp ({overallCvr.toFixed(2)}%)</span> — vấn đề ở landing page/form, không phải quảng cáo. Tối ưu form và tốc độ tải.</li>
+          )}
+          {wastedPct > 15 && (
+            <li>• <span className="font-semibold">{wastedPct.toFixed(0)}% ngân sách ({fmtVND(wastedSpend)}₫)</span> đổ vào campaign 0 đăng ký — dấu hiệu phân bổ ngân sách kém, nên dùng CBO/ABO + rule tự tắt khi CPL > ngưỡng.</li>
+          )}
+          {needsFix.length > 0 && (
+            <li>• <span className="font-semibold">{needsFix.length}/{productDiagnoses.length} sản phẩm</span> đang cần tối ưu: <span className="font-mono">{needsFix.map(p => p.name).join(", ")}</span></li>
+          )}
+          {regDelta < -15 && weekComp.prev.registrations > 0 && (
+            <li>• <span className="font-semibold">Số đăng ký tuần này giảm {Math.abs(regDelta).toFixed(0)}%</span> so với tuần trước — dấu hiệu audience fatigue hoặc creative đã bão hoà.</li>
+          )}
+          {spendDelta > 30 && regDelta < spendDelta && (
+            <li>• <span className="font-semibold">Chi tiêu tăng {spendDelta.toFixed(0)}%</span> nhưng đăng ký chỉ tăng {regDelta.toFixed(0)}% — đang scale quá nhanh, ML chưa kịp tối ưu.</li>
+          )}
+          {improving.length > declining.length && (
+            <li>• <span className="font-semibold text-emerald-700">{improving.length} campaign đang trên đà cải thiện</span> — tận dụng momentum để scale tổng ngân sách.</li>
+          )}
+          {declining.length > improving.length && (
+            <li>• <span className="font-semibold text-red-700">{declining.length} campaign đang suy giảm</span> nhiều hơn campaign cải thiện — ưu tiên xử lý các campaign này trước khi tăng budget tổng.</li>
+          )}
+        </ul>
+      </div>
+
+      {/* PLAN HÀNH ĐỘNG 7 NGÀY */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+        <h3 className="text-sm font-bold text-blue-900 mb-2 flex items-center gap-2">
+          🎯 Kế hoạch hành động 7 ngày tới
+        </h3>
+        <ol className="text-xs text-blue-900 space-y-1.5 list-decimal ml-5">
+          <li><span className="font-semibold">Ngày 1–2:</span> Tạm dừng tất cả campaign 0 đăng ký ({fmtVND(wastedSpend)}₫/{filterLabel.toLowerCase()}). Phân ngân sách này sang các campaign improving.</li>
+          <li><span className="font-semibold">Ngày 1–3:</span> Refresh creative cho {needsFix.length ? needsFix.map(p => p.name).join(", ") : "các sản phẩm CPL cao"} — chuẩn bị 3 hook mới + 2 format (video dọc, carousel).</li>
+          <li><span className="font-semibold">Ngày 2–4:</span> Với campaign improving, tăng budget từ từ +15%/2 ngày. Theo dõi CPL không vượt 1.3x mức hiện tại.</li>
+          <li><span className="font-semibold">Ngày 3–5:</span> A/B test creative mới ở nhóm 1 ad set, giữ creative cũ ở 1 ad set khác để so sánh.</li>
+          <li><span className="font-semibold">Ngày 5–7:</span> Đánh giá lại — campaign nào không cải thiện sau refresh thì cắt; campaign nào cải thiện thì nhân bản sang Lookalike 1–3%.</li>
+          <li><span className="font-semibold">Liên tục:</span> Đặt automated rule: tắt ad set nếu CPL &gt; 1.5x trung bình sản phẩm trong 2 ngày liên tiếp với spend &gt; 200K₫.</li>
+        </ol>
+      </div>
+    </div>
+  )
+}
+
+
+// =============================================================
+// RENDER — render directly from the baked-in snapshot
+// =============================================================
+// Live-fetch via Netlify Function đã bị tắt (function chưa deploy được nên
+// cứ trả 404 và hiện banner đỏ). Dashboard lấy dữ liệu trực tiếp từ DATA
+// đã được GitHub Actions cron inject mỗi 30 phút — đủ tươi cho nhu cầu
+// của Facebook Ads (Meta API cũng không realtime).
+const rootEl = document.getElementById('root');
+ReactDOM.createRoot(rootEl).render(React.createElement(FacebookAdsDashboard));
+
+</script>
+</body>
+</html>

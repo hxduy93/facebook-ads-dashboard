@@ -1,0 +1,29 @@
+{
+  "_comment": "Danh sách đối thủ theo dõi hàng tuần. Dashboard tự fetch ads qua Meta API mỗi lần build.",
+  "competitors": [
+    {
+      "page_id": "100069504335760",
+      "label": "Đối thủ 1",
+      "products": ["Noma911"],
+      "page_url": "https://www.facebook.com/profile.php?id=100069504335760",
+      "notes": "Đang hoạt động mạnh trên Facebook",
+      "added_date": "2026-04-10"
+    },
+    {
+      "page_id": "tayoglassnano",
+      "label": "Tayo Glass Nano",
+      "products": ["Noma911"],
+      "page_url": "https://www.facebook.com/tayoglassnano",
+      "notes": "Đang hoạt động mạnh trên Facebook",
+      "added_date": "2026-04-10"
+    },
+    {
+      "page_id": "61588493893443",
+      "label": "Đối thủ 3",
+      "products": ["Noma911"],
+      "page_url": "https://www.facebook.com/profile.php?id=61588493893443",
+      "notes": "Đang hoạt động mạnh trên Facebook",
+      "added_date": "2026-04-10"
+    }
+  ]
+}
