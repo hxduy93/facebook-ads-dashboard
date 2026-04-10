@@ -827,10 +827,11 @@ function CompetitorResearch({ knownData }) {
 }
 
 // =============================================================
-// SUB-COMPONENT: Radar Result Panel (hiển thị kết quả phân tích AI)
+// SUB-COMPONENT: Radar Result Panel (hiển thị kết quả phân tích AI — CI Report v5.0)
 // =============================================================
 function RadarResultPanel({ data }) {
   const [expandSection, setExpandSection] = useState("all")
+  const [expandedCard, setExpandedCard] = useState(null)
   const threatColors = {
     low: "bg-emerald-100 text-emerald-800 border-emerald-300",
     medium: "bg-amber-100 text-amber-800 border-amber-300",
@@ -838,6 +839,9 @@ function RadarResultPanel({ data }) {
     critical: "bg-red-200 text-red-900 border-red-400"
   }
   const threatLabel = { low: "Thấp", medium: "Trung bình", high: "Cao", critical: "Nghiêm trọng" }
+  const threatEmoji = { low: "🟢", medium: "🟡", high: "🔴", critical: "🔴" }
+  const riskColors = { "CAO": "text-red-700 bg-red-50", "TB": "text-amber-700 bg-amber-50", "THẤP": "text-emerald-700 bg-emerald-50" }
+  const sentimentComp = data.sentiment?.competitors_summary || data.sentiment?.competitors
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -846,18 +850,192 @@ function RadarResultPanel({ data }) {
         <div>
           <h4 className="font-bold text-gray-900 flex items-center gap-2">
             📊 Kết quả phân tích: {data.product || "Tất cả"}
+            {data.version && <span className="text-xs text-gray-400 font-normal">{data.version}</span>}
             <span className={`px-2 py-0.5 text-xs rounded-full border ${threatColors[data.threat_level] || threatColors.medium}`}>
-              Mức đe dọa: {threatLabel[data.threat_level] || data.threat_level}
+              Mức đe dọa: {threatLabel[data.threat_level] || data.threat_level || "—"}
             </span>
           </h4>
           <p className="text-xs text-gray-500 mt-1">Cập nhật: {data.saved_at ? new Date(data.saved_at).toLocaleString("vi-VN") : data.analyzed_at || "—"}</p>
         </div>
       </div>
 
-      {/* Summary */}
-      {data.summary && (
-        <div className="px-4 py-3 bg-blue-50 border-b border-blue-100 text-sm text-blue-900">
-          💡 {data.summary}
+      {/* CEO Summary (v5.0) */}
+      {data.ceo_summary && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">👔 CEO Executive Summary</h5>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+              <div className="font-semibold text-red-800 text-xs mb-1">🔴 Đáng lo nhất</div>
+              <div className="text-xs text-red-700">{data.ceo_summary.biggest_threat}</div>
+            </div>
+            <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+              <div className="font-semibold text-emerald-800 text-xs mb-1">🟢 Đáng tận dụng</div>
+              <div className="text-xs text-emerald-700">{data.ceo_summary.biggest_opportunity}</div>
+            </div>
+            <div className="p-3 rounded-lg bg-amber-50 border border-amber-200">
+              <div className="font-semibold text-amber-800 text-xs mb-1">⚡ Quyết định hôm nay</div>
+              <div className="text-xs text-amber-700">{data.ceo_summary.decision_today}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Top 3 Signals (v5.0) */}
+      {data.top_3_signals && data.top_3_signals.length > 0 && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">🚨 3 Tín hiệu cạnh tranh quan trọng</h5>
+          <div className="space-y-2">
+            {data.top_3_signals.map((s, i) => (
+              <div key={i} className="p-3 rounded-lg bg-gray-50 border border-gray-200">
+                <div className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">0{i+1}</span>
+                  {s.title}
+                </div>
+                <div className="text-xs text-gray-600 mt-1 ml-8">{s.description}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Battle Line (v5.0) */}
+      {data.battle_line && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">⚔️ Chiến trường: {data.battle_line.name}</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div className="p-3 rounded bg-gray-50">
+              <div className="font-semibold text-gray-700 mb-1">Đối thủ trực tiếp</div>
+              <div className="text-gray-600">{(data.battle_line.competitors || []).join(", ")}</div>
+            </div>
+            <div className="p-3 rounded bg-gray-50">
+              <div className="font-semibold text-gray-700 mb-1">Họ đang thắng bằng</div>
+              <div className="text-gray-600">{data.battle_line.competitors_winning_by}</div>
+            </div>
+            <div className="p-3 rounded bg-red-50">
+              <div className="font-semibold text-red-700 mb-1">Doscom yếu ở</div>
+              <div className="text-red-600">{data.battle_line.doscom_weak_at}</div>
+            </div>
+            <div className="p-3 rounded bg-emerald-50">
+              <div className="font-semibold text-emerald-700 mb-1">Đòn phản công</div>
+              <div className="text-emerald-600">{data.battle_line.counter_attack}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Competitor Cards (v5.0) */}
+      {data.competitor_cards && data.competitor_cards.length > 0 && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">🎯 Đối thủ chi tiết ({data.competitor_cards.length})</h5>
+          <div className="space-y-2">
+            {data.competitor_cards.map((c, i) => (
+              <div key={i} className="rounded-lg border border-gray-200 overflow-hidden">
+                <div className="p-3 bg-gray-50 flex items-center justify-between cursor-pointer" onClick={() => setExpandedCard(expandedCard === i ? null : i)}>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm">{threatEmoji[c.threat_level] || "🟡"}</span>
+                    <div>
+                      <span className="font-semibold text-sm text-gray-900">{c.name}</span>
+                      <span className="text-xs text-gray-500 ml-2">{c.origin} · {c.price_segment}</span>
+                    </div>
+                    <span className={`px-2 py-0.5 text-xs rounded-full border ${threatColors[c.threat_level] || threatColors.medium}`}>
+                      {c.threat_score}/10
+                    </span>
+                  </div>
+                  <span className="text-gray-400 text-xs">{expandedCard === i ? "▲" : "▼"}</span>
+                </div>
+                {expandedCard === i && (
+                  <div className="p-3 text-xs space-y-2 border-t border-gray-100">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3">
+                      {c.radar_scores && Object.entries(c.radar_scores).map(([k, v]) => (
+                        <div key={k} className="text-center p-2 rounded bg-gray-50">
+                          <div className="font-bold text-indigo-700 text-lg">{v}</div>
+                          <div className="text-gray-500 capitalize">{k === "price" ? "Giá" : k === "content" ? "Content" : k === "trust" ? "Trust" : k === "product" ? "SP" : "Growth"}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div><strong>Vũ khí:</strong> {c.competitive_weapon}</div>
+                    <div><strong>Điểm yếu thật:</strong> <span className="text-red-600">{c.real_weakness}</span></div>
+                    <div><strong>Dễ phá:</strong> <span className="text-emerald-600">{c.easy_to_break}</span></div>
+                    <div><strong>{c.attack_directly ? "✅ Đánh trực diện" : "🔄 Bypass"}:</strong> {c.attack_directly ? (c.attack_directly_reason || "") : (c.bypass_strategy || "")}</div>
+                    <div><strong>Đáng copy:</strong> {c.worth_copying}</div>
+                    <div><strong>Thông điệp bán:</strong> <em>"{c.sales_message}"</em></div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Consumer Ladder (v5.0) */}
+      {data.consumer_ladder && data.consumer_ladder.length > 0 && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">👥 Phân khúc khách hàng</h5>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-gray-50 text-gray-500 uppercase">
+                  <th className="py-2 px-3 text-left font-medium">Phân khúc</th>
+                  <th className="py-2 px-3 text-center font-medium">Quy mô</th>
+                  <th className="py-2 px-3 text-center font-medium">Dễ thắng</th>
+                  <th className="py-2 px-3 text-left font-medium">Ai đang thắng</th>
+                  <th className="py-2 px-3 text-left font-medium">Thông điệp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.consumer_ladder.map((cl, i) => (
+                  <tr key={i} className="border-b border-gray-50">
+                    <td className="py-2 px-3 font-medium text-gray-900">{cl.segment}</td>
+                    <td className="py-2 px-3 text-center text-gray-600">{cl.size_pct}</td>
+                    <td className="py-2 px-3 text-center">{"★".repeat(cl.ease_to_win)}{"☆".repeat(5 - cl.ease_to_win)}</td>
+                    <td className="py-2 px-3 text-gray-600">{cl.current_winner}</td>
+                    <td className="py-2 px-3 text-indigo-600 italic">"{cl.recommended_message}"</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Risk Assessment (v5.0) */}
+      {data.risk_assessment && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">⚠️ Đánh giá rủi ro</h5>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+            {[
+              { key: "price_risk", label: "Giá" },
+              { key: "content_risk", label: "Content" },
+              { key: "perception_risk", label: "Trust" },
+              { key: "product_risk", label: "Sản phẩm" },
+              { key: "growth_risk", label: "Tăng trưởng" }
+            ].map(({ key, label }) => {
+              const risk = data.risk_assessment[key]
+              if (!risk) return null
+              return (
+                <div key={key} className={`p-3 rounded-lg text-xs ${riskColors[risk.level] || "text-gray-700 bg-gray-50"}`}>
+                  <div className="font-bold mb-1">{label}: {risk.level}</div>
+                  <div>{risk.description}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Customer Psychology Insights (v5.0) */}
+      {data.customer_psychology_insights && data.customer_psychology_insights.length > 0 && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">🧠 Insight tâm lý khách hàng</h5>
+          <div className="space-y-2">
+            {data.customer_psychology_insights.map((ins, i) => (
+              <div key={i} className="p-3 rounded-lg bg-purple-50 border border-purple-200 text-xs">
+                <div className="font-semibold text-purple-900">"{ins.insight_title}"</div>
+                <div className="text-purple-700 mt-1">{ins.description}</div>
+                <div className="mt-1 text-purple-600"><strong>Ai khai thác:</strong> {ins.who_exploits_it} · <strong>Doscom nên:</strong> {ins.doscom_action}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -928,11 +1106,11 @@ function RadarResultPanel({ data }) {
                 {data.sentiment.our_product.negative && <div className="text-xs text-red-600 mt-1">❌ {data.sentiment.our_product.negative.join(", ")}</div>}
               </div>
             )}
-            {data.sentiment.competitors && (
+            {sentimentComp && (
               <div className="p-3 rounded-lg bg-red-50 border border-red-200">
-                <div className="font-semibold text-red-800 text-xs mb-2">Đối thủ {data.sentiment.competitors.rating_avg && `⭐ ${data.sentiment.competitors.rating_avg}`}</div>
-                {data.sentiment.competitors.positive && <div className="text-xs text-emerald-700">✅ {data.sentiment.competitors.positive.join(", ")}</div>}
-                {data.sentiment.competitors.negative && <div className="text-xs text-red-600 mt-1">❌ {data.sentiment.competitors.negative.join(", ")}</div>}
+                <div className="font-semibold text-red-800 text-xs mb-2">Đối thủ {sentimentComp.rating_avg && `⭐ ${sentimentComp.rating_avg}`}</div>
+                {sentimentComp.positive && <div className="text-xs text-emerald-700">✅ {sentimentComp.positive.join(", ")}</div>}
+                {sentimentComp.negative && <div className="text-xs text-red-600 mt-1">❌ {sentimentComp.negative.join(", ")}</div>}
               </div>
             )}
           </div>
@@ -942,10 +1120,68 @@ function RadarResultPanel({ data }) {
         </div>
       )}
 
-      {/* Recommendations */}
+      {/* Actions (v5.0) */}
+      {data.actions && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">🚀 Cơ hội & Hành động</h5>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {data.actions.quick_win_24h && (
+              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+                <div className="font-bold text-emerald-800 text-xs mb-2">⚡ Quick Win 24h</div>
+                {data.actions.quick_win_24h.map((a, i) => (
+                  <div key={i} className="text-xs text-emerald-700 mb-1 flex items-start gap-1"><span className="font-bold">{i+1}.</span> {a}</div>
+                ))}
+              </div>
+            )}
+            {data.actions.test_7_days && (
+              <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                <div className="font-bold text-blue-800 text-xs mb-2">🧪 Test 7 ngày</div>
+                {data.actions.test_7_days.map((a, i) => (
+                  <div key={i} className="text-xs text-blue-700 mb-1 flex items-start gap-1"><span className="font-bold">{i+1}.</span> {a}</div>
+                ))}
+              </div>
+            )}
+            {data.actions.strategy_30_days && (
+              <div className="p-3 rounded-lg bg-purple-50 border border-purple-200">
+                <div className="font-bold text-purple-800 text-xs mb-2">🎯 Chiến lược 30 ngày</div>
+                {data.actions.strategy_30_days.map((a, i) => (
+                  <div key={i} className="text-xs text-purple-700 mb-1 flex items-start gap-1"><span className="font-bold">{i+1}.</span> {a}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* CEO Decision (v5.0) */}
+      {data.ceo_decision && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3">👔 Quyết định đề xuất CEO</h5>
+          <div className="p-4 rounded-lg bg-indigo-50 border border-indigo-200">
+            <div className="font-bold text-indigo-900 text-sm mb-2">Ưu tiên #1: {data.ceo_decision.priority}</div>
+            <div className="text-xs text-indigo-700 mb-2"><strong>Lý do:</strong> {data.ceo_decision.reason}</div>
+            {data.ceo_decision.action_steps && (
+              <div className="text-xs text-indigo-700 mb-2">
+                <strong>Hành động:</strong>
+                {data.ceo_decision.action_steps.map((s, i) => (
+                  <span key={i}> {i+1}. {s}{i < data.ceo_decision.action_steps.length - 1 ? " →" : ""}</span>
+                ))}
+              </div>
+            )}
+            <div className="text-xs text-indigo-600">
+              <strong>Team:</strong> {data.ceo_decision.team} · <strong>Deadline:</strong> {data.ceo_decision.deadline}
+            </div>
+            {data.ceo_decision.risk_and_mitigation && (
+              <div className="text-xs text-amber-700 mt-2 p-2 bg-amber-50 rounded">⚠️ {data.ceo_decision.risk_and_mitigation}</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Recommendations (legacy + v5.0) */}
       {data.recommendations && data.recommendations.length > 0 && (
         <div className="p-4">
-          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">🎯 Đề xuất hành động</h5>
+          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">📋 Đề xuất tổng hợp</h5>
           <div className="space-y-2">
             {data.recommendations.map((r, i) => (
               <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
@@ -954,6 +1190,13 @@ function RadarResultPanel({ data }) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Legacy: Summary (for old data without ceo_summary) */}
+      {!data.ceo_summary && data.summary && (
+        <div className="px-4 py-3 bg-blue-50 border-b border-blue-100 text-sm text-blue-900">
+          💡 {data.summary}
         </div>
       )}
     </div>
