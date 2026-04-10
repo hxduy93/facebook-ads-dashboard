@@ -761,9 +761,7 @@ function CompetitorResearch({ knownData }) {
   // Open Cowork with pre-built prompt
   const openCoworkAnalysis = () => {
     const prompt = encodeURIComponent(
-      `Chạy skill competitor-radar cho sản phẩm "${radarProduct}". ` +
-      `Phân tích toàn diện: giá + promotion đối thủ trên Shopee/Lazada, FB Ads đối thủ (Ad Library), review/sentiment khách hàng. ` +
-      `Sau khi phân tích xong, đẩy kết quả lên dashboard qua POST /api/radar-data.`
+      `Chạy skill competitor-radar cho sản phẩm "${radarProduct}". Chạy ngay, không hỏi thêm.`
     )
     window.open(`https://claude.ai/new?q=${prompt}`, "_blank")
   }
