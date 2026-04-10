@@ -746,10 +746,15 @@ function FacebookAdsDashboard() {
 function AdsCreatorPanel() {
   const [product, setProduct] = useState("D1")
   const [format, setFormat] = useState("lead_gen")
+  const [optGoal, setOptGoal] = useState("LEAD_GENERATION")
+  const [destType, setDestType] = useState("WEBSITE")
+  const [billingEvent, setBillingEvent] = useState("IMPRESSIONS")
+  const [buyingType, setBuyingType] = useState("AUCTION")
   const [account, setAccount] = useState("act_927390616363424")
   const [pixel, setPixel] = useState("")
   const [page, setPage] = useState("")
   const [budget, setBudget] = useState("300000")
+  const [budgetType, setBudgetType] = useState("daily") // "daily" | "lifetime"
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [headline, setHeadline] = useState("")
@@ -794,13 +799,76 @@ function AdsCreatorPanel() {
     "24397685376567889": "NOMA 911",
   }
 
+  // ── 6 ODAX Campaign Objectives (Meta Ads API 2025+) ──
   const FORMATS = {
-    "lead_gen": { label: "Lead Gen (Đăng ký)", objective: "OUTCOME_LEADS", goal: "LEAD_GENERATION", cta: "SIGN_UP" },
-    "traffic":  { label: "Traffic (Lượt truy cập)", objective: "OUTCOME_TRAFFIC", goal: "LINK_CLICKS", cta: "LEARN_MORE" },
-    "video":    { label: "Video Views (Lượt xem)", objective: "OUTCOME_AWARENESS", goal: "THRUPLAY", cta: "WATCH_MORE" },
+    // 1. AWARENESS
+    "awareness_reach":     { label: "Awareness — Tiếp cận (Reach)", objective: "OUTCOME_AWARENESS", goal: "REACH", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "awareness_brand":     { label: "Awareness — Nhận diện thương hiệu", objective: "OUTCOME_AWARENESS", goal: "AD_RECALL_LIFT", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "awareness_video":     { label: "Awareness — Lượt xem video (ThruPlay)", objective: "OUTCOME_AWARENESS", goal: "THRUPLAY", cta: "WATCH_MORE", billing: "IMPRESSIONS", dest: "ON_VIDEO" },
+    "awareness_impr":      { label: "Awareness — Hiển thị tối đa (Impressions)", objective: "OUTCOME_AWARENESS", goal: "IMPRESSIONS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    // 2. TRAFFIC
+    "traffic_click":       { label: "Traffic — Lượt click liên kết", objective: "OUTCOME_TRAFFIC", goal: "LINK_CLICKS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "traffic_landing":     { label: "Traffic — Lượt xem trang đích", objective: "OUTCOME_TRAFFIC", goal: "LANDING_PAGE_VIEWS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "traffic_msg":         { label: "Traffic — Tin nhắn (Messenger/Zalo)", objective: "OUTCOME_TRAFFIC", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
+    "traffic_call":        { label: "Traffic — Cuộc gọi", objective: "OUTCOME_TRAFFIC", goal: "QUALITY_CALL", cta: "CALL_NOW", billing: "IMPRESSIONS", dest: "PHONE_CALL" },
+    // 3. ENGAGEMENT
+    "engage_post":         { label: "Engagement — Tương tác bài viết", objective: "OUTCOME_ENGAGEMENT", goal: "POST_ENGAGEMENT", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "ON_POST" },
+    "engage_page_like":    { label: "Engagement — Lượt thích trang", objective: "OUTCOME_ENGAGEMENT", goal: "PAGE_LIKES", cta: "LIKE_PAGE", billing: "IMPRESSIONS", dest: "ON_PAGE" },
+    "engage_event":        { label: "Engagement — Phản hồi sự kiện", objective: "OUTCOME_ENGAGEMENT", goal: "EVENT_RESPONSES", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "ON_EVENT" },
+    "engage_video":        { label: "Engagement — Lượt xem video", objective: "OUTCOME_ENGAGEMENT", goal: "THRUPLAY", cta: "WATCH_MORE", billing: "IMPRESSIONS", dest: "ON_VIDEO" },
+    "engage_msg":          { label: "Engagement — Tin nhắn", objective: "OUTCOME_ENGAGEMENT", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
+    // 4. LEADS
+    "lead_gen":            { label: "Leads — Form trên Facebook", objective: "OUTCOME_LEADS", goal: "LEAD_GENERATION", cta: "SIGN_UP", billing: "IMPRESSIONS", dest: "ON_AD" },
+    "lead_convert":        { label: "Leads — Chuyển đổi trên website", objective: "OUTCOME_LEADS", goal: "OFFSITE_CONVERSIONS", cta: "SIGN_UP", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "lead_call":           { label: "Leads — Cuộc gọi", objective: "OUTCOME_LEADS", goal: "QUALITY_CALL", cta: "CALL_NOW", billing: "IMPRESSIONS", dest: "PHONE_CALL" },
+    "lead_msg":            { label: "Leads — Tin nhắn Messenger", objective: "OUTCOME_LEADS", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
+    "lead_ig":             { label: "Leads — Tin nhắn Instagram", objective: "OUTCOME_LEADS", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "INSTAGRAM_DIRECT" },
+    // 5. APP PROMOTION
+    "app_install":         { label: "App — Lượt cài đặt", objective: "OUTCOME_APP_PROMOTION", goal: "APP_INSTALLS", cta: "INSTALL_MOBILE_APP", billing: "IMPRESSIONS", dest: "APP" },
+    "app_event":           { label: "App — Sự kiện trong app", objective: "OUTCOME_APP_PROMOTION", goal: "OFFSITE_CONVERSIONS", cta: "USE_APP", billing: "IMPRESSIONS", dest: "APP" },
+    "app_value":           { label: "App — Giá trị (Value)", objective: "OUTCOME_APP_PROMOTION", goal: "VALUE", cta: "USE_APP", billing: "IMPRESSIONS", dest: "APP" },
+    // 6. SALES
+    "sales_convert":       { label: "Sales — Chuyển đổi website", objective: "OUTCOME_SALES", goal: "OFFSITE_CONVERSIONS", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "sales_value":         { label: "Sales — Tối ưu giá trị (ROAS)", objective: "OUTCOME_SALES", goal: "VALUE", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "sales_catalog":       { label: "Sales — Danh mục sản phẩm (Catalog)", objective: "OUTCOME_SALES", goal: "OFFSITE_CONVERSIONS", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
+    "sales_msg":           { label: "Sales — Tin nhắn", objective: "OUTCOME_SALES", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
   }
 
-  const CTAS = ["LEARN_MORE", "SIGN_UP", "SHOP_NOW", "WATCH_MORE", "CONTACT_US", "SEND_MESSAGE", "GET_QUOTE"]
+  // Group objectives for display
+  const FORMAT_GROUPS = {
+    "AWARENESS":      { emoji: "👁️", color: "blue",   keys: ["awareness_reach","awareness_brand","awareness_video","awareness_impr"] },
+    "TRAFFIC":        { emoji: "🔗", color: "cyan",   keys: ["traffic_click","traffic_landing","traffic_msg","traffic_call"] },
+    "ENGAGEMENT":     { emoji: "💬", color: "purple", keys: ["engage_post","engage_page_like","engage_event","engage_video","engage_msg"] },
+    "LEADS":          { emoji: "🎯", color: "orange", keys: ["lead_gen","lead_convert","lead_call","lead_msg","lead_ig"] },
+    "APP PROMOTION":  { emoji: "📱", color: "green",  keys: ["app_install","app_event","app_value"] },
+    "SALES":          { emoji: "💰", color: "red",    keys: ["sales_convert","sales_value","sales_catalog","sales_msg"] },
+  }
+
+  const OPTIMIZATION_GOALS = [
+    "REACH", "AD_RECALL_LIFT", "IMPRESSIONS", "THRUPLAY",
+    "LINK_CLICKS", "LANDING_PAGE_VIEWS", "CONVERSATIONS", "QUALITY_CALL",
+    "POST_ENGAGEMENT", "PAGE_LIKES", "EVENT_RESPONSES",
+    "LEAD_GENERATION", "OFFSITE_CONVERSIONS",
+    "APP_INSTALLS", "VALUE",
+    "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS",
+  ]
+
+  const DESTINATION_TYPES = [
+    "WEBSITE", "APP", "MESSENGER", "WHATSAPP", "INSTAGRAM_DIRECT",
+    "ON_AD", "ON_POST", "ON_PAGE", "ON_EVENT", "ON_VIDEO",
+    "SHOP", "PHONE_CALL", "APPLINKS_AUTOMATIC",
+  ]
+
+  const BILLING_EVENTS = ["IMPRESSIONS", "LINK_CLICKS", "THRUPLAY", "POST_ENGAGEMENT"]
+
+  const BUYING_TYPES = ["AUCTION", "RESERVED"]
+
+  const CTAS = [
+    "LEARN_MORE", "SIGN_UP", "SHOP_NOW", "WATCH_MORE", "CONTACT_US",
+    "SEND_MESSAGE", "GET_QUOTE", "CALL_NOW", "APPLY_NOW", "BOOK_TRAVEL",
+    "DOWNLOAD", "GET_OFFER", "ORDER_NOW", "SUBSCRIBE", "GET_DIRECTIONS",
+    "LIKE_PAGE", "INSTALL_MOBILE_APP", "USE_APP", "LISTEN_NOW",
+  ]
 
   // Auto-fill defaults when product changes
   const handleProductChange = (p) => {
@@ -813,10 +881,14 @@ function AdsCreatorPanel() {
     }
   }
 
-  // Auto-set CTA when format changes
+  // Auto-set CTA + optimization goal + destination + billing when format changes
   const handleFormatChange = (f) => {
     setFormat(f)
-    setCta(FORMATS[f].cta)
+    const cfg = FORMATS[f]
+    setCta(cfg.cta)
+    setOptGoal(cfg.goal)
+    setDestType(cfg.dest)
+    setBillingEvent(cfg.billing)
   }
 
   // Handle video file selection
@@ -844,14 +916,18 @@ function AdsCreatorPanel() {
     const fmt = FORMATS[format]
     const today = new Date().toISOString().slice(0, 10)
     return {
-      campaign_name: `${product} - ${fmt.label.split(" (")[0]} - ${today}`,
+      campaign_name: `${product} - ${fmt.label.split(" — ")[1] || fmt.label} - ${today}`,
       account: ACCOUNTS[account] || account,
       page: PAGES[page] || page,
       pixel: PIXELS[pixel] || pixel,
       format: fmt.label,
       objective: fmt.objective,
-      optimization_goal: fmt.goal,
-      budget_daily: `${Number(budget).toLocaleString("vi-VN")}đ`,
+      optimization_goal: optGoal,
+      destination_type: destType,
+      billing_event: billingEvent,
+      buying_type: buyingType,
+      budget_type: budgetType,
+      budget: `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`,
       start: startDate || "(ngay lập tức)",
       end: endDate || "(không giới hạn)",
       headline,
@@ -881,8 +957,12 @@ function AdsCreatorPanel() {
       pixel_id: pixel,
       format_key: format,
       objective: FORMATS[format].objective,
-      optimization_goal: FORMATS[format].goal,
-      daily_budget: Number(budget),
+      optimization_goal: optGoal,
+      destination_type: destType,
+      billing_event: billingEvent,
+      buying_type: buyingType,
+      budget_type: budgetType,
+      budget_amount: Number(budget),
       start_time: startDate,
       end_time: endDate,
       headline,
@@ -936,9 +1016,43 @@ function AdsCreatorPanel() {
               </div>
 
               <div>
-                <label className={labelClass}>Định dạng chiến dịch</label>
+                <label className={labelClass}>Mục tiêu chiến dịch</label>
                 <select value={format} onChange={e => handleFormatChange(e.target.value)} className={selectClass}>
-                  {Object.entries(FORMATS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                  {Object.entries(FORMAT_GROUPS).map(([group, { emoji, keys }]) => (
+                    <optgroup key={group} label={`${emoji} ${group}`}>
+                      {keys.map(k => <option key={k} value={k}>{FORMATS[k].label.split(" — ")[1]}</option>)}
+                    </optgroup>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-400 mt-1">API: {FORMATS[format].objective}</p>
+              </div>
+
+              <div>
+                <label className={labelClass}>Optimization Goal</label>
+                <select value={optGoal} onChange={e => setOptGoal(e.target.value)} className={selectClass}>
+                  {OPTIMIZATION_GOALS.map(g => <option key={g} value={g}>{g.replace(/_/g, " ")}</option>)}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={labelClass}>Destination</label>
+                  <select value={destType} onChange={e => setDestType(e.target.value)} className={selectClass}>
+                    {DESTINATION_TYPES.map(d => <option key={d} value={d}>{d.replace(/_/g, " ")}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className={labelClass}>Billing</label>
+                  <select value={billingEvent} onChange={e => setBillingEvent(e.target.value)} className={selectClass}>
+                    {BILLING_EVENTS.map(b => <option key={b} value={b}>{b.replace(/_/g, " ")}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className={labelClass}>Buying Type</label>
+                <select value={buyingType} onChange={e => setBuyingType(e.target.value)} className={selectClass}>
+                  {BUYING_TYPES.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
 
@@ -971,9 +1085,16 @@ function AdsCreatorPanel() {
 
             <div className="space-y-4">
               <div>
-                <label className={labelClass}>Ngân sách/ngày (VND)</label>
+                <label className={labelClass}>Loại ngân sách</label>
+                <div className="flex gap-2">
+                  <button onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Ngày</button>
+                  <button onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
+                </div>
+              </div>
+              <div>
+                <label className={labelClass}>Ngân sách {budgetType === "daily" ? "/ngày" : "tổng"} (VND)</label>
                 <input type="number" value={budget} onChange={e => setBudget(e.target.value)} className={inputClass} placeholder="300000" step="50000" />
-                <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ/ngày</p>
+                <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ {budgetType === "daily" ? "/ngày" : "trọn đời"}</p>
               </div>
 
               <div>
@@ -1052,43 +1173,28 @@ function AdsCreatorPanel() {
           <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
             <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Eye /> Xem trước cấu hình</h3>
 
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Sản phẩm</span>
-                <span className="font-semibold">{product}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Định dạng</span>
-                <span className="font-semibold">{FORMATS[format].label.split(" (")[0]}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Tài khoản</span>
-                <span className="font-semibold">{ACCOUNTS[account]}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Page</span>
-                <span className="font-semibold text-xs text-right max-w-[160px] truncate">{(PAGES[page] || "").split(" (")[0]}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Pixel</span>
-                <span className="font-semibold">{PIXELS[pixel]}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Budget/ngày</span>
-                <span className="font-semibold text-green-600">{Number(budget).toLocaleString("vi-VN")}đ</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Lịch</span>
-                <span className="font-semibold text-xs">{startDate || "Ngay"} → {endDate || "Không giới hạn"}</span>
-              </div>
-              <div className="flex justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">CTA</span>
-                <span className="font-semibold">{cta.replace(/_/g, " ")}</span>
-              </div>
-              <div className="flex justify-between py-1.5">
-                <span className="text-gray-500">Media</span>
-                <span className="font-semibold text-xs">{videoFile ? "Video" : imageFile ? "Ảnh" : "Chưa chọn"}</span>
-              </div>
+            <div className="space-y-1 text-sm">
+              {[
+                ["Sản phẩm", product],
+                ["Objective", FORMATS[format].objective],
+                ["Mục tiêu", (FORMATS[format].label.split(" — ")[1] || FORMATS[format].label)],
+                ["Opt. Goal", optGoal.replace(/_/g, " ")],
+                ["Destination", destType.replace(/_/g, " ")],
+                ["Billing", billingEvent.replace(/_/g, " ")],
+                ["Buying", buyingType],
+                ["Tài khoản", ACCOUNTS[account]],
+                ["Page", (PAGES[page] || "").split(" (")[0]],
+                ["Pixel", PIXELS[pixel]],
+                ["Budget", `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`],
+                ["Lịch", `${startDate || "Ngay"} → ${endDate || "∞"}`],
+                ["CTA", cta.replace(/_/g, " ")],
+                ["Media", videoFile ? "Video" : imageFile ? "Ảnh" : "—"],
+              ].map(([label, val], i) => (
+                <div key={i} className="flex justify-between py-1 border-b border-gray-50">
+                  <span className="text-gray-400 text-xs">{label}</span>
+                  <span className="font-semibold text-xs text-right max-w-[150px] truncate">{val}</span>
+                </div>
+              ))}
             </div>
           </div>
 
