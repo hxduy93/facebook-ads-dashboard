@@ -65,6 +65,9 @@ const Search            = makeIcon("🔍");
 const ExternalLink      = makeIcon("🔗");
 const Globe             = makeIcon("🌐");
 const Spy               = makeIcon("🕵️");
+const Megaphone         = makeIcon("📣");
+const Upload            = makeIcon("⬆️");
+const Play              = makeIcon("▶️");
 
 
 // =============================================================
@@ -224,7 +227,7 @@ function CompareCard({ title, current, previous, isMoneyMetric, inverseGood }) {
 // MAIN COMPONENT
 // =============================================================
 function FacebookAdsDashboard() {
-  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors"
+  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator"
   const [selectedAccount, setSelectedAccount] = useState("all")
   const [timeFilter, setTimeFilter] = useState("30d")
 
@@ -389,11 +392,25 @@ function FacebookAdsDashboard() {
             >
               <Spy /> Theo dõi đối thủ
             </button>
+            <button
+              onClick={() => setCurrentView("ads-creator")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "ads-creator"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              <Megaphone /> Tạo quảng cáo
+            </button>
           </nav>
         </div>
 
         {currentView === "competitors" && (
           <CompetitorResearch />
+        )}
+
+        {currentView === "ads-creator" && (
+          <AdsCreatorPanel />
         )}
 
         {currentView === "main" && (<>
@@ -722,6 +739,426 @@ function FacebookAdsDashboard() {
     </div>
   )
 }
+
+// =============================================================
+// SUB-COMPONENT: Ads Creator Panel
+// =============================================================
+function AdsCreatorPanel() {
+  const [product, setProduct] = useState("D1")
+  const [format, setFormat] = useState("lead_gen")
+  const [account, setAccount] = useState("act_927390616363424")
+  const [pixel, setPixel] = useState("")
+  const [page, setPage] = useState("")
+  const [budget, setBudget] = useState("300000")
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [headline, setHeadline] = useState("")
+  const [adCopy, setAdCopy] = useState("")
+  const [cta, setCta] = useState("LEARN_MORE")
+  const [link, setLink] = useState("")
+  const [videoFile, setVideoFile] = useState(null)
+  const [imageFile, setImageFile] = useState(null)
+  const [mediaPreview, setMediaPreview] = useState(null)
+  const [status, setStatus] = useState(null) // null | "ready" | "sending" | "done" | "error"
+  const [statusMsg, setStatusMsg] = useState("")
+
+  const PRODUCTS = {
+    "D1":        { pixel: "283066540825683", page: "102966349378081", account: "act_927390616363424", pixelName: "D1 CHUẨN" },
+    "DR1":       { pixel: "317565188066584", page: "102966349378081", account: "act_927390616363424", pixelName: "DR1" },
+    "Noma 911":  { pixel: "24397685376567889", page: "681202051750505", account: "act_764394829882083", pixelName: "NOMA 911" },
+    "DA8.1":     { pixel: "922958632515102", page: "114261474867281", account: "act_927390616363424", pixelName: "DA8.1" },
+    "DA8.1 Pro": { pixel: "1278302354053624", page: "114261474867281", account: "act_927390616363424", pixelName: "DA8.1 Pro" },
+  }
+
+  const ACCOUNTS = {
+    "act_927390616363424": "Doscom CN",
+    "act_764394829882083": "Noma Xe Hơi",
+    "act_1655506672244826": "Noma VN",
+    "act_1449385949897024": "Holdings CN",
+  }
+
+  const PAGES = {
+    "102966349378081": "Doscom - Công nghệ nâng tầm cuộc sống (27K)",
+    "681202051750505": "Noma Việt Nam (10K)",
+    "110312205647152": "Doscom Mart (3.8M)",
+    "842243695641184": "Noma.vn",
+    "114261474867281": "Doscom - Công Nghệ An Ninh (8.2K)",
+  }
+
+  const PIXELS = {
+    "283066540825683": "D1 CHUẨN",
+    "1084989479958179": "D1 MỚI",
+    "922958632515102": "DA8.1",
+    "1278302354053624": "DA8.1 Pro",
+    "317565188066584": "DR1",
+    "24397685376567889": "NOMA 911",
+  }
+
+  const FORMATS = {
+    "lead_gen": { label: "Lead Gen (Đăng ký)", objective: "OUTCOME_LEADS", goal: "LEAD_GENERATION", cta: "SIGN_UP" },
+    "traffic":  { label: "Traffic (Lượt truy cập)", objective: "OUTCOME_TRAFFIC", goal: "LINK_CLICKS", cta: "LEARN_MORE" },
+    "video":    { label: "Video Views (Lượt xem)", objective: "OUTCOME_AWARENESS", goal: "THRUPLAY", cta: "WATCH_MORE" },
+  }
+
+  const CTAS = ["LEARN_MORE", "SIGN_UP", "SHOP_NOW", "WATCH_MORE", "CONTACT_US", "SEND_MESSAGE", "GET_QUOTE"]
+
+  // Auto-fill defaults when product changes
+  const handleProductChange = (p) => {
+    setProduct(p)
+    const cfg = PRODUCTS[p]
+    if (cfg) {
+      setPixel(cfg.pixel)
+      setPage(cfg.page)
+      setAccount(cfg.account)
+    }
+  }
+
+  // Auto-set CTA when format changes
+  const handleFormatChange = (f) => {
+    setFormat(f)
+    setCta(FORMATS[f].cta)
+  }
+
+  // Handle video file selection
+  const handleVideoSelect = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setVideoFile(file)
+      setImageFile(null)
+      setMediaPreview(URL.createObjectURL(file))
+    }
+  }
+
+  // Handle image file selection
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImageFile(file)
+      setVideoFile(null)
+      setMediaPreview(URL.createObjectURL(file))
+    }
+  }
+
+  // Build campaign config summary
+  const buildSummary = () => {
+    const fmt = FORMATS[format]
+    const today = new Date().toISOString().slice(0, 10)
+    return {
+      campaign_name: `${product} - ${fmt.label.split(" (")[0]} - ${today}`,
+      account: ACCOUNTS[account] || account,
+      page: PAGES[page] || page,
+      pixel: PIXELS[pixel] || pixel,
+      format: fmt.label,
+      objective: fmt.objective,
+      optimization_goal: fmt.goal,
+      budget_daily: `${Number(budget).toLocaleString("vi-VN")}đ`,
+      start: startDate || "(ngay lập tức)",
+      end: endDate || "(không giới hạn)",
+      headline,
+      ad_copy: adCopy.slice(0, 100) + (adCopy.length > 100 ? "..." : ""),
+      cta,
+      link,
+      media: videoFile ? `Video: ${videoFile.name}` : imageFile ? `Ảnh: ${imageFile.name}` : "(chưa chọn)",
+    }
+  }
+
+  const handlePublish = () => {
+    // This sets status to "ready" to show the confirmation summary
+    // In real flow: Claude/Cowork reads this config from the form and calls Pipeboard MCP tools
+    setStatus("ready")
+    setStatusMsg(JSON.stringify(buildSummary(), null, 2))
+  }
+
+  const handleConfirm = () => {
+    setStatus("sending")
+    setStatusMsg("Đang gửi đến Claude... Mở Cowork và yêu cầu: \"Tạo campaign theo config trên dashboard\"")
+    // In reality, this data gets picked up by Cowork scheduled task or manual trigger
+    // Save config to a JSON file that Cowork can read
+    const config = {
+      ...buildSummary(),
+      account_id: account,
+      page_id: page,
+      pixel_id: pixel,
+      format_key: format,
+      objective: FORMATS[format].objective,
+      optimization_goal: FORMATS[format].goal,
+      daily_budget: Number(budget),
+      start_time: startDate,
+      end_time: endDate,
+      headline,
+      ad_copy: adCopy,
+      cta,
+      link,
+      video_filename: videoFile?.name || null,
+      image_filename: imageFile?.name || null,
+      created_at: new Date().toISOString(),
+    }
+    // Store in localStorage for Cowork to pick up
+    try {
+      const pending = JSON.parse(localStorage.getItem("doscom_pending_ads") || "[]")
+      pending.push(config)
+      localStorage.setItem("doscom_pending_ads", JSON.stringify(pending))
+    } catch(e) {}
+    setTimeout(() => {
+      setStatus("done")
+      setStatusMsg("Config đã lưu! Mở Cowork chat và nói: \"Chạy campaign mới từ dashboard config\"")
+    }, 1500)
+  }
+
+  // Initialize defaults
+  React.useEffect(() => { handleProductChange("D1") }, [])
+
+  const selectClass = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+  const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  const labelClass = "block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5"
+
+  return (
+    <div className="space-y-6">
+      {/* HEADER */}
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-6 text-white">
+        <h2 className="text-xl font-bold flex items-center gap-2"><Megaphone /> Tạo Quảng Cáo Facebook</h2>
+        <p className="text-blue-100 text-sm mt-1">Setup chiến dịch → Claude tự tạo qua Meta Ads API (Pipeboard)</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* LEFT COLUMN — Product & Format */}
+        <div className="space-y-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Package /> Sản phẩm & Định dạng</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Sản phẩm</label>
+                <select value={product} onChange={e => handleProductChange(e.target.value)} className={selectClass}>
+                  {Object.keys(PRODUCTS).map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Định dạng chiến dịch</label>
+                <select value={format} onChange={e => handleFormatChange(e.target.value)} className={selectClass}>
+                  {Object.entries(FORMATS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Tài khoản quảng cáo</label>
+                <select value={account} onChange={e => setAccount(e.target.value)} className={selectClass}>
+                  {Object.entries(ACCOUNTS).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Facebook Page</label>
+                <select value={page} onChange={e => setPage(e.target.value)} className={selectClass}>
+                  {Object.entries(PAGES).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Pixel</label>
+                <select value={pixel} onChange={e => setPixel(e.target.value)} className={selectClass}>
+                  {Object.entries(PIXELS).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* BUDGET & SCHEDULE */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><DollarSign /> Ngân sách & Lịch chạy</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Ngân sách/ngày (VND)</label>
+                <input type="number" value={budget} onChange={e => setBudget(e.target.value)} className={inputClass} placeholder="300000" step="50000" />
+                <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ/ngày</p>
+              </div>
+
+              <div>
+                <label className={labelClass}>Ngày bắt đầu</label>
+                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className={inputClass} />
+              </div>
+
+              <div>
+                <label className={labelClass}>Ngày kết thúc (tùy chọn)</label>
+                <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className={inputClass} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MIDDLE COLUMN — Media & Content */}
+        <div className="space-y-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Upload /> Upload Media</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Video quảng cáo</label>
+                <input type="file" accept="video/*" onChange={handleVideoSelect} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+              </div>
+
+              <div>
+                <label className={labelClass}>Hoặc ảnh quảng cáo</label>
+                <input type="file" accept="image/*" onChange={handleImageSelect} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100" />
+              </div>
+
+              {mediaPreview && (
+                <div className="mt-3 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+                  {videoFile ? (
+                    <video src={mediaPreview} controls className="w-full max-h-48 object-contain" />
+                  ) : (
+                    <img src={mediaPreview} className="w-full max-h-48 object-contain" />
+                  )}
+                  <p className="text-xs text-gray-500 p-2 text-center">{videoFile?.name || imageFile?.name}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Lightbulb /> Nội dung quảng cáo</h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Tiêu đề (Headline)</label>
+                <input type="text" value={headline} onChange={e => setHeadline(e.target.value)} className={inputClass} placeholder="VD: Máy dò nghe lén D1 — Bảo vệ riêng tư" />
+              </div>
+
+              <div>
+                <label className={labelClass}>Nội dung quảng cáo (Ad Copy)</label>
+                <textarea value={adCopy} onChange={e => setAdCopy(e.target.value)} className={inputClass + " h-32 resize-none"} placeholder="Nhập nội dung quảng cáo...&#10;&#10;Tip: Sau khi train phong cách viết, Claude sẽ tự gợi ý content" />
+              </div>
+
+              <div>
+                <label className={labelClass}>Call to Action</label>
+                <select value={cta} onChange={e => setCta(e.target.value)} className={selectClass}>
+                  {CTAS.map(c => <option key={c} value={c}>{c.replace(/_/g, " ")}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className={labelClass}>Link đích (Landing page)</label>
+                <input type="url" value={link} onChange={e => setLink(e.target.value)} className={inputClass} placeholder="https://doscom.vn/san-pham/d1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN — Preview & Publish */}
+        <div className="space-y-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Eye /> Xem trước cấu hình</h3>
+
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Sản phẩm</span>
+                <span className="font-semibold">{product}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Định dạng</span>
+                <span className="font-semibold">{FORMATS[format].label.split(" (")[0]}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Tài khoản</span>
+                <span className="font-semibold">{ACCOUNTS[account]}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Page</span>
+                <span className="font-semibold text-xs text-right max-w-[160px] truncate">{(PAGES[page] || "").split(" (")[0]}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Pixel</span>
+                <span className="font-semibold">{PIXELS[pixel]}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Budget/ngày</span>
+                <span className="font-semibold text-green-600">{Number(budget).toLocaleString("vi-VN")}đ</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">Lịch</span>
+                <span className="font-semibold text-xs">{startDate || "Ngay"} → {endDate || "Không giới hạn"}</span>
+              </div>
+              <div className="flex justify-between py-1.5 border-b border-gray-100">
+                <span className="text-gray-500">CTA</span>
+                <span className="font-semibold">{cta.replace(/_/g, " ")}</span>
+              </div>
+              <div className="flex justify-between py-1.5">
+                <span className="text-gray-500">Media</span>
+                <span className="font-semibold text-xs">{videoFile ? "Video" : imageFile ? "Ảnh" : "Chưa chọn"}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* PUBLISH BUTTON */}
+          <button
+            onClick={handlePublish}
+            disabled={!headline || !adCopy}
+            className={`w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg transition flex items-center justify-center gap-2 ${
+              !headline || !adCopy
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98]"
+            }`}
+          >
+            <Megaphone /> Tạo chiến dịch
+          </button>
+
+          {!headline && !adCopy && (
+            <p className="text-xs text-gray-400 text-center">Nhập tiêu đề và nội dung quảng cáo để tiếp tục</p>
+          )}
+
+          {/* STATUS / CONFIRMATION */}
+          {status === "ready" && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <p className="text-sm font-semibold text-amber-800 mb-2">Xác nhận tạo chiến dịch?</p>
+              <pre className="text-xs bg-white p-3 rounded-lg border border-amber-100 overflow-auto max-h-40 whitespace-pre-wrap">{statusMsg}</pre>
+              <div className="flex gap-2 mt-3">
+                <button onClick={handleConfirm} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">
+                  Xác nhận & Gửi
+                </button>
+                <button onClick={() => setStatus(null)} className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200">
+                  Hủy
+                </button>
+              </div>
+            </div>
+          )}
+
+          {status === "sending" && (
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+              <div className="animate-spin inline-block w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mb-2"></div>
+              <p className="text-sm text-blue-700">{statusMsg}</p>
+            </div>
+          )}
+
+          {status === "done" && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <p className="text-sm font-semibold text-green-800 mb-1">Campaign config sẵn sàng!</p>
+              <p className="text-xs text-green-600">{statusMsg}</p>
+              <button onClick={() => { setStatus(null); setHeadline(""); setAdCopy(""); setVideoFile(null); setImageFile(null); setMediaPreview(null) }} className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700">
+                Tạo chiến dịch mới
+              </button>
+            </div>
+          )}
+
+          {/* INSTRUCTIONS */}
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+            <h4 className="text-xs font-bold text-gray-600 uppercase mb-2">Quy trình</h4>
+            <div className="space-y-2 text-xs text-gray-500">
+              <p><span className="font-bold text-gray-700">1.</span> Điền form → Ấn "Tạo chiến dịch"</p>
+              <p><span className="font-bold text-gray-700">2.</span> Xác nhận config → Claude tự tạo qua Meta API</p>
+              <p><span className="font-bold text-gray-700">3.</span> Campaign tạo ở trạng thái PAUSED</p>
+              <p><span className="font-bold text-gray-700">4.</span> Review trên Meta → Bật ACTIVE khi sẵn sàng</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 
 // =============================================================
 // SUB-COMPONENT: Competitor Research (Chrome-scraped data)
