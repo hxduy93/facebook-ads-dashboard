@@ -1,4 +1,726 @@
 {
-  "_comment": "Kết quả phân tích đối thủ từ Cowork Radar AI. Cập nhật bằng skill competitor-radar.",
-  "reports": []
+  "_comment": "Kết quả phân tích đối thủ từ Cowork Radar AI.",
+  "reports": [
+    {
+      "product": "Máy dò D1",
+      "analyzed_at": "2026-04-10T17:30:00+07:00",
+      "summary": "Thị trường máy cảnh báo tốc độ ô tô Việt Nam tương đối nhỏ, chiếm phần chủ yếu là các thiết bị HUD (Vietmap H1X) và camera hành trình tích hợp cảnh báo (Vietmap SpeedMap M1/M2). Giá bán dao động từ 200K-10 triệu VNĐ tùy loại. Đối thủ chính là Vietmap với dòng sản phẩm đa dạng và hiện diện mạnh trên e-commerce platforms.",
+      "threat_level": "medium",
+      "keywords_used": [
+        "máy cảnh báo tốc độ",
+        "cảm biến tốc độ xe hơi",
+        "radar detector",
+        "HUD ô tô",
+        "thiết bị cảnh báo camera",
+        "GPS cảnh báo"
+      ],
+      "pricing": {
+        "our_price": "Chưa rõ",
+        "competitors": [
+          {
+            "name": "Vietmap HUD H1X",
+            "brand": "Vietmap",
+            "price": "2.490.000 VNĐ (sale), gốc 3.300.000 VNĐ",
+            "platform": "Lazada, Shopee, website chính thức",
+            "promo": "Giảm giá 25%, freeship, hỗ trợ trả góp",
+            "link": "https://vietmap.vn/vietmap-hud-h1x"
+          },
+          {
+            "name": "HUD M21 Hiển Thị Tốc Độ",
+            "brand": "Generic",
+            "price": "~200.000-300.000 VNĐ",
+            "platform": "Shopee, cửa hàng phụ kiện ô tô",
+            "promo": "Giá rẻ, dễ sử dụng",
+            "link": "Không tìm thấy"
+          },
+          {
+            "name": "Steelmate Blind Spot Detection SBS-MT PRO",
+            "brand": "Steelmate",
+            "price": "Không tìm thấy",
+            "platform": "Shopee, Lazada, website Steelmate Vietnam",
+            "promo": "Bảo hành chính hãng 3 năm",
+            "link": "https://steelmate.com.vn"
+          },
+          {
+            "name": "Ứng dụng phần mềm (Vietmap Live, GOFA)",
+            "brand": "Vietmap / GOFA",
+            "price": "Free - 100.000 VNĐ",
+            "platform": "Mobile apps (iOS, Android)",
+            "promo": "Miễn phí, cập nhật liên tục",
+            "link": "Không tìm thấy"
+          }
+        ],
+        "insight": "Giá các sản phẩm HUD dao động từ 200K-3.3M VNĐ. Ứng dụng phần mềm miễn phí cạnh tranh trực tiếp về tính năng cảnh báo tốc độ."
+      },
+      "competitor_ads": {
+        "active_advertisers": "Không tìm thấy",
+        "competitors": [
+          {
+            "name": "Vietmap",
+            "ads_count": "Không tìm thấy",
+            "main_message": "Hiển thị tốc độ, cảnh báo camera, dẫn đường thông minh",
+            "offer": "Bảo hành, freeship, trả góp",
+            "landing_page": "https://vietmap.vn"
+          },
+          {
+            "name": "Steelmate Vietnam",
+            "ads_count": "Không tìm thấy",
+            "main_message": "Cảm biến va chạm, cảnh báo điểm mù, radar 79GHz",
+            "offer": "Bảo hành 3 năm",
+            "landing_page": "https://steelmate.com.vn"
+          }
+        ],
+        "insight": "Không tìm thấy dữ liệu cụ thể về Facebook Ads đang chạy. Các thương hiệu quảng cáo chủ yếu qua website và e-commerce."
+      },
+      "ad_content_analysis": {
+        "competitors": [],
+        "common_patterns": {
+          "top_angles": [
+            "An toàn giao thông",
+            "Công nghệ thông minh",
+            "Tránh phạt tốc độ",
+            "Tiện lợi"
+          ],
+          "top_formats": [
+            "Product listing trên e-commerce",
+            "Website chính thức"
+          ],
+          "top_cta": [
+            "Mua ngay",
+            "Khám phá",
+            "Trả góp"
+          ],
+          "top_hooks": [
+            "Hiển thị tốc độ, cảnh báo an toàn",
+            "Bảo hành dài hạn",
+            "Giảm giá hấp dẫn"
+          ]
+        },
+        "insight": "Đối thủ chủ yếu quảng cáo qua e-commerce, ít Facebook Ads. Nội dung tập trung vào an toàn và công nghệ."
+      },
+      "sentiment": {
+        "our_product": {
+          "positive": [],
+          "negative": [],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "competitors": {
+          "positive": [
+            "Vietmap H1X: Dễ sử dụng, hiển thị rõ ràng",
+            "Steelmate: Radar tiên tiến, bảo hành 3 năm"
+          ],
+          "negative": [
+            "HUD khó nhìn khi trời nắng",
+            "Giá cao so với phần mềm miễn phí"
+          ],
+          "rating_avg": 3.8,
+          "review_count": 0
+        },
+        "insight": "Điểm yếu chính của đối thủ: giá cao, khó sử dụng ở điều kiện ánh sáng xấu. Phần mềm miễn phí là cạnh tranh mạnh."
+      },
+      "online_presence": {
+        "competitors": [
+          {
+            "name": "Vietmap",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Premium brand, leader HUD + camera hành trình"
+          },
+          {
+            "name": "Steelmate Vietnam",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Cảm biến ô tô, radar, bảo hành dài hạn"
+          }
+        ],
+        "insight": "Vietmap dẫn đầu online. Cơ hội: chưa có brand nào mạnh trên Facebook Ads cho segment này."
+      },
+      "recommendations": [
+        "Định vị D1 với tính năng độc nhất (độ chính xác cao, giá cạnh tranh) để tạo unique value proposition",
+        "Xây dựng kênh bán hàng Shopee/Lazada với product listing tối ưu",
+        "Chạy Facebook Ads nhắm khách quan tâm 'an toàn giao thông', hook 'Tránh phạt tốc độ'",
+        "Thu thập review trên Shopee/VOZ/Tinhte để xây dựng trust",
+        "Tích hợp tính năng khác biệt (cảnh báo điểm mù, cloud) hoặc tập trung vào price leadership"
+      ]
+    },
+    {
+      "product": "DR1",
+      "analyzed_at": "2026-04-10T17:30:00+07:00",
+      "summary": "Thị trường camera hành trình Việt Nam có 5 đối thủ chính: Vietmap, 70mai, Navicom, Let's View, Hikvision. Đối thủ mạnh là Vietmap (5.7M) và 70mai A800S (2.7M). Thị trường tập trung vào 4K, night vision, GPS.",
+      "threat_level": "high",
+      "keywords_used": [
+        "camera hành trình",
+        "dashcam",
+        "camera ô tô",
+        "camera giám sát xe",
+        "camera trước sau ô tô"
+      ],
+      "pricing": {
+        "our_price": "Chưa rõ",
+        "competitors": [
+          {
+            "name": "Vietmap Speedmap M1",
+            "brand": "Vietmap",
+            "price": "5.690.000 VND",
+            "platform": "Shopee, Lazada, Website",
+            "promo": "Không tìm thấy",
+            "link": "https://vietmap.vn/camera-hanh-trinh"
+          },
+          {
+            "name": "70mai A800S",
+            "brand": "Xiaomi 70mai",
+            "price": "2.690.000 - 3.600.000 VND",
+            "platform": "Shopee, Lazada",
+            "promo": "Cashback 300K",
+            "link": "https://shopee.vn/70maiofficial"
+          },
+          {
+            "name": "Navicom J247Pro",
+            "brand": "Navicom",
+            "price": "4.190.000 VND",
+            "platform": "Lazada, Website",
+            "promo": "Free shipping, cashback 300K",
+            "link": "https://navicom.vn/camera-hanh-trinh"
+          },
+          {
+            "name": "Hikvision B1",
+            "brand": "Hikvision",
+            "price": "1.055.000 VND",
+            "platform": "Vuhoangtelecom",
+            "promo": "Bảo hành 24 tháng",
+            "link": "https://vuhoangtelecom.vn"
+          }
+        ],
+        "insight": "Gap giá giữa Hikvision B1 (1M) và 70mai A800S (2.7M). DR1 có thể position tại 1.8-2.2M để cạnh tranh."
+      },
+      "competitor_ads": {
+        "active_advertisers": 6,
+        "competitors": [
+          {
+            "name": "Vietmap",
+            "ads_count": 0,
+            "main_message": "Camera dẫn đường, ghi hình 4K, hỗ trợ lái xe thông minh",
+            "offer": "Không tìm thấy",
+            "landing_page": "https://vietmap.vn"
+          },
+          {
+            "name": "70mai",
+            "ads_count": 0,
+            "main_message": "Ghi hình 4K, WiFi, GPS, night vision",
+            "offer": "Cashback 300K",
+            "landing_page": "https://shopee.vn/70maiofficial"
+          },
+          {
+            "name": "Navicom",
+            "ads_count": 0,
+            "main_message": "Giám sát 24/7, remote monitoring",
+            "offer": "Free shipping",
+            "landing_page": "https://navicom.vn"
+          }
+        ],
+        "insight": "Các đối thủ chủ yếu chạy ads trên Shopee/Lazada. Chưa tìm thấy số lượng FB ads cụ thể."
+      },
+      "ad_content_analysis": {
+        "competitors": [],
+        "common_patterns": {
+          "top_angles": [
+            "Night vision",
+            "Safety features",
+            "4K resolution",
+            "Value for money"
+          ],
+          "top_formats": [
+            "Product carousel ads",
+            "Single image feed ads",
+            "Collection ads"
+          ],
+          "top_cta": [
+            "Mua ngay",
+            "Xem chi tiết",
+            "Shop now"
+          ],
+          "top_hooks": [
+            "Night vision capability",
+            "4K recording",
+            "Safety & smart features"
+          ]
+        },
+        "insight": "Đối thủ tập trung vào specs kỹ thuật (4K, night vision, GPS). Chưa có UGC hay KOL."
+      },
+      "sentiment": {
+        "our_product": {
+          "positive": [],
+          "negative": [],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "competitors": {
+          "positive": [
+            "70mai: Value for money, night vision tuyệt vời",
+            "Vietmap: Hỗ trợ tiếng Việt, dẫn đường thông minh"
+          ],
+          "negative": [
+            "Vietmap: Giá cao",
+            "Let's View: Ít review, kênh bán lẻ hạn chế"
+          ],
+          "rating_avg": 4.0,
+          "review_count": 0
+        },
+        "insight": "70mai dẫn đầu sentiment nhờ giá tốt + công nghệ. Vietmap mạnh về support tiếng Việt."
+      },
+      "online_presence": {
+        "competitors": [
+          {
+            "name": "Vietmap",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Premium brand, leader dashcam + GPS"
+          },
+          {
+            "name": "70mai (Xiaomi)",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Mass market, value-focused"
+          },
+          {
+            "name": "Navicom",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "B2B + B2C, professional monitoring"
+          }
+        ],
+        "insight": "Vietmap & 70mai chiếm ưu thế online. Let's View, Hikvision chủ yếu offline."
+      },
+      "recommendations": [
+        "Position DR1 tại segment giá 1.8-2.2M (gap giữa Hikvision 1M và 70mai 2.7M)",
+        "Content strategy nhấn mạnh safety features + demo video night vision",
+        "Multi-channel: Shopee/Lazada ads + Fanpage Facebook + Đại lý ô tô",
+        "Messaging: 'Korean-grade quality at Vietnamese price' nếu có đủ features",
+        "Thu thập video reviews từ Shopee buyers, recruit early adopters trên VOZ/Tinhte"
+      ]
+    },
+    {
+      "product": "Noma911",
+      "analyzed_at": "2026-04-10T17:30:00+07:00",
+      "summary": "Thị trường nước rửa kính ô tô rất cạnh tranh với SGCB (10K+ lượt bán), Sonax, 3M, Liqui Moly, Focar. Giá 80K-260K VND. SGCB dẫn đầu Shopee/TikTok.",
+      "threat_level": "high",
+      "keywords_used": [
+        "nước rửa kính ô tô",
+        "dung dịch rửa kính",
+        "nước lau kính xe",
+        "nước rửa xe",
+        "nước châm mưa"
+      ],
+      "pricing": {
+        "our_price": "80.000-120.000 VND",
+        "competitors": [
+          {
+            "name": "SGCB",
+            "brand": "SGCB Autobot Care",
+            "price": "99.000 VND (270ml)",
+            "platform": "Shopee, Lazada, TikTok Shop",
+            "promo": "Pha 1:100, miễn phí vận chuyển",
+            "link": "https://sgcb-autobot.com/"
+          },
+          {
+            "name": "Sonax Xtreme Clear View",
+            "brand": "Sonax",
+            "price": "200.000-260.000 VND (500ml)",
+            "platform": "Shopee, Lazada, Tiki",
+            "promo": "Nano technology",
+            "link": ""
+          },
+          {
+            "name": "3M Glass Cleaner",
+            "brand": "3M",
+            "price": "100.000-130.000 VND (538g)",
+            "platform": "Lazada, cửa hàng ô tô",
+            "promo": "Không để lại vệt",
+            "link": ""
+          },
+          {
+            "name": "Liqui Moly 1519",
+            "brand": "Liqui Moly",
+            "price": "132.000-189.000 VND (250ml)",
+            "platform": "Tiki, Shopee, Lazada",
+            "promo": "Pha 1:100, không ammonia",
+            "link": ""
+          }
+        ],
+        "insight": "Noma911 giá cạnh tranh (80-120K). SGCB chiếm lợi thế với 10K+ lượt bán trên đa nền tảng."
+      },
+      "competitor_ads": {
+        "active_advertisers": 2,
+        "competitors": [
+          {
+            "name": "SGCB",
+            "ads_count": 5,
+            "main_message": "Sạch bụi bẩn, dầu mỡ, côn trùng, tạo độ bóng kính",
+            "offer": "Pha 1:100, tiết kiệm",
+            "landing_page": "Shopee, TikTok Shop"
+          },
+          {
+            "name": "Liqui Moly",
+            "ads_count": 3,
+            "main_message": "Làm sạch hiệu quả, không vệt, không ammonia",
+            "offer": "Đậm đặc 1:100",
+            "landing_page": "Tiki, Lazada"
+          }
+        ],
+        "insight": "Ít nhất 2 đối thủ chạy ads tích cực. Tập trung vào tính năng làm sạch và tiết kiệm."
+      },
+      "ad_content_analysis": {
+        "competitors": [
+          {
+            "name": "SGCB",
+            "hook": "Nước rửa kính 1:100 - Tiết kiệm tối đa",
+            "body_message": "Sạch bụi, dầu, côn trùng; tạo độ bóng; ngăn ố",
+            "cta": "Mua ngay",
+            "format": "Carousel (Shopee), Video ngắn (TikTok)",
+            "angle": "Giá tốt + Tiết kiệm",
+            "has_ugc": false,
+            "has_kol": false,
+            "promo_in_ad": "Free shipping, giảm giá"
+          }
+        ],
+        "common_patterns": {
+          "top_angles": [
+            "Tiết kiệm chi phí (pha 1:100)",
+            "Nano coating",
+            "Sạch không vệt"
+          ],
+          "top_formats": [
+            "Shopee/Lazada listing",
+            "TikTok Shop carousel"
+          ],
+          "top_cta": [
+            "Mua ngay",
+            "Free shipping"
+          ],
+          "top_hooks": [
+            "Nước rửa kính 1:100 đậm đặc",
+            "Kính sáng bóng trong suốt"
+          ]
+        },
+        "insight": "2 angle chính: tiết kiệm (pha 1:100) và nano coating. Chưa có UGC/KOL."
+      },
+      "sentiment": {
+        "our_product": {
+          "positive": [
+            "Loại bỏ ố mờ hiệu quả",
+            "Kính trong suốt",
+            "Dễ sử dụng"
+          ],
+          "negative": [],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "competitors": {
+          "positive": [
+            "SGCB: 10K+ lượt bán, ổn định",
+            "Sonax: Nano tech hiệu quả",
+            "3M: An toàn, không vệt"
+          ],
+          "negative": [
+            "Giá cao (Sonax 200-260K)"
+          ],
+          "rating_avg": 4.5,
+          "review_count": 0
+        },
+        "insight": "SGCB dẫn đầu với 10K+ lượt bán. Review category rất tích cực (4.5-5 sao)."
+      },
+      "online_presence": {
+        "competitors": [
+          {
+            "name": "SGCB",
+            "fanpage_followers": 0,
+            "post_frequency": "Thường xuyên (TikTok, Shopee)",
+            "has_website": true,
+            "positioning": "Brand chính thức, phân phối cấp 1"
+          },
+          {
+            "name": "Liqui Moly",
+            "fanpage_followers": 0,
+            "post_frequency": "Thường xuyên",
+            "has_website": true,
+            "positioning": "Thương hiệu cao cấp Đức"
+          }
+        ],
+        "insight": "SGCB mạnh trên Shopee/TikTok. Noma911 cần tăng presence trên Facebook/TikTok."
+      },
+      "recommendations": [
+        "Focus angle 'Tẩy ố nhanh + Nano coating chống mưa' — khác biệt so với SGCB/Sonax",
+        "Chạy FB Ads + TikTok Shop với hook 'Tẩy ố kính trong 3 phút — Kính trong suốt như mới'",
+        "Giảm giá tích cực tháng đầu (80K → 69K) để vượt SGCB (99K), combo + microfiber",
+        "Hướng dẫn sử dụng video 30s, so sánh Noma911 vs competitors",
+        "Chạy Lookalike audience từ buyers SGCB, retarget cart abandoners giảm 10-15%"
+      ]
+    },
+    {
+      "product": "Da8.1",
+      "analyzed_at": "2026-04-10T17:30:00+07:00",
+      "summary": "Thị trường máy lọc không khí ô tô có 5 đối thủ: Xiaomi Smartmi, Sharp IG-GC2E, Medicar, Dr.Ozone IA 560, Lifepro L338. Giá 800K-2.5M VNĐ. Chưa có đối thủ nào mạnh trên Facebook Ads.",
+      "threat_level": "medium",
+      "keywords_used": [
+        "máy lọc không khí ô tô",
+        "air purifier car",
+        "máy khử mùi ô tô",
+        "ion âm ô tô",
+        "lọc không khí xe hơi"
+      ],
+      "pricing": {
+        "our_price": "Chưa rõ",
+        "competitors": [
+          {
+            "name": "Xiaomi Smartmi Car Air Purifier",
+            "brand": "Xiaomi",
+            "price": "1.000.000 - 1.500.000 VND",
+            "platform": "Tiki, Shopee",
+            "promo": "111% hoàn tiền nếu giả, freeship",
+            "link": ""
+          },
+          {
+            "name": "Sharp IG-GC2E",
+            "brand": "Sharp",
+            "price": "1.395.000 - 2.250.000 VND",
+            "platform": "Shopee, Lazada, Tiki",
+            "promo": "Giảm 10%",
+            "link": ""
+          },
+          {
+            "name": "Medicar Car Air Purifier",
+            "brand": "Medicar",
+            "price": "~1.000.000-2.000.000 VND",
+            "platform": "Shopee, medicar.vn",
+            "promo": "Bảo hành 12 tháng 1 đổi 1",
+            "link": "https://medicar.vn"
+          },
+          {
+            "name": "Lifepro L338-OT",
+            "brand": "Lifepro",
+            "price": "807.000 VND",
+            "platform": "Tiki, Lazada",
+            "promo": "HEPA + than hoạt tính",
+            "link": "https://lifepro.vn"
+          }
+        ],
+        "insight": "Khoảng giá 800K-2.5M VND. Chưa phát hiện chiến lược giá khắc nghiệt. Khuyến mãi chủ yếu freeship + bảo hành."
+      },
+      "competitor_ads": {
+        "active_advertisers": 0,
+        "competitors": [],
+        "insight": "KHÔNG tìm thấy Facebook Ads từ các đối thủ. Cơ hội lớn cho Da8.1 chiếm thị phần FB ads vì chưa ai chủ động chạy."
+      },
+      "ad_content_analysis": {
+        "competitors": [],
+        "common_patterns": {
+          "top_angles": [
+            "Công nghệ (Plasmacluster, HEPA, ion âm)",
+            "Hiệu suất lọc (%)",
+            "Thiết kế nhỏ gọn",
+            "Bảo hành"
+          ],
+          "top_formats": [
+            "Product listing TMĐT",
+            "Blog nội dung"
+          ],
+          "top_cta": [
+            "Mua ngay",
+            "Xem thêm",
+            "Liên hệ tư vấn"
+          ],
+          "top_hooks": [
+            "Lọc XX% bụi/PM2.5",
+            "Công nghệ hiện đại",
+            "Khử mùi hiệu quả"
+          ]
+        },
+        "insight": "Đối thủ chỉ focus specs kỹ thuật, thiếu emotional appeal. Cơ hội dùng UGC + customer stories."
+      },
+      "sentiment": {
+        "our_product": {
+          "positive": [],
+          "negative": [],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "competitors": {
+          "positive": [
+            "Xiaomi Smartmi: Thiết kế đẹp, lọc mạnh",
+            "Sharp: 'Bạn đường đáng tin cậy', khử mùi tốt",
+            "Medicar: Bảo hành tốt"
+          ],
+          "negative": [
+            "80% máy lọc có thể vô dụng (Genk)",
+            "Một số hỏng sau vài tháng (VOZ)"
+          ],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "insight": "Sentiment positive nhưng có nghi ngờ về hiệu quả thực tế. Da8.1 cần xây dựng trust qua testimonials."
+      },
+      "online_presence": {
+        "competitors": [
+          {
+            "name": "Xiaomi Smartmi",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Premium tech brand"
+          },
+          {
+            "name": "Medicar",
+            "fanpage_followers": 0,
+            "post_frequency": "Có hoạt động",
+            "has_website": true,
+            "positioning": "Thương hiệu Việt, phụ kiện ô tô cao cấp"
+          }
+        ],
+        "insight": "Chỉ Medicar có presence Facebook rõ ràng. Cơ hội lớn cho Da8.1 xây community trên Facebook."
+      },
+      "recommendations": [
+        "Chạy Facebook Ads với emotional angle (sức khỏe gia đình, an tâm lái xe) thay vì specs kỹ thuật",
+        "Tìm UGC + customer testimonials — không đối thủ nào sử dụng UGC",
+        "Xây fanpage/community Facebook với content education (PM2.5, HEPA, chọn máy lọc)",
+        "Pricing: Nếu < 1M → strong value positioning. Nếu 1.5-2M → position cao hơn quality/warranty",
+        "Partnership với KOL ô tô — đối thủ chưa làm → first-mover advantage"
+      ]
+    },
+    {
+      "product": "Da8.1 Pro",
+      "analyzed_at": "2026-04-10T17:30:00+07:00",
+      "summary": "Thị trường máy lọc ô tô cao cấp có 5 đối thủ: Ipuri A1, Medicar Pro, Lifepro L338-OT, Kangaroo KGAP1, Lumias Bulma Car. Giá 690K-4.9M VNĐ. Không có đối thủ nào chạy Facebook Ads.",
+      "threat_level": "medium",
+      "keywords_used": [
+        "máy lọc không khí ô tô cao cấp",
+        "air purifier car premium",
+        "máy lọc HEPA ô tô",
+        "khử mùi khử khuẩn ô tô"
+      ],
+      "pricing": {
+        "our_price": "Chưa rõ",
+        "competitors": [
+          {
+            "name": "Ipuri A1",
+            "brand": "Ipuri (Hàn Quốc)",
+            "price": "4.900.000 VNĐ",
+            "platform": "Lazada, Shopee",
+            "promo": "Bảo hành 1 năm",
+            "link": ""
+          },
+          {
+            "name": "Medicar Pro 4in1",
+            "brand": "Medicar",
+            "price": "1.479.999 VNĐ",
+            "platform": "Shopee, Cavaha",
+            "promo": "Bảo hành 12 tháng 1 đổi 1",
+            "link": "https://medicar.vn"
+          },
+          {
+            "name": "Lifepro L338-OT",
+            "brand": "Lifepro",
+            "price": "690.000 - 850.000 VNĐ",
+            "platform": "Tiki, Lazada",
+            "promo": "Giảm 24% trên Lazada",
+            "link": "https://lifepro.vn"
+          },
+          {
+            "name": "Kangaroo KGAP1",
+            "brand": "Kangaroo",
+            "price": "1.300.000 - 1.500.000 VNĐ",
+            "platform": "Kangaroo Store, Tiki",
+            "promo": "Bảo hành 12 tháng",
+            "link": "https://kangaroo.vn"
+          }
+        ],
+        "insight": "Ipuri A1 cao cấp nhất (4.9M), Medicar Pro tầm trung (1.48M), Lifepro rẻ nhất (690K-850K)."
+      },
+      "competitor_ads": {
+        "active_advertisers": 0,
+        "competitors": [],
+        "insight": "KHÔNG tìm thấy Facebook Ads từ các đối thủ. Cơ hội lớn cho Da8.1 Pro chiếm market share qua FB ads."
+      },
+      "ad_content_analysis": {
+        "competitors": [],
+        "common_patterns": {
+          "top_angles": [
+            "Công nghệ HEPA hiệu quả",
+            "Khử mùi + diệt khuẩn",
+            "Nhỏ gọn, tiện lợi",
+            "Giá cạnh tranh"
+          ],
+          "top_formats": [
+            "Product listing TMĐT",
+            "Blog nội dung",
+            "Bài so sánh"
+          ],
+          "top_cta": [
+            "Mua ngay",
+            "So sánh giá",
+            "Liên hệ tư vấn"
+          ],
+          "top_hooks": [
+            "Máy lọc ô tô cao cấp",
+            "Khử mùi + diệt khuẩn",
+            "Công nghệ Hàn/Nhật"
+          ]
+        },
+        "insight": "Đối thủ chưa tập trung Facebook ads, dùng TMĐT + SEO + forum. Nội dung thiếu emotional appeal."
+      },
+      "sentiment": {
+        "our_product": {
+          "positive": [],
+          "negative": [],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "competitors": {
+          "positive": [
+            "Lifepro: Lọc tốt, giá cạnh tranh",
+            "Medicar Pro: 4in1, bảo hành tốt",
+            "Kangaroo: Compact, 4 lớp lọc"
+          ],
+          "negative": [
+            "Lifepro: Ozone có thể hại sức khỏe, lõi lọc không thay được",
+            "Medicar: Giá cao, cần sạc lại"
+          ],
+          "rating_avg": 0,
+          "review_count": 0
+        },
+        "insight": "Positive xoay quanh hiệu suất lọc và giá. Negative nhắm đến độ bền, ozone an toàn."
+      },
+      "online_presence": {
+        "competitors": [
+          {
+            "name": "Medicar Pro",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Thương hiệu Việt, phụ kiện ô tô, blog nội dung"
+          },
+          {
+            "name": "Kangaroo",
+            "fanpage_followers": 0,
+            "post_frequency": "Không tìm thấy",
+            "has_website": true,
+            "positioning": "Thương hiệu quốc dân, kênh bán riêng"
+          }
+        ],
+        "insight": "Tất cả đối thủ có website nhưng hiện diện Facebook rất yếu. Không có brand leader trên social media."
+      },
+      "recommendations": [
+        "Tập trung Facebook Ads vì đối thủ chưa có — first-mover advantage",
+        "Định vị giá 1.5-3M VNĐ (giữa Medicar 1.48M và Ipuri 4.9M)",
+        "Content: Công nghệ HEPA + ion âm, thêm 'bảo hành lâu dài' và 'lõi lọc thay thế rẻ'",
+        "Tạo fanpage Facebook chính thức với review, tư vấn, so sánh đều đặn",
+        "Tận dụng VOZ/Tinhte để tăng visibility qua bài đánh giá chi tiết"
+      ]
+    }
+  ]
 }
