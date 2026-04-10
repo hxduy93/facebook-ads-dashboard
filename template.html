@@ -734,9 +734,230 @@ function FacebookAdsDashboard() {
 // SUB-COMPONENT: Competitor Research (Chrome-scraped data)
 // =============================================================
 function CompetitorResearch({ knownData }) {
+  const [radarProduct, setRadarProduct] = useState("Noma911")
+  const [radarData, setRadarData] = useState(null)
+  const [radarLoading, setRadarLoading] = useState(false)
+  const [radarError, setRadarError] = useState(null)
+
+  const PRODUCTS = ["Máy dò D1", "DR1", "Noma911", "Da8.1", "Da8.1 Pro"]
+
+  // Fetch radar data from static JSON file
+  const fetchRadar = () => {
+    setRadarLoading(true)
+    setRadarError(null)
+    fetch("/data/radar-latest.json")
+      .then(r => r.json())
+      .then(d => {
+        if (!d.reports || d.reports.length === 0) { setRadarData(null); setRadarLoading(false); return }
+        const match = d.reports.find(r => r.product === radarProduct)
+        setRadarData(match || d.reports[0])
+        setRadarLoading(false)
+      })
+      .catch(e => { setRadarError(e.message); setRadarLoading(false) })
+  }
+
+  React.useEffect(() => { fetchRadar() }, [radarProduct])
+
+  // Open Cowork with pre-built prompt
+  const openCoworkAnalysis = () => {
+    const prompt = encodeURIComponent(
+      `Chạy skill competitor-radar cho sản phẩm "${radarProduct}". ` +
+      `Phân tích toàn diện: giá + promotion đối thủ trên Shopee/Lazada, FB Ads đối thủ (Ad Library), review/sentiment khách hàng. ` +
+      `Sau khi phân tích xong, đẩy kết quả lên dashboard qua POST /api/radar-data.`
+    )
+    window.open(`https://claude.ai/new?q=${prompt}`, "_blank")
+  }
+
   return (
     <div>
+      {/* RADAR AI PANEL */}
+      <div className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-5 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
+              🛰️ Radar AI — Phân tích đối thủ
+            </h3>
+            <p className="text-xs text-gray-600 mt-1">Chọn sản phẩm → Bấm phân tích → Claude sẽ tìm kiếm & đẩy kết quả về đây</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select
+              value={radarProduct}
+              onChange={e => setRadarProduct(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            >
+              {PRODUCTS.map(p => <option key={p} value={p}>{p}</option>)}
+            </select>
+            <button
+              onClick={openCoworkAnalysis}
+              className="px-5 py-2.5 rounded-lg bg-purple-600 text-white text-sm font-semibold hover:bg-purple-700 transition shadow-md flex items-center gap-2"
+            >
+              🔍 Phân tích đối thủ
+            </button>
+            <button
+              onClick={fetchRadar}
+              className="px-3 py-2.5 rounded-lg bg-white border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 transition"
+              title="Tải lại kết quả"
+            >
+              🔄
+            </button>
+          </div>
+        </div>
+
+        {/* Radar Results */}
+        {radarLoading && (
+          <div className="text-center py-8 text-gray-500 text-sm">⏳ Đang tải dữ liệu radar...</div>
+        )}
+        {radarError && (
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-800">
+            ⚠️ Lỗi: {radarError}. KV có thể chưa được setup — xem hướng dẫn bên dưới.
+          </div>
+        )}
+        {!radarLoading && !radarError && !radarData && (
+          <div className="text-center py-8 border-2 border-dashed border-purple-200 rounded-lg bg-white/50">
+            <div className="text-4xl mb-2">🛰️</div>
+            <p className="text-sm text-gray-600">Chưa có dữ liệu radar cho <strong>{radarProduct}</strong></p>
+            <p className="text-xs text-gray-400 mt-1">Bấm "Phân tích đối thủ" để bắt đầu — kết quả sẽ hiển thị tại đây</p>
+          </div>
+        )}
+        {!radarLoading && radarData && <RadarResultPanel data={radarData} />}
+      </div>
+
+      {/* EXISTING: Known Competitors Table */}
       <KnownCompetitorsView data={knownData} />
+    </div>
+  )
+}
+
+// =============================================================
+// SUB-COMPONENT: Radar Result Panel (hiển thị kết quả phân tích AI)
+// =============================================================
+function RadarResultPanel({ data }) {
+  const [expandSection, setExpandSection] = useState("all")
+  const threatColors = {
+    low: "bg-emerald-100 text-emerald-800 border-emerald-300",
+    medium: "bg-amber-100 text-amber-800 border-amber-300",
+    high: "bg-red-100 text-red-800 border-red-300",
+    critical: "bg-red-200 text-red-900 border-red-400"
+  }
+  const threatLabel = { low: "Thấp", medium: "Trung bình", high: "Cao", critical: "Nghiêm trọng" }
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h4 className="font-bold text-gray-900 flex items-center gap-2">
+            📊 Kết quả phân tích: {data.product || "Tất cả"}
+            <span className={`px-2 py-0.5 text-xs rounded-full border ${threatColors[data.threat_level] || threatColors.medium}`}>
+              Mức đe dọa: {threatLabel[data.threat_level] || data.threat_level}
+            </span>
+          </h4>
+          <p className="text-xs text-gray-500 mt-1">Cập nhật: {data.saved_at ? new Date(data.saved_at).toLocaleString("vi-VN") : data.analyzed_at || "—"}</p>
+        </div>
+      </div>
+
+      {/* Summary */}
+      {data.summary && (
+        <div className="px-4 py-3 bg-blue-50 border-b border-blue-100 text-sm text-blue-900">
+          💡 {data.summary}
+        </div>
+      )}
+
+      {/* Pricing Section */}
+      {data.pricing && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">💰 Giá & Promotion</h5>
+          {data.pricing.our_price && (
+            <div className="mb-2 text-sm"><strong>Giá NOMA:</strong> {data.pricing.our_price}</div>
+          )}
+          {data.pricing.competitors && data.pricing.competitors.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-gray-50 text-gray-500 uppercase">
+                    <th className="py-2 px-3 text-left font-medium">Đối thủ</th>
+                    <th className="py-2 px-3 text-right font-medium">Giá</th>
+                    <th className="py-2 px-3 text-left font-medium">Nền tảng</th>
+                    <th className="py-2 px-3 text-left font-medium">Khuyến mãi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.pricing.competitors.map((c, i) => (
+                    <tr key={i} className="border-b border-gray-50">
+                      <td className="py-2 px-3 font-medium text-gray-900">{c.name}</td>
+                      <td className="py-2 px-3 text-right font-bold text-red-600">{c.price}</td>
+                      <td className="py-2 px-3 text-gray-600">{c.platform}</td>
+                      <td className="py-2 px-3 text-purple-600">{c.promo || "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {data.pricing.insight && (
+            <p className="mt-2 text-xs text-gray-600 bg-gray-50 rounded p-2">📌 {data.pricing.insight}</p>
+          )}
+        </div>
+      )}
+
+      {/* Competitor Ads Section */}
+      {data.competitor_ads && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">📢 FB Ads đối thủ ({data.competitor_ads.active_advertisers || 0} đang chạy)</h5>
+          {data.competitor_ads.competitors && data.competitor_ads.competitors.map((c, i) => (
+            <div key={i} className="mb-2 p-2 rounded bg-gray-50 text-xs">
+              <div className="font-semibold text-gray-900">{c.name}</div>
+              {c.main_message && <div className="text-gray-600 mt-1">"{c.main_message}"</div>}
+              {c.offer && <div className="text-purple-600 mt-0.5">🎁 {c.offer}</div>}
+              <div className="text-gray-400 mt-0.5">Trạng thái: {c.ad_status || "unknown"}</div>
+            </div>
+          ))}
+          {data.competitor_ads.insight && (
+            <p className="mt-2 text-xs text-gray-600 bg-gray-50 rounded p-2">📌 {data.competitor_ads.insight}</p>
+          )}
+        </div>
+      )}
+
+      {/* Sentiment Section */}
+      {data.sentiment && (
+        <div className="p-4 border-b border-gray-100">
+          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">💬 Sentiment khách hàng</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {data.sentiment.our_product && (
+              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+                <div className="font-semibold text-emerald-800 text-xs mb-2">Sản phẩm mình {data.sentiment.our_product.rating_avg && `⭐ ${data.sentiment.our_product.rating_avg}`}</div>
+                {data.sentiment.our_product.positive && <div className="text-xs text-emerald-700">✅ {data.sentiment.our_product.positive.join(", ")}</div>}
+                {data.sentiment.our_product.negative && <div className="text-xs text-red-600 mt-1">❌ {data.sentiment.our_product.negative.join(", ")}</div>}
+              </div>
+            )}
+            {data.sentiment.competitors && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                <div className="font-semibold text-red-800 text-xs mb-2">Đối thủ {data.sentiment.competitors.rating_avg && `⭐ ${data.sentiment.competitors.rating_avg}`}</div>
+                {data.sentiment.competitors.positive && <div className="text-xs text-emerald-700">✅ {data.sentiment.competitors.positive.join(", ")}</div>}
+                {data.sentiment.competitors.negative && <div className="text-xs text-red-600 mt-1">❌ {data.sentiment.competitors.negative.join(", ")}</div>}
+              </div>
+            )}
+          </div>
+          {data.sentiment.insight && (
+            <p className="mt-2 text-xs text-gray-600 bg-gray-50 rounded p-2">📌 {data.sentiment.insight}</p>
+          )}
+        </div>
+      )}
+
+      {/* Recommendations */}
+      {data.recommendations && data.recommendations.length > 0 && (
+        <div className="p-4">
+          <h5 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">🎯 Đề xuất hành động</h5>
+          <div className="space-y-2">
+            {data.recommendations.map((r, i) => (
+              <div key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+                {r}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
