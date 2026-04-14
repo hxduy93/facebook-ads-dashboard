@@ -14,6 +14,7 @@ Logic:
 import os
 import json
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 import urllib.request
@@ -42,8 +43,8 @@ SOURCE_FILTER_KEYWORD = "DUY"   # only count orders whose source contains "DUY"
 LOOKBACK_DAYS = 90              # tạm mở rộng để verify có đơn lịch sử
 
 
-def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False):
-    """Fetch one page of orders from Pancake POS."""
+def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False, max_retries=4):
+    """Fetch one page of orders from Pancake POS with retry/backoff on 5xx."""
     params = {
         "api_key": API_KEY,
         "page_number": page,
@@ -55,28 +56,43 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=Fa
         params["endDateTime"] = end_date.strftime("%Y-%m-%dT23:59:59")
 
     url = f"{BASE_URL}/shops/{SHOP_ID}/orders?{urlencode(params)}"
-    # Print safe URL (redact key) for debugging
     safe_url = url.replace(API_KEY, "***") if API_KEY else url
     print(f"[DEBUG] GET {safe_url}")
 
-    req = urllib.request.Request(url, headers={"Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            raw = resp.read().decode("utf-8")
-            print(f"[DEBUG] HTTP {resp.status} · {len(raw)} bytes")
-            if debug:
-                print(f"[DEBUG] Response body (first 2000 chars):\n{raw[:2000]}")
-            parsed = json.loads(raw)
-            if debug:
-                print(f"[DEBUG] Top-level keys: {list(parsed.keys()) if isinstance(parsed, dict) else type(parsed).__name__}")
-            return parsed
-    except urllib.error.HTTPError as e:
-        body = e.read().decode('utf-8', errors='ignore')[:2000]
-        print(f"[ERROR] HTTP {e.code}: {body}", file=sys.stderr)
-        raise
-    except Exception as e:
-        print(f"[ERROR] {type(e).__name__}: {e}", file=sys.stderr)
-        raise
+    last_err = None
+    for attempt in range(1, max_retries + 1):
+        req = urllib.request.Request(url, headers={"Accept": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=45) as resp:
+                raw = resp.read().decode("utf-8")
+                print(f"[DEBUG] HTTP {resp.status} · {len(raw)} bytes (attempt {attempt})")
+                if debug:
+                    print(f"[DEBUG] Response body (first 2000 chars):\n{raw[:2000]}")
+                parsed = json.loads(raw)
+                if debug:
+                    print(f"[DEBUG] Top-level keys: {list(parsed.keys()) if isinstance(parsed, dict) else type(parsed).__name__}")
+                return parsed
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="ignore")[:500]
+            print(f"[WARN] HTTP {e.code} (attempt {attempt}/{max_retries}): {body}", file=sys.stderr)
+            last_err = e
+            if e.code in (429, 500, 502, 503, 504) and attempt < max_retries:
+                sleep_s = 2 ** attempt  # 2s, 4s, 8s, 16s
+                print(f"[INFO] Retrying in {sleep_s}s...", file=sys.stderr)
+                time.sleep(sleep_s)
+                continue
+            # 4xx không retry (trừ 429), hoặc đã hết lần → return None để caller tự xử lý
+            print(f"[ERROR] Giving up after {attempt} attempt(s) at page {page}", file=sys.stderr)
+            return None
+        except Exception as e:
+            print(f"[WARN] {type(e).__name__} (attempt {attempt}/{max_retries}): {e}", file=sys.stderr)
+            last_err = e
+            if attempt < max_retries:
+                sleep_s = 2 ** attempt
+                time.sleep(sleep_s)
+                continue
+            return None
+    return None
 
 
 def source_matches(order):
@@ -198,8 +214,21 @@ def main():
     # Không kèm date filter trong URL (Pancake bỏ qua startDateTime/endDateTime)
     # → fetch đơn mới nhất trước, dừng khi gặp đơn cũ hơn cutoff
     stop = False
+    consecutive_fails = 0
     while not stop:
         data = fetch_orders(page=page, page_size=100, start_date=None, end_date=None, debug=(page == 1))
+
+        # Page lỗi (sau retry vẫn fail) → bỏ qua page này, thử page kế tiếp
+        if data is None:
+            consecutive_fails += 1
+            if consecutive_fails >= 3:
+                print(f"[WARN] 3 pages liên tiếp fail, dừng fetch và dùng data đã có", file=sys.stderr)
+                break
+            page += 1
+            time.sleep(3)
+            continue
+        consecutive_fails = 0
+
         if isinstance(data, list):
             batch = data
         elif isinstance(data, dict):
@@ -228,6 +257,8 @@ def main():
         if len(batch) < 100:
             break
         page += 1
+        # throttle để tránh rate limit / 500
+        time.sleep(0.3)
         if page > 600:  # 59k đơn / 100 ≈ 590 pages — safety cap cao hơn
             print("[WARN] Hit 600-page safety cap", file=sys.stderr)
             break
