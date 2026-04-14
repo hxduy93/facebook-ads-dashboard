@@ -97,16 +97,21 @@ const ACCOUNT_COLOR = {
 const PRODUCT_COLOR = {
   "D1": "#3b82f6",
   "Noma911": "#10b981",
-  "DR1": "#f59e0b"
+  "Noma922": "#14b8a6",
+  "DR1": "#f59e0b",
+  "DA8.1": "#a855f7",
+  "DA8.1 Pro": "#6366f1"
 }
 
 const TIME_FILTERS = [
   { key: "today",     label: "Hôm nay",       days: 0 },
   { key: "yesterday", label: "Hôm qua",       days: 1 },
-  { key: "3d",        label: "3 ngày trước",  days: 3 },
-  { key: "7d",        label: "7 ngày trước",  days: 7 },
+  { key: "7d",        label: "7 ngày",        days: 7 },
   { key: "lastweek",  label: "Tuần trước",    days: 7 },
-  { key: "30d",       label: "1 tháng trước", days: 30 }
+  { key: "thismonth", label: "Tháng này",     days: 0 },
+  { key: "lastmonth", label: "Tháng trước",   days: 0 },
+  { key: "30d",       label: "30 ngày",       days: 30 },
+  { key: "90d",       label: "90 ngày",       days: 90 }
 ]
 
 const fmtVND = (n) => {
@@ -148,6 +153,19 @@ function getDateRange(filterKey) {
     const sunLast = new Date(monLast); sunLast.setUTCDate(sunLast.getUTCDate() + 6)
     return { start: monLast.toISOString().slice(0, 10), end: sunLast.toISOString().slice(0, 10) }
   }
+  if (filterKey === "thismonth") {
+    // Ngày 1 của tháng hiện tại → hôm nay
+    const y = today.getUTCFullYear(), m = today.getUTCMonth()
+    const first = new Date(Date.UTC(y, m, 1))
+    return { start: first.toISOString().slice(0, 10), end: TODAY }
+  }
+  if (filterKey === "lastmonth") {
+    // Ngày 1 đến ngày cuối của tháng trước
+    const y = today.getUTCFullYear(), m = today.getUTCMonth()
+    const first = new Date(Date.UTC(y, m - 1, 1))
+    const last  = new Date(Date.UTC(y, m, 0))  // day 0 của tháng này = ngày cuối tháng trước
+    return { start: first.toISOString().slice(0, 10), end: last.toISOString().slice(0, 10) }
+  }
   const f = TIME_FILTERS.find(f => f.key === filterKey)
   const start = new Date(today); start.setUTCDate(start.getUTCDate() - (f.days - 1))
   return { start: start.toISOString().slice(0, 10), end: TODAY }
@@ -167,6 +185,51 @@ function sumDaily(daily) {
     reach: acc.reach + (d.reach || 0),
     registrations: acc.registrations + (d.registrations || 0)
   }), { spend: 0, impressions: 0, clicks: 0, reach: 0, registrations: 0 })
+}
+
+// =============================================================
+// REVENUE HELPERS (Pancake POS — data/product-revenue.json)
+// =============================================================
+// Ad data dùng tên rút gọn (D1, Noma911, DR1). Pancake dùng tên đầy đủ
+// (D1, DR1, Noma 911, Noma 922, DA8.1, DA8.1 Pro). Normalize 2 chiều.
+const AD_TO_REV_NAME = {
+  "D1": "D1",
+  "DR1": "DR1",
+  "Noma911": "Noma 911",
+  "Noma922": "Noma 922",
+  "DA8.1": "DA8.1",
+  "DA8.1 Pro": "DA8.1 Pro"
+}
+
+// Sum revenue of 1 product trong khoảng date range (inclusive)
+function sumRevenueForProduct(adName, range) {
+  const rev = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
+  const products = rev.products || {}
+  const revName = AD_TO_REV_NAME[adName] || adName
+  const p = products[revName]
+  if (!p || !p.by_date) return 0
+  let total = 0
+  for (const [date, amount] of Object.entries(p.by_date)) {
+    if (date >= range.start && date <= range.end) total += amount || 0
+  }
+  return total
+}
+
+// Sum revenue cho nhiều products + build daily-by-date dataset
+function revenueByDate(adNames, range) {
+  const rev = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
+  const products = rev.products || {}
+  const map = {}
+  adNames.forEach(adName => {
+    const revName = AD_TO_REV_NAME[adName] || adName
+    const p = products[revName]
+    if (!p || !p.by_date) return
+    for (const [date, amount] of Object.entries(p.by_date)) {
+      if (date < range.start || date > range.end) continue
+      map[date] = (map[date] || 0) + (amount || 0)
+    }
+  })
+  return map
 }
 
 // =============================================================
@@ -292,10 +355,21 @@ function FacebookAdsDashboard() {
         dailyFiltered = filterDaily(arr, dateRange)
       }
       const totals = sumDaily(dailyFiltered)
-      return { name, daily: dailyFiltered, totals }
-    }).filter(p => p.totals.spend > 0)
+      // Doanh thu Pancake (theo product name đã map) trong cùng date range
+      const revenue = sumRevenueForProduct(name, dateRange)
+      const revByDate = revenueByDate([name], dateRange)
+      const roas = totals.spend > 0 ? revenue / totals.spend : null
+      return { name, daily: dailyFiltered, totals, revenue, revByDate, roas }
+    }).filter(p => p.totals.spend > 0 || p.revenue > 0)
     return list
   }, [selectedAccount, dateRange])
+
+  // Tổng doanh thu & ROAS toàn bộ (các product đang có spend hoặc revenue)
+  const revenueKpis = useMemo(() => {
+    const total = productsData.reduce((s, p) => s + (p.revenue || 0), 0)
+    const spend = productsData.reduce((s, p) => s + (p.totals.spend || 0), 0)
+    return { total, roas: spend > 0 ? total / spend : null }
+  }, [productsData])
 
   // Campaigns filtered by time + account
   const campaignsFiltered = useMemo(() => {
@@ -469,7 +543,7 @@ function FacebookAdsDashboard() {
         </div>
 
         {/* KPI SCORECARDS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
           <KpiCard
             icon={DollarSign}
             label="Tổng chi tiêu"
@@ -497,6 +571,13 @@ function FacebookAdsDashboard() {
             value={fmtNum(kpis.registrations)}
             sub={kpis.registrations ? `CPL ${fmtVND(kpis.cpl)}₫` : "Chưa có đăng ký"}
             color="amber"
+          />
+          <KpiCard
+            icon={Package}
+            label="Doanh thu (Pancake)"
+            value={fmtVND(revenueKpis.total) + "₫"}
+            sub={revenueKpis.roas != null ? `ROAS ${revenueKpis.roas.toFixed(2)}x` : "—"}
+            color="red"
           />
         </div>
 
@@ -1846,11 +1927,12 @@ function RadarResultPanel({ data }) {
 // =============================================================
 function ProductDailyTable({ product }) {
   const totalCpl = product.totals.registrations ? product.totals.spend / product.totals.registrations : null
+  const revByDate = product.revByDate || {}
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-bold text-gray-900 flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: PRODUCT_COLOR[product.name] }} />
+          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: PRODUCT_COLOR[product.name] || "#6b7280" }} />
           {product.name}
         </h3>
         <div className="text-right">
@@ -1858,7 +1940,7 @@ function ProductDailyTable({ product }) {
         </div>
       </div>
       <div className="bg-gray-50 rounded p-2 mb-2 text-xs">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2 mb-2">
           <div>
             <p className="text-[10px] text-gray-500 uppercase">Spend</p>
             <p className="font-bold text-gray-900">{fmtVND(product.totals.spend)}₫</p>
@@ -1872,26 +1954,39 @@ function ProductDailyTable({ product }) {
             <p className="font-bold text-gray-900">{totalCpl ? fmtVND(totalCpl) + "₫" : "—"}</p>
           </div>
         </div>
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-200">
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase">Doanh thu</p>
+            <p className="font-bold text-red-600">{fmtVND(product.revenue || 0)}₫</p>
+          </div>
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase">ROAS</p>
+            <p className="font-bold text-gray-900">{product.roas != null ? product.roas.toFixed(2) + "x" : "—"}</p>
+          </div>
+        </div>
       </div>
       <div className="overflow-y-auto" style={{ maxHeight: 280 }}>
         <table className="w-full text-xs">
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-gray-200 text-gray-500">
               <th className="py-1.5 px-1 text-left font-medium">Ngày</th>
-              <th className="py-1.5 px-1 text-right font-medium">Chi tiêu</th>
+              <th className="py-1.5 px-1 text-right font-medium">Spend</th>
               <th className="py-1.5 px-1 text-right font-medium">ĐK</th>
-              <th className="py-1.5 px-1 text-right font-medium">CPL</th>
+              <th className="py-1.5 px-1 text-right font-medium">D.thu</th>
+              <th className="py-1.5 px-1 text-right font-medium">ROAS</th>
             </tr>
           </thead>
           <tbody>
             {product.daily.map(d => {
-              const cpl = d.registrations ? d.spend / d.registrations : null
+              const rev = revByDate[d.date] || 0
+              const roas = d.spend > 0 ? rev / d.spend : null
               return (
                 <tr key={d.date} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-1.5 px-1 text-gray-700">{fmtDate(d.date)}</td>
                   <td className="py-1.5 px-1 text-right font-medium text-gray-900">{fmtVND(d.spend)}</td>
                   <td className="py-1.5 px-1 text-right font-bold text-emerald-600">{d.registrations || "—"}</td>
-                  <td className="py-1.5 px-1 text-right text-gray-600">{cpl ? fmtVND(cpl) : "—"}</td>
+                  <td className="py-1.5 px-1 text-right font-medium text-red-600">{rev > 0 ? fmtVND(rev) : "—"}</td>
+                  <td className="py-1.5 px-1 text-right text-gray-600">{roas != null ? roas.toFixed(2) + "x" : "—"}</td>
                 </tr>
               )
             })}

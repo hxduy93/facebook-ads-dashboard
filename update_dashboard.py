@@ -316,6 +316,18 @@ def build_data():
                 bucket[dt]["clicks"]        += d["clicks"]
         data["products"][p] = sorted(bucket.values(), key=lambda x: x["date"])
 
+    # --- PANCAKE REVENUE (injected from data/product-revenue.json) ---
+    try:
+        data["revenue"] = _load_json("data/product-revenue.json")
+        rev_total = sum(
+            (p.get("total", 0) if isinstance(p, dict) else 0)
+            for p in (data["revenue"].get("products") or {}).values()
+        )
+        print(f"   ✓ loaded revenue snapshot: {rev_total:,.0f}₫ (delivered, {data['revenue'].get('window_days', '?')}d)")
+    except Exception as e:
+        print(f"   ✗ revenue load failed: {e}")
+        data["revenue"] = {}
+
     # --- COMPETITOR TRACKING (Chrome-scraped data) ---
     try:
         data["known_competitors"] = load_competitor_data()
