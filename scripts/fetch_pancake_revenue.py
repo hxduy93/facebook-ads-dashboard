@@ -350,6 +350,31 @@ def main():
         # Đếm số đơn match whitelist
         in_whitelist = sum(1 for o in all_orders if str(o.get("order_sources", "")) in DUY_SOURCE_IDS)
         print(f"[DEBUG] Orders with order_sources in DUY whitelist: {in_whitelist}/{len(all_orders)}")
+
+        # ── Dump phân bố mã sản phẩm thực có trong line items ──
+        from collections import Counter as _C
+        code_counter = _C()
+        for o in all_orders:
+            for li in (o.get("items") or o.get("order_items") or []):
+                for k in ("display_id", "product_display_id", "product_code",
+                          "product_id", "variation_id", "barcode",
+                          "sku", "product_sku"):
+                    v = li.get(k)
+                    if v:
+                        code_counter[f"{k}={v}"] += 1
+                prod = li.get("product") or {}
+                for k in ("display_id", "code", "id"):
+                    v = prod.get(k)
+                    if v:
+                        code_counter[f"product.{k}={v}"] += 1
+                vi = li.get("variation_info") or {}
+                for k in ("display_id", "sku", "code"):
+                    v = vi.get(k)
+                    if v:
+                        code_counter[f"variation_info.{k}={v}"] += 1
+        print("[DEBUG] Top 40 product identifiers seen in line items:")
+        for k, v in code_counter.most_common(40):
+            print(f"    {v:>5}x  {k}")
         items_sample = (sample.get("items") or sample.get("order_items") or [])
         if items_sample:
             print(f"[DEBUG] Sample item keys: {list(items_sample[0].keys())[:30]}")
