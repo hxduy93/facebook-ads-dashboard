@@ -42,7 +42,7 @@ SOURCE_FILTER_KEYWORD = "DUY"   # only count orders whose source contains "DUY"
 LOOKBACK_DAYS = 30
 
 
-def fetch_orders(page=1, page_size=100, start_date=None, end_date=None):
+def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False):
     """Fetch one page of orders from Pancake POS."""
     params = {
         "api_key": API_KEY,
@@ -55,12 +55,24 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None):
         params["endDateTime"] = end_date.strftime("%Y-%m-%dT23:59:59")
 
     url = f"{BASE_URL}/shops/{SHOP_ID}/orders?{urlencode(params)}"
+    # Print safe URL (redact key) for debugging
+    safe_url = url.replace(API_KEY, "***") if API_KEY else url
+    print(f"[DEBUG] GET {safe_url}")
+
     req = urllib.request.Request(url, headers={"Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+            raw = resp.read().decode("utf-8")
+            print(f"[DEBUG] HTTP {resp.status} · {len(raw)} bytes")
+            if debug:
+                print(f"[DEBUG] Response body (first 2000 chars):\n{raw[:2000]}")
+            parsed = json.loads(raw)
+            if debug:
+                print(f"[DEBUG] Top-level keys: {list(parsed.keys()) if isinstance(parsed, dict) else type(parsed).__name__}")
+            return parsed
     except urllib.error.HTTPError as e:
-        print(f"[ERROR] HTTP {e.code}: {e.read().decode('utf-8', errors='ignore')[:500]}", file=sys.stderr)
+        body = e.read().decode('utf-8', errors='ignore')[:2000]
+        print(f"[ERROR] HTTP {e.code}: {body}", file=sys.stderr)
         raise
     except Exception as e:
         print(f"[ERROR] {type(e).__name__}: {e}", file=sys.stderr)
