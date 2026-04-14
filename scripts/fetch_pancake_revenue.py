@@ -177,6 +177,14 @@ def main():
 
     all_orders = []
     page = 1
+
+    # Bước 1: thử gọi KHÔNG kèm date filter để xem shop có đơn nào không (diagnostic)
+    print("[DIAG] Probe: fetching page 1 WITHOUT date filter to check if shop has any orders...")
+    probe = fetch_orders(page=1, page_size=5, start_date=None, end_date=None, debug=True)
+    probe_batch = probe.get("data") if isinstance(probe, dict) else None
+    probe_total = probe.get("total_entries") if isinstance(probe, dict) else None
+    print(f"[DIAG] Probe result: total_entries={probe_total}, sample_data_len={len(probe_batch) if probe_batch else 0}")
+
     while True:
         # bật debug=True cho page đầu để xem raw body + top-level keys
         data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt, debug=(page == 1))
