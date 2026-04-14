@@ -371,6 +371,30 @@ function FacebookAdsDashboard() {
     return { total, roas: spend > 0 ? total / spend : null }
   }, [productsData])
 
+  // Doanh thu tách theo status (đã giao / đang hoàn / đã hoàn / đã hủy / đang xử lý)
+  const revenueByStatus = useMemo(() => {
+    const rev = DATA.revenue || {}
+    const byStatus = rev.products_by_status || {}
+    const statusKeys = ["delivered", "returning", "returned", "canceled", "other"]
+    const result = {} // { status: { products: {name: revenue}, total: sum } }
+    statusKeys.forEach(sk => {
+      const bucket = byStatus[sk] || {}
+      const products = {}
+      let total = 0
+      for (const [revName, p] of Object.entries(bucket)) {
+        if (!p || !p.by_date) { products[revName] = 0; continue }
+        let sum = 0
+        for (const [date, amount] of Object.entries(p.by_date)) {
+          if (date >= dateRange.start && date <= dateRange.end) sum += amount || 0
+        }
+        products[revName] = sum
+        total += sum
+      }
+      result[sk] = { products, total }
+    })
+    return result
+  }, [dateRange])
+
   // Campaigns filtered by time + account
   const campaignsFiltered = useMemo(() => {
     const list = DATA.campaigns
@@ -611,6 +635,9 @@ function FacebookAdsDashboard() {
             ))}
           </div>
         </div>
+
+        {/* REVENUE BREAKDOWN BY STATUS */}
+        <RevenueStatusBreakdown revenueByStatus={revenueByStatus} dateRange={dateRange} />
 
         {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
@@ -1923,6 +1950,100 @@ function RadarResultPanel({ data }) {
   )
 }
 // =============================================================
+// SUB-COMPONENT: Revenue breakdown theo status (đã giao / đang hoàn / đã hoàn / ...)
+// =============================================================
+function RevenueStatusBreakdown({ revenueByStatus, dateRange }) {
+  // Map revName → adName để hiển thị cùng tên với cards phía trên
+  const REV_TO_DISPLAY = {
+    "D1": "D1", "DR1": "DR1",
+    "Noma 911": "Noma 911", "Noma 922": "Noma 922",
+    "DA8.1": "DA8.1", "DA8.1 Pro": "DA8.1 Pro"
+  }
+  const productOrder = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+
+  const STATUS_META = [
+    { key: "delivered", label: "Đã giao",     color: "text-emerald-600", bg: "bg-emerald-50" },
+    { key: "returning", label: "Đang hoàn",   color: "text-amber-600",   bg: "bg-amber-50"   },
+    { key: "returned",  label: "Đã hoàn",     color: "text-red-600",     bg: "bg-red-50"     },
+    { key: "canceled",  label: "Đã hủy",      color: "text-gray-500",    bg: "bg-gray-100"   },
+    { key: "other",     label: "Đang xử lý",  color: "text-blue-600",    bg: "bg-blue-50"    }
+  ]
+
+  // Hàng "Tổng đã tạo" = cộng dồn tất cả status
+  const totalByProduct = {}
+  productOrder.forEach(p => {
+    totalByProduct[p] = STATUS_META.reduce((s, st) => s + (revenueByStatus[st.key]?.products?.[p] || 0), 0)
+  })
+  const grandTotal = Object.values(totalByProduct).reduce((s, v) => s + v, 0)
+
+  return (
+    <div className="mb-6 bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
+        <Package className="w-5 h-5 text-red-600" />
+        Doanh thu theo trạng thái — Pancake
+      </h2>
+      <p className="text-xs text-gray-500 mb-4">
+        Bóc tách doanh thu theo status đơn hàng · Khoảng: {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-gray-200 text-gray-600">
+              <th className="py-2 px-3 text-left font-semibold">Trạng thái</th>
+              {productOrder.map(p => (
+                <th key={p} className="py-2 px-3 text-right font-semibold">{REV_TO_DISPLAY[p]}</th>
+              ))}
+              <th className="py-2 px-3 text-right font-bold bg-gray-50">Tổng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STATUS_META.map(st => {
+              const row = revenueByStatus[st.key] || { products: {}, total: 0 }
+              return (
+                <tr key={st.key} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className={`py-2 px-3 font-medium ${st.color}`}>
+                    <span className={`inline-block w-2 h-2 rounded-full mr-2 ${st.bg}`} style={{ border: "2px solid currentColor" }} />
+                    {st.label}
+                  </td>
+                  {productOrder.map(p => {
+                    const v = row.products?.[p] || 0
+                    return (
+                      <td key={p} className={`py-2 px-3 text-right ${v > 0 ? "text-gray-900" : "text-gray-300"}`}>
+                        {v > 0 ? fmtVND(v) + "₫" : "—"}
+                      </td>
+                    )
+                  })}
+                  <td className={`py-2 px-3 text-right font-bold ${row.total > 0 ? st.color : "text-gray-300"} bg-gray-50`}>
+                    {row.total > 0 ? fmtVND(row.total) + "₫" : "—"}
+                  </td>
+                </tr>
+              )
+            })}
+            <tr className="border-t-2 border-gray-300 bg-gray-50">
+              <td className="py-3 px-3 font-bold text-gray-900">Tổng đã tạo</td>
+              {productOrder.map(p => {
+                const v = totalByProduct[p] || 0
+                return (
+                  <td key={p} className={`py-3 px-3 text-right font-bold ${v > 0 ? "text-gray-900" : "text-gray-300"}`}>
+                    {v > 0 ? fmtVND(v) + "₫" : "—"}
+                  </td>
+                )
+              })}
+              <td className="py-3 px-3 text-right font-bold text-red-600 bg-red-50">
+                {grandTotal > 0 ? fmtVND(grandTotal) + "₫" : "—"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="text-[11px] text-gray-400 mt-3 italic">
+        "Doanh thu (Pancake)" ở phần KPI phía trên = "Tổng đã tạo" (bao gồm tất cả đơn). ROAS được tính trên cùng doanh thu này.
+      </p>
+    </div>
+  )
+}
+
+// =============================================================
 // SUB-COMPONENT: Per-product daily table
 // =============================================================
 function ProductDailyTable({ product }) {
@@ -2393,3 +2514,4 @@ ReactDOM.createRoot(rootEl).render(React.createElement(FacebookAdsDashboard));
 </script>
 </body>
 </html>
+  

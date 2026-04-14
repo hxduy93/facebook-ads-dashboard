@@ -41,9 +41,11 @@ DUY_SOURCES = [
 ]
 
 # Pancake status codes
+# 0=mới, 1=đã duyệt, 2=đã shipped, 3=đã giao, 4=đang hoàn, 5=đã hoàn, 6=đã hủy, 8=đang đóng, 9=pending
 STATUS_DELIVERED = 3
 STATUS_RETURNING = 4
-STATUS_CANCELED = 6
+STATUS_RETURNED  = 5
+STATUS_CANCELED  = 6
 
 # Product mapping (case-insensitive key)
 # Mỗi mapping = list các (product, qty_per_unit). Giá lấy từ retail_price thật của Pancake,
@@ -135,20 +137,31 @@ def empty_bucket():
     return {p: {"total": 0, "orders": 0, "units": 0, "by_date": {}} for p in PRODUCT_LIST}
 
 
+def merge_buckets(*bucket_dicts):
+    """Gộp nhiều per-product bucket dict thành 1 (cộng dồn total/orders/units/by_date)."""
+    result = empty_bucket()
+    for bucket in bucket_dicts:
+        for p in PRODUCT_LIST:
+            src = bucket[p]
+            dst = result[p]
+            dst["total"]  += src["total"]
+            dst["orders"] += src["orders"]
+            dst["units"]  += src["units"]
+            for date, amount in src["by_date"].items():
+                dst["by_date"][date] = dst["by_date"].get(date, 0) + amount
+    return result
+
+
 def aggregate(orders):
-    """Aggregate orders vào 4 bucket theo status."""
+    """Aggregate orders vào 5 bucket theo status Pancake."""
     buckets = {
-        "delivered": empty_bucket(),
-        "returning": empty_bucket(),
-        "canceled":  empty_bucket(),
-        "other":     empty_bucket(),
+        "delivered": empty_bucket(),   # 3 — Đã giao
+        "returning": empty_bucket(),   # 4 — Đang hoàn
+        "returned":  empty_bucket(),   # 5 — Đã hoàn
+        "canceled":  empty_bucket(),   # 6 — Đã hủy
+        "other":     empty_bucket(),   # 0/1/2/8/9 — Đang xử lý
     }
-    summary = {
-        "delivered": {"orders": 0, "total": 0},
-        "returning": {"orders": 0, "total": 0},
-        "canceled":  {"orders": 0, "total": 0},
-        "other":     {"orders": 0, "total": 0},
-    }
+    summary = {k: {"orders": 0, "total": 0} for k in buckets.keys()}
     total_orders = 0
 
     for o in orders:
@@ -158,6 +171,8 @@ def aggregate(orders):
             bucket_key = "delivered"
         elif status == STATUS_RETURNING:
             bucket_key = "returning"
+        elif status == STATUS_RETURNED:
+            bucket_key = "returned"
         elif status == STATUS_CANCELED:
             bucket_key = "canceled"
         else:
@@ -242,13 +257,16 @@ def main():
     buckets, summary, total_orders = aggregate(all_orders)
 
     print(f"\n[RESULT] Tổng {total_orders} đơn trong {LOOKBACK_DAYS} ngày")
-    for k in ("delivered", "returning", "canceled", "other"):
+    for k in ("delivered", "returning", "returned", "canceled", "other"):
         s = summary[k]
         print(f"  {k:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
 
-    print(f"\n[RESULT] Doanh thu (status delivered) theo sản phẩm:")
+    # Doanh thu chính = TẤT CẢ đơn đã tạo (bao gồm mọi status)
+    products_all = merge_buckets(*buckets.values())
+
+    print(f"\n[RESULT] Doanh thu theo sản phẩm (tất cả đơn đã tạo):")
     for p in PRODUCT_LIST:
-        d = buckets["delivered"][p]
+        d = products_all[p]
         print(f"  {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
 
     output = {
@@ -256,17 +274,9 @@ def main():
         "window_days": LOOKBACK_DAYS,
         "total_orders": total_orders,
         "summary": summary,
-        "products": buckets["delivered"],   # Doanh thu chính = đã giao
-        "products_by_status": buckets,      # Chi tiết tất cả status
+        "products": products_all,           # Doanh thu chính = tất cả đơn đã tạo
+        "products_by_status": buckets,      # Chi tiết: delivered/returning/returned/canceled/other
     }
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")
-    out_path = os.path.abspath(out_path)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"\n[INFO] Wrote {out_path}")
-
-
-if __name__ == "__main__":
-    main()
+    out_path = os.path.abspa
