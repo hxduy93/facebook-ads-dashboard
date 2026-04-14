@@ -331,6 +331,17 @@ def main():
                 if isinstance(v, str) and v.strip():
                     source_names_seen.add(v.strip())
         print(f"[DEBUG] Distinct source names (first 20): {list(source_names_seen)[:20]}")
+
+        # Phân bố order_sources ID — top 30
+        from collections import Counter
+        src_counter = Counter()
+        for o in all_orders:
+            src_counter[str(o.get("order_sources", "N/A"))] += 1
+        print(f"[DEBUG] Top 30 order_sources IDs (count): {src_counter.most_common(30)}")
+
+        # Đếm số đơn match whitelist
+        in_whitelist = sum(1 for o in all_orders if str(o.get("order_sources", "")) in DUY_SOURCE_IDS)
+        print(f"[DEBUG] Orders with order_sources in DUY whitelist: {in_whitelist}/{len(all_orders)}")
         items_sample = (sample.get("items") or sample.get("order_items") or [])
         if items_sample:
             print(f"[DEBUG] Sample item keys: {list(items_sample[0].keys())[:30]}")
