@@ -279,4 +279,12 @@ def main():
     }
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")
-    out_path = os.path.abspa
+    out_path = os.path.abspath(out_path)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+    print(f"\n[INFO] Wrote {out_path}")
+
+
+if __name__ == "__main__":
+    main()
