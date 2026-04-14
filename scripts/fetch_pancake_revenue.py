@@ -20,8 +20,8 @@ import urllib.request
 import urllib.error
 
 # ── Config ─────────────────────────────────────────────
-API_KEY = os.environ.get("PANCAKE_API_KEY", "")
-SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "")
+API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
+SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pages.fm/api/v1"
 
 # Product code -> standard product + base revenue (VND)
