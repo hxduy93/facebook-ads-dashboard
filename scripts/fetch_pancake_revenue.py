@@ -177,18 +177,29 @@ def main():
 
     all_orders = []
     page = 1
+    cutoff_ts = start_dt  # đơn cũ hơn cutoff_ts sẽ dừng fetch
 
-    # Bước 1: thử gọi KHÔNG kèm date filter để xem shop có đơn nào không (diagnostic)
-    print("[DIAG] Probe: fetching page 1 WITHOUT date filter to check if shop has any orders...")
-    probe = fetch_orders(page=1, page_size=5, start_date=None, end_date=None, debug=True)
-    probe_batch = probe.get("data") if isinstance(probe, dict) else None
-    probe_total = probe.get("total_entries") if isinstance(probe, dict) else None
-    print(f"[DIAG] Probe result: total_entries={probe_total}, sample_data_len={len(probe_batch) if probe_batch else 0}")
+    def order_time(o):
+        """Lấy timestamp của đơn (ưu tiên inserted_at → updated_at → purchased_at)."""
+        for k in ("inserted_at", "updated_at", "purchased_at", "last_update_at"):
+            v = o.get(k)
+            if v:
+                try:
+                    # Pancake ISO 8601 kiểu 2026-04-14T02:43:42.535411
+                    s = v.replace("Z", "+00:00")
+                    dt = datetime.fromisoformat(s)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    return dt
+                except Exception:
+                    continue
+        return None
 
-    while True:
-        # bật debug=True cho page đầu để xem raw body + top-level keys
-        data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt, debug=(page == 1))
-        # Pancake có thể trả về "data", "orders", "result", hoặc array trực tiếp
+    # Không kèm date filter trong URL (Pancake bỏ qua startDateTime/endDateTime)
+    # → fetch đơn mới nhất trước, dừng khi gặp đơn cũ hơn cutoff
+    stop = False
+    while not stop:
+        data = fetch_orders(page=page, page_size=100, start_date=None, end_date=None, debug=(page == 1))
         if isinstance(data, list):
             batch = data
         elif isinstance(data, dict):
@@ -197,20 +208,31 @@ def main():
             batch = []
         if not batch:
             break
-        all_orders.extend(batch)
-        print(f"[INFO] Page {page}: {len(batch)} orders (total {len(all_orders)})")
-        # Pancake typically uses total_pages or has_next
-        total_pages = data.get("total_pages") or data.get("page_total") or 0
-        if total_pages and page >= total_pages:
-            break
+
+        # Filter client-side theo cutoff
+        kept_this_page = 0
+        for o in batch:
+            ot = order_time(o)
+            if ot is None:
+                all_orders.append(o)  # không xác định được → giữ
+                kept_this_page += 1
+            elif ot >= cutoff_ts:
+                all_orders.append(o)
+                kept_this_page += 1
+            else:
+                # đơn cũ hơn cutoff → vì Pancake trả desc, có thể dừng luôn
+                stop = True
+
+        print(f"[INFO] Page {page}: fetched {len(batch)}, kept {kept_this_page} within {LOOKBACK_DAYS}d (total kept {len(all_orders)})")
+
         if len(batch) < 100:
             break
         page += 1
-        if page > 50:  # safety cap
-            print("[WARN] Hit 50-page safety cap", file=sys.stderr)
+        if page > 600:  # 59k đơn / 100 ≈ 590 pages — safety cap cao hơn
+            print("[WARN] Hit 600-page safety cap", file=sys.stderr)
             break
 
-    print(f"[INFO] Fetched {len(all_orders)} orders total")
+    print(f"[INFO] Fetched {len(all_orders)} orders total (within {LOOKBACK_DAYS}d)")
 
     # Debug: in sample order structure để verify parsing
     if all_orders:
