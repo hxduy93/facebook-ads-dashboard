@@ -35,7 +35,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain data/product-revenue.json)" ]; then
             git add data/product-revenue.json
-            git commit -m "chore: update pancake revenue snapshot [skip ci]"
+            git commit -m "chore: update pancake revenue snapshot"
             git push
           else
             echo "No revenue changes to commit."
