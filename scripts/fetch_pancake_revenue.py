@@ -178,8 +178,15 @@ def main():
     all_orders = []
     page = 1
     while True:
-        data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt)
-        batch = data.get("data", [])
+        # bật debug=True cho page đầu để xem raw body + top-level keys
+        data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt, debug=(page == 1))
+        # Pancake có thể trả về "data", "orders", "result", hoặc array trực tiếp
+        if isinstance(data, list):
+            batch = data
+        elif isinstance(data, dict):
+            batch = data.get("data") or data.get("orders") or data.get("result") or []
+        else:
+            batch = []
         if not batch:
             break
         all_orders.extend(batch)
