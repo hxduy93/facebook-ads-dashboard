@@ -40,7 +40,7 @@ PRODUCT_MAPPING = {
 }
 
 SOURCE_FILTER_KEYWORD = "DUY"   # only count orders whose source contains "DUY"
-LOOKBACK_DAYS = 90              # tạm mở rộng để verify có đơn lịch sử
+LOOKBACK_DAYS = 30              # 30 ngày đủ cho dashboard, giới hạn thời gian chạy
 
 
 def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False, max_retries=4):
