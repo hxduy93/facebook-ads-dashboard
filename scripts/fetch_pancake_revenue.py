@@ -225,4 +225,16 @@ def main():
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")
     out_path = os.path.abspath(out_path)
-    os.makedirs(os.path.dirname(
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+
+    print(f"[INFO] Wrote {out_path}")
+
+
+if __name__ == "__main__":
+    if not API_KEY or not SHOP_ID:
+        print("[ERROR] Missing PANCAKE_API_KEY or PANCAKE_SHOP_ID env var", file=sys.stderr)
+        sys.exit(1)
+    main()
