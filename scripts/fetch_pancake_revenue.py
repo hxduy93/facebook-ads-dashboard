@@ -96,27 +96,48 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=Fa
 
 
 def source_matches(order):
-    """Return True if order source/channel contains 'DUY' (case-insensitive)."""
+    """Return True if order source/channel contains 'DUY' (case-insensitive).
+
+    Pancake lưu `order_sources` là ID số → tên thật ở `order_sources_name`.
+    Ngoài ra check cả `marketer`, `assigning_seller`, `creator` name.
+    """
     candidates = []
-    for key in ("source", "source_name", "channel", "channel_name", "order_source", "order_sources"):
+    # Các trường tên nguồn phổ biến
+    for key in (
+        "order_sources_name", "source_name", "channel_name",
+        "source", "channel", "order_source",
+    ):
         v = order.get(key)
         if isinstance(v, str):
             candidates.append(v)
         elif isinstance(v, list):
-            candidates.extend(str(x) for x in v)
+            for x in v:
+                if isinstance(x, str):
+                    candidates.append(x)
+                elif isinstance(x, dict):
+                    for k2 in ("name", "label", "title"):
+                        if isinstance(x.get(k2), str):
+                            candidates.append(x[k2])
         elif isinstance(v, dict):
-            # e.g. {"name": "Duy - Noma911"}
             for k2 in ("name", "label", "title"):
-                if k2 in v and isinstance(v[k2], str):
+                if isinstance(v.get(k2), str):
                     candidates.append(v[k2])
 
-    # Some Pancake schemas put source under a nested account or page object
-    for key in ("account", "page", "origin"):
+    # Các object lồng có thể chứa tên người phụ trách (marketer, seller)
+    for key in ("marketer", "assigning_seller", "creator", "account", "page", "origin"):
         v = order.get(key)
-        if isinstance(v, dict):
-            for k2 in ("name", "page_name"):
-                if k2 in v and isinstance(v[k2], str):
+        if isinstance(v, str):
+            candidates.append(v)
+        elif isinstance(v, dict):
+            for k2 in ("name", "full_name", "page_name", "username"):
+                if isinstance(v.get(k2), str):
                     candidates.append(v[k2])
+
+    # p_utm_* fields đôi khi chứa nguồn quảng cáo
+    for key in ("p_utm_source", "p_utm_medium", "p_utm_content", "p_utm_campaign"):
+        v = order.get(key)
+        if isinstance(v, str):
+            candidates.append(v)
 
     joined = " | ".join(candidates).upper()
     return SOURCE_FILTER_KEYWORD.upper() in joined
@@ -268,9 +289,23 @@ def main():
     # Debug: in sample order structure để verify parsing
     if all_orders:
         sample = all_orders[0]
-        print(f"[DEBUG] Sample order keys: {list(sample.keys())[:30]}")
-        src_keys = {k: sample.get(k) for k in ("source", "source_name", "channel", "channel_name", "order_sources") if k in sample}
-        print(f"[DEBUG] Sample source fields: {json.dumps(src_keys, ensure_ascii=False)[:500]}")
+        print(f"[DEBUG] Sample order keys: {list(sample.keys())[:40]}")
+        src_keys = {k: sample.get(k) for k in (
+            "source", "source_name", "channel", "channel_name",
+            "order_sources", "order_sources_name",
+            "marketer", "assigning_seller", "creator",
+            "p_utm_source", "p_utm_medium", "p_utm_content",
+        ) if k in sample}
+        print(f"[DEBUG] Sample source fields: {json.dumps(src_keys, ensure_ascii=False, default=str)[:800]}")
+
+        # In 10 tên nguồn khác nhau để biết tên thật trông ra sao
+        source_names_seen = set()
+        for o in all_orders[:500]:
+            for k in ("order_sources_name", "source_name", "channel_name"):
+                v = o.get(k)
+                if isinstance(v, str) and v.strip():
+                    source_names_seen.add(v.strip())
+        print(f"[DEBUG] Distinct source names (first 20): {list(source_names_seen)[:20]}")
         items_sample = (sample.get("items") or sample.get("order_items") or [])
         if items_sample:
             print(f"[DEBUG] Sample item keys: {list(items_sample[0].keys())[:30]}")
