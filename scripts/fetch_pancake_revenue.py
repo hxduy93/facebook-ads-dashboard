@@ -23,7 +23,7 @@ import urllib.error
 # ── Config ─────────────────────────────────────────────
 API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
-BASE_URL = "https://pos.pages.fm/api/v1"
+BASE_URL = "https://pos.pancake.vn/api/v1"  # internal endpoint cho get_orders
 
 # Product code -> standard product + base revenue (VND)
 # Combo prices strip the SD-card portion to get the machine revenue only
@@ -42,8 +42,10 @@ PRODUCT_MAPPING = {
 SOURCE_FILTER_KEYWORD = "DUY"   # legacy fallback
 LOOKBACK_DAYS = 30              # 30 ngày đủ cho dashboard, giới hạn thời gian chạy
 
-# Danh sách ID nguồn đơn thuộc về Duy — trích từ saved filter
-# "DUY" (saved_filters_id=8350fe1d-fd9b-41d8-bb3a-f075a5e94df5)
+# Saved filter "DUY" trên Pancake — server-side filter, không cần match client-side
+DUY_SAVED_FILTER_ID = "8350fe1d-fd9b-41d8-bb3a-f075a5e94df5"
+
+# Legacy fallback (không còn dùng trực tiếp, giữ làm reference)
 DUY_SOURCE_IDS = {
     "308004272", "1536003777", "615005571", "308003603",
     "922003735", "1843001674", "922002510", "1843000628",
@@ -52,29 +54,34 @@ DUY_SOURCE_IDS = {
     "1842043463", "1228044436", "614044869", "921041902",
     "1535037303", "1228042142", "1535038664",
 }
-# Fallback: đơn có order_sources == -1 mà page_id thuộc page của Duy
 DUY_PAGE_IDS = {"842243695641184"}
 
 
 def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False, max_retries=4):
-    """Fetch one page of orders from Pancake POS with retry/backoff on 5xx."""
+    """Fetch một page đơn từ Pancake POS (dùng internal endpoint `orders/get_orders`
+    với saved_filters_id=DUY để server-side filter đơn của Duy)."""
     params = {
         "api_key": API_KEY,
-        "page_number": page,
+        "saved_filters_id": DUY_SAVED_FILTER_ID,
+        "page": page,
         "page_size": page_size,
+        "status": -1,              # tất cả trạng thái
+        "updateStatus": "inserted_at",
+        "option_sort": "inserted_at_desc",
+        "es_only": "true",
     }
     if start_date:
-        params["startDateTime"] = start_date.strftime("%Y-%m-%dT00:00:00")
+        params["startDateTime"] = int(start_date.timestamp())  # Unix seconds
     if end_date:
-        params["endDateTime"] = end_date.strftime("%Y-%m-%dT23:59:59")
+        params["endDateTime"] = int(end_date.timestamp())
 
-    url = f"{BASE_URL}/shops/{SHOP_ID}/orders?{urlencode(params)}"
+    url = f"{BASE_URL}/shops/{SHOP_ID}/orders/get_orders?{urlencode(params)}"
     safe_url = url.replace(API_KEY, "***") if API_KEY else url
-    print(f"[DEBUG] GET {safe_url}")
+    print(f"[DEBUG] POST {safe_url}")
 
     last_err = None
     for attempt in range(1, max_retries + 1):
-        req = urllib.request.Request(url, headers={"Accept": "application/json"})
+        req = urllib.request.Request(url, headers={"Accept": "application/json"}, method="POST")
         try:
             with urllib.request.urlopen(req, timeout=45) as resp:
                 raw = resp.read().decode("utf-8")
@@ -199,8 +206,8 @@ def aggregate(orders):
 
     filtered_count = 0
     for o in orders:
-        if not source_matches(o):
-            continue
+        # Server (Pancake) đã filter theo saved_filters_id=DUY → không cần match lại.
+        # Giữ source_matches() chỉ để log/diagnostics, không dùng để loại đơn.
         filtered_count += 1
 
         # Order date (YYYY-MM-DD)
@@ -239,7 +246,8 @@ def main():
 
     all_orders = []
     page = 1
-    cutoff_ts = start_dt  # đơn cũ hơn cutoff_ts sẽ dừng fetch
+    total_entries = None  # sẽ lấy từ response đầu tiên
+    cutoff_ts = start_dt  # chỉ dùng cho fallback parse local
 
     def order_time(o):
         """Lấy timestamp của đơn (ưu tiên inserted_at → updated_at → purchased_at)."""
@@ -257,12 +265,12 @@ def main():
                     continue
         return None
 
-    # Không kèm date filter trong URL (Pancake bỏ qua startDateTime/endDateTime)
-    # → fetch đơn mới nhất trước, dừng khi gặp đơn cũ hơn cutoff
+    # Dùng endpoint internal /orders/get_orders + saved_filters_id=DUY
+    # Server đã filter theo nguồn + ngày (Unix timestamp), ta chỉ pagination.
     stop = False
     consecutive_fails = 0
     while not stop:
-        data = fetch_orders(page=page, page_size=100, start_date=None, end_date=None, debug=(page == 1))
+        data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt, debug=(page == 1))
 
         # Page lỗi (sau retry vẫn fail) → bỏ qua page này, thử page kế tiếp
         if data is None:
