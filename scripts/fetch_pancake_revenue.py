@@ -25,18 +25,21 @@ API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"  # internal endpoint cho get_orders
 
-# Product code -> standard product + base revenue (VND)
-# Combo prices strip the SD-card portion to get the machine revenue only
+# Product mapping -> match theo variation_info.display_id (human-readable)
+# Được trích từ top 40 line items thật trong đơn của Duy.
+# Combo giá = giá máy (không trừ thẻ nhớ, vì user xác nhận không có discount).
 PRODUCT_MAPPING = {
-    "1580":        {"product": "D1",        "base_price": 2_500_000},
-    "DR-011":      {"product": "DR1",       "base_price": 1_300_000},
-    "29792739244": {"product": "Noma 911",  "base_price":   199_000},
-    "3924":        {"product": "DA8.1",     "base_price": 1_250_000},
-    "COMBO-058":   {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 64GB
-    "COMBO-059":   {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 128GB
-    "21257":       {"product": "DA8.1 Pro", "base_price": 1_550_000},
-    "COMBO-060":   {"product": "DA8.1 Pro", "base_price": 1_550_000},  # Pro + 64GB
-    "COMBO-061":   {"product": "DA8.1 Pro", "base_price": 1_550_000},  # Pro + 128GB
+    # Đơn lẻ
+    "D1":        {"product": "D1",        "base_price": 2_500_000},
+    "DR1 New":   {"product": "DR1",       "base_price": 1_300_000},
+    "Noma 911":  {"product": "Noma 911",  "base_price":   199_000},
+    "DA8.1":     {"product": "DA8.1",     "base_price": 1_250_000},
+    "DA8.1 Pro": {"product": "DA8.1 Pro", "base_price": 1_550_000},
+    # Combo (máy + thẻ nhớ) — doanh thu = giá máy
+    "COMBO-058": {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 64GB
+    "COMBO-059": {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 128GB
+    "COMBO-060": {"product": "DA8.1 Pro", "base_price": 1_550_000},  # DA8.1 Pro + 64GB
+    "COMBO-061": {"product": "DA8.1 Pro", "base_price": 1_550_000},  # DA8.1 Pro + 128GB
 }
 
 SOURCE_FILTER_KEYWORD = "DUY"   # legacy fallback
@@ -176,21 +179,26 @@ def source_matches(order):
 
 
 def extract_items(order):
-    """Return list of (product_code, quantity) from order line items."""
+    """Return list of (code, quantity) from order line items.
+
+    Pancake internal API: variation_info.display_id là key người đọc được
+    (ví dụ "D1", "Noma 911", "DA8.1", "COMBO-001").
+    """
     items = []
     for li in order.get("items", []) or order.get("order_items", []) or []:
-        # Pancake typically exposes: product_code / display_id / variation_id
+        vi = li.get("variation_info") or {}
+        prod = li.get("product") or {}
         code = (
-            li.get("product_display_id")
-            or li.get("product_code")
+            vi.get("display_id")
+            or prod.get("display_id")
             or li.get("display_id")
-            or (li.get("variation_info") or {}).get("display_id")
-            or (li.get("product") or {}).get("display_id")
-            or (li.get("product") or {}).get("code")
+            or li.get("product_display_id")
+            or li.get("product_code")
+            or prod.get("code")
         )
         qty = li.get("quantity", 1) or 1
         if code:
-            items.append((str(code), int(qty)))
+            items.append((str(code).strip(), int(qty)))
     return items
 
 
