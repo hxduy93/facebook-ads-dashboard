@@ -39,7 +39,7 @@ PRODUCT_MAPPING = {
 }
 
 SOURCE_FILTER_KEYWORD = "DUY"   # only count orders whose source contains "DUY"
-LOOKBACK_DAYS = 30
+LOOKBACK_DAYS = 90              # tạm mở rộng để verify có đơn lịch sử
 
 
 def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False):
@@ -197,6 +197,17 @@ def main():
 
     print(f"[INFO] Fetched {len(all_orders)} orders total")
 
+    # Debug: in sample order structure để verify parsing
+    if all_orders:
+        sample = all_orders[0]
+        print(f"[DEBUG] Sample order keys: {list(sample.keys())[:30]}")
+        src_keys = {k: sample.get(k) for k in ("source", "source_name", "channel", "channel_name", "order_sources") if k in sample}
+        print(f"[DEBUG] Sample source fields: {json.dumps(src_keys, ensure_ascii=False)[:500]}")
+        items_sample = (sample.get("items") or sample.get("order_items") or [])
+        if items_sample:
+            print(f"[DEBUG] Sample item keys: {list(items_sample[0].keys())[:30]}")
+            print(f"[DEBUG] Sample item (trimmed): {json.dumps(items_sample[0], ensure_ascii=False)[:800]}")
+
     revenue, filtered_count = aggregate(all_orders)
     print(f"[INFO] {filtered_count} orders matched source filter '{SOURCE_FILTER_KEYWORD}'")
 
@@ -214,11 +225,4 @@ def main():
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")
     out_path = os.path.abspath(out_path)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"[INFO] Wrote {out_path}")
-
-
-if __name__ == "__main__":
-    main()
+    os.makedirs(os.path.dirname(
