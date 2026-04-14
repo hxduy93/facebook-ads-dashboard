@@ -26,20 +26,29 @@ SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"  # internal endpoint cho get_orders
 
 # Product mapping -> match theo variation_info.display_id (human-readable)
-# Được trích từ top 40 line items thật trong đơn của Duy.
+# Được trích từ top line items thật trong đơn của Duy.
 # Combo giá = giá máy (không trừ thẻ nhớ, vì user xác nhận không có discount).
+#
+# Format: key (lowercase để match case-insensitive) -> list các (product, qty, price).
+# Một combo có thể phát sinh nhiều line item (ví dụ COMBO-103 = 1× Noma 911 + 1× Noma 922).
+# "qty" ở đây là số lượng product trong 1 combo, sẽ nhân tiếp với quantity của line item.
 PRODUCT_MAPPING = {
     # Đơn lẻ
-    "D1":        {"product": "D1",        "base_price": 2_500_000},
-    "DR1 New":   {"product": "DR1",       "base_price": 1_300_000},
-    "Noma 911":  {"product": "Noma 911",  "base_price":   199_000},
-    "DA8.1":     {"product": "DA8.1",     "base_price": 1_250_000},
-    "DA8.1 Pro": {"product": "DA8.1 Pro", "base_price": 1_550_000},
-    # Combo (máy + thẻ nhớ) — doanh thu = giá máy
-    "COMBO-058": {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 64GB
-    "COMBO-059": {"product": "DA8.1",     "base_price": 1_250_000},  # DA8.1 + 128GB
-    "COMBO-060": {"product": "DA8.1 Pro", "base_price": 1_550_000},  # DA8.1 Pro + 64GB
-    "COMBO-061": {"product": "DA8.1 Pro", "base_price": 1_550_000},  # DA8.1 Pro + 128GB
+    "d1":         [("D1",        1, 2_500_000)],
+    "dr1 new":    [("DR1",       1, 1_300_000)],
+    "noma 911":   [("Noma 911",  1,   199_000)],
+    "noma 922":   [("Noma 922",  1,   199_000)],
+    "da8.1":      [("DA8.1",     1, 1_250_000)],
+    "da8.1 pro":  [("DA8.1 Pro", 1, 1_550_000)],
+    # Combo máy + thẻ nhớ (doanh thu = giá máy, thẻ nhớ không tính)
+    "combo-058":  [("DA8.1",     1, 1_250_000)],  # DA8.1 + 64GB
+    "combo-059":  [("DA8.1",     1, 1_250_000)],  # DA8.1 + 128GB
+    "combo-060":  [("DA8.1 Pro", 1, 1_550_000)],  # DA8.1 Pro + 64GB
+    "combo-061":  [("DA8.1 Pro", 1, 1_550_000)],  # DA8.1 Pro + 128GB
+    # Combo Noma (cùng giá 199K/chai)
+    "combo-092":  [("Noma 911",  2,   199_000)],  # 2 chai chà kính Noma 911
+    "combo-103":  [("Noma 911",  1,   199_000),
+                   ("Noma 922",  1,   199_000)],  # Combo kính xe Noma 911 + Noma 922
 }
 
 SOURCE_FILTER_KEYWORD = "DUY"   # legacy fallback
@@ -208,6 +217,7 @@ def aggregate(orders):
         "D1":        {"total": 0, "orders": 0, "units": 0, "by_date": {}},
         "DR1":       {"total": 0, "orders": 0, "units": 0, "by_date": {}},
         "Noma 911":  {"total": 0, "orders": 0, "units": 0, "by_date": {}},
+        "Noma 922":  {"total": 0, "orders": 0, "units": 0, "by_date": {}},
         "DA8.1":     {"total": 0, "orders": 0, "units": 0, "by_date": {}},
         "DA8.1 Pro": {"total": 0, "orders": 0, "units": 0, "by_date": {}},
     }
@@ -226,15 +236,18 @@ def aggregate(orders):
         products_in_order = set()
 
         for code, qty in extract_items(o):
-            mapping = PRODUCT_MAPPING.get(code)
+            mapping = PRODUCT_MAPPING.get(code.lower())
             if not mapping:
                 continue
-            p = mapping["product"]
-            revenue = mapping["base_price"] * qty
-            result[p]["total"] += revenue
-            result[p]["units"] += qty
-            result[p]["by_date"][date] = result[p]["by_date"].get(date, 0) + revenue
-            products_in_order.add(p)
+            # Mỗi mapping là list các (product, qty_per_unit, price)
+            # Tổng units = qty_per_unit × line_item.quantity
+            for product, per_unit, price in mapping:
+                total_units = per_unit * qty
+                revenue = price * total_units
+                result[product]["total"] += revenue
+                result[product]["units"] += total_units
+                result[product]["by_date"][date] = result[product]["by_date"].get(date, 0) + revenue
+                products_in_order.add(product)
 
         for p in products_in_order:
             result[p]["orders"] += 1
