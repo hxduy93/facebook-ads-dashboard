@@ -39,8 +39,21 @@ PRODUCT_MAPPING = {
     "COMBO-061":   {"product": "DA8.1 Pro", "base_price": 1_550_000},  # Pro + 128GB
 }
 
-SOURCE_FILTER_KEYWORD = "DUY"   # only count orders whose source contains "DUY"
+SOURCE_FILTER_KEYWORD = "DUY"   # legacy fallback
 LOOKBACK_DAYS = 30              # 30 ngày đủ cho dashboard, giới hạn thời gian chạy
+
+# Danh sách ID nguồn đơn thuộc về Duy — trích từ saved filter
+# "DUY" (saved_filters_id=8350fe1d-fd9b-41d8-bb3a-f075a5e94df5)
+DUY_SOURCE_IDS = {
+    "308004272", "1536003777", "615005571", "308003603",
+    "922003735", "1843001674", "922002510", "1843000628",
+    "307500561", "921500725", "921041344", "307040304",
+    "39739", "614046174", "1842044041", "307039298",
+    "1842043463", "1228044436", "614044869", "921041902",
+    "1535037303", "1228042142", "1535038664",
+}
+# Fallback: đơn có order_sources == -1 mà page_id thuộc page của Duy
+DUY_PAGE_IDS = {"842243695641184"}
 
 
 def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=False, max_retries=4):
@@ -96,11 +109,23 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, debug=Fa
 
 
 def source_matches(order):
-    """Return True if order source/channel contains 'DUY' (case-insensitive).
+    """Return True if đơn này thuộc về Duy.
 
-    Pancake lưu `order_sources` là ID số → tên thật ở `order_sources_name`.
-    Ngoài ra check cả `marketer`, `assigning_seller`, `creator` name.
+    Ưu tiên: match `order_sources` ID với whitelist DUY_SOURCE_IDS (chính xác 100%).
+    Fallback: text match "DUY" trong các trường tên (khi không có ID).
     """
+    # 1) ID match chính xác theo saved filter "DUY" của Pancake
+    src_raw = order.get("order_sources")
+    src_str = str(src_raw).strip() if src_raw is not None else ""
+    if src_str in DUY_SOURCE_IDS:
+        return True
+    # Đơn có order_sources = "-1" → fallback theo page_id
+    if src_str == "-1":
+        pid = str(order.get("page_id", "")).strip()
+        if pid in DUY_PAGE_IDS:
+            return True
+
+    # 2) Fallback text match (phòng trường hợp có nguồn mới chưa có trong whitelist)
     candidates = []
     # Các trường tên nguồn phổ biến
     for key in (
