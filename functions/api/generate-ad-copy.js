@@ -2,13 +2,16 @@
 // Body: { product: "D1" | "DR1" | ..., format: "lead_gen" | ..., formatLabel, cta, notes }
 // Response: { variants: [...] }
 //
-// Powered by Groq (Llama 3.3 70B Versatile) — free tier, không region block, siêu nhanh.
+// Powered by Cloudflare Workers AI (Llama 3.3 70B) — native Cloudflare, free tier,
+// không cần API key, không bị region block.
+//
+// YÊU CẦU: Cloudflare Pages binding tên "AI" đã được kích hoạt
+// (Settings → Functions → Bindings → Add binding → Workers AI → name: AI).
 
 import { getProduct } from "../lib/product-catalog.js";
 import { SYSTEM_PROMPT, buildUserPrompt } from "../lib/ad-prompts.js";
 
-const GROQ_MODEL = "llama-3.3-70b-versatile";
-const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
+const CF_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -20,8 +23,10 @@ function jsonResponse(data, status = 200) {
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  if (!env.GROQ_API_KEY) {
-    return jsonResponse({ error: "Thiếu GROQ_API_KEY trong env var." }, 500);
+  if (!env.AI) {
+    return jsonResponse({
+      error: "Thiếu Workers AI binding. Vào Cloudflare Pages → Settings → Functions → Bindings → Add binding → Workers AI → name: AI.",
+    }, 500);
   }
 
   let body;
@@ -40,63 +45,69 @@ export async function onRequestPost(context) {
 
   const userPrompt = buildUserPrompt({ product, format, formatLabel, cta, notes });
 
-  const groqBody = {
-    model: GROQ_MODEL,
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user", content: userPrompt },
-    ],
-    temperature: 0.9,
-    top_p: 0.95,
-    max_tokens: 4096,
-    response_format: { type: "json_object" },
-  };
-
-  let groqRes;
+  let aiResult;
   try {
-    groqRes = await fetch(GROQ_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(groqBody),
+    aiResult = await env.AI.run(CF_AI_MODEL, {
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.9,
+      top_p: 0.95,
+      max_tokens: 4096,
+      response_format: { type: "json_object" },
     });
   } catch (err) {
-    return jsonResponse({ error: "Không gọi được Groq API: " + err.message }, 502);
-  }
-
-  if (!groqRes.ok) {
-    const errText = await groqRes.text();
     return jsonResponse({
-      error: `Groq trả về lỗi ${groqRes.status}`,
-      detail: errText.slice(0, 500),
+      error: "Workers AI lỗi: " + (err?.message || String(err)),
     }, 502);
   }
 
-  const groqData = await groqRes.json();
-  const textOut = groqData?.choices?.[0]?.message?.content;
-
-  if (!textOut) {
+  // Workers AI trả về { response: "..." } hoặc object đã parse tùy model
+  let textOut;
+  if (typeof aiResult === "string") {
+    textOut = aiResult;
+  } else if (aiResult?.response) {
+    textOut = typeof aiResult.response === "string"
+      ? aiResult.response
+      : JSON.stringify(aiResult.response);
+  } else if (aiResult?.result) {
+    textOut = typeof aiResult.result === "string"
+      ? aiResult.result
+      : JSON.stringify(aiResult.result);
+  } else {
     return jsonResponse({
-      error: "Groq không trả về nội dung.",
-      debug: groqData,
+      error: "Workers AI không trả về nội dung.",
+      debug: aiResult,
     }, 502);
   }
 
+  // Thử parse JSON; nếu model kèm text thừa, cố gắng extract block JSON
   let parsed;
   try {
     parsed = JSON.parse(textOut);
-  } catch (err) {
-    return jsonResponse({
-      error: "Groq trả JSON không hợp lệ.",
-      raw: textOut.slice(0, 500),
-    }, 502);
+  } catch {
+    const match = textOut.match(/\{[\s\S]*\}/);
+    if (match) {
+      try {
+        parsed = JSON.parse(match[0]);
+      } catch (err2) {
+        return jsonResponse({
+          error: "Workers AI trả JSON không hợp lệ.",
+          raw: textOut.slice(0, 500),
+        }, 502);
+      }
+    } else {
+      return jsonResponse({
+        error: "Workers AI trả JSON không hợp lệ.",
+        raw: textOut.slice(0, 500),
+      }, 502);
+    }
   }
 
   if (!Array.isArray(parsed.variants) || parsed.variants.length === 0) {
     return jsonResponse({
-      error: "Groq không trả variants hợp lệ.",
+      error: "Workers AI không trả variants hợp lệ.",
       raw: parsed,
     }, 502);
   }
@@ -113,7 +124,7 @@ export async function onRequestPost(context) {
 
   return jsonResponse({
     ok: true,
-    model: GROQ_MODEL,
+    model: CF_AI_MODEL,
     product: productKey,
     variants: parsed.variants,
   });
