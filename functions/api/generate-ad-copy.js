@@ -5,7 +5,7 @@
 import { getProduct } from "../lib/product-catalog.js";
 import { SYSTEM_PROMPT, buildUserPrompt, RESPONSE_SCHEMA } from "../lib/ad-prompts.js";
 
-const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 function jsonResponse(data, status = 200) {
