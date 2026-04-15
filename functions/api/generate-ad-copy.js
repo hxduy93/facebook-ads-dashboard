@@ -121,6 +121,4 @@ export async function onRequestPost(context) {
   });
 }
 
-// Fallback cho GET (trả 405 rõ ràng)
-export async function onRequest(context) {
-  if (context.request.metho
+// Các method khác GET/POST sẽ tự động trả 405 bởi Cloudflare Pages Functions
