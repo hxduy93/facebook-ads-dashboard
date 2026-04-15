@@ -5,7 +5,7 @@
 import { getProduct } from "../lib/product-catalog.js";
 import { SYSTEM_PROMPT, buildUserPrompt, RESPONSE_SCHEMA } from "../lib/ad-prompts.js";
 
-const GEMINI_MODEL = "gemini-2.0-flash-exp";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 function jsonResponse(data, status = 200) {
@@ -123,8 +123,4 @@ export async function onRequestPost(context) {
 
 // Fallback cho GET (trả 405 rõ ràng)
 export async function onRequest(context) {
-  if (context.request.method === "POST") {
-    return onRequestPost(context);
-  }
-  return jsonResponse({ error: "Method Not Allowed. Use POST." }, 405);
-}
+  if (context.request.metho
