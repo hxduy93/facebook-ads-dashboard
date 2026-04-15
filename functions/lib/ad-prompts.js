@@ -1,4 +1,4 @@
-// Template prompt gửi Gemini để sinh content ads
+// Template prompt gửi Groq (Llama 3.3 70B) để sinh content ads
 // Nếu muốn chỉnh style / brand voice — sửa file này, push là có hiệu lực
 
 export const SYSTEM_PROMPT = `Bạn là copywriter chuyên viết quảng cáo Facebook Ads tiếng Việt cho Doscom — công ty chuyên phân phối thiết bị công nghệ (an ninh, ghi âm, chăm sóc xe, camera hội nghị).
@@ -59,7 +59,7 @@ YÊU CẦU: Viết 3 variants content khác STYLE rõ rệt:
 
 Mỗi variant gồm 4 trường: headline, primary_text, video_title, description.
 
-Trả về JSON đúng schema:
+Trả về JSON DUY NHẤT (không markdown, không text ngoài JSON) với schema:
 {
   "variants": [
     {
@@ -70,33 +70,22 @@ Trả về JSON đúng schema:
       "video_title": "...",
       "description": "..."
     },
-    { "id": "B", "style": "Rational", ... },
-    { "id": "C", "style": "Urgency", ... }
+    {
+      "id": "B",
+      "style": "Rational",
+      "headline": "...",
+      "primary_text": "...",
+      "video_title": "...",
+      "description": "..."
+    },
+    {
+      "id": "C",
+      "style": "Urgency",
+      "headline": "...",
+      "primary_text": "...",
+      "video_title": "...",
+      "description": "..."
+    }
   ]
 }`;
 }
-
-/**
- * JSON schema để Gemini trả structured output
- */
-export const RESPONSE_SCHEMA = {
-  type: "object",
-  properties: {
-    variants: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          id: { type: "string" },
-          style: { type: "string" },
-          headline: { type: "string" },
-          primary_text: { type: "string" },
-          video_title: { type: "string" },
-          description: { type: "string" },
-        },
-        required: ["id", "style", "headline", "primary_text", "video_title", "description"],
-      },
-    },
-  },
-  required: ["variants"],
-};

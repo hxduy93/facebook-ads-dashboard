@@ -1,12 +1,14 @@
 // Endpoint: POST /api/generate-ad-copy
 // Body: { product: "D1" | "DR1" | ..., format: "lead_gen" | ..., formatLabel, cta, notes }
 // Response: { variants: [...] }
+//
+// Powered by Groq (Llama 3.3 70B Versatile) — free tier, không region block, siêu nhanh.
 
 import { getProduct } from "../lib/product-catalog.js";
-import { SYSTEM_PROMPT, buildUserPrompt, RESPONSE_SCHEMA } from "../lib/ad-prompts.js";
+import { SYSTEM_PROMPT, buildUserPrompt } from "../lib/ad-prompts.js";
 
-const GEMINI_MODEL = "gemini-2.5-flash";
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const GROQ_MODEL = "llama-3.3-70b-versatile";
+const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -18,8 +20,8 @@ function jsonResponse(data, status = 200) {
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  if (!env.GEMINI_API_KEY) {
-    return jsonResponse({ error: "Thiếu GEMINI_API_KEY trong env var." }, 500);
+  if (!env.GROQ_API_KEY) {
+    return jsonResponse({ error: "Thiếu GROQ_API_KEY trong env var." }, 500);
   }
 
   let body;
@@ -38,51 +40,47 @@ export async function onRequestPost(context) {
 
   const userPrompt = buildUserPrompt({ product, format, formatLabel, cta, notes });
 
-  const geminiBody = {
-    systemInstruction: {
-      parts: [{ text: SYSTEM_PROMPT }],
-    },
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: userPrompt }],
-      },
+  const groqBody = {
+    model: GROQ_MODEL,
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: userPrompt },
     ],
-    generationConfig: {
-      temperature: 0.9,
-      topP: 0.95,
-      maxOutputTokens: 2048,
-      responseMimeType: "application/json",
-      responseSchema: RESPONSE_SCHEMA,
-    },
+    temperature: 0.9,
+    top_p: 0.95,
+    max_tokens: 4096,
+    response_format: { type: "json_object" },
   };
 
-  let geminiRes;
+  let groqRes;
   try {
-    geminiRes = await fetch(`${GEMINI_ENDPOINT}?key=${env.GEMINI_API_KEY}`, {
+    groqRes = await fetch(GROQ_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(geminiBody),
+      headers: {
+        "Authorization": `Bearer ${env.GROQ_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(groqBody),
     });
   } catch (err) {
-    return jsonResponse({ error: "Không gọi được Gemini API: " + err.message }, 502);
+    return jsonResponse({ error: "Không gọi được Groq API: " + err.message }, 502);
   }
 
-  if (!geminiRes.ok) {
-    const errText = await geminiRes.text();
+  if (!groqRes.ok) {
+    const errText = await groqRes.text();
     return jsonResponse({
-      error: `Gemini trả về lỗi ${geminiRes.status}`,
+      error: `Groq trả về lỗi ${groqRes.status}`,
       detail: errText.slice(0, 500),
     }, 502);
   }
 
-  const geminiData = await geminiRes.json();
-  const textOut = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const groqData = await groqRes.json();
+  const textOut = groqData?.choices?.[0]?.message?.content;
 
   if (!textOut) {
     return jsonResponse({
-      error: "Gemini không trả về nội dung.",
-      debug: geminiData,
+      error: "Groq không trả về nội dung.",
+      debug: groqData,
     }, 502);
   }
 
@@ -91,14 +89,14 @@ export async function onRequestPost(context) {
     parsed = JSON.parse(textOut);
   } catch (err) {
     return jsonResponse({
-      error: "Gemini trả JSON không hợp lệ.",
+      error: "Groq trả JSON không hợp lệ.",
       raw: textOut.slice(0, 500),
     }, 502);
   }
 
   if (!Array.isArray(parsed.variants) || parsed.variants.length === 0) {
     return jsonResponse({
-      error: "Gemini không trả variants hợp lệ.",
+      error: "Groq không trả variants hợp lệ.",
       raw: parsed,
     }, 502);
   }
@@ -115,7 +113,7 @@ export async function onRequestPost(context) {
 
   return jsonResponse({
     ok: true,
-    model: GEMINI_MODEL,
+    model: GROQ_MODEL,
     product: productKey,
     variants: parsed.variants,
   });
