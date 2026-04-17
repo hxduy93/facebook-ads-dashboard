@@ -243,11 +243,13 @@ export async function onRequestPost(context) {
     // ── Step 2: Create Campaign ─────────────────────────────────
     // Budget level: "campaign" (CBO) → budget on campaign, adset inherits.
     //               "adset"    (ABO) → budget on adset (default).
+    // launch_status: "ACTIVE" starts running immediately, "PAUSED" for review
+    const launchStatus = cfg.launch_status === "ACTIVE" ? "ACTIVE" : "PAUSED";
     const isCBO = cfg.budget_level === "campaign";
     const campaignBody = {
       name: cfg.campaign_name || `${cfg.objective}-${Date.now()}`,
       objective: cfg.objective,
-      status: "PAUSED",
+      status: launchStatus,
       buying_type: cfg.buying_type || "AUCTION",
       special_ad_categories: [],
       is_adset_budget_sharing_enabled: isCBO,
@@ -270,7 +272,7 @@ export async function onRequestPost(context) {
       campaign_id: partial.campaign_id,
       optimization_goal: cfg.optimization_goal,
       billing_event: cfg.billing_event,
-      status: "PAUSED",
+      status: launchStatus,
       destination_type: cfg.destination_type || "WEBSITE",
       targeting: buildTargeting(cfg),
     };
@@ -325,7 +327,7 @@ export async function onRequestPost(context) {
         name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,
         adset_id: partial.adset_id,
         creative: { creative_id: creativeRes.id },
-        status: "PAUSED",
+        status: launchStatus,
       }, token);
 
       partial.ads.push({
