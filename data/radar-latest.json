@@ -1,11 +1,10 @@
 {
-  "_comment": "Kết quả phân tích đối thủ từ Cowork Radar AI — CI Report Framework v5.0",
+  "_comment": "Kết quả phân tích đối thủ từ Cowork Radar AI — CI Report Framework v5.0 | Weekly radar 2026-04-17 (so sánh với baseline 2026-04-10)",
   "reports": [
     {
       "product": "Noma911",
-      "analyzed_at": "2026-04-10T16:00:00+07:00",
+      "analyzed_at": "2026-04-17T09:00:00+07:00",
       "version": "v5.0",
-
       "top_3_signals": [
         {
           "title": "SOFT99 đang đẩy mạnh Glass Care trên TikTok Shop VN",
@@ -20,22 +19,27 @@
           "description": "Song Đan (nội địa) bán combo gel tẩy ố + nước rửa kính giá rẻ, active trên TikTok Shop. Content before-after đơn giản nhưng hiệu quả cho nhóm New DIY User."
         }
       ],
-
       "ceo_summary": {
         "biggest_threat": "Noma911 bị ép 2 đầu: SOFT99 ép từ trên (premium Nhật, visual mạnh), 3M/Song Đan ép từ dưới (giá rẻ 79-100K, review nhiều). Cần tăng visual proof + combo bundle để giữ mid-market.",
         "biggest_opportunity": "Hầu hết đối thủ KHÔNG chạy FB Ads — đây là kênh trống. Noma911 có thể chiếm top-of-mind bằng FB Ads + TikTok Ads nhắm nhóm New DIY User và Pain-Point Buyer.",
         "decision_today": "Tạo 3 video TikTok before-after cho Noma911 (so sánh ngầm vs 3M/Song Đan) + setup combo Noma911 trên TikTok Shop."
       },
-
       "battle_line": {
         "name": "Glass Care — Tẩy ố kính ô tô",
-        "doscom_skus": ["Noma911"],
-        "competitors": ["3M Creme Cleanser 93662", "Sonax 337100", "Libitu", "SOFT99 Glaco", "Song Đan"],
+        "doscom_skus": [
+          "Noma911"
+        ],
+        "competitors": [
+          "3M Creme Cleanser 93662",
+          "Sonax 337100",
+          "Libitu",
+          "SOFT99 Glaco",
+          "Song Đan"
+        ],
         "competitors_winning_by": "3M: giá rẻ 86K + 711 review. SOFT99: xuất xứ Nhật + visual hạt nước. Song Đan: combo giá rẻ + TikTok Shop active.",
         "doscom_weak_at": "Visual before-after chưa đủ mạnh. Chưa có combo tẩy+phủ. Không có presence trên Tinhte/VOZ (0 review forum).",
         "counter_attack": "Combo Noma911 giá bundle. Video TikTok hiệu ứng mưa. So sánh trực tiếp vs 3M (Noma 2in1 tẩy ố + chống bám nước, 3M chỉ tẩy ố)."
       },
-
       "consumer_ladder": [
         {
           "segment": "New DIY User",
@@ -70,7 +74,6 @@
           "recommended_message": "Combo tiết kiệm – 2in1 tẩy ố + chống bám nước"
         }
       ],
-
       "competitor_cards": [
         {
           "name": "3M Creme Cleanser 93662",
@@ -83,12 +86,20 @@
           "target_customers": "Value Seeker + New DIY User",
           "bypass_strategy": null,
           "strong_products": "Creme Cleanser đa năng",
-          "doscom_skus_threatened": ["Noma911"],
+          "doscom_skus_threatened": [
+            "Noma911"
+          ],
           "worth_copying": "Volume review cao (711) — cách xây social proof trên Shopee",
           "competitive_weapon": "Giá rẻ nhất 86K + brand trust 3M + 711 review",
           "easy_to_break": "Không có chống bám nước. Content/ads yếu. Không active trên TikTok Shop.",
           "sales_message": "Kem tẩy ố 3M — đa năng, giá rẻ, thương hiệu Mỹ",
-          "radar_scores": { "price": 9, "content": 3, "trust": 8, "product": 5, "growth": 4 },
+          "radar_scores": {
+            "price": 9,
+            "content": 3,
+            "trust": 8,
+            "product": 5,
+            "growth": 4
+          },
           "threat_score": 5.8,
           "threat_level": "medium"
         },
@@ -103,12 +114,20 @@
           "target_customers": "Car Enthusiast + DIY Functional",
           "bypass_strategy": "Đánh 'hiệu quả thực tế cho người VN + khí hậu nóng ẩm + dễ mua TikTok Shop'",
           "strong_products": "Glaco series (tẩy ố + phủ nano)",
-          "doscom_skus_threatened": ["Noma911"],
+          "doscom_skus_threatened": [
+            "Noma911"
+          ],
           "worth_copying": "Visual hiệu ứng hạt nước trên kính. Video demo sạch sẽ, chuyên nghiệp.",
           "competitive_weapon": "Xuất xứ Nhật + visual hạt nước lá sen + trust cộng đồng xe",
           "easy_to_break": "Giá cao. Content VN yếu. Không có TikTok Shop chính thức. Khó tiếp cận New DIY User.",
           "sales_message": "Công nghệ Nhật Bản – hiệu ứng lá sen – kính trong veo",
-          "radar_scores": { "price": 5, "content": 6, "trust": 8, "product": 7, "growth": 6 },
+          "radar_scores": {
+            "price": 5,
+            "content": 6,
+            "trust": 8,
+            "product": 7,
+            "growth": 6
+          },
           "threat_score": 6.4,
           "threat_level": "medium"
         },
@@ -123,12 +142,20 @@
           "target_customers": "DIY Functional + Enthusiast",
           "bypass_strategy": null,
           "strong_products": "Glass Polish Intensive",
-          "doscom_skus_threatened": ["Noma911"],
+          "doscom_skus_threatened": [
+            "Noma911"
+          ],
           "worth_copying": "Claim công nghệ Nano. Phân loại sản phẩm theo ứng dụng.",
           "competitive_weapon": "Xuất xứ Đức + dung tích lớn 250ml + rating 4.9",
           "easy_to_break": "Review ít (8). Kênh offline-heavy. Content VN ít. TikTok Shop yếu.",
           "sales_message": "Công nghệ Đức – tiêu chuẩn châu Âu – đánh bóng chuyên nghiệp",
-          "radar_scores": { "price": 7, "content": 3, "trust": 7, "product": 6, "growth": 3 },
+          "radar_scores": {
+            "price": 7,
+            "content": 3,
+            "trust": 7,
+            "product": 6,
+            "growth": 3
+          },
           "threat_score": 5.2,
           "threat_level": "medium"
         },
@@ -143,12 +170,20 @@
           "target_customers": "Value Seeker",
           "bypass_strategy": null,
           "strong_products": "Glass Polishing Powder",
-          "doscom_skus_threatened": ["Noma911"],
+          "doscom_skus_threatened": [
+            "Noma911"
+          ],
           "worth_copying": "Giá entry thấp 79K",
           "competitive_weapon": "Giá rẻ nhất 79K",
           "easy_to_break": "Dạng bột khó dùng. 2 review. Brand không ai biết.",
           "sales_message": "Bột tẩy ố kính giá rẻ",
-          "radar_scores": { "price": 9, "content": 2, "trust": 2, "product": 4, "growth": 2 },
+          "radar_scores": {
+            "price": 9,
+            "content": 2,
+            "trust": 2,
+            "product": 4,
+            "growth": 2
+          },
           "threat_score": 3.8,
           "threat_level": "low"
         },
@@ -163,17 +198,24 @@
           "target_customers": "New DIY User + Pain-Point Buyer",
           "bypass_strategy": null,
           "strong_products": "Gel tẩy ố + combo nước rửa kính",
-          "doscom_skus_threatened": ["Noma911"],
+          "doscom_skus_threatened": [
+            "Noma911"
+          ],
           "worth_copying": "Combo tẩy+rửa. TikTok Shop active. Visual trước-sau.",
           "competitive_weapon": "Combo giá rẻ + TikTok Shop active + content before-after",
           "easy_to_break": "Brand mới. Trust thấp. Không có chống bám nước 2in1.",
           "sales_message": "Gel tẩy ố kính tự nhiên – combo tiết kiệm",
-          "radar_scores": { "price": 7, "content": 6, "trust": 4, "product": 5, "growth": 6 },
+          "radar_scores": {
+            "price": 7,
+            "content": 6,
+            "trust": 4,
+            "product": 5,
+            "growth": 6
+          },
           "threat_score": 5.6,
           "threat_level": "medium"
         }
       ],
-
       "domestic_competitors_summary": [
         {
           "name": "Song Đan",
@@ -184,15 +226,43 @@
           "threat_score": 5.6
         }
       ],
-
       "counter_attack_framework": [
-        { "competitor": "3M", "attack_directly": true, "attack_with": "So sánh: Noma 2in1 (tẩy+chống bám nước) vs 3M chỉ tẩy ố", "bypass_with": null, "worth_copying": "Volume review Shopee" },
-        { "competitor": "SOFT99", "attack_directly": false, "attack_with": null, "bypass_with": "Giá hợp lý + khí hậu VN + dễ mua TikTok", "worth_copying": "Visual hạt nước" },
-        { "competitor": "Sonax", "attack_directly": true, "attack_with": "Noma rẻ hơn + 2in1 + dễ dùng hơn (thoa-chờ-rửa)", "bypass_with": null, "worth_copying": "Claim Nano" },
-        { "competitor": "Song Đan", "attack_directly": true, "attack_with": "Brand trust + R&D + before-after mạnh hơn", "bypass_with": null, "worth_copying": "Combo tẩy+rửa" },
-        { "competitor": "Libitu", "attack_directly": true, "attack_with": "Dễ dùng hơn (kem lỏng vs bột)", "bypass_with": null, "worth_copying": "Giá entry" }
+        {
+          "competitor": "3M",
+          "attack_directly": true,
+          "attack_with": "So sánh: Noma 2in1 (tẩy+chống bám nước) vs 3M chỉ tẩy ố",
+          "bypass_with": null,
+          "worth_copying": "Volume review Shopee"
+        },
+        {
+          "competitor": "SOFT99",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "Giá hợp lý + khí hậu VN + dễ mua TikTok",
+          "worth_copying": "Visual hạt nước"
+        },
+        {
+          "competitor": "Sonax",
+          "attack_directly": true,
+          "attack_with": "Noma rẻ hơn + 2in1 + dễ dùng hơn (thoa-chờ-rửa)",
+          "bypass_with": null,
+          "worth_copying": "Claim Nano"
+        },
+        {
+          "competitor": "Song Đan",
+          "attack_directly": true,
+          "attack_with": "Brand trust + R&D + before-after mạnh hơn",
+          "bypass_with": null,
+          "worth_copying": "Combo tẩy+rửa"
+        },
+        {
+          "competitor": "Libitu",
+          "attack_directly": true,
+          "attack_with": "Dễ dùng hơn (kem lỏng vs bột)",
+          "bypass_with": null,
+          "worth_copying": "Giá entry"
+        }
       ],
-
       "customer_psychology_insights": [
         {
           "insight_title": "Tôi sợ dùng sai hóa chất cho kính xe",
@@ -213,59 +283,168 @@
           "doscom_action": "Nhấn mạnh USP 2in1 duy nhất trên thị trường"
         }
       ],
-
       "risk_assessment": {
-        "price_risk": { "level": "CAO", "description": "3M 86K, Libitu 79K đang kéo giá sàn xuống. Noma911 199K cần justify bằng tính năng 2in1." },
-        "content_risk": { "level": "CAO", "description": "SOFT99 và Song Đan đang tạo visual before-after mạnh hơn Noma911. Noma không có review trên Tinhte/VOZ." },
-        "perception_risk": { "level": "TB", "description": "Noma chưa có claim xuất xứ mạnh (3M-Mỹ, SOFT99-Nhật, Sonax-Đức). Cần thêm proof points." },
-        "product_risk": { "level": "THẤP", "description": "Noma911 là sản phẩm 2in1 duy nhất trên thị trường — lợi thế sản phẩm rõ ràng." },
-        "growth_risk": { "level": "CAO", "description": "TikTok Shop đang chiếm 41% e-commerce VN. Noma chưa đẩy mạnh TikTok Shop." }
+        "price_risk": {
+          "level": "CAO",
+          "description": "3M 86K, Libitu 79K đang kéo giá sàn xuống. Noma911 199K cần justify bằng tính năng 2in1."
+        },
+        "content_risk": {
+          "level": "CAO",
+          "description": "SOFT99 và Song Đan đang tạo visual before-after mạnh hơn Noma911. Noma không có review trên Tinhte/VOZ."
+        },
+        "perception_risk": {
+          "level": "TB",
+          "description": "Noma chưa có claim xuất xứ mạnh (3M-Mỹ, SOFT99-Nhật, Sonax-Đức). Cần thêm proof points."
+        },
+        "product_risk": {
+          "level": "THẤP",
+          "description": "Noma911 là sản phẩm 2in1 duy nhất trên thị trường — lợi thế sản phẩm rõ ràng."
+        },
+        "growth_risk": {
+          "level": "CAO",
+          "description": "TikTok Shop đang chiếm 41% e-commerce VN. Noma chưa đẩy mạnh TikTok Shop."
+        }
       },
-
       "pricing": {
         "our_price": "199,000₫",
         "competitors": [
-          { "name": "3M Creme Cleanser 93662", "brand": "3M", "price": "86,000₫", "platform": "Shopee", "promo": "", "rating": 4.7, "review_count": 711, "link": "" },
-          { "name": "Sonax Glass Polish 337100", "brand": "Sonax", "price": "100,000₫", "platform": "Shopee", "promo": "", "rating": 4.9, "review_count": 8, "link": "" },
-          { "name": "Libitu Glass Polishing Powder", "brand": "Libitu", "price": "79,000₫", "platform": "Shopee", "promo": "", "rating": 4.5, "review_count": 2, "link": "" },
-          { "name": "Song Đan Gel Tẩy Ố", "brand": "Song Đan", "price": "100,000-150,000₫", "platform": "Shopee/TikTok", "promo": "Combo tẩy+rửa", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "SOFT99 Glaco", "brand": "SOFT99", "price": "150,000-500,000₫", "platform": "Shopee/Ubuy", "promo": "", "rating": 0, "review_count": 0, "link": "" }
+          {
+            "name": "3M Creme Cleanser 93662",
+            "brand": "3M",
+            "price": "86,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.7,
+            "review_count": 711,
+            "link": ""
+          },
+          {
+            "name": "Sonax Glass Polish 337100",
+            "brand": "Sonax",
+            "price": "100,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.9,
+            "review_count": 8,
+            "link": ""
+          },
+          {
+            "name": "Libitu Glass Polishing Powder",
+            "brand": "Libitu",
+            "price": "79,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.5,
+            "review_count": 2,
+            "link": ""
+          },
+          {
+            "name": "Song Đan Gel Tẩy Ố",
+            "brand": "Song Đan",
+            "price": "100,000-150,000₫",
+            "platform": "Shopee/TikTok",
+            "promo": "Combo tẩy+rửa",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "SOFT99 Glaco",
+            "brand": "SOFT99",
+            "price": "150,000-500,000₫",
+            "platform": "Shopee/Ubuy",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          }
         ],
         "insight": "Noma911 (199K) nằm giữa phân khúc rẻ (3M 86K, Libitu 79K) và cao cấp (SOFT99 150-500K). Lợi thế: sản phẩm 2in1 duy nhất ở mức giá này."
       },
-
       "competitor_ads": {
         "active_advertisers": 0,
         "competitors": [],
         "insight": "Không tìm thấy đối thủ nào chạy FB Ads cho 'tẩy ố kính ô tô'. Đây là cơ hội lớn — Noma911 có thể chiếm kênh FB Ads hoàn toàn."
       },
-
       "ad_content_analysis": {
         "competitors": [],
         "common_patterns": {
-          "top_angles": ["before-after", "giá rẻ", "xuất xứ"],
-          "top_formats": ["video ngắn TikTok"],
-          "top_cta": ["Mua ngay trên Shopee/TikTok"],
-          "top_hooks": ["Kính xe ố 3 năm — 5 phút sạch bong"]
+          "top_angles": [
+            "before-after",
+            "giá rẻ",
+            "xuất xứ"
+          ],
+          "top_formats": [
+            "video ngắn TikTok"
+          ],
+          "top_cta": [
+            "Mua ngay trên Shopee/TikTok"
+          ],
+          "top_hooks": [
+            "Kính xe ố 3 năm — 5 phút sạch bong"
+          ]
         },
         "insight": "Đối thủ chủ yếu active trên TikTok/Shopee, không chạy FB Ads. Content before-after là format hiệu quả nhất."
       },
-
       "sentiment": {
-        "our_product": { "positive": ["2in1 tẩy ố + chống bám nước", "dễ dùng", "hiệu quả"], "negative": ["giá cao hơn đối thủ"], "rating_avg": 4.8, "review_count": 137 },
-        "competitors_summary": { "positive": ["giá rẻ", "brand quốc tế"], "negative": ["chỉ tẩy ố không chống bám", "bột khó dùng"], "rating_avg": 4.6, "review_count": 721 },
+        "our_product": {
+          "positive": [
+            "2in1 tẩy ố + chống bám nước",
+            "dễ dùng",
+            "hiệu quả"
+          ],
+          "negative": [
+            "giá cao hơn đối thủ"
+          ],
+          "rating_avg": 4.8,
+          "review_count": 137
+        },
+        "competitors_summary": {
+          "positive": [
+            "giá rẻ",
+            "brand quốc tế"
+          ],
+          "negative": [
+            "chỉ tẩy ố không chống bám",
+            "bột khó dùng"
+          ],
+          "rating_avg": 4.6,
+          "review_count": 721
+        },
         "insight": "Noma911 rating 4.8 cao hơn TB đối thủ (4.6). Lợi thế 2in1 được khách hàng đánh giá cao. Điểm yếu: giá 199K cao hơn 3M (86K) 131%."
       },
-
       "online_presence": {
         "competitors": [
-          { "name": "3M", "fanpage_followers": 0, "post_frequency": "Không rõ", "has_website": true, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Thương hiệu Mỹ, giá rẻ, đa năng" },
-          { "name": "SOFT99", "fanpage_followers": 0, "post_frequency": "Không rõ", "has_website": true, "has_tiktok_shop": true, "has_shopee": true, "positioning": "Premium Nhật, glass care chuyên dụng" },
-          { "name": "Song Đan", "fanpage_followers": 0, "post_frequency": "Active", "has_website": true, "has_tiktok_shop": true, "has_shopee": true, "positioning": "Nội địa, combo giá rẻ" }
+          {
+            "name": "3M",
+            "fanpage_followers": 0,
+            "post_frequency": "Không rõ",
+            "has_website": true,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Thương hiệu Mỹ, giá rẻ, đa năng"
+          },
+          {
+            "name": "SOFT99",
+            "fanpage_followers": 0,
+            "post_frequency": "Không rõ",
+            "has_website": true,
+            "has_tiktok_shop": true,
+            "has_shopee": true,
+            "positioning": "Premium Nhật, glass care chuyên dụng"
+          },
+          {
+            "name": "Song Đan",
+            "fanpage_followers": 0,
+            "post_frequency": "Active",
+            "has_website": true,
+            "has_tiktok_shop": true,
+            "has_shopee": true,
+            "positioning": "Nội địa, combo giá rẻ"
+          }
         ],
         "insight": "Đối thủ chủ yếu bán trên Shopee + TikTok Shop. FB Ads là kênh trống hoàn toàn."
       },
-
       "actions": {
         "quick_win_24h": [
           "Tạo 3 video TikTok before-after cho Noma911 (so sánh ngầm vs 3M)",
@@ -283,30 +462,231 @@
           "So sánh trực tiếp Noma911 vs 3M trong video (2in1 vs chỉ tẩy ố)"
         ]
       },
-
       "ceo_decision": {
         "priority": "Chiếm kênh FB Ads + TikTok Ads cho 'tẩy ố kính ô tô' — hiện không có đối thủ nào chạy ads",
         "reason": "Kênh FB Ads hoàn toàn trống cho ngách tẩy ố kính. Noma911 có lợi thế 2in1 duy nhất. 75% thị trường (New DIY + Pain-Point + Value Seeker) có thể thắng.",
-        "action_steps": ["Tạo 3 video before-after trong 48h", "Setup FB Ads CBO 200K/ngày", "Setup TikTok Shop listing + combo"],
+        "action_steps": [
+          "Tạo 3 video before-after trong 48h",
+          "Setup FB Ads CBO 200K/ngày",
+          "Setup TikTok Shop listing + combo"
+        ],
         "team": "Marketing + Content",
         "deadline": "48h",
         "risk_and_mitigation": "Rủi ro: đối thủ copy chiến lược → đối phó bằng brand trust Doscom + review volume"
       },
-
       "recommendations": [
         "Chạy FB Ads ngay — kênh trống hoàn toàn, không ai cạnh tranh",
         "Nhấn mạnh USP '2in1 tẩy ố + chống bám nước' — KHÔNG đối thủ nào có",
         "Tạo video before-after hàng loạt trên TikTok — copy chiến lược SOFT99/Song Đan",
         "Xây review trên Tinhte/VOZ — hiện có 0 bài về Noma911",
         "So sánh trực tiếp Noma vs 3M: Noma 2in1 vs 3M chỉ tẩy"
-      ]
+      ],
+      "weekly_changes": {
+        "baseline_date": "2026-04-10T16:00:00+07:00",
+        "current_date": "2026-04-17T09:00:00+07:00",
+        "summary": "SOFT99 đẩy mạnh chiến dịch combo Glass Compound + Ultra Glaco (tẩy + coating 12 tháng) trên TikTok toàn cầu — áp lực content tăng. Song Đan tiếp tục dominant TikTok VN với KOC Khánh Paint Shop (nhiều video viral). Xuất hiện 3 brand mới đang len vào Shopee: Braum Clean 300ml, Flamingo (Mỹ), Waxco (Malaysia).",
+        "threat_changes": [
+          {
+            "competitor": "SOFT99 Glaco",
+            "old_score": 6.4,
+            "new_score": 6.7,
+            "delta": 0.3,
+            "reason": "Tung combo Glass Compound Roll On + Ultra Glaco (coating 12 tháng) — nâng tầm story 2in1 mà Noma911 đang sở hữu. Video TikTok Cybertruck demo hút view"
+          },
+          {
+            "competitor": "Song Đan",
+            "old_score": 5.6,
+            "new_score": 5.9,
+            "delta": 0.3,
+            "reason": "Khánh Paint Shop tiếp tục đẩy 5+ video mới tuần qua, format 'test thực tế cho khách Quy Nhơn', chai 200ml bán combo TikTok Shop"
+          },
+          {
+            "competitor": "3M Creme Cleanser 93662",
+            "old_score": 5.8,
+            "new_score": 5.8,
+            "delta": 0,
+            "reason": "Giá & rating giữ nguyên ~86K, tiếp tục là SKU số 1 Shopee (711 review), chưa thấy thay đổi lớn"
+          },
+          {
+            "competitor": "Sonax Glass Polish 337100",
+            "old_score": 5.2,
+            "new_score": 5.1,
+            "delta": -0.1,
+            "reason": "Không thấy content mới, vẫn 8 review — yếu kênh VN"
+          },
+          {
+            "competitor": "Libitu Glass Polishing Powder",
+            "old_score": 3.8,
+            "new_score": 3.8,
+            "delta": 0,
+            "reason": "Không đổi, vẫn lặng (2 review)"
+          }
+        ],
+        "price_changes": [
+          {
+            "competitor": "3M Creme Cleanser 93662",
+            "old_price": "86,000₫",
+            "new_price": "86,000₫",
+            "change": "Không đổi",
+            "impact": "Giá sàn vẫn 86K — tiếp tục ép giá trần Noma911"
+          },
+          {
+            "competitor": "SOFT99 Glaco Combo",
+            "old_price": "150,000-500,000₫",
+            "new_price": "150,000-500,000₫ (thêm combo 100ml+70ml bundle ~~$25 trên Amazon)",
+            "change": "Bổ sung combo package thay vì giảm giá",
+            "impact": "SOFT99 chọn hướng tăng value combo thay vì giảm giá — hợp lý để bảo vệ premium"
+          },
+          {
+            "competitor": "Song Đan",
+            "old_price": "100,000-150,000₫",
+            "new_price": "100,000-150,000₫",
+            "change": "Không đổi",
+            "impact": "Giữ giá, dồn lực vào content KOC"
+          }
+        ],
+        "new_content": [
+          {
+            "competitor": "SOFT99",
+            "platform": "TikTok (soft99usa, soft99europe)",
+            "count": 3,
+            "description": "3 video mới về Glaco Glass Compound Roll On + Ultra Glaco combo — có video demo Tesla Cybertruck",
+            "notable": "Story '2 loại hạt mài' + coating 12 tháng — trùng angle 2in1 Noma911 đang nắm"
+          },
+          {
+            "competitor": "Song Đan (Khánh Paint Shop)",
+            "platform": "TikTok",
+            "count": 5,
+            "description": "5 video mới tuần qua: review cho khách Quy Nhơn, hướng dẫn kính lái ố, test an toàn không mùi",
+            "notable": "KOC Khánh Paint Shop duy trì tần suất cao, nhiều video hit 7-10K+ views"
+          },
+          {
+            "competitor": "3M",
+            "platform": "Shopee + phim cách nhiệt 3M VN",
+            "count": 0,
+            "description": "Không thấy content FB/TikTok mới — dựa hoàn toàn vào listing Shopee và distributor",
+            "notable": "Điểm yếu content TikTok duy trì — cơ hội cho Noma911"
+          }
+        ],
+        "sales_signals": [
+          {
+            "competitor": "3M Creme Cleanser 93662",
+            "platform": "Shopee",
+            "old_reviews": 711,
+            "new_reviews": 720,
+            "delta_reviews": 9,
+            "estimated_weekly_sales": "~9-15 đơn/tuần (chậm lại từ baseline)",
+            "trend": "stable"
+          },
+          {
+            "competitor": "Sonax 337100",
+            "platform": "Shopee",
+            "old_reviews": 8,
+            "new_reviews": 8,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "~0 đơn",
+            "trend": "flat"
+          },
+          {
+            "competitor": "Libitu",
+            "platform": "Shopee",
+            "old_reviews": 2,
+            "new_reviews": 2,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "~0 đơn",
+            "trend": "flat"
+          }
+        ],
+        "traffic_signals": [
+          {
+            "competitor": "SOFT99",
+            "source": "TikTok global",
+            "trend": "up",
+            "detail": "Video Cybertruck Glaco Glass Compound lan truyền mạnh — hashtag #soft99 #glaco tăng"
+          },
+          {
+            "competitor": "Song Đan",
+            "source": "TikTok VN (@khanhpaintshop)",
+            "trend": "up",
+            "detail": "Duy trì 5+ video/tuần, engagement cao"
+          },
+          {
+            "competitor": "Noma911 ngách chung",
+            "source": "Google Trends 'tẩy ố kính ô tô'",
+            "trend": "stable",
+            "detail": "Nhu cầu mùa đầu hè (tháng 4) thường tăng — opportunity window"
+          }
+        ],
+        "new_competitors": [
+          {
+            "name": "Braum Clean 300ml",
+            "first_seen": "2026-04-15",
+            "threat_level": "low",
+            "detail": "Chai xịt 300ml xuất hiện list Shopee SHITEK — dạng xịt không phải kem, khác category Noma911 nhưng cùng intent KH"
+          },
+          {
+            "name": "Flamingo (Mỹ)",
+            "first_seen": "2026-04-15",
+            "threat_level": "low",
+            "detail": "Thương hiệu Mỹ mới lên kệ VN, story 'công thức đặc biệt', chưa có review đáng kể"
+          },
+          {
+            "name": "Waxco Water Marks Remover (Malaysia)",
+            "first_seen": "2026-04-15",
+            "threat_level": "low",
+            "detail": "Brand Malaysia phân khúc trung, hiện diện cửa hàng detailing lẻ"
+          }
+        ],
+        "ads_changes": [
+          {
+            "competitor": "Tất cả đối thủ ngách 'tẩy ố kính ô tô'",
+            "change_type": "no_fb_ads",
+            "detail": "Tuần này tiếp tục KHÔNG có brand lớn nào chạy FB Ads cho từ khóa này — cửa trống cho Noma911 duy trì. Kết quả search 'tẩy ố kính ô tô Facebook ads' trả về toàn bài hướng dẫn chạy ads, không có landing đối thủ"
+          }
+        ],
+        "risk_changes": [
+          {
+            "risk_type": "price_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Không đổi — 3M 86K vẫn là sàn"
+          },
+          {
+            "risk_type": "content_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Tăng cường — SOFT99 push combo 12 tháng + Song Đan duy trì tần suất KOC"
+          },
+          {
+            "risk_type": "perception_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          },
+          {
+            "risk_type": "product_risk",
+            "old_level": "THẤP",
+            "new_level": "TB",
+            "change": "Tăng — SOFT99 combo Glaco + Glass Compound bắt đầu tiếp cận khái niệm 2in1 mà Noma911 đang là duy nhất ở VN"
+          },
+          {
+            "risk_type": "growth_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Không đổi — TikTok Shop vẫn chỗ trống"
+          }
+        ],
+        "top_3_changes": [
+          "SOFT99 đang tấn công câu chuyện 2in1 bằng combo Glass Compound + Ultra Glaco (12 tháng coating) — Noma911 cần tăng tốc quảng bá 'tẩy + chống bám nước' trước khi bị loãng vị thế",
+          "Song Đan duy trì dominant TikTok VN qua Khánh Paint Shop với 5+ video mới/tuần — cần đầu tư KOC chuyên ô tô của Noma911 ngay",
+          "Xuất hiện 3 brand mới (Braum Clean, Flamingo, Waxco) — thị trường bắt đầu đông hơn, cửa sổ dẫn đầu hẹp lại"
+        ]
+      }
     },
-
     {
       "product": "D1",
-      "analyzed_at": "2026-04-10T16:00:00+07:00",
+      "analyzed_at": "2026-04-17T09:00:00+07:00",
       "version": "v5.0",
-
       "top_3_signals": [
         {
           "title": "GT13 bán giá chỉ 1.2M — rẻ hơn D1 52%",
@@ -321,22 +701,31 @@
           "description": "Các shop nhỏ lẻ Trung Quốc bán máy dò RF S16/S16+ với giá rất rẻ (189-648K). Chất lượng không rõ nhưng thu hút khách hàng giá rẻ."
         }
       ],
-
       "ceo_summary": {
         "biggest_threat": "GT13 (1.2M) là đối thủ nguy hiểm nhất — specs tương đương D1 nhưng giá rẻ hơn 52%. Cần justify giá 2.5M bằng brand trust + bảo hành + hỗ trợ kỹ thuật.",
         "biggest_opportunity": "D1 đã bán 1.135 cái, rating 5⭐ — social proof rất mạnh. Đối thủ TQ không có bảo hành/hỗ trợ tiếng Việt. Đánh vào fear 'mua hàng TQ không ai hỗ trợ'.",
         "decision_today": "Tạo content so sánh D1 vs hàng TQ giá rẻ: nhấn mạnh bảo hành chính hãng + hỗ trợ kỹ thuật Doscom + 1.135 khách đã tin dùng."
       },
-
       "battle_line": {
         "name": "Spy Detection — Dò nghe lén/camera ẩn/GPS",
-        "doscom_skus": ["D1", "D1 Pro", "D2"],
-        "competitors": ["GT13", "K68", "X13", "Baseus Heyo", "Ugreen detector", "RF Detector S16", "Noyafa G318"],
+        "doscom_skus": [
+          "D1",
+          "D1 Pro",
+          "D2"
+        ],
+        "competitors": [
+          "GT13",
+          "K68",
+          "X13",
+          "Baseus Heyo",
+          "Ugreen detector",
+          "RF Detector S16",
+          "Noyafa G318"
+        ],
         "competitors_winning_by": "GT13: specs tốt + giá rẻ 1.2M. Baseus/Ugreen: giá siêu rẻ 200-300K. Shop TQ: giá sàn 189K.",
         "doscom_weak_at": "Giá 2.5M cao nhất phân khúc. Cần justify rõ ràng hơn tại sao đắt hơn GT13 gấp đôi.",
         "counter_attack": "Đánh vào trust: 1.135 đã bán + rating 5⭐ + bảo hành Doscom + hỗ trợ kỹ thuật VN. Content 'mua hàng TQ rẻ nhưng hỏng không ai sửa'."
       },
-
       "consumer_ladder": [
         {
           "segment": "Lo ngại bị theo dõi (cá nhân)",
@@ -363,7 +752,6 @@
           "recommended_message": "Bảo mật doanh nghiệp – chống nghe lén phòng họp"
         }
       ],
-
       "competitor_cards": [
         {
           "name": "GT13",
@@ -376,12 +764,20 @@
           "target_customers": "Cá nhân lo ngại theo dõi, budget trung",
           "bypass_strategy": null,
           "strong_products": "GT13 detector 3 chế độ",
-          "doscom_skus_threatened": ["D1"],
+          "doscom_skus_threatened": [
+            "D1"
+          ],
           "worth_copying": "Specs tốt ở mức giá 1.2M. Thiết kế nhỏ gọn 20g.",
           "competitive_weapon": "Giá rẻ 1.2M + 3 chế độ + pin 25h + Type-C",
           "easy_to_break": "Không bảo hành. Không hỗ trợ kỹ thuật VN. Brand vô danh.",
           "sales_message": "Máy dò 3 chế độ siêu nhỏ giá rẻ",
-          "radar_scores": { "price": 8, "content": 3, "trust": 3, "product": 7, "growth": 5 },
+          "radar_scores": {
+            "price": 8,
+            "content": 3,
+            "trust": 3,
+            "product": 7,
+            "growth": 5
+          },
           "threat_score": 5.2,
           "threat_level": "medium"
         },
@@ -396,12 +792,20 @@
           "target_customers": "Du khách, người đi Airbnb",
           "bypass_strategy": "D1 dò TOÀN DIỆN (RF + từ trường + IR + GPS) vs Baseus chỉ dò camera",
           "strong_products": "Camera detector móc khóa",
-          "doscom_skus_threatened": ["D1"],
+          "doscom_skus_threatened": [
+            "D1"
+          ],
           "worth_copying": "Form factor nhỏ gọn dạng móc khóa",
           "competitive_weapon": "Giá siêu rẻ 200-300K + brand Baseus",
           "easy_to_break": "Chỉ dò camera, bỏ lỡ nghe lén/GPS/RF",
           "sales_message": "Dò camera ẩn nhỏ gọn như móc khóa",
-          "radar_scores": { "price": 10, "content": 5, "trust": 6, "product": 3, "growth": 6 },
+          "radar_scores": {
+            "price": 10,
+            "content": 5,
+            "trust": 6,
+            "product": 3,
+            "growth": 6
+          },
           "threat_score": 4.0,
           "threat_level": "low"
         },
@@ -416,25 +820,49 @@
           "target_customers": "Người cần thiết bị chuyên nghiệp",
           "bypass_strategy": null,
           "strong_products": "K68 multi-mode detector",
-          "doscom_skus_threatened": ["D1", "D1 Pro"],
+          "doscom_skus_threatened": [
+            "D1",
+            "D1 Pro"
+          ],
           "worth_copying": "Đa chế độ (RF, GPS, camera, 3G/4G)",
           "competitive_weapon": "Multi-band detection + giá vừa",
           "easy_to_break": "Không bảo hành VN. Ít review.",
           "sales_message": "Dò nghe lén đa chế độ thế hệ mới",
-          "radar_scores": { "price": 6, "content": 3, "trust": 3, "product": 7, "growth": 4 },
+          "radar_scores": {
+            "price": 6,
+            "content": 3,
+            "trust": 3,
+            "product": 7,
+            "growth": 4
+          },
           "threat_score": 4.6,
           "threat_level": "low"
         }
       ],
-
       "domestic_competitors_summary": [],
-
       "counter_attack_framework": [
-        { "competitor": "GT13", "attack_directly": true, "attack_with": "Trust Doscom + bảo hành + 1.135 đã bán vs hàng TQ không bảo hành", "bypass_with": null, "worth_copying": "Specs/giá" },
-        { "competitor": "Baseus Heyo", "attack_directly": false, "attack_with": null, "bypass_with": "D1 dò toàn diện vs Baseus chỉ dò camera", "worth_copying": "Form factor nhỏ" },
-        { "competitor": "Hàng TQ Shopee", "attack_directly": true, "attack_with": "Content 'mua hàng TQ giá rẻ nhưng hỏng không ai sửa'", "bypass_with": null, "worth_copying": "Giá entry" }
+        {
+          "competitor": "GT13",
+          "attack_directly": true,
+          "attack_with": "Trust Doscom + bảo hành + 1.135 đã bán vs hàng TQ không bảo hành",
+          "bypass_with": null,
+          "worth_copying": "Specs/giá"
+        },
+        {
+          "competitor": "Baseus Heyo",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "D1 dò toàn diện vs Baseus chỉ dò camera",
+          "worth_copying": "Form factor nhỏ"
+        },
+        {
+          "competitor": "Hàng TQ Shopee",
+          "attack_directly": true,
+          "attack_with": "Content 'mua hàng TQ giá rẻ nhưng hỏng không ai sửa'",
+          "bypass_with": null,
+          "worth_copying": "Giá entry"
+        }
       ],
-
       "customer_psychology_insights": [
         {
           "insight_title": "Tôi sợ mua nhầm hàng fake/kém chất lượng",
@@ -455,58 +883,160 @@
           "doscom_action": "Content 'checklist an toàn khi thuê phòng' + D1 là công cụ không thể thiếu"
         }
       ],
-
       "risk_assessment": {
-        "price_risk": { "level": "CAO", "description": "GT13 (1.2M) rẻ hơn 52%. Hàng TQ Shopee từ 189K. D1 cần justify giá 2.5M." },
-        "content_risk": { "level": "TB", "description": "Đối thủ content yếu. Doscom có cơ hội chiếm bằng content chất lượng." },
-        "perception_risk": { "level": "THẤP", "description": "D1 rating 5⭐, 1.135 đã bán — trust rất mạnh." },
-        "product_risk": { "level": "TB", "description": "GT13 specs tương đương. D1 cần highlight tần số quét 1500 lần/phút vượt trội." },
-        "growth_risk": { "level": "TB", "description": "Ngách nhỏ nhưng đang grow. Cần mở rộng content sang kênh TikTok." }
+        "price_risk": {
+          "level": "CAO",
+          "description": "GT13 (1.2M) rẻ hơn 52%. Hàng TQ Shopee từ 189K. D1 cần justify giá 2.5M."
+        },
+        "content_risk": {
+          "level": "TB",
+          "description": "Đối thủ content yếu. Doscom có cơ hội chiếm bằng content chất lượng."
+        },
+        "perception_risk": {
+          "level": "THẤP",
+          "description": "D1 rating 5⭐, 1.135 đã bán — trust rất mạnh."
+        },
+        "product_risk": {
+          "level": "TB",
+          "description": "GT13 specs tương đương. D1 cần highlight tần số quét 1500 lần/phút vượt trội."
+        },
+        "growth_risk": {
+          "level": "TB",
+          "description": "Ngách nhỏ nhưng đang grow. Cần mở rộng content sang kênh TikTok."
+        }
       },
-
       "pricing": {
         "our_price": "2,500,000₫",
         "competitors": [
-          { "name": "GT13", "brand": "N/A", "price": "1,200,000₫", "platform": "Shopee/Web", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "K68", "brand": "N/A", "price": "1,500,000-2,000,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Baseus Heyo", "brand": "Baseus", "price": "200,000-300,000₫", "platform": "Shopee", "promo": "", "rating": 4.5, "review_count": 0, "link": "" },
-          { "name": "RF Detector S16", "brand": "N/A", "price": "189,000-648,000₫", "platform": "Shopee", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Noyafa G318", "brand": "Noyafa", "price": "1,000,000-2,000,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" }
+          {
+            "name": "GT13",
+            "brand": "N/A",
+            "price": "1,200,000₫",
+            "platform": "Shopee/Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "K68",
+            "brand": "N/A",
+            "price": "1,500,000-2,000,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Baseus Heyo",
+            "brand": "Baseus",
+            "price": "200,000-300,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.5,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "RF Detector S16",
+            "brand": "N/A",
+            "price": "189,000-648,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Noyafa G318",
+            "brand": "Noyafa",
+            "price": "1,000,000-2,000,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          }
         ],
         "insight": "D1 (2.5M) là sản phẩm đắt nhất phân khúc. GT13 (1.2M) là đối thủ giá đáng lo nhất. Hàng TQ siêu rẻ (189-648K) thu hút nhóm giá rẻ."
       },
-
       "competitor_ads": {
         "active_advertisers": 0,
         "competitors": [],
         "insight": "Không tìm thấy đối thủ nào chạy FB Ads cho ngách dò nghe lén. Kênh trống hoàn toàn."
       },
-
       "ad_content_analysis": {
         "competitors": [],
         "common_patterns": {
-          "top_angles": ["fear/an ninh", "du lịch an toàn", "chống theo dõi"],
-          "top_formats": ["video demo thực tế"],
-          "top_cta": ["Mua ngay trên Shopee"],
-          "top_hooks": ["Bạn có biết ai đang theo dõi bạn?"]
+          "top_angles": [
+            "fear/an ninh",
+            "du lịch an toàn",
+            "chống theo dõi"
+          ],
+          "top_formats": [
+            "video demo thực tế"
+          ],
+          "top_cta": [
+            "Mua ngay trên Shopee"
+          ],
+          "top_hooks": [
+            "Bạn có biết ai đang theo dõi bạn?"
+          ]
         },
         "insight": "Ngách dò nghe lén ít quảng cáo. Cơ hội lớn cho Doscom chiếm kênh FB Ads + TikTok Ads bằng content fear-based."
       },
-
       "sentiment": {
-        "our_product": { "positive": ["rating 5⭐", "1.135 đã bán", "bảo hành Doscom", "tần số quét nhanh"], "negative": ["giá cao"], "rating_avg": 5.0, "review_count": 19 },
-        "competitors_summary": { "positive": ["giá rẻ", "nhỏ gọn"], "negative": ["không bảo hành", "brand không rõ"], "rating_avg": 0, "review_count": 0 },
+        "our_product": {
+          "positive": [
+            "rating 5⭐",
+            "1.135 đã bán",
+            "bảo hành Doscom",
+            "tần số quét nhanh"
+          ],
+          "negative": [
+            "giá cao"
+          ],
+          "rating_avg": 5.0,
+          "review_count": 19
+        },
+        "competitors_summary": {
+          "positive": [
+            "giá rẻ",
+            "nhỏ gọn"
+          ],
+          "negative": [
+            "không bảo hành",
+            "brand không rõ"
+          ],
+          "rating_avg": 0,
+          "review_count": 0
+        },
         "insight": "D1 dẫn đầu về trust (rating 5⭐, 1.135 bán). Đối thủ TQ hầu như không có review đáng tin cậy."
       },
-
       "online_presence": {
         "competitors": [
-          { "name": "GT13", "fanpage_followers": 0, "post_frequency": "Không có", "has_website": false, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Giá rẻ, specs tốt" },
-          { "name": "Baseus Heyo", "fanpage_followers": 0, "post_frequency": "Không rõ", "has_website": true, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Camera detector nhỏ gọn giá rẻ" }
+          {
+            "name": "GT13",
+            "fanpage_followers": 0,
+            "post_frequency": "Không có",
+            "has_website": false,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Giá rẻ, specs tốt"
+          },
+          {
+            "name": "Baseus Heyo",
+            "fanpage_followers": 0,
+            "post_frequency": "Không rõ",
+            "has_website": true,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Camera detector nhỏ gọn giá rẻ"
+          }
         ],
         "insight": "Đối thủ hầu như không có online presence tại VN. Doscom dẫn đầu hoàn toàn."
       },
-
       "actions": {
         "quick_win_24h": [
           "Tạo content 'D1 vs hàng TQ giá rẻ' — video so sánh thực tế",
@@ -524,30 +1054,190 @@
           "Mở rộng content B2B: bảo mật phòng họp doanh nghiệp"
         ]
       },
-
       "ceo_decision": {
         "priority": "Chiếm kênh FB Ads + TikTok cho ngách dò nghe lén — không đối thủ nào chạy ads",
         "reason": "D1 có trust mạnh nhất (5⭐, 1.135 bán). Đối thủ TQ không có brand/bảo hành. Kênh ads hoàn toàn trống.",
-        "action_steps": ["Video so sánh D1 vs GT13/hàng TQ", "FB Ads fear-based angle", "TikTok content dò camera khách sạn"],
+        "action_steps": [
+          "Video so sánh D1 vs GT13/hàng TQ",
+          "FB Ads fear-based angle",
+          "TikTok content dò camera khách sạn"
+        ],
         "team": "Marketing + Content",
         "deadline": "48h",
         "risk_and_mitigation": "Rủi ro: GT13 cải thiện brand → đối phó bằng volume review + content liên tục"
       },
-
       "recommendations": [
         "Chạy FB Ads fear-based: 'Ai đang theo dõi bạn?' — kênh trống 100%",
         "Video so sánh D1 vs GT13: nhấn bảo hành Doscom + hỗ trợ kỹ thuật VN",
         "Content 'du lịch an toàn' — partner travel blogger",
         "Justify giá 2.5M: bảo hành + 1.135 khách + tần số quét 1500 lần/phút",
         "Mở rộng B2B: bảo mật doanh nghiệp, phòng họp"
-      ]
+      ],
+      "weekly_changes": {
+        "baseline_date": "2026-04-10T16:00:00+07:00",
+        "current_date": "2026-04-17T09:00:00+07:00",
+        "summary": "Baseus Heyo Series II vẫn tiếp tục là mối đe dọa giá siêu rẻ — 275K, có sale -8%. GT13 và K68 giữ nguyên phân khúc trung. Ugreen xuất hiện trên tinhte.vn với review tích cực — tín hiệu đối thủ mới dòng premium phổ thông.",
+        "threat_changes": [
+          {
+            "competitor": "Baseus Heyo",
+            "old_score": 4.0,
+            "new_score": 4.3,
+            "delta": 0.3,
+            "reason": "Series II nâng cấp hồng ngoại + chờ 720h + Type-C, vẫn giữ giá 275K (-8%) — áp lực entry-tier tăng"
+          },
+          {
+            "competitor": "GT13",
+            "old_score": 5.2,
+            "new_score": 5.2,
+            "delta": 0,
+            "reason": "Không đổi, vẫn ~1.2M với specs 3 chế độ đầy đủ"
+          },
+          {
+            "competitor": "K68",
+            "old_score": 4.6,
+            "new_score": 4.6,
+            "delta": 0,
+            "reason": "Không đổi, vẫn là dòng RF detector phổ thông phân khúc 1.5-2M"
+          }
+        ],
+        "price_changes": [
+          {
+            "competitor": "Baseus Heyo",
+            "old_price": "200,000-300,000₫",
+            "new_price": "192,280-275,080₫ (đang sale -8%)",
+            "change": "Giảm nhẹ do sale",
+            "impact": "Giá entry rẻ hơn → pressure cho KH cân nhắc 'thử cái rẻ trước' thay vì D1 2.5M"
+          },
+          {
+            "competitor": "GT13",
+            "old_price": "1,200,000₫",
+            "new_price": "1,200,000₫",
+            "change": "Không đổi",
+            "impact": "Vẫn là competitor trực diện nhất ở phân khúc trung"
+          },
+          {
+            "competitor": "K68",
+            "old_price": "1,500,000-2,000,000₫",
+            "new_price": "1,500,000-2,000,000₫",
+            "change": "Không đổi",
+            "impact": "Vẫn gần giá D1"
+          }
+        ],
+        "new_content": [
+          {
+            "competitor": "Baseus",
+            "platform": "Shopee + FB",
+            "count": 0,
+            "description": "Không thấy campaign mới rõ rệt, duy trì listing",
+            "notable": "Series II là thế hệ mới ra mắt — nếu Baseus push campaign ra mắt sẽ tăng đột biến"
+          },
+          {
+            "competitor": "Ugreen",
+            "platform": "Tinhte.vn",
+            "count": 1,
+            "description": "Review chi tiết 'Dùng thử máy dò camera quay lén Ugreen, phát hiện được, giảm rủi ro'",
+            "notable": "Ugreen — brand mới manh nha trong ngách, content trust-building chất lượng cao"
+          },
+          {
+            "competitor": "K68",
+            "platform": "Các site camera lẻ",
+            "count": 0,
+            "description": "Không thấy content mới, vẫn listing cũ",
+            "notable": "Yếu về content"
+          }
+        ],
+        "sales_signals": [
+          {
+            "competitor": "Baseus Heyo",
+            "platform": "Shopee",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Không rõ",
+            "trend": "stable"
+          },
+          {
+            "competitor": "GT13",
+            "platform": "Shopee",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Không rõ",
+            "trend": "stable"
+          }
+        ],
+        "traffic_signals": [
+          {
+            "competitor": "Ngách 'máy dò camera ẩn'",
+            "source": "Google Trends + báo chí (tuoitre.vn)",
+            "trend": "up",
+            "detail": "Bài tuoitre.vn về máy dò lan rộng — gia tăng awareness ngách, có lợi cho cả D1 và đối thủ"
+          }
+        ],
+        "new_competitors": [
+          {
+            "name": "Ugreen Camera Detector",
+            "first_seen": "2026-04-15",
+            "threat_level": "medium",
+            "detail": "Xuất hiện review Tinhte.vn chất lượng cao. Ugreen là brand phụ kiện đã có trust cao ở VN — nếu tung camera detector chính thức sẽ là threat medium"
+          },
+          {
+            "name": "Baseus Heyo Series II",
+            "first_seen": "2026-04-15",
+            "threat_level": "low",
+            "detail": "Phiên bản nâng cấp, về bản chất không khác cũ nhiều nhưng tên Series II dễ thu hút KH"
+          }
+        ],
+        "ads_changes": [
+          {
+            "competitor": "Tất cả",
+            "change_type": "no_fb_ads",
+            "detail": "Tiếp tục không có đối thủ chạy FB Ads rõ ràng — cửa trống cho D1 duy trì"
+          }
+        ],
+        "risk_changes": [
+          {
+            "risk_type": "price_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Không đổi — Baseus vẫn là entry-tier hút KH"
+          },
+          {
+            "risk_type": "content_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi — Ugreen xuất hiện nhưng chưa nhiều"
+          },
+          {
+            "risk_type": "perception_risk",
+            "old_level": "THẤP",
+            "new_level": "THẤP",
+            "change": "Không đổi — Doscom giữ trust"
+          },
+          {
+            "risk_type": "product_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          },
+          {
+            "risk_type": "growth_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          }
+        ],
+        "top_3_changes": [
+          "Baseus Heyo Series II ra mắt với sale -8% — threat score +0.3, nhưng vẫn là phân khúc dưới D1",
+          "Ugreen manh nha trong ngách qua review Tinhte.vn — cần theo dõi sát nếu Ugreen tung SKU chính thức",
+          "Ngách 'máy dò camera ẩn' tăng awareness nhờ báo chí (tuoitre.vn) — cơ hội D1 snap demand"
+        ]
+      }
     },
-
     {
       "product": "DR1",
-      "analyzed_at": "2026-04-10T16:00:00+07:00",
+      "analyzed_at": "2026-04-17T09:00:00+07:00",
       "version": "v5.0",
-
       "top_3_signals": [
         {
           "title": "Mrobo A18 giá chỉ 900K-1M với pin 10 ngày — đối thủ nguy hiểm nhất",
@@ -562,22 +1252,28 @@
           "description": "Takstar A69 ghi âm 83h (gấp gần 3x DR1), giá gần tương đương. Thời gian ghi là weakness lớn nhất của DR1."
         }
       ],
-
       "ceo_summary": {
         "biggest_threat": "Mrobo A18 (900K-1M) rẻ hơn 30% và pin 10 ngày (vs DR1 30h). DR1 cần justify bằng chất lượng âm + brand trust.",
         "biggest_opportunity": "DR1 rating 5⭐ (332 bán) — trust mạnh nhất ngách. Đối thủ TQ không có bảo hành VN. Đánh vào 'ghi âm 1 chạm đơn giản nhất'.",
         "decision_today": "Tạo content so sánh chất lượng âm DR1 vs Mrobo A18 — nhấn khử nhiễu + 1 chạm + bảo hành."
       },
-
       "battle_line": {
         "name": "Voice Recording — Thiết bị ghi âm",
-        "doscom_skus": ["DR1"],
-        "competitors": ["Mrobo A18", "Mrobo RV18", "Takstar A69", "Visen IC VX665", "Sony ICD-TX660", "Sony ICD-UX560F"],
+        "doscom_skus": [
+          "DR1"
+        ],
+        "competitors": [
+          "Mrobo A18",
+          "Mrobo RV18",
+          "Takstar A69",
+          "Visen IC VX665",
+          "Sony ICD-TX660",
+          "Sony ICD-UX560F"
+        ],
         "competitors_winning_by": "Mrobo: pin 10 ngày + giá 900K. Takstar: 83h ghi. Sony: brand trust + chất lượng âm.",
         "doscom_weak_at": "Thời gian ghi 30h kém Takstar (83h) và Mrobo A18 (10 ngày pin). Bộ nhớ 16GB cố định kém Mrobo (mSD 128GB).",
         "counter_attack": "Đánh vào UX: ghi âm 1 chạm đơn giản nhất + khử nhiễu tự động + 360° + bảo hành Doscom. Content 'DR1 bấm 1 nút là ghi'."
       },
-
       "consumer_ladder": [
         {
           "segment": "Ghi âm cuộc họp/buổi học",
@@ -604,7 +1300,6 @@
           "recommended_message": "Bypass nhóm này — focus DIY user"
         }
       ],
-
       "competitor_cards": [
         {
           "name": "Mrobo A18",
@@ -617,12 +1312,20 @@
           "target_customers": "Sinh viên, nhân viên văn phòng budget thấp",
           "bypass_strategy": null,
           "strong_products": "A18 (pin 10 ngày, mSD 128GB)",
-          "doscom_skus_threatened": ["DR1"],
+          "doscom_skus_threatened": [
+            "DR1"
+          ],
           "worth_copying": "Pin 10 ngày. Hỗ trợ thẻ nhớ mở rộng 128GB.",
           "competitive_weapon": "Giá 900K + pin 10 ngày + mSD 128GB",
           "easy_to_break": "Brand TQ vô danh. Không bảo hành VN. Khử nhiễu kém.",
           "sales_message": "Máy ghi âm pin 10 ngày giá rẻ",
-          "radar_scores": { "price": 9, "content": 3, "trust": 3, "product": 7, "growth": 5 },
+          "radar_scores": {
+            "price": 9,
+            "content": 3,
+            "trust": 3,
+            "product": 7,
+            "growth": 5
+          },
           "threat_score": 5.4,
           "threat_level": "medium"
         },
@@ -637,25 +1340,48 @@
           "target_customers": "Người cần ghi âm dài (hội nghị, sự kiện)",
           "bypass_strategy": null,
           "strong_products": "A69 (83h ghi, stereo)",
-          "doscom_skus_threatened": ["DR1"],
+          "doscom_skus_threatened": [
+            "DR1"
+          ],
           "worth_copying": "Thời gian ghi 83h — gấp gần 3x DR1.",
           "competitive_weapon": "83h ghi âm liên tục + stereo + 16GB",
           "easy_to_break": "Brand ít biết tại VN. UX phức tạp hơn DR1.",
           "sales_message": "Ghi âm stereo 83 giờ liên tục",
-          "radar_scores": { "price": 6, "content": 3, "trust": 4, "product": 7, "growth": 3 },
+          "radar_scores": {
+            "price": 6,
+            "content": 3,
+            "trust": 4,
+            "product": 7,
+            "growth": 3
+          },
           "threat_score": 4.6,
           "threat_level": "low"
         }
       ],
-
       "domestic_competitors_summary": [],
-
       "counter_attack_framework": [
-        { "competitor": "Mrobo A18", "attack_directly": true, "attack_with": "Chất lượng âm + khử nhiễu 360° + 1 chạm + bảo hành Doscom", "bypass_with": null, "worth_copying": "Pin + mSD" },
-        { "competitor": "Takstar A69", "attack_directly": true, "attack_with": "UX 1 chạm + brand Doscom + rating 5⭐", "bypass_with": null, "worth_copying": "Thời gian ghi dài" },
-        { "competitor": "Sony ICD", "attack_directly": false, "attack_with": null, "bypass_with": "Target DIY user (giá 1.3M) vs Sony pro (2.25-2.45M)", "worth_copying": "Chất lượng âm" }
+        {
+          "competitor": "Mrobo A18",
+          "attack_directly": true,
+          "attack_with": "Chất lượng âm + khử nhiễu 360° + 1 chạm + bảo hành Doscom",
+          "bypass_with": null,
+          "worth_copying": "Pin + mSD"
+        },
+        {
+          "competitor": "Takstar A69",
+          "attack_directly": true,
+          "attack_with": "UX 1 chạm + brand Doscom + rating 5⭐",
+          "bypass_with": null,
+          "worth_copying": "Thời gian ghi dài"
+        },
+        {
+          "competitor": "Sony ICD",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "Target DIY user (giá 1.3M) vs Sony pro (2.25-2.45M)",
+          "worth_copying": "Chất lượng âm"
+        }
       ],
-
       "customer_psychology_insights": [
         {
           "insight_title": "Tôi cần ghi âm NGAY — không có thời gian setup",
@@ -676,58 +1402,162 @@
           "doscom_action": "Content demo khử nhiễu DR1 trong môi trường ồn"
         }
       ],
-
       "risk_assessment": {
-        "price_risk": { "level": "TB", "description": "Mrobo 900K-1M rẻ hơn 30%. Nhưng DR1 1.3M vẫn hợp lý cho mid-market." },
-        "content_risk": { "level": "TB", "description": "Đối thủ content yếu. Doscom có cơ hội chiếm." },
-        "perception_risk": { "level": "THẤP", "description": "DR1 rating 5⭐, 332 bán — trust tốt." },
-        "product_risk": { "level": "CAO", "description": "30h ghi kém Takstar (83h) và Mrobo (10 ngày). 16GB cố định kém Mrobo (mSD 128GB)." },
-        "growth_risk": { "level": "TB", "description": "Ngách ghi âm ổn định. Cần mở TikTok content." }
+        "price_risk": {
+          "level": "TB",
+          "description": "Mrobo 900K-1M rẻ hơn 30%. Nhưng DR1 1.3M vẫn hợp lý cho mid-market."
+        },
+        "content_risk": {
+          "level": "TB",
+          "description": "Đối thủ content yếu. Doscom có cơ hội chiếm."
+        },
+        "perception_risk": {
+          "level": "THẤP",
+          "description": "DR1 rating 5⭐, 332 bán — trust tốt."
+        },
+        "product_risk": {
+          "level": "CAO",
+          "description": "30h ghi kém Takstar (83h) và Mrobo (10 ngày). 16GB cố định kém Mrobo (mSD 128GB)."
+        },
+        "growth_risk": {
+          "level": "TB",
+          "description": "Ngách ghi âm ổn định. Cần mở TikTok content."
+        }
       },
-
       "pricing": {
         "our_price": "1,300,000₫",
         "competitors": [
-          { "name": "Mrobo A18", "brand": "Mrobo", "price": "900,000-1,000,000₫", "platform": "Lazada/Shopee", "promo": "", "rating": 4.5, "review_count": 0, "link": "" },
-          { "name": "Takstar A69", "brand": "Takstar", "price": "1,500,000₫", "platform": "Shopee", "promo": "", "rating": 4.0, "review_count": 0, "link": "" },
-          { "name": "Visen IC VX665", "brand": "Visen", "price": "1,200,000₫", "platform": "Shopee", "promo": "", "rating": 4.0, "review_count": 0, "link": "" },
-          { "name": "Sony ICD-TX660", "brand": "Sony", "price": "2,450,000₫", "platform": "Shopee/Lazada", "promo": "", "rating": 4.8, "review_count": 0, "link": "" },
-          { "name": "Sony ICD-UX560F", "brand": "Sony", "price": "2,250,000₫", "platform": "Shopee/Lazada", "promo": "", "rating": 4.5, "review_count": 0, "link": "" }
+          {
+            "name": "Mrobo A18",
+            "brand": "Mrobo",
+            "price": "900,000-1,000,000₫",
+            "platform": "Lazada/Shopee",
+            "promo": "",
+            "rating": 4.5,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Takstar A69",
+            "brand": "Takstar",
+            "price": "1,500,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Visen IC VX665",
+            "brand": "Visen",
+            "price": "1,200,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 4.0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Sony ICD-TX660",
+            "brand": "Sony",
+            "price": "2,450,000₫",
+            "platform": "Shopee/Lazada",
+            "promo": "",
+            "rating": 4.8,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Sony ICD-UX560F",
+            "brand": "Sony",
+            "price": "2,250,000₫",
+            "platform": "Shopee/Lazada",
+            "promo": "",
+            "rating": 4.5,
+            "review_count": 0,
+            "link": ""
+          }
         ],
         "insight": "DR1 (1.3M) nằm mid-market. Rẻ hơn Sony (2.25-2.45M), đắt hơn Mrobo (900K-1M). USP: 1 chạm + khử nhiễu 360°."
       },
-
       "competitor_ads": {
         "active_advertisers": 0,
         "competitors": [],
         "insight": "Không tìm thấy đối thủ chạy FB Ads cho ngách ghi âm. Kênh trống."
       },
-
       "ad_content_analysis": {
         "competitors": [],
         "common_patterns": {
-          "top_angles": ["pin trâu", "giá rẻ", "nhỏ gọn kín đáo"],
-          "top_formats": ["review video"],
-          "top_cta": ["Mua ngay trên Shopee"],
-          "top_hooks": ["Máy ghi âm nhỏ bằng ngón tay — ghi 30h liên tục"]
+          "top_angles": [
+            "pin trâu",
+            "giá rẻ",
+            "nhỏ gọn kín đáo"
+          ],
+          "top_formats": [
+            "review video"
+          ],
+          "top_cta": [
+            "Mua ngay trên Shopee"
+          ],
+          "top_hooks": [
+            "Máy ghi âm nhỏ bằng ngón tay — ghi 30h liên tục"
+          ]
         },
         "insight": "Ngách ghi âm ít quảng cáo. Cơ hội chiếm FB Ads + TikTok."
       },
-
       "sentiment": {
-        "our_product": { "positive": ["1 chạm", "khử nhiễu 360°", "nhỏ gọn", "bảo hành"], "negative": ["pin 30h kém đối thủ", "16GB cố định"], "rating_avg": 5.0, "review_count": 23 },
-        "competitors_summary": { "positive": ["pin trâu", "giá rẻ", "mSD mở rộng"], "negative": ["brand TQ", "không bảo hành VN"], "rating_avg": 4.3, "review_count": 0 },
+        "our_product": {
+          "positive": [
+            "1 chạm",
+            "khử nhiễu 360°",
+            "nhỏ gọn",
+            "bảo hành"
+          ],
+          "negative": [
+            "pin 30h kém đối thủ",
+            "16GB cố định"
+          ],
+          "rating_avg": 5.0,
+          "review_count": 23
+        },
+        "competitors_summary": {
+          "positive": [
+            "pin trâu",
+            "giá rẻ",
+            "mSD mở rộng"
+          ],
+          "negative": [
+            "brand TQ",
+            "không bảo hành VN"
+          ],
+          "rating_avg": 4.3,
+          "review_count": 0
+        },
         "insight": "DR1 trust mạnh nhất (5⭐). Điểm yếu: pin + bộ nhớ kém đối thủ TQ."
       },
-
       "online_presence": {
         "competitors": [
-          { "name": "Mrobo", "fanpage_followers": 0, "post_frequency": "Không có", "has_website": false, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Pin trâu giá rẻ" },
-          { "name": "Sony", "fanpage_followers": 0, "post_frequency": "Không rõ", "has_website": true, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Premium, chuyên nghiệp" }
+          {
+            "name": "Mrobo",
+            "fanpage_followers": 0,
+            "post_frequency": "Không có",
+            "has_website": false,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Pin trâu giá rẻ"
+          },
+          {
+            "name": "Sony",
+            "fanpage_followers": 0,
+            "post_frequency": "Không rõ",
+            "has_website": true,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Premium, chuyên nghiệp"
+          }
         ],
         "insight": "Đối thủ trực tiếp (Mrobo, Takstar) không có online presence tại VN. Doscom dẫn đầu."
       },
-
       "actions": {
         "quick_win_24h": [
           "Tạo video demo khử nhiễu DR1 trong môi trường ồn",
@@ -745,30 +1575,183 @@
           "Cân nhắc nâng cấp DR1 v2: pin dài hơn + hỗ trợ mSD"
         ]
       },
-
       "ceo_decision": {
         "priority": "Chiếm kênh ads cho ngách ghi âm + content so sánh chất lượng âm",
         "reason": "DR1 trust mạnh nhất (5⭐, 332 bán). Đối thủ TQ không có brand/bảo hành VN. FB Ads trống.",
-        "action_steps": ["Video demo khử nhiễu", "FB Ads 1 chạm angle", "So sánh âm thanh DR1 vs Mrobo"],
+        "action_steps": [
+          "Video demo khử nhiễu",
+          "FB Ads 1 chạm angle",
+          "So sánh âm thanh DR1 vs Mrobo"
+        ],
         "team": "Marketing + Content",
         "deadline": "48h",
         "risk_and_mitigation": "Rủi ro: Mrobo cải thiện pin → đối phó bằng content liên tục + nâng cấp DR1 v2"
       },
-
       "recommendations": [
         "Chạy FB Ads ngay — kênh trống cho ngách ghi âm",
         "Nhấn mạnh USP '1 chạm + khử nhiễu 360°' — đối thủ không có",
         "Video so sánh chất lượng âm DR1 vs Mrobo A18 trong môi trường ồn",
         "Target ngành pháp lý, nhà báo — nhóm sẵn sàng trả giá cao",
         "Cân nhắc roadmap DR1 v2: pin 50h+ và hỗ trợ thẻ nhớ mSD"
-      ]
+      ],
+      "weekly_changes": {
+        "baseline_date": "2026-04-10T16:00:00+07:00",
+        "current_date": "2026-04-17T09:00:00+07:00",
+        "summary": "Sony ICD-TX660 giảm giá từ 1.79M → 1.49M — bám sát phân khúc DR1 1.3M. Mrobo ra RV18 (7mm siêu mỏng, 30h ghi âm, lọc DPS) — đối thủ kỹ thuật mới trực tiếp. Takstar và các brand khác không thay đổi.",
+        "threat_changes": [
+          {
+            "competitor": "Mrobo A18",
+            "old_score": 5.4,
+            "new_score": 5.6,
+            "delta": 0.2,
+            "reason": "Bổ sung dòng RV18 7mm siêu mỏng 30h ghi âm + DPS — ecosystem Mrobo mở rộng"
+          },
+          {
+            "competitor": "Takstar A69",
+            "old_score": 4.6,
+            "new_score": 4.6,
+            "delta": 0,
+            "reason": "Không đổi"
+          },
+          {
+            "competitor": "Sony ICD-TX660",
+            "old_score": null,
+            "new_score": 6.0,
+            "delta": "New tracking",
+            "reason": "Thêm vào competitor_cards tuần này — giảm giá từ 1.79M → 1.49M, siêu gần DR1. Trust Sony mạnh"
+          }
+        ],
+        "price_changes": [
+          {
+            "competitor": "Sony ICD-TX660",
+            "old_price": "2,450,000₫",
+            "new_price": "1,490,000₫ (từ 1,790,000₫, sale lớn)",
+            "change": "Giảm ~39% từ giá baseline — nay còn 1.49M",
+            "impact": "ÁP LỰC LỚN: Sony giờ còn 1.49M (so với DR1 1.3M) — chỉ chênh 190K. Trust Sony >>> Doscom ở ngách ghi âm"
+          },
+          {
+            "competitor": "Mrobo A18",
+            "old_price": "900,000-1,000,000₫",
+            "new_price": "900,000-1,000,000₫",
+            "change": "Không đổi",
+            "impact": "Vẫn là entry-tier"
+          },
+          {
+            "competitor": "Takstar A69",
+            "old_price": "1,500,000₫",
+            "new_price": "1,500,000₫",
+            "change": "Không đổi",
+            "impact": "Vẫn premium-mid"
+          }
+        ],
+        "new_content": [
+          {
+            "competitor": "Mrobo",
+            "platform": "Fptcamera + Boba",
+            "count": 1,
+            "description": "Ra mắt Mrobo RV18 — 7mm siêu mỏng, 30h ghi âm, lọc âm DPS",
+            "notable": "Design 7mm siêu mỏng ĐÁNH TRỰC tiếp vào story 'kín đáo' của DR1. Cần đối phó"
+          },
+          {
+            "competitor": "Sony",
+            "platform": "sony.com.vn + retailers",
+            "count": 0,
+            "description": "Không có content TikTok/FB, dựa vào retailer và trust thương hiệu",
+            "notable": "Promo giảm giá mạnh không quảng bá lớn — đánh thẳng bằng giá"
+          }
+        ],
+        "sales_signals": [
+          {
+            "competitor": "Mrobo RV18",
+            "platform": "Boba.vn + Fptcamera",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Chưa đo được — SKU mới",
+            "trend": "new"
+          },
+          {
+            "competitor": "Sony ICD-TX660",
+            "platform": "Tiki, Phucanh, Audiovietnam",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Chưa đo được",
+            "trend": "stable"
+          }
+        ],
+        "traffic_signals": [
+          {
+            "competitor": "Sony ICD-TX660",
+            "source": "Google Search",
+            "trend": "up",
+            "detail": "Nhiều retailer VN đang push khuyến mãi — traffic brand search tăng"
+          },
+          {
+            "competitor": "Ngách máy ghi âm siêu nhỏ",
+            "source": "Shopee search",
+            "trend": "stable",
+            "detail": "Keyword 'máy ghi âm mini'/'siêu nhỏ' ổn định"
+          }
+        ],
+        "new_competitors": [
+          {
+            "name": "Mrobo RV18",
+            "first_seen": "2026-04-15",
+            "threat_level": "medium",
+            "detail": "SKU mới của Mrobo: 7mm siêu mỏng, 30h ghi âm, lọc âm DPS — trực tiếp cạnh tranh story 'kín đáo' của DR1"
+          }
+        ],
+        "ads_changes": [
+          {
+            "competitor": "Tất cả",
+            "change_type": "no_fb_ads",
+            "detail": "Không thấy đối thủ chạy FB Ads rõ ràng — DR1 vẫn có cửa trống"
+          }
+        ],
+        "risk_changes": [
+          {
+            "risk_type": "price_risk",
+            "old_level": "TB",
+            "new_level": "CAO",
+            "change": "TĂNG — Sony ICD-TX660 sale xuống 1.49M khiến DR1 1.3M không còn lợi thế giá so với brand Nhật"
+          },
+          {
+            "risk_type": "content_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          },
+          {
+            "risk_type": "perception_risk",
+            "old_level": "THẤP",
+            "new_level": "TB",
+            "change": "TĂNG — Sony với trust cao ở phân khúc 1.49M là pressure lên perception"
+          },
+          {
+            "risk_type": "product_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Tăng thêm — Mrobo RV18 7mm đánh vào USP 'kín đáo' của DR1"
+          },
+          {
+            "risk_type": "growth_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          }
+        ],
+        "top_3_changes": [
+          "Sony ICD-TX660 giảm giá mạnh còn 1.49M (từ 1.79M) — lần đầu tiên DR1 mất lợi thế giá so với brand Nhật trust cao. Cần phản ứng ngay",
+          "Mrobo ra RV18 siêu mỏng 7mm 30h ghi âm — đối thủ kỹ thuật trực tiếp story 'kín đáo'",
+          "Không có FB Ads từ đối thủ — DR1 vẫn có cửa trống để chiếm ngách ads"
+        ]
+      }
     },
-
     {
       "product": "Da8.1",
-      "analyzed_at": "2026-04-10T16:00:00+07:00",
+      "analyzed_at": "2026-04-17T09:00:00+07:00",
       "version": "v5.0",
-
       "top_3_signals": [
         {
           "title": "Nhiều brand TQ (Yoosee, Vstarcam, IMOU) cạnh tranh cùng mức giá",
@@ -783,22 +1766,29 @@
           "description": "Ezviz (thương hiệu của Hikvision) đang push dòng baby monitor + camera gọi video. Brand trust mạnh hơn Doscom ở phân khúc camera."
         }
       ],
-
       "ceo_summary": {
         "biggest_threat": "Ezviz (Hikvision) đang vào phân khúc camera gọi video với brand trust mạnh + hệ sinh thái lớn. Giá cao hơn (1.6-2M) nhưng trust level cao.",
         "biggest_opportunity": "Da8.1 đã bán 11.856 cái — KHÔNG đối thủ nào gần con số này. Social proof là vũ khí mạnh nhất. Nhấn '11.856 gia đình đã tin dùng'.",
         "decision_today": "Tạo content '11.856 gia đình tin dùng' + video người già thực sự gọi video cho con cháu bằng 1 nút."
       },
-
       "battle_line": {
         "name": "Video Call Camera — Camera gọi video 2 chiều cho người già",
-        "doscom_skus": ["Da8.1", "Da8.1 Pro"],
-        "competitors": ["Camera C30/IMCAM", "Yoosee PNC204", "Vstarcam CV331S", "IMOU REX VT", "QCT Baby Monitor", "Ezviz BM1"],
+        "doscom_skus": [
+          "Da8.1",
+          "Da8.1 Pro"
+        ],
+        "competitors": [
+          "Camera C30/IMCAM",
+          "Yoosee PNC204",
+          "Vstarcam CV331S",
+          "IMOU REX VT",
+          "QCT Baby Monitor",
+          "Ezviz BM1"
+        ],
         "competitors_winning_by": "Ezviz: brand trust Hikvision. IMOU: 3K/5MP cao hơn. Yoosee: giá rẻ + phổ biến.",
         "doscom_weak_at": "Brand Doscom ít biết trong ngành camera. Độ phân giải Full HD thấp hơn IMOU (5MP).",
         "counter_attack": "Đánh vào UX: '1 nút bấm duy nhất — người già 80 tuổi cũng gọi được'. Volume 11.856 bán. App Im Cam tiếng Việt."
       },
-
       "consumer_ladder": [
         {
           "segment": "Gia đình có người già sống xa",
@@ -825,7 +1815,6 @@
           "recommended_message": "Bypass nhóm này — focus 'gọi video cho người già'"
         }
       ],
-
       "competitor_cards": [
         {
           "name": "Yoosee PNC204",
@@ -838,12 +1827,20 @@
           "target_customers": "Gia đình budget trung bình",
           "bypass_strategy": null,
           "strong_products": "PNC204 camera gọi video",
-          "doscom_skus_threatened": ["Da8.1"],
+          "doscom_skus_threatened": [
+            "Da8.1"
+          ],
           "worth_copying": "Giá competitive",
           "competitive_weapon": "Giá rẻ + phổ biến trên Shopee",
           "easy_to_break": "App kém. Bảo hành yếu. Chất lượng không ổn định.",
           "sales_message": "Camera gọi video 2 chiều giá tốt",
-          "radar_scores": { "price": 7, "content": 3, "trust": 4, "product": 5, "growth": 5 },
+          "radar_scores": {
+            "price": 7,
+            "content": 3,
+            "trust": 4,
+            "product": 5,
+            "growth": 5
+          },
           "threat_score": 4.8,
           "threat_level": "low"
         },
@@ -858,12 +1855,21 @@
           "target_customers": "Bố mẹ trẻ, gia đình khá giả",
           "bypass_strategy": "Da8.1 đánh vào 'dễ dùng cho NGƯỜI GIÀ' — Ezviz focus baby monitor. Hai target khác nhau.",
           "strong_products": "BM1 baby monitor, H6C Pro",
-          "doscom_skus_threatened": ["Da8.1", "Da8.1 Pro"],
+          "doscom_skus_threatened": [
+            "Da8.1",
+            "Da8.1 Pro"
+          ],
           "worth_copying": "Brand trust Hikvision. Chất lượng phần cứng.",
           "competitive_weapon": "Brand Hikvision + ecosystem camera lớn + R&D mạnh",
           "easy_to_break": "Giá cao. Không focus người già. Không có 1 nút bấm.",
           "sales_message": "Camera thông minh cho gia đình — Ezviz by Hikvision",
-          "radar_scores": { "price": 5, "content": 6, "trust": 8, "product": 7, "growth": 7 },
+          "radar_scores": {
+            "price": 5,
+            "content": 6,
+            "trust": 8,
+            "product": 7,
+            "growth": 7
+          },
           "threat_score": 6.6,
           "threat_level": "medium"
         },
@@ -878,26 +1884,55 @@
           "target_customers": "Gia đình cần camera cầm tay",
           "bypass_strategy": null,
           "strong_products": "CV331S (pin + đèn ngủ + 1 nút)",
-          "doscom_skus_threatened": ["Da8.1 Pro"],
+          "doscom_skus_threatened": [
+            "Da8.1 Pro"
+          ],
           "worth_copying": "Tính năng đèn ngủ. Pin 5h cho cầm tay.",
           "competitive_weapon": "Pin 5h + đèn ngủ + 1 nút bấm",
           "easy_to_break": "Brand yếu. App không tiếng Việt. Pin chỉ 5h.",
           "sales_message": "Camera gọi điện có pin + đèn ngủ cho bé",
-          "radar_scores": { "price": 6, "content": 3, "trust": 4, "product": 6, "growth": 4 },
+          "radar_scores": {
+            "price": 6,
+            "content": 3,
+            "trust": 4,
+            "product": 6,
+            "growth": 4
+          },
           "threat_score": 4.6,
           "threat_level": "low"
         }
       ],
-
       "domestic_competitors_summary": [],
-
       "counter_attack_framework": [
-        { "competitor": "Yoosee PNC204", "attack_directly": true, "attack_with": "App Im Cam tiếng Việt + bảo hành Doscom + 11.856 bán", "bypass_with": null, "worth_copying": "Giá" },
-        { "competitor": "Ezviz BM1", "attack_directly": false, "attack_with": null, "bypass_with": "Target 'người già' vs Ezviz target 'baby'. Hai nhóm khác nhau.", "worth_copying": "Brand trust" },
-        { "competitor": "Vstarcam CV331S", "attack_directly": true, "attack_with": "App tiếng Việt + volume 11.856 + bảo hành", "bypass_with": null, "worth_copying": "Đèn ngủ + pin" },
-        { "competitor": "IMOU REX VT", "attack_directly": false, "attack_with": null, "bypass_with": "Da8.1 rẻ hơn + 1 nút đơn giản vs IMOU quá nhiều tính năng", "worth_copying": "Độ phân giải 5MP" }
+        {
+          "competitor": "Yoosee PNC204",
+          "attack_directly": true,
+          "attack_with": "App Im Cam tiếng Việt + bảo hành Doscom + 11.856 bán",
+          "bypass_with": null,
+          "worth_copying": "Giá"
+        },
+        {
+          "competitor": "Ezviz BM1",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "Target 'người già' vs Ezviz target 'baby'. Hai nhóm khác nhau.",
+          "worth_copying": "Brand trust"
+        },
+        {
+          "competitor": "Vstarcam CV331S",
+          "attack_directly": true,
+          "attack_with": "App tiếng Việt + volume 11.856 + bảo hành",
+          "bypass_with": null,
+          "worth_copying": "Đèn ngủ + pin"
+        },
+        {
+          "competitor": "IMOU REX VT",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "Da8.1 rẻ hơn + 1 nút đơn giản vs IMOU quá nhiều tính năng",
+          "worth_copying": "Độ phân giải 5MP"
+        }
       ],
-
       "customer_psychology_insights": [
         {
           "insight_title": "Ông bà tôi không biết dùng điện thoại",
@@ -918,60 +1953,181 @@
           "doscom_action": "Content 'setup Da8.1 trong 5 phút — app Im Cam tiếng Việt — hỗ trợ 24/7'"
         }
       ],
-
       "risk_assessment": {
-        "price_risk": { "level": "THẤP", "description": "Da8.1 (1.25M) giá cạnh tranh nhất phân khúc. Rẻ hơn Ezviz (1.6-1.9M) và IMOU (1.5-1.8M)." },
-        "content_risk": { "level": "TB", "description": "Ezviz đang có content chuyên nghiệp hơn. Doscom cần tăng video emotional." },
-        "perception_risk": { "level": "TB", "description": "Doscom ít biết trong ngành camera. Ezviz/Hikvision trust cao hơn." },
-        "product_risk": { "level": "THẤP", "description": "Da8.1 có tính năng 1 nút bấm độc đáo. 11.856 bán chứng minh product-market fit." },
-        "growth_risk": { "level": "TB", "description": "Ezviz đang đẩy mạnh VN. Cần giữ vững market share bằng content + volume." }
+        "price_risk": {
+          "level": "THẤP",
+          "description": "Da8.1 (1.25M) giá cạnh tranh nhất phân khúc. Rẻ hơn Ezviz (1.6-1.9M) và IMOU (1.5-1.8M)."
+        },
+        "content_risk": {
+          "level": "TB",
+          "description": "Ezviz đang có content chuyên nghiệp hơn. Doscom cần tăng video emotional."
+        },
+        "perception_risk": {
+          "level": "TB",
+          "description": "Doscom ít biết trong ngành camera. Ezviz/Hikvision trust cao hơn."
+        },
+        "product_risk": {
+          "level": "THẤP",
+          "description": "Da8.1 có tính năng 1 nút bấm độc đáo. 11.856 bán chứng minh product-market fit."
+        },
+        "growth_risk": {
+          "level": "TB",
+          "description": "Ezviz đang đẩy mạnh VN. Cần giữ vững market share bằng content + volume."
+        }
       },
-
       "pricing": {
         "our_price": "1,250,000₫",
         "competitors": [
-          { "name": "Camera C30/IMCAM", "brand": "Phocamera", "price": "1,200,000-1,500,000₫", "platform": "Shopee", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Yoosee PNC204", "brand": "Yoosee", "price": "1,200,000-1,400,000₫", "platform": "Shopee", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Vstarcam CV331S", "brand": "Vstarcam", "price": "1,300,000-1,600,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "IMOU REX VT 5MP", "brand": "IMOU", "price": "1,500,000-1,800,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "QCT Baby Monitor", "brand": "QCT", "price": "1,400,000-1,600,000₫", "platform": "Nguyễn Kim/TCS", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Ezviz BM1", "brand": "Ezviz", "price": "1,600,000-1,900,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" }
+          {
+            "name": "Camera C30/IMCAM",
+            "brand": "Phocamera",
+            "price": "1,200,000-1,500,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Yoosee PNC204",
+            "brand": "Yoosee",
+            "price": "1,200,000-1,400,000₫",
+            "platform": "Shopee",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Vstarcam CV331S",
+            "brand": "Vstarcam",
+            "price": "1,300,000-1,600,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "IMOU REX VT 5MP",
+            "brand": "IMOU",
+            "price": "1,500,000-1,800,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "QCT Baby Monitor",
+            "brand": "QCT",
+            "price": "1,400,000-1,600,000₫",
+            "platform": "Nguyễn Kim/TCS",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Ezviz BM1",
+            "brand": "Ezviz",
+            "price": "1,600,000-1,900,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          }
         ],
         "insight": "Da8.1 (1.25M) là sản phẩm rẻ nhất phân khúc camera gọi video 2 chiều. Lợi thế giá + 11.856 bán."
       },
-
       "competitor_ads": {
         "active_advertisers": 0,
         "competitors": [],
         "insight": "Không tìm thấy đối thủ trực tiếp chạy FB Ads cho 'camera gọi video cho người già'. Kênh trống."
       },
-
       "ad_content_analysis": {
         "competitors": [],
         "common_patterns": {
-          "top_angles": ["emotional — ông bà gọi cháu", "an ninh gia đình", "baby monitor"],
-          "top_formats": ["video emotional"],
-          "top_cta": ["Mua ngay để kết nối gia đình"],
-          "top_hooks": ["Ông bà bạn có gọi video được không?"]
+          "top_angles": [
+            "emotional — ông bà gọi cháu",
+            "an ninh gia đình",
+            "baby monitor"
+          ],
+          "top_formats": [
+            "video emotional"
+          ],
+          "top_cta": [
+            "Mua ngay để kết nối gia đình"
+          ],
+          "top_hooks": [
+            "Ông bà bạn có gọi video được không?"
+          ]
         },
         "insight": "Kênh FB Ads trống cho ngách camera người già. Content emotional (ông bà gọi cháu) sẽ viral."
       },
-
       "sentiment": {
-        "our_product": { "positive": ["1 nút bấm", "dễ dùng", "app tiếng Việt", "11.856 bán"], "negative": ["brand ít biết trong camera", "Full HD vs 5MP"], "rating_avg": 5.0, "review_count": 8 },
-        "competitors_summary": { "positive": ["brand trust camera", "độ phân giải cao"], "negative": ["app không tiếng Việt", "setup phức tạp", "giá cao hơn"], "rating_avg": 4.3, "review_count": 0 },
+        "our_product": {
+          "positive": [
+            "1 nút bấm",
+            "dễ dùng",
+            "app tiếng Việt",
+            "11.856 bán"
+          ],
+          "negative": [
+            "brand ít biết trong camera",
+            "Full HD vs 5MP"
+          ],
+          "rating_avg": 5.0,
+          "review_count": 8
+        },
+        "competitors_summary": {
+          "positive": [
+            "brand trust camera",
+            "độ phân giải cao"
+          ],
+          "negative": [
+            "app không tiếng Việt",
+            "setup phức tạp",
+            "giá cao hơn"
+          ],
+          "rating_avg": 4.3,
+          "review_count": 0
+        },
         "insight": "Da8.1 thắng về UX (1 nút + app VN + giá rẻ nhất). Yếu về brand trust camera so với Ezviz/IMOU."
       },
-
       "online_presence": {
         "competitors": [
-          { "name": "Ezviz", "fanpage_followers": 0, "post_frequency": "Active", "has_website": true, "has_tiktok_shop": true, "has_shopee": true, "positioning": "Camera thông minh Hikvision" },
-          { "name": "IMOU", "fanpage_followers": 0, "post_frequency": "Active", "has_website": true, "has_tiktok_shop": true, "has_shopee": true, "positioning": "Camera AI gia đình" },
-          { "name": "Yoosee", "fanpage_followers": 0, "post_frequency": "Ít", "has_website": false, "has_tiktok_shop": false, "has_shopee": true, "positioning": "Camera wifi giá rẻ" }
+          {
+            "name": "Ezviz",
+            "fanpage_followers": 0,
+            "post_frequency": "Active",
+            "has_website": true,
+            "has_tiktok_shop": true,
+            "has_shopee": true,
+            "positioning": "Camera thông minh Hikvision"
+          },
+          {
+            "name": "IMOU",
+            "fanpage_followers": 0,
+            "post_frequency": "Active",
+            "has_website": true,
+            "has_tiktok_shop": true,
+            "has_shopee": true,
+            "positioning": "Camera AI gia đình"
+          },
+          {
+            "name": "Yoosee",
+            "fanpage_followers": 0,
+            "post_frequency": "Ít",
+            "has_website": false,
+            "has_tiktok_shop": false,
+            "has_shopee": true,
+            "positioning": "Camera wifi giá rẻ"
+          }
         ],
         "insight": "Ezviz và IMOU có online presence mạnh. Yoosee/Vstarcam yếu. Doscom cần tăng presence trên TikTok."
       },
-
       "actions": {
         "quick_win_24h": [
           "Tạo video emotional: ông bà 80 tuổi gọi video cho cháu bằng 1 nút Da8.1",
@@ -989,30 +2145,190 @@
           "Mở rộng sang nhóm baby monitor — cạnh tranh Ezviz BM1"
         ]
       },
-
       "ceo_decision": {
         "priority": "Khai thác social proof 11.856 bán + content emotional cho người già",
         "reason": "Da8.1 đã chứng minh product-market fit (11.856 bán, 5⭐). Đối thủ không ai có volume này. Content emotional (ông bà gọi cháu) có tiềm năng viral cực cao.",
-        "action_steps": ["Video emotional người già thật", "FB Ads 300K/ngày", "Badge 11.856 trên listing"],
+        "action_steps": [
+          "Video emotional người già thật",
+          "FB Ads 300K/ngày",
+          "Badge 11.856 trên listing"
+        ],
         "team": "Marketing + Content",
         "deadline": "48h",
         "risk_and_mitigation": "Rủi ro: Ezviz mạnh về camera trust → đối phó bằng 'Da8.1 cho người già, không phải camera an ninh'"
       },
-
       "recommendations": [
         "FB Ads emotional: 'Ông bà gọi video bằng 1 nút' — kênh trống hoàn toàn",
         "Khai thác social proof: 11.856 bán — KHÔNG đối thủ nào có con số này",
         "Phân biệt rõ: Da8.1 = camera GỌI VIDEO cho người già, KHÔNG PHẢI camera an ninh",
         "App Im Cam tiếng Việt là USP mạnh vs đối thủ TQ app tiếng Trung/Anh",
         "Video setup 5 phút — giải quyết fear 'setup camera phức tạp'"
-      ]
+      ],
+      "weekly_changes": {
+        "baseline_date": "2026-04-10T16:00:00+07:00",
+        "current_date": "2026-04-17T09:00:00+07:00",
+        "summary": "Ezviz BM1 đang sale -35% — signal cần dõi. Yoosee 2 mắt giá xuống 350K với xoay 360 + đàm thoại 2 chiều — pressure giá rẻ tăng. Ezviz H6C Pro cũng đã có nút gọi video trực tiếp trên camera — tính năng từng là USP Da8.1 giờ bị copy.",
+        "threat_changes": [
+          {
+            "competitor": "Ezviz BM1",
+            "old_score": 6.6,
+            "new_score": 6.8,
+            "delta": 0.2,
+            "reason": "Sale -35% trên các trang VN — tiếp cận gần phân khúc Da8.1 (1.2-1.4M). Thương hiệu Ezviz trust cao"
+          },
+          {
+            "competitor": "Yoosee PNC204",
+            "old_score": 4.8,
+            "new_score": 4.8,
+            "delta": 0,
+            "reason": "Không đổi, vẫn 1.2-1.4M"
+          },
+          {
+            "competitor": "Vstarcam CV331S",
+            "old_score": 4.6,
+            "new_score": 4.6,
+            "delta": 0,
+            "reason": "Không đổi"
+          },
+          {
+            "competitor": "Ezviz H6C Pro (cross-over)",
+            "old_score": null,
+            "new_score": 6.2,
+            "delta": "New tracking",
+            "reason": "H6C Pro giờ có nút 'Bấm Để Gọi Thoại Hai Chiều' — copy USP của Da8.1. Cross-over với Da8.1 Pro nhưng đe dọa cả Da8.1"
+          }
+        ],
+        "price_changes": [
+          {
+            "competitor": "Ezviz BM1",
+            "old_price": "1,600,000-1,900,000₫",
+            "new_price": "~1,100,000-1,300,000₫ (sau -35% sale)",
+            "change": "Giảm mạnh xuống gần ngang Da8.1",
+            "impact": "CAO — Ezviz trust + giá ngang Da8.1 = KH phân vân. Đây là pressure lớn nhất tuần này"
+          },
+          {
+            "competitor": "Yoosee 2 mắt (upgrade)",
+            "old_price": null,
+            "new_price": "350,000₫ (upgrade 2 mắt 8MP 2026)",
+            "change": "SKU mới phân khúc rẻ",
+            "impact": "Ngách rẻ hơn — không threat trực tiếp nhưng giúp Yoosee giữ funnel customers"
+          },
+          {
+            "competitor": "Vstarcam CV331S",
+            "old_price": "1,300,000-1,600,000₫",
+            "new_price": "1,300,000-1,600,000₫",
+            "change": "Không đổi",
+            "impact": "Ổn định"
+          }
+        ],
+        "new_content": [
+          {
+            "competitor": "Ezviz",
+            "platform": "Các reseller (ezvizlife, ezvizstore, digione)",
+            "count": 3,
+            "description": "Các reseller push sale BM1 -35%, kèm banner campaign lớn",
+            "notable": "Coordinated reseller campaign — dấu hiệu Ezviz VN đang đẩy mạnh BM1 tháng 4"
+          },
+          {
+            "competitor": "Yoosee",
+            "platform": "Camerangocdiep + Camerayoosee",
+            "count": 2,
+            "description": "2 trang push Yoosee 2 mắt 2026 — 'mới nhất 2026', 'bán chạy 2026'",
+            "notable": "Brand SEO tốt, chiếm top Google cho từ khóa 'camera yoosee 2026'"
+          }
+        ],
+        "sales_signals": [
+          {
+            "competitor": "Ezviz BM1",
+            "platform": "Các reseller VN",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Ước tăng do campaign -35%",
+            "trend": "up"
+          },
+          {
+            "competitor": "Yoosee",
+            "platform": "Các reseller",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Ổn định",
+            "trend": "stable"
+          }
+        ],
+        "traffic_signals": [
+          {
+            "competitor": "Ezviz BM1",
+            "source": "Google Search 'camera BM1'",
+            "trend": "up",
+            "detail": "Nhiều trang reseller push campaign → tăng search volume brand"
+          },
+          {
+            "competitor": "'Camera cho người già'",
+            "source": "Google Trends",
+            "trend": "up",
+            "detail": "Mùa lễ 30/4 - 1/5 tới gần, nhu cầu 'giám sát bố mẹ già ở quê' thường tăng"
+          }
+        ],
+        "new_competitors": [
+          {
+            "name": "Ezviz H6C Pro (cross-over)",
+            "first_seen": "2026-04-15",
+            "threat_level": "medium",
+            "detail": "Không phải đối thủ mới hoàn toàn, nhưng giờ đã copy USP 'bấm để gọi video 2 chiều' — đe dọa cả Da8.1 và Da8.1 Pro"
+          }
+        ],
+        "ads_changes": [
+          {
+            "competitor": "Ezviz reseller chain",
+            "change_type": "coordinated_push",
+            "detail": "Nhiều reseller đồng loạt push BM1 -35% — có thể có campaign ads phối hợp dù không rõ FB Ads trực tiếp từ Ezviz HQ"
+          }
+        ],
+        "risk_changes": [
+          {
+            "risk_type": "price_risk",
+            "old_level": "THẤP",
+            "new_level": "TB",
+            "change": "TĂNG — Ezviz BM1 sale đến ngang Da8.1 làm mất lợi thế giá"
+          },
+          {
+            "risk_type": "content_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          },
+          {
+            "risk_type": "perception_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          },
+          {
+            "risk_type": "product_risk",
+            "old_level": "THẤP",
+            "new_level": "TB",
+            "change": "TĂNG — Ezviz H6C Pro có nút gọi video copy USP"
+          },
+          {
+            "risk_type": "growth_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          }
+        ],
+        "top_3_changes": [
+          "Ezviz BM1 sale -35% xuống ~1.1-1.3M — mất lợi thế giá lịch sử của Da8.1. Cần counter ngay trước 30/4",
+          "Ezviz H6C Pro giờ có nút 'bấm để gọi video 2 chiều' — copy USP Da8.1. Doscom cần nhấn khác biệt 'màn hình 2.8 inch tích hợp + dành riêng người già'",
+          "Nhu cầu 'camera cho người già' lên mùa 30/4 - 1/5 — cửa sổ quảng cáo 2 tuần tới"
+        ]
+      }
     },
-
     {
       "product": "Da8.1 Pro",
-      "analyzed_at": "2026-04-10T16:00:00+07:00",
+      "analyzed_at": "2026-04-17T09:00:00+07:00",
       "version": "v5.0",
-
       "top_3_signals": [
         {
           "title": "Vstarcam CV331S cạnh tranh trực tiếp — có pin + đèn ngủ",
@@ -1027,22 +2343,24 @@
           "description": "Ít đối thủ trực tiếp. Da8.1 Pro có cơ hội chiếm ownership nếu đẩy mạnh content + ads sớm."
         }
       ],
-
       "ceo_summary": {
         "biggest_threat": "Ezviz H6C Pro (1.8-2M) cùng positioning 'camera cầm tay gọi video' + brand Hikvision. Nếu Ezviz đẩy mạnh marketing, Da8.1 Pro sẽ bị ép.",
         "biggest_opportunity": "Phân khúc camera CẦM TAY gọi video cho người già rất mới. Da8.1 Pro có first-mover advantage. Cần chiếm ownership ngay.",
         "decision_today": "Tạo content 'Da8.1 Pro — ông bà mang đi khắp nhà' — nhấn tính năng cầm tay linh hoạt vs camera cố định."
       },
-
       "battle_line": {
         "name": "Portable Video Call Camera — Camera cầm tay gọi video",
-        "doscom_skus": ["Da8.1 Pro"],
-        "competitors": ["Vstarcam CV331S", "Ezviz H6C Pro"],
+        "doscom_skus": [
+          "Da8.1 Pro"
+        ],
+        "competitors": [
+          "Vstarcam CV331S",
+          "Ezviz H6C Pro"
+        ],
         "competitors_winning_by": "Vstarcam: pin 5h + đèn ngủ. Ezviz: brand trust Hikvision + nút chạm.",
         "doscom_weak_at": "Volume bán chỉ 361 (vs Da8.1 11.856). Brand Doscom ít biết trong camera.",
         "counter_attack": "Đánh vào 'cầm tay cho NGƯỜI GIÀ — đi khắp nhà' + giá 1.55M rẻ hơn Ezviz (1.8-2M) + app Im Cam tiếng Việt."
       },
-
       "consumer_ladder": [
         {
           "segment": "Người già cần linh hoạt di chuyển",
@@ -1061,7 +2379,6 @@
           "recommended_message": "Theo dõi bé mọi lúc mọi nơi trong nhà"
         }
       ],
-
       "competitor_cards": [
         {
           "name": "Ezviz H6C Pro",
@@ -1074,12 +2391,20 @@
           "target_customers": "Gia đình khá giả, bố mẹ trẻ",
           "bypass_strategy": "Da8.1 Pro đánh 'dễ dùng nhất cho NGƯỜI GIÀ' + giá rẻ hơn 300-450K",
           "strong_products": "H6C Pro 2MP cầm tay",
-          "doscom_skus_threatened": ["Da8.1 Pro"],
+          "doscom_skus_threatened": [
+            "Da8.1 Pro"
+          ],
           "worth_copying": "Nút chạm gọi điện. Build quality.",
           "competitive_weapon": "Brand Hikvision + build quality + ecosystem",
           "easy_to_break": "Giá cao. Không focus người già. Nút chạm phức tạp.",
           "sales_message": "Camera Ezviz cầm tay — by Hikvision",
-          "radar_scores": { "price": 4, "content": 6, "trust": 8, "product": 7, "growth": 6 },
+          "radar_scores": {
+            "price": 4,
+            "content": 6,
+            "trust": 8,
+            "product": 7,
+            "growth": 6
+          },
           "threat_score": 6.2,
           "threat_level": "medium"
         },
@@ -1094,24 +2419,41 @@
           "target_customers": "Gia đình có trẻ nhỏ, người già",
           "bypass_strategy": null,
           "strong_products": "CV331S (pin + đèn ngủ)",
-          "doscom_skus_threatened": ["Da8.1 Pro"],
+          "doscom_skus_threatened": [
+            "Da8.1 Pro"
+          ],
           "worth_copying": "Đèn ngủ tích hợp. Pin 5h.",
           "competitive_weapon": "Pin 5h + đèn ngủ + giá vừa",
           "easy_to_break": "Pin yếu (5h). App không tiếng Việt. Brand yếu.",
           "sales_message": "Camera cầm tay có pin + đèn ngủ cho bé",
-          "radar_scores": { "price": 6, "content": 3, "trust": 4, "product": 6, "growth": 4 },
+          "radar_scores": {
+            "price": 6,
+            "content": 3,
+            "trust": 4,
+            "product": 6,
+            "growth": 4
+          },
           "threat_score": 4.6,
           "threat_level": "low"
         }
       ],
-
       "domestic_competitors_summary": [],
-
       "counter_attack_framework": [
-        { "competitor": "Ezviz H6C Pro", "attack_directly": false, "attack_with": null, "bypass_with": "Giá rẻ hơn 300K + 1 nút vật lý đơn giản cho người già", "worth_copying": "Nút chạm, build quality" },
-        { "competitor": "Vstarcam CV331S", "attack_directly": true, "attack_with": "App Im Cam tiếng Việt + bảo hành Doscom + dễ dùng hơn", "bypass_with": null, "worth_copying": "Đèn ngủ + pin" }
+        {
+          "competitor": "Ezviz H6C Pro",
+          "attack_directly": false,
+          "attack_with": null,
+          "bypass_with": "Giá rẻ hơn 300K + 1 nút vật lý đơn giản cho người già",
+          "worth_copying": "Nút chạm, build quality"
+        },
+        {
+          "competitor": "Vstarcam CV331S",
+          "attack_directly": true,
+          "attack_with": "App Im Cam tiếng Việt + bảo hành Doscom + dễ dùng hơn",
+          "bypass_with": null,
+          "worth_copying": "Đèn ngủ + pin"
+        }
       ],
-
       "customer_psychology_insights": [
         {
           "insight_title": "Ông bà tôi muốn mang camera đi khắp nhà",
@@ -1126,55 +2468,130 @@
           "doscom_action": "Highlight trọng lượng nhẹ + form factor dễ cầm cho người già"
         }
       ],
-
       "risk_assessment": {
-        "price_risk": { "level": "THẤP", "description": "Da8.1 Pro (1.55M) rẻ hơn Ezviz H6C Pro (1.8-2M). Giá cạnh tranh." },
-        "content_risk": { "level": "CAO", "description": "Ezviz có content marketing chuyên nghiệp. Doscom cần tăng content cầm tay." },
-        "perception_risk": { "level": "TB", "description": "Ezviz brand trust mạnh hơn. Doscom cần đẩy volume bán + review." },
-        "product_risk": { "level": "TB", "description": "Volume 361 bán ít hơn nhiều so với Da8.1 (11.856). Cần push marketing." },
-        "growth_risk": { "level": "TB", "description": "Phân khúc mới, Ezviz có thể chiếm nếu Doscom không đẩy nhanh." }
+        "price_risk": {
+          "level": "THẤP",
+          "description": "Da8.1 Pro (1.55M) rẻ hơn Ezviz H6C Pro (1.8-2M). Giá cạnh tranh."
+        },
+        "content_risk": {
+          "level": "CAO",
+          "description": "Ezviz có content marketing chuyên nghiệp. Doscom cần tăng content cầm tay."
+        },
+        "perception_risk": {
+          "level": "TB",
+          "description": "Ezviz brand trust mạnh hơn. Doscom cần đẩy volume bán + review."
+        },
+        "product_risk": {
+          "level": "TB",
+          "description": "Volume 361 bán ít hơn nhiều so với Da8.1 (11.856). Cần push marketing."
+        },
+        "growth_risk": {
+          "level": "TB",
+          "description": "Phân khúc mới, Ezviz có thể chiếm nếu Doscom không đẩy nhanh."
+        }
       },
-
       "pricing": {
         "our_price": "1,550,000₫",
         "competitors": [
-          { "name": "Vstarcam CV331S", "brand": "Vstarcam", "price": "1,300,000-1,600,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" },
-          { "name": "Ezviz H6C Pro", "brand": "Ezviz", "price": "1,800,000-2,000,000₫", "platform": "Web", "promo": "", "rating": 0, "review_count": 0, "link": "" }
+          {
+            "name": "Vstarcam CV331S",
+            "brand": "Vstarcam",
+            "price": "1,300,000-1,600,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          },
+          {
+            "name": "Ezviz H6C Pro",
+            "brand": "Ezviz",
+            "price": "1,800,000-2,000,000₫",
+            "platform": "Web",
+            "promo": "",
+            "rating": 0,
+            "review_count": 0,
+            "link": ""
+          }
         ],
         "insight": "Da8.1 Pro (1.55M) nằm giữa Vstarcam (1.3-1.6M) và Ezviz (1.8-2M). Giá hợp lý cho tính năng cầm tay."
       },
-
       "competitor_ads": {
         "active_advertisers": 0,
         "competitors": [],
         "insight": "Kênh ads hoàn toàn trống cho ngách camera cầm tay gọi video. First-mover advantage."
       },
-
       "ad_content_analysis": {
         "competitors": [],
         "common_patterns": {
-          "top_angles": ["cầm tay linh hoạt", "người già di chuyển", "baby monitor"],
-          "top_formats": ["video lifestyle"],
-          "top_cta": ["Mua ngay"],
-          "top_hooks": ["Camera mang đi khắp nhà — gọi video bất kỳ đâu"]
+          "top_angles": [
+            "cầm tay linh hoạt",
+            "người già di chuyển",
+            "baby monitor"
+          ],
+          "top_formats": [
+            "video lifestyle"
+          ],
+          "top_cta": [
+            "Mua ngay"
+          ],
+          "top_hooks": [
+            "Camera mang đi khắp nhà — gọi video bất kỳ đâu"
+          ]
         },
         "insight": "Phân khúc rất mới. Kênh ads trống hoàn toàn. First-mover advantage lớn."
       },
-
       "sentiment": {
-        "our_product": { "positive": ["cầm tay linh hoạt", "1 nút bấm", "app tiếng Việt"], "negative": ["volume bán thấp 361", "ít review"], "rating_avg": 5.0, "review_count": 0 },
-        "competitors_summary": { "positive": ["brand trust (Ezviz)", "pin (Vstarcam)"], "negative": ["giá cao", "app không tiếng Việt"], "rating_avg": 0, "review_count": 0 },
+        "our_product": {
+          "positive": [
+            "cầm tay linh hoạt",
+            "1 nút bấm",
+            "app tiếng Việt"
+          ],
+          "negative": [
+            "volume bán thấp 361",
+            "ít review"
+          ],
+          "rating_avg": 5.0,
+          "review_count": 0
+        },
+        "competitors_summary": {
+          "positive": [
+            "brand trust (Ezviz)",
+            "pin (Vstarcam)"
+          ],
+          "negative": [
+            "giá cao",
+            "app không tiếng Việt"
+          ],
+          "rating_avg": 0,
+          "review_count": 0
+        },
         "insight": "Phân khúc mới, ít review cho tất cả sản phẩm. Da8.1 Pro cần đẩy review sớm để chiếm social proof."
       },
-
       "online_presence": {
         "competitors": [
-          { "name": "Ezviz", "fanpage_followers": 0, "post_frequency": "Active", "has_website": true, "has_tiktok_shop": true, "has_shopee": true, "positioning": "Camera Hikvision" },
-          { "name": "Vstarcam", "fanpage_followers": 0, "post_frequency": "Ít", "has_website": true, "has_tiktok_shop": false, "has_shopee": false, "positioning": "Camera wifi budget" }
+          {
+            "name": "Ezviz",
+            "fanpage_followers": 0,
+            "post_frequency": "Active",
+            "has_website": true,
+            "has_tiktok_shop": true,
+            "has_shopee": true,
+            "positioning": "Camera Hikvision"
+          },
+          {
+            "name": "Vstarcam",
+            "fanpage_followers": 0,
+            "post_frequency": "Ít",
+            "has_website": true,
+            "has_tiktok_shop": false,
+            "has_shopee": false,
+            "positioning": "Camera wifi budget"
+          }
         ],
         "insight": "Ezviz online presence mạnh. Vstarcam yếu. Doscom cần chiếm sớm."
       },
-
       "actions": {
         "quick_win_24h": [
           "Video ông bà cầm Da8.1 Pro đi khắp nhà gọi video — emotional content",
@@ -1192,23 +2609,155 @@
           "Bundle Da8.1 + Da8.1 Pro combo 'toàn nhà'"
         ]
       },
-
       "ceo_decision": {
         "priority": "Chiếm ownership phân khúc camera cầm tay cho người già trước Ezviz",
         "reason": "Phân khúc rất mới, ads trống, ít đối thủ. Da8.1 Pro có first-mover advantage. Ezviz chưa focus người già.",
-        "action_steps": ["Content emotional cầm tay", "FB Ads 200K/ngày", "Cross-sell từ Da8.1"],
+        "action_steps": [
+          "Content emotional cầm tay",
+          "FB Ads 200K/ngày",
+          "Cross-sell từ Da8.1"
+        ],
         "team": "Marketing + Content",
         "deadline": "48h",
         "risk_and_mitigation": "Rủi ro: Ezviz đẩy marketing → đối phó bằng chiếm sớm + volume review + giá rẻ hơn"
       },
-
       "recommendations": [
         "Chiếm kênh ads ngay — phân khúc camera cầm tay cho người già trống hoàn toàn",
         "Video emotional: ông bà cầm Da8.1 Pro đi khắp nhà gọi video",
         "Cross-sell Da8.1 → Da8.1 Pro: 'nâng cấp cầm tay, linh hoạt hơn'",
         "Giá 1.55M rẻ hơn Ezviz 300K — nhấn mạnh trong so sánh",
         "Bundle combo Da8.1 + Da8.1 Pro 'camera toàn nhà'"
-      ]
+      ],
+      "weekly_changes": {
+        "baseline_date": "2026-04-10T16:00:00+07:00",
+        "current_date": "2026-04-17T09:00:00+07:00",
+        "summary": "Ezviz H6C Pro 2K+ tích hợp NÚT BẤM GỌI VIDEO TRỰC TIẾP trên camera — copy chính xác USP của Da8.1 Pro. Thêm Tinhte.vn có bài 'trên tay' viral. Ezviz H6C Pro 4MP cũng có cùng tính năng, giờ lên Shopee chính thức.",
+        "threat_changes": [
+          {
+            "competitor": "Ezviz H6C Pro",
+            "old_score": 6.2,
+            "new_score": 6.6,
+            "delta": 0.4,
+            "reason": "Đã tích hợp nút 'bấm để gọi thoại 2 chiều' trực tiếp trên camera — copy USP cốt lõi Da8.1 Pro. Có bài Tinhte.vn chất lượng cao"
+          },
+          {
+            "competitor": "Vstarcam CV331S",
+            "old_score": 4.6,
+            "new_score": 4.6,
+            "delta": 0,
+            "reason": "Không đổi"
+          }
+        ],
+        "price_changes": [
+          {
+            "competitor": "Ezviz H6C Pro 2K+",
+            "old_price": "1,800,000-2,000,000₫",
+            "new_price": "1,800,000-2,000,000₫ (giảm 500K cho đơn từ 20tr qua Techcombank, HSD 28/02/2026 — đã hết)",
+            "change": "Promo ngân hàng kết thúc, giá trở về thường",
+            "impact": "Hết promo → giảm áp lực giá ngắn hạn, nhưng vẫn là đối thủ đáng gờm"
+          },
+          {
+            "competitor": "Ezviz H6C Pro 4MP",
+            "old_price": null,
+            "new_price": "Listing chính thức trên phucanh, vuhoangtelecom",
+            "change": "SKU 4MP mới có mặt trên các retailer lớn",
+            "impact": "Mở rộng dòng Ezviz — tăng lựa chọn cho KH đang cân nhắc H6C Pro"
+          }
+        ],
+        "new_content": [
+          {
+            "competitor": "Ezviz",
+            "platform": "Tinhte.vn + Phucanh",
+            "count": 2,
+            "description": "Bài 'Trên tay EZVIZ H6c Pro 2K+: nút gọi điện trên camera, theo dõi con người và tự cắt khung hình' — review chi tiết viral",
+            "notable": "Tinhte.vn là trust source hàng đầu VN cho tech review — bài này có thể thu hút KH tech-savvy đang cân Da8.1 Pro"
+          },
+          {
+            "competitor": "Ezviz reseller (digione, akia)",
+            "platform": "Web + SEO",
+            "count": 3,
+            "description": "Nhiều trang push H6C Pro 2K+ với story 'nút gọi video'",
+            "notable": "Đang chiếm ngách SEO 'camera gọi điện qua app'"
+          }
+        ],
+        "sales_signals": [
+          {
+            "competitor": "Ezviz H6C Pro",
+            "platform": "FPT Shop + Phucanh",
+            "old_reviews": 0,
+            "new_reviews": 0,
+            "delta_reviews": 0,
+            "estimated_weekly_sales": "Ước tăng",
+            "trend": "up"
+          }
+        ],
+        "traffic_signals": [
+          {
+            "competitor": "Ezviz H6C Pro",
+            "source": "Google Search + Tinhte",
+            "trend": "up",
+            "detail": "Bài Tinhte.vn 'trên tay' có thể đưa traffic organic đáng kể cho Ezviz"
+          },
+          {
+            "competitor": "'camera cầm tay cho người già'",
+            "source": "Google Trends",
+            "trend": "stable",
+            "detail": "Ngách này vẫn nhỏ, nhưng chưa có đối thủ Việt dominant"
+          }
+        ],
+        "new_competitors": [
+          {
+            "name": "Ezviz H6C Pro 4MP",
+            "first_seen": "2026-04-15",
+            "threat_level": "medium",
+            "detail": "SKU 4MP mới lên kệ retailer lớn — cùng tính năng nút gọi, độ phân giải cao hơn. Threat medium"
+          }
+        ],
+        "ads_changes": [
+          {
+            "competitor": "Ezviz",
+            "change_type": "content_push",
+            "detail": "Không thấy FB Ads trực tiếp từ Ezviz HQ VN, nhưng reseller đang push mạnh SEO + review — dạng owned content"
+          }
+        ],
+        "risk_changes": [
+          {
+            "risk_type": "price_risk",
+            "old_level": "THẤP",
+            "new_level": "THẤP",
+            "change": "Không đổi — Da8.1 Pro 1.55M vẫn rẻ hơn H6C Pro 1.8-2M"
+          },
+          {
+            "risk_type": "content_risk",
+            "old_level": "CAO",
+            "new_level": "CAO",
+            "change": "Tăng cường — Tinhte.vn + nhiều reseller đẩy H6C Pro"
+          },
+          {
+            "risk_type": "perception_risk",
+            "old_level": "TB",
+            "new_level": "CAO",
+            "change": "TĂNG — Ezviz là brand quốc tế có trust cao, đã sao chép USP lõi"
+          },
+          {
+            "risk_type": "product_risk",
+            "old_level": "TB",
+            "new_level": "CAO",
+            "change": "TĂNG — USP 'nút gọi video' không còn là khác biệt duy nhất. Da8.1 Pro cần nhấn 'CẦM TAY' và 'dành riêng người già'"
+          },
+          {
+            "risk_type": "growth_risk",
+            "old_level": "TB",
+            "new_level": "TB",
+            "change": "Không đổi"
+          }
+        ],
+        "top_3_changes": [
+          "Ezviz H6C Pro copy USP 'nút gọi video 2 chiều' của Da8.1 Pro — đây là thay đổi QUAN TRỌNG NHẤT. Da8.1 Pro phải pivot story sang 'CẦM TAY' + 'người già' ngay",
+          "Tinhte.vn có bài trên tay H6C Pro 2K+ chất lượng cao — awareness Ezviz tăng đột biến ở nhóm tech-savvy",
+          "Ezviz ra thêm SKU H6C Pro 4MP (4 triệu pixel) — mở rộng dòng sản phẩm, tạo ladder lên cao hơn"
+        ]
+      }
     }
   ]
 }
