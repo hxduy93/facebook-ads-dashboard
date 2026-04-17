@@ -291,6 +291,16 @@ export async function onRequestPost(context) {
     if (startIso) adsetBody.start_time = startIso;
     if (endIso)   adsetBody.end_time   = endIso;
 
+    // Attribution window (cfg.attribution_spec is already the Meta-API array format)
+    if (Array.isArray(cfg.attribution_spec) && cfg.attribution_spec.length > 0) {
+      adsetBody.attribution_spec = cfg.attribution_spec;
+    }
+
+    // Pacing (standard | no_pacing) — Meta wants an array
+    if (cfg.pacing_type) {
+      adsetBody.pacing_type = [cfg.pacing_type];
+    }
+
     const po = buildPromotedObject(cfg);
     if (po) adsetBody.promoted_object = po;
 

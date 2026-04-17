@@ -872,6 +872,10 @@ function AdsCreatorPanel() {
   const [optGoal, setOptGoal] = useState("LEAD_GENERATION")
   const [destType, setDestType] = useState("WEBSITE")
   const [billingEvent, setBillingEvent] = useState("IMPRESSIONS")
+  const [conversionEvent, setConversionEvent] = useState("PURCHASE") // Meta pixel event to optimize for
+  const [customEventName, setCustomEventName] = useState("") // for custom conversions
+  const [attributionPreset, setAttributionPreset] = useState("7d_click_1d_view") // attribution window preset
+  const [pacingType, setPacingType] = useState("standard") // "standard" | "no_pacing"
   const [budget, setBudget] = useState("300000")
   const [budgetType, setBudgetType] = useState("daily")
   // startDate/endDate now accept datetime-local format "YYYY-MM-DDTHH:MM"
@@ -1049,6 +1053,66 @@ function AdsCreatorPanel() {
     { value: "POST_ENGAGEMENT", label: "Mỗi lượt tương tác" },
   ]
 
+  // ── Pixel Standard Events (hiển thị y hệt Ads Manager tiếng Việt) ──
+  // User có thể chọn "Khác (custom)" và nhập tên event custom.
+  const PIXEL_EVENTS = [
+    { value: "PURCHASE",              label: "Lượt mua" },
+    { value: "INITIATE_CHECKOUT",     label: "Bắt đầu thanh toán" },
+    { value: "ADD_TO_CART",           label: "Thêm vào giỏ hàng" },
+    { value: "ADD_PAYMENT_INFO",      label: "Thêm thông tin thanh toán" },
+    { value: "ADD_TO_WISHLIST",       label: "Thêm vào danh sách yêu thích" },
+    { value: "COMPLETE_REGISTRATION", label: "Hoàn tất đăng ký" },
+    { value: "LEAD",                  label: "Khách hàng tiềm năng" },
+    { value: "SUBSCRIBE",             label: "Đăng ký" },
+    { value: "CONTACT",               label: "Liên hệ" },
+    { value: "SUBMIT_APPLICATION",    label: "Gửi đơn đăng ký" },
+    { value: "VIEW_CONTENT",          label: "Xem nội dung" },
+    { value: "SEARCH",                label: "Tìm kiếm" },
+    { value: "SCHEDULE",              label: "Đặt lịch" },
+    { value: "START_TRIAL",           label: "Bắt đầu dùng thử" },
+    { value: "CUSTOMIZE_PRODUCT",     label: "Tùy chỉnh sản phẩm" },
+    { value: "FIND_LOCATION",         label: "Tìm địa điểm" },
+    { value: "DONATE",                label: "Quyên góp" },
+    { value: "OTHER",                 label: "Khác (nhập tên custom event)" },
+  ]
+
+  // ── Attribution Windows (Cài đặt ghi nhận) ──
+  // API format: attribution_spec = [{event_type, window_days}]
+  const ATTRIBUTION_PRESETS = [
+    {
+      value: "7d_click_1d_view",
+      label: "Lượt click trong 7 ngày, lượt tương tác trong 1 ngày (Mặc định)",
+      spec: [
+        { event_type: "CLICK_THROUGH",       window_days: 7 },
+        { event_type: "ENGAGED_VIDEO_VIEW",  window_days: 1 },
+        { event_type: "VIEW_THROUGH",        window_days: 1 },
+      ],
+    },
+    {
+      value: "1d_click",
+      label: "Lượt click trong 1 ngày",
+      spec: [{ event_type: "CLICK_THROUGH", window_days: 1 }],
+    },
+    {
+      value: "7d_click",
+      label: "Lượt click trong 7 ngày",
+      spec: [{ event_type: "CLICK_THROUGH", window_days: 7 }],
+    },
+    {
+      value: "1d_click_1d_view",
+      label: "Lượt click trong 1 ngày, lượt tương tác trong 1 ngày",
+      spec: [
+        { event_type: "CLICK_THROUGH", window_days: 1 },
+        { event_type: "VIEW_THROUGH",  window_days: 1 },
+      ],
+    },
+  ]
+
+  const PACING_TYPES = [
+    { value: "standard",  label: "Tiêu chuẩn (phân phối đều trong ngày)" },
+    { value: "no_pacing", label: "Không giới hạn tốc độ (spend nhanh nhất có thể)" },
+  ]
+
   const BUYING_TYPES = [
     { value: "AUCTION",  label: "Đấu giá (Auction)" },
     { value: "RESERVED", label: "Đặt trước (Reach & Frequency)" },
@@ -1205,6 +1269,16 @@ function AdsCreatorPanel() {
       optimization_goal_label: GOAL_LABELS[optGoal] || optGoal,
       destination_type: destType,
       billing_event: billingEvent,
+      // Conversion event (chỉ apply khi optimization_goal = OFFSITE_CONVERSIONS)
+      promoted_event: conversionEvent === "OTHER" ? (customEventName.trim() || null) : conversionEvent,
+      promoted_event_label: conversionEvent === "OTHER"
+        ? (customEventName || "(custom)")
+        : ((PIXEL_EVENTS.find(e => e.value === conversionEvent) || {}).label || conversionEvent),
+      // Attribution window spec
+      attribution_spec: (ATTRIBUTION_PRESETS.find(p => p.value === attributionPreset) || {}).spec || null,
+      attribution_label: (ATTRIBUTION_PRESETS.find(p => p.value === attributionPreset) || {}).label || "",
+      // Pacing
+      pacing_type: pacingType,
       launch_status: launchStatus, // "ACTIVE" | "PAUSED"
       budget_level: budgetLevel, // "campaign" (CBO) | "adset" (ABO)
       budget_type: budgetType,
@@ -1464,6 +1538,30 @@ function AdsCreatorPanel() {
                 </select>
               </div>
 
+              {/* CONVERSION EVENT — chỉ hiện khi optimization = OFFSITE_CONVERSIONS */}
+              {optGoal === "OFFSITE_CONVERSIONS" && (
+                <div className="md:col-span-2">
+                  <label className={labelClass}>Hành động bạn muốn mọi người thực hiện (Sự kiện chuyển đổi)</label>
+                  <select value={conversionEvent} onChange={e => setConversionEvent(e.target.value)} className={selectClass}>
+                    {PIXEL_EVENTS.map(e => (
+                      <option key={e.value} value={e.value}>{e.label}</option>
+                    ))}
+                  </select>
+                  {conversionEvent === "OTHER" && (
+                    <input
+                      type="text"
+                      value={customEventName}
+                      onChange={e => setCustomEventName(e.target.value)}
+                      className={inputClass + " mt-2"}
+                      placeholder="VD: ClickButton, ScrollDepth_50_percent, SubmitForm..."
+                    />
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    ⚠️ Pixel <span className="font-semibold">{PIXELS[pixel] || ""}</span> phải đã fire event này (check Events Manager) trong 7 ngày qua — không Meta sẽ reject.
+                  </p>
+                </div>
+              )}
+
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Sự kiện tính phí (Billing Event)</label>
@@ -1526,6 +1624,27 @@ function AdsCreatorPanel() {
                     <span className="font-mono text-gray-700">{pixel}</span>
                   </p>
                 )}
+              </div>
+
+              {/* ATTRIBUTION WINDOW — Cài đặt ghi nhận */}
+              <div className="md:col-span-2">
+                <label className={labelClass}>Cài đặt ghi nhận (Attribution Window)</label>
+                <select value={attributionPreset} onChange={e => setAttributionPreset(e.target.value)} className={selectClass}>
+                  {ATTRIBUTION_PRESETS.map(p => (
+                    <option key={p.value} value={p.value}>{p.label}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Khoảng thời gian Meta tính lượt chuyển đổi sau khi user thấy/click quảng cáo</p>
+              </div>
+
+              {/* PACING TYPE — Loại phân phối */}
+              <div className="md:col-span-2">
+                <label className={labelClass}>Loại phân phối (Pacing)</label>
+                <select value={pacingType} onChange={e => setPacingType(e.target.value)} className={selectClass}>
+                  {PACING_TYPES.map(p => (
+                    <option key={p.value} value={p.value}>{p.label}</option>
+                  ))}
+                </select>
               </div>
 
               {/* BUDGET — chỉ hiện khi ABO */}
