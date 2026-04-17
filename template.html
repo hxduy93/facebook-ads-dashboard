@@ -861,6 +861,7 @@ function AdsCreatorPanel() {
   const [campaignName, setCampaignName] = useState("")
   const [objective, setObjective] = useState("OUTCOME_LEADS")
   const [buyingType, setBuyingType] = useState("AUCTION")
+  const [budgetLevel, setBudgetLevel] = useState("adset") // "campaign" (CBO) | "adset" (ABO)
 
   // ── Adset-level ──
   const [adsetName, setAdsetName] = useState("")
@@ -872,6 +873,7 @@ function AdsCreatorPanel() {
   const [billingEvent, setBillingEvent] = useState("IMPRESSIONS")
   const [budget, setBudget] = useState("300000")
   const [budgetType, setBudgetType] = useState("daily")
+  // startDate/endDate now accept datetime-local format "YYYY-MM-DDTHH:MM"
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
 
@@ -1202,9 +1204,10 @@ function AdsCreatorPanel() {
       optimization_goal_label: GOAL_LABELS[optGoal] || optGoal,
       destination_type: destType,
       billing_event: billingEvent,
+      budget_level: budgetLevel, // "campaign" (CBO) | "adset" (ABO)
       budget_type: budgetType,
       budget_amount: Number(budget),
-      budget_display: `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`,
+      budget_display: `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"} (${budgetLevel === "campaign" ? "CBO" : "ABO"})`,
       start_time: startDate,
       end_time: endDate,
       ads: ads.map((a, idx) => ({
@@ -1371,6 +1374,50 @@ function AdsCreatorPanel() {
                   </div>
                 )}
               </div>
+
+              {/* BUDGET LEVEL TOGGLE — CBO vs ABO */}
+              <div className="md:col-span-2">
+                <label className={labelClass}>Cấp ngân sách (Budget Level)</label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setBudgetLevel("campaign")}
+                    className={`flex-1 py-2.5 text-xs font-semibold rounded-lg border transition ${budgetLevel === "campaign" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}
+                  >
+                    Ngân sách chiến dịch (CBO)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBudgetLevel("adset")}
+                    className={`flex-1 py-2.5 text-xs font-semibold rounded-lg border transition ${budgetLevel === "adset" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}
+                  >
+                    Ngân sách nhóm quảng cáo (ABO)
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1.5">
+                  {budgetLevel === "campaign"
+                    ? "CBO: Meta tự chia ngân sách giữa các nhóm quảng cáo theo hiệu quả. Budget đặt ở cấp chiến dịch."
+                    : "ABO: Mỗi nhóm quảng cáo có ngân sách riêng, bạn tự control. Budget đặt ở cấp nhóm quảng cáo."}
+                </p>
+              </div>
+
+              {/* BUDGET INPUTS — shown when CBO */}
+              {budgetLevel === "campaign" && (
+                <>
+                  <div>
+                    <label className={labelClass}>Loại ngân sách</label>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Theo ngày</button>
+                      <button type="button" onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Ngân sách {budgetType === "daily" ? "/ngày" : "tổng"} (VND)</label>
+                    <input type="number" value={budget} onChange={e => setBudget(e.target.value)} className={inputClass} placeholder="300000" step="50000" />
+                    <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ {budgetType === "daily" ? "/ngày" : "trọn đời"}</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -1479,26 +1526,37 @@ function AdsCreatorPanel() {
                 )}
               </div>
 
-              <div>
-                <label className={labelClass}>Loại ngân sách</label>
-                <div className="flex gap-2">
-                  <button type="button" onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Theo ngày</button>
-                  <button type="button" onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
+              {/* BUDGET — chỉ hiện khi ABO */}
+              {budgetLevel === "adset" ? (
+                <>
+                  <div>
+                    <label className={labelClass}>Loại ngân sách</label>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Theo ngày</button>
+                      <button type="button" onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Ngân sách {budgetType === "daily" ? "/ngày" : "tổng"} (VND)</label>
+                    <input type="number" value={budget} onChange={e => setBudget(e.target.value)} className={inputClass} placeholder="300000" step="50000" />
+                    <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ {budgetType === "daily" ? "/ngày" : "trọn đời"}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="md:col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+                  💡 <span className="font-semibold">Ngân sách đang đặt ở cấp chiến dịch (CBO)</span> — chỉnh ngân sách ở Section 1.
                 </div>
-              </div>
-              <div>
-                <label className={labelClass}>Ngân sách {budgetType === "daily" ? "/ngày" : "tổng"} (VND)</label>
-                <input type="number" value={budget} onChange={e => setBudget(e.target.value)} className={inputClass} placeholder="300000" step="50000" />
-                <p className="text-xs text-gray-400 mt-1">{Number(budget).toLocaleString("vi-VN")}đ {budgetType === "daily" ? "/ngày" : "trọn đời"}</p>
-              </div>
+              )}
 
               <div>
-                <label className={labelClass}>Ngày bắt đầu</label>
-                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className={inputClass} />
+                <label className={labelClass}>Thời gian bắt đầu</label>
+                <input type="datetime-local" value={startDate} onChange={e => setStartDate(e.target.value)} className={inputClass} />
+                <p className="text-xs text-gray-400 mt-1">Để trống = bắt đầu ngay. Giờ VN (+07:00).</p>
               </div>
               <div>
-                <label className={labelClass}>Ngày kết thúc (tùy chọn)</label>
-                <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className={inputClass} />
+                <label className={labelClass}>Thời gian kết thúc (tùy chọn)</label>
+                <input type="datetime-local" value={endDate} onChange={e => setEndDate(e.target.value)} className={inputClass} />
+                <p className="text-xs text-gray-400 mt-1">Để trống = chạy vô thời hạn (chỉ ABO daily). Giờ VN.</p>
               </div>
             </div>
           </div>
@@ -1770,8 +1828,8 @@ function AdsCreatorPanel() {
                 ["Tài khoản", ACCOUNTS[account]],
                 ["Page", (PAGES[page] || "").split(" (")[0]],
                 ["Pixel", `${PIXELS[pixel] || ""} · ${pixel}`],
-                ["Ngân sách", `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`],
-                ["Lịch", `${startDate || "Ngay"} → ${endDate || "∞"}`],
+                ["Ngân sách", `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"} (${budgetLevel === "campaign" ? "CBO" : "ABO"})`],
+                ["Lịch", `${(startDate || "Ngay").replace("T", " ")} → ${(endDate || "∞").replace("T", " ")}`],
                 ["Số quảng cáo", `${ads.length} ad(s)`],
               ].map(([label, val], i) => (
                 <div key={i} className="flex justify-between py-1 border-b border-gray-50 gap-2">

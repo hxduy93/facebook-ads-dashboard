@@ -79,6 +79,18 @@ function buildTargeting(cfg) {
   };
 }
 
+// Normalize any date-ish string → Meta-compatible ISO with VN timezone (+07:00).
+// Accepts: "2026-04-17" (date only) | "2026-04-17T10:30" (datetime-local)
+//        | "2026-04-17T10:30:00" (no tz) | full ISO with tz (pass through)
+function toMetaDatetime(v) {
+  if (!v) return null;
+  const s = String(v).trim();
+  if (s.length === 10) return `${s}T00:00:00+07:00`;      // date only → midnight VN
+  if (s.length === 16) return `${s}:00+07:00`;             // datetime-local → add seconds+tz
+  if (s.length === 19 && !/[zZ]|[+-]\d{2}:?\d{2}$/.test(s)) return `${s}+07:00`;
+  return s;                                                 // already has tz
+}
+
 // Upload a video file to the ad account. Returns video_id.
 async function uploadVideo(accountId, file, token) {
   const fd = new FormData();
@@ -195,16 +207,27 @@ export async function onRequestPost(context) {
     partial.uploaded = uploaded;
 
     // ── Step 2: Create Campaign ─────────────────────────────────
-    // NOTE: is_adset_budget_sharing_enabled required by Meta when campaign
-    // has no budget (budget lives on adset). False = each adset has own budget.
-    const campRes = await fbPost(`/act_${accountIdRaw}/campaigns`, {
+    // Budget level: "campaign" (CBO) → budget on campaign, adset inherits.
+    //               "adset"    (ABO) → budget on adset (default).
+    const isCBO = cfg.budget_level === "campaign";
+    const campaignBody = {
       name: cfg.campaign_name || `${cfg.objective}-${Date.now()}`,
       objective: cfg.objective,
       status: "PAUSED",
       buying_type: cfg.buying_type || "AUCTION",
       special_ad_categories: [],
-      is_adset_budget_sharing_enabled: false,
-    }, token);
+      is_adset_budget_sharing_enabled: isCBO,
+    };
+    if (isCBO) {
+      if (cfg.budget_type === "lifetime") {
+        campaignBody.lifetime_budget = cfg.budget_amount;
+      } else {
+        campaignBody.daily_budget = cfg.budget_amount;
+      }
+      // CBO requires a bid_strategy on campaign too
+      campaignBody.bid_strategy = "LOWEST_COST_WITHOUT_CAP";
+    }
+    const campRes = await fbPost(`/act_${accountIdRaw}/campaigns`, campaignBody, token);
     partial.campaign_id = campRes.id;
 
     // ── Step 3: Create AdSet ────────────────────────────────────
@@ -213,27 +236,25 @@ export async function onRequestPost(context) {
       campaign_id: partial.campaign_id,
       optimization_goal: cfg.optimization_goal,
       billing_event: cfg.billing_event,
-      bid_strategy: "LOWEST_COST_WITHOUT_CAP",
       status: "PAUSED",
       destination_type: cfg.destination_type || "WEBSITE",
       targeting: buildTargeting(cfg),
     };
-    if (cfg.budget_type === "lifetime") {
-      adsetBody.lifetime_budget = cfg.budget_amount;
-    } else {
-      adsetBody.daily_budget = cfg.budget_amount;
+    // Budget on adset only when ABO
+    if (!isCBO) {
+      adsetBody.bid_strategy = "LOWEST_COST_WITHOUT_CAP";
+      if (cfg.budget_type === "lifetime") {
+        adsetBody.lifetime_budget = cfg.budget_amount;
+      } else {
+        adsetBody.daily_budget = cfg.budget_amount;
+      }
     }
-    if (cfg.start_time) {
-      // Append VN timezone if just a date
-      adsetBody.start_time = cfg.start_time.length <= 10
-        ? `${cfg.start_time}T00:00:00+07:00`
-        : cfg.start_time;
-    }
-    if (cfg.end_time) {
-      adsetBody.end_time = cfg.end_time.length <= 10
-        ? `${cfg.end_time}T23:59:59+07:00`
-        : cfg.end_time;
-    }
+    // Schedule
+    const startIso = toMetaDatetime(cfg.start_time);
+    const endIso   = toMetaDatetime(cfg.end_time);
+    if (startIso) adsetBody.start_time = startIso;
+    if (endIso)   adsetBody.end_time   = endIso;
+
     const po = buildPromotedObject(cfg);
     if (po) adsetBody.promoted_object = po;
 
@@ -287,4 +308,18 @@ export async function onRequestPost(context) {
     if (partial.campaign_id && !partial.adset_id) step = "create_adset";
     else if (partial.adset_id && partial.ads === undefined) step = "create_ads";
     else if (partial.uploaded && !partial.campaign_id) step = "create_campaign";
-    retu
+    return json({
+      success: false,
+      step,
+      error: String(e.message || e),
+      partial,
+    }, 502);
+  }
+}
+
+function json(body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json; charset=utf-8" },
+  });
+}
