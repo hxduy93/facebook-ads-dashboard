@@ -195,12 +195,15 @@ export async function onRequestPost(context) {
     partial.uploaded = uploaded;
 
     // ── Step 2: Create Campaign ─────────────────────────────────
+    // NOTE: is_adset_budget_sharing_enabled required by Meta when campaign
+    // has no budget (budget lives on adset). False = each adset has own budget.
     const campRes = await fbPost(`/act_${accountIdRaw}/campaigns`, {
       name: cfg.campaign_name || `${cfg.objective}-${Date.now()}`,
       objective: cfg.objective,
       status: "PAUSED",
       buying_type: cfg.buying_type || "AUCTION",
       special_ad_categories: [],
+      is_adset_budget_sharing_enabled: false,
     }, token);
     partial.campaign_id = campRes.id;
 
@@ -284,18 +287,4 @@ export async function onRequestPost(context) {
     if (partial.campaign_id && !partial.adset_id) step = "create_adset";
     else if (partial.adset_id && partial.ads === undefined) step = "create_ads";
     else if (partial.uploaded && !partial.campaign_id) step = "create_campaign";
-    return json({
-      success: false,
-      step,
-      error: String(e.message || e),
-      partial,
-    }, 502);
-  }
-}
-
-function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8" },
-  });
-}
+    retu
