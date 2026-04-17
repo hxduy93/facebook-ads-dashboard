@@ -25,6 +25,17 @@ const GRAPH = `https://graph.facebook.com/${FB_API_VERSION}`;
 
 // ───────────────────────── helpers ─────────────────────────
 
+async function fbGet(endpoint, params, token) {
+  const qs = new URLSearchParams(params || {});
+  qs.append("access_token", token);
+  const r = await fetch(`${GRAPH}${endpoint}?${qs}`, { signal: AbortSignal.timeout(30000) });
+  const data = await r.json().catch(() => ({ error: { message: `Non-JSON response (status ${r.status})` } }));
+  if (!r.ok || data.error) {
+    throw new Error((data.error && data.error.message) || `HTTP ${r.status}`);
+  }
+  return data;
+}
+
 async function fbPost(endpoint, body, token) {
   // body can be FormData (for file uploads) or URLSearchParams / object
   let init;
@@ -99,6 +110,26 @@ async function uploadVideo(accountId, file, token) {
   return data.id;
 }
 
+// Wait for Meta to generate thumbnails after video upload, then return a URL.
+// Meta takes 5–30s to auto-generate thumbnails depending on video length.
+async function waitForVideoThumbnail(videoId, token, maxWaitMs = 25000, pollIntervalMs = 2500) {
+  const start = Date.now();
+  while (Date.now() - start < maxWaitMs) {
+    try {
+      const data = await fbGet(`/${videoId}/thumbnails`, { fields: "uri,is_preferred" }, token);
+      const list = (data && data.data) || [];
+      if (list.length > 0) {
+        const preferred = list.find((t) => t.is_preferred) || list[0];
+        if (preferred && preferred.uri) return preferred.uri;
+      }
+    } catch (e) {
+      // Ignore transient errors while video is still processing
+    }
+    await new Promise((r) => setTimeout(r, pollIntervalMs));
+  }
+  throw new Error("Thumbnail chưa sinh xong sau 25s — video có thể quá lớn. Thử upload video ngắn hơn (< 1 phút) hoặc nén lại.");
+}
+
 // Upload an image file. Returns image_hash.
 async function uploadImage(accountId, file, token) {
   const fd = new FormData();
@@ -111,19 +142,22 @@ async function uploadImage(accountId, file, token) {
 }
 
 // Build object_story_spec for creative based on media type & destination
-function buildStorySpec({ pageId, ad, videoId, imageHash, destinationType }) {
+function buildStorySpec({ pageId, ad, videoId, videoThumbnailUrl, imageHash, destinationType }) {
   const cta = { type: ad.cta || "LEARN_MORE", value: {} };
   if (ad.link) cta.value.link = ad.link_with_utm || ad.link;
 
   if (videoId) {
+    if (!videoThumbnailUrl) {
+      throw new Error("Thumbnail required for video ad — waitForVideoThumbnail() failed");
+    }
     return {
       page_id: pageId,
       video_data: {
         video_id: videoId,
+        image_url: videoThumbnailUrl, // REQUIRED by Meta — auto-generated after upload
         message: ad.ad_copy || "",
         title: ad.headline || "",
         call_to_action: cta,
-        // image_url optional thumbnail — Meta auto-generates from video
         link_description: ad.description || "",
       },
     };
@@ -267,10 +301,17 @@ export async function onRequestPost(context) {
       const ad = cfg.ads[i];
       const media = uploaded[i];
 
+      // Video ads need a thumbnail — poll Meta until it finishes processing
+      let videoThumbnailUrl = null;
+      if (media.video_id) {
+        videoThumbnailUrl = await waitForVideoThumbnail(media.video_id, token);
+      }
+
       const storySpec = buildStorySpec({
         pageId: cfg.page_id,
         ad,
         videoId: media.video_id,
+        videoThumbnailUrl,
         imageHash: media.image_hash,
         destinationType: cfg.destination_type,
       });
@@ -303,11 +344,18 @@ export async function onRequestPost(context) {
       ads_manager_url: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=${accountIdRaw}&selected_campaign_ids=${partial.campaign_id}`,
     });
   } catch (e) {
-    // Figure out which step failed based on partial state
-    let step = "upload_media";
-    if (partial.campaign_id && !partial.adset_id) step = "create_adset";
-    else if (partial.adset_id && partial.ads === undefined) step = "create_ads";
-    else if (partial.uploaded && !partial.campaign_id) step = "create_campaign";
+    // Figure out which step failed based on what's been populated in `partial`
+    let step;
+    if (!partial.uploaded) {
+      step = "upload_media";
+    } else if (!partial.campaign_id) {
+      step = "create_campaign";
+    } else if (!partial.adset_id) {
+      step = "create_adset";
+    } else {
+      // campaign + adset exist → failing inside creative/ad loop or thumbnail wait
+      step = "create_ads";
+    }
     return json({
       success: false,
       step,
