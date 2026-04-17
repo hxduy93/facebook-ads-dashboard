@@ -854,36 +854,62 @@ function FacebookAdsDashboard() {
 // SUB-COMPONENT: Ads Creator Panel
 // =============================================================
 function AdsCreatorPanel() {
+  // ── Product ──
   const [product, setProduct] = useState("D1")
-  const [format, setFormat] = useState("lead_gen")
+
+  // ── Campaign-level ──
+  const [campaignName, setCampaignName] = useState("")
+  const [objective, setObjective] = useState("OUTCOME_LEADS")
+  const [buyingType, setBuyingType] = useState("AUCTION")
+
+  // ── Adset-level ──
+  const [adsetName, setAdsetName] = useState("")
+  const [account, setAccount] = useState("act_927390616363424")
+  const [page, setPage] = useState("")
+  const [pixel, setPixel] = useState("")
   const [optGoal, setOptGoal] = useState("LEAD_GENERATION")
   const [destType, setDestType] = useState("WEBSITE")
   const [billingEvent, setBillingEvent] = useState("IMPRESSIONS")
-  const [buyingType, setBuyingType] = useState("AUCTION")
-  const [account, setAccount] = useState("act_927390616363424")
-  const [pixel, setPixel] = useState("")
-  const [page, setPage] = useState("")
   const [budget, setBudget] = useState("300000")
-  const [budgetType, setBudgetType] = useState("daily") // "daily" | "lifetime"
+  const [budgetType, setBudgetType] = useState("daily")
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
-  const [headline, setHeadline] = useState("")
-  const [adCopy, setAdCopy] = useState("")
-  const [cta, setCta] = useState("LEARN_MORE")
-  const [link, setLink] = useState("")
-  const [videoFile, setVideoFile] = useState(null)
-  const [imageFile, setImageFile] = useState(null)
-  const [mediaPreview, setMediaPreview] = useState(null)
-  const [status, setStatus] = useState(null) // null | "ready" | "sending" | "done" | "error"
-  const [statusMsg, setStatusMsg] = useState("")
 
-  // ── AI Content Generator state ──
+  // ── Ads (array) ──
+  const makeEmptyAd = (index = 0) => ({
+    id: Date.now() + Math.random(),
+    adName: "",
+    headline: "",
+    adCopy: "",
+    cta: "LEARN_MORE",
+    link: "",
+    videoFile: null,
+    imageFile: null,
+    mediaPreview: null,
+    utmSource: "facebook",
+    utmMedium: "paid",
+    utmCampaign: "",
+    utmContent: "",
+    utmTerm: "",
+  })
+  const [ads, setAds] = useState([makeEmptyAd(0)])
+
+  // ── AI Content Generator state (shared, targets a specific ad) ──
+  const [aiTargetAdId, setAiTargetAdId] = useState(null)
   const [aiKeyword, setAiKeyword] = useState("")
   const [aiDirection, setAiDirection] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState("")
   const [aiVariants, setAiVariants] = useState([])
   const [aiSelectedId, setAiSelectedId] = useState(null)
+
+  // ── Publish status ──
+  const [status, setStatus] = useState(null) // null | "ready" | "sending" | "done" | "error"
+  const [statusMsg, setStatusMsg] = useState("")
+
+  // ── Tooltips toggle ──
+  const [showBuyingInfo, setShowBuyingInfo] = useState(false)
+  const [showBillingInfo, setShowBillingInfo] = useState(false)
 
   const PRODUCTS = {
     "D1":        { pixel: "283066540825683", page: "102966349378081", account: "act_927390616363424", pixelName: "D1 CHUẨN" },
@@ -908,78 +934,122 @@ function AdsCreatorPanel() {
     "114261474867281": "Doscom - Công Nghệ An Ninh (8.2K)",
   }
 
+  // PIXELS — tên chuẩn theo Trình quản lý sự kiện (Events Manager)
   const PIXELS = {
-    "283066540825683": "D1 CHUẨN",
-    "1084989479958179": "D1 MỚI",
-    "922958632515102": "DA8.1",
-    "1278302354053624": "DA8.1 Pro",
-    "317565188066584": "DR1",
+    "283066540825683":   "D1 CHUẨN",
+    "1084989479958179":  "D1 MỚI",
+    "922958632515102":   "DA8.1",
+    "1278302354053624":  "DA8.1 Pro",
+    "317565188066584":   "DR1",
     "24397685376567889": "NOMA 911",
   }
 
-  // ── 6 ODAX Campaign Objectives (Meta Ads API 2025+) ──
-  const FORMATS = {
-    // 1. AWARENESS
-    "awareness_reach":     { label: "Awareness — Tiếp cận (Reach)", objective: "OUTCOME_AWARENESS", goal: "REACH", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "awareness_brand":     { label: "Awareness — Nhận diện thương hiệu", objective: "OUTCOME_AWARENESS", goal: "AD_RECALL_LIFT", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "awareness_video":     { label: "Awareness — Lượt xem video (ThruPlay)", objective: "OUTCOME_AWARENESS", goal: "THRUPLAY", cta: "WATCH_MORE", billing: "IMPRESSIONS", dest: "ON_VIDEO" },
-    "awareness_impr":      { label: "Awareness — Hiển thị tối đa (Impressions)", objective: "OUTCOME_AWARENESS", goal: "IMPRESSIONS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    // 2. TRAFFIC
-    "traffic_click":       { label: "Traffic — Lượt click liên kết", objective: "OUTCOME_TRAFFIC", goal: "LINK_CLICKS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "traffic_landing":     { label: "Traffic — Lượt xem trang đích", objective: "OUTCOME_TRAFFIC", goal: "LANDING_PAGE_VIEWS", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "traffic_msg":         { label: "Traffic — Tin nhắn (Messenger/Zalo)", objective: "OUTCOME_TRAFFIC", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
-    "traffic_call":        { label: "Traffic — Cuộc gọi", objective: "OUTCOME_TRAFFIC", goal: "QUALITY_CALL", cta: "CALL_NOW", billing: "IMPRESSIONS", dest: "PHONE_CALL" },
-    // 3. ENGAGEMENT
-    "engage_post":         { label: "Engagement — Tương tác bài viết", objective: "OUTCOME_ENGAGEMENT", goal: "POST_ENGAGEMENT", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "ON_POST" },
-    "engage_page_like":    { label: "Engagement — Lượt thích trang", objective: "OUTCOME_ENGAGEMENT", goal: "PAGE_LIKES", cta: "LIKE_PAGE", billing: "IMPRESSIONS", dest: "ON_PAGE" },
-    "engage_event":        { label: "Engagement — Phản hồi sự kiện", objective: "OUTCOME_ENGAGEMENT", goal: "EVENT_RESPONSES", cta: "LEARN_MORE", billing: "IMPRESSIONS", dest: "ON_EVENT" },
-    "engage_video":        { label: "Engagement — Lượt xem video", objective: "OUTCOME_ENGAGEMENT", goal: "THRUPLAY", cta: "WATCH_MORE", billing: "IMPRESSIONS", dest: "ON_VIDEO" },
-    "engage_msg":          { label: "Engagement — Tin nhắn", objective: "OUTCOME_ENGAGEMENT", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
-    // 4. LEADS
-    "lead_gen":            { label: "Leads — Form trên Facebook", objective: "OUTCOME_LEADS", goal: "LEAD_GENERATION", cta: "SIGN_UP", billing: "IMPRESSIONS", dest: "ON_AD" },
-    "lead_convert":        { label: "Leads — Chuyển đổi trên website", objective: "OUTCOME_LEADS", goal: "OFFSITE_CONVERSIONS", cta: "SIGN_UP", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "lead_call":           { label: "Leads — Cuộc gọi", objective: "OUTCOME_LEADS", goal: "QUALITY_CALL", cta: "CALL_NOW", billing: "IMPRESSIONS", dest: "PHONE_CALL" },
-    "lead_msg":            { label: "Leads — Tin nhắn Messenger", objective: "OUTCOME_LEADS", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
-    "lead_ig":             { label: "Leads — Tin nhắn Instagram", objective: "OUTCOME_LEADS", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "INSTAGRAM_DIRECT" },
-    // 5. APP PROMOTION
-    "app_install":         { label: "App — Lượt cài đặt", objective: "OUTCOME_APP_PROMOTION", goal: "APP_INSTALLS", cta: "INSTALL_MOBILE_APP", billing: "IMPRESSIONS", dest: "APP" },
-    "app_event":           { label: "App — Sự kiện trong app", objective: "OUTCOME_APP_PROMOTION", goal: "OFFSITE_CONVERSIONS", cta: "USE_APP", billing: "IMPRESSIONS", dest: "APP" },
-    "app_value":           { label: "App — Giá trị (Value)", objective: "OUTCOME_APP_PROMOTION", goal: "VALUE", cta: "USE_APP", billing: "IMPRESSIONS", dest: "APP" },
-    // 6. SALES
-    "sales_convert":       { label: "Sales — Chuyển đổi website", objective: "OUTCOME_SALES", goal: "OFFSITE_CONVERSIONS", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "sales_value":         { label: "Sales — Tối ưu giá trị (ROAS)", objective: "OUTCOME_SALES", goal: "VALUE", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "sales_catalog":       { label: "Sales — Danh mục sản phẩm (Catalog)", objective: "OUTCOME_SALES", goal: "OFFSITE_CONVERSIONS", cta: "SHOP_NOW", billing: "IMPRESSIONS", dest: "WEBSITE" },
-    "sales_msg":           { label: "Sales — Tin nhắn", objective: "OUTCOME_SALES", goal: "CONVERSATIONS", cta: "SEND_MESSAGE", billing: "IMPRESSIONS", dest: "MESSENGER" },
+  // ── Mục tiêu chiến dịch (6 ODAX objectives) — Text y hệt FB Ads Manager tiếng Việt ──
+  const OBJECTIVES = {
+    "OUTCOME_AWARENESS":     { label: "Mức độ nhận biết",     desc: "Hiển thị cho nhiều người nhất có thể" },
+    "OUTCOME_TRAFFIC":       { label: "Lưu lượng truy cập",   desc: "Đưa người dùng tới website/app/Messenger" },
+    "OUTCOME_ENGAGEMENT":    { label: "Lượt tương tác",       desc: "Tin nhắn, video views, tương tác bài viết, thích trang" },
+    "OUTCOME_LEADS":         { label: "Khách hàng tiềm năng", desc: "Thu thập lead qua form hoặc cuộc trò chuyện" },
+    "OUTCOME_APP_PROMOTION": { label: "Quảng bá ứng dụng",    desc: "Cài đặt app, sự kiện trong app" },
+    "OUTCOME_SALES":         { label: "Doanh số",             desc: "Tìm người có khả năng mua hàng cao" },
   }
 
-  // Group objectives for display
-  const FORMAT_GROUPS = {
-    "AWARENESS":      { emoji: "👁️", color: "blue",   keys: ["awareness_reach","awareness_brand","awareness_video","awareness_impr"] },
-    "TRAFFIC":        { emoji: "🔗", color: "cyan",   keys: ["traffic_click","traffic_landing","traffic_msg","traffic_call"] },
-    "ENGAGEMENT":     { emoji: "💬", color: "purple", keys: ["engage_post","engage_page_like","engage_event","engage_video","engage_msg"] },
-    "LEADS":          { emoji: "🎯", color: "orange", keys: ["lead_gen","lead_convert","lead_call","lead_msg","lead_ig"] },
-    "APP PROMOTION":  { emoji: "📱", color: "green",  keys: ["app_install","app_event","app_value"] },
-    "SALES":          { emoji: "💰", color: "red",    keys: ["sales_convert","sales_value","sales_catalog","sales_msg"] },
+  // ── Optimization Goals per Objective (y hệt FB Ads Manager) ──
+  const OBJECTIVE_GOALS = {
+    "OUTCOME_AWARENESS": [
+      { goal: "REACH",          dest: "WEBSITE", cta: "LEARN_MORE" },
+      { goal: "IMPRESSIONS",    dest: "WEBSITE", cta: "LEARN_MORE" },
+      { goal: "AD_RECALL_LIFT", dest: "WEBSITE", cta: "LEARN_MORE" },
+      { goal: "THRUPLAY",       dest: "ON_VIDEO", cta: "WATCH_MORE" },
+      { goal: "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS", dest: "ON_VIDEO", cta: "WATCH_MORE" },
+    ],
+    "OUTCOME_TRAFFIC": [
+      { goal: "LINK_CLICKS",         dest: "WEBSITE",   cta: "LEARN_MORE" },
+      { goal: "LANDING_PAGE_VIEWS",  dest: "WEBSITE",   cta: "LEARN_MORE" },
+      { goal: "CONVERSATIONS",       dest: "MESSENGER", cta: "SEND_MESSAGE" },
+      { goal: "QUALITY_CALL",        dest: "PHONE_CALL",cta: "CALL_NOW" },
+      { goal: "IMPRESSIONS",         dest: "WEBSITE",   cta: "LEARN_MORE" },
+      { goal: "REACH",               dest: "WEBSITE",   cta: "LEARN_MORE" },
+    ],
+    "OUTCOME_ENGAGEMENT": [
+      { goal: "POST_ENGAGEMENT",  dest: "ON_POST",   cta: "LEARN_MORE" },
+      { goal: "PAGE_LIKES",       dest: "ON_PAGE",   cta: "LIKE_PAGE" },
+      { goal: "EVENT_RESPONSES",  dest: "ON_EVENT",  cta: "LEARN_MORE" },
+      { goal: "THRUPLAY",         dest: "ON_VIDEO",  cta: "WATCH_MORE" },
+      { goal: "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS", dest: "ON_VIDEO", cta: "WATCH_MORE" },
+      { goal: "CONVERSATIONS",    dest: "MESSENGER", cta: "SEND_MESSAGE" },
+      { goal: "IMPRESSIONS",      dest: "ON_POST",   cta: "LEARN_MORE" },
+      { goal: "REACH",            dest: "ON_POST",   cta: "LEARN_MORE" },
+    ],
+    "OUTCOME_LEADS": [
+      { goal: "LEAD_GENERATION",      dest: "ON_AD",     cta: "SIGN_UP" },
+      { goal: "OFFSITE_CONVERSIONS",  dest: "WEBSITE",   cta: "SIGN_UP" },
+      { goal: "QUALITY_CALL",         dest: "PHONE_CALL",cta: "CALL_NOW" },
+      { goal: "CONVERSATIONS",        dest: "MESSENGER", cta: "SEND_MESSAGE" },
+      { goal: "LINK_CLICKS",          dest: "WEBSITE",   cta: "LEARN_MORE" },
+    ],
+    "OUTCOME_APP_PROMOTION": [
+      { goal: "APP_INSTALLS",         dest: "APP", cta: "INSTALL_MOBILE_APP" },
+      { goal: "OFFSITE_CONVERSIONS",  dest: "APP", cta: "USE_APP" },
+      { goal: "VALUE",                dest: "APP", cta: "USE_APP" },
+    ],
+    "OUTCOME_SALES": [
+      { goal: "OFFSITE_CONVERSIONS", dest: "WEBSITE",   cta: "SHOP_NOW" },
+      { goal: "VALUE",               dest: "WEBSITE",   cta: "SHOP_NOW" },
+      { goal: "CONVERSATIONS",       dest: "MESSENGER", cta: "SEND_MESSAGE" },
+      { goal: "LINK_CLICKS",         dest: "WEBSITE",   cta: "SHOP_NOW" },
+      { goal: "IMPRESSIONS",         dest: "WEBSITE",   cta: "SHOP_NOW" },
+      { goal: "REACH",               dest: "WEBSITE",   cta: "SHOP_NOW" },
+    ],
   }
 
-  const OPTIMIZATION_GOALS = [
-    "REACH", "AD_RECALL_LIFT", "IMPRESSIONS", "THRUPLAY",
-    "LINK_CLICKS", "LANDING_PAGE_VIEWS", "CONVERSATIONS", "QUALITY_CALL",
-    "POST_ENGAGEMENT", "PAGE_LIKES", "EVENT_RESPONSES",
-    "LEAD_GENERATION", "OFFSITE_CONVERSIONS",
-    "APP_INSTALLS", "VALUE",
-    "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS",
+  // Label tiếng Việt chuẩn FB Ads Manager cho optimization goal
+  const GOAL_LABELS = {
+    "REACH":                              "Phạm vi tiếp cận",
+    "IMPRESSIONS":                        "Lần hiển thị",
+    "AD_RECALL_LIFT":                     "Mức tăng khả năng nhớ tới quảng cáo",
+    "THRUPLAY":                           "ThruPlay (xem ≥15s)",
+    "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS":  "Lượt xem video liên tục 2 giây",
+    "LINK_CLICKS":                        "Lượt nhấp vào liên kết",
+    "LANDING_PAGE_VIEWS":                 "Lượt xem trang đích",
+    "CONVERSATIONS":                      "Tin nhắn (cuộc trò chuyện)",
+    "QUALITY_CALL":                       "Cuộc gọi chất lượng",
+    "POST_ENGAGEMENT":                    "Lượt tương tác với bài viết",
+    "PAGE_LIKES":                         "Lượt thích trang",
+    "EVENT_RESPONSES":                    "Phản hồi sự kiện",
+    "LEAD_GENERATION":                    "Khách hàng tiềm năng",
+    "OFFSITE_CONVERSIONS":                "Lượt chuyển đổi",
+    "APP_INSTALLS":                       "Lượt cài đặt ứng dụng",
+    "VALUE":                              "Giá trị",
+  }
+
+  const DESTINATION_LABELS = {
+    "WEBSITE":            "Trang web",
+    "APP":                "Ứng dụng",
+    "MESSENGER":          "Messenger",
+    "WHATSAPP":           "WhatsApp",
+    "INSTAGRAM_DIRECT":   "Instagram Direct",
+    "ON_AD":              "Trên quảng cáo (Form)",
+    "ON_POST":            "Trên bài viết",
+    "ON_PAGE":            "Trên trang",
+    "ON_EVENT":           "Trên sự kiện",
+    "ON_VIDEO":           "Trên video",
+    "SHOP":               "Cửa hàng",
+    "PHONE_CALL":         "Cuộc gọi",
+    "APPLINKS_AUTOMATIC": "Deep Link tự động",
+  }
+
+  const BILLING_EVENTS = [
+    { value: "IMPRESSIONS",     label: "Mỗi lần hiển thị (CPM)" },
+    { value: "LINK_CLICKS",     label: "Mỗi lần nhấp liên kết (CPC)" },
+    { value: "THRUPLAY",        label: "ThruPlay (video ≥15s)" },
+    { value: "POST_ENGAGEMENT", label: "Mỗi lượt tương tác" },
   ]
 
-  const DESTINATION_TYPES = [
-    "WEBSITE", "APP", "MESSENGER", "WHATSAPP", "INSTAGRAM_DIRECT",
-    "ON_AD", "ON_POST", "ON_PAGE", "ON_EVENT", "ON_VIDEO",
-    "SHOP", "PHONE_CALL", "APPLINKS_AUTOMATIC",
+  const BUYING_TYPES = [
+    { value: "AUCTION",  label: "Đấu giá (Auction)" },
+    { value: "RESERVED", label: "Đặt trước (Reach & Frequency)" },
   ]
-
-  const BILLING_EVENTS = ["IMPRESSIONS", "LINK_CLICKS", "THRUPLAY", "POST_ENGAGEMENT"]
-
-  const BUYING_TYPES = ["AUCTION", "RESERVED"]
 
   const CTAS = [
     "LEARN_MORE", "SIGN_UP", "SHOP_NOW", "WATCH_MORE", "CONTACT_US",
@@ -999,44 +1069,82 @@ function AdsCreatorPanel() {
     }
   }
 
-  // Auto-set CTA + optimization goal + destination + billing when format changes
-  const handleFormatChange = (f) => {
-    setFormat(f)
-    const cfg = FORMATS[f]
-    setCta(cfg.cta)
-    setOptGoal(cfg.goal)
-    setDestType(cfg.dest)
-    setBillingEvent(cfg.billing)
+  // Auto-set goal/dest/billing when objective changes
+  const handleObjectiveChange = (obj) => {
+    setObjective(obj)
+    const goals = OBJECTIVE_GOALS[obj]
+    if (goals && goals[0]) {
+      setOptGoal(goals[0].goal)
+      setDestType(goals[0].dest)
+      // set default CTA for all ads
+      setAds(curr => curr.map(a => ({ ...a, cta: goals[0].cta })))
+    }
+    setBillingEvent("IMPRESSIONS")
   }
 
-  // Handle video file selection
-  const handleVideoSelect = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      setVideoFile(file)
-      setImageFile(null)
-      setMediaPreview(URL.createObjectURL(file))
+  // Auto-set destination + CTA when optimization goal changes
+  const handleGoalChange = (g) => {
+    setOptGoal(g)
+    const goals = OBJECTIVE_GOALS[objective] || []
+    const match = goals.find(x => x.goal === g)
+    if (match) {
+      setDestType(match.dest)
+      setAds(curr => curr.map(a => ({ ...a, cta: match.cta })))
     }
   }
 
-  // Handle image file selection
-  const handleImageSelect = (e) => {
+  // ── Ad array operations ──
+  const addAd = () => {
+    setAds(curr => [...curr, makeEmptyAd(curr.length)])
+  }
+
+  const removeAd = (id) => {
+    setAds(curr => curr.length > 1 ? curr.filter(a => a.id !== id) : curr)
+  }
+
+  const updateAd = (id, patch) => {
+    setAds(curr => curr.map(a => a.id === id ? { ...a, ...patch } : a))
+  }
+
+  const handleVideoSelect = (id, e) => {
     const file = e.target.files[0]
     if (file) {
-      setImageFile(file)
-      setVideoFile(null)
-      setMediaPreview(URL.createObjectURL(file))
+      updateAd(id, { videoFile: file, imageFile: null, mediaPreview: URL.createObjectURL(file) })
     }
   }
 
-  // ── AI generate content ──
-  const handleGenerateContent = async () => {
+  const handleImageSelect = (id, e) => {
+    const file = e.target.files[0]
+    if (file) {
+      updateAd(id, { imageFile: file, videoFile: null, mediaPreview: URL.createObjectURL(file) })
+    }
+  }
+
+  // ── Build final link with UTM params ──
+  const buildLinkWithUtm = (ad) => {
+    if (!ad.link) return ""
+    try {
+      const url = new URL(ad.link)
+      if (ad.utmSource)   url.searchParams.set("utm_source",   ad.utmSource)
+      if (ad.utmMedium)   url.searchParams.set("utm_medium",   ad.utmMedium)
+      if (ad.utmCampaign) url.searchParams.set("utm_campaign", ad.utmCampaign)
+      if (ad.utmContent)  url.searchParams.set("utm_content",  ad.utmContent)
+      if (ad.utmTerm)     url.searchParams.set("utm_term",     ad.utmTerm)
+      return url.toString()
+    } catch (e) {
+      // invalid URL — return original
+      return ad.link
+    }
+  }
+
+  // ── AI generate content for a specific ad ──
+  const handleGenerateContent = async (targetAdId) => {
+    setAiTargetAdId(targetAdId)
     setAiLoading(true)
     setAiError("")
     setAiVariants([])
     setAiSelectedId(null)
     try {
-      const fmt = FORMATS[format]
       const notes = [
         aiKeyword ? `Từ khóa chính phải có: ${aiKeyword}` : "",
         aiDirection ? `Hướng content: ${aiDirection}` : "",
@@ -1047,9 +1155,9 @@ function AdsCreatorPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product,
-          format,
-          formatLabel: fmt.label,
-          cta,
+          format: objective,
+          formatLabel: (OBJECTIVES[objective] || {}).label || objective,
+          cta: (ads.find(a => a.id === targetAdId) || {}).cta || "LEARN_MORE",
           notes,
         }),
       })
@@ -1066,41 +1174,61 @@ function AdsCreatorPanel() {
   }
 
   const handleUseVariant = (v) => {
-    setHeadline(v.headline || "")
-    setAdCopy(v.primary_text || "")
+    if (!aiTargetAdId) return
+    updateAd(aiTargetAdId, { headline: v.headline || "", adCopy: v.primary_text || "" })
     setAiSelectedId(v.id)
   }
 
-  // Build campaign config summary
+  // ── Build publish summary ──
   const buildSummary = () => {
-    const fmt = FORMATS[format]
     const today = new Date().toISOString().slice(0, 10)
+    const objCfg = OBJECTIVES[objective]
+    const finalCampaignName = campaignName || `${product} - ${objCfg.label} - ${today}`
+    const finalAdsetName = adsetName || `${product} - AdSet - ${today}`
+
     return {
-      campaign_name: `${product} - ${fmt.label.split(" — ")[1] || fmt.label} - ${today}`,
-      account: ACCOUNTS[account] || account,
-      page: PAGES[page] || page,
-      pixel: PIXELS[pixel] || pixel,
-      format: fmt.label,
-      objective: fmt.objective,
+      campaign_name: finalCampaignName,
+      adset_name: finalAdsetName,
+      objective,
+      objective_label: objCfg.label,
+      buying_type: buyingType,
+      account_id: account,
+      account_name: ACCOUNTS[account] || account,
+      page_id: page,
+      page_name: (PAGES[page] || page),
+      pixel_id: pixel,
+      pixel_name: PIXELS[pixel] || pixel,
       optimization_goal: optGoal,
+      optimization_goal_label: GOAL_LABELS[optGoal] || optGoal,
       destination_type: destType,
       billing_event: billingEvent,
-      buying_type: buyingType,
       budget_type: budgetType,
-      budget: `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`,
-      start: startDate || "(ngay lập tức)",
-      end: endDate || "(không giới hạn)",
-      headline,
-      ad_copy: adCopy.slice(0, 100) + (adCopy.length > 100 ? "..." : ""),
-      cta,
-      link,
-      media: videoFile ? `Video: ${videoFile.name}` : imageFile ? `Ảnh: ${imageFile.name}` : "(chưa chọn)",
+      budget_amount: Number(budget),
+      budget_display: `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`,
+      start_time: startDate,
+      end_time: endDate,
+      ads: ads.map((a, idx) => ({
+        ad_name: a.adName || `${finalCampaignName} - Ad ${idx + 1}`,
+        headline: a.headline,
+        ad_copy: a.adCopy,
+        cta: a.cta,
+        link: a.link,
+        link_with_utm: buildLinkWithUtm(a),
+        utm: {
+          source:   a.utmSource,
+          medium:   a.utmMedium,
+          campaign: a.utmCampaign,
+          content:  a.utmContent,
+          term:     a.utmTerm,
+        },
+        video_filename: a.videoFile?.name || null,
+        image_filename: a.imageFile?.name || null,
+      })),
+      created_at: new Date().toISOString(),
     }
   }
 
   const handlePublish = () => {
-    // This sets status to "ready" to show the confirmation summary
-    // In real flow: Claude/Cowork reads this config from the form and calls Pipeboard MCP tools
     setStatus("ready")
     setStatusMsg(JSON.stringify(buildSummary(), null, 2))
   }
@@ -1108,32 +1236,7 @@ function AdsCreatorPanel() {
   const handleConfirm = () => {
     setStatus("sending")
     setStatusMsg("Đang gửi đến Claude... Mở Cowork và yêu cầu: \"Tạo campaign theo config trên dashboard\"")
-    // In reality, this data gets picked up by Cowork scheduled task or manual trigger
-    // Save config to a JSON file that Cowork can read
-    const config = {
-      ...buildSummary(),
-      account_id: account,
-      page_id: page,
-      pixel_id: pixel,
-      format_key: format,
-      objective: FORMATS[format].objective,
-      optimization_goal: optGoal,
-      destination_type: destType,
-      billing_event: billingEvent,
-      buying_type: buyingType,
-      budget_type: budgetType,
-      budget_amount: Number(budget),
-      start_time: startDate,
-      end_time: endDate,
-      headline,
-      ad_copy: adCopy,
-      cta,
-      link,
-      video_filename: videoFile?.name || null,
-      image_filename: imageFile?.name || null,
-      created_at: new Date().toISOString(),
-    }
-    // Store in localStorage for Cowork to pick up
+    const config = buildSummary()
     try {
       const pending = JSON.parse(localStorage.getItem("doscom_pending_ads") || "[]")
       pending.push(config)
@@ -1148,72 +1251,175 @@ function AdsCreatorPanel() {
   // Initialize defaults
   React.useEffect(() => { handleProductChange("D1") }, [])
 
+  // ── Validations ──
+  const allAdsHaveContent = ads.every(a => a.headline && a.adCopy)
+  const canPublish = allAdsHaveContent
+
   const selectClass = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
   const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
   const labelClass = "block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5"
+  const sectionHeaderClass = "flex items-center gap-3 mb-5 pb-3 border-b-2"
 
+  // ── Render ──
   return (
     <div className="space-y-6">
       {/* HEADER */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-6 text-white">
         <h2 className="text-xl font-bold flex items-center gap-2"><Megaphone /> Tạo Quảng Cáo Facebook</h2>
-        <p className="text-blue-100 text-sm mt-1">Setup chiến dịch → Claude tự tạo qua Meta Ads API (Pipeboard)</p>
+        <p className="text-blue-100 text-sm mt-1">Cấu hình theo đúng cấu trúc: Chiến dịch → Nhóm quảng cáo → Quảng cáo</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* LEFT 2 COLUMNS — Main form (stacked sections) */}
+        <div className="lg:col-span-2 space-y-6">
 
-        {/* LEFT COLUMN — Product & Format */}
-        <div className="space-y-5">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Package /> Sản phẩm & Định dạng</h3>
-
-            <div className="space-y-4">
+          {/* ═══════════════ SECTION 1: CHIẾN DỊCH ═══════════════ */}
+          <div className="bg-white rounded-xl border-2 border-blue-200 p-5 shadow-sm">
+            <div className={sectionHeaderClass + " border-blue-500"}>
+              <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-lg">1</div>
               <div>
+                <h3 className="text-base font-bold text-blue-900">Chiến dịch (Campaign)</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Cấu hình cấp chiến dịch: mục tiêu, loại hình mua</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
                 <label className={labelClass}>Sản phẩm</label>
                 <select value={product} onChange={e => handleProductChange(e.target.value)} className={selectClass}>
                   {Object.keys(PRODUCTS).map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
 
-              <div>
+              <div className="md:col-span-2">
+                <label className={labelClass}>Đặt tên chiến dịch</label>
+                <input
+                  type="text"
+                  value={campaignName}
+                  onChange={e => setCampaignName(e.target.value)}
+                  className={inputClass}
+                  placeholder={`VD: ${product} - ${(OBJECTIVES[objective] || {}).label || "Leads"} - ${new Date().toISOString().slice(0,10)}`}
+                />
+                <p className="text-xs text-gray-400 mt-1">Để trống sẽ tự đặt: {`${product} - ${(OBJECTIVES[objective] || {}).label || ""} - ${new Date().toISOString().slice(0,10)}`}</p>
+              </div>
+
+              <div className="md:col-span-2">
                 <label className={labelClass}>Mục tiêu chiến dịch</label>
-                <select value={format} onChange={e => handleFormatChange(e.target.value)} className={selectClass}>
-                  {Object.entries(FORMAT_GROUPS).map(([group, { emoji, keys }]) => (
-                    <optgroup key={group} label={`${emoji} ${group}`}>
-                      {keys.map(k => <option key={k} value={k}>{FORMATS[k].label.split(" — ")[1]}</option>)}
-                    </optgroup>
+                <select value={objective} onChange={e => handleObjectiveChange(e.target.value)} className={selectClass}>
+                  {Object.entries(OBJECTIVES).map(([key, cfg]) => (
+                    <option key={key} value={key}>{cfg.label}</option>
                   ))}
                 </select>
-                <p className="text-xs text-gray-400 mt-1">API: {FORMATS[format].objective}</p>
+                <p className="text-xs text-gray-500 mt-1">{(OBJECTIVES[objective] || {}).desc} <span className="text-gray-400">· API: {objective}</span></p>
               </div>
 
-              <div>
-                <label className={labelClass}>Optimization Goal</label>
-                <select value={optGoal} onChange={e => setOptGoal(e.target.value)} className={selectClass}>
-                  {OPTIMIZATION_GOALS.map(g => <option key={g} value={g}>{g.replace(/_/g, " ")}</option>)}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className={labelClass}>Destination</label>
-                  <select value={destType} onChange={e => setDestType(e.target.value)} className={selectClass}>
-                    {DESTINATION_TYPES.map(d => <option key={d} value={d}>{d.replace(/_/g, " ")}</option>)}
-                  </select>
+              <div className="md:col-span-2">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Loại hình mua (Buying Type)</label>
+                  <button type="button" onClick={() => setShowBuyingInfo(!showBuyingInfo)} className="text-xs text-blue-600 hover:underline">
+                    {showBuyingInfo ? "Ẩn giải thích" : "ℹ️ Giải thích"}
+                  </button>
                 </div>
-                <div>
-                  <label className={labelClass}>Billing</label>
-                  <select value={billingEvent} onChange={e => setBillingEvent(e.target.value)} className={selectClass}>
-                    {BILLING_EVENTS.map(b => <option key={b} value={b}>{b.replace(/_/g, " ")}</option>)}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Buying Type</label>
                 <select value={buyingType} onChange={e => setBuyingType(e.target.value)} className={selectClass}>
-                  {BUYING_TYPES.map(b => <option key={b} value={b}>{b}</option>)}
+                  {BUYING_TYPES.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
                 </select>
+                {showBuyingInfo && (
+                  <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-gray-700 space-y-2">
+                    <div>
+                      <p className="font-bold text-blue-900">Đấu giá (AUCTION)</p>
+                      <p>Cách mua mặc định trên Meta — hệ thống tự đấu giá với advertiser khác để giành placement.</p>
+                      <p className="text-gray-600">• Linh hoạt: tạm dừng/chỉnh sửa bất kỳ lúc nào</p>
+                      <p className="text-gray-600">• Ngân sách tùy ý</p>
+                      <p className="text-gray-600">• Dùng cho mọi objective</p>
+                      <p className="font-semibold text-blue-700">→ Dùng cho 99% trường hợp.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold text-blue-900">Đặt trước (RESERVED)</p>
+                      <p>Đặt trước inventory với giá + số impression cố định.</p>
+                      <p className="text-gray-600">• Chỉ áp dụng cho Reach & Frequency, TopView</p>
+                      <p className="text-gray-600">• Cần booking trước, không hoàn tiền</p>
+                      <p className="text-gray-600">• Đảm bảo reach chính xác</p>
+                      <p className="font-semibold text-blue-700">→ Dùng cho campaign brand awareness lớn (launch sản phẩm, TVC).</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ═══════════════ SECTION 2: NHÓM QUẢNG CÁO ═══════════════ */}
+          <div className="bg-white rounded-xl border-2 border-purple-200 p-5 shadow-sm">
+            <div className={sectionHeaderClass + " border-purple-500"}>
+              <div className="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-lg">2</div>
+              <div>
+                <h3 className="text-base font-bold text-purple-900">Nhóm quảng cáo (Ad Set)</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Tối ưu hóa, tài khoản, trang, pixel, ngân sách & lịch chạy</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className={labelClass}>Đặt tên nhóm quảng cáo</label>
+                <input
+                  type="text"
+                  value={adsetName}
+                  onChange={e => setAdsetName(e.target.value)}
+                  className={inputClass}
+                  placeholder={`VD: ${product} - AdSet - ${new Date().toISOString().slice(0,10)}`}
+                />
+              </div>
+
+              <div>
+                <label className={labelClass}>Mục tiêu tối ưu hóa (Optimization Goal)</label>
+                <select value={optGoal} onChange={e => handleGoalChange(e.target.value)} className={selectClass}>
+                  {(OBJECTIVE_GOALS[objective] || []).map(g => (
+                    <option key={g.goal} value={g.goal}>{GOAL_LABELS[g.goal] || g.goal}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-400 mt-1">API: {optGoal}</p>
+              </div>
+
+              <div>
+                <label className={labelClass}>Điểm đến (Destination)</label>
+                <select value={destType} onChange={e => setDestType(e.target.value)} className={selectClass}>
+                  {Object.entries(DESTINATION_LABELS).map(([v, l]) => (
+                    <option key={v} value={v}>{l}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Sự kiện tính phí (Billing Event)</label>
+                  <button type="button" onClick={() => setShowBillingInfo(!showBillingInfo)} className="text-xs text-blue-600 hover:underline">
+                    {showBillingInfo ? "Ẩn giải thích" : "ℹ️ Giải thích"}
+                  </button>
+                </div>
+                <select value={billingEvent} onChange={e => setBillingEvent(e.target.value)} className={selectClass}>
+                  {BILLING_EVENTS.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
+                </select>
+                {showBillingInfo && (
+                  <div className="mt-2 bg-purple-50 border border-purple-200 rounded-lg p-3 text-xs text-gray-700 space-y-2">
+                    <p className="font-semibold text-purple-900">Billing Event quyết định <u>khi nào</u> Meta thu tiền của bạn (khác với Optimization Goal — mục tiêu tối ưu).</p>
+                    <div>
+                      <p className="font-bold">Mỗi lần hiển thị (CPM)</p>
+                      <p>Trả tiền cho mỗi 1,000 lần quảng cáo hiển thị. Mặc định cho hầu hết objective. Ổn định, predict được chi phí.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold">Mỗi lần nhấp liên kết (CPC)</p>
+                      <p>Chỉ trả khi có người nhấp. Chỉ dùng được với optimization goal = Link Clicks. Rủi ro nếu CTR thấp.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold">ThruPlay</p>
+                      <p>Trả khi người xem coi hết 15s video (hoặc hết video nếu &lt; 15s). Dùng với Video Views.</p>
+                    </div>
+                    <div>
+                      <p className="font-bold">Mỗi lượt tương tác</p>
+                      <p>Trả cho mỗi tương tác (like/comment/share). Dùng với Engagement.</p>
+                    </div>
+                    <p className="font-semibold text-purple-700">→ Quy tắc: 99% dùng <u>Mỗi lần hiển thị (CPM)</u> — Meta tự tối ưu để bạn trả ít nhất cho kết quả mong muốn.</p>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -1230,25 +1436,27 @@ function AdsCreatorPanel() {
                 </select>
               </div>
 
-              <div>
-                <label className={labelClass}>Pixel</label>
+              <div className="md:col-span-2">
+                <label className={labelClass}>Pixel (tên + ID theo Trình quản lý sự kiện)</label>
                 <select value={pixel} onChange={e => setPixel(e.target.value)} className={selectClass}>
-                  {Object.entries(PIXELS).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+                  {Object.entries(PIXELS).map(([id, name]) => (
+                    <option key={id} value={id}>{name} — {id}</option>
+                  ))}
                 </select>
+                {pixel && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    <span className="font-semibold">{PIXELS[pixel]}</span>
+                    <span className="text-gray-400"> · Pixel ID: </span>
+                    <span className="font-mono text-gray-700">{pixel}</span>
+                  </p>
+                )}
               </div>
-            </div>
-          </div>
 
-          {/* BUDGET & SCHEDULE */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><DollarSign /> Ngân sách & Lịch chạy</h3>
-
-            <div className="space-y-4">
               <div>
                 <label className={labelClass}>Loại ngân sách</label>
                 <div className="flex gap-2">
-                  <button onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Ngày</button>
-                  <button onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
+                  <button type="button" onClick={() => setBudgetType("daily")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "daily" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Theo ngày</button>
+                  <button type="button" onClick={() => setBudgetType("lifetime")} className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition ${budgetType === "lifetime" ? "bg-blue-50 border-blue-500 text-blue-700" : "bg-white border-gray-300 text-gray-500"}`}>Trọn đời</button>
                 </div>
               </div>
               <div>
@@ -1261,279 +1469,346 @@ function AdsCreatorPanel() {
                 <label className={labelClass}>Ngày bắt đầu</label>
                 <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className={inputClass} />
               </div>
-
               <div>
                 <label className={labelClass}>Ngày kết thúc (tùy chọn)</label>
                 <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className={inputClass} />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* MIDDLE COLUMN — Media & Content */}
-        <div className="space-y-5">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Upload /> Upload Media</h3>
-
-            <div className="space-y-4">
-              <div>
-                <label className={labelClass}>Video quảng cáo</label>
-                <input type="file" accept="video/*" onChange={handleVideoSelect} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+          {/* ═══════════════ SECTION 3: QUẢNG CÁO ═══════════════ */}
+          <div className="bg-white rounded-xl border-2 border-green-200 p-5 shadow-sm">
+            <div className={sectionHeaderClass + " border-green-500"}>
+              <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-lg">3</div>
+              <div className="flex-1">
+                <h3 className="text-base font-bold text-green-900">Quảng cáo (Ads)</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Nội dung, media, CTA, link đích và UTM — có thể tạo nhiều quảng cáo trong cùng 1 nhóm</p>
               </div>
-
-              <div>
-                <label className={labelClass}>Hoặc ảnh quảng cáo</label>
-                <input type="file" accept="image/*" onChange={handleImageSelect} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100" />
-              </div>
-
-              {mediaPreview && (
-                <div className="mt-3 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
-                  {videoFile ? (
-                    <video src={mediaPreview} controls className="w-full max-h-48 object-contain" />
-                  ) : (
-                    <img src={mediaPreview} className="w-full max-h-48 object-contain" />
-                  )}
-                  <p className="text-xs text-gray-500 p-2 text-center">{videoFile?.name || imageFile?.name}</p>
-                </div>
-              )}
+              <span className="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">{ads.length} quảng cáo</span>
             </div>
-          </div>
 
-          {/* ═══════ AI CONTENT GENERATOR ═══════ */}
-          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl border-2 border-amber-300 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-              <Sparkles /> AI Content Generator
-              <span className="ml-auto text-[10px] font-normal text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">Workers AI · Llama 3.3 70B</span>
-            </h3>
-            <p className="text-xs text-gray-600 mb-4">Tự động sinh 3 bản content (Cảm xúc / Lý trí / Khẩn cấp) dựa trên sản phẩm & format đã chọn.</p>
+            <div className="space-y-5">
+              {ads.map((ad, adIdx) => (
+                <div key={ad.id} className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50 hover:bg-white transition">
+                  {/* Ad header */}
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-8 rounded-lg bg-green-500 text-white flex items-center justify-center font-bold text-sm">#{adIdx + 1}</span>
+                      <h4 className="text-sm font-bold text-gray-800">Quảng cáo #{adIdx + 1}</h4>
+                    </div>
+                    {ads.length > 1 && (
+                      <button type="button" onClick={() => removeAd(ad.id)} className="text-xs text-red-600 hover:text-red-800 hover:underline font-semibold">
+                        ✕ Xóa quảng cáo này
+                      </button>
+                    )}
+                  </div>
 
-            <div className="space-y-3 mb-4">
-              <div>
-                <label className={labelClass}>Từ khóa chính (tùy chọn)</label>
+                  <div className="space-y-4">
+                    {/* Ad name */}
+                    <div>
+                      <label className={labelClass}>Đặt tên quảng cáo</label>
+                      <input
+                        type="text"
+                        value={ad.adName}
+                        onChange={e => updateAd(ad.id, { adName: e.target.value })}
+                        className={inputClass}
+                        placeholder={`VD: ${product} - Ad ${adIdx + 1} - Video Pain Point`}
+                      />
+                    </div>
+
+                    {/* Media upload */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className={labelClass}>Upload video</label>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={e => handleVideoSelect(ad.id, e)}
+                          className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Hoặc upload ảnh</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={e => handleImageSelect(ad.id, e)}
+                          className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+                        />
+                      </div>
+                    </div>
+
+                    {ad.mediaPreview && (
+                      <div className="rounded-lg overflow-hidden border border-gray-200 bg-white">
+                        {ad.videoFile ? (
+                          <video src={ad.mediaPreview} controls className="w-full max-h-40 object-contain" />
+                        ) : (
+                          <img src={ad.mediaPreview} className="w-full max-h-40 object-contain" />
+                        )}
+                        <p className="text-xs text-gray-500 p-2 text-center">{ad.videoFile?.name || ad.imageFile?.name}</p>
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <div>
+                      <label className={labelClass}>Tiêu đề (Headline)</label>
+                      <input
+                        type="text"
+                        value={ad.headline}
+                        onChange={e => updateAd(ad.id, { headline: e.target.value })}
+                        className={inputClass}
+                        placeholder="VD: Máy dò nghe lén D1 — Bảo vệ riêng tư"
+                      />
+                    </div>
+
+                    <div>
+                      <label className={labelClass}>Nội dung quảng cáo (Primary Text)</label>
+                      <textarea
+                        value={ad.adCopy}
+                        onChange={e => updateAd(ad.id, { adCopy: e.target.value })}
+                        className={inputClass + " h-28 resize-none"}
+                        placeholder="Nhập nội dung quảng cáo hoặc dùng AI Content Generator bên dưới..."
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className={labelClass}>Call to Action (CTA)</label>
+                        <select value={ad.cta} onChange={e => updateAd(ad.id, { cta: e.target.value })} className={selectClass}>
+                          {CTAS.map(c => <option key={c} value={c}>{c.replace(/_/g, " ")}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className={labelClass}>Link đích (Landing page)</label>
+                        <input
+                          type="url"
+                          value={ad.link}
+                          onChange={e => updateAd(ad.id, { link: e.target.value })}
+                          className={inputClass}
+                          placeholder="https://doscom.vn/san-pham/d1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* UTM BOX */}
+                    <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-3">
+                      <h5 className="text-xs font-bold text-amber-900 mb-2 flex items-center gap-1.5">
+                        🔗 UTM Tracking Parameters
+                        <span className="text-[10px] font-normal text-amber-700">— để track traffic trên GA/Pancake</span>
+                      </h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-[10px] font-semibold text-amber-800 uppercase">utm_source</label>
+                          <input type="text" value={ad.utmSource} onChange={e => updateAd(ad.id, { utmSource: e.target.value })} className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-amber-500" placeholder="facebook" />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-amber-800 uppercase">utm_medium</label>
+                          <input type="text" value={ad.utmMedium} onChange={e => updateAd(ad.id, { utmMedium: e.target.value })} className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-amber-500" placeholder="paid / cpc" />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-amber-800 uppercase">utm_campaign</label>
+                          <input type="text" value={ad.utmCampaign} onChange={e => updateAd(ad.id, { utmCampaign: e.target.value })} className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-amber-500" placeholder={`${product}_${new Date().toISOString().slice(0,7)}`} />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-semibold text-amber-800 uppercase">utm_content</label>
+                          <input type="text" value={ad.utmContent} onChange={e => updateAd(ad.id, { utmContent: e.target.value })} className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-amber-500" placeholder={`ad${adIdx + 1}_video`} />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="text-[10px] font-semibold text-amber-800 uppercase">utm_term (tùy chọn — keyword)</label>
+                          <input type="text" value={ad.utmTerm} onChange={e => updateAd(ad.id, { utmTerm: e.target.value })} className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-amber-500" placeholder="chong_nghe_len" />
+                        </div>
+                      </div>
+                      {ad.link && (
+                        <div className="mt-2 bg-white border border-amber-200 rounded p-2">
+                          <p className="text-[10px] font-semibold text-amber-800 uppercase mb-1">Link cuối cùng (có UTM)</p>
+                          <p className="text-xs font-mono text-gray-700 break-all">{buildLinkWithUtm(ad)}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* AI Content Generator button */}
+                    <button
+                      type="button"
+                      onClick={() => handleGenerateContent(ad.id)}
+                      disabled={aiLoading}
+                      className={`w-full py-2.5 rounded-lg font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 ${
+                        aiLoading && aiTargetAdId === ad.id
+                          ? "bg-amber-200 text-amber-700 cursor-wait"
+                          : "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                      }`}
+                    >
+                      {aiLoading && aiTargetAdId === ad.id ? (
+                        <>
+                          <div className="animate-spin w-4 h-4 border-2 border-amber-700 border-t-transparent rounded-full"></div>
+                          Đang viết content cho Ad #{adIdx + 1}...
+                        </>
+                      ) : (
+                        <><Wand /> Sinh content AI cho Ad #{adIdx + 1}</>
+                      )}
+                    </button>
+
+                    {/* AI variants shown only for the target ad */}
+                    {aiTargetAdId === ad.id && aiError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p className="text-xs font-semibold text-red-700 mb-1">Lỗi sinh content</p>
+                        <p className="text-xs text-red-600">{aiError}</p>
+                      </div>
+                    )}
+                    {aiTargetAdId === ad.id && aiVariants.length > 0 && (
+                      <div className="space-y-2">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                          {aiVariants.map((v) => {
+                            const styleConfig = {
+                              "A": { color: "pink",  emoji: "💝", label: "Cảm xúc" },
+                              "B": { color: "blue",  emoji: "🧠", label: "Lý trí" },
+                              "C": { color: "red",   emoji: "⏰", label: "Khẩn cấp" },
+                            }
+                            const cfg = styleConfig[v.id] || { color: "gray", emoji: "📝", label: v.style }
+                            const isSelected = aiSelectedId === v.id
+                            return (
+                              <div key={v.id} className={`bg-white rounded-lg border-2 p-2 ${isSelected ? `border-${cfg.color}-500` : "border-gray-200"}`}>
+                                <div className={`text-[10px] font-bold mb-1.5 text-${cfg.color}-700 flex items-center gap-1`}>
+                                  <span>{cfg.emoji}</span>
+                                  <span>Bản {v.id} — {cfg.label}</span>
+                                </div>
+                                <div className="space-y-1 text-[11px]">
+                                  <p className="font-semibold text-gray-800">{v.headline}</p>
+                                  <p className="text-gray-600 whitespace-pre-wrap leading-tight max-h-24 overflow-y-auto">{v.primary_text}</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => handleUseVariant(v)}
+                                  className={`mt-2 w-full py-1.5 rounded text-[11px] font-bold text-white ${isSelected ? "bg-green-600" : `bg-${cfg.color}-500 hover:bg-${cfg.color}-600`}`}
+                                >
+                                  {isSelected ? "✓ Đã fill" : "Dùng bản này"}
+                                </button>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* BUTTON: Tạo thêm quảng cáo */}
+              <button
+                type="button"
+                onClick={addAd}
+                className="w-full py-3 border-2 border-dashed border-green-400 text-green-700 rounded-xl font-semibold text-sm hover:bg-green-50 hover:border-green-500 transition flex items-center justify-center gap-2"
+              >
+                <span className="text-lg">+</span> Tạo thêm quảng cáo
+              </button>
+            </div>
+
+            {/* AI Content input shared (applied when clicking generate on a specific ad) */}
+            <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <p className="text-xs font-semibold text-amber-900 mb-2">⚙️ Cấu hình AI Content (áp dụng cho ad bạn bấm sinh)</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <input
                   type="text"
                   value={aiKeyword}
                   onChange={e => setAiKeyword(e.target.value)}
-                  className={inputClass}
-                  placeholder="VD: chống nghe lén, tẩy ố kính axit, camera 4K"
+                  className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs"
+                  placeholder="Từ khóa chính (VD: chống nghe lén)"
                 />
-              </div>
-              <div>
-                <label className={labelClass}>Hướng content (tùy chọn)</label>
-                <textarea
+                <input
+                  type="text"
                   value={aiDirection}
                   onChange={e => setAiDirection(e.target.value)}
-                  className={inputClass + " h-20 resize-none"}
-                  placeholder="VD: Nhắm vào chủ xe hơi nam 30-45 tuổi, nhấn mạnh tiết kiệm chi phí so với ra gara"
+                  className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs"
+                  placeholder="Hướng content (VD: nhấn mạnh đi công tác)"
                 />
               </div>
             </div>
-
-            <button
-              onClick={handleGenerateContent}
-              disabled={aiLoading}
-              className={`w-full py-3 rounded-lg font-bold text-sm shadow-md transition flex items-center justify-center gap-2 ${
-                aiLoading
-                  ? "bg-amber-200 text-amber-700 cursor-wait"
-                  : "bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 active:scale-[0.98]"
-              }`}
-            >
-              {aiLoading ? (
-                <>
-                  <div className="animate-spin w-4 h-4 border-2 border-amber-700 border-t-transparent rounded-full"></div>
-                  Đang viết content...
-                </>
-              ) : (
-                <><Wand /> Create content</>
-              )}
-            </button>
-
-            {aiError && (
-              <div className="mt-3 bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-xs font-semibold text-red-700 mb-1">Lỗi sinh content</p>
-                <p className="text-xs text-red-600">{aiError}</p>
-              </div>
-            )}
-
-            {aiVariants.length > 0 && (
-              <div className="mt-4 space-y-3">
-                <p className="text-xs font-semibold text-gray-700">3 bản đã sinh — chọn bản ưng ý:</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {aiVariants.map((v) => {
-                    const styleConfig = {
-                      "A": { color: "pink",   emoji: "💝", label: "Cảm xúc" },
-                      "B": { color: "blue",   emoji: "🧠", label: "Lý trí" },
-                      "C": { color: "red",    emoji: "⏰", label: "Khẩn cấp" },
-                    }
-                    const cfg = styleConfig[v.id] || { color: "gray", emoji: "📝", label: v.style }
-                    const isSelected = aiSelectedId === v.id
-                    return (
-                      <div
-                        key={v.id}
-                        className={`bg-white rounded-lg border-2 p-3 transition ${
-                          isSelected ? `border-${cfg.color}-500 ring-2 ring-${cfg.color}-200` : "border-gray-200"
-                        }`}
-                      >
-                        <div className={`text-xs font-bold mb-2 text-${cfg.color}-700 flex items-center gap-1`}>
-                          <span>{cfg.emoji}</span>
-                          <span>Bản {v.id} — {cfg.label}</span>
-                          {isSelected && <span className="ml-auto text-green-600">✓ Đang dùng</span>}
-                        </div>
-
-                        <div className="space-y-2 text-xs">
-                          <div>
-                            <span className="text-gray-400 uppercase font-semibold text-[9px]">Headline</span>
-                            <p className="font-semibold text-gray-800 mt-0.5">{v.headline}</p>
-                          </div>
-                          <div>
-                            <span className="text-gray-400 uppercase font-semibold text-[9px]">Primary text</span>
-                            <p className="text-gray-700 mt-0.5 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">{v.primary_text}</p>
-                          </div>
-                          <div>
-                            <span className="text-gray-400 uppercase font-semibold text-[9px]">Video title</span>
-                            <p className="text-gray-600 mt-0.5">{v.video_title}</p>
-                          </div>
-                          <div>
-                            <span className="text-gray-400 uppercase font-semibold text-[9px]">Description</span>
-                            <p className="text-gray-600 mt-0.5">{v.description}</p>
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => handleUseVariant(v)}
-                          className={`mt-3 w-full py-2 rounded-md text-xs font-bold transition ${
-                            isSelected
-                              ? "bg-green-600 text-white"
-                              : `bg-${cfg.color}-500 text-white hover:bg-${cfg.color}-600`
-                          }`}
-                        >
-                          {isSelected ? "✓ Đã fill vào form" : "Dùng bản này"}
-                        </button>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Lightbulb /> Nội dung quảng cáo</h3>
-
-            <div className="space-y-4">
-              <div>
-                <label className={labelClass}>Tiêu đề (Headline)</label>
-                <input type="text" value={headline} onChange={e => setHeadline(e.target.value)} className={inputClass} placeholder="VD: Máy dò nghe lén D1 — Bảo vệ riêng tư" />
-              </div>
-
-              <div>
-                <label className={labelClass}>Nội dung quảng cáo (Ad Copy)</label>
-                <textarea value={adCopy} onChange={e => setAdCopy(e.target.value)} className={inputClass + " h-32 resize-none"} placeholder="Nhập nội dung quảng cáo hoặc dùng AI Content Generator phía trên..." />
-              </div>
-
-              <div>
-                <label className={labelClass}>Call to Action</label>
-                <select value={cta} onChange={e => setCta(e.target.value)} className={selectClass}>
-                  {CTAS.map(c => <option key={c} value={c}>{c.replace(/_/g, " ")}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className={labelClass}>Link đích (Landing page)</label>
-                <input type="url" value={link} onChange={e => setLink(e.target.value)} className={inputClass} placeholder="https://doscom.vn/san-pham/d1" />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* RIGHT COLUMN — Preview & Publish */}
         <div className="space-y-5">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm sticky top-4">
             <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center gap-2"><Eye /> Xem trước cấu hình</h3>
 
             <div className="space-y-1 text-sm">
               {[
-                ["Sản phẩm", product],
-                ["Objective", FORMATS[format].objective],
-                ["Mục tiêu", (FORMATS[format].label.split(" — ")[1] || FORMATS[format].label)],
-                ["Opt. Goal", optGoal.replace(/_/g, " ")],
-                ["Destination", destType.replace(/_/g, " ")],
-                ["Billing", billingEvent.replace(/_/g, " ")],
-                ["Buying", buyingType],
+                ["Chiến dịch", campaignName || `${product} - ${(OBJECTIVES[objective] || {}).label} - ${new Date().toISOString().slice(0,10)}`],
+                ["Mục tiêu", (OBJECTIVES[objective] || {}).label],
+                ["Loại hình mua", (BUYING_TYPES.find(b => b.value === buyingType) || {}).label],
+                ["Nhóm QC", adsetName || `${product} - AdSet - ${new Date().toISOString().slice(0,10)}`],
+                ["Tối ưu hóa", GOAL_LABELS[optGoal] || optGoal],
+                ["Điểm đến", DESTINATION_LABELS[destType] || destType],
+                ["Tính phí", (BILLING_EVENTS.find(b => b.value === billingEvent) || {}).label],
                 ["Tài khoản", ACCOUNTS[account]],
                 ["Page", (PAGES[page] || "").split(" (")[0]],
-                ["Pixel", PIXELS[pixel]],
-                ["Budget", `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`],
+                ["Pixel", `${PIXELS[pixel] || ""} · ${pixel}`],
+                ["Ngân sách", `${Number(budget).toLocaleString("vi-VN")}đ ${budgetType === "daily" ? "/ngày" : "trọn đời"}`],
                 ["Lịch", `${startDate || "Ngay"} → ${endDate || "∞"}`],
-                ["CTA", cta.replace(/_/g, " ")],
-                ["Media", videoFile ? "Video" : imageFile ? "Ảnh" : "—"],
+                ["Số quảng cáo", `${ads.length} ad(s)`],
               ].map(([label, val], i) => (
-                <div key={i} className="flex justify-between py-1 border-b border-gray-50">
-                  <span className="text-gray-400 text-xs">{label}</span>
-                  <span className="font-semibold text-xs text-right max-w-[150px] truncate">{val}</span>
+                <div key={i} className="flex justify-between py-1 border-b border-gray-50 gap-2">
+                  <span className="text-gray-400 text-xs whitespace-nowrap">{label}</span>
+                  <span className="font-semibold text-xs text-right truncate">{val}</span>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* PUBLISH BUTTON */}
-          <button
-            onClick={handlePublish}
-            disabled={!headline || !adCopy}
-            className={`w-full py-4 rounded-xl text-white font-bold text-lg shadow-lg transition flex items-center justify-center gap-2 ${
-              !headline || !adCopy
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98]"
-            }`}
-          >
-            <Megaphone /> Tạo chiến dịch
-          </button>
+            {/* PUBLISH BUTTON */}
+            <button
+              type="button"
+              onClick={handlePublish}
+              disabled={!canPublish}
+              className={`w-full mt-4 py-4 rounded-xl text-white font-bold text-sm shadow-lg transition flex items-center justify-center gap-2 ${
+                !canPublish
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98]"
+              }`}
+            >
+              <Megaphone /> Tạo chiến dịch ({ads.length} ads)
+            </button>
 
-          {!headline && !adCopy && (
-            <p className="text-xs text-gray-400 text-center">Nhập tiêu đề và nội dung quảng cáo để tiếp tục</p>
-          )}
+            {!canPublish && (
+              <p className="text-xs text-gray-400 text-center mt-2">Điền tiêu đề & nội dung cho tất cả các ad</p>
+            )}
 
-          {/* STATUS / CONFIRMATION */}
-          {status === "ready" && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <p className="text-sm font-semibold text-amber-800 mb-2">Xác nhận tạo chiến dịch?</p>
-              <pre className="text-xs bg-white p-3 rounded-lg border border-amber-100 overflow-auto max-h-40 whitespace-pre-wrap">{statusMsg}</pre>
-              <div className="flex gap-2 mt-3">
-                <button onClick={handleConfirm} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">
-                  Xác nhận & Gửi
-                </button>
-                <button onClick={() => setStatus(null)} className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200">
-                  Hủy
+            {/* STATUS */}
+            {status === "ready" && (
+              <div className="mt-3 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                <p className="text-xs font-semibold text-amber-800 mb-2">Xác nhận tạo chiến dịch?</p>
+                <pre className="text-[10px] bg-white p-2 rounded border border-amber-100 overflow-auto max-h-40 whitespace-pre-wrap">{statusMsg}</pre>
+                <div className="flex gap-2 mt-2">
+                  <button onClick={handleConfirm} className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-xs font-semibold hover:bg-blue-700">Xác nhận & Gửi</button>
+                  <button onClick={() => setStatus(null)} className="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg text-xs font-semibold hover:bg-gray-200">Hủy</button>
+                </div>
+              </div>
+            )}
+            {status === "sending" && (
+              <div className="mt-3 bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+                <div className="animate-spin inline-block w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full mb-1"></div>
+                <p className="text-xs text-blue-700">{statusMsg}</p>
+              </div>
+            )}
+            {status === "done" && (
+              <div className="mt-3 bg-green-50 border border-green-200 rounded-xl p-3">
+                <p className="text-xs font-semibold text-green-800 mb-1">Campaign config sẵn sàng!</p>
+                <p className="text-[11px] text-green-600">{statusMsg}</p>
+                <button onClick={() => { setStatus(null); setAds([makeEmptyAd(0)]); setCampaignName(""); setAdsetName("") }} className="mt-2 w-full bg-green-600 text-white py-2 rounded-lg text-xs font-semibold hover:bg-green-700">
+                  Tạo chiến dịch mới
                 </button>
               </div>
-            </div>
-          )}
-
-          {status === "sending" && (
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-              <div className="animate-spin inline-block w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mb-2"></div>
-              <p className="text-sm text-blue-700">{statusMsg}</p>
-            </div>
-          )}
-
-          {status === "done" && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-              <p className="text-sm font-semibold text-green-800 mb-1">Campaign config sẵn sàng!</p>
-              <p className="text-xs text-green-600">{statusMsg}</p>
-              <button onClick={() => { setStatus(null); setHeadline(""); setAdCopy(""); setVideoFile(null); setImageFile(null); setMediaPreview(null) }} className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700">
-                Tạo chiến dịch mới
-              </button>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* INSTRUCTIONS */}
           <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
             <h4 className="text-xs font-bold text-gray-600 uppercase mb-2">Quy trình</h4>
-            <div className="space-y-2 text-xs text-gray-500">
-              <p><span className="font-bold text-gray-700">1.</span> Điền form → Ấn "Tạo chiến dịch"</p>
-              <p><span className="font-bold text-gray-700">2.</span> Xác nhận config → Claude tự tạo qua Meta API</p>
-              <p><span className="font-bold text-gray-700">3.</span> Campaign tạo ở trạng thái PAUSED</p>
-              <p><span className="font-bold text-gray-700">4.</span> Review trên Meta → Bật ACTIVE khi sẵn sàng</p>
+            <div className="space-y-1.5 text-xs text-gray-500">
+              <p><span className="font-bold text-gray-700">1.</span> Điền 3 mục: Chiến dịch → Nhóm QC → Quảng cáo</p>
+              <p><span className="font-bold text-gray-700">2.</span> "Tạo thêm quảng cáo" để thêm ad vào cùng 1 nhóm</p>
+              <p><span className="font-bold text-gray-700">3.</span> Ấn "Tạo chiến dịch" → Xác nhận config</p>
+              <p><span className="font-bold text-gray-700">4.</span> Claude dùng Meta API tạo ở trạng thái PAUSED</p>
+              <p><span className="font-bold text-gray-700">5.</span> Review trên Meta → Bật ACTIVE</p>
             </div>
           </div>
         </div>
