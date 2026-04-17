@@ -11,8 +11,101 @@
 <script src="https://cdn.jsdelivr.net/npm/recharts@2.12.7/umd/Recharts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.7/babel.min.js"></script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#000 !important; color:#fff; }
   #boot-error { display:none; padding:20px; background:#fee; color:#900; font-family:monospace; white-space:pre-wrap; }
+
+  /* ═══════════════════ DARK THEME OVERRIDES ═══════════════════
+     Black background + white body text + bright green bold headers */
+
+  :root {
+    --doscom-bg:           #000000;
+    --doscom-card:         #0d0d0d;
+    --doscom-card-alt:     #141414;
+    --doscom-border:       rgba(255,255,255,0.12);
+    --doscom-text:         #ffffff;
+    --doscom-text-mute:    rgba(255,255,255,0.65);
+    --doscom-text-dim:     rgba(255,255,255,0.4);
+    --doscom-green:        #00ff66;   /* bright green for headers */
+  }
+
+  /* ── Shell ──────────────────────────────────────────────── */
+  .min-h-screen,
+  .bg-gray-50 { background: var(--doscom-bg) !important; }
+
+  /* ── Cards ──────────────────────────────────────────────── */
+  .bg-white { background: var(--doscom-card) !important; }
+  .bg-gray-100 { background: var(--doscom-card-alt) !important; }
+  .bg-gray-50:not(.min-h-screen) { background: var(--doscom-card-alt) !important; }
+
+  /* Soft-tint card backgrounds (form sections) → dark with colored border preserved */
+  .bg-blue-50 { background: rgba(59,130,246,0.08) !important; }
+  .bg-purple-50 { background: rgba(168,85,247,0.08) !important; }
+  .bg-green-50 { background: rgba(16,185,129,0.08) !important; }
+  .bg-amber-50 { background: rgba(245,158,11,0.08) !important; }
+  .bg-red-50 { background: rgba(239,68,68,0.08) !important; }
+  .bg-emerald-50 { background: rgba(16,185,129,0.08) !important; }
+  .bg-indigo-50 { background: rgba(99,102,241,0.08) !important; }
+
+  /* ── Text (body + muted variants) ──────────────────────── */
+  .text-gray-900, .text-gray-800, .text-black { color: var(--doscom-text) !important; }
+  .text-gray-700 { color: rgba(255,255,255,0.82) !important; }
+  .text-gray-600 { color: rgba(255,255,255,0.72) !important; }
+  .text-gray-500 { color: var(--doscom-text-mute) !important; }
+  .text-gray-400 { color: var(--doscom-text-dim) !important; }
+  .text-gray-300 { color: rgba(255,255,255,0.28) !important; }
+
+  /* ── Borders (soft white overlay) ──────────────────────── */
+  .border-gray-100, .border-gray-200, .border-gray-300 { border-color: var(--doscom-border) !important; }
+  hr, .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+  .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: var(--doscom-border) !important; }
+
+  /* ── Headers → bright green bold ───────────────────────── */
+  h1, h2, h3, h4, h5, h6 { color: var(--doscom-green) !important; font-weight: 800 !important; }
+
+  /* Tailwind label classes most used as "section start" */
+  label,
+  .uppercase.tracking-wide,
+  label.uppercase,
+  thead th,
+  thead td { color: var(--doscom-green) !important; font-weight: 700 !important; }
+
+  /* ── Tables ────────────────────────────────────────────── */
+  thead, thead tr, thead.bg-white { background: #0a0a0a !important; }
+  tbody tr:hover { background: rgba(255,255,255,0.04) !important; }
+  tbody tr.hover\:bg-gray-50:hover { background: rgba(255,255,255,0.04) !important; }
+
+  /* ── Form inputs ───────────────────────────────────────── */
+  input[type="text"], input[type="number"], input[type="email"],
+  input[type="url"], input[type="datetime-local"], input[type="date"],
+  input[type="search"], textarea, select {
+    background: #0a0a0a !important;
+    color: var(--doscom-text) !important;
+    border-color: var(--doscom-border) !important;
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+  select option { background: #0a0a0a !important; color: var(--doscom-text) !important; }
+
+  /* ── Buttons preserve semantic bg, but when in "white" state give dark alt ── */
+  button.bg-white, .bg-white[role="button"] { background: #1a1a1a !important; color: var(--doscom-text) !important; }
+
+  /* ── Keep KPI status colors visible on dark ── */
+  .text-emerald-600, .text-emerald-700 { color: #22ff88 !important; }
+  .text-red-600, .text-red-700 { color: #ff5577 !important; }
+  .text-amber-600, .text-amber-700 { color: #ffaa33 !important; }
+  .text-blue-600, .text-blue-700 { color: #4fc3ff !important; }
+  .text-purple-600, .text-purple-700 { color: #c084fc !important; }
+
+  /* Gradient headers (section hero with blue/indigo gradient) — darken slightly */
+  .bg-gradient-to-r.from-blue-600,
+  .bg-gradient-to-br.from-blue-600 {
+    background-image: linear-gradient(to right, #001a3d, #0a0030) !important;
+    border: 1px solid var(--doscom-green) !important;
+  }
+
+  /* Scrollbar tuning */
+  ::-webkit-scrollbar { width: 10px; height: 10px; background: #050505; }
+  ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #333; }
 </style>
 </head>
 <body>
