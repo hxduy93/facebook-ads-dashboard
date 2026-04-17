@@ -142,9 +142,12 @@ async function uploadImage(accountId, file, token) {
 }
 
 // Build object_story_spec for creative based on media type & destination
+// NOTE: Link đích (ad.link) được GIỮ NGUYÊN. UTM params được gửi riêng qua
+// adcreative.url_tags (set trong onRequestPost bên dưới) — Meta tự append vào
+// mọi click URL. Tương đương field "Thông số URL" trong Ads Manager UI.
 function buildStorySpec({ pageId, ad, videoId, videoThumbnailUrl, imageHash, destinationType }) {
   const cta = { type: ad.cta || "LEARN_MORE", value: {} };
-  if (ad.link) cta.value.link = ad.link_with_utm || ad.link;
+  if (ad.link) cta.value.link = ad.link;
 
   if (videoId) {
     if (!videoThumbnailUrl) {
@@ -167,7 +170,7 @@ function buildStorySpec({ pageId, ad, videoId, videoThumbnailUrl, imageHash, des
       page_id: pageId,
       link_data: {
         image_hash: imageHash,
-        link: ad.link_with_utm || ad.link || "https://doscom.vn",
+        link: ad.link || "https://doscom.vn",
         message: ad.ad_copy || "",
         name: ad.headline || "",
         description: ad.description || "",
@@ -328,10 +331,17 @@ export async function onRequestPost(context) {
         destinationType: cfg.destination_type,
       });
 
-      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, {
+      // Build adcreative body — attach url_tags if ad has UTM params.
+      // url_tags format: "utm_source=X&utm_medium=Y&..." (no leading ?).
+      // Meta sẽ tự append vào mọi outbound click URL.
+      const creativeBody = {
         name: `${ad.ad_name || `Ad ${i + 1}`} — creative`,
         object_story_spec: storySpec,
-      }, token);
+      };
+      if (ad.url_tags && typeof ad.url_tags === "string" && ad.url_tags.trim()) {
+        creativeBody.url_tags = ad.url_tags.trim();
+      }
+      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, creativeBody, token);
 
       const adRes = await fbPost(`/act_${accountIdRaw}/ads`, {
         name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,

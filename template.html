@@ -1233,21 +1233,17 @@ function AdsCreatorPanel() {
     }
   }
 
-  // ── Build final link with UTM params ──
-  const buildLinkWithUtm = (ad) => {
-    if (!ad.link) return ""
-    try {
-      const url = new URL(ad.link)
-      if (ad.utmSource)   url.searchParams.set("utm_source",   ad.utmSource)
-      if (ad.utmMedium)   url.searchParams.set("utm_medium",   ad.utmMedium)
-      if (ad.utmCampaign) url.searchParams.set("utm_campaign", ad.utmCampaign)
-      if (ad.utmContent)  url.searchParams.set("utm_content",  ad.utmContent)
-      if (ad.utmTerm)     url.searchParams.set("utm_term",     ad.utmTerm)
-      return url.toString()
-    } catch (e) {
-      // invalid URL — return original
-      return ad.link
-    }
+  // ── Build url_tags string for Meta adcreative.url_tags field ──
+  // Format: "utm_source=X&utm_medium=Y&..." — Meta sẽ tự append vào mọi link click
+  // Đây là field "Thông số URL" trong Ads Manager UI. Link đích được giữ nguyên.
+  const buildUtmString = (ad) => {
+    const params = new URLSearchParams()
+    if (ad.utmSource)   params.set("utm_source",   ad.utmSource)
+    if (ad.utmMedium)   params.set("utm_medium",   ad.utmMedium)
+    if (ad.utmCampaign) params.set("utm_campaign", ad.utmCampaign)
+    if (ad.utmContent)  params.set("utm_content",  ad.utmContent)
+    if (ad.utmTerm)     params.set("utm_term",     ad.utmTerm)
+    return params.toString()
   }
 
   // ── AI generate content for a specific ad ──
@@ -1349,8 +1345,10 @@ function AdsCreatorPanel() {
         headline: a.headline,
         ad_copy: a.adCopy,
         cta: a.cta,
+        // Link đích — GIỮ NGUYÊN, không append UTM
         link: a.link,
-        link_with_utm: buildLinkWithUtm(a),
+        // UTM đi vào field "Thông số URL" của Meta (adcreative.url_tags)
+        url_tags: buildUtmString(a),
         utm: {
           source:   a.utmSource,
           medium:   a.utmMedium,
@@ -2020,9 +2018,17 @@ function AdsCreatorPanel() {
                         </div>
                       </div>
                       {ad.link && (
-                        <div className="mt-2 bg-white border border-amber-200 rounded p-2">
-                          <p className="text-[10px] font-semibold text-amber-800 uppercase mb-1">Link cuối cùng (có UTM)</p>
-                          <p className="text-xs font-mono text-gray-700 break-all">{buildLinkWithUtm(ad)}</p>
+                        <div className="mt-2 bg-white border border-amber-200 rounded p-2 space-y-1.5">
+                          <div>
+                            <p className="text-[10px] font-semibold text-amber-800 uppercase mb-0.5">Link đích (giữ nguyên)</p>
+                            <p className="text-xs font-mono text-gray-700 break-all">{ad.link}</p>
+                          </div>
+                          {buildUtmString(ad) && (
+                            <div className="pt-1 border-t border-amber-100">
+                              <p className="text-[10px] font-semibold text-amber-800 uppercase mb-0.5">→ Thông số URL (điền vào ô "Thông số URL" của Meta)</p>
+                              <p className="text-xs font-mono text-gray-700 break-all">{buildUtmString(ad)}</p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
