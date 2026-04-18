@@ -3128,9 +3128,9 @@ function RadarResultPanel({ data }) {
 }
 // =============================================================
 // SUB-COMPONENT: Revenue breakdown theo NHÂN SỰ (3 nhóm)
-//   Nhân sự Duy        = nguồn DUY
-//   Nhân sự Phương Nam = nguồn PHUONG_NAM
-//   Nhân sự Website    = WEBSITE + ZALO_OA + HOTLINE (gộp)
+//   Nhân sự Duy        = nguồn DUY (saved filter 8350fe1d…)
+//   Nhân sự Phương Nam = nguồn PHUONG_NAM (saved filter 78a874c7…)
+//   WEBSITE            = WEBSITE + ZALO_OA + HOTLINE (gộp)
 // =============================================================
 function RevenueByStaffBreakdown({ dateRange }) {
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
@@ -3158,8 +3158,8 @@ function RevenueByStaffBreakdown({ dateRange }) {
     },
     {
       key: "WEBSITE_STAFF",
-      label: "Nhân sự Website",
-      shortLabel: "Website",
+      label: "WEBSITE",
+      shortLabel: "WEBSITE",
       subSources: [
         { key: "WEBSITE", label: "Website" },
         { key: "ZALO_OA", label: "Zalo OA" },
@@ -3227,7 +3227,7 @@ function RevenueByStaffBreakdown({ dateRange }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-lg font-bold text-red-700 tracking-tight">👥 Doanh thu theo nhân sự — 3 nhóm</h2>
-          <p className="text-xs text-gray-500 mt-1">Gộp các nguồn đơn theo người phụ trách · Website staff = Website + Zalo OA + Hotline</p>
+          <p className="text-xs text-gray-500 mt-1">Gộp các nguồn đơn theo người phụ trách · WEBSITE = Website + Zalo OA + Hotline</p>
         </div>
         <div className="text-right">
           <div className="text-xs text-gray-500">Tổng 3 nhân sự</div>
