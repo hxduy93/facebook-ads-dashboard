@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
-Fetch revenue data from Pancake POS API and aggregate by product.
+Fetch revenue data from Pancake POS API and aggregate by product × source group.
 
 Output: data/product-revenue.json
 
 Logic:
-- Filter: explicit order_sources[] (24 nguồn trong saved filter DUY) — khớp 100% UI Pancake
+- Fetch 5 source groups: DUY, PHƯƠNG NAM, Website, Zalo OA, Hotline
+- DUY + PHƯƠNG NAM: via saved_filters_id (UUID)
+- Website / Zalo OA / Hotline: via explicit order_sources[] IDs
 - Range: 90 ngày gần nhất
 - Revenue per item: variation_info.retail_price × quantity (Pancake giá thật, đã tính discount)
-- Breakdown theo status: delivered (3), returning (4), canceled (6), other
-- Aggregate per product × date cho 6 sản phẩm chính
+- Breakdown theo status: delivered (3), returning (4), returned (5), canceled (6), other
+- Aggregate per product × date × source cho 6 sản phẩm chính
 """
 
 import os
@@ -28,16 +30,54 @@ SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"
 LOOKBACK_DAYS = 90
 
-# Saved filter "DUY" + 24 nguồn (khớp UI Pancake)
-DUY_SAVED_FILTER_ID = "8350fe1d-fd9b-41d8-bb3a-f075a5e94df5"
-DUY_SOURCES = [
-    '["308004272"]', '["1536003777"]', '["615005571"]', '["308003603"]',
-    '["922003735"]', '["1843001674"]', '["922002510"]', '["1843000628"]',
-    '["307500561"]', '["921500725"]', '["921041344"]', '["307040304"]',
-    '["39739"]', '["614046174"]', '["1842044041"]', '["307039298"]',
-    '["1842043463"]', '["1228044436"]', '["614044869"]', '["921041902"]',
-    '["1535037303"]', '["1228042142"]', '["1535038664"]',
-    '["-1","842243695641184"]',
+# ── 5 SOURCE GROUPS — captured từ Pancake UI ───────────────────────
+# Mỗi nhóm được fetch riêng và aggregate thành 1 bucket trong output.
+# "filter_id" = saved filter UUID (POST kèm saved_filters_id).
+# "sources"   = list order_sources[] payload để POST cùng (hoặc chỉ 1 ID).
+# Nếu chỉ có filter_id mà không có sources → dùng saved filter nguyên gốc.
+# Nếu chỉ có sources mà không có filter_id → dùng raw source IDs.
+
+SOURCE_GROUPS = [
+    {
+        "key": "DUY",
+        "label": "DUY",
+        "filter_id": "8350fe1d-fd9b-41d8-bb3a-f075a5e94df5",
+        "sources": [
+            '["308004272"]', '["1536003777"]', '["615005571"]', '["308003603"]',
+            '["922003735"]', '["1843001674"]', '["922002510"]', '["1843000628"]',
+            '["307500561"]', '["921500725"]', '["921041344"]', '["307040304"]',
+            '["39739"]', '["614046174"]', '["1842044041"]', '["307039298"]',
+            '["1842043463"]', '["1228044436"]', '["614044869"]', '["921041902"]',
+            '["1535037303"]', '["1228042142"]', '["1535038664"]',
+            '["-1","842243695641184"]',
+        ],
+    },
+    {
+        "key": "PHUONG_NAM",
+        "label": "PHƯƠNG NAM",
+        "filter_id": "78a874c7-0601-4416-a377-481dce360b87",
+        "sources": [
+            '["1008799"]', '["1536008673"]', '["1229011407"]',
+        ],
+    },
+    {
+        "key": "WEBSITE",
+        "label": "Website",
+        "filter_id": None,  # sub-nhóm của Website saved filter, fetch bằng raw source ID
+        "sources": ['["921043352"]'],
+    },
+    {
+        "key": "ZALO_OA",
+        "label": "Zalo OA",
+        "filter_id": None,
+        "sources": ['["37931"]'],
+    },
+    {
+        "key": "HOTLINE",
+        "label": "Hotline",
+        "filter_id": None,
+        "sources": ['["614042808"]'],
+    },
 ]
 
 # Pancake status codes
@@ -71,11 +111,10 @@ PRODUCT_MAPPING = {
 PRODUCT_LIST = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
 
 
-def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, max_retries=4):
-    """Fetch 1 page đơn từ Pancake với explicit order_sources[] filter."""
+def fetch_orders(group, page=1, page_size=100, start_date=None, end_date=None, max_retries=4):
+    """Fetch 1 page đơn từ Pancake cho 1 source group."""
     params = [
         ("api_key", API_KEY),
-        ("saved_filters_id", DUY_SAVED_FILTER_ID),
         ("page", page),
         ("page_size", page_size),
         ("status", -1),
@@ -84,11 +123,13 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, max_retr
         ("es_only", "true"),
         ("is_filter_multiple_source", "true"),
     ]
+    if group.get("filter_id"):
+        params.append(("saved_filters_id", group["filter_id"]))
     if start_date:
         params.append(("startDateTime", int(start_date.timestamp())))
     if end_date:
         params.append(("endDateTime", int(end_date.timestamp())))
-    for s in DUY_SOURCES:
+    for s in group.get("sources", []):
         params.append(("order_sources[]", s))
 
     url = f"{BASE_URL}/shops/{SHOP_ID}/orders/get_orders?{urlencode(params)}"
@@ -101,18 +142,49 @@ def fetch_orders(page=1, page_size=100, start_date=None, end_date=None, max_retr
                 return json.loads(raw)
         except urllib.error.HTTPError as e:
             body = e.read().decode("utf-8", errors="ignore")[:200]
-            print(f"[WARN] HTTP {e.code} page={page} attempt={attempt}: {body}", file=sys.stderr)
+            print(f"[WARN] group={group['key']} HTTP {e.code} page={page} attempt={attempt}: {body}", file=sys.stderr)
             if e.code in (429, 500, 502, 503, 504) and attempt < max_retries:
                 time.sleep(2 ** attempt)
                 continue
             return None
         except Exception as e:
-            print(f"[WARN] {type(e).__name__} page={page} attempt={attempt}: {e}", file=sys.stderr)
+            print(f"[WARN] group={group['key']} {type(e).__name__} page={page} attempt={attempt}: {e}", file=sys.stderr)
             if attempt < max_retries:
                 time.sleep(2 ** attempt)
                 continue
             return None
     return None
+
+
+def fetch_all_orders_for_group(group, start_dt, end_dt):
+    """Fetch tất cả orders của 1 source group trong date range."""
+    all_orders = []
+    page = 1
+    consecutive_fails = 0
+    while True:
+        data = fetch_orders(group, page=page, page_size=100, start_date=start_dt, end_date=end_dt)
+        if data is None:
+            consecutive_fails += 1
+            if consecutive_fails >= 3:
+                print(f"[WARN] group={group['key']}: 3 pages fail liên tiếp, dừng fetch", file=sys.stderr)
+                break
+            page += 1
+            time.sleep(3)
+            continue
+        consecutive_fails = 0
+        batch = data.get("data") or data.get("orders") or []
+        if not batch:
+            break
+        all_orders.extend(batch)
+        print(f"[INFO] group={group['key']} page {page}: {len(batch)} đơn (tổng {len(all_orders)})")
+        if len(batch) < 100:
+            break
+        page += 1
+        time.sleep(0.3)
+        if page > 200:
+            print(f"[WARN] group={group['key']}: Hit 200-page safety cap", file=sys.stderr)
+            break
+    return all_orders
 
 
 def extract_items(order):
@@ -220,62 +292,70 @@ def main():
     start_dt = end_dt - timedelta(days=LOOKBACK_DAYS)
 
     print(f"[INFO] Fetching Pancake orders {start_dt.date()} → {end_dt.date()} ({LOOKBACK_DAYS}d)")
+    print(f"[INFO] Source groups: {[g['label'] for g in SOURCE_GROUPS]}\n")
 
-    all_orders = []
-    page = 1
-    consecutive_fails = 0
-    while True:
-        data = fetch_orders(page=page, page_size=100, start_date=start_dt, end_date=end_dt)
-        if data is None:
-            consecutive_fails += 1
-            if consecutive_fails >= 3:
-                print("[WARN] 3 pages fail liên tiếp, dừng fetch", file=sys.stderr)
-                break
-            page += 1
-            time.sleep(3)
-            continue
-        consecutive_fails = 0
-        batch = data.get("data") or data.get("orders") or []
-        if not batch:
-            break
-        all_orders.extend(batch)
-        print(f"[INFO] Page {page}: {len(batch)} đơn (tổng {len(all_orders)})")
-        if len(batch) < 100:
-            break
-        page += 1
-        time.sleep(0.3)
-        if page > 200:
-            print("[WARN] Hit 200-page safety cap", file=sys.stderr)
-            break
+    # Per-group aggregates
+    per_group = {}
+    grand_total_orders = 0
+    all_orders_combined = []
 
-    print(f"[INFO] Fetched {len(all_orders)} đơn (trong {LOOKBACK_DAYS} ngày)")
+    for group in SOURCE_GROUPS:
+        key = group["key"]
+        label = group["label"]
+        print(f"─── [{label}] ───────────────────────────────────")
+        orders = fetch_all_orders_for_group(group, start_dt, end_dt)
+        print(f"[INFO] group={key}: fetched {len(orders)} đơn")
 
-    # Debug: phân bố status
-    status_counter = Counter(o.get("status") for o in all_orders)
-    print(f"[DEBUG] Status distribution: {dict(status_counter.most_common())}")
+        status_counter = Counter(o.get("status") for o in orders)
+        print(f"[DEBUG] {key} status: {dict(status_counter.most_common())}")
 
-    buckets, summary, total_orders = aggregate(all_orders)
+        buckets, summary, group_total = aggregate(orders)
+        products_all = merge_buckets(*buckets.values())
 
-    print(f"\n[RESULT] Tổng {total_orders} đơn trong {LOOKBACK_DAYS} ngày")
-    for k in ("delivered", "returning", "returned", "canceled", "other"):
-        s = summary[k]
-        print(f"  {k:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
+        print(f"[RESULT] {label}: {group_total} đơn")
+        for st in ("delivered", "returning", "returned", "canceled", "other"):
+            s = summary[st]
+            print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
+        print(f"  Doanh thu / sản phẩm ({label}):")
+        for p in PRODUCT_LIST:
+            d = products_all[p]
+            print(f"    {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
+        print()
 
-    # Doanh thu chính = TẤT CẢ đơn đã tạo (bao gồm mọi status)
-    products_all = merge_buckets(*buckets.values())
+        per_group[key] = {
+            "label": label,
+            "total_orders": group_total,
+            "summary": summary,
+            "products": products_all,
+            "products_by_status": buckets,
+        }
+        grand_total_orders += group_total
+        all_orders_combined.extend(orders)
 
-    print(f"\n[RESULT] Doanh thu theo sản phẩm (tất cả đơn đã tạo):")
+    # ── Aggregate tổng hợp (all 5 groups combined) — giữ backward-compat với dashboard cũ ──
+    print("─── [TỔNG HỢP 5 NHÓM] ───────────────────────────")
+    total_buckets, total_summary, total_count = aggregate(all_orders_combined)
+    total_products = merge_buckets(*total_buckets.values())
+    print(f"[RESULT] Tổng 5 nhóm: {total_count} đơn")
+    for st in ("delivered", "returning", "returned", "canceled", "other"):
+        s = total_summary[st]
+        print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
+    print("  Doanh thu / sản phẩm (tổng):")
     for p in PRODUCT_LIST:
-        d = products_all[p]
-        print(f"  {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
+        d = total_products[p]
+        print(f"    {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
 
     output = {
         "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),
         "window_days": LOOKBACK_DAYS,
-        "total_orders": total_orders,
-        "summary": summary,
-        "products": products_all,           # Doanh thu chính = tất cả đơn đã tạo
-        "products_by_status": buckets,      # Chi tiết: delivered/returning/returned/canceled/other
+        "total_orders": total_count,
+        # Giữ format cũ cho các chỗ dashboard đang dùng (`summary`, `products`, `products_by_status`)
+        "summary": total_summary,
+        "products": total_products,
+        "products_by_status": total_buckets,
+        # MỚI: per-source breakdown
+        "source_groups_order": [g["key"] for g in SOURCE_GROUPS],
+        "source_groups": per_group,
     }
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")

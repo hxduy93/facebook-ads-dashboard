@@ -900,6 +900,9 @@ function FacebookAdsDashboard() {
         {/* REVENUE BREAKDOWN BY STATUS */}
         <RevenueStatusBreakdown revenueByStatus={revenueByStatus} dateRange={dateRange} />
 
+        {/* REVENUE BREAKDOWN BY SOURCE GROUP (5 nguồn: DUY / PHƯƠNG NAM / Website / Zalo OA / Hotline) */}
+        <RevenueBySourceBreakdown dateRange={dateRange} />
+
         {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
@@ -3120,6 +3123,163 @@ function RadarResultPanel({ data }) {
     </div>
   )
 }
+// =============================================================
+// SUB-COMPONENT: Revenue breakdown theo 5 source group
+// (DUY · PHƯƠNG NAM · Website · Zalo OA · Hotline)
+// =============================================================
+function RevenueBySourceBreakdown({ dateRange }) {
+  const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
+  const groupsOrder = revenue.source_groups_order || []
+  const groups = revenue.source_groups || {}
+
+  if (!groupsOrder.length || !Object.keys(groups).length) {
+    return null
+  }
+
+  // Product list (match PRODUCT_LIST trong fetch script)
+  const PRODUCTS = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+
+  // Brand color cho từng group
+  const GROUP_COLOR = {
+    "DUY":        { bg: "bg-blue-50",   border: "border-blue-300",   text: "text-blue-700",   bar: "bg-blue-500"   },
+    "PHUONG_NAM": { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", bar: "bg-purple-500" },
+    "WEBSITE":    { bg: "bg-emerald-50",border: "border-emerald-300",text: "text-emerald-700",bar: "bg-emerald-500"},
+    "ZALO_OA":    { bg: "bg-amber-50",  border: "border-amber-300",  text: "text-amber-700",  bar: "bg-amber-500"  },
+    "HOTLINE":    { bg: "bg-red-50",    border: "border-red-300",    text: "text-red-700",    bar: "bg-red-500"    },
+  }
+
+  // Helper: filter by_date theo dateRange
+  const isInRange = (ymd) => {
+    if (!dateRange?.start || !dateRange?.end) return true
+    return ymd >= dateRange.start && ymd <= dateRange.end
+  }
+
+  // Tính revenue + orders mỗi group trong range, kèm breakdown theo product
+  const rows = groupsOrder.map(key => {
+    const g = groups[key]
+    if (!g) return null
+    const prodTotals = {}
+    let totalRev = 0
+    let totalOrders = 0
+
+    PRODUCTS.forEach(p => {
+      const pData = g.products?.[p] || { by_date: {}, orders: 0 }
+      let sum = 0
+      Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+        if (isInRange(d)) sum += v
+      })
+      prodTotals[p] = sum
+      totalRev += sum
+      totalOrders += pData.orders || 0
+    })
+
+    return {
+      key,
+      label: g.label || key,
+      totalRev,
+      totalOrders: g.total_orders || totalOrders,
+      prodTotals,
+      color: GROUP_COLOR[key] || GROUP_COLOR["DUY"],
+    }
+  }).filter(Boolean)
+
+  // Grand total (sum 5 groups) để tính % share
+  const grandRev = rows.reduce((s, r) => s + r.totalRev, 0)
+  // Product totals (across all groups) for column bar scale
+  const productMax = {}
+  PRODUCTS.forEach(p => {
+    productMax[p] = Math.max(1, ...rows.map(r => r.prodTotals[p] || 0))
+  })
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-lg font-bold text-red-700 tracking-tight">💰 Doanh thu theo nguồn — 5 kênh bán hàng</h2>
+          <p className="text-xs text-gray-500 mt-1">Pancake POS · tách theo DUY, PHƯƠNG NAM, Website, Zalo OA, Hotline</p>
+        </div>
+        <div className="text-right">
+          <div className="text-xs text-gray-500">Tổng 5 nguồn</div>
+          <div className="text-xl font-extrabold text-gray-900">{fmtVND(grandRev)}₫</div>
+        </div>
+      </div>
+
+      {/* Card hàng ngang: 1 card / group */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5">
+        {rows.map(r => {
+          const pct = grandRev > 0 ? (r.totalRev / grandRev * 100) : 0
+          return (
+            <div key={r.key} className={`rounded-lg border ${r.color.border} ${r.color.bg} p-3`}>
+              <div className={`text-xs font-bold uppercase tracking-wide ${r.color.text} mb-1`}>{r.label}</div>
+              <div className="text-xl font-extrabold text-gray-900 leading-tight">{fmtVND(r.totalRev)}₫</div>
+              <div className="text-[11px] text-gray-600 mt-1">{r.totalOrders.toLocaleString("vi-VN")} đơn · {pct.toFixed(1)}% tổng</div>
+              {/* Share bar */}
+              <div className="mt-2 h-1.5 bg-white/60 rounded-full overflow-hidden">
+                <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Bảng chi tiết: row = product, col = group */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              <th className="py-2 px-3 text-left font-semibold text-gray-700">Sản phẩm</th>
+              {rows.map(r => (
+                <th key={r.key} className={`py-2 px-3 text-right font-bold ${r.color.text}`}>{r.label}</th>
+              ))}
+              <th className="py-2 px-3 text-right font-semibold text-gray-900 border-l border-gray-200">Tổng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PRODUCTS.map(p => {
+              const rowTotal = rows.reduce((s, r) => s + (r.prodTotals[p] || 0), 0)
+              if (rowTotal === 0) return null
+              return (
+                <tr key={p} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-2 px-3 font-medium text-gray-800">{p}</td>
+                  {rows.map(r => {
+                    const v = r.prodTotals[p] || 0
+                    const pct = productMax[p] > 0 ? (v / productMax[p]) * 100 : 0
+                    return (
+                      <td key={r.key} className="py-2 px-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <div className="text-gray-700">{v > 0 ? fmtVND(v) : "—"}</div>
+                          {v > 0 && (
+                            <div className="w-12 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    )
+                  })}
+                  <td className="py-2 px-3 text-right font-bold text-gray-900 border-l border-gray-200">{fmtVND(rowTotal)}</td>
+                </tr>
+              )
+            })}
+            {/* Tổng cột cuối */}
+            <tr className="bg-gray-50 border-t-2 border-gray-300">
+              <td className="py-2 px-3 font-bold text-gray-900">Tổng nguồn</td>
+              {rows.map(r => (
+                <td key={r.key} className={`py-2 px-3 text-right font-bold ${r.color.text}`}>{fmtVND(r.totalRev)}</td>
+              ))}
+              <td className="py-2 px-3 text-right font-extrabold text-gray-900 border-l border-gray-200">{fmtVND(grandRev)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p className="text-[11px] text-gray-500 mt-3">
+        * Doanh thu = tất cả đơn đã tạo trong khoảng thời gian đã chọn (bao gồm mọi trạng thái — giao / đang hoàn / đã hoàn / hủy / xử lý).
+      </p>
+    </div>
+  )
+}
+
 // =============================================================
 // SUB-COMPONENT: Revenue breakdown theo status (đã giao / đang hoàn / đã hoàn / ...)
 // =============================================================
