@@ -784,7 +784,7 @@ function FacebookAdsDashboard() {
                 selectedAccount === "all" ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-100"
               }`}
             >
-              Tất cả 4 tài khoản
+              Tất cả {accounts.length} tài khoản
             </button>
             {accounts.map(a => (
               <button
@@ -866,45 +866,22 @@ function FacebookAdsDashboard() {
           />
         </div>
 
-        {/* COMPARISON 7d vs 7d */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <CompareCard
-            title="So sánh chi tiêu — 7 ngày gần nhất vs 7 ngày trước đó"
-            current={weekComp.last.spend}
-            previous={weekComp.prev.spend}
-            isMoneyMetric={true}
-            inverseGood={false}
-          />
-          <CompareCard
-            title="So sánh đăng ký hoàn tất — 7 ngày gần nhất vs 7 ngày trước đó"
-            current={weekComp.last.registrations}
-            previous={weekComp.prev.registrations}
-            isMoneyMetric={false}
-            inverseGood={false}
-          />
-        </div>
+        {/* ═══════════════════════════════════════════════════════════════
+             PANCAKE REVENUE BLOCKS — theo thứ tự yêu cầu:
+             1. Doanh thu theo nhân sự (3 nhóm) — tổng hợp
+             2. Doanh thu theo nguồn (5 kênh) — có filter theo nhân sự
+             3. Doanh thu theo trạng thái (delivered / returning / canceled …)
+             Tất cả đều reactive theo `dateRange`.
+           ═══════════════════════════════════════════════════════════════ */}
 
-        {/* PER-PRODUCT DAILY TABLES */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Package className="w-5 h-5 text-blue-600" />
-            Chi tiêu & đăng ký theo ngày — từng sản phẩm
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {productsData.map(p => (
-              <ProductDailyTable key={p.name} product={p} />
-            ))}
-          </div>
-        </div>
-
-        {/* REVENUE BREAKDOWN BY STATUS */}
-        <RevenueStatusBreakdown revenueByStatus={revenueByStatus} dateRange={dateRange} />
-
-        {/* REVENUE BREAKDOWN BY STAFF (3 nhân sự: Duy / Phương Nam / Website) */}
+        {/* 1. REVENUE BREAKDOWN BY STAFF (Duy / Phương Nam / WEBSITE) */}
         <RevenueByStaffBreakdown dateRange={dateRange} />
 
-        {/* REVENUE BREAKDOWN BY SOURCE GROUP (5 nguồn: DUY / PHƯƠNG NAM / Website / Zalo OA / Hotline) */}
+        {/* 2. REVENUE BREAKDOWN BY SOURCE GROUP — có filter theo nhân sự */}
         <RevenueBySourceBreakdown dateRange={dateRange} />
+
+        {/* 3. REVENUE BREAKDOWN BY STATUS */}
+        <RevenueStatusBreakdown revenueByStatus={revenueByStatus} dateRange={dateRange} />
 
         {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
@@ -3175,25 +3152,61 @@ function RevenueByStaffBreakdown({ dateRange }) {
   }
 
   // Tính revenue/orders cho 1 source group (DUY / PHUONG_NAM / WEBSITE / ZALO_OA / HOTLINE)
+  // Trả về:
+  //   totalRev       — doanh thu nhóm filter theo dateRange
+  //   totalOrders    — số đơn nhóm filter theo dateRange (từ total_orders_by_date)
+  //   prodTotals     — {product: doanh thu filter}
+  //   prodOrders     — {product: số đơn có sản phẩm đó, filter}
+  //   fallbackOrders — true khi JSON chưa có orders_by_date → dùng tổng 90d approx
   const computeSourceTotals = (srcKey) => {
     const g = groups[srcKey]
-    if (!g) return { totalRev: 0, totalOrders: 0, prodTotals: {}, hasData: false }
+    if (!g) return { totalRev: 0, totalOrders: 0, prodTotals: {}, prodOrders: {}, hasData: false }
     const prodTotals = {}
+    const prodOrders = {}
     let totalRev = 0
+
+    // Check 1 lần xem JSON đã có orders_by_date chưa — quyết định fallback
+    const hasOrdersByDate = !!g.total_orders_by_date
+
     PRODUCTS.forEach(p => {
-      const pData = g.products?.[p] || { by_date: {}, orders: 0 }
+      const pData = g.products?.[p] || {}
       let sum = 0
       Object.entries(pData.by_date || {}).forEach(([d, v]) => {
         if (isInRange(d)) sum += v
       })
       prodTotals[p] = sum
       totalRev += sum
+
+      // Số đơn có sản phẩm p
+      if (pData.orders_by_date) {
+        let ord = 0
+        Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+          if (isInRange(d)) ord += c
+        })
+        prodOrders[p] = ord
+      } else {
+        // Fallback: JSON snapshot cũ, dùng tổng 90d (không filter được)
+        prodOrders[p] = pData.orders || 0
+      }
     })
+
+    // Tổng đơn nhóm (khác sum(prodOrders) vì 1 đơn có thể có nhiều sản phẩm)
+    let totalOrders = 0
+    if (hasOrdersByDate) {
+      Object.entries(g.total_orders_by_date).forEach(([d, c]) => {
+        if (isInRange(d)) totalOrders += c
+      })
+    } else {
+      totalOrders = g.total_orders || 0
+    }
+
     return {
       totalRev,
-      totalOrders: g.total_orders || 0,
+      totalOrders,
       prodTotals,
+      prodOrders,
       hasData: true,
+      fallbackOrders: !hasOrdersByDate,
     }
   }
 
@@ -3207,14 +3220,18 @@ function RevenueByStaffBreakdown({ dateRange }) {
     const totalRev = subTotals.reduce((s, x) => s + x.totalRev, 0)
     const totalOrders = subTotals.reduce((s, x) => s + x.totalOrders, 0)
     const prodTotals = {}
+    const prodOrders = {}
     PRODUCTS.forEach(p => {
       prodTotals[p] = subTotals.reduce((s, x) => s + (x.prodTotals[p] || 0), 0)
+      prodOrders[p] = subTotals.reduce((s, x) => s + (x.prodOrders?.[p] || 0), 0)
     })
-    return { ...st, totalRev, totalOrders, prodTotals, subTotals }
+    const fallbackOrders = subTotals.some(x => x.fallbackOrders)
+    return { ...st, totalRev, totalOrders, prodTotals, prodOrders, subTotals, fallbackOrders }
   })
 
   const grandRev = staffRows.reduce((s, r) => s + r.totalRev, 0)
   const grandOrders = staffRows.reduce((s, r) => s + r.totalOrders, 0)
+  const anyFallback = staffRows.some(r => r.fallbackOrders)
 
   // Max per product column (để scale mini bar)
   const productMax = {}
@@ -3271,13 +3288,13 @@ function RevenueByStaffBreakdown({ dateRange }) {
         })}
       </div>
 
-      {/* Bảng chi tiết: row = nhân sự (+ sub nếu Website), col = 6 products + tổng */}
+      {/* Bảng chi tiết: row = nhân sự (+ sub nếu WEBSITE), col = 6 products + tổng.
+          Mỗi cell product hiện "N đơn · Y₫" — đều filter theo dateRange. */}
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
             <tr className="bg-gray-50 border-b-2 border-gray-200">
               <th className="py-2 px-3 text-left font-semibold text-gray-700">Nhân sự / Nguồn</th>
-              <th className="py-2 px-3 text-right font-semibold text-gray-700">Đơn</th>
               {PRODUCTS.map(p => (
                 <th key={p} className="py-2 px-3 text-right font-semibold text-gray-700">{p}</th>
               ))}
@@ -3289,21 +3306,25 @@ function RevenueByStaffBreakdown({ dateRange }) {
               <React.Fragment key={r.key}>
                 {/* Row tổng của staff */}
                 <tr className={`border-b border-gray-200 ${r.color.bg}`}>
-                  <td className={`py-2.5 px-3 font-bold ${r.color.text}`}>{r.label}</td>
-                  <td className="py-2.5 px-3 text-right font-semibold text-gray-800">{r.totalOrders.toLocaleString("vi-VN")}</td>
+                  <td className={`py-2.5 px-3 font-bold ${r.color.text}`}>
+                    {r.label}
+                    <span className="ml-2 text-[10px] font-normal text-gray-500">({r.totalOrders.toLocaleString("vi-VN")} đơn)</span>
+                  </td>
                   {PRODUCTS.map(p => {
                     const v = r.prodTotals[p] || 0
+                    const ord = r.prodOrders[p] || 0
                     const pct = productMax[p] > 0 ? (v / productMax[p]) * 100 : 0
                     return (
                       <td key={p} className="py-2.5 px-3 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <span className="font-semibold text-gray-800">{v > 0 ? fmtVND(v) : "—"}</span>
-                          {v > 0 && (
-                            <div className="w-10 h-1.5 bg-white/60 rounded-full overflow-hidden">
+                        {v > 0 ? (
+                          <div className="flex flex-col items-end gap-0.5">
+                            <span className="font-semibold text-gray-800">{fmtVND(v)}</span>
+                            <span className="text-[10px] text-gray-500">{ord.toLocaleString("vi-VN")} đơn</span>
+                            <div className="w-10 h-1 bg-white/60 rounded-full overflow-hidden">
                               <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        ) : <span className="text-gray-300">—</span>}
                       </td>
                     )
                   })}
@@ -3315,13 +3336,19 @@ function RevenueByStaffBreakdown({ dateRange }) {
                     <td className="py-2 px-3 pl-8 text-gray-600">
                       <span className="text-gray-400 mr-1">{idx === r.subTotals.length - 1 ? "└─" : "├─"}</span>
                       {s.label}
+                      <span className="ml-2 text-[10px] font-normal text-gray-400">({s.totalOrders.toLocaleString("vi-VN")} đơn)</span>
                     </td>
-                    <td className="py-2 px-3 text-right text-gray-600">{s.totalOrders.toLocaleString("vi-VN")}</td>
                     {PRODUCTS.map(p => {
                       const v = s.prodTotals[p] || 0
+                      const ord = s.prodOrders?.[p] || 0
                       return (
                         <td key={p} className="py-2 px-3 text-right text-gray-600">
-                          {v > 0 ? fmtVND(v) : "—"}
+                          {v > 0 ? (
+                            <div className="flex flex-col items-end">
+                              <span>{fmtVND(v)}</span>
+                              <span className="text-[10px] text-gray-400">{ord.toLocaleString("vi-VN")} đơn</span>
+                            </div>
+                          ) : <span className="text-gray-300">—</span>}
                         </td>
                       )
                     })}
@@ -3332,12 +3359,22 @@ function RevenueByStaffBreakdown({ dateRange }) {
             ))}
             {/* Row tổng cuối */}
             <tr className="bg-gray-100 border-t-2 border-gray-300">
-              <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG 3 NHÂN SỰ</td>
-              <td className="py-3 px-3 text-right font-extrabold text-gray-900">{grandOrders.toLocaleString("vi-VN")}</td>
+              <td className="py-3 px-3 font-extrabold text-gray-900">
+                TỔNG 3 NHÂN SỰ
+                <span className="ml-2 text-[10px] font-normal text-gray-600">({grandOrders.toLocaleString("vi-VN")} đơn)</span>
+              </td>
               {PRODUCTS.map(p => {
                 const v = staffRows.reduce((s, r) => s + (r.prodTotals[p] || 0), 0)
+                const ord = staffRows.reduce((s, r) => s + (r.prodOrders[p] || 0), 0)
                 return (
-                  <td key={p} className="py-3 px-3 text-right font-bold text-gray-900">{v > 0 ? fmtVND(v) : "—"}</td>
+                  <td key={p} className="py-3 px-3 text-right font-bold text-gray-900">
+                    {v > 0 ? (
+                      <div className="flex flex-col items-end">
+                        <span>{fmtVND(v)}</span>
+                        <span className="text-[10px] font-normal text-gray-500">{ord.toLocaleString("vi-VN")} đơn</span>
+                      </div>
+                    ) : <span className="text-gray-300">—</span>}
+                  </td>
                 )
               })}
               <td className="py-3 px-3 text-right font-extrabold text-red-700 border-l border-gray-300 text-sm">{fmtVND(grandRev)}</td>
@@ -3347,7 +3384,12 @@ function RevenueByStaffBreakdown({ dateRange }) {
       </div>
 
       <p className="text-[11px] text-gray-500 mt-3">
-        * Doanh thu = tất cả đơn đã tạo trong khoảng thời gian đã chọn. Click dropdown ngày phía trên để đổi range.
+        * Doanh thu + số đơn đều tính theo khoảng thời gian anh chọn ở bộ lọc phía trên.
+        {anyFallback && (
+          <span className="block text-amber-600 mt-1">
+            ⚠ Số đơn đang hiển thị tổng 90 ngày (snapshot cũ chưa có orders_by_date) — sẽ tự cập nhật sau khi workflow Pancake chạy lần kế.
+          </span>
+        )}
       </p>
     </div>
   )
@@ -3356,11 +3398,19 @@ function RevenueByStaffBreakdown({ dateRange }) {
 // =============================================================
 // SUB-COMPONENT: Revenue breakdown theo 5 source group
 // (DUY · PHƯƠNG NAM · Website · Zalo OA · Hotline)
+// + Filter theo NHÂN SỰ: Tất cả / Duy / Phương Nam / WEBSITE
+//   - Tất cả         → show 5 nguồn
+//   - Duy            → chỉ show nguồn DUY
+//   - Phương Nam     → chỉ show nguồn PHUONG_NAM
+//   - WEBSITE        → show Website + Zalo OA + Hotline (3 nguồn con)
 // =============================================================
 function RevenueBySourceBreakdown({ dateRange }) {
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
   const groupsOrder = revenue.source_groups_order || []
   const groups = revenue.source_groups || {}
+
+  // State filter nhân sự: ALL / DUY / PHUONG_NAM / WEBSITE_STAFF
+  const [staffFilter, setStaffFilter] = React.useState("ALL")
 
   if (!groupsOrder.length || !Object.keys(groups).length) {
     return null
@@ -3368,6 +3418,15 @@ function RevenueBySourceBreakdown({ dateRange }) {
 
   // Product list (match PRODUCT_LIST trong fetch script)
   const PRODUCTS = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+
+  // Mapping staff → source group keys để lọc
+  const STAFF_FILTER_MAP = {
+    ALL:           { label: "Tất cả",     sourceKeys: groupsOrder },
+    DUY:           { label: "Duy",        sourceKeys: ["DUY"] },
+    PHUONG_NAM:    { label: "Phương Nam", sourceKeys: ["PHUONG_NAM"] },
+    WEBSITE_STAFF: { label: "WEBSITE",    sourceKeys: ["WEBSITE", "ZALO_OA", "HOTLINE"] },
+  }
+  const STAFF_FILTER_ORDER = ["ALL", "DUY", "PHUONG_NAM", "WEBSITE_STAFF"]
 
   // Brand color cho từng group
   const GROUP_COLOR = {
@@ -3384,66 +3443,122 @@ function RevenueBySourceBreakdown({ dateRange }) {
     return ymd >= dateRange.start && ymd <= dateRange.end
   }
 
+  // Danh sách nguồn được show dựa theo staffFilter
+  const activeSourceKeys = STAFF_FILTER_MAP[staffFilter].sourceKeys
+
   // Tính revenue + orders mỗi group trong range, kèm breakdown theo product
-  const rows = groupsOrder.map(key => {
+  const rows = activeSourceKeys.map(key => {
     const g = groups[key]
     if (!g) return null
     const prodTotals = {}
+    const prodOrders = {}
     let totalRev = 0
-    let totalOrders = 0
+    const hasOrdersByDate = !!g.total_orders_by_date
 
     PRODUCTS.forEach(p => {
-      const pData = g.products?.[p] || { by_date: {}, orders: 0 }
+      const pData = g.products?.[p] || {}
       let sum = 0
       Object.entries(pData.by_date || {}).forEach(([d, v]) => {
         if (isInRange(d)) sum += v
       })
       prodTotals[p] = sum
       totalRev += sum
-      totalOrders += pData.orders || 0
+
+      if (pData.orders_by_date) {
+        let ord = 0
+        Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+          if (isInRange(d)) ord += c
+        })
+        prodOrders[p] = ord
+      } else {
+        prodOrders[p] = pData.orders || 0
+      }
     })
+
+    // Tổng đơn nhóm (filter theo dateRange nếu có total_orders_by_date)
+    let totalOrders = 0
+    if (hasOrdersByDate) {
+      Object.entries(g.total_orders_by_date).forEach(([d, c]) => {
+        if (isInRange(d)) totalOrders += c
+      })
+    } else {
+      totalOrders = g.total_orders || 0
+    }
 
     return {
       key,
       label: g.label || key,
       totalRev,
-      totalOrders: g.total_orders || totalOrders,
+      totalOrders,
       prodTotals,
+      prodOrders,
       color: GROUP_COLOR[key] || GROUP_COLOR["DUY"],
+      fallbackOrders: !hasOrdersByDate,
     }
   }).filter(Boolean)
 
-  // Grand total (sum 5 groups) để tính % share
+  // Grand total (sum các group đang hiển thị) để tính % share
   const grandRev = rows.reduce((s, r) => s + r.totalRev, 0)
-  // Product totals (across all groups) for column bar scale
+  const grandOrders = rows.reduce((s, r) => s + r.totalOrders, 0)
+  const anyFallback = rows.some(r => r.fallbackOrders)
+  // Product totals (across all groups đang hiển thị) for column bar scale
   const productMax = {}
   PRODUCTS.forEach(p => {
     productMax[p] = Math.max(1, ...rows.map(r => r.prodTotals[p] || 0))
   })
 
+  // Grid column count tùy số nguồn đang hiển thị
+  const gridColsCls = rows.length >= 5 ? "md:grid-cols-5"
+                    : rows.length === 3 ? "md:grid-cols-3"
+                    : rows.length === 2 ? "md:grid-cols-2"
+                    : "md:grid-cols-1"
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <div>
           <h2 className="text-lg font-bold text-red-700 tracking-tight">💰 Doanh thu theo nguồn — 5 kênh bán hàng</h2>
-          <p className="text-xs text-gray-500 mt-1">Pancake POS · tách theo DUY, PHƯƠNG NAM, Website, Zalo OA, Hotline</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Pancake POS · lọc theo nhân sự: <span className="font-semibold text-gray-700">{STAFF_FILTER_MAP[staffFilter].label}</span>
+            {" · "}{rows.length} nguồn
+          </p>
         </div>
         <div className="text-right">
-          <div className="text-xs text-gray-500">Tổng 5 nguồn</div>
+          <div className="text-xs text-gray-500">Tổng</div>
           <div className="text-xl font-extrabold text-gray-900">{fmtVND(grandRev)}₫</div>
+          <div className="text-[11px] text-gray-500">{grandOrders.toLocaleString("vi-VN")} đơn</div>
         </div>
       </div>
 
-      {/* Card hàng ngang: 1 card / group */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5">
+      {/* Toggle filter theo NHÂN SỰ */}
+      <div className="mb-4">
+        <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide mb-2">Chọn nhân sự</p>
+        <div className="flex flex-wrap gap-2">
+          {STAFF_FILTER_ORDER.map(k => (
+            <button
+              key={k}
+              onClick={() => setStaffFilter(k)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
+                staffFilter === k
+                  ? "bg-red-600 text-white border-red-600 shadow-sm"
+                  : "bg-white text-gray-700 border-gray-200 hover:bg-red-50 hover:border-red-200"
+              }`}
+            >
+              {STAFF_FILTER_MAP[k].label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Card hàng ngang: 1 card / group đang hiển thị */}
+      <div className={`grid grid-cols-1 ${gridColsCls} gap-3 mb-5`}>
         {rows.map(r => {
           const pct = grandRev > 0 ? (r.totalRev / grandRev * 100) : 0
           return (
             <div key={r.key} className={`rounded-lg border ${r.color.border} ${r.color.bg} p-3`}>
               <div className={`text-xs font-bold uppercase tracking-wide ${r.color.text} mb-1`}>{r.label}</div>
               <div className="text-xl font-extrabold text-gray-900 leading-tight">{fmtVND(r.totalRev)}₫</div>
-              <div className="text-[11px] text-gray-600 mt-1">{r.totalOrders.toLocaleString("vi-VN")} đơn · {pct.toFixed(1)}% tổng</div>
-              {/* Share bar */}
+              <div className="text-[11px] text-gray-600 mt-1">{r.totalOrders.toLocaleString("vi-VN")} đơn · {pct.toFixed(1)}%</div>
               <div className="mt-2 h-1.5 bg-white/60 rounded-full overflow-hidden">
                 <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
               </div>
@@ -3452,7 +3567,7 @@ function RevenueBySourceBreakdown({ dateRange }) {
         })}
       </div>
 
-      {/* Bảng chi tiết: row = product, col = group */}
+      {/* Bảng chi tiết: row = product, col = group đang hiển thị. Cell: N đơn · Y₫ */}
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
@@ -3467,27 +3582,37 @@ function RevenueBySourceBreakdown({ dateRange }) {
           <tbody>
             {PRODUCTS.map(p => {
               const rowTotal = rows.reduce((s, r) => s + (r.prodTotals[p] || 0), 0)
-              if (rowTotal === 0) return null
+              const rowOrders = rows.reduce((s, r) => s + (r.prodOrders[p] || 0), 0)
+              if (rowTotal === 0 && rowOrders === 0) return null
               return (
                 <tr key={p} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-2 px-3 font-medium text-gray-800">{p}</td>
                   {rows.map(r => {
                     const v = r.prodTotals[p] || 0
+                    const ord = r.prodOrders[p] || 0
                     const pct = productMax[p] > 0 ? (v / productMax[p]) * 100 : 0
                     return (
                       <td key={r.key} className="py-2 px-3 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <div className="text-gray-700">{v > 0 ? fmtVND(v) : "—"}</div>
-                          {v > 0 && (
-                            <div className="w-12 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
-                            </div>
-                          )}
-                        </div>
+                        {v > 0 || ord > 0 ? (
+                          <div className="flex flex-col items-end gap-0.5">
+                            <span className="font-semibold text-gray-800">{v > 0 ? fmtVND(v) : "—"}</span>
+                            <span className="text-[10px] text-gray-500">{ord.toLocaleString("vi-VN")} đơn</span>
+                            {v > 0 && (
+                              <div className="w-10 h-1 bg-gray-100 rounded-full overflow-hidden">
+                                <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
+                              </div>
+                            )}
+                          </div>
+                        ) : <span className="text-gray-300">—</span>}
                       </td>
                     )
                   })}
-                  <td className="py-2 px-3 text-right font-bold text-gray-900 border-l border-gray-200">{fmtVND(rowTotal)}</td>
+                  <td className="py-2 px-3 text-right font-bold text-gray-900 border-l border-gray-200">
+                    <div className="flex flex-col items-end">
+                      <span>{fmtVND(rowTotal)}</span>
+                      <span className="text-[10px] font-normal text-gray-500">{rowOrders.toLocaleString("vi-VN")} đơn</span>
+                    </div>
+                  </td>
                 </tr>
               )
             })}
@@ -3495,16 +3620,31 @@ function RevenueBySourceBreakdown({ dateRange }) {
             <tr className="bg-gray-50 border-t-2 border-gray-300">
               <td className="py-2 px-3 font-bold text-gray-900">Tổng nguồn</td>
               {rows.map(r => (
-                <td key={r.key} className={`py-2 px-3 text-right font-bold ${r.color.text}`}>{fmtVND(r.totalRev)}</td>
+                <td key={r.key} className={`py-2 px-3 text-right font-bold ${r.color.text}`}>
+                  <div className="flex flex-col items-end">
+                    <span>{fmtVND(r.totalRev)}</span>
+                    <span className="text-[10px] font-normal text-gray-500">{r.totalOrders.toLocaleString("vi-VN")} đơn</span>
+                  </div>
+                </td>
               ))}
-              <td className="py-2 px-3 text-right font-extrabold text-gray-900 border-l border-gray-200">{fmtVND(grandRev)}</td>
+              <td className="py-2 px-3 text-right font-extrabold text-gray-900 border-l border-gray-200">
+                <div className="flex flex-col items-end">
+                  <span>{fmtVND(grandRev)}</span>
+                  <span className="text-[10px] font-normal text-gray-600">{grandOrders.toLocaleString("vi-VN")} đơn</span>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <p className="text-[11px] text-gray-500 mt-3">
-        * Doanh thu = tất cả đơn đã tạo trong khoảng thời gian đã chọn (bao gồm mọi trạng thái — giao / đang hoàn / đã hoàn / hủy / xử lý).
+        * Doanh thu + số đơn theo bộ lọc thời gian phía trên (mọi trạng thái — giao / đang hoàn / đã hoàn / hủy / xử lý).
+        {anyFallback && (
+          <span className="block text-amber-600 mt-1">
+            ⚠ Số đơn đang hiển thị tổng 90 ngày (snapshot cũ chưa có orders_by_date) — sẽ tự cập nhật sau khi workflow Pancake chạy lần kế.
+          </span>
+        )}
       </p>
     </div>
   )
