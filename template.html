@@ -10,12 +10,269 @@
 <script src="https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/recharts@2.12.7/umd/Recharts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.7/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   #boot-error { display:none; padding:20px; background:#fee; color:#900; font-family:monospace; white-space:pre-wrap; }
+
+  /* ═══════════════════════ LOADING SCREEN ═══════════════════════ */
+  #loading-overlay {
+    position: fixed; inset: 0; z-index: 99999; background: #000; color: #00d4ff;
+    font-family: 'Consolas', 'Courier New', monospace;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loading-overlay.hide { opacity: 0; visibility: hidden; }
+  #loading-overlay .three-wrap { position: absolute; inset: 0; z-index: 1; }
+  #loading-overlay .scanlines::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 50;
+    background:
+      radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.5px) 0 0 / 3px 3px,
+      repeating-linear-gradient(0deg, transparent 0, rgba(0,212,255,0.02) 1px, transparent 2px, transparent 4px);
+    mix-blend-mode: screen;
+  }
+  #loading-overlay .corner { position: absolute; z-index: 11; font-size: 11px; letter-spacing: 3px; opacity: 0.7; color: #00d4ff; }
+  #loading-overlay .corner.tl { top: 24px; left: 30px; }
+  #loading-overlay .corner.tr { top: 24px; right: 30px; text-align: right; }
+  #loading-overlay .corner.bl { bottom: 24px; left: 30px; }
+  #loading-overlay .corner.br { bottom: 24px; right: 30px; text-align: right; }
+  #loading-overlay .corner .dash { margin-top: 6px; opacity: 0.55; font-size: 10px; }
+
+  #loading-overlay .overlay-content {
+    position: absolute; inset: 0; z-index: 10; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    padding: 0 0 14vh 0;
+  }
+  #loading-overlay .center-text {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    z-index: 12; text-align: center; pointer-events: none;
+  }
+  #loading-overlay .center-text .prefix {
+    font-family: 'Orbitron', 'Arial Black', sans-serif;
+    font-size: 16px; letter-spacing: 10px; color: #ffffff; font-weight: 700;
+    text-transform: uppercase; opacity: 0.9; margin-bottom: 28px; min-height: 18px;
+  }
+  #loading-overlay .center-text .brand {
+    font-family: 'Orbitron', 'Arial Black', sans-serif;
+    font-size: 92px; letter-spacing: 12px; color: #ffffff; font-weight: 800;
+    text-transform: uppercase; line-height: 1; min-height: 92px; padding-left: 12px;
+  }
+  #loading-overlay .center-text .trailer {
+    font-family: 'Orbitron', 'Arial Black', sans-serif;
+    font-size: 15px; letter-spacing: 8px; color: rgba(255,255,255,0.9); font-weight: 600;
+    text-transform: uppercase; margin-top: 30px; min-height: 16px;
+  }
+  #loading-overlay .type-cursor {
+    display: inline-block; width: 0.55em; height: 0.9em; background: #ffffff;
+    vertical-align: -0.05em; margin-left: 4px; animation: blinkCur 0.7s steps(1) infinite;
+  }
+  @keyframes blinkCur { 50% { opacity: 0; } }
+
+  #loading-overlay .title {
+    font-size: 12px; letter-spacing: 10px; color: #00d4ff; opacity: 0.8;
+    margin-bottom: 22px; text-shadow: 0 0 8px #00d4ff;
+  }
+  #loading-overlay .bar-wrap { width: 72%; max-width: 980px; position: relative; }
+  #loading-overlay .ticks { display: flex; gap: 4px; margin-bottom: 6px; padding-left: 3px; }
+  #loading-overlay .ticks span { width: 52px; height: 3px; background: #00d4ff; box-shadow: 0 0 4px #00d4ff; }
+  #loading-overlay .bar-outline {
+    border: 1.5px solid #00d4ff; padding: 3px; height: 26px; position: relative;
+    box-shadow: 0 0 20px rgba(0,212,255,0.4), inset 0 0 6px rgba(0,212,255,0.1);
+  }
+  #loading-overlay .bar-fill {
+    height: 100%; background: #00d4ff; width: 0%; transition: width 0.15s linear;
+    box-shadow: 0 0 12px #00d4ff, inset 0 0 8px rgba(255,255,255,0.3);
+  }
+  #loading-overlay .pct {
+    position: absolute; right: -78px; top: 0; height: 26px; border: 1.5px solid #00d4ff; padding: 0 10px;
+    display: flex; align-items: center; font-weight: 700; font-size: 13px; color: #00d4ff;
+    letter-spacing: 1px; min-width: 66px; justify-content: center; box-shadow: 0 0 15px rgba(0,212,255,0.4);
+  }
 </style>
 </head>
 <body>
+
+<!-- ═══════════════ LOADING OVERLAY (runs before React) ═══════════════ -->
+<div id="loading-overlay" class="scanlines">
+  <div class="three-wrap" id="loading-three"></div>
+  <div class="corner tl">◈ DOSCOM HOLDINGS<div class="dash">OPERATIONS CENTER</div></div>
+  <div class="corner tr">GLOBAL NETWORK<div class="dash" id="loading-clock">--:--:--</div></div>
+  <div class="corner bl" id="loading-nodeCount">NODES ═ 0 / 3500</div>
+  <div class="corner br">LAT 21.01° · LON 105.85°<div class="dash">HANOI · VN</div></div>
+  <div class="center-text">
+    <div class="prefix" id="loading-prefix"></div>
+    <div class="brand" id="loading-brand"></div>
+    <div class="trailer" id="loading-trailer"></div>
+  </div>
+  <div class="overlay-content">
+    <div class="title">◆ CONNECTING TO GLOBAL NETWORK ◆</div>
+    <div class="bar-wrap">
+      <div class="ticks"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="bar-outline"><div class="bar-fill" id="loading-fill"></div></div>
+      <div class="pct" id="loading-pct">0%</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ LOADING SCREEN — runs immediately, before React ═══
+(function() {
+  if (typeof THREE === 'undefined') { document.getElementById('loading-overlay').style.display='none'; return; }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 4.2;
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  document.getElementById('loading-three').appendChild(renderer.domElement);
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Build globe dotted cloud
+  const RADIUS=1.3, TOTAL=3500, PHI=(1+Math.sqrt(5))/2;
+  function noise(x,y,z){
+    let n=0;
+    n+=Math.sin(x*2.8+1.3)*Math.cos(y*3.2-0.6);
+    n+=Math.sin(y*4.1+2.1)*Math.cos(z*2.9+1.7);
+    n+=Math.sin(z*3.5-0.8)*0.85;
+    n+=Math.cos(x*5.6)*Math.sin(z*4.2)*0.55;
+    n+=Math.sin(x*1.3)*Math.cos(y*1.1)*0.7;
+    return n;
+  }
+  const cloud=[], nodes=[];
+  for (let i=0;i<TOTAL;i++){
+    const y=1-(i/(TOTAL-1))*2, r=Math.sqrt(1-y*y), t=(2*Math.PI*i)/PHI;
+    const x=Math.cos(t)*r, z=Math.sin(t)*r;
+    if (noise(x,y,z)>0.1) {
+      const px=x*RADIUS, py=y*RADIUS, pz=z*RADIUS;
+      cloud.push(px,py,pz);
+      if (Math.random()<0.018) nodes.push(px,py,pz);
+    }
+  }
+  const keptDots = cloud.length/3;
+
+  const cloudGeom = new THREE.BufferGeometry();
+  cloudGeom.setAttribute('position', new THREE.Float32BufferAttribute(cloud,3));
+  const cloudPts = new THREE.Points(cloudGeom, new THREE.PointsMaterial({
+    color:0x00a8d8, size:0.017, transparent:true, opacity:0.75, sizeAttenuation:true,
+    depthWrite:false, blending:THREE.AdditiveBlending
+  }));
+  const nodeGeom = new THREE.BufferGeometry();
+  nodeGeom.setAttribute('position', new THREE.Float32BufferAttribute(nodes,3));
+  const nodePts = new THREE.Points(nodeGeom, new THREE.PointsMaterial({
+    color:0x9df9ff, size:0.08, transparent:true, opacity:1.0, sizeAttenuation:true,
+    depthWrite:false, blending:THREE.AdditiveBlending
+  }));
+  const innerSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS*0.94,32,32),
+    new THREE.MeshBasicMaterial({ color:0x001020, transparent:true, opacity:0.6, depthWrite:false })
+  );
+  const linesGroup = new THREE.Group();
+  function rebuildLines(){
+    while(linesGroup.children.length) linesGroup.remove(linesGroup.children[0]);
+    const nC = nodes.length/3;
+    for (let i=0;i<28;i++){
+      const a=Math.floor(Math.random()*nC), b=Math.floor(Math.random()*nC);
+      if (a===b) continue;
+      const pa=new THREE.Vector3(nodes[a*3],nodes[a*3+1],nodes[a*3+2]);
+      const pb=new THREE.Vector3(nodes[b*3],nodes[b*3+1],nodes[b*3+2]);
+      const d=pa.distanceTo(pb);
+      if (d>1.7 || d<0.3) continue;
+      linesGroup.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([pa,pb]),
+        new THREE.LineBasicMaterial({ color:0x00d4ff, transparent:true, opacity:0.25+Math.random()*0.45 })
+      ));
+    }
+  }
+  rebuildLines();
+  const linesInt = setInterval(rebuildLines, 900);
+
+  const outer = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS*1.06,24,16),
+    new THREE.MeshBasicMaterial({ color:0x003855, wireframe:true, transparent:true, opacity:0.12 })
+  );
+  const globe = new THREE.Group();
+  globe.add(innerSphere); globe.add(cloudPts); globe.add(nodePts); globe.add(linesGroup); globe.add(outer);
+  globe.rotation.x = 0.35;
+  scene.add(globe);
+
+  document.getElementById('loading-nodeCount').innerHTML = 'NODES ═ ' + keptDots.toLocaleString() + ' / ' + TOTAL.toLocaleString() + '<div class="dash">NETWORK ACTIVE</div>';
+  const clockInt = setInterval(() => {
+    document.getElementById('loading-clock').textContent = new Date().toTimeString().slice(0,8);
+  }, 500);
+
+  let rafId;
+  function animate(){
+    rafId = requestAnimationFrame(animate);
+    globe.rotation.y += 0.0028;
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  // ── Typing effect ──
+  function typeText(el, text, msPerChar, keepCursor, done){
+    let i=0;
+    el.innerHTML='<span class="type-cursor"></span>';
+    const iv=setInterval(()=>{
+      i++;
+      el.innerHTML=text.substring(0,i)+'<span class="type-cursor"></span>';
+      if (i>=text.length){
+        clearInterval(iv);
+        if (!keepCursor) el.innerHTML=text;
+        if (done) done();
+      }
+    }, msPerChar);
+  }
+
+  let dotsInt;
+  setTimeout(()=>{
+    typeText(document.getElementById('loading-prefix'), '> PROJECT', 50, false, ()=>{
+      setTimeout(()=>{
+        typeText(document.getElementById('loading-brand'), 'DOSCOM', 90, false, ()=>{
+          const t = document.getElementById('loading-trailer');
+          let n=0; t.innerHTML='LOADING';
+          dotsInt = setInterval(()=>{ n=(n+1)%4; t.textContent='LOADING'+'.'.repeat(n); }, 220);
+        });
+      }, 120);
+    });
+  }, 150);
+
+  // ── Progress bar — 3s total ──
+  let p=0;
+  const fill = document.getElementById('loading-fill');
+  const pct  = document.getElementById('loading-pct');
+  function tick(){
+    p += Math.random()*3 + 2;
+    if (p>100) p=100;
+    fill.style.width = p + '%';
+    pct.textContent = Math.floor(p) + '%';
+    if (p<100) setTimeout(tick, 65);
+    else setTimeout(fadeOut, 400);
+  }
+  setTimeout(tick, 200);
+
+  function fadeOut(){
+    const ov = document.getElementById('loading-overlay');
+    ov.classList.add('hide');
+    // Clean up after transition
+    setTimeout(()=>{
+      clearInterval(linesInt);
+      clearInterval(clockInt);
+      if (dotsInt) clearInterval(dotsInt);
+      cancelAnimationFrame(rafId);
+      renderer.dispose();
+      if (ov.parentNode) ov.parentNode.removeChild(ov);
+    }, 700);
+  }
+})();
+</script>
+
 <div id="root"></div>
 <pre id="boot-error"></pre>
 <script>
@@ -2414,33 +2671,33 @@ function RadarResultPanel({ data }) {
       {/* Weekly Changes (v5.1) */}
       {data.weekly_changes && (
         <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex items-center justify-between mb-3">
-            <h5 className="font-semibold text-gray-800 flex items-center gap-2">📊 Thay đổi tuần này</h5>
-            <span className="text-xs text-gray-500">
+          <div className="flex items-center justify-between mb-4">
+            <h5 className="text-lg font-extrabold text-red-700 flex items-center gap-2 tracking-tight">📊 Thay đổi tuần này</h5>
+            <span className="text-xs text-gray-500 font-medium">
               {data.weekly_changes.baseline_date ? new Date(data.weekly_changes.baseline_date).toLocaleDateString("vi-VN") : "?"} → {data.weekly_changes.current_date ? new Date(data.weekly_changes.current_date).toLocaleDateString("vi-VN") : "hôm nay"}
             </span>
           </div>
           {data.weekly_changes.summary && (
-            <div className="text-sm text-indigo-900 bg-white/60 rounded-lg p-3 mb-3 border border-indigo-200">{data.weekly_changes.summary}</div>
+            <div className="text-sm text-indigo-900 bg-white/60 rounded-lg p-3 mb-4 border-l-4 border-red-500 border border-indigo-200 leading-relaxed">{data.weekly_changes.summary}</div>
           )}
           {/* Top 3 changes */}
           {data.weekly_changes.top_3_changes && data.weekly_changes.top_3_changes.length > 0 && (
-            <div className="space-y-2 mb-3">
+            <div className="space-y-2 mb-4">
               {data.weekly_changes.top_3_changes.map((c, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">{i+1}</span>
-                  <span className="text-gray-800">{c}</span>
+                <div key={i} className="flex items-start gap-2 text-sm">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-red-600 text-white text-xs font-bold flex items-center justify-center mt-0.5 shadow">{i+1}</span>
+                  <span className="text-gray-800 leading-snug"><strong>{c}</strong></span>
                 </div>
               ))}
             </div>
           )}
           {/* Threat changes */}
           {data.weekly_changes.threat_changes && data.weekly_changes.threat_changes.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">🎯 Threat Score thay đổi</div>
+            <div className="mb-4">
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">🎯 Threat Score thay đổi</div>
               <div className="flex flex-wrap gap-2">
                 {data.weekly_changes.threat_changes.map((t, i) => (
-                  <div key={i} className={`px-2 py-1 rounded text-xs border ${t.delta > 0 ? "bg-red-50 border-red-200 text-red-700" : t.delta < 0 ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "bg-gray-50 border-gray-200 text-gray-600"}`}>
+                  <div key={i} className={`px-2.5 py-1 rounded text-xs border font-semibold ${t.delta > 0 ? "bg-red-50 border-red-300 text-red-700" : t.delta < 0 ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "bg-gray-50 border-gray-200 text-gray-600"}`}>
                     {t.competitor}: {t.old_score}→{t.new_score} ({t.delta > 0 ? "+" : ""}{t.delta})
                   </div>
                 ))}
@@ -2449,12 +2706,12 @@ function RadarResultPanel({ data }) {
           )}
           {/* Price changes */}
           {data.weekly_changes.price_changes && data.weekly_changes.price_changes.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">💰 Biến động giá</div>
+            <div className="mb-4">
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">💰 Biến động giá</div>
               <div className="space-y-1">
                 {data.weekly_changes.price_changes.map((p, i) => (
-                  <div key={i} className="text-xs text-gray-700 bg-white/60 rounded px-2 py-1">
-                    <strong>{p.competitor}</strong>: {p.change} {p.impact && <span className="text-amber-600">— {p.impact}</span>}
+                  <div key={i} className="text-sm text-gray-700 bg-white/60 rounded px-3 py-1.5">
+                    <strong className="text-gray-900">{p.competitor}</strong>: {p.change} {p.impact && <span className="text-red-600 font-semibold">— {p.impact}</span>}
                   </div>
                 ))}
               </div>
@@ -2462,12 +2719,12 @@ function RadarResultPanel({ data }) {
           )}
           {/* New content */}
           {data.weekly_changes.new_content && data.weekly_changes.new_content.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">📝 Content mới đối thủ</div>
+            <div className="mb-4">
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">📝 Content mới đối thủ</div>
               <div className="space-y-1">
                 {data.weekly_changes.new_content.map((nc, i) => (
-                  <div key={i} className="text-xs text-gray-700 bg-white/60 rounded px-2 py-1">
-                    <strong>{nc.competitor}</strong> ({nc.platform}): {nc.count} bài mới — {nc.description}
+                  <div key={i} className="text-sm text-gray-700 bg-white/60 rounded px-3 py-1.5">
+                    <strong className="text-gray-900">{nc.competitor}</strong> ({nc.platform}): <span className="font-semibold text-red-600">{nc.count} bài mới</span> — {nc.description}
                   </div>
                 ))}
               </div>
@@ -2475,11 +2732,11 @@ function RadarResultPanel({ data }) {
           )}
           {/* Sales signals */}
           {data.weekly_changes.sales_signals && data.weekly_changes.sales_signals.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">📦 Tín hiệu bán hàng</div>
+            <div className="mb-4">
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">📦 Tín hiệu bán hàng</div>
               <div className="flex flex-wrap gap-2">
                 {data.weekly_changes.sales_signals.map((s, i) => (
-                  <div key={i} className={`px-2 py-1 rounded text-xs border ${s.trend === "up" ? "bg-red-50 border-red-200 text-red-700" : s.trend === "down" ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "bg-gray-50 border-gray-200 text-gray-600"}`}>
+                  <div key={i} className={`px-2.5 py-1 rounded text-xs border font-semibold ${s.trend === "up" ? "bg-red-50 border-red-300 text-red-700" : s.trend === "down" ? "bg-emerald-50 border-emerald-200 text-emerald-700" : "bg-gray-50 border-gray-200 text-gray-600"}`}>
                     {s.competitor} ({s.platform}): {s.old_reviews}→{s.new_reviews} reviews ({s.delta_reviews > 0 ? "+" : ""}{s.delta_reviews}) {s.trend === "up" ? "📈" : s.trend === "down" ? "📉" : "➡️"}
                   </div>
                 ))}
@@ -2488,12 +2745,12 @@ function RadarResultPanel({ data }) {
           )}
           {/* New competitors */}
           {data.weekly_changes.new_competitors && data.weekly_changes.new_competitors.length > 0 && (
-            <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">🆕 Đối thủ mới xuất hiện</div>
+            <div className="mb-4">
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">🆕 Đối thủ mới xuất hiện</div>
               <div className="space-y-1">
                 {data.weekly_changes.new_competitors.map((nc, i) => (
-                  <div key={i} className="text-xs bg-white/60 rounded px-2 py-1">
-                    <strong className="text-purple-700">{nc.name}</strong> <span className={`px-1 rounded text-[10px] ${nc.threat_level === "high" ? "bg-red-100 text-red-700" : nc.threat_level === "medium" ? "bg-amber-100 text-amber-700" : "bg-gray-100 text-gray-600"}`}>{nc.threat_level}</span> — {nc.detail}
+                  <div key={i} className="text-sm bg-white/60 rounded px-3 py-1.5">
+                    <strong className="text-red-700">{nc.name}</strong> <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${nc.threat_level === "high" ? "bg-red-600 text-white" : nc.threat_level === "medium" ? "bg-amber-500 text-white" : "bg-gray-300 text-gray-700"}`}>{nc.threat_level}</span> — <span className="text-gray-700">{nc.detail}</span>
                   </div>
                 ))}
               </div>
@@ -2502,11 +2759,11 @@ function RadarResultPanel({ data }) {
           {/* Ads changes */}
           {data.weekly_changes.ads_changes && data.weekly_changes.ads_changes.length > 0 && (
             <div className="mb-3">
-              <div className="text-xs font-semibold text-gray-700 mb-1">📢 Thay đổi FB Ads</div>
+              <div className="text-base font-extrabold text-red-700 mb-2 pb-1 border-b-2 border-red-200 flex items-center gap-2">📢 Thay đổi FB Ads</div>
               <div className="space-y-1">
                 {data.weekly_changes.ads_changes.map((a, i) => (
-                  <div key={i} className="text-xs text-gray-700 bg-white/60 rounded px-2 py-1">
-                    <strong>{a.competitor}</strong>: {a.detail}
+                  <div key={i} className="text-sm text-gray-700 bg-white/60 rounded px-3 py-1.5 leading-snug">
+                    <strong className="text-gray-900">{a.competitor}</strong>: {a.detail}
                   </div>
                 ))}
               </div>
