@@ -1,8 +1,8 @@
 """
 Facebook Ads Dashboard Auto-Updater
 ====================================
-Fetches latest Facebook Ads data for 4 Doscom accounts, rebuilds index.html
-from template.html, and deploys to Netlify.
+Fetches latest Facebook Ads data for 6 ad accounts under BM "Yoday Media
+Retail", rebuilds index.html from template.html, and deploys to Netlify.
 
 Run via GitHub Actions every 30 minutes. Requires these env vars:
   - FB_ACCESS_TOKEN   Facebook Marketing API long-lived token
@@ -36,11 +36,16 @@ SKIP_DEPLOY     = os.environ.get("SKIP_NETLIFY_DEPLOY", "").lower() in ("1", "tr
 FB_API_VERSION = "v20.0"
 DAYS_BACK      = 30  # last 30 days of data
 
+# 6 ad accounts under BM "Yoday Media Retail".
+# `name` = tên chính xác như đặt trong Business Manager.
+# `short` = tên dùng hiển thị trên dashboard (giữ nguyên đầy đủ theo yêu cầu).
 ACCOUNTS = [
-    {"id": "927390616363424",  "short": "Doscom CN",   "name": "Doscom - Công nghệ nâng tầm cuộc sống"},
-    {"id": "764394829882083",  "short": "Noma Xe Hơi", "name": "Doscom - Noma.vn Xe Hơi"},
-    {"id": "1655506672244826", "short": "Noma VN",     "name": "DOSCOM HOLDINGS - Noma Việt Nam"},
-    {"id": "1449385949897024", "short": "Holdings CN", "name": "DOSCOM HOLDINGS - Công nghệ NTCS"},
+    {"id": "927390616363424",  "short": "Doscom - Công nghệ nâng tầm cuộc sống",                         "name": "Doscom - Công nghệ nâng tầm cuộc sống"},
+    {"id": "764394829882083",  "short": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện",        "name": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện"},
+    {"id": "1655506672244826", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam",                  "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam"},
+    {"id": "1449385949897024", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống",   "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống"},
+    {"id": "906015559004892",  "short": "Doscom Mart",                                                   "name": "Doscom Mart"},
+    {"id": "1416634670476226", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart",                    "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart"},
 ]
 
 # Competitor data files (scraped via Chrome, not API)
