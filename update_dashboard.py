@@ -443,6 +443,29 @@ def build_data():
         print(f"   ✗ revenue load failed: {e}")
         data["revenue"] = {}
 
+    # --- GOOGLE ADS (loaded from data/google-ads-spend.json) ------
+    # File này được pull từ Windsor.ai (manually hoặc auto qua workflow riêng).
+    # Cấu trúc: by_category[cat] = {_total, by_date: {YYYY-MM-DD: spend}, campaigns: [...]}
+    # Category keys: MAYDO/DINHVI/GHIAM/CAMCALL (map vào 13 PROFIT_PRODUCTS) +
+    # OTHER_CAM/OTHER_DI/OTHER_SIM/OTHER_RAZOR (ngoài danh sách).
+    try:
+        g_ads = _load_json("data/google-ads-spend.json") or {}
+        data["google_ads"] = {
+            "generated_at": g_ads.get("generated_at"),
+            "account_id": g_ads.get("account_id"),
+            "account_name": g_ads.get("account_name"),
+            "date_range": g_ads.get("date_range"),
+            "by_category": g_ads.get("by_category", {}),
+            "campaigns_raw": g_ads.get("campaigns_raw", []),
+        }
+        total_gads = sum(v.get("_total", 0) for v in g_ads.get("by_category", {}).values())
+        print(f"   ✓ loaded Google Ads spend: {total_gads:,.0f}đ · "
+              f"{len(g_ads.get('by_category', {}))} categories · "
+              f"range {g_ads.get('date_range', {}).get('start')} → {g_ads.get('date_range', {}).get('end')}")
+    except Exception as e:
+        print(f"   ✗ Google Ads load failed: {e}")
+        data["google_ads"] = {"by_category": {}, "campaigns_raw": []}
+
     # --- PRODUCT COSTS (injected from data/product-costs.json) ------
     try:
         costs_raw = _load_json("data/product-costs.json") or {}

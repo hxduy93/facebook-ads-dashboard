@@ -3313,13 +3313,20 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   ]
 
   const STAFF_MAP = {
-    "ALL":           { label: "Team Ads",      sources: ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"], adKeys: ["DUY", "PHUONG_NAM"], color: { bg: "bg-red-50",     border: "border-red-300" },     showCloseBtn: false },
+    // Team Ads FB — chỉ gộp 2 nguồn chạy FB Ads, không gộp Website/Zalo/Hotline (đó là kênh khác).
+    "ALL":           { label: "Team Ads FB",   sources: ["DUY", "PHUONG_NAM"],                                  adKeys: ["DUY", "PHUONG_NAM"], color: { bg: "bg-red-50",     border: "border-red-300" },     showCloseBtn: false },
     "DUY":           { label: "Duy",           sources: ["DUY"],                                                adKeys: ["DUY"],               color: { bg: "bg-blue-50",    border: "border-blue-300" },    showCloseBtn: true },
     "PHUONG_NAM":    { label: "Phương Nam",    sources: ["PHUONG_NAM"],                                         adKeys: ["PHUONG_NAM"],        color: { bg: "bg-purple-50",  border: "border-purple-300" },  showCloseBtn: true },
-    "WEBSITE_STAFF": { label: "WEBSITE",       sources: ["WEBSITE", "ZALO_OA", "HOTLINE"],                      adKeys: [],                    color: { bg: "bg-emerald-50", border: "border-emerald-300" }, showCloseBtn: true },
+    // WEBSITE — component riêng (GoogleAdsProfit) với rows theo category + spend Google Ads
+    "WEBSITE_STAFF": { label: "Google Ads — Website",       sources: ["WEBSITE"],                               adKeys: ["GOOGLE"],            color: { bg: "bg-emerald-50", border: "border-emerald-300" }, showCloseBtn: true, isGoogleAds: true },
   }
   const staff = STAFF_MAP[staffKey || "ALL"]
   if (!staff) return null
+
+  // Khi staff là Google Ads / Website → render component riêng với rows theo category
+  if (staff.isGoogleAds) {
+    return <GoogleAdsProfit dateRange={dateRange} onClose={onClose} />
+  }
 
   const isInRange = (ymd) => {
     if (!dateRange?.start || !dateRange?.end) return true
@@ -3664,6 +3671,329 @@ function CampaignDetailModal({ mode, product, staff, dateRange, onClose }) {
             </p>
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+// =============================================================
+// GOOGLE ADS PROFIT — rows theo category, doanh thu từ nguồn WEBSITE
+// =============================================================
+// Mapping category → nhóm SP (phải đồng bộ với detect_google_category
+// trong scripts và google-ads-spend.json)
+const GOOGLE_CATEGORIES = [
+  { key: "MAYDO",    label: "Máy dò",                 products: ["D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro"] },
+  { key: "DINHVI",   label: "Định vị",                products: ["DV1 Pro"] },
+  { key: "GHIAM",    label: "Ghi âm",                 products: ["DR1", "DR4 Plus"] },
+  { key: "CAMCALL",  label: "Camera gọi 2 chiều",     products: ["DA8.1", "DA8.1 Pro"] },
+  { key: "OTHER",    label: "Khác (Cam 4G/Mini/NLMT/WiFi, Chống ghi âm, Sim 4G, Máy cạo râu)", products: [], isMisc: true },
+]
+const GOOGLE_OTHER_KEYS = ["OTHER_CAM", "OTHER_DI", "OTHER_SIM", "OTHER_RAZOR", "OTHER"]
+
+function GoogleAdsProfit({ dateRange, onClose }) {
+  const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
+  const groups = revenue.source_groups || {}
+  const productCosts = (typeof DATA !== "undefined" ? DATA.product_costs : null) || {}
+  const googleAds = (typeof DATA !== "undefined" ? DATA.google_ads : null) || { by_category: {}, campaigns_raw: [] }
+  const [campModal, setCampModal] = useState(null)
+
+  const isInRange = (ymd) => {
+    if (!dateRange?.start || !dateRange?.end) return true
+    return ymd >= dateRange.start && ymd <= dateRange.end
+  }
+  const VAT_RATE = 0.10
+  const SOURCE = "WEBSITE"
+  const g = groups[SOURCE]
+
+  const computeRows = (STATUSES_KEEP) => {
+    const rows = GOOGLE_CATEGORIES.map(cat => {
+      let revenueC = 0, unitsC = 0, ordersC = 0, costTotal = 0
+      if (g && !cat.isMisc) {
+        cat.products.forEach(p => {
+          STATUSES_KEEP.forEach(stKey => {
+            const pData = g.products_by_status?.[stKey]?.[p]
+            if (!pData) return
+            Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+              if (isInRange(d)) revenueC += (v || 0)
+            })
+            let unitsProd = 0
+            if (pData.units_by_date) {
+              Object.entries(pData.units_by_date).forEach(([d, u]) => {
+                if (isInRange(d)) unitsProd += (u || 0)
+              })
+            } else if (pData.units && pData.total > 0) {
+              const inRangeRev = Object.entries(pData.by_date || {})
+                .filter(([d]) => isInRange(d)).reduce((s, [, v]) => s + (v || 0), 0)
+              const ratio = pData.total > 0 ? inRangeRev / pData.total : 0
+              unitsProd = Math.round((pData.units || 0) * ratio)
+            }
+            unitsC += unitsProd
+            const costEntry = productCosts[p] || {}
+            const costPerUnit = Number(costEntry.gia_nhap_vnd) || 0
+            costTotal += costPerUnit * unitsProd
+            if (pData.orders_by_date) {
+              Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+                if (isInRange(d)) ordersC += (c || 0)
+              })
+            }
+          })
+        })
+      }
+
+      // Google Ads spend
+      let spendC = 0
+      const keysToSum = cat.isMisc ? GOOGLE_OTHER_KEYS : [cat.key]
+      keysToSum.forEach(k => {
+        const bucket = googleAds.by_category[k]
+        if (!bucket || !bucket.by_date) return
+        Object.entries(bucket.by_date).forEach(([d, v]) => {
+          if (isInRange(d)) spendC += (v || 0)
+        })
+      })
+
+      const vat = revenueC * VAT_RATE
+      const profit = revenueC - vat - spendC - costTotal
+      const margin = revenueC > 0 ? (profit / revenueC) * 100 : null
+      return {
+        cat: cat.key,
+        label: cat.label,
+        products: cat.products,
+        isMisc: !!cat.isMisc,
+        units: unitsC,
+        orders: ordersC,
+        revenue: revenueC,
+        vat,
+        adSpend: spendC,
+        totalCost: costTotal,
+        profit,
+        margin,
+      }
+    })
+    const tot = rows.reduce((a, r) => ({
+      revenue: a.revenue + r.revenue,
+      vat: a.vat + r.vat,
+      adSpend: a.adSpend + r.adSpend,
+      totalCost: a.totalCost + r.totalCost,
+      profit: a.profit + r.profit,
+      units: a.units + r.units,
+      orders: a.orders + r.orders,
+    }), { revenue: 0, vat: 0, adSpend: 0, totalCost: 0, profit: 0, units: 0, orders: 0 })
+    const totMargin = tot.revenue > 0 ? (tot.profit / tot.revenue) * 100 : null
+    return { rows, tot, totMargin }
+  }
+
+  const beforeReturns = computeRows(["delivered", "returning", "other", "returned"])
+  const afterReturns  = computeRows(["delivered", "returning", "other"])
+  const lossByReturns = beforeReturns.tot.profit - afterReturns.tot.profit
+
+  const renderTable = (data) => (
+    <div className="overflow-x-auto bg-white rounded-lg border border-gray-200 mb-2">
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="bg-gray-50 border-b-2 border-gray-200 text-gray-700">
+            <th className="py-2 px-3 text-left font-semibold">Nhóm SP</th>
+            <th className="py-2 px-3 text-right font-semibold">SL bán</th>
+            <th className="py-2 px-3 text-right font-semibold">Đơn</th>
+            <th className="py-2 px-3 text-right font-semibold">DT Website</th>
+            <th className="py-2 px-3 text-right font-semibold text-amber-700">VAT 10%</th>
+            <th className="py-2 px-3 text-right font-semibold text-blue-700">Google Ads</th>
+            <th className="py-2 px-3 text-right font-semibold">Σ Giá nhập</th>
+            <th className="py-2 px-3 text-right font-bold border-l border-gray-300">LỢI NHUẬN</th>
+            <th className="py-2 px-3 text-right font-semibold">Biên LN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.rows.map(r => {
+            const hasData = r.revenue > 0 || r.adSpend > 0
+            return (
+              <tr key={r.cat} className={`border-b border-gray-100 ${hasData ? "" : "opacity-40"} hover:bg-gray-50/60`}>
+                <td className="py-2 px-3 font-semibold text-gray-900 max-w-[300px]">
+                  <span className="inline-flex items-center gap-1.5 flex-wrap">
+                    <span>{r.label}</span>
+                    <button
+                      onClick={() => setCampModal({ category: r.cat, isMisc: r.isMisc })}
+                      className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold hover:bg-blue-600 hover:text-white border border-blue-300 tracking-wider"
+                      title={`Xem campaign Google Ads nhóm ${r.label}`}
+                    >
+                      CAMP
+                    </button>
+                  </span>
+                  {!r.isMisc && r.products.length > 0 && (
+                    <div className="text-[10px] text-gray-500 mt-0.5 font-normal">{r.products.join(", ")}</div>
+                  )}
+                </td>
+                <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-600">{r.orders > 0 ? fmtNum(r.orders) : "—"}</td>
+                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVND(r.revenue) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVND(r.vat) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVND(r.adSpend) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVND(r.totalCost) + "₫" : "—"}</td>
+                <td className={`py-2 px-3 text-right font-extrabold border-l border-gray-300 ${r.profit > 0 ? "text-emerald-700" : r.profit < 0 ? "text-red-600" : "text-gray-400"}`}>
+                  {hasData ? fmtVND(r.profit) + "₫" : "—"}
+                </td>
+                <td className={`py-2 px-3 text-right font-semibold ${r.margin == null ? "text-gray-300" : r.margin > 0 ? "text-emerald-700" : "text-red-600"}`}>
+                  {r.margin == null ? "—" : r.margin.toFixed(1) + "%"}
+                </td>
+              </tr>
+            )
+          })}
+          <tr className="bg-gray-100 border-t-2 border-gray-300">
+            <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.units)}</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.orders)}</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVND(data.tot.revenue)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVND(data.tot.vat)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVND(data.tot.adSpend)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVND(data.tot.totalCost)}₫</td>
+            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(data.tot.profit)}₫</td>
+            <td className={`py-3 px-3 text-right font-bold ${data.totMargin == null ? "text-gray-400" : data.totMargin > 0 ? "text-emerald-700" : "text-red-600"}`}>
+              {data.totMargin == null ? "—" : data.totMargin.toFixed(1) + "%"}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+
+  return (
+    <div className="mb-6 rounded-xl border-2 border-emerald-300 bg-emerald-50 p-5 shadow-sm">
+      <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 tracking-tight flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-emerald-600" /> Lợi nhuận — Google Ads / Website
+          </h2>
+          <p className="text-xs text-gray-600 mt-1">
+            Doanh thu: <span className="font-semibold">Pancake nguồn Website</span> · Chi phí: <span className="font-semibold">Google Ads TK {googleAds.account_name || "MHDI"}</span> · {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
+            {" · "}
+            <span className="font-mono text-[10px] bg-white/80 px-1.5 py-0.5 rounded border border-gray-200">
+              LN = DT − DT×10% VAT − Google Ads − Giá nhập × SL
+            </span>
+          </p>
+        </div>
+        <button
+          onClick={onClose}
+          className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-600"
+          title="Đóng (quay về Team Ads FB)"
+        >
+          ✕ Đóng
+        </button>
+      </div>
+
+      {/* BẢNG 1 — TRƯỚC HOÀN */}
+      <div className="mb-2">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-xs font-bold text-amber-900 bg-amber-100 px-2 py-1 rounded border border-amber-300">📊 LN TRƯỚC HOÀN</span>
+          <span className="text-[11px] text-gray-600">Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý + Đã hoàn</span> · loại Đã hủy</span>
+        </div>
+        {renderTable(beforeReturns)}
+      </div>
+
+      <div className="my-3 px-4 py-3 bg-white rounded-lg border-2 border-dashed border-gray-300 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+        <span className="text-gray-700">
+          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(beforeReturns.tot.profit)}₫</span>
+        </span>
+        <span className="text-gray-400 text-lg">→</span>
+        <span className="text-gray-700">
+          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVND(Math.abs(lossByReturns))}₫</span>
+        </span>
+        <span className="text-gray-400 text-lg">→</span>
+        <span className="text-gray-700">
+          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(afterReturns.tot.profit)}₫</span>
+        </span>
+      </div>
+
+      {/* BẢNG 2 — SAU HOÀN */}
+      <div className="mt-2">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-xs font-bold text-white bg-emerald-600 px-2 py-1 rounded border border-emerald-700">✅ LN SAU HOÀN</span>
+          <span className="text-[11px] text-gray-600">Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý</span> · <span className="text-red-600 font-semibold">ĐÃ LOẠI Đã hoàn + Đã hủy</span></span>
+        </div>
+        {renderTable(afterReturns)}
+      </div>
+
+      <p className="text-[11px] text-gray-600 mt-3 italic">
+        * Doanh thu = Pancake nguồn Website (không kể Zalo OA + Hotline) · Google Ads spend = TK MHDI, category detect từ tên campaign (RMK/Search/Shopping) · Row "Khác" = SP ngoài 13 PROFIT_PRODUCTS (DI/Cam 4G/Cam WiFi/Cam Mini/NLMT/Sim 4G/Máy cạo râu) nên không có DT để tính LN, spend trừ trực tiếp. Data Google Ads sync từ Windsor.ai — cập nhật thủ công qua file <code className="bg-white px-1 rounded border">data/google-ads-spend.json</code>.
+      </p>
+
+      {campModal && (
+        <GoogleCampaignsModal
+          category={campModal.category}
+          isMisc={campModal.isMisc}
+          dateRange={dateRange}
+          onClose={() => setCampModal(null)}
+        />
+      )}
+    </div>
+  )
+}
+
+function GoogleCampaignsModal({ category, isMisc, dateRange, onClose }) {
+  const googleAds = (typeof DATA !== "undefined" ? DATA.google_ads : null) || { campaigns_raw: [] }
+  const raw = googleAds.campaigns_raw || []
+  const catSet = isMisc
+    ? new Set(GOOGLE_OTHER_KEYS)
+    : new Set([category])
+
+  const byCampaign = {}
+  raw.forEach(r => {
+    if (!catSet.has(r.category)) return
+    if (r.date < dateRange.start || r.date > dateRange.end) return
+    const key = r.campaign
+    byCampaign[key] = byCampaign[key] || { name: key, category: r.category, spend: 0, clicks: 0, impressions: 0 }
+    byCampaign[key].spend += (r.spend || 0)
+    byCampaign[key].clicks += (r.clicks || 0)
+    byCampaign[key].impressions += (r.impressions || 0)
+  })
+  const rows = Object.values(byCampaign).sort((a, b) => b.spend - a.spend)
+  const total = rows.reduce((s, r) => s + r.spend, 0)
+  const title = isMisc ? "Google Ads — Nhóm KHÁC (SP ngoài 13 PROFIT_PRODUCTS)" : `Google Ads — ${category}`
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-teal-50">
+          <div className="min-w-0">
+            <h3 className="font-bold text-gray-900 text-base">📊 {title}</h3>
+            <p className="text-[11px] text-gray-600 mt-0.5">
+              {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)} · {rows.length} campaign · Tổng: <span className="font-bold text-blue-700">{fmtVND(total)}₫</span>
+            </p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl font-bold w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 flex-shrink-0 ml-2">✕</button>
+        </div>
+        <div className="overflow-y-auto flex-1 p-4">
+          {rows.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center py-12 italic">
+              Không có campaign Google Ads nào thuộc nhóm này trong range {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}.
+            </p>
+          ) : (
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-gray-50 border-b-2 border-gray-200 text-gray-700">
+                  <th className="py-2 px-2 text-left font-semibold w-8">#</th>
+                  <th className="py-2 px-2 text-left font-semibold">Campaign</th>
+                  <th className="py-2 px-2 text-left font-semibold">Category</th>
+                  <th className="py-2 px-2 text-right font-semibold">Clicks</th>
+                  <th className="py-2 px-2 text-right font-semibold">Spend</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={r.name} className="border-b border-gray-100 hover:bg-emerald-50/40">
+                    <td className="py-2 px-2 text-gray-500">{i + 1}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 break-words">{r.name}</td>
+                    <td className="py-2 px-2 text-[10px] text-gray-500 font-mono">{r.category}</td>
+                    <td className="py-2 px-2 text-right text-gray-600">{fmtNum(r.clicks)}</td>
+                    <td className="py-2 px-2 text-right font-bold text-blue-700 whitespace-nowrap">{fmtVND(r.spend)}₫</td>
+                  </tr>
+                ))}
+                <tr className="bg-gray-100 border-t-2 border-gray-300">
+                  <td colSpan="4" className="py-3 px-3 font-extrabold text-gray-900 text-right">TỔNG</td>
+                  <td className="py-3 px-3 text-right font-extrabold text-blue-800 whitespace-nowrap">{fmtVND(total)}₫</td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   )
