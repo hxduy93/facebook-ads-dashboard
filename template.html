@@ -3139,8 +3139,7 @@ function RadarResultPanel({ data }) {
 // Mặc định tính trên đơn ĐÃ GIAO (delivered) — đơn khác không có LN thực.
 // =============================================================
 function ProfitBreakdown({ staffKey, dateRange, onClose }) {
-  if (!staffKey || staffKey === "ALL") return null
-
+  // Hiện cho mọi staffKey — bao gồm ALL (tổng công ty) và từng nhân sự.
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
   const groups = revenue.source_groups || {}
   const adSpendByStaff = (typeof DATA !== "undefined" ? DATA.ad_spend_by_staff : null) || {}
@@ -3154,11 +3153,12 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   ]
 
   const STAFF_MAP = {
-    "DUY":           { label: "Duy",        sources: ["DUY"],                              adKey: "DUY",        color: { bg: "bg-blue-50",    border: "border-blue-300" } },
-    "PHUONG_NAM":    { label: "Phương Nam", sources: ["PHUONG_NAM"],                       adKey: "PHUONG_NAM", color: { bg: "bg-purple-50",  border: "border-purple-300" } },
-    "WEBSITE_STAFF": { label: "WEBSITE",    sources: ["WEBSITE", "ZALO_OA", "HOTLINE"],    adKey: null,         color: { bg: "bg-emerald-50", border: "border-emerald-300" } },
+    "ALL":           { label: "TỔNG CÔNG TY",  sources: ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"], adKeys: ["DUY", "PHUONG_NAM"], color: { bg: "bg-red-50",     border: "border-red-300" },     showCloseBtn: false },
+    "DUY":           { label: "Duy",           sources: ["DUY"],                                                adKeys: ["DUY"],               color: { bg: "bg-blue-50",    border: "border-blue-300" },    showCloseBtn: true },
+    "PHUONG_NAM":    { label: "Phương Nam",    sources: ["PHUONG_NAM"],                                         adKeys: ["PHUONG_NAM"],        color: { bg: "bg-purple-50",  border: "border-purple-300" },  showCloseBtn: true },
+    "WEBSITE_STAFF": { label: "WEBSITE",       sources: ["WEBSITE", "ZALO_OA", "HOTLINE"],                      adKeys: [],                    color: { bg: "bg-emerald-50", border: "border-emerald-300" }, showCloseBtn: true },
   }
-  const staff = STAFF_MAP[staffKey]
+  const staff = STAFF_MAP[staffKey || "ALL"]
   if (!staff) return null
 
   const isInRange = (ymd) => {
@@ -3167,7 +3167,8 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   }
 
   const VAT_RATE = 0.10
-  const STATUS_KEY = "delivered"   // chỉ đơn đã giao mới có LN thực
+  // LOẠI đơn hoàn + đơn hủy — cộng dồn status: delivered + returning + other (khớp RevenueByStaffBreakdown).
+  const STATUSES_KEEP = ["delivered", "returning", "other"]
 
   const rows = PRODUCTS.map(p => {
     let revenueP = 0
@@ -3176,38 +3177,42 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
     staff.sources.forEach(srcKey => {
       const g = groups[srcKey]
       if (!g) return
-      const pData = g.products_by_status?.[STATUS_KEY]?.[p]
-      if (!pData) return
-      Object.entries(pData.by_date || {}).forEach(([d, v]) => {
-        if (isInRange(d)) revenueP += (v || 0)
+      STATUSES_KEEP.forEach(stKey => {
+        const pData = g.products_by_status?.[stKey]?.[p]
+        if (!pData) return
+        Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+          if (isInRange(d)) revenueP += (v || 0)
+        })
+        // units_by_date (mới) — fallback theo tỷ lệ nếu snapshot cũ
+        if (pData.units_by_date) {
+          Object.entries(pData.units_by_date).forEach(([d, u]) => {
+            if (isInRange(d)) unitsP += (u || 0)
+          })
+        } else if (pData.units && pData.total > 0) {
+          const inRangeRev = Object.entries(pData.by_date || {})
+            .filter(([d]) => isInRange(d))
+            .reduce((s, [, v]) => s + (v || 0), 0)
+          const ratio = pData.total > 0 ? inRangeRev / pData.total : 0
+          unitsP += Math.round((pData.units || 0) * ratio)
+        }
+        // orders trong range
+        if (pData.orders_by_date) {
+          Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+            if (isInRange(d)) ordersP += (c || 0)
+          })
+        }
       })
-      // units_by_date (mới) — fallback dùng tỷ lệ nếu snapshot cũ chưa có
-      if (pData.units_by_date) {
-        Object.entries(pData.units_by_date).forEach(([d, u]) => {
-          if (isInRange(d)) unitsP += (u || 0)
-        })
-      } else if (pData.units && pData.total > 0) {
-        const inRangeRev = Object.entries(pData.by_date || {})
-          .filter(([d]) => isInRange(d))
-          .reduce((s, [, v]) => s + (v || 0), 0)
-        const ratio = pData.total > 0 ? inRangeRev / pData.total : 0
-        unitsP += Math.round((pData.units || 0) * ratio)
-      }
-      // orders trong range
-      if (pData.orders_by_date) {
-        Object.entries(pData.orders_by_date).forEach(([d, c]) => {
-          if (isInRange(d)) ordersP += (c || 0)
-        })
-      }
     })
 
+    // Ad spend — gộp qua tất cả adKeys của staff (ALL = DUY + PHUONG_NAM).
     let adSpendP = 0
-    if (staff.adKey && adSpendByStaff[staff.adKey] && adSpendByStaff[staff.adKey][p]) {
-      const byDate = adSpendByStaff[staff.adKey][p].by_date || {}
-      Object.entries(byDate).forEach(([d, v]) => {
+    staff.adKeys.forEach(adKey => {
+      const bucket = adSpendByStaff[adKey] && adSpendByStaff[adKey][p]
+      if (!bucket) return
+      Object.entries(bucket.by_date || {}).forEach(([d, v]) => {
         if (isInRange(d)) adSpendP += (v || 0)
       })
-    }
+    })
 
     const costEntry = productCosts[p] || {}
     const costPerUnit = Number(costEntry.gia_nhap_vnd) || 0
@@ -3251,20 +3256,22 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
             <DollarSign className="w-5 h-5 text-emerald-600" /> Lợi nhuận — {staff.label}
           </h2>
           <p className="text-xs text-gray-600 mt-1">
-            Chỉ tính đơn <span className="font-semibold">Đã giao</span> · {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
+            Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý</span> · <span className="text-red-600 font-semibold">ĐÃ LOẠI Đã hoàn + Đã hủy</span> · {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
             {" · "}
             <span className="font-mono text-[10px] bg-white/80 px-1.5 py-0.5 rounded border border-gray-200">
               LN = DT − DT×10% VAT − Ad − Giá nhập × SL
             </span>
           </p>
         </div>
-        <button
-          onClick={onClose}
-          className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-600"
-          title="Đóng bảng lợi nhuận (quay về Tất cả)"
-        >
-          ✕ Đóng
-        </button>
+        {staff.showCloseBtn && (
+          <button
+            onClick={onClose}
+            className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-600"
+            title="Đóng bảng lợi nhuận (quay về Tất cả)"
+          >
+            ✕ Đóng
+          </button>
+        )}
       </div>
 
       <div className="overflow-x-auto bg-white rounded-lg border border-gray-200">
@@ -3328,7 +3335,7 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
       </div>
 
       <p className="text-[11px] text-gray-600 mt-3 italic">
-        * Doanh thu = cột COD Pancake (đã giao) · Ad spend = chi tiêu FB Ads của các TK {staff.adKey ? staff.label : "(Website không chạy FB Ads)"} cho từng SP dò từ tên campaign · Giá nhập lookup "Mã tên gọi" trong xlsx Kho tổng.
+        * Doanh thu = cột COD Pancake (đã loại đơn hoàn/hủy) · Ad spend = chi tiêu FB Ads của {staff.adKeys.length === 0 ? "Website (không chạy FB Ads)" : staff.adKeys.length === 2 ? "Duy + Phương Nam (6 TK)" : staff.label} cho từng SP, dò từ tên campaign · Giá nhập lookup "Mã tên gọi" trong xlsx Kho tổng.
       </p>
     </div>
   )
