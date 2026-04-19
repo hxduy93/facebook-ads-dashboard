@@ -381,7 +381,8 @@ const TIME_FILTERS = [
   { key: "thismonth", label: "Tháng này",     days: 0 },
   { key: "lastmonth", label: "Tháng trước",   days: 0 },
   { key: "30d",       label: "30 ngày",       days: 30 },
-  { key: "90d",       label: "90 ngày",       days: 90 }
+  { key: "90d",       label: "90 ngày",       days: 90 },
+  { key: "custom",    label: "📅 Tùy chỉnh",  days: 0 },
 ]
 
 const fmtVND = (n) => {
@@ -404,8 +405,19 @@ const fmtDate = (d) => {
 // IMPORTANT: all Date math is done in UTC to avoid the browser-local-timezone
 // bug where `new Date("2026-04-09T00:00:00")` in a UTC+7 browser becomes
 // 2026-04-08T17:00Z, causing .toISOString() to return the wrong day.
-function getDateRange(filterKey) {
+function getDateRange(filterKey, customRange) {
   const today = new Date(TODAY + "T00:00:00Z")  // parse as UTC, not local
+  if (filterKey === "custom") {
+    const s = customRange && customRange.start
+    const e = customRange && customRange.end
+    if (!s || !e) {
+      // Default: last 7 days khi chưa chọn
+      const start = new Date(today); start.setUTCDate(start.getUTCDate() - 6)
+      return { start: start.toISOString().slice(0, 10), end: TODAY }
+    }
+    // Swap nếu user nhập end < start
+    return { start: s <= e ? s : e, end: s <= e ? e : s }
+  }
   if (filterKey === "today") {
     return { start: TODAY, end: TODAY }
   }
@@ -455,6 +467,101 @@ function sumDaily(daily) {
     reach: acc.reach + (d.reach || 0),
     registrations: acc.registrations + (d.registrations || 0)
   }), { spend: 0, impressions: 0, clicks: 0, reach: 0, registrations: 0 })
+}
+
+// =============================================================
+// AD SPEND HELPERS — map campaign → product/staff cho CAMP modal
+// =============================================================
+// JS port của detect_profit_product() trong update_dashboard.py — PHẢI giữ đồng bộ.
+function detectProfitProduct(name) {
+  if (!name) return null
+  let n = name.toLowerCase().replace(/_/g, " ").replace(/-/g, " ")
+  n = n.split(/\s+/).filter(Boolean).join(" ")
+  if (n.includes("da8.1 pro") || n.includes("da 8.1 pro") || n.includes("da8 1 pro")) return "DA8.1 Pro"
+  if (n.includes("da8.1") || n.includes("da 8.1") || n.includes("da8 1")) return "DA8.1"
+  if (n.includes("noma 922") || n.includes("noma922")) return "Noma 922"
+  if (n.includes("noma 911") || n.includes("noma911")) return "Noma 911"
+  if (n.includes("dr4 plus") || n.includes("dr4plus")) return "DR4 Plus"
+  if (n.includes("dr1")) return "DR1"
+  if (n.includes("dv1 pro") || n.includes("dv1pro")) return "DV1 Pro"
+  if (n.includes("d1 pro") || n.includes("d1pro")) return "D1 Pro"
+  if (n.includes("d8 pro") || n.includes("d8pro")) return "D8 Pro"
+  for (const code of ["d1", "d2", "d3", "d4"]) {
+    // Dùng non-lookbehind regex để tương thích Safari cũ
+    const re = new RegExp(`(?:^|[^a-z0-9])${code}(?:[^a-z0-9]|$)`)
+    if (re.test(n)) return code.toUpperCase()
+  }
+  return null
+}
+
+// Map account_id → staff key (mirror ACCOUNTS trong update_dashboard.py, hardcoded).
+// Nếu thêm TK mới bên Python thì nhớ thêm ở đây.
+const ACCOUNT_STAFF = {
+  "act_927390616363424":  "DUY",
+  "act_1655506672244826": "DUY",
+  "act_1449385949897024": "DUY",
+  "act_764394829882083":  "PHUONG_NAM",
+  "act_906015559004892":  "PHUONG_NAM",
+  "act_1416634670476226": "PHUONG_NAM",
+}
+
+function accountShortLabel(accountId) {
+  const accounts = (typeof DATA !== "undefined" ? DATA.accounts : null) || []
+  const a = accounts.find(x => x.id === accountId)
+  return a ? a.short : accountId
+}
+
+// Trả về danh sách campaign đã match đúng product cho staff + spend trong dateRange
+function campaignsForProduct(product, adKeys, range) {
+  const campaigns = (typeof DATA !== "undefined" ? DATA.campaigns : null) || []
+  const adKeySet = new Set(adKeys)
+  const rows = []
+  campaigns.forEach(c => {
+    const staff = ACCOUNT_STAFF[c.account_id]
+    if (!adKeySet.has(staff)) return
+    if (detectProfitProduct(c.name || "") !== product) return
+    let spendInRange = 0
+    ;(c.daily || []).forEach(d => {
+      if (d.date >= range.start && d.date <= range.end) spendInRange += (d.spend || 0)
+    })
+    rows.push({
+      id: c.id,
+      name: c.name || "(không tên)",
+      accountId: c.account_id,
+      accountShort: accountShortLabel(c.account_id),
+      staff,
+      spend: spendInRange,
+    })
+  })
+  rows.sort((a, b) => b.spend - a.spend)
+  return rows
+}
+
+// Trả về list campaign KHÔNG match SP nào (để debug tên campaign sai chuẩn)
+function unassignedCampaigns(adKeys, range) {
+  const campaigns = (typeof DATA !== "undefined" ? DATA.campaigns : null) || []
+  const adKeySet = new Set(adKeys)
+  const rows = []
+  campaigns.forEach(c => {
+    const staff = ACCOUNT_STAFF[c.account_id]
+    if (!adKeySet.has(staff)) return
+    if (detectProfitProduct(c.name || "") !== null) return
+    let spendInRange = 0
+    ;(c.daily || []).forEach(d => {
+      if (d.date >= range.start && d.date <= range.end) spendInRange += (d.spend || 0)
+    })
+    if (spendInRange <= 0) return
+    rows.push({
+      id: c.id,
+      name: c.name || "(không tên)",
+      accountId: c.account_id,
+      accountShort: accountShortLabel(c.account_id),
+      staff,
+      spend: spendInRange,
+    })
+  })
+  rows.sort((a, b) => b.spend - a.spend)
+  return rows
 }
 
 // =============================================================
@@ -563,11 +670,17 @@ function FacebookAdsDashboard() {
   const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator"
   const [selectedAccount, setSelectedAccount] = useState("all")
   const [timeFilter, setTimeFilter] = useState("30d")
+  // customRange — chỉ active khi timeFilter === "custom". Default 7 ngày gần nhất.
+  const [customRange, setCustomRange] = useState(() => {
+    const tod = new Date(TODAY + "T00:00:00Z")
+    const start = new Date(tod); start.setUTCDate(start.getUTCDate() - 6)
+    return { start: start.toISOString().slice(0, 10), end: TODAY }
+  })
   // staffFilter — lift lên parent để cả RevenueBySourceBreakdown và RevenueStatusBreakdown cùng react
   // Giá trị: "ALL" / "DUY" / "PHUONG_NAM" / "WEBSITE_STAFF"
   const [staffFilter, setStaffFilter] = useState("ALL")
 
-  const dateRange = useMemo(() => getDateRange(timeFilter), [timeFilter])
+  const dateRange = useMemo(() => getDateRange(timeFilter, customRange), [timeFilter, customRange])
 
   // Filter accounts
   const accounts = DATA.accounts
@@ -834,6 +947,51 @@ function FacebookAdsDashboard() {
               ({dateRange.start === dateRange.end ? fmtDate(dateRange.start) : `${fmtDate(dateRange.start)} → ${fmtDate(dateRange.end)}`})
             </div>
           </div>
+          {timeFilter === "custom" && (
+            <div className="mt-3 inline-flex items-center gap-2 flex-wrap bg-white border-2 border-blue-300 rounded-lg px-3 py-2 shadow-sm">
+              <span className="text-xs font-semibold text-gray-700">Từ</span>
+              <input
+                type="date"
+                value={customRange.start}
+                onChange={e => setCustomRange(r => ({ ...r, start: e.target.value }))}
+                className="px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+              />
+              <span className="text-xs font-semibold text-gray-700">đến</span>
+              <input
+                type="date"
+                value={customRange.end}
+                onChange={e => setCustomRange(r => ({ ...r, end: e.target.value }))}
+                className="px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+              />
+              <button
+                onClick={() => {
+                  const tod = new Date(TODAY + "T00:00:00Z")
+                  const s = new Date(tod); s.setUTCDate(s.getUTCDate() - 6)
+                  setCustomRange({ start: s.toISOString().slice(0, 10), end: TODAY })
+                }}
+                className="px-2 py-1 text-[11px] bg-gray-100 text-gray-700 rounded hover:bg-gray-200 border border-gray-300"
+                title="Reset về 7 ngày gần nhất"
+              >
+                ↺ 7 ngày
+              </button>
+              <button
+                onClick={() => {
+                  // Tuần trước (T2 → CN)
+                  const tod = new Date(TODAY + "T00:00:00Z")
+                  const dow = tod.getUTCDay()
+                  const toMon = (dow === 0 ? 6 : dow - 1)
+                  const monThis = new Date(tod); monThis.setUTCDate(monThis.getUTCDate() - toMon)
+                  const monLast = new Date(monThis); monLast.setUTCDate(monLast.getUTCDate() - 7)
+                  const sunLast = new Date(monLast); sunLast.setUTCDate(sunLast.getUTCDate() + 6)
+                  setCustomRange({ start: monLast.toISOString().slice(0, 10), end: sunLast.toISOString().slice(0, 10) })
+                }}
+                className="px-2 py-1 text-[11px] bg-gray-100 text-gray-700 rounded hover:bg-gray-200 border border-gray-300"
+                title="Tuần trước (T2 → CN)"
+              >
+                ↺ Tuần trước
+              </button>
+            </div>
+          )}
         </div>
 
         {/* KPI SCORECARDS — 4 cards: Chi tiêu · Tổng đơn · Doanh thu Pancake · CIR */}
@@ -3144,6 +3302,8 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   const groups = revenue.source_groups || {}
   const adSpendByStaff = (typeof DATA !== "undefined" ? DATA.ad_spend_by_staff : null) || {}
   const productCosts = (typeof DATA !== "undefined" ? DATA.product_costs : null) || {}
+  // Modal state: null | { mode: "product"|"unassigned", product?: string }
+  const [campModal, setCampModal] = useState(null)
   const PRODUCTS = (typeof DATA !== "undefined" && DATA.profit_products) ? DATA.profit_products : [
     "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",
     "DR1", "DR4 Plus",
@@ -3256,6 +3416,10 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
 
   const lossByReturns = beforeReturns.tot.profit - afterReturns.tot.profit
 
+  // Unassigned campaigns (tên không match 13 PROFIT_PRODUCTS) — để debug
+  const unassignedRows = staff.adKeys.length > 0 ? unassignedCampaigns(staff.adKeys, dateRange) : []
+  const unassignedTotal = unassignedRows.reduce((s, r) => s + r.spend, 0)
+
   const renderTable = (data) => (
     <div className="overflow-x-auto bg-white rounded-lg border border-gray-200 mb-2">
       <table className="w-full text-xs">
@@ -3279,7 +3443,18 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
             return (
               <tr key={r.product} className={`border-b border-gray-100 ${hasData ? "" : "opacity-50"} hover:bg-gray-50/60`}>
                 <td className="py-2 px-3 font-semibold text-gray-900">
-                  {r.product}
+                  <span className="inline-flex items-center gap-1.5">
+                    {r.product}
+                    {staff.adKeys.length > 0 && (
+                      <button
+                        onClick={() => setCampModal({ mode: "product", product: r.product })}
+                        className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold hover:bg-blue-600 hover:text-white border border-blue-300 tracking-wider"
+                        title={`Xem campaign match ${r.product} trong range`}
+                      >
+                        CAMP
+                      </button>
+                    )}
+                  </span>
                   {r.missingCost && <span className="ml-2 text-[10px] text-red-600 font-medium" title="Giá nhập chưa có trong xlsx">⚠ thiếu giá nhập</span>}
                 </td>
                 <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
@@ -3332,15 +3507,26 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
             </span>
           </p>
         </div>
-        {staff.showCloseBtn && (
-          <button
-            onClick={onClose}
-            className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-600"
-            title="Đóng bảng lợi nhuận (quay về Tất cả)"
-          >
-            ✕ Đóng
-          </button>
-        )}
+        <div className="flex items-center gap-2 flex-wrap">
+          {unassignedTotal > 0 && (
+            <button
+              onClick={() => setCampModal({ mode: "unassigned" })}
+              className="text-xs px-2.5 py-1.5 rounded-md bg-amber-100 text-amber-900 border border-amber-400 hover:bg-amber-200 font-semibold"
+              title="Xem campaign không detect được SP — tên campaign sai chuẩn"
+            >
+              ⚠ UNASSIGNED: {fmtVND(unassignedTotal)}₫ · {unassignedRows.length} camp
+            </button>
+          )}
+          {staff.showCloseBtn && (
+            <button
+              onClick={onClose}
+              className="text-xs px-3 py-1.5 rounded-md bg-white border border-gray-300 hover:bg-gray-100 text-gray-600"
+              title="Đóng bảng lợi nhuận (quay về Tất cả)"
+            >
+              ✕ Đóng
+            </button>
+          )}
+        </div>
       </div>
 
       {/* BẢNG 1 — LN TRƯỚC HOÀN */}
@@ -3387,6 +3573,98 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
       <p className="text-[11px] text-gray-600 mt-3 italic">
         * Doanh thu = cột COD Pancake · Ad spend = chi tiêu FB Ads của {staff.adKeys.length === 0 ? "Website (không chạy FB Ads)" : staff.adKeys.length === 2 ? "Duy + Phương Nam (6 TK)" : staff.label} cho từng SP, dò từ tên campaign · Giá nhập lookup "Mã tên gọi" trong xlsx Kho tổng · Ad spend giữ nguyên ở cả 2 bảng (chi phí đã tiêu, không phụ thuộc đơn hoàn).
       </p>
+
+      {campModal && (
+        <CampaignDetailModal
+          mode={campModal.mode}
+          product={campModal.product}
+          staff={staff}
+          dateRange={dateRange}
+          onClose={() => setCampModal(null)}
+        />
+      )}
+    </div>
+  )
+}
+
+// Modal popup — bấm "CAMP" bên cạnh SP hoặc chip UNASSIGNED để mở.
+// Hiển thị list campaign + spend trong dateRange, để verify detection logic.
+function CampaignDetailModal({ mode, product, staff, dateRange, onClose }) {
+  const isUnassigned = mode === "unassigned"
+  const rows = isUnassigned
+    ? unassignedCampaigns(staff.adKeys, dateRange)
+    : campaignsForProduct(product, staff.adKeys, dateRange)
+  const total = rows.reduce((s, r) => s + r.spend, 0)
+  const title = isUnassigned
+    ? `⚠ Campaign KHÔNG detect được SP — ${staff.label}`
+    : `📊 Campaign chạy ${product} — ${staff.label}`
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className={`px-5 py-4 border-b border-gray-200 flex items-center justify-between ${isUnassigned ? "bg-gradient-to-r from-amber-50 to-yellow-50" : "bg-gradient-to-r from-blue-50 to-indigo-50"}`}>
+          <div className="min-w-0">
+            <h3 className="font-bold text-gray-900 text-base">{title}</h3>
+            <p className="text-[11px] text-gray-600 mt-0.5">
+              {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)} · {rows.length} campaign · Tổng: <span className="font-bold text-blue-700">{fmtVND(total)}₫</span>
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 text-xl font-bold w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 flex-shrink-0 ml-2"
+            title="Đóng"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="overflow-y-auto flex-1 p-4">
+          {rows.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center py-12 italic">
+              {isUnassigned
+                ? "Không có campaign nào bị unassigned — tất cả đã match SP đúng chuẩn. 🎉"
+                : `Không có campaign nào match "${product}" trong khoảng ${fmtDate(dateRange.start)} → ${fmtDate(dateRange.end)}.`}
+            </p>
+          ) : (
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-gray-50 border-b-2 border-gray-200 text-gray-700">
+                  <th className="py-2 px-2 text-left font-semibold w-8">#</th>
+                  <th className="py-2 px-2 text-left font-semibold">Campaign</th>
+                  <th className="py-2 px-2 text-left font-semibold">Tài khoản</th>
+                  <th className="py-2 px-2 text-right font-semibold">Spend trong range</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r, i) => (
+                  <tr key={r.id || i} className="border-b border-gray-100 hover:bg-blue-50/40">
+                    <td className="py-2 px-2 text-gray-500">{i + 1}</td>
+                    <td className="py-2 px-2 font-semibold text-gray-900 break-words">{r.name}</td>
+                    <td className="py-2 px-2 text-gray-600 text-[11px] break-words max-w-[240px]">{r.accountShort}</td>
+                    <td className="py-2 px-2 text-right font-bold text-blue-700 whitespace-nowrap">{fmtVND(r.spend)}₫</td>
+                  </tr>
+                ))}
+                <tr className="bg-gray-100 border-t-2 border-gray-300">
+                  <td colSpan="3" className="py-3 px-3 font-extrabold text-gray-900 text-right">TỔNG</td>
+                  <td className="py-3 px-3 text-right font-extrabold text-blue-800 whitespace-nowrap">{fmtVND(total)}₫</td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+        </div>
+        {isUnassigned && rows.length > 0 && (
+          <div className="px-5 py-3 bg-amber-50 border-t border-amber-200">
+            <p className="text-[11px] text-amber-800">
+              💡 Campaign này KHÔNG chứa tên SP khớp với 13 PROFIT_PRODUCTS. Đổi tên campaign chứa "D1", "D1 Pro", "DA8.1 Pro", "Noma 911"... hoặc mở rộng hàm <code className="bg-white px-1 rounded border">detectProfitProduct</code> (cả Python & JS).
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
