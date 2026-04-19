@@ -3139,7 +3139,7 @@ function RadarResultPanel({ data }) {
 // Mặc định tính trên đơn ĐÃ GIAO (delivered) — đơn khác không có LN thực.
 // =============================================================
 function ProfitBreakdown({ staffKey, dateRange, onClose }) {
-  // Hiện cho mọi staffKey — bao gồm ALL (tổng công ty) và từng nhân sự.
+  // Hiện cho mọi staffKey — bao gồm ALL (team ads) và từng nhân sự.
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
   const groups = revenue.source_groups || {}
   const adSpendByStaff = (typeof DATA !== "undefined" ? DATA.ad_spend_by_staff : null) || {}
@@ -3153,7 +3153,7 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   ]
 
   const STAFF_MAP = {
-    "ALL":           { label: "TỔNG CÔNG TY",  sources: ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"], adKeys: ["DUY", "PHUONG_NAM"], color: { bg: "bg-red-50",     border: "border-red-300" },     showCloseBtn: false },
+    "ALL":           { label: "Team Ads",      sources: ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"], adKeys: ["DUY", "PHUONG_NAM"], color: { bg: "bg-red-50",     border: "border-red-300" },     showCloseBtn: false },
     "DUY":           { label: "Duy",           sources: ["DUY"],                                                adKeys: ["DUY"],               color: { bg: "bg-blue-50",    border: "border-blue-300" },    showCloseBtn: true },
     "PHUONG_NAM":    { label: "Phương Nam",    sources: ["PHUONG_NAM"],                                         adKeys: ["PHUONG_NAM"],        color: { bg: "bg-purple-50",  border: "border-purple-300" },  showCloseBtn: true },
     "WEBSITE_STAFF": { label: "WEBSITE",       sources: ["WEBSITE", "ZALO_OA", "HOTLINE"],                      adKeys: [],                    color: { bg: "bg-emerald-50", border: "border-emerald-300" }, showCloseBtn: true },
@@ -3167,86 +3167,155 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
   }
 
   const VAT_RATE = 0.10
-  // LOẠI đơn hoàn + đơn hủy — cộng dồn status: delivered + returning + other (khớp RevenueByStaffBreakdown).
-  const STATUSES_KEEP = ["delivered", "returning", "other"]
 
-  const rows = PRODUCTS.map(p => {
-    let revenueP = 0
-    let unitsP = 0
-    let ordersP = 0
-    staff.sources.forEach(srcKey => {
-      const g = groups[srcKey]
-      if (!g) return
-      STATUSES_KEEP.forEach(stKey => {
-        const pData = g.products_by_status?.[stKey]?.[p]
-        if (!pData) return
-        Object.entries(pData.by_date || {}).forEach(([d, v]) => {
-          if (isInRange(d)) revenueP += (v || 0)
+  // Helper: compute rows cho 1 tập status.
+  // Ad spend dùng CHUNG cho cả 2 bảng (chi phí thật sự đã tiêu, không phân biệt đơn có hoàn hay không).
+  const computeRows = (STATUSES_KEEP) => {
+    const rows = PRODUCTS.map(p => {
+      let revenueP = 0
+      let unitsP = 0
+      let ordersP = 0
+      staff.sources.forEach(srcKey => {
+        const g = groups[srcKey]
+        if (!g) return
+        STATUSES_KEEP.forEach(stKey => {
+          const pData = g.products_by_status?.[stKey]?.[p]
+          if (!pData) return
+          Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+            if (isInRange(d)) revenueP += (v || 0)
+          })
+          if (pData.units_by_date) {
+            Object.entries(pData.units_by_date).forEach(([d, u]) => {
+              if (isInRange(d)) unitsP += (u || 0)
+            })
+          } else if (pData.units && pData.total > 0) {
+            const inRangeRev = Object.entries(pData.by_date || {})
+              .filter(([d]) => isInRange(d))
+              .reduce((s, [, v]) => s + (v || 0), 0)
+            const ratio = pData.total > 0 ? inRangeRev / pData.total : 0
+            unitsP += Math.round((pData.units || 0) * ratio)
+          }
+          if (pData.orders_by_date) {
+            Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+              if (isInRange(d)) ordersP += (c || 0)
+            })
+          }
         })
-        // units_by_date (mới) — fallback theo tỷ lệ nếu snapshot cũ
-        if (pData.units_by_date) {
-          Object.entries(pData.units_by_date).forEach(([d, u]) => {
-            if (isInRange(d)) unitsP += (u || 0)
-          })
-        } else if (pData.units && pData.total > 0) {
-          const inRangeRev = Object.entries(pData.by_date || {})
-            .filter(([d]) => isInRange(d))
-            .reduce((s, [, v]) => s + (v || 0), 0)
-          const ratio = pData.total > 0 ? inRangeRev / pData.total : 0
-          unitsP += Math.round((pData.units || 0) * ratio)
-        }
-        // orders trong range
-        if (pData.orders_by_date) {
-          Object.entries(pData.orders_by_date).forEach(([d, c]) => {
-            if (isInRange(d)) ordersP += (c || 0)
-          })
-        }
       })
+
+      // Ad spend — gộp qua tất cả adKeys của staff (ALL = DUY + PHUONG_NAM).
+      let adSpendP = 0
+      staff.adKeys.forEach(adKey => {
+        const bucket = adSpendByStaff[adKey] && adSpendByStaff[adKey][p]
+        if (!bucket) return
+        Object.entries(bucket.by_date || {}).forEach(([d, v]) => {
+          if (isInRange(d)) adSpendP += (v || 0)
+        })
+      })
+
+      const costEntry = productCosts[p] || {}
+      const costPerUnit = Number(costEntry.gia_nhap_vnd) || 0
+
+      const vat = revenueP * VAT_RATE
+      const totalCost = costPerUnit * unitsP
+      const profit = revenueP - vat - adSpendP - totalCost
+      const margin = revenueP > 0 ? (profit / revenueP) * 100 : null
+
+      return {
+        product: p,
+        units: unitsP,
+        orders: ordersP,
+        revenue: revenueP,
+        vat,
+        adSpend: adSpendP,
+        costPerUnit,
+        totalCost,
+        profit,
+        margin,
+        missingCost: !costPerUnit,
+      }
     })
 
-    // Ad spend — gộp qua tất cả adKeys của staff (ALL = DUY + PHUONG_NAM).
-    let adSpendP = 0
-    staff.adKeys.forEach(adKey => {
-      const bucket = adSpendByStaff[adKey] && adSpendByStaff[adKey][p]
-      if (!bucket) return
-      Object.entries(bucket.by_date || {}).forEach(([d, v]) => {
-        if (isInRange(d)) adSpendP += (v || 0)
-      })
-    })
+    const tot = rows.reduce((a, r) => ({
+      revenue: a.revenue + r.revenue,
+      vat: a.vat + r.vat,
+      adSpend: a.adSpend + r.adSpend,
+      totalCost: a.totalCost + r.totalCost,
+      profit: a.profit + r.profit,
+      units: a.units + r.units,
+      orders: a.orders + r.orders,
+    }), { revenue: 0, vat: 0, adSpend: 0, totalCost: 0, profit: 0, units: 0, orders: 0 })
+    const totMargin = tot.revenue > 0 ? (tot.profit / tot.revenue) * 100 : null
+    return { rows, tot, totMargin }
+  }
 
-    const costEntry = productCosts[p] || {}
-    const costPerUnit = Number(costEntry.gia_nhap_vnd) || 0
+  // TRƯỚC HOÀN: gồm delivered + returning + other + returned (đơn đã từng bán, CHƯA trừ hoàn) · loại canceled
+  const beforeReturns = computeRows(["delivered", "returning", "other", "returned"])
+  // SAU HOÀN: loại returned + canceled (khớp RevenueByStaffBreakdown)
+  const afterReturns  = computeRows(["delivered", "returning", "other"])
 
-    const vat = revenueP * VAT_RATE
-    const totalCost = costPerUnit * unitsP
-    const profit = revenueP - vat - adSpendP - totalCost
-    const margin = revenueP > 0 ? (profit / revenueP) * 100 : null
+  const lossByReturns = beforeReturns.tot.profit - afterReturns.tot.profit
 
-    return {
-      product: p,
-      units: unitsP,
-      orders: ordersP,
-      revenue: revenueP,
-      vat,
-      adSpend: adSpendP,
-      costPerUnit,
-      totalCost,
-      profit,
-      margin,
-      missingCost: !costPerUnit,
-    }
-  })
-
-  const tot = rows.reduce((a, r) => ({
-    revenue: a.revenue + r.revenue,
-    vat: a.vat + r.vat,
-    adSpend: a.adSpend + r.adSpend,
-    totalCost: a.totalCost + r.totalCost,
-    profit: a.profit + r.profit,
-    units: a.units + r.units,
-    orders: a.orders + r.orders,
-  }), { revenue: 0, vat: 0, adSpend: 0, totalCost: 0, profit: 0, units: 0, orders: 0 })
-  const totMargin = tot.revenue > 0 ? (tot.profit / tot.revenue) * 100 : null
+  const renderTable = (data) => (
+    <div className="overflow-x-auto bg-white rounded-lg border border-gray-200 mb-2">
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="bg-gray-50 border-b-2 border-gray-200 text-gray-700">
+            <th className="py-2 px-3 text-left font-semibold">Sản phẩm</th>
+            <th className="py-2 px-3 text-right font-semibold">SL bán</th>
+            <th className="py-2 px-3 text-right font-semibold">Đơn</th>
+            <th className="py-2 px-3 text-right font-semibold">Doanh thu</th>
+            <th className="py-2 px-3 text-right font-semibold text-amber-700">VAT 10%</th>
+            <th className="py-2 px-3 text-right font-semibold text-blue-700">Ad spend</th>
+            <th className="py-2 px-3 text-right font-semibold">Giá nhập/cái</th>
+            <th className="py-2 px-3 text-right font-semibold">Σ Giá nhập</th>
+            <th className="py-2 px-3 text-right font-bold border-l border-gray-300">LỢI NHUẬN</th>
+            <th className="py-2 px-3 text-right font-semibold">Biên LN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.rows.map(r => {
+            const hasData = r.revenue > 0 || r.adSpend > 0
+            return (
+              <tr key={r.product} className={`border-b border-gray-100 ${hasData ? "" : "opacity-50"} hover:bg-gray-50/60`}>
+                <td className="py-2 px-3 font-semibold text-gray-900">
+                  {r.product}
+                  {r.missingCost && <span className="ml-2 text-[10px] text-red-600 font-medium" title="Giá nhập chưa có trong xlsx">⚠ thiếu giá nhập</span>}
+                </td>
+                <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-600">{r.orders > 0 ? fmtNum(r.orders) : "—"}</td>
+                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVND(r.revenue) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVND(r.vat) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVND(r.adSpend) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-600">{r.costPerUnit > 0 ? fmtVND(r.costPerUnit) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVND(r.totalCost) + "₫" : "—"}</td>
+                <td className={`py-2 px-3 text-right font-extrabold border-l border-gray-300 ${r.profit > 0 ? "text-emerald-700" : r.profit < 0 ? "text-red-600" : "text-gray-400"}`}>
+                  {hasData ? fmtVND(r.profit) + "₫" : "—"}
+                </td>
+                <td className={`py-2 px-3 text-right font-semibold ${r.margin == null ? "text-gray-300" : r.margin > 0 ? "text-emerald-700" : "text-red-600"}`}>
+                  {r.margin == null ? "—" : r.margin.toFixed(1) + "%"}
+                </td>
+              </tr>
+            )
+          })}
+          <tr className="bg-gray-100 border-t-2 border-gray-300">
+            <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.units)}</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.orders)}</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVND(data.tot.revenue)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVND(data.tot.vat)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVND(data.tot.adSpend)}₫</td>
+            <td className="py-3 px-3 text-right text-gray-500">—</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVND(data.tot.totalCost)}₫</td>
+            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(data.tot.profit)}₫</td>
+            <td className={`py-3 px-3 text-right font-bold ${data.totMargin == null ? "text-gray-400" : data.totMargin > 0 ? "text-emerald-700" : "text-red-600"}`}>
+              {data.totMargin == null ? "—" : data.totMargin.toFixed(1) + "%"}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
 
   return (
     <div className={`mb-6 rounded-xl border-2 ${staff.color.border} ${staff.color.bg} p-5 shadow-sm`}>
@@ -3256,7 +3325,7 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
             <DollarSign className="w-5 h-5 text-emerald-600" /> Lợi nhuận — {staff.label}
           </h2>
           <p className="text-xs text-gray-600 mt-1">
-            Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý</span> · <span className="text-red-600 font-semibold">ĐÃ LOẠI Đã hoàn + Đã hủy</span> · {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
+            {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
             {" · "}
             <span className="font-mono text-[10px] bg-white/80 px-1.5 py-0.5 rounded border border-gray-200">
               LN = DT − DT×10% VAT − Ad − Giá nhập × SL
@@ -3274,68 +3343,49 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
         )}
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg border border-gray-200">
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="bg-gray-50 border-b-2 border-gray-200 text-gray-700">
-              <th className="py-2 px-3 text-left font-semibold">Sản phẩm</th>
-              <th className="py-2 px-3 text-right font-semibold">SL bán</th>
-              <th className="py-2 px-3 text-right font-semibold">Đơn</th>
-              <th className="py-2 px-3 text-right font-semibold">Doanh thu</th>
-              <th className="py-2 px-3 text-right font-semibold text-amber-700">VAT 10%</th>
-              <th className="py-2 px-3 text-right font-semibold text-blue-700">Ad spend</th>
-              <th className="py-2 px-3 text-right font-semibold">Giá nhập/cái</th>
-              <th className="py-2 px-3 text-right font-semibold">Σ Giá nhập</th>
-              <th className="py-2 px-3 text-right font-bold border-l border-gray-300">LỢI NHUẬN</th>
-              <th className="py-2 px-3 text-right font-semibold">Biên LN</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(r => {
-              const hasData = r.revenue > 0 || r.adSpend > 0
-              return (
-                <tr key={r.product} className={`border-b border-gray-100 ${hasData ? "" : "opacity-50"} hover:bg-gray-50/60`}>
-                  <td className="py-2 px-3 font-semibold text-gray-900">
-                    {r.product}
-                    {r.missingCost && <span className="ml-2 text-[10px] text-red-600 font-medium" title="Giá nhập chưa có trong xlsx">⚠ thiếu giá nhập</span>}
-                  </td>
-                  <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
-                  <td className="py-2 px-3 text-right text-gray-600">{r.orders > 0 ? fmtNum(r.orders) : "—"}</td>
-                  <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVND(r.revenue) + "₫" : "—"}</td>
-                  <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVND(r.vat) + "₫" : "—"}</td>
-                  <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVND(r.adSpend) + "₫" : "—"}</td>
-                  <td className="py-2 px-3 text-right text-gray-600">{r.costPerUnit > 0 ? fmtVND(r.costPerUnit) + "₫" : "—"}</td>
-                  <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVND(r.totalCost) + "₫" : "—"}</td>
-                  <td className={`py-2 px-3 text-right font-extrabold border-l border-gray-300 ${r.profit > 0 ? "text-emerald-700" : r.profit < 0 ? "text-red-600" : "text-gray-400"}`}>
-                    {hasData ? fmtVND(r.profit) + "₫" : "—"}
-                  </td>
-                  <td className={`py-2 px-3 text-right font-semibold ${r.margin == null ? "text-gray-300" : r.margin > 0 ? "text-emerald-700" : "text-red-600"}`}>
-                    {r.margin == null ? "—" : r.margin.toFixed(1) + "%"}
-                  </td>
-                </tr>
-              )
-            })}
-            {/* Tổng */}
-            <tr className="bg-gray-100 border-t-2 border-gray-300">
-              <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG</td>
-              <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(tot.units)}</td>
-              <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(tot.orders)}</td>
-              <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVND(tot.revenue)}₫</td>
-              <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVND(tot.vat)}₫</td>
-              <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVND(tot.adSpend)}₫</td>
-              <td className="py-3 px-3 text-right text-gray-500">—</td>
-              <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVND(tot.totalCost)}₫</td>
-              <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(tot.profit)}₫</td>
-              <td className={`py-3 px-3 text-right font-bold ${totMargin == null ? "text-gray-400" : totMargin > 0 ? "text-emerald-700" : "text-red-600"}`}>
-                {totMargin == null ? "—" : totMargin.toFixed(1) + "%"}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      {/* BẢNG 1 — LN TRƯỚC HOÀN */}
+      <div className="mb-2">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-xs font-bold text-amber-900 bg-amber-100 px-2 py-1 rounded border border-amber-300">
+            📊 LN TRƯỚC HOÀN
+          </span>
+          <span className="text-[11px] text-gray-600">
+            Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý + Đã hoàn</span> · loại <span className="font-semibold">Đã hủy</span>
+          </span>
+        </div>
+        {renderTable(beforeReturns)}
+      </div>
+
+      {/* Dòng tóm tắt TRƯỚC → MẤT → SAU */}
+      <div className="my-3 px-4 py-3 bg-white rounded-lg border-2 border-dashed border-gray-300 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+        <span className="text-gray-700">
+          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(beforeReturns.tot.profit)}₫</span>
+        </span>
+        <span className="text-gray-400 text-lg">→</span>
+        <span className="text-gray-700">
+          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVND(Math.abs(lossByReturns))}₫</span>
+        </span>
+        <span className="text-gray-400 text-lg">→</span>
+        <span className="text-gray-700">
+          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(afterReturns.tot.profit)}₫</span>
+        </span>
+      </div>
+
+      {/* BẢNG 2 — LN SAU HOÀN */}
+      <div className="mt-2">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <span className="text-xs font-bold text-white bg-emerald-600 px-2 py-1 rounded border border-emerald-700">
+            ✅ LN SAU HOÀN
+          </span>
+          <span className="text-[11px] text-gray-600">
+            Gồm <span className="font-semibold">Đã giao + Đang hoàn + Đang xử lý</span> · <span className="text-red-600 font-semibold">ĐÃ LOẠI Đã hoàn + Đã hủy</span>
+          </span>
+        </div>
+        {renderTable(afterReturns)}
       </div>
 
       <p className="text-[11px] text-gray-600 mt-3 italic">
-        * Doanh thu = cột COD Pancake (đã loại đơn hoàn/hủy) · Ad spend = chi tiêu FB Ads của {staff.adKeys.length === 0 ? "Website (không chạy FB Ads)" : staff.adKeys.length === 2 ? "Duy + Phương Nam (6 TK)" : staff.label} cho từng SP, dò từ tên campaign · Giá nhập lookup "Mã tên gọi" trong xlsx Kho tổng.
+        * Doanh thu = cột COD Pancake · Ad spend = chi tiêu FB Ads của {staff.adKeys.length === 0 ? "Website (không chạy FB Ads)" : staff.adKeys.length === 2 ? "Duy + Phương Nam (6 TK)" : staff.label} cho từng SP, dò từ tên campaign · Giá nhập lookup "Mã tên gọi" trong xlsx Kho tổng · Ad spend giữ nguyên ở cả 2 bảng (chi phí đã tiêu, không phụ thuộc đơn hoàn).
       </p>
     </div>
   )
