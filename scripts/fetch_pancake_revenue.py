@@ -239,10 +239,13 @@ def aggregate(orders):
     """Aggregate orders vào 5 bucket theo status Pancake.
 
     Returns:
-        buckets              — {status_key: per_product_bucket}
-        summary              — {status_key: {orders, total}}
-        total_orders         — int tổng số đơn raw
-        total_orders_by_date — {date: orders_count} cấp nhóm (không phải per product)
+        buckets                         — {status_key: per_product_bucket}
+        summary                         — {status_key: {orders, total}}
+        total_orders                    — int tổng số đơn raw
+        total_orders_by_date            — {date: orders_count} cấp nhóm (tất cả status)
+        order_revenue_by_status_by_date — {status_key: {date: revenue}} cấp nhóm.
+            MỚI: tổng `total_price_after_sub_discount` của đơn — KHÔNG phụ thuộc 6 SP chính.
+            Dùng để tính "doanh thu tổng thực thu" khớp với Pancake aggs (cod+prepaid).
     """
     buckets = {
         "delivered": empty_bucket(),   # 3 — Đã giao
@@ -254,6 +257,12 @@ def aggregate(orders):
     summary = {k: {"orders": 0, "total": 0} for k in buckets.keys()}
     total_orders = 0
     total_orders_by_date = {}  # date → số đơn bất kể status, để UI lọc theo dateRange
+    # MỚI: {status: {date: tổng total_price_after_sub_discount}} — doanh thu THỰC THU theo đơn
+    # (không bó hẹp 6 SP chính). Dùng cho box Staff / Source "Doanh thu tổng".
+    order_revenue_by_status_by_date = {k: {} for k in buckets.keys()}
+    # MỚI: {status: {date: orders_count}} — số đơn THEO STATUS theo ngày.
+    # Dùng cho UI "chưa tính hoàn hủy" (loại status `returned` + `canceled`).
+    order_count_by_status_by_date = {k: {} for k in buckets.keys()}
 
     for o in orders:
         total_orders += 1
@@ -270,7 +279,7 @@ def aggregate(orders):
             bucket_key = "other"
 
         bucket = buckets[bucket_key]
-        # Order total thực (Pancake)
+        # Order total thực (Pancake) — đã trừ discount cấp đơn
         order_total = int(o.get("total_price_after_sub_discount") or o.get("total_price") or 0)
         summary[bucket_key]["orders"] += 1
         summary[bucket_key]["total"] += order_total
@@ -278,6 +287,11 @@ def aggregate(orders):
         inserted_at = o.get("inserted_at") or o.get("created_at") or ""
         date = inserted_at[:10] if inserted_at else "unknown"
         total_orders_by_date[date] = total_orders_by_date.get(date, 0) + 1
+        # Gộp doanh thu + số đơn vào status+date map
+        order_revenue_by_status_by_date[bucket_key][date] = \
+            order_revenue_by_status_by_date[bucket_key].get(date, 0) + order_total
+        order_count_by_status_by_date[bucket_key][date] = \
+            order_count_by_status_by_date[bucket_key].get(date, 0) + 1
 
         products_in_order = set()
         for code, qty, retail_price in extract_items(o):
@@ -302,7 +316,8 @@ def aggregate(orders):
             bucket[p]["orders"] += 1
             bucket[p]["orders_by_date"][date] = bucket[p]["orders_by_date"].get(date, 0) + 1
 
-    return buckets, summary, total_orders, total_orders_by_date
+    return (buckets, summary, total_orders, total_orders_by_date,
+            order_revenue_by_status_by_date, order_count_by_status_by_date)
 
 
 def main():
@@ -331,7 +346,8 @@ def main():
         status_counter = Counter(o.get("status") for o in orders)
         print(f"[DEBUG] {key} status: {dict(status_counter.most_common())}")
 
-        buckets, summary, group_total, group_orders_by_date = aggregate(orders)
+        (buckets, summary, group_total, group_orders_by_date,
+         group_order_rev_by_status, group_order_count_by_status) = aggregate(orders)
         products_all = merge_buckets(*buckets.values())
 
         print(f"[RESULT] {label}: {group_total} đơn")
@@ -349,6 +365,11 @@ def main():
             "total_orders": group_total,
             # MỚI: đơn theo ngày ở cấp nhóm, để UI lọc "tổng đơn của nhân sự" theo dateRange.
             "total_orders_by_date": group_orders_by_date,
+            # MỚI: tổng doanh thu THỰC THU (total_price_after_sub_discount) per status per date.
+            # Dùng cho box Staff/Source "doanh thu tổng" (khớp Pancake aggs), KHÔNG bó 6 SP chính.
+            "order_revenue_by_status_by_date": group_order_rev_by_status,
+            # MỚI: số đơn per status per date — để UI tính "số đơn chưa tính hoàn hủy"
+            "order_count_by_status_by_date": group_order_count_by_status,
             "summary": summary,
             "products": products_all,
             "products_by_status": buckets,
@@ -358,7 +379,8 @@ def main():
 
     # ── Aggregate tổng hợp (all 5 groups combined) — giữ backward-compat với dashboard cũ ──
     print("─── [TỔNG HỢP 5 NHÓM] ───────────────────────────")
-    total_buckets, total_summary, total_count, total_orders_by_date = aggregate(all_orders_combined)
+    (total_buckets, total_summary, total_count, total_orders_by_date,
+     total_order_rev_by_status, total_order_count_by_status) = aggregate(all_orders_combined)
     total_products = merge_buckets(*total_buckets.values())
     print(f"[RESULT] Tổng 5 nhóm: {total_count} đơn")
     for st in ("delivered", "returning", "returned", "canceled", "other"):
@@ -375,6 +397,10 @@ def main():
         "total_orders": total_count,
         # MỚI: tổng đơn theo ngày (tất cả 5 nhóm)
         "total_orders_by_date": total_orders_by_date,
+        # MỚI: doanh thu THỰC THU per status per date (top-level, gộp 5 nguồn)
+        "order_revenue_by_status_by_date": total_order_rev_by_status,
+        # MỚI: số đơn per status per date (top-level, gộp 5 nguồn)
+        "order_count_by_status_by_date": total_order_count_by_status,
         # Giữ format cũ cho các chỗ dashboard đang dùng (`summary`, `products`, `products_by_status`)
         "summary": total_summary,
         "products": total_products,

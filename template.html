@@ -554,6 +554,9 @@ function FacebookAdsDashboard() {
   const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator"
   const [selectedAccount, setSelectedAccount] = useState("all")
   const [timeFilter, setTimeFilter] = useState("30d")
+  // staffFilter — lift lên parent để cả RevenueBySourceBreakdown và RevenueStatusBreakdown cùng react
+  // Giá trị: "ALL" / "DUY" / "PHUONG_NAM" / "WEBSITE_STAFF"
+  const [staffFilter, setStaffFilter] = useState("ALL")
 
   const dateRange = useMemo(() => getDateRange(timeFilter), [timeFilter])
 
@@ -625,36 +628,33 @@ function FacebookAdsDashboard() {
     return list
   }, [selectedAccount, dateRange])
 
-  // Tổng doanh thu & ROAS toàn bộ (các product đang có spend hoặc revenue)
+  // Tổng doanh thu & ROAS toàn bộ (các product đang có spend hoặc revenue) — dùng cho per-product ROAS
   const revenueKpis = useMemo(() => {
     const total = productsData.reduce((s, p) => s + (p.revenue || 0), 0)
     const spend = productsData.reduce((s, p) => s + (p.totals.spend || 0), 0)
     return { total, roas: spend > 0 ? total / spend : null }
   }, [productsData])
 
-  // Doanh thu tách theo status (đã giao / đang hoàn / đã hoàn / đã hủy / đang xử lý)
-  const revenueByStatus = useMemo(() => {
+  // ── KPI: TỔNG ĐƠN HÀNG + DOANH THU PANCAKE (THỰC THU, gộp cả 3 nhân sự / 5 nguồn) ──
+  // - Tổng đơn   = sum(total_orders_by_date) trong dateRange (bất kể status)
+  // - Doanh thu  = sum(order_revenue_by_status_by_date[status][date]) cho all status — dùng total_price
+  //                Pancake (= cod + prepaid theo Pancake aggs), KHÔNG bó hẹp 6 SP chính.
+  // - CIR        = spend / revenue (chi phí / doanh thu) — càng thấp càng tốt.
+  const pancakeKpi = useMemo(() => {
     const rev = DATA.revenue || {}
-    const byStatus = rev.products_by_status || {}
-    const statusKeys = ["delivered", "returning", "returned", "canceled", "other"]
-    const result = {} // { status: { products: {name: revenue}, total: sum } }
-    statusKeys.forEach(sk => {
-      const bucket = byStatus[sk] || {}
-      const products = {}
-      let total = 0
-      for (const [revName, p] of Object.entries(bucket)) {
-        if (!p || !p.by_date) { products[revName] = 0; continue }
-        let sum = 0
-        for (const [date, amount] of Object.entries(p.by_date)) {
-          if (date >= dateRange.start && date <= dateRange.end) sum += amount || 0
-        }
-        products[revName] = sum
-        total += sum
-      }
-      result[sk] = { products, total }
+    const inRange = (d) => d >= dateRange.start && d <= dateRange.end
+    let totalOrders = 0
+    Object.entries(rev.total_orders_by_date || {}).forEach(([d, c]) => { if (inRange(d)) totalOrders += c })
+    let totalRevenue = 0
+    const orderRev = rev.order_revenue_by_status_by_date || {}
+    Object.values(orderRev).forEach(perDate => {
+      Object.entries(perDate || {}).forEach(([d, v]) => { if (inRange(d)) totalRevenue += v })
     })
-    return result
+    return { totalOrders, totalRevenue }
   }, [dateRange])
+
+  // (Trước đây có useMemo `revenueByStatus` ở đây — đã chuyển logic vào RevenueStatusBreakdown
+  //  để self-compute theo cả dateRange + staffFilter.)
 
   // Campaigns filtered by time + account
   const campaignsFiltered = useMemo(() => {
@@ -827,8 +827,8 @@ function FacebookAdsDashboard() {
           </div>
         </div>
 
-        {/* KPI SCORECARDS */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+        {/* KPI SCORECARDS — 4 cards: Chi tiêu · Tổng đơn · Doanh thu Pancake · CIR */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <KpiCard
             icon={DollarSign}
             label="Tổng chi tiêu"
@@ -837,32 +837,29 @@ function FacebookAdsDashboard() {
             color="blue"
           />
           <KpiCard
-            icon={Eye}
-            label="Impressions"
-            value={fmtNum(kpis.impressions)}
-            sub={`Reach: ${fmtNum(kpis.reach)}`}
-            color="purple"
-          />
-          <KpiCard
-            icon={MousePointerClick}
-            label="Clicks / CTR"
-            value={fmtNum(kpis.clicks)}
-            sub={`CTR ${kpis.ctr.toFixed(2)}%`}
-            color="green"
-          />
-          <KpiCard
             icon={Target}
-            label="Đăng ký hoàn tất"
-            value={fmtNum(kpis.registrations)}
-            sub={kpis.registrations ? `CPL ${fmtVND(kpis.cpl)}₫` : "Chưa có đăng ký"}
+            label="Tổng đơn hàng"
+            value={fmtNum(pancakeKpi.totalOrders)}
+            sub="Pancake · tất cả nguồn"
             color="amber"
           />
           <KpiCard
             icon={Package}
             label="Doanh thu (Pancake)"
-            value={fmtVND(revenueKpis.total) + "₫"}
-            sub={revenueKpis.roas != null ? `ROAS ${revenueKpis.roas.toFixed(2)}x` : "—"}
+            value={fmtVND(pancakeKpi.totalRevenue) + "₫"}
+            sub="Tổng 3 nhân sự · gộp mọi trạng thái"
             color="red"
+          />
+          <KpiCard
+            icon={MousePointerClick}
+            label="CIR (chi phí / doanh thu)"
+            value={pancakeKpi.totalRevenue > 0
+              ? (kpis.spend / pancakeKpi.totalRevenue * 100).toFixed(1) + "%"
+              : "—"}
+            sub={pancakeKpi.totalRevenue > 0
+              ? `${fmtVND(kpis.spend)}₫ / ${fmtVND(pancakeKpi.totalRevenue)}₫`
+              : "Chưa có doanh thu"}
+            color="green"
           />
         </div>
 
@@ -877,11 +874,18 @@ function FacebookAdsDashboard() {
         {/* 1. REVENUE BREAKDOWN BY STAFF (Duy / Phương Nam / WEBSITE) */}
         <RevenueByStaffBreakdown dateRange={dateRange} />
 
-        {/* 2. REVENUE BREAKDOWN BY SOURCE GROUP — có filter theo nhân sự */}
-        <RevenueBySourceBreakdown dateRange={dateRange} />
+        {/* 2. REVENUE BREAKDOWN BY SOURCE GROUP — filter theo nhân sự (controlled) */}
+        <RevenueBySourceBreakdown
+          dateRange={dateRange}
+          staffFilter={staffFilter}
+          setStaffFilter={setStaffFilter}
+        />
 
-        {/* 3. REVENUE BREAKDOWN BY STATUS */}
-        <RevenueStatusBreakdown revenueByStatus={revenueByStatus} dateRange={dateRange} />
+        {/* 3. REVENUE BREAKDOWN BY STATUS — react theo cùng staffFilter */}
+        <RevenueStatusBreakdown
+          dateRange={dateRange}
+          staffFilter={staffFilter}
+        />
 
         {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
@@ -3151,54 +3155,80 @@ function RevenueByStaffBreakdown({ dateRange }) {
     return ymd >= dateRange.start && ymd <= dateRange.end
   }
 
+  // Loại 'returned' (đã hoàn) + 'canceled' (đã hủy) — theo yêu cầu user.
+  // Doanh thu nhân sự = sum 3 status: delivered + returning + other.
+  const STATUSES_KEEP = ["delivered", "returning", "other"]
+
   // Tính revenue/orders cho 1 source group (DUY / PHUONG_NAM / WEBSITE / ZALO_OA / HOTLINE)
-  // Trả về:
-  //   totalRev       — doanh thu nhóm filter theo dateRange
-  //   totalOrders    — số đơn nhóm filter theo dateRange (từ total_orders_by_date)
-  //   prodTotals     — {product: doanh thu filter}
-  //   prodOrders     — {product: số đơn có sản phẩm đó, filter}
-  //   fallbackOrders — true khi JSON chưa có orders_by_date → dùng tổng 90d approx
+  // - totalRev       — doanh thu THỰC THU (total_price_after_sub_discount), CHƯA tính hoàn/hủy.
+  //                    Nguồn: order_revenue_by_status_by_date — không bó hẹp 6 SP chính → khớp Pancake.
+  // - totalOrders    — số đơn của 3 status keep, từ order_count_by_status_by_date.
+  // - prodTotals     — {product: doanh thu 6 SP chính, đã loại hoàn hủy}
+  // - prodOrders     — {product: số đơn có sản phẩm đó, đã loại hoàn hủy}
+  // - fallbackXxx    — true khi JSON cũ chưa có field mới → fallback gross/all-status
   const computeSourceTotals = (srcKey) => {
     const g = groups[srcKey]
     if (!g) return { totalRev: 0, totalOrders: 0, prodTotals: {}, prodOrders: {}, hasData: false }
-    const prodTotals = {}
-    const prodOrders = {}
+
+    const hasOrderRev   = !!g.order_revenue_by_status_by_date
+    const hasOrderCount = !!g.order_count_by_status_by_date
+
+    // ── Tổng doanh thu nhân sự (THỰC THU, loại hoàn hủy) ──
     let totalRev = 0
-
-    // Check 1 lần xem JSON đã có orders_by_date chưa — quyết định fallback
-    const hasOrdersByDate = !!g.total_orders_by_date
-
-    PRODUCTS.forEach(p => {
-      const pData = g.products?.[p] || {}
-      let sum = 0
-      Object.entries(pData.by_date || {}).forEach(([d, v]) => {
-        if (isInRange(d)) sum += v
-      })
-      prodTotals[p] = sum
-      totalRev += sum
-
-      // Số đơn có sản phẩm p
-      if (pData.orders_by_date) {
-        let ord = 0
-        Object.entries(pData.orders_by_date).forEach(([d, c]) => {
-          if (isInRange(d)) ord += c
+    if (hasOrderRev) {
+      STATUSES_KEEP.forEach(st => {
+        Object.entries(g.order_revenue_by_status_by_date[st] || {}).forEach(([d, v]) => {
+          if (isInRange(d)) totalRev += v
         })
-        prodOrders[p] = ord
-      } else {
-        // Fallback: JSON snapshot cũ, dùng tổng 90d (không filter được)
-        prodOrders[p] = pData.orders || 0
-      }
-    })
-
-    // Tổng đơn nhóm (khác sum(prodOrders) vì 1 đơn có thể có nhiều sản phẩm)
-    let totalOrders = 0
-    if (hasOrdersByDate) {
-      Object.entries(g.total_orders_by_date).forEach(([d, c]) => {
-        if (isInRange(d)) totalOrders += c
       })
+    } else {
+      // Fallback: snapshot cũ — sum products[p].by_date 6 SP (không tách status nổi)
+      PRODUCTS.forEach(p => {
+        const pData = g.products?.[p] || {}
+        Object.entries(pData.by_date || {}).forEach(([d, v]) => { if (isInRange(d)) totalRev += v })
+      })
+    }
+
+    // ── Tổng đơn nhân sự (loại hoàn hủy) ──
+    let totalOrders = 0
+    if (hasOrderCount) {
+      STATUSES_KEEP.forEach(st => {
+        Object.entries(g.order_count_by_status_by_date[st] || {}).forEach(([d, c]) => {
+          if (isInRange(d)) totalOrders += c
+        })
+      })
+    } else if (g.total_orders_by_date) {
+      // Fallback: tất cả status
+      Object.entries(g.total_orders_by_date).forEach(([d, c]) => { if (isInRange(d)) totalOrders += c })
     } else {
       totalOrders = g.total_orders || 0
     }
+
+    // ── Per-product cells (6 SP chính) — cũng loại hoàn hủy để consistent ──
+    const prodTotals = {}
+    const prodOrders = {}
+    PRODUCTS.forEach(p => {
+      let sum = 0
+      let ord = 0
+      if (g.products_by_status) {
+        STATUSES_KEEP.forEach(st => {
+          const pData = g.products_by_status[st]?.[p] || {}
+          Object.entries(pData.by_date || {}).forEach(([d, v]) => { if (isInRange(d)) sum += v })
+          Object.entries(pData.orders_by_date || {}).forEach(([d, c]) => { if (isInRange(d)) ord += c })
+        })
+      } else {
+        // Fallback: dùng products tổng (gross)
+        const pData = g.products?.[p] || {}
+        Object.entries(pData.by_date || {}).forEach(([d, v]) => { if (isInRange(d)) sum += v })
+        if (pData.orders_by_date) {
+          Object.entries(pData.orders_by_date).forEach(([d, c]) => { if (isInRange(d)) ord += c })
+        } else {
+          ord = pData.orders || 0
+        }
+      }
+      prodTotals[p] = sum
+      prodOrders[p] = ord
+    })
 
     return {
       totalRev,
@@ -3206,7 +3236,7 @@ function RevenueByStaffBreakdown({ dateRange }) {
       prodTotals,
       prodOrders,
       hasData: true,
-      fallbackOrders: !hasOrdersByDate,
+      fallbackOrders: !hasOrderCount,
     }
   }
 
@@ -3244,7 +3274,9 @@ function RevenueByStaffBreakdown({ dateRange }) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-lg font-bold text-red-700 tracking-tight">👥 Doanh thu theo nhân sự — 3 nhóm</h2>
-          <p className="text-xs text-gray-500 mt-1">Gộp các nguồn đơn theo người phụ trách · WEBSITE = Website + Zalo OA + Hotline</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Doanh thu thực thu (đã trừ giảm giá đơn) · <span className="font-semibold text-emerald-700">CHƯA tính đơn hoàn / hủy</span> · WEBSITE = Website + Zalo OA + Hotline
+          </p>
         </div>
         <div className="text-right">
           <div className="text-xs text-gray-500">Tổng 3 nhân sự</div>
@@ -3384,10 +3416,13 @@ function RevenueByStaffBreakdown({ dateRange }) {
       </div>
 
       <p className="text-[11px] text-gray-500 mt-3">
-        * Doanh thu + số đơn đều tính theo khoảng thời gian anh chọn ở bộ lọc phía trên.
+        * Doanh thu + số đơn theo bộ lọc thời gian phía trên · loại "Đã hoàn" + "Đã hủy".
+        Cell mỗi sản phẩm = doanh thu của 6 SP chính (D1, DR1, Noma 911/922, DA8.1/Pro);
+        Cột "Tổng" = tổng doanh thu thực thu mọi SKU (khớp Pancake POS).
         {anyFallback && (
           <span className="block text-amber-600 mt-1">
-            ⚠ Số đơn đang hiển thị tổng 90 ngày (snapshot cũ chưa có orders_by_date) — sẽ tự cập nhật sau khi workflow Pancake chạy lần kế.
+            ⚠ Snapshot JSON cũ chưa có order_revenue_by_status_by_date — đang dùng số xấp xỉ.
+            Sẽ tự cập nhật trong vòng 15 phút (workflow Pancake chạy cron).
           </span>
         )}
       </p>
@@ -3404,13 +3439,10 @@ function RevenueByStaffBreakdown({ dateRange }) {
 //   - Phương Nam     → chỉ show nguồn PHUONG_NAM
 //   - WEBSITE        → show Website + Zalo OA + Hotline (3 nguồn con)
 // =============================================================
-function RevenueBySourceBreakdown({ dateRange }) {
+function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
   const groupsOrder = revenue.source_groups_order || []
   const groups = revenue.source_groups || {}
-
-  // State filter nhân sự: ALL / DUY / PHUONG_NAM / WEBSITE_STAFF
-  const [staffFilter, setStaffFilter] = React.useState("ALL")
 
   if (!groupsOrder.length || !Object.keys(groups).length) {
     return null
@@ -3651,15 +3683,11 @@ function RevenueBySourceBreakdown({ dateRange }) {
 }
 
 // =============================================================
-// SUB-COMPONENT: Revenue breakdown theo status (đã giao / đang hoàn / đã hoàn / ...)
+// SUB-COMPONENT: Revenue breakdown theo STATUS (đã giao / đang hoàn / đã hoàn / …)
+// React theo dateRange + staffFilter (cùng filter với box Doanh thu theo nguồn).
+// Khi staffFilter khác ALL → tự compute lại từ DATA.revenue.source_groups[KEY].products_by_status
 // =============================================================
-function RevenueStatusBreakdown({ revenueByStatus, dateRange }) {
-  // Map revName → adName để hiển thị cùng tên với cards phía trên
-  const REV_TO_DISPLAY = {
-    "D1": "D1", "DR1": "DR1",
-    "Noma 911": "Noma 911", "Noma 922": "Noma 922",
-    "DA8.1": "DA8.1", "DA8.1 Pro": "DA8.1 Pro"
-  }
+function RevenueStatusBreakdown({ dateRange, staffFilter }) {
   const productOrder = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
 
   const STATUS_META = [
@@ -3670,21 +3698,105 @@ function RevenueStatusBreakdown({ revenueByStatus, dateRange }) {
     { key: "other",     label: "Đang xử lý",  color: "text-blue-600",    bg: "bg-blue-50"    }
   ]
 
-  // Hàng "Tổng đã tạo" = cộng dồn tất cả status
+  // Mapping nhân sự → danh sách source keys để gộp
+  const STAFF_TO_SOURCES = {
+    ALL:           ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"],
+    DUY:           ["DUY"],
+    PHUONG_NAM:    ["PHUONG_NAM"],
+    WEBSITE_STAFF: ["WEBSITE", "ZALO_OA", "HOTLINE"],
+  }
+  const STAFF_LABEL = {
+    ALL: "Tất cả nhân sự",
+    DUY: "Nhân sự Duy",
+    PHUONG_NAM: "Nhân sự Phương Nam",
+    WEBSITE_STAFF: "Nhân sự WEBSITE (Website + Zalo OA + Hotline)",
+  }
+
+  // Self-compute revenueByStatus theo staffFilter + dateRange
+  // - Doanh thu per cell: lấy từ source_groups[KEY].products_by_status[status][product].by_date
+  // - Số đơn per cell:    lấy từ source_groups[KEY].products_by_status[status][product].orders_by_date
+  const { revenueByStatus, anyFallback } = React.useMemo(() => {
+    const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
+    const groups = revenue.source_groups || {}
+    const sourceKeys = STAFF_TO_SOURCES[staffFilter] || STAFF_TO_SOURCES.ALL
+    const statusKeys = ["delivered", "returning", "returned", "canceled", "other"]
+    const isInRange = (d) => {
+      if (!dateRange?.start || !dateRange?.end) return true
+      return d >= dateRange.start && d <= dateRange.end
+    }
+
+    const result = {}
+    let sawOrdersByDate = false
+    let sawNoOrdersByDate = false
+
+    statusKeys.forEach(sk => {
+      const products = {}       // {product: revenue}
+      const productsOrders = {} // {product: orders}
+      let total = 0
+      let totalOrders = 0
+
+      productOrder.forEach(p => {
+        let sum = 0
+        let ord = 0
+        sourceKeys.forEach(srcKey => {
+          const g = groups[srcKey]
+          if (!g) return
+          const pData = g.products_by_status?.[sk]?.[p] || {}
+          // Doanh thu theo date
+          Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+            if (isInRange(d)) sum += v || 0
+          })
+          // Số đơn theo date (nếu có)
+          if (pData.orders_by_date) {
+            sawOrdersByDate = true
+            Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+              if (isInRange(d)) ord += c || 0
+            })
+          } else if (pData.orders != null) {
+            // Fallback: tổng 90d (snapshot cũ)
+            sawNoOrdersByDate = true
+            ord += pData.orders || 0
+          }
+        })
+        products[p] = sum
+        productsOrders[p] = ord
+        total += sum
+        totalOrders += ord
+      })
+      result[sk] = { products, productsOrders, total, totalOrders }
+    })
+
+    return {
+      revenueByStatus: result,
+      anyFallback: sawNoOrdersByDate && !sawOrdersByDate,
+    }
+  }, [dateRange, staffFilter])
+
+  // Hàng "Tổng đã tạo" = cộng dồn 5 status
   const totalByProduct = {}
+  const totalOrdersByProduct = {}
   productOrder.forEach(p => {
-    totalByProduct[p] = STATUS_META.reduce((s, st) => s + (revenueByStatus[st.key]?.products?.[p] || 0), 0)
+    totalByProduct[p]       = STATUS_META.reduce((s, st) => s + (revenueByStatus[st.key]?.products?.[p] || 0), 0)
+    totalOrdersByProduct[p] = STATUS_META.reduce((s, st) => s + (revenueByStatus[st.key]?.productsOrders?.[p] || 0), 0)
   })
-  const grandTotal = Object.values(totalByProduct).reduce((s, v) => s + v, 0)
+  const grandTotal  = Object.values(totalByProduct).reduce((s, v) => s + v, 0)
+  const grandOrders = Object.values(totalOrdersByProduct).reduce((s, v) => s + v, 0)
 
   return (
     <div className="mb-6 bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
-        <Package className="w-5 h-5 text-red-600" />
-        Doanh thu theo trạng thái — Pancake
-      </h2>
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+        <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <Package className="w-5 h-5 text-red-600" />
+          Doanh thu theo trạng thái — Pancake
+        </h2>
+        <div className="text-right">
+          <div className="text-[11px] text-gray-500">Tổng đã tạo</div>
+          <div className="text-base font-extrabold text-red-600">{fmtVND(grandTotal)}₫</div>
+          <div className="text-[11px] text-gray-500">{grandOrders.toLocaleString("vi-VN")} đơn</div>
+        </div>
+      </div>
       <p className="text-xs text-gray-500 mb-4">
-        Bóc tách doanh thu theo status đơn hàng · Khoảng: {fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}
+        Bóc tách doanh thu + số đơn theo status · Khoảng: <span className="font-semibold text-gray-700">{fmtDate(dateRange.start)} → {fmtDate(dateRange.end)}</span> · Nhân sự: <span className="font-semibold text-gray-700">{STAFF_LABEL[staffFilter] || "Tất cả"}</span>
       </p>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -3692,53 +3804,85 @@ function RevenueStatusBreakdown({ revenueByStatus, dateRange }) {
             <tr className="border-b-2 border-gray-200 text-gray-600">
               <th className="py-2 px-3 text-left font-semibold">Trạng thái</th>
               {productOrder.map(p => (
-                <th key={p} className="py-2 px-3 text-right font-semibold">{REV_TO_DISPLAY[p]}</th>
+                <th key={p} className="py-2 px-3 text-right font-semibold">{p}</th>
               ))}
               <th className="py-2 px-3 text-right font-bold bg-gray-50">Tổng</th>
             </tr>
           </thead>
           <tbody>
             {STATUS_META.map(st => {
-              const row = revenueByStatus[st.key] || { products: {}, total: 0 }
+              const row = revenueByStatus[st.key] || { products: {}, productsOrders: {}, total: 0, totalOrders: 0 }
               return (
                 <tr key={st.key} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className={`py-2 px-3 font-medium ${st.color}`}>
                     <span className={`inline-block w-2 h-2 rounded-full mr-2 ${st.bg}`} style={{ border: "2px solid currentColor" }} />
                     {st.label}
+                    <span className="ml-2 text-[10px] font-normal text-gray-400">({row.totalOrders.toLocaleString("vi-VN")} đơn)</span>
                   </td>
                   {productOrder.map(p => {
                     const v = row.products?.[p] || 0
+                    const ord = row.productsOrders?.[p] || 0
                     return (
-                      <td key={p} className={`py-2 px-3 text-right ${v > 0 ? "text-gray-900" : "text-gray-300"}`}>
-                        {v > 0 ? fmtVND(v) + "₫" : "—"}
+                      <td key={p} className="py-2 px-3 text-right">
+                        {v > 0 || ord > 0 ? (
+                          <div className="flex flex-col items-end">
+                            <span className={`font-medium ${v > 0 ? "text-gray-900" : "text-gray-400"}`}>{v > 0 ? fmtVND(v) + "₫" : "—"}</span>
+                            <span className="text-[10px] text-gray-500">{ord.toLocaleString("vi-VN")} đơn</span>
+                          </div>
+                        ) : <span className="text-gray-300">—</span>}
                       </td>
                     )
                   })}
                   <td className={`py-2 px-3 text-right font-bold ${row.total > 0 ? st.color : "text-gray-300"} bg-gray-50`}>
-                    {row.total > 0 ? fmtVND(row.total) + "₫" : "—"}
+                    {row.total > 0 ? (
+                      <div className="flex flex-col items-end">
+                        <span>{fmtVND(row.total)}₫</span>
+                        <span className="text-[10px] font-normal text-gray-500">{row.totalOrders.toLocaleString("vi-VN")} đơn</span>
+                      </div>
+                    ) : "—"}
                   </td>
                 </tr>
               )
             })}
             <tr className="border-t-2 border-gray-300 bg-gray-50">
-              <td className="py-3 px-3 font-bold text-gray-900">Tổng đã tạo</td>
+              <td className="py-3 px-3 font-bold text-gray-900">
+                Tổng đã tạo
+                <span className="ml-2 text-[10px] font-normal text-gray-600">({grandOrders.toLocaleString("vi-VN")} đơn)</span>
+              </td>
               {productOrder.map(p => {
                 const v = totalByProduct[p] || 0
+                const ord = totalOrdersByProduct[p] || 0
                 return (
                   <td key={p} className={`py-3 px-3 text-right font-bold ${v > 0 ? "text-gray-900" : "text-gray-300"}`}>
-                    {v > 0 ? fmtVND(v) + "₫" : "—"}
+                    {v > 0 || ord > 0 ? (
+                      <div className="flex flex-col items-end">
+                        <span>{v > 0 ? fmtVND(v) + "₫" : "—"}</span>
+                        <span className="text-[10px] font-normal text-gray-500">{ord.toLocaleString("vi-VN")} đơn</span>
+                      </div>
+                    ) : "—"}
                   </td>
                 )
               })}
               <td className="py-3 px-3 text-right font-bold text-red-600 bg-red-50">
-                {grandTotal > 0 ? fmtVND(grandTotal) + "₫" : "—"}
+                {grandTotal > 0 ? (
+                  <div className="flex flex-col items-end">
+                    <span>{fmtVND(grandTotal)}₫</span>
+                    <span className="text-[10px] font-normal text-gray-600">{grandOrders.toLocaleString("vi-VN")} đơn</span>
+                  </div>
+                ) : "—"}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <p className="text-[11px] text-gray-400 mt-3 italic">
-        "Doanh thu (Pancake)" ở phần KPI phía trên = "Tổng đã tạo" (bao gồm tất cả đơn). ROAS được tính trên cùng doanh thu này.
+        * Phản ứng theo bộ lọc thời gian + filter nhân sự ở box "Doanh thu theo nguồn" phía trên.
+        "Tổng đã tạo" = cộng cả 5 status — khớp với KPI "Doanh thu (Pancake)" khi filter = Tất cả.
+        {anyFallback && (
+          <span className="block text-amber-600 mt-1 not-italic">
+            ⚠ Số đơn đang hiển thị tổng 90 ngày (snapshot cũ chưa có orders_by_date) — sẽ tự cập nhật sau khi workflow Pancake chạy lần kế.
+          </span>
+        )}
       </p>
     </div>
   )
