@@ -775,6 +775,17 @@ function FacebookAdsDashboard() {
     return { totalOrders, totalRevenue }
   }, [dateRange])
 
+  // Google Ads spend trong dateRange — gộp tất cả category
+  const googleSpendInRange = useMemo(() => {
+    const ga = (typeof DATA !== "undefined" ? DATA.google_ads : null) || { by_category: {} }
+    const inRange = (d) => d >= dateRange.start && d <= dateRange.end
+    let total = 0
+    Object.values(ga.by_category || {}).forEach(bucket => {
+      Object.entries(bucket.by_date || {}).forEach(([d, v]) => { if (inRange(d)) total += (v || 0) })
+    })
+    return total
+  }, [dateRange])
+
   // (Trước đây có useMemo `revenueByStatus` ở đây — đã chuyển logic vào RevenueStatusBreakdown
   //  để self-compute theo cả dateRange + staffFilter.)
 
@@ -994,13 +1005,13 @@ function FacebookAdsDashboard() {
           )}
         </div>
 
-        {/* KPI SCORECARDS — 4 cards: Chi tiêu · Tổng đơn · Doanh thu Pancake · CIR */}
+        {/* KPI SCORECARDS — 4 cards: Chi tiêu (FB+Google) · Tổng đơn · Doanh thu Pancake · CIR */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <KpiCard
             icon={DollarSign}
-            label="Tổng chi tiêu"
-            value={fmtVND(kpis.spend) + "₫"}
-            sub={fmtNum(kpis.spend) + " VND"}
+            label="Tổng chi tiêu QC"
+            value={fmtVND(kpis.spend + googleSpendInRange) + "₫"}
+            sub={`FB: ${fmtVND(kpis.spend)}₫ · Google: ${fmtVND(googleSpendInRange)}₫`}
             color="blue"
           />
           <KpiCard
@@ -1021,10 +1032,10 @@ function FacebookAdsDashboard() {
             icon={MousePointerClick}
             label="CIR (chi phí / doanh thu)"
             value={pancakeKpi.totalRevenue > 0
-              ? (kpis.spend / pancakeKpi.totalRevenue * 100).toFixed(1) + "%"
+              ? ((kpis.spend + googleSpendInRange) / pancakeKpi.totalRevenue * 100).toFixed(1) + "%"
               : "—"}
             sub={pancakeKpi.totalRevenue > 0
-              ? `${fmtVND(kpis.spend)}₫ / ${fmtVND(pancakeKpi.totalRevenue)}₫`
+              ? `${fmtVND(kpis.spend + googleSpendInRange)}₫ / ${fmtVND(pancakeKpi.totalRevenue)}₫`
               : "Chưa có doanh thu"}
             color="green"
           />
@@ -4002,6 +4013,8 @@ function GoogleCampaignsModal({ category, isMisc, dateRange, onClose }) {
 function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
   const groups = revenue.source_groups || {}
+  const adSpendByStaff = (typeof DATA !== "undefined" ? DATA.ad_spend_by_staff : null) || {}
+  const googleAds = (typeof DATA !== "undefined" ? DATA.google_ads : null) || { by_category: {} }
   const handleClick = onSelectStaff || (() => {})
 
   if (!Object.keys(groups).length) return null
@@ -4134,6 +4147,30 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
     }
   }
 
+  // Helper: ad spend của 1 staff trong dateRange
+  // - DUY / PHUONG_NAM → FB Ads (DATA.ad_spend_by_staff)
+  // - WEBSITE_STAFF → Google Ads (DATA.google_ads.by_category, gộp tất cả category)
+  const adSpendForStaff = (staffKey) => {
+    if (staffKey === "WEBSITE_STAFF") {
+      let total = 0
+      Object.values(googleAds.by_category || {}).forEach(bucket => {
+        Object.entries(bucket.by_date || {}).forEach(([d, v]) => {
+          if (isInRange(d)) total += (v || 0)
+        })
+      })
+      return { spend: total, adKind: "Google Ads" }
+    }
+    // FB Ads: aggregate across all products for this staff
+    let total = 0
+    const buckets = adSpendByStaff[staffKey] || {}
+    Object.values(buckets).forEach(b => {
+      Object.entries(b.by_date || {}).forEach(([d, v]) => {
+        if (isInRange(d)) total += (v || 0)
+      })
+    })
+    return { spend: total, adKind: "FB Ads" }
+  }
+
   // Aggregate per staff (gộp sub-sources nếu có nhiều)
   const staffRows = STAFF.map(st => {
     const subTotals = st.subSources.map(s => ({
@@ -4150,7 +4187,9 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
       prodOrders[p] = subTotals.reduce((s, x) => s + (x.prodOrders?.[p] || 0), 0)
     })
     const fallbackOrders = subTotals.some(x => x.fallbackOrders)
-    return { ...st, totalRev, totalOrders, prodTotals, prodOrders, subTotals, fallbackOrders }
+    const { spend: adSpend, adKind } = adSpendForStaff(st.key)
+    const cir = totalRev > 0 ? (adSpend / totalRev * 100) : null
+    return { ...st, totalRev, totalOrders, prodTotals, prodOrders, subTotals, fallbackOrders, adSpend, adKind, cir }
   })
 
   const grandRev = staffRows.reduce((s, r) => s + r.totalRev, 0)
@@ -4201,6 +4240,19 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
               {/* Share bar */}
               <div className="mt-2 h-2 bg-white/60 rounded-full overflow-hidden">
                 <div className={`h-full ${r.color.bar}`} style={{ width: pct + "%" }}></div>
+              </div>
+              {/* Ad spend + CIR per staff */}
+              <div className="mt-3 pt-2 border-t border-white/50 space-y-0.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-gray-500">💸 Chi phí QC ({r.adKind})</span>
+                  <span className="font-bold text-gray-800">{fmtVND(r.adSpend)}₫</span>
+                </div>
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-gray-500">📊 CIR (QC / DT)</span>
+                  <span className={`font-bold ${r.cir == null ? "text-gray-400" : r.cir < 20 ? "text-emerald-700" : r.cir < 40 ? "text-amber-700" : "text-red-600"}`}>
+                    {r.cir == null ? "—" : r.cir.toFixed(1) + "%"}
+                  </span>
+                </div>
               </div>
               {/* Sub-source pills (chỉ hiện nếu > 1 sub) */}
               {r.subTotals.length > 1 && (
