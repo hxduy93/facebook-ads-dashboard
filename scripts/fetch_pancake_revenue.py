@@ -215,8 +215,35 @@ def fetch_all_orders_for_group(group, start_dt, end_dt):
     return all_orders
 
 
+def _num(v, default=0.0):
+    """Parse float an toàn — giữ số lẻ (KHÔNG int-truncate). Dùng để khớp Pancake POS."""
+    if v is None or v == "":
+        return default
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def order_revenue(order):
+    """
+    Doanh thu chính xác per order — ưu tiên cột COD trên Pancake POS UI.
+    Fallback chain:
+      1. cod / cod_amount / total_cod                → đúng cột COD
+      2. total_price_after_sub_discount              → tổng đã giảm giá đơn
+      3. total_price                                 → tổng chưa giảm
+    Trả về float (giữ số lẻ). Fix "doanh thu làm tròn".
+    """
+    for key in ("cod", "cod_amount", "total_cod",
+                "total_price_after_sub_discount", "total_price"):
+        v = order.get(key)
+        if v is not None and _num(v, 0) > 0:
+            return _num(v)
+    return 0.0
+
+
 def extract_items(order):
-    """Return list of (code, quantity, retail_price) from line items.
+    """Return list of (code, quantity, line_revenue) from line items.
 
     SKU code priority (theo phát hiện 2026-04-19):
       1. variation_info.id          ← thật sự chứa SKU code (vd: "D1 Pro", "DR1 New", "COMBO-092")
@@ -224,6 +251,11 @@ def extract_items(order):
       2. variation_info.display_id  ← rỗng cho đa số đơn manual, có cho 1 số đơn sàn
       3. product.display_id         ← fallback nếu line không có variation
       4. line.display_id            ← rất rare, fallback cuối
+
+    line_revenue priority (để khớp COD đến số lẻ, KHÔNG int-truncate):
+      1. li.total_price_after_sub_discount   — line net revenue (sau chiết khấu dòng)
+      2. li.total_price                      — line gross
+      3. variation_info.retail_price × qty   — fallback list-price
     """
     items = []
     for li in (order.get("items") or order.get("order_items") or []):
@@ -235,28 +267,39 @@ def extract_items(order):
             or prod.get("display_id")
             or li.get("display_id")
         )
-        qty = int(li.get("quantity", 1) or 1)
-        price = int(vi.get("retail_price") or 0)
+        qty = int(_num(li.get("quantity", 1), 1) or 1)
+
+        line_rev = None
+        for key in ("total_price_after_sub_discount", "total_price", "price_after_discount"):
+            v = li.get(key)
+            if v is not None and _num(v, 0) > 0:
+                line_rev = _num(v)
+                break
+        if line_rev is None:
+            retail = _num(vi.get("retail_price") or li.get("price") or 0)
+            line_rev = retail * qty
+
         if code:
-            items.append((str(code).strip(), qty, price))
+            items.append((str(code).strip(), qty, line_rev))
     return items
 
 
 def empty_bucket():
     return {
         p: {
-            "total": 0,
+            "total": 0.0,           # doanh thu FLOAT (giữ số lẻ)
             "orders": 0,
             "units": 0,
             "by_date": {},          # {date: revenue}
-            "orders_by_date": {},   # {date: orders_count}  ← mới, để UI lọc số đơn theo dateRange
+            "orders_by_date": {},   # {date: orders_count}
+            "units_by_date": {},    # {date: units_count}  ← MỚI cho tính Giá nhập × SL theo range
         }
         for p in PRODUCT_LIST
     }
 
 
 def merge_buckets(*bucket_dicts):
-    """Gộp nhiều per-product bucket dict thành 1 (cộng dồn total/orders/units/by_date/orders_by_date)."""
+    """Gộp nhiều per-product bucket dict thành 1 (cộng dồn total/orders/units/by_date/orders_by_date/units_by_date)."""
     result = empty_bucket()
     for bucket in bucket_dicts:
         for p in PRODUCT_LIST:
@@ -269,6 +312,8 @@ def merge_buckets(*bucket_dicts):
                 dst["by_date"][date] = dst["by_date"].get(date, 0) + amount
             for date, cnt in (src.get("orders_by_date") or {}).items():
                 dst["orders_by_date"][date] = dst["orders_by_date"].get(date, 0) + cnt
+            for date, u in (src.get("units_by_date") or {}).items():
+                dst["units_by_date"][date] = dst["units_by_date"].get(date, 0) + u
     return result
 
 
@@ -291,14 +336,12 @@ def aggregate(orders):
         "canceled":  empty_bucket(),   # 6 — Đã hủy
         "other":     empty_bucket(),   # 0/1/2/8/9 — Đang xử lý
     }
-    summary = {k: {"orders": 0, "total": 0} for k in buckets.keys()}
+    summary = {k: {"orders": 0, "total": 0.0} for k in buckets.keys()}
     total_orders = 0
     total_orders_by_date = {}  # date → số đơn bất kể status, để UI lọc theo dateRange
-    # MỚI: {status: {date: tổng total_price_after_sub_discount}} — doanh thu THỰC THU theo đơn
-    # (không bó hẹp 6 SP chính). Dùng cho box Staff / Source "Doanh thu tổng".
+    # MỚI: {status: {date: doanh thu}} — dùng COD của đơn (float). Khớp Pancake POS cột COD.
     order_revenue_by_status_by_date = {k: {} for k in buckets.keys()}
     # MỚI: {status: {date: orders_count}} — số đơn THEO STATUS theo ngày.
-    # Dùng cho UI "chưa tính hoàn hủy" (loại status `returned` + `canceled`).
     order_count_by_status_by_date = {k: {} for k in buckets.keys()}
 
     for o in orders:
@@ -316,8 +359,8 @@ def aggregate(orders):
             bucket_key = "other"
 
         bucket = buckets[bucket_key]
-        # Order total thực (Pancake) — đã trừ discount cấp đơn
-        order_total = int(o.get("total_price_after_sub_discount") or o.get("total_price") or 0)
+        # Order total — ưu tiên cột COD Pancake (float, không làm tròn)
+        order_total = order_revenue(o)
         summary[bucket_key]["orders"] += 1
         summary[bucket_key]["total"] += order_total
 
@@ -326,29 +369,29 @@ def aggregate(orders):
         total_orders_by_date[date] = total_orders_by_date.get(date, 0) + 1
         # Gộp doanh thu + số đơn vào status+date map
         order_revenue_by_status_by_date[bucket_key][date] = \
-            order_revenue_by_status_by_date[bucket_key].get(date, 0) + order_total
+            order_revenue_by_status_by_date[bucket_key].get(date, 0.0) + order_total
         order_count_by_status_by_date[bucket_key][date] = \
             order_count_by_status_by_date[bucket_key].get(date, 0) + 1
 
         products_in_order = set()
-        for code, qty, retail_price in extract_items(o):
+        for code, qty, line_rev in extract_items(o):
             mapping = PRODUCT_MAPPING.get(code.lower())
             if not mapping:
                 continue
-            # Nếu combo có N sản phẩm + thẻ nhớ, retail_price là của cả combo.
-            # Chia đều cho số sản phẩm (thường combo = máy + phụ kiện, máy chiếm >90% giá)
-            # → Đơn giản: revenue per_unit = retail_price (toàn bộ giá combo gán cho sản phẩm chính đầu tiên trong mapping)
-            # Với non-combo thì mapping có 1 entry nên dùng nguyên retail_price.
+            # Nếu combo có N sản phẩm + thẻ nhớ, line_rev là của cả combo.
+            # Entry đầu tiên trong mapping nhận full revenue; entry sau = 0 (tránh double count).
             for idx, (product, qty_per_unit) in enumerate(mapping):
                 total_units = qty_per_unit * qty
-                # Chỉ entry đầu tiên nhận full revenue; entry sau = 0 (để không double count giá combo)
-                revenue = retail_price * qty if idx == 0 else 0
+                revenue = float(line_rev) if idx == 0 else 0.0
                 bucket[product]["total"] += revenue
                 bucket[product]["units"] += total_units
-                bucket[product]["by_date"][date] = bucket[product]["by_date"].get(date, 0) + revenue
+                bucket[product]["by_date"][date] = bucket[product]["by_date"].get(date, 0.0) + revenue
+                bucket[product]["units_by_date"][date] = (
+                    bucket[product]["units_by_date"].get(date, 0) + total_units
+                )
                 products_in_order.add(product)
 
-        # Đếm orders per product (tổng) + orders per product PER DATE (mới)
+        # Đếm orders per product (tổng) + orders per product PER DATE
         for p in products_in_order:
             bucket[p]["orders"] += 1
             bucket[p]["orders_by_date"][date] = bucket[p]["orders_by_date"].get(date, 0) + 1
@@ -390,11 +433,11 @@ def main():
         print(f"[RESULT] {label}: {group_total} đơn")
         for st in ("delivered", "returning", "returned", "canceled", "other"):
             s = summary[st]
-            print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
+            print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,.0f}đ")
         print(f"  Doanh thu / sản phẩm ({label}):")
         for p in PRODUCT_LIST:
             d = products_all[p]
-            print(f"    {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
+            print(f"    {p:12s} | {d['total']:>15,.2f}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
         print()
 
         per_group[key] = {
@@ -422,11 +465,11 @@ def main():
     print(f"[RESULT] Tổng 5 nhóm: {total_count} đơn")
     for st in ("delivered", "returning", "returned", "canceled", "other"):
         s = total_summary[st]
-        print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,}đ")
+        print(f"  {st:10s}: {s['orders']:>5} đơn · {s['total']:>15,.0f}đ")
     print("  Doanh thu / sản phẩm (tổng):")
     for p in PRODUCT_LIST:
         d = total_products[p]
-        print(f"    {p:12s} | {d['total']:>15,}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
+        print(f"    {p:12s} | {d['total']:>15,.2f}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
 
     output = {
         "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),

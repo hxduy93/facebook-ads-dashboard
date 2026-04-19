@@ -37,16 +37,41 @@ FB_API_VERSION = "v20.0"
 DAYS_BACK      = 30  # last 30 days of data
 
 # 6 ad accounts under BM "Yoday Media Retail".
-# `name` = tên chính xác như đặt trong Business Manager.
-# `short` = tên dùng hiển thị trên dashboard (giữ nguyên đầy đủ theo yêu cầu).
+# `staff`  = nhân sự cầm tài khoản (DUY / PHUONG_NAM) — dùng phân bổ ad spend cho tính LN.
 ACCOUNTS = [
-    {"id": "927390616363424",  "short": "Doscom - Công nghệ nâng tầm cuộc sống",                         "name": "Doscom - Công nghệ nâng tầm cuộc sống"},
-    {"id": "764394829882083",  "short": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện",        "name": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện"},
-    {"id": "1655506672244826", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam",                  "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam"},
-    {"id": "1449385949897024", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống",   "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống"},
-    {"id": "906015559004892",  "short": "Doscom Mart",                                                   "name": "Doscom Mart"},
-    {"id": "1416634670476226", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart",                    "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart"},
+    {"id": "927390616363424",  "staff": "DUY",        "short": "Doscom - Công nghệ nâng tầm cuộc sống",                         "name": "Doscom - Công nghệ nâng tầm cuộc sống"},
+    {"id": "764394829882083",  "staff": "PHUONG_NAM", "short": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện",        "name": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện"},
+    {"id": "1655506672244826", "staff": "DUY",        "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam",                  "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam"},
+    {"id": "1449385949897024", "staff": "DUY",        "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống",   "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống"},
+    {"id": "906015559004892",  "staff": "PHUONG_NAM", "short": "Doscom Mart",                                                   "name": "Doscom Mart"},
+    {"id": "1416634670476226", "staff": "PHUONG_NAM", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart",                    "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart"},
 ]
+
+# 13 SP tính lợi nhuận — khớp PRODUCT_LIST trong fetch_pancake_revenue.py
+PROFIT_PRODUCTS = [
+    "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",
+    "DR1", "DR4 Plus",
+    "DV1 Pro",
+    "DA8.1", "DA8.1 Pro",
+    "Noma 911", "Noma 922",
+]
+
+# Map tên SP (PROFIT_PRODUCTS) → key Mã tên gọi trong xlsx Kho tổng (đã lowercase)
+PRODUCT_TO_COST_KEY = {
+    "D1":         "d1",
+    "D1 Pro":     "d1 pro",
+    "D2":         "d2",
+    "D3":         "d3",
+    "D4":         "d4",
+    "D8 Pro":     "d8 pro",
+    "DR1":        "dr1 new",     # xlsx: "DR1 New" đang KD (bản "DR1" cũ ngừng KD)
+    "DR4 Plus":   "dr4 plus",
+    "DV1 Pro":    "dv1 pro",
+    "DA8.1":      "da8.1",
+    "DA8.1 Pro":  "da8.1 pro",   # xlsx viết "DA8.1 PRO", đã lowercase
+    "Noma 911":   "noma 911",
+    "Noma 922":   "noma 922",
+}
 
 # Competitor data files (scraped via Chrome, not API)
 COMPETITOR_BASELINE_FILE  = "data/competitor_baseline.json"
@@ -57,7 +82,7 @@ KNOWN_COMPETITORS_FILE    = "known_competitors.json"
 # HELPERS
 # -----------------------------------------------------------------------------
 def detect_product(name: str):
-    """Extract product tag from campaign/ad name."""
+    """Extract product tag từ campaign/ad — dùng cho 3 bucket legacy (D1/Noma911/DR1)."""
     if not name:
         return None
     n = name.lower()
@@ -67,6 +92,58 @@ def detect_product(name: str):
         return "DR1"
     if "d1" in n:
         return "D1"
+    return None
+
+
+def detect_profit_product(name: str):
+    """
+    Extract 1 trong 13 PROFIT_PRODUCTS từ tên campaign — để phân bổ ad spend
+    per nhân sự × sản phẩm cho tính lợi nhuận.
+
+    Thứ tự check quan trọng (ưu tiên match cụ thể hơn):
+      - "DA8.1 Pro" trước "DA8.1"
+      - "Noma 922/911" trước generic
+      - "D1 Pro", "D8 Pro" trước "D1", "D8"
+      - "DR4 Plus" trước "DR4"
+      - "DV1 Pro" trước "DV1"
+    """
+    if not name:
+        return None
+    n = name.lower().replace("_", " ").replace("-", " ")
+    n = " ".join(n.split())
+
+    # Camera DA8.1 — ưu tiên Pro
+    if "da8.1 pro" in n or "da 8.1 pro" in n or "da8 1 pro" in n:
+        return "DA8.1 Pro"
+    if "da8.1" in n or "da 8.1" in n or "da8 1" in n:
+        return "DA8.1"
+
+    # Noma
+    if "noma 922" in n or "noma922" in n:
+        return "Noma 922"
+    if "noma 911" in n or "noma911" in n:
+        return "Noma 911"
+
+    # DR
+    if "dr4 plus" in n or "dr4plus" in n:
+        return "DR4 Plus"
+    if "dr1" in n:
+        return "DR1"
+
+    # DV
+    if "dv1 pro" in n or "dv1pro" in n:
+        return "DV1 Pro"
+
+    # Máy dò D* — ưu tiên Pro/số lớn trước
+    if "d1 pro" in n or "d1pro" in n:
+        return "D1 Pro"
+    if "d8 pro" in n or "d8pro" in n:
+        return "D8 Pro"
+    # Dò 2-ký-tự — match boundary để tránh "d10"/"d20" false positive
+    import re
+    for code in ("d1", "d2", "d3", "d4"):
+        if re.search(rf"(?<![a-z0-9]){code}(?![a-z0-9])", n):
+            return code.upper()
     return None
 
 def extract_registrations(actions):
@@ -321,6 +398,39 @@ def build_data():
                 bucket[dt]["clicks"]        += d["clicks"]
         data["products"][p] = sorted(bucket.values(), key=lambda x: x["date"])
 
+    # --- AD SPEND PER STAFF × PROFIT PRODUCT -----------------------
+    # Duy cầm 3 TK, Phương Nam cầm 3 TK; campaign name chứa tên SP → detect_profit_product.
+    account_to_staff = {f"act_{a['id']}": a["staff"] for a in ACCOUNTS}
+    ad_spend_by_staff = {"DUY": {}, "PHUONG_NAM": {}}
+    for c in data["campaigns"]:
+        staff = account_to_staff.get(c.get("account_id"))
+        if not staff:
+            continue
+        prod = detect_profit_product(c.get("name", ""))
+        if not prod:
+            continue
+        bucket = ad_spend_by_staff[staff].setdefault(prod, {"_total": 0.0, "by_date": {}})
+        for d in c["daily"]:
+            sp = float(d.get("spend") or 0)
+            if sp <= 0:
+                continue
+            bucket["_total"] += sp
+            bucket["by_date"][d["date"]] = bucket["by_date"].get(d["date"], 0.0) + sp
+    data["ad_spend_by_staff"] = ad_spend_by_staff
+
+    # Unassigned (campaign không detect được SP) để biết campaign cần đổi tên
+    unassigned = {"DUY": 0.0, "PHUONG_NAM": 0.0}
+    for c in data["campaigns"]:
+        staff = account_to_staff.get(c.get("account_id"))
+        if not staff or detect_profit_product(c.get("name", "")):
+            continue
+        for d in c["daily"]:
+            unassigned[staff] += float(d.get("spend") or 0)
+    data["ad_spend_unassigned"] = unassigned
+    print(f"   ✓ ad spend by staff: DUY={sum(v['_total'] for v in ad_spend_by_staff['DUY'].values()):,.0f}đ · "
+          f"PHUONG_NAM={sum(v['_total'] for v in ad_spend_by_staff['PHUONG_NAM'].values()):,.0f}đ · "
+          f"unassigned: DUY={unassigned['DUY']:,.0f}đ / PN={unassigned['PHUONG_NAM']:,.0f}đ")
+
     # --- PANCAKE REVENUE (injected from data/product-revenue.json) ---
     try:
         data["revenue"] = _load_json("data/product-revenue.json")
@@ -332,6 +442,37 @@ def build_data():
     except Exception as e:
         print(f"   ✗ revenue load failed: {e}")
         data["revenue"] = {}
+
+    # --- PRODUCT COSTS (injected from data/product-costs.json) ------
+    try:
+        costs_raw = _load_json("data/product-costs.json") or {}
+        products_cost = costs_raw.get("products") or {}
+        profit_costs = {}
+        missing = []
+        for label in PROFIT_PRODUCTS:
+            key = PRODUCT_TO_COST_KEY.get(label)
+            entry = products_cost.get(key) if key else None
+            if entry and entry.get("gia_nhap_vnd"):
+                profit_costs[label] = {
+                    "gia_nhap_vnd": entry.get("gia_nhap_vnd"),
+                    "gia_ban_vnd": entry.get("gia_ban_vnd"),
+                    "ma_ten_goi": entry.get("ma_ten_goi"),
+                    "ten": entry.get("ten"),
+                    "trang_thai": entry.get("trang_thai"),
+                }
+            else:
+                profit_costs[label] = {"gia_nhap_vnd": None, "ma_ten_goi": None}
+                missing.append(f"{label} (key={key!r})")
+        data["product_costs"] = profit_costs
+        data["profit_products"] = PROFIT_PRODUCTS
+        ok_count = sum(1 for v in profit_costs.values() if v.get("gia_nhap_vnd"))
+        print(f"   ✓ loaded product costs: {ok_count}/{len(PROFIT_PRODUCTS)} SP có giá nhập")
+        if missing:
+            print(f"   ⚠ missing: {', '.join(missing)}")
+    except Exception as e:
+        print(f"   ✗ cost catalog load failed: {e}")
+        data["product_costs"] = {}
+        data["profit_products"] = PROFIT_PRODUCTS
 
     # --- COMPETITOR TRACKING (Chrome-scraped data) ---
     try:
