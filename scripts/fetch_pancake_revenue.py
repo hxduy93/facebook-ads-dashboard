@@ -87,28 +87,56 @@ STATUS_RETURNING = 4
 STATUS_RETURNED  = 5
 STATUS_CANCELED  = 6
 
-# Product mapping (case-insensitive key)
+# Product mapping (case-insensitive key by `variation_info.id` từ Pancake).
 # Mỗi mapping = list các (product, qty_per_unit). Giá lấy từ retail_price thật của Pancake,
 # mapping chỉ cần biết 1 combo = mấy máy nào.
+#
+# Mở rộng từ 6 → 13 SP chính (2026-04-19) sau khi inspect Pancake thấy nhiều đơn Website
+# bán máy dò D1 Pro/D2/D3/D4/D8 Pro, ghi âm DR4 Plus, định vị DV1 Pro — không match list cũ.
 PRODUCT_MAPPING = {
-    # Đơn lẻ
-    "d1":         [("D1",        1)],
-    "dr1 new":    [("DR1",       1)],
-    "noma 911":   [("Noma 911",  1)],
-    "noma 922":   [("Noma 922",  1)],
-    "da8.1":      [("DA8.1",     1)],
-    "da8.1 pro":  [("DA8.1 Pro", 1)],
-    # Combo máy + thẻ nhớ
-    "combo-058":  [("DA8.1",     1)],  # DA8.1 + 64GB
-    "combo-059":  [("DA8.1",     1)],  # DA8.1 + 128GB
-    "combo-060":  [("DA8.1 Pro", 1)],  # DA8.1 Pro + 64GB
-    "combo-061":  [("DA8.1 Pro", 1)],  # DA8.1 Pro + 128GB
-    # Combo Noma
-    "combo-092":  [("Noma 911",  2)],           # 2 chai Noma 911
-    "combo-103":  [("Noma 911",  1), ("Noma 922", 1)],  # Noma 911 + Noma 922
+    # ── Máy dò ──
+    "d1":         [("D1",         1)],
+    "d1 pro":     [("D1 Pro",     1)],
+    "d2":         [("D2",         1)],
+    "d3":         [("D3",         1)],
+    "d4":         [("D4",         1)],
+    "d8 pro":     [("D8 Pro",     1)],
+    # ── Camera ──
+    "da8.1":      [("DA8.1",      1)],
+    "da8.1 pro":  [("DA8.1 Pro",  1)],
+    # ── Ghi âm ──
+    "dr1 new":    [("DR1",        1)],
+    "dr1":        [("DR1",        1)],
+    "dr4 plus":   [("DR4 Plus",   1)],
+    # ── Định vị ──
+    "dv1 pro":    [("DV1 Pro",    1)],
+    # ── Noma ──
+    "noma 911":   [("Noma 911",   1)],
+    "noma 922":   [("Noma 922",   1)],
+    # ── Combo máy + thẻ nhớ ──
+    "combo-058":  [("DA8.1",      1)],  # DA8.1 + 64GB
+    "combo-059":  [("DA8.1",      1)],  # DA8.1 + 128GB
+    "combo-060":  [("DA8.1 Pro",  1)],  # DA8.1 Pro + 64GB
+    "combo-061":  [("DA8.1 Pro",  1)],  # DA8.1 Pro + 128GB
+    # ── Combo Noma ──
+    "combo-092":  [("Noma 911",   2)],                          # 2 chai Noma 911
+    "combo-103":  [("Noma 911",   1), ("Noma 922", 1)],         # 911 + 922
+    # ── Combo Định vị (DV2 + Sim) — đếm vào DV1 Pro để có đại diện nhóm Định vị ──
+    # (Khi nào user muốn tách DV1/DV2 riêng thì split ra. Hiện chỉ có 1 cột "DV1 Pro")
+    "combo-068":  [("DV1 Pro",    1)],
+    "combo-096":  [("DV1 Pro",    1)],
 }
 
-PRODUCT_LIST = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+# Thứ tự cột trong dashboard (từ trái → phải).
+# Sắp theo nhóm: Máy dò → Ghi âm → Định vị → Camera → Noma.
+PRODUCT_LIST = [
+    "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",         # Máy dò (6)
+    "DR1", "DR4 Plus",                                    # Ghi âm (2)
+    "DV1 Pro",                                            # Định vị (1)
+    "DA8.1", "DA8.1 Pro",                                 # Camera (2)
+    "Noma 911", "Noma 922",                               # Noma (2)
+]
+# = 13 sản phẩm
 
 
 def fetch_orders(group, page=1, page_size=100, start_date=None, end_date=None, max_retries=4):
@@ -188,13 +216,22 @@ def fetch_all_orders_for_group(group, start_dt, end_dt):
 
 
 def extract_items(order):
-    """Return list of (code, quantity, retail_price) from line items."""
+    """Return list of (code, quantity, retail_price) from line items.
+
+    SKU code priority (theo phát hiện 2026-04-19):
+      1. variation_info.id          ← thật sự chứa SKU code (vd: "D1 Pro", "DR1 New", "COMBO-092")
+                                       cho các đơn manual / website / hotline
+      2. variation_info.display_id  ← rỗng cho đa số đơn manual, có cho 1 số đơn sàn
+      3. product.display_id         ← fallback nếu line không có variation
+      4. line.display_id            ← rất rare, fallback cuối
+    """
     items = []
     for li in (order.get("items") or order.get("order_items") or []):
         vi = li.get("variation_info") or {}
         prod = li.get("product") or {}
         code = (
-            vi.get("display_id")
+            vi.get("id")
+            or vi.get("display_id")
             or prod.get("display_id")
             or li.get("display_id")
         )

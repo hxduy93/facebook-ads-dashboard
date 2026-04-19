@@ -356,12 +356,21 @@ const ACCOUNT_COLOR = {
 }
 
 const PRODUCT_COLOR = {
-  "D1": "#3b82f6",
-  "Noma911": "#10b981",
-  "Noma922": "#14b8a6",
-  "DR1": "#f59e0b",
-  "DA8.1": "#a855f7",
-  "DA8.1 Pro": "#6366f1"
+  "D1":        "#3b82f6",
+  "D1 Pro":    "#2563eb",
+  "D2":        "#0ea5e9",
+  "D3":        "#0284c7",
+  "D4":        "#0369a1",
+  "D8 Pro":    "#1e40af",
+  "DR1":       "#f59e0b",
+  "DR4 Plus":  "#ea580c",
+  "DV1 Pro":   "#14b8a6",
+  "DA8.1":     "#a855f7",
+  "DA8.1 Pro": "#6366f1",
+  "Noma 911":  "#10b981",
+  "Noma 922":  "#059669",
+  "Noma911":   "#10b981",  // alias cho FB campaign naming (không có space)
+  "Noma922":   "#059669",
 }
 
 const TIME_FILTERS = [
@@ -3119,7 +3128,14 @@ function RevenueByStaffBreakdown({ dateRange }) {
 
   if (!Object.keys(groups).length) return null
 
-  const PRODUCTS = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+  // 13 SP chính (mở rộng 2026-04-19 để cover nguồn Website: máy dò D1 Pro/D2/D3/D4/D8 Pro, ghi âm DR4 Plus, định vị DV1 Pro)
+  const PRODUCTS = [
+    "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",
+    "DR1", "DR4 Plus",
+    "DV1 Pro",
+    "DA8.1", "DA8.1 Pro",
+    "Noma 911", "Noma 922",
+  ]
 
   // Mapping nhân sự → danh sách source key + màu thương hiệu
   const STAFF = [
@@ -3448,8 +3464,14 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
     return null
   }
 
-  // Product list (match PRODUCT_LIST trong fetch script)
-  const PRODUCTS = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+  // Product list (match PRODUCT_LIST trong fetch script) — 13 SP
+  const PRODUCTS = [
+    "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",
+    "DR1", "DR4 Plus",
+    "DV1 Pro",
+    "DA8.1", "DA8.1 Pro",
+    "Noma 911", "Noma 922",
+  ]
 
   // Mapping staff → source group keys để lọc
   const STAFF_FILTER_MAP = {
@@ -3688,7 +3710,13 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
 // Khi staffFilter khác ALL → tự compute lại từ DATA.revenue.source_groups[KEY].products_by_status
 // =============================================================
 function RevenueStatusBreakdown({ dateRange, staffFilter }) {
-  const productOrder = ["D1", "DR1", "Noma 911", "Noma 922", "DA8.1", "DA8.1 Pro"]
+  const productOrder = [
+    "D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro",
+    "DR1", "DR4 Plus",
+    "DV1 Pro",
+    "DA8.1", "DA8.1 Pro",
+    "Noma 911", "Noma 922",
+  ]
 
   const STATUS_META = [
     { key: "delivered", label: "Đã giao",     color: "text-emerald-600", bg: "bg-emerald-50" },
