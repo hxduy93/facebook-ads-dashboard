@@ -1394,6 +1394,7 @@ function AdsCreatorPanel() {
   const [aiTargetAdId, setAiTargetAdId] = useState(null)
   const [aiKeyword, setAiKeyword] = useState("")
   const [aiDirection, setAiDirection] = useState("")
+  const [aiPromotion, setAiPromotion] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState("")
   const [aiVariants, setAiVariants] = useState([])
@@ -1714,6 +1715,7 @@ function AdsCreatorPanel() {
           formatLabel: (OBJECTIVES[objective] || {}).label || objective,
           cta: (ads.find(a => a.id === targetAdId) || {}).cta || "LEARN_MORE",
           notes,
+          promotion: aiPromotion.trim(),
         }),
       })
       const data = await res.json()
@@ -2573,6 +2575,16 @@ function AdsCreatorPanel() {
                   className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs"
                   placeholder="Hướng content (VD: nhấn mạnh đi công tác)"
                 />
+              </div>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={aiPromotion}
+                  onChange={e => setAiPromotion(e.target.value)}
+                  className="w-full border border-amber-300 rounded px-2 py-1.5 text-xs"
+                  placeholder="Khuyến mãi (tùy chọn — VD: Giảm 500K + tặng thẻ nhớ 32GB, hết 31/10). Để trống nếu không có KM — AI sẽ không tự bịa."
+                />
+                <p className="text-[10px] text-amber-700 mt-1 italic">💡 Nếu bạn KHÔNG điền, AI sẽ chỉ giữ dòng Bảo hành 12 tháng và không tự ý thêm giảm giá / quà tặng / "chỉ hôm nay".</p>
               </div>
             </div>
           </div>

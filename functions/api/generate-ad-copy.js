@@ -1,5 +1,7 @@
 // Endpoint: POST /api/generate-ad-copy
-// Body: { product: "D1" | "DR1" | ..., format: "lead_gen" | ..., formatLabel, cta, notes }
+// Body: { product: "D1" | "DR1" | ..., format: "lead_gen" | ..., formatLabel, cta, notes, promotion }
+//  - promotion (tùy chọn): chuỗi mô tả KM do user cung cấp (quà tặng/giảm giá/thời hạn).
+//    Nếu rỗng → AI KHÔNG tự ý bịa KM. Chỉ giữ dòng Bảo hành cố định.
 // Response: { variants: [...] }
 //
 // Powered by Cloudflare Workers AI (Llama 3.3 70B) — native Cloudflare, free tier,
@@ -36,14 +38,14 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: "Body không phải JSON hợp lệ." }, 400);
   }
 
-  const { product: productKey, format, formatLabel, cta, notes } = body;
+  const { product: productKey, format, formatLabel, cta, notes, promotion } = body;
 
   const product = getProduct(productKey);
   if (!product) {
     return jsonResponse({ error: `Không tìm thấy sản phẩm: ${productKey}` }, 400);
   }
 
-  const userPrompt = buildUserPrompt({ product, format, formatLabel, cta, notes });
+  const userPrompt = buildUserPrompt({ product, format, formatLabel, cta, notes, promotion });
 
   let aiResult;
   try {
