@@ -1,0 +1,45 @@
+name: Fetch Google Ads Spend
+
+# Chạy mỗi 30 phút, 24/7 — fetch Google Ads spend từ Windsor.ai JSON API,
+# transform thành data/google-ads-spend.json theo schema dashboard.
+#
+# Yêu cầu GitHub Secret:
+#   WINDSOR_API_KEY  — lấy từ https://onboard.windsor.ai/ → Data Sources → JSON API
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:            # cho phép chạy thủ công từ tab Actions
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Windsor.ai fetch script
+        env:
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+        run: python scripts/fetch_google_ads_spend.py
+
+      - name: Commit updated Google Ads spend snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/google-ads-spend.json)" ]; then
+            git add data/google-ads-spend.json
+            git commit -m "chore: auto-sync Google Ads spend snapshot (Windsor.ai)"
+            git push
+          else
+            echo "No Google Ads changes to commit."
+          fi
