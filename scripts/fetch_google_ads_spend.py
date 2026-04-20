@@ -26,7 +26,10 @@ ACCOUNT_ID = os.environ.get("WINDSOR_GOOGLE_ADS_ACCOUNT_ID", "477-705-2298").str
 ACCOUNT_NAME = os.environ.get("WINDSOR_GOOGLE_ADS_ACCOUNT_NAME", "MHDI").strip()
 
 DATE_PRESET = "last_90d"
-FIELDS = "campaign,date,spend,clicks,impressions"
+# Windsor endpoint /all chỉ chấp nhận: api_key, date_preset, fields.
+# KHÔNG đưa connector= hay _account= (sẽ trả HTTP 500).
+# Filter account/datasource làm trong Python sau khi fetch.
+FIELDS = "account_name,campaign,date,spend,clicks,impressions,datasource"
 
 BASE_URL = "https://connectors.windsor.ai/all"
 
@@ -68,13 +71,11 @@ def fetch_windsor_data() -> list:
     url = (
         f"{BASE_URL}"
         f"?api_key={API_KEY}"
-        f"&connector=google_ads"
-        f"&_account={ACCOUNT_ID}"
         f"&date_preset={DATE_PRESET}"
         f"&fields={FIELDS}"
     )
 
-    print(f"[INFO] Fetching Windsor.ai data for account {ACCOUNT_ID} ({ACCOUNT_NAME})")
+    print(f"[INFO] Fetching Windsor.ai (all connectors, filter Google Ads sau)")
     print(f"[INFO] Date range: {DATE_PRESET} · fields: {FIELDS}")
 
     req = urllib.request.Request(url, headers={"Accept": "application/json"})
@@ -105,11 +106,26 @@ def fetch_windsor_data() -> list:
 
 
 def main():
-    rows = fetch_windsor_data()
-    print(f"[INFO] Got {len(rows)} rows from Windsor.ai")
+    all_rows = fetch_windsor_data()
+    print(f"[INFO] Got {len(all_rows)} rows total (all connectors)")
+
+    # Filter chỉ Google Ads (trường datasource có value như "Google Ads" hoặc "google_ads")
+    def is_google_ads(r):
+        ds = (r.get("datasource", "") or "").lower()
+        return "google" in ds and "ad" in ds
+
+    rows = [r for r in all_rows if is_google_ads(r)]
+    print(f"[INFO] Filtered to {len(rows)} Google Ads rows")
+
+    # Filter tiếp theo account_name nếu có nhiều account Google Ads
+    if ACCOUNT_NAME:
+        rows_acc = [r for r in rows if (r.get("account_name", "") or "").strip() == ACCOUNT_NAME]
+        if rows_acc:
+            rows = rows_acc
+            print(f"[INFO] Filtered to {len(rows)} rows for account '{ACCOUNT_NAME}'")
 
     if not rows:
-        print("[WARN] No data returned. Giữ nguyên file cũ, không overwrite.")
+        print("[WARN] No Google Ads data. Giữ nguyên file cũ, không overwrite.")
         sys.exit(0)
 
     by_category = defaultdict(lambda: {"_total": 0.0, "by_date": defaultdict(float)})
@@ -174,9 +190,4 @@ def main():
     print(f"       Unique campaigns: {len(set(r['campaign'] for r in campaigns_raw))}")
     print(f"       Categories:")
     for cat in sorted(by_category.keys()):
-        unique_camps = len(set(r["campaign"] for r in campaigns_raw if r["category"] == cat))
-        print(f"         {cat:12s}: {by_category[cat]['_total']:>14,.0f}đ · {unique_camps} camps")
-
-
-if __name__ == "__main__":
-    main()
+        unique_camps = len(set(r["campaign"] for r in campa
