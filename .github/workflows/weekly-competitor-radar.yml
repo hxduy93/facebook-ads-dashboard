@@ -1,0 +1,69 @@
+name: Weekly Competitor + Radar Update
+
+# Chạy 1 lần/tuần vào 9:00 sáng thứ 2 giờ Việt Nam (UTC+7)
+# = 02:00 UTC thứ 2
+#
+# Scope:
+# - Re-run update_dashboard.py để đảm bảo competitor_history.json được rebuild
+#   từ competitor_snapshots.json (scrape qua Cowork) và commit nếu có thay đổi.
+# - Radar cạnh tranh (data/radar-latest.json) thực tế được push từ Windows local
+#   qua Cowork scraping — workflow này commit nếu file đã được push từ bên kia
+#   nhưng chưa sync (chẳng hạn khi Cowork/Windows push có lỗi).
+#
+# LƯU Ý: Scrape fanpage đối thủ không thể chạy trong GitHub Actions runner (cần
+# trình duyệt và session Facebook). Việc scrape phải chạy ở phía Cowork / Windows
+# local — user cần config Windows Task Scheduler hoặc Cowork workflow chạy trước
+# workflow này (khuyến nghị: Chủ nhật hoặc sáng sớm thứ 2 trước 9h).
+on:
+  schedule:
+    - cron: "0 2 * * 1"         # 9:00 sáng thứ 2 giờ VN
+  workflow_dispatch:            # cho phép chạy thủ công
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests openpyxl
+
+      - name: Re-run update script to refresh competitor + radar blocks
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          NETLIFY_TOKEN:   ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: python update_dashboard.py
+
+      - name: Commit updated competitor history
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/competitor_history.json)" ]; then
+            git add data/competitor_history.json
+            git commit -m "chore: weekly competitor history snapshot (Mon 9AM VN) [skip ci]"
+            git push
+          else
+            echo "No competitor history changes to commit."
+          fi
+
+      - name: Commit radar snapshot if pushed from local
+        run: |
+          if [ -n "$(git status --porcelain data/radar-latest.json)" ]; then
+            git add data/radar-latest.json
+            git commit -m "chore: weekly radar snapshot (Mon 9AM VN) [skip ci]"
+            git push
+          else
+            echo "No radar changes to commit."
+          fi

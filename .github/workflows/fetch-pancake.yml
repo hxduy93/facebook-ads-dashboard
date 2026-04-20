@@ -1,9 +1,9 @@
 name: Fetch Pancake Revenue
 
-# Chạy mỗi 15 phút — fetch đơn hàng từ Pancake POS, tổng hợp doanh thu theo SP
+# Chạy mỗi 30 phút — fetch đơn hàng từ Pancake POS, tổng hợp doanh thu theo SP
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:            # cho phép chạy thủ công từ tab Actions
 
 permissions:

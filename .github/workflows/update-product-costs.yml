@@ -1,0 +1,46 @@
+name: Update Product Costs (Manual)
+
+# Chỉ chạy THỦ CÔNG khi user cần rebuild product-costs.json từ file xlsx giá vốn.
+# KHÔNG có cron — tránh ghi đè khi user chưa sẵn sàng.
+#
+# Cách chạy:
+# 1. Sửa file xlsx Kho tổng tại ổ E: (local), commit xlsx lên repo
+# 2. Vào tab Actions trên GitHub → chọn workflow này → Run workflow
+# 3. Hoặc dùng gh CLI: gh workflow run update-product-costs.yml
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Rebuild product-costs.json từ xlsx giá vốn
+        run: python scripts/build_product_costs.py
+
+      - name: Commit updated product costs
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/product-costs.json)" ]; then
+            git add data/product-costs.json
+            git commit -m "chore: manual rebuild product costs [skip ci]"
+            git push
+          else
+            echo "No product costs changes to commit."
+          fi
