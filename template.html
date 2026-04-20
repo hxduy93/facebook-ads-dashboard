@@ -3429,8 +3429,9 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
 
   // TRƯỚC HOÀN: gồm delivered + returning + other + returned (đơn đã từng bán, CHƯA trừ hoàn) · loại canceled
   const beforeReturns = computeRows(["delivered", "returning", "other", "returned"])
-  // SAU HOÀN: loại returned + canceled (khớp RevenueByStaffBreakdown)
-  const afterReturns  = computeRows(["delivered", "returning", "other"])
+  // SAU HOÀN: khớp Pancake POS — chỉ giữ delivered + other (đơn đã giao + đơn đang xử lý)
+  // Loại returning (đang hoàn) + returned (đã hoàn) + canceled (đã hủy). Match RevenueByStaffBreakdown.
+  const afterReturns  = computeRows(["delivered", "other"])
 
   const lossByReturns = beforeReturns.tot.profit - afterReturns.tot.profit
 
@@ -3456,7 +3457,13 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
           </tr>
         </thead>
         <tbody>
-          {data.rows.map(r => {
+          {data.rows.filter(r => {
+            // Khi xem cá nhân (DUY / PHUONG_NAM) → ẩn SP người đó không chạy QC + không có doanh thu
+            // Khi xem Team Ads (ALL) → vẫn giữ đủ 13 SP để thấy toàn cảnh
+            const isIndividual = staffKey && staffKey !== "ALL"
+            if (!isIndividual) return true
+            return r.revenue > 0 || r.adSpend > 0 || r.units > 0 || r.orders > 0
+          }).map(r => {
             const hasData = r.revenue > 0 || r.adSpend > 0
             return (
               <tr key={r.product} className={`border-b border-gray-100 ${hasData ? "" : "opacity-50"} hover:bg-gray-50/60`}>
@@ -3692,14 +3699,30 @@ function CampaignDetailModal({ mode, product, staff, dateRange, onClose }) {
 // =============================================================
 // Mapping category → nhóm SP (phải đồng bộ với detect_google_category
 // trong scripts và google-ads-spend.json)
+//
+// 5 category chính (có doanh thu mapping Pancake): MAYDO / DINHVI / GHIAM / CAMCALL — lấy spend từ by_category[key]
+// 5 micro category (không map SP Pancake — chỉ trừ spend): CAM4G / CAMWIFI / CAMNLMT / ANTIREC / RAZOR
+//   → lấy spend từ campaigns_raw, match regex tên campaign (mỗi SP có 1 camp Search + 1 camp Remarketing)
+// 1 bucket tổng hợp: OTHER_MISC — các camp còn lại của OTHER_CAM/OTHER_SIM/OTHER không match micro (Cam Mini, Sim 4G, máy massage, rửa hoa quả, thiết bị chăm sóc…)
 const GOOGLE_CATEGORIES = [
-  { key: "MAYDO",    label: "Máy dò",                 products: ["D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro"] },
-  { key: "DINHVI",   label: "Định vị",                products: ["DV1 Pro"] },
-  { key: "GHIAM",    label: "Ghi âm",                 products: ["DR1", "DR4 Plus"] },
-  { key: "CAMCALL",  label: "Camera gọi 2 chiều",     products: ["DA8.1", "DA8.1 Pro"] },
-  { key: "OTHER",    label: "Khác (Cam 4G/Mini/NLMT/WiFi, Chống ghi âm, Sim 4G, Máy cạo râu)", products: [], isMisc: true },
+  { key: "MAYDO",     label: "Máy dò",                 products: ["D1", "D1 Pro", "D2", "D3", "D4", "D8 Pro"] },
+  { key: "DINHVI",    label: "Định vị",                products: ["DV1 Pro"] },
+  { key: "GHIAM",     label: "Ghi âm",                 products: ["DR1", "DR4 Plus"] },
+  { key: "CAMCALL",   label: "Camera gọi 2 chiều",     products: ["DA8.1", "DA8.1 Pro"] },
+  { key: "CAM4G",     label: "Camera 4G",              products: [], isMicro: true,
+    campaignTest: n => /cam(?:era)?\s*4g/i.test(n) },
+  { key: "CAMWIFI",   label: "Camera WiFi",            products: [], isMicro: true,
+    campaignTest: n => /cam(?:era)?\s*wifi/i.test(n) },
+  { key: "CAMNLMT",   label: "Camera NLMT (năng lượng mặt trời)", products: [], isMicro: true,
+    campaignTest: n => /nlmt/i.test(n) || /năng lượng mặt trời/i.test(n) },
+  { key: "ANTIREC",   label: "Chống ghi âm",           products: [], isMicro: true,
+    campaignTest: n => /chống\s*ghi\s*âm/i.test(n) || /chong\s*ghi\s*am/i.test(n) },
+  { key: "RAZOR",     label: "Máy cạo râu",            products: [], isMicro: true,
+    campaignTest: n => /cạo\s*râu/i.test(n) || /cao\s*rau/i.test(n) },
+  { key: "OTHER_MISC", label: "Khác (Cam Mini, Sim 4G, máy massage, rửa hoa quả, thiết bị chăm sóc…)", products: [], isMisc: true },
 ]
-const GOOGLE_OTHER_KEYS = ["OTHER_CAM", "OTHER_DI", "OTHER_SIM", "OTHER_RAZOR", "OTHER"]
+// Category gốc (trong by_category) mà micro sẽ re-categorize lại (5 nhóm "OTHER_*" của script detect cũ)
+const GOOGLE_OTHER_SOURCE_KEYS = ["OTHER_CAM", "OTHER_DI", "OTHER_SIM", "OTHER_RAZOR", "OTHER"]
 
 function GoogleAdsProfit({ dateRange, onClose }) {
   const revenue = (typeof DATA !== "undefined" ? DATA.revenue : null) || {}
@@ -3716,10 +3739,33 @@ function GoogleAdsProfit({ dateRange, onClose }) {
   const SOURCE = "WEBSITE"
   const g = groups[SOURCE]
 
+  // Pre-build micro + OTHER_MISC spend buckets từ campaigns_raw.
+  // Chỉ re-categorize các campaign thuộc category gốc "OTHER_*" (không đụng MAYDO/DINHVI/GHIAM/CAMCALL).
+  const microSpend = {}
+  GOOGLE_CATEGORIES.filter(c => c.isMicro || c.key === "OTHER_MISC").forEach(c => {
+    microSpend[c.key] = { by_date: {}, _total: 0, campaigns: new Set() }
+  })
+  ;(googleAds.campaigns_raw || []).forEach(row => {
+    if (!GOOGLE_OTHER_SOURCE_KEYS.includes(row.category)) return
+    const name = row.campaign || ""
+    let target = null
+    for (const cat of GOOGLE_CATEGORIES) {
+      if (cat.campaignTest && cat.campaignTest(name)) { target = cat.key; break }
+    }
+    if (!target) target = "OTHER_MISC"
+    const d = row.date
+    const sp = Number(row.spend) || 0
+    if (!microSpend[target]) return
+    microSpend[target].by_date[d] = (microSpend[target].by_date[d] || 0) + sp
+    microSpend[target]._total += sp
+    microSpend[target].campaigns.add(name)
+  })
+
   const computeRows = (STATUSES_KEEP) => {
     const rows = GOOGLE_CATEGORIES.map(cat => {
       let revenueC = 0, unitsC = 0, ordersC = 0, costTotal = 0
-      if (g && !cat.isMisc) {
+      // Micro + Misc category không có product mapping → không tính revenue Pancake
+      if (g && !cat.isMisc && !cat.isMicro) {
         cat.products.forEach(p => {
           STATUSES_KEEP.forEach(stKey => {
             const pData = g.products_by_status?.[stKey]?.[p]
@@ -3751,16 +3797,23 @@ function GoogleAdsProfit({ dateRange, onClose }) {
         })
       }
 
-      // Google Ads spend
+      // Google Ads spend — micro/misc lấy từ microSpend (re-categorize), main lấy từ by_category
       let spendC = 0
-      const keysToSum = cat.isMisc ? GOOGLE_OTHER_KEYS : [cat.key]
-      keysToSum.forEach(k => {
-        const bucket = googleAds.by_category[k]
-        if (!bucket || !bucket.by_date) return
-        Object.entries(bucket.by_date).forEach(([d, v]) => {
-          if (isInRange(d)) spendC += (v || 0)
-        })
-      })
+      if (cat.isMicro || cat.key === "OTHER_MISC") {
+        const bucket = microSpend[cat.key]
+        if (bucket && bucket.by_date) {
+          Object.entries(bucket.by_date).forEach(([d, v]) => {
+            if (isInRange(d)) spendC += (v || 0)
+          })
+        }
+      } else {
+        const bucket = googleAds.by_category[cat.key]
+        if (bucket && bucket.by_date) {
+          Object.entries(bucket.by_date).forEach(([d, v]) => {
+            if (isInRange(d)) spendC += (v || 0)
+          })
+        }
+      }
 
       const vat = revenueC * VAT_RATE
       const profit = revenueC - vat - spendC - costTotal
@@ -3770,6 +3823,7 @@ function GoogleAdsProfit({ dateRange, onClose }) {
         label: cat.label,
         products: cat.products,
         isMisc: !!cat.isMisc,
+        isMicro: !!cat.isMicro,
         units: unitsC,
         orders: ordersC,
         revenue: revenueC,
@@ -3794,7 +3848,8 @@ function GoogleAdsProfit({ dateRange, onClose }) {
   }
 
   const beforeReturns = computeRows(["delivered", "returning", "other", "returned"])
-  const afterReturns  = computeRows(["delivered", "returning", "other"])
+  // SAU HOÀN: khớp Pancake POS — chỉ giữ delivered + other. Loại returning + returned + canceled.
+  const afterReturns  = computeRows(["delivered", "other"])
   const lossByReturns = beforeReturns.tot.profit - afterReturns.tot.profit
 
   const renderTable = (data) => (
@@ -3822,15 +3877,18 @@ function GoogleAdsProfit({ dateRange, onClose }) {
                   <span className="inline-flex items-center gap-1.5 flex-wrap">
                     <span>{r.label}</span>
                     <button
-                      onClick={() => setCampModal({ category: r.cat, isMisc: r.isMisc })}
+                      onClick={() => setCampModal({ category: r.cat, isMisc: r.isMisc, isMicro: r.isMicro })}
                       className="text-[9px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold hover:bg-blue-600 hover:text-white border border-blue-300 tracking-wider"
                       title={`Xem campaign Google Ads nhóm ${r.label}`}
                     >
                       CAMP
                     </button>
                   </span>
-                  {!r.isMisc && r.products.length > 0 && (
+                  {!r.isMisc && !r.isMicro && r.products.length > 0 && (
                     <div className="text-[10px] text-gray-500 mt-0.5 font-normal">{r.products.join(", ")}</div>
+                  )}
+                  {r.isMicro && (
+                    <div className="text-[10px] text-gray-500 mt-0.5 font-normal italic">1 camp Search + 1 camp Remarketing</div>
                   )}
                 </td>
                 <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
@@ -3923,13 +3981,14 @@ function GoogleAdsProfit({ dateRange, onClose }) {
       </div>
 
       <p className="text-[11px] text-gray-600 mt-3 italic">
-        * Doanh thu = Pancake nguồn Website (không kể Zalo OA + Hotline) · Google Ads spend = TK MHDI, category detect từ tên campaign (RMK/Search/Shopping) · Row "Khác" = SP ngoài 13 PROFIT_PRODUCTS (DI/Cam 4G/Cam WiFi/Cam Mini/NLMT/Sim 4G/Máy cạo râu) nên không có DT để tính LN, spend trừ trực tiếp. Data Google Ads sync từ Windsor.ai — cập nhật thủ công qua file <code className="bg-white px-1 rounded border">data/google-ads-spend.json</code>.
+        * Doanh thu = Pancake nguồn Website (không kể Zalo OA + Hotline) · Google Ads spend = TK MHDI, category detect từ tên campaign (RMK/Search/Shopping) · 4 dòng đầu (Máy dò/Định vị/Ghi âm/Camera gọi 2 chiều) có mapping SP → tính LN thật. 5 dòng micro (Camera 4G/WiFi/NLMT, Chống ghi âm, Máy cạo râu) + "Khác" = SP không có DT từ nguồn Website → LN = 0 − spend. Data Google Ads sync từ Windsor.ai — cập nhật thủ công qua file <code className="bg-white px-1 rounded border">data/google-ads-spend.json</code>.
       </p>
 
       {campModal && (
         <GoogleCampaignsModal
           category={campModal.category}
           isMisc={campModal.isMisc}
+          isMicro={campModal.isMicro}
           dateRange={dateRange}
           onClose={() => setCampModal(null)}
         />
@@ -3938,17 +3997,41 @@ function GoogleAdsProfit({ dateRange, onClose }) {
   )
 }
 
-function GoogleCampaignsModal({ category, isMisc, dateRange, onClose }) {
+function GoogleCampaignsModal({ category, isMisc, isMicro, dateRange, onClose }) {
   const googleAds = (typeof DATA !== "undefined" ? DATA.google_ads : null) || { campaigns_raw: [] }
   const raw = googleAds.campaigns_raw || []
-  const catSet = isMisc
-    ? new Set(GOOGLE_OTHER_KEYS)
-    : new Set([category])
+
+  // Micro / OTHER_MISC → match campaign theo regex của category (không filter theo r.category).
+  // Main category (MAYDO/DINHVI/GHIAM/CAMCALL) → filter r.category === category.
+  // OTHER_MISC → chỉ các campaign thuộc source keys "OTHER_*" + KHÔNG match regex micro nào.
+  const catDef = GOOGLE_CATEGORIES.find(c => c.key === category)
+  const isOtherMisc = category === "OTHER_MISC"
+  const microCats = GOOGLE_CATEGORIES.filter(c => c.isMicro)
 
   const byCampaign = {}
   raw.forEach(r => {
-    if (!catSet.has(r.category)) return
     if (r.date < dateRange.start || r.date > dateRange.end) return
+    let match = false
+    if (isMicro && catDef && catDef.campaignTest) {
+      // Chỉ các campaign thuộc source "OTHER_*" + match regex của micro category này
+      if (GOOGLE_OTHER_SOURCE_KEYS.includes(r.category) && catDef.campaignTest(r.campaign || "")) {
+        match = true
+      }
+    } else if (isOtherMisc) {
+      // Các campaign source "OTHER_*" không match regex micro nào
+      if (GOOGLE_OTHER_SOURCE_KEYS.includes(r.category)) {
+        const matchedMicro = microCats.some(c => c.campaignTest && c.campaignTest(r.campaign || ""))
+        if (!matchedMicro) match = true
+      }
+    } else if (isMisc) {
+      // (backward compat — không còn dùng sau refactor, nhưng giữ an toàn)
+      if (GOOGLE_OTHER_SOURCE_KEYS.includes(r.category)) match = true
+    } else {
+      // Main category
+      if (r.category === category) match = true
+    }
+    if (!match) return
+
     const key = r.campaign
     byCampaign[key] = byCampaign[key] || { name: key, category: r.category, spend: 0, clicks: 0, impressions: 0 }
     byCampaign[key].spend += (r.spend || 0)
@@ -3957,7 +4040,9 @@ function GoogleCampaignsModal({ category, isMisc, dateRange, onClose }) {
   })
   const rows = Object.values(byCampaign).sort((a, b) => b.spend - a.spend)
   const total = rows.reduce((s, r) => s + r.spend, 0)
-  const title = isMisc ? "Google Ads — Nhóm KHÁC (SP ngoài 13 PROFIT_PRODUCTS)" : `Google Ads — ${category}`
+  const title = isOtherMisc
+    ? "Google Ads — KHÁC (Cam Mini / Sim 4G / máy khác)"
+    : (catDef ? `Google Ads — ${catDef.label}` : `Google Ads — ${category}`)
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
@@ -4062,9 +4147,9 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
     return ymd >= dateRange.start && ymd <= dateRange.end
   }
 
-  // Loại 'returned' (đã hoàn) + 'canceled' (đã hủy) — theo yêu cầu user.
-  // Doanh thu nhân sự = sum 3 status: delivered + returning + other.
-  const STATUSES_KEEP = ["delivered", "returning", "other"]
+  // KHỚP POS PANCAKE — chỉ giữ 2 status: delivered (đã giao) + other (đang xử lý: mới/duyệt/ship/đóng/pending).
+  // Loại returning (đang hoàn) + returned (đã hoàn) + canceled (đã hủy) — POS không tính 3 nhóm này vào doanh thu.
+  const STATUSES_KEEP = ["delivered", "other"]
 
   // Tính revenue/orders cho 1 source group (DUY / PHUONG_NAM / WEBSITE / ZALO_OA / HOTLINE)
   // - totalRev       — doanh thu THỰC THU (total_price_after_sub_discount), CHƯA tính hoàn/hủy.
@@ -4208,7 +4293,7 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
         <div>
           <h2 className="text-lg font-bold text-red-700 tracking-tight">👥 Doanh thu theo nhân sự — 3 nhóm</h2>
           <p className="text-xs text-gray-500 mt-1">
-            Doanh thu thực thu (đã trừ giảm giá đơn) · <span className="font-semibold text-emerald-700">CHƯA tính đơn hoàn / hủy</span> · WEBSITE = Website + Zalo OA + Hotline
+            Doanh thu thực thu (đã trừ giảm giá đơn) · <span className="font-semibold text-emerald-700">Khớp POS Pancake — delivered + other, loại đang hoàn / đã hoàn / đã hủy</span> · WEBSITE = Website + Zalo OA + Hotline
           </p>
         </div>
         <div className="text-right">
@@ -4440,6 +4525,10 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
   // Danh sách nguồn được show dựa theo staffFilter
   const activeSourceKeys = STAFF_FILTER_MAP[staffFilter].sourceKeys
 
+  // KHỚP POS PANCAKE — chỉ giữ delivered + other (loại returning/returned/canceled).
+  // Match RevenueByStaffBreakdown.STATUSES_KEEP để 2 bảng consistent.
+  const STATUSES_KEEP = ["delivered", "other"]
+
   // Tính revenue + orders mỗi group trong range, kèm breakdown theo product
   const rows = activeSourceKeys.map(key => {
     const g = groups[key]
@@ -4447,31 +4536,66 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
     const prodTotals = {}
     const prodOrders = {}
     let totalRev = 0
+
+    // Field mới (có tách status) vs field cũ (fallback)
+    const hasProductsByStatus = !!g.products_by_status
+    const hasOrderCountByStatus = !!g.order_count_by_status_by_date
+    const hasOrderRevByStatus = !!g.order_revenue_by_status_by_date
     const hasOrdersByDate = !!g.total_orders_by_date
 
     PRODUCTS.forEach(p => {
-      const pData = g.products?.[p] || {}
       let sum = 0
-      Object.entries(pData.by_date || {}).forEach(([d, v]) => {
-        if (isInRange(d)) sum += v
-      })
-      prodTotals[p] = sum
-      totalRev += sum
-
-      if (pData.orders_by_date) {
-        let ord = 0
-        Object.entries(pData.orders_by_date).forEach(([d, c]) => {
-          if (isInRange(d)) ord += c
+      let ord = 0
+      if (hasProductsByStatus) {
+        STATUSES_KEEP.forEach(st => {
+          const pData = g.products_by_status[st]?.[p] || {}
+          Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+            if (isInRange(d)) sum += (v || 0)
+          })
+          Object.entries(pData.orders_by_date || {}).forEach(([d, c]) => {
+            if (isInRange(d)) ord += (c || 0)
+          })
         })
-        prodOrders[p] = ord
       } else {
-        prodOrders[p] = pData.orders || 0
+        // Fallback: snapshot cũ — dùng products merged (all status). Không khớp POS 100%.
+        const pData = g.products?.[p] || {}
+        Object.entries(pData.by_date || {}).forEach(([d, v]) => {
+          if (isInRange(d)) sum += (v || 0)
+        })
+        if (pData.orders_by_date) {
+          Object.entries(pData.orders_by_date).forEach(([d, c]) => {
+            if (isInRange(d)) ord += (c || 0)
+          })
+        } else {
+          ord = pData.orders || 0
+        }
       }
+      prodTotals[p] = sum
+      prodOrders[p] = ord
     })
 
-    // Tổng đơn nhóm (filter theo dateRange nếu có total_orders_by_date)
+    // Tổng doanh thu nguồn (không bó 13 SP chính) — match POS:
+    if (hasOrderRevByStatus) {
+      totalRev = 0
+      STATUSES_KEEP.forEach(st => {
+        Object.entries(g.order_revenue_by_status_by_date[st] || {}).forEach(([d, v]) => {
+          if (isInRange(d)) totalRev += (v || 0)
+        })
+      })
+    } else {
+      // Fallback: sum 13 SP (kém chính xác vì bỏ SP phụ)
+      totalRev = PRODUCTS.reduce((s, p) => s + (prodTotals[p] || 0), 0)
+    }
+
+    // Tổng đơn nguồn (loại hoàn/hủy)
     let totalOrders = 0
-    if (hasOrdersByDate) {
+    if (hasOrderCountByStatus) {
+      STATUSES_KEEP.forEach(st => {
+        Object.entries(g.order_count_by_status_by_date[st] || {}).forEach(([d, c]) => {
+          if (isInRange(d)) totalOrders += (c || 0)
+        })
+      })
+    } else if (hasOrdersByDate) {
       Object.entries(g.total_orders_by_date).forEach(([d, c]) => {
         if (isInRange(d)) totalOrders += c
       })
@@ -4487,7 +4611,7 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
       prodTotals,
       prodOrders,
       color: GROUP_COLOR[key] || GROUP_COLOR["DUY"],
-      fallbackOrders: !hasOrdersByDate,
+      fallbackOrders: !hasOrderCountByStatus && !hasOrdersByDate,
     }
   }).filter(Boolean)
 
