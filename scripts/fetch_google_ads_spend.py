@@ -190,4 +190,9 @@ def main():
     print(f"       Unique campaigns: {len(set(r['campaign'] for r in campaigns_raw))}")
     print(f"       Categories:")
     for cat in sorted(by_category.keys()):
-        unique_camps = len(set(r["campaign"] for r in campa
+        unique_camps = len(set(r["campaign"] for r in campaigns_raw if r["category"] == cat))
+        print(f"         {cat:12s}: {by_category[cat]['_total']:>14,.0f}đ · {unique_camps} camps")
+
+
+if __name__ == "__main__":
+    main()
