@@ -387,10 +387,18 @@ const TIME_FILTERS = [
 
 const fmtVND = (n) => {
   if (n == null || isNaN(n)) return "—"
-  if (n >= 1e9) return (n / 1e9).toFixed(2) + " tỷ"
-  if (n >= 1e6) return (n / 1e6).toFixed(1) + " tr"
-  if (n >= 1e3) return (n / 1e3).toFixed(0) + "K"
-  return Math.round(n).toString()
+  const sign = n < 0 ? "-" : ""
+  const a = Math.abs(n)
+  if (a >= 1e9) return sign + (a / 1e9).toFixed(2) + " tỷ"
+  if (a >= 1e6) return sign + (a / 1e6).toFixed(1) + " tr"
+  if (a >= 1e3) return sign + (a / 1e3).toFixed(0) + "K"
+  return sign + Math.round(a).toString()
+}
+// Format tiền đầy đủ có dấu phân cách phần nghìn (vi-VN) — dùng cho bảng Lợi nhuận
+// để user thấy chính xác tới từng đồng, không rút gọn K/tr.
+const fmtVNDFull = (n) => {
+  if (n == null || isNaN(n)) return "—"
+  return new Intl.NumberFormat("vi-VN").format(Math.round(n))
 }
 const fmtNum = (n) => {
   if (n == null) return "—"
@@ -3484,13 +3492,13 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
                 </td>
                 <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
                 <td className="py-2 px-3 text-right text-gray-600">{r.orders > 0 ? fmtNum(r.orders) : "—"}</td>
-                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVND(r.revenue) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVND(r.vat) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVND(r.adSpend) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-gray-600">{r.costPerUnit > 0 ? fmtVND(r.costPerUnit) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVND(r.totalCost) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVNDFull(r.revenue) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVNDFull(r.vat) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVNDFull(r.adSpend) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-600">{r.costPerUnit > 0 ? fmtVNDFull(r.costPerUnit) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVNDFull(r.totalCost) + "₫" : "—"}</td>
                 <td className={`py-2 px-3 text-right font-extrabold border-l border-gray-300 ${r.profit > 0 ? "text-emerald-700" : r.profit < 0 ? "text-red-600" : "text-gray-400"}`}>
-                  {hasData ? fmtVND(r.profit) + "₫" : "—"}
+                  {hasData ? fmtVNDFull(r.profit) + "₫" : "—"}
                 </td>
                 <td className={`py-2 px-3 text-right font-semibold ${r.margin == null ? "text-gray-300" : r.margin > 0 ? "text-emerald-700" : "text-red-600"}`}>
                   {r.margin == null ? "—" : r.margin.toFixed(1) + "%"}
@@ -3502,12 +3510,12 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
             <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG</td>
             <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.units)}</td>
             <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.orders)}</td>
-            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVND(data.tot.revenue)}₫</td>
-            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVND(data.tot.vat)}₫</td>
-            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVND(data.tot.adSpend)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVNDFull(data.tot.revenue)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVNDFull(data.tot.vat)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVNDFull(data.tot.adSpend)}₫</td>
             <td className="py-3 px-3 text-right text-gray-500">—</td>
-            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVND(data.tot.totalCost)}₫</td>
-            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(data.tot.profit)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVNDFull(data.tot.totalCost)}₫</td>
+            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(data.tot.profit)}₫</td>
             <td className={`py-3 px-3 text-right font-bold ${data.totMargin == null ? "text-gray-400" : data.totMargin > 0 ? "text-emerald-700" : "text-red-600"}`}>
               {data.totMargin == null ? "—" : data.totMargin.toFixed(1) + "%"}
             </td>
@@ -3570,15 +3578,15 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
       {/* Dòng tóm tắt TRƯỚC → MẤT → SAU */}
       <div className="my-3 px-4 py-3 bg-white rounded-lg border-2 border-dashed border-gray-300 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
         <span className="text-gray-700">
-          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(beforeReturns.tot.profit)}₫</span>
+          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(beforeReturns.tot.profit)}₫</span>
         </span>
         <span className="text-gray-400 text-lg">→</span>
         <span className="text-gray-700">
-          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVND(Math.abs(lossByReturns))}₫</span>
+          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVNDFull(Math.abs(lossByReturns))}₫</span>
         </span>
         <span className="text-gray-400 text-lg">→</span>
         <span className="text-gray-700">
-          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(afterReturns.tot.profit)}₫</span>
+          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(afterReturns.tot.profit)}₫</span>
         </span>
       </div>
 
@@ -3893,12 +3901,12 @@ function GoogleAdsProfit({ dateRange, onClose }) {
                 </td>
                 <td className="py-2 px-3 text-right text-gray-800">{r.units > 0 ? fmtNum(r.units) : "—"}</td>
                 <td className="py-2 px-3 text-right text-gray-600">{r.orders > 0 ? fmtNum(r.orders) : "—"}</td>
-                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVND(r.revenue) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVND(r.vat) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVND(r.adSpend) + "₫" : "—"}</td>
-                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVND(r.totalCost) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right font-semibold text-gray-900">{r.revenue > 0 ? fmtVNDFull(r.revenue) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-amber-700">{r.vat > 0 ? "-" + fmtVNDFull(r.vat) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-blue-700">{r.adSpend > 0 ? "-" + fmtVNDFull(r.adSpend) + "₫" : "—"}</td>
+                <td className="py-2 px-3 text-right text-gray-700">{r.totalCost > 0 ? "-" + fmtVNDFull(r.totalCost) + "₫" : "—"}</td>
                 <td className={`py-2 px-3 text-right font-extrabold border-l border-gray-300 ${r.profit > 0 ? "text-emerald-700" : r.profit < 0 ? "text-red-600" : "text-gray-400"}`}>
-                  {hasData ? fmtVND(r.profit) + "₫" : "—"}
+                  {hasData ? fmtVNDFull(r.profit) + "₫" : "—"}
                 </td>
                 <td className={`py-2 px-3 text-right font-semibold ${r.margin == null ? "text-gray-300" : r.margin > 0 ? "text-emerald-700" : "text-red-600"}`}>
                   {r.margin == null ? "—" : r.margin.toFixed(1) + "%"}
@@ -3910,11 +3918,11 @@ function GoogleAdsProfit({ dateRange, onClose }) {
             <td className="py-3 px-3 font-extrabold text-gray-900">TỔNG</td>
             <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.units)}</td>
             <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtNum(data.tot.orders)}</td>
-            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVND(data.tot.revenue)}₫</td>
-            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVND(data.tot.vat)}₫</td>
-            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVND(data.tot.adSpend)}₫</td>
-            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVND(data.tot.totalCost)}₫</td>
-            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(data.tot.profit)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-900">{fmtVNDFull(data.tot.revenue)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-amber-700">-{fmtVNDFull(data.tot.vat)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-blue-700">-{fmtVNDFull(data.tot.adSpend)}₫</td>
+            <td className="py-3 px-3 text-right font-bold text-gray-800">-{fmtVNDFull(data.tot.totalCost)}₫</td>
+            <td className={`py-3 px-3 text-right font-extrabold border-l border-gray-300 ${data.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(data.tot.profit)}₫</td>
             <td className={`py-3 px-3 text-right font-bold ${data.totMargin == null ? "text-gray-400" : data.totMargin > 0 ? "text-emerald-700" : "text-red-600"}`}>
               {data.totMargin == null ? "—" : data.totMargin.toFixed(1) + "%"}
             </td>
@@ -3959,15 +3967,15 @@ function GoogleAdsProfit({ dateRange, onClose }) {
 
       <div className="my-3 px-4 py-3 bg-white rounded-lg border-2 border-dashed border-gray-300 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
         <span className="text-gray-700">
-          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(beforeReturns.tot.profit)}₫</span>
+          LN trước hoàn: <span className={`font-extrabold ${beforeReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(beforeReturns.tot.profit)}₫</span>
         </span>
         <span className="text-gray-400 text-lg">→</span>
         <span className="text-gray-700">
-          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVND(Math.abs(lossByReturns))}₫</span>
+          Hoàn mất: <span className={`font-extrabold ${lossByReturns > 0 ? "text-red-600" : "text-gray-500"}`}>-{fmtVNDFull(Math.abs(lossByReturns))}₫</span>
         </span>
         <span className="text-gray-400 text-lg">→</span>
         <span className="text-gray-700">
-          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVND(afterReturns.tot.profit)}₫</span>
+          LN sau hoàn: <span className={`font-extrabold ${afterReturns.tot.profit > 0 ? "text-emerald-700" : "text-red-600"}`}>{fmtVNDFull(afterReturns.tot.profit)}₫</span>
         </span>
       </div>
 
