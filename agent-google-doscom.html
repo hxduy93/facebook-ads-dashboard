@@ -146,17 +146,33 @@ function esc(s) {
 }
 
 async function load() {
+  const t0 = performance.now();
   try {
     const res = await fetch(REPORT_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const fetchMs = (performance.now() - t0).toFixed(0);
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' (fetch ' + fetchMs + 'ms)');
     const r = await res.json();
-    render(r);
+    const parseMs = (performance.now() - t0).toFixed(0);
+    try {
+      render(r);
+      const renderMs = (performance.now() - t0).toFixed(0);
+      console.log('[AgentPage] fetch: ' + fetchMs + 'ms, parse+render: ' + renderMs + 'ms total');
+    } catch (err) {
+      console.error('[AgentPage] render failed:', err);
+      document.getElementById('main').innerHTML =
+        '<div class="card" style="border-left: 4px solid #dc2626; background: #fef2f2;">' +
+        '<h3>❌ Lỗi render UI</h3>' +
+        '<p class="text-sm" style="margin-top: 8px;">JSON load OK nhưng render lỗi. Báo cho admin.</p>' +
+        '<pre style="font-size: 11px; color: #991b1b; margin-top: 8px; background: white; padding: 8px; border-radius: 4px; overflow-x: auto;">' +
+        esc(err.stack || err.message) + '</pre></div>';
+    }
   } catch (e) {
+    console.error('[AgentPage] fetch failed:', e);
     document.getElementById('main').innerHTML =
       '<div class="card" style="border-left: 4px solid #f59e0b;">' +
-      '<h3>⏳ Báo cáo chưa sẵn sàng</h3>' +
-      '<p class="text-sm" style="margin-top: 8px;">Chờ agent chạy lần đầu, hoặc bấm Run now trên Cowork.</p>' +
-      '<p class="text-xs" style="color: #6b7280; margin-top: 4px;">' + esc(e.message) + '</p></div>';
+      '<h3>⏳ Báo cáo chưa sẵn sàng hoặc fetch lỗi</h3>' +
+      '<p class="text-sm" style="margin-top: 8px;">' + esc(e.message) + '</p>' +
+      '<p class="text-xs" style="color: #6b7280; margin-top: 8px;">Debug: mở F12 → Console + Network → xem request <code>data/google-ads-daily-report.json</code></p></div>';
   }
 }
 
@@ -225,7 +241,7 @@ function render(r) {
     const c = cats[k];
     const isActive = k === currentCat;
     const hasUrgent = (c.summary_actions || []).some(a => a.priority === 'high');
-    html += '<button class="cat-tab ' + (isActive ? 'active' : '') + '" onclick="switchCat(\'' + k + '\')">' +
+    html += '<button class="cat-tab ' + (isActive ? 'active' : '') + '" onclick="switchCat(\'' + k + '\', event)">' +
       esc(c.display_name) + (hasUrgent ? '<span class="urgent-dot">●</span>' : '') + '</button>';
   });
   html += '</div><div id="cat-content">' + renderCategory(cats[currentCat]) + '</div></section>';
@@ -242,10 +258,11 @@ function render(r) {
   document.getElementById('main').innerHTML = html;
 }
 
-function switchCat(key) {
+function switchCat(key, ev) {
   currentCat = key;
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  const evt = ev || window.event;
+  if (evt && evt.target) evt.target.classList.add('active');
   document.getElementById('cat-content').innerHTML = renderCategory(REPORT.categories[key]);
 }
 
@@ -278,24 +295,4 @@ function renderCategory(c) {
     });
     html += '</div>';
   } else {
-    html += '<p class="text-xs text-gray" style="margin-bottom: 12px;">Không có hành động cần thực hiện.</p>';
-  }
-
-  // Keywords
-  html += '<h3 style="margin-top: 16px;">🔑 Keywords (' + (c.keywords_count || 0) + ' meaningful, hiện top ' + (c.keywords || []).length + ')</h3>';
-  if (!(c.keywords || []).length) {
-    html += '<p class="text-xs text-gray">Không có keyword meaningful.</p>';
-  } else {
-    html += '<div class="tbl-wrap"><table><thead><tr>' +
-      '<th>Keyword</th><th>Match</th><th>Status</th>' +
-      '<th class="t-right">Spend</th><th class="t-right">Click</th>' +
-      '<th class="t-right">CTR</th><th class="t-right">Conv</th>' +
-      '<th>Rec</th><th>Lý do</th></tr></thead><tbody>';
-    c.keywords.forEach(k => {
-      html += '<tr>' +
-        '<td><span class="truncate" title="' + esc(k.text) + '">' + esc(k.text) + '</span></td>' +
-        '<td class="text-xs">' + esc(k.match_type) + '</td>' +
-        '<td class="text-xs">' + esc(k.status) + '</td>' +
-        '<td class="t-right">' + fmtVND(k.spend_30d) + 'đ</td>' +
-        '<td class="t-right">' + fmtInt(k.clicks_30d) + '</td>' +
-        '<td class="t-right">' + fmtPct(k.ctr_30d) + '</td>' 
+    html += '<p class="text-xs text-gray" style="margin-bottom: 12px;">Không có hành động cần t
