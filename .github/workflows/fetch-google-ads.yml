@@ -39,7 +39,14 @@ jobs:
           if [ -n "$(git status --porcelain data/google-ads-spend.json)" ]; then
             git add data/google-ads-spend.json
             git commit -m "chore: auto-sync Google Ads spend snapshot (Windsor.ai)"
-            git push
+            # Retry + rebase để tránh race condition với fetch-pancake chạy cùng lúc
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
           else
             echo "No Google Ads changes to commit."
           fi

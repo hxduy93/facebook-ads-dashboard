@@ -36,7 +36,14 @@ jobs:
           if [ -n "$(git status --porcelain data/product-revenue.json)" ]; then
             git add data/product-revenue.json
             git commit -m "chore: update pancake revenue snapshot"
-            git push
+            # Retry + rebase để tránh race condition với fetch-google-ads chạy cùng lúc
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
           else
             echo "No revenue changes to commit."
           fi
