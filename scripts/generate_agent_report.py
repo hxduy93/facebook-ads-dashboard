@@ -411,6 +411,10 @@ def main():
             "keywords": cat_keywords[:12],  # Top 12 per cat (limit output size, tối ưu load speed)
             "banners": cat_banners[:8],
             "summary_actions": summary_actions,
+            "suggested_keywords": suggest_keywords_for_category(cat_key, cat_keywords),
+            "banner_improvement_tips": generate_banner_improvement_tips(cat_banners, cat_key),
+            "ab_test_suggestions": generate_ab_test_suggestions(cat_banners, cat_key),
+            "title_analysis": generate_title_analysis(ads, cat_key, None),
         }
 
     # Overall score từ v2 schema (giữ compatible)
@@ -451,8 +455,15 @@ def main():
         f"Xem bảng chi tiết từng nhóm sản phẩm bên dưới."
     )
 
+    score_summary_data = build_score_summary(categories_report, {
+        "total_actions": total_actions,
+        "urgent_actions": urgent_actions,
+        "estimated_total_saving_vnd": total_saving,
+    }, roas)
+
     report = {
         "generated_at": now_vn.strftime("%Y-%m-%d %H:%M"),
+        "score_summary": score_summary_data,
         "version": "3.0",
         "period": {
             "start": ctx.get("source_data_date_range", {}).get("start_30d", ""),
@@ -496,6 +507,425 @@ def main():
     cats_by_spend = sorted(categories_report.items(), key=lambda x: -x[1]["ads_spend_30d"])[:3]
     for cat, c in cats_by_spend:
         print(f"         {c['display_name']:25s}: spend {c['ads_spend_30d']/1_000_000:.1f}tr · {c['keywords_count']} kw · {c['banners_count']} banner · {len(c['summary_actions'])} action")
+
+
+
+
+def suggest_keywords_for_category(category_key, existing_keywords):
+    """
+    Rule-based suggest keyword MỚI dựa vào top converting keywords của category.
+    Mỗi category có seed patterns — expand thành biến thể intent-driven.
+    """
+    # Keywords template cho mỗi category (rule-based, không AI)
+    SEED_TEMPLATES = {
+        "MAYDO": {
+            "intent_buy": [
+                "mua máy dò camera ẩn chính hãng",
+                "máy dò thiết bị nghe lén giá rẻ",
+                "thiết bị phát hiện camera quay lén tốt nhất",
+                "máy dò nghe lén giá bao nhiêu",
+                "mua máy dò định vị ở đâu",
+            ],
+            "intent_compare": [
+                "so sánh máy dò nghe lén",
+                "review máy dò camera ẩn",
+                "máy dò nghe lén loại nào tốt",
+                "đánh giá thiết bị phát hiện camera",
+            ],
+            "intent_location": [
+                "mua máy dò nghe lén tại hà nội",
+                "máy dò camera ẩn tphcm",
+                "cửa hàng bán máy dò thiết bị ẩn",
+            ],
+            "intent_brand": [
+                "máy dò nghe lén doscom",
+                "doscom da1 pro",
+                "thiết bị an ninh doscom",
+            ],
+            "reason": "Intent mua cao + brand keyword (CTR cao, CPC thấp)",
+        },
+        "DINHVI": {
+            "intent_buy": [
+                "mua thiết bị định vị gps chính hãng",
+                "thiết bị định vị xe máy có sim",
+                "định vị ô tô không dây",
+                "thiết bị định vị theo dõi con",
+                "gps tracker cho xe máy",
+            ],
+            "intent_compare": [
+                "review thiết bị định vị gps",
+                "thiết bị định vị nào tốt nhất",
+                "so sánh định vị wifi và gps",
+            ],
+            "intent_feature": [
+                "thiết bị định vị không cần sim",
+                "định vị pin trâu 30 ngày",
+                "thiết bị định vị siêu nhỏ",
+            ],
+            "intent_target": [
+                "định vị ngoại tình",
+                "theo dõi chồng qua điện thoại",
+                "định vị xe công",
+            ],
+            "reason": "Target audience cao + feature-specific (intent rõ ràng)",
+        },
+        "GHIAM": {
+            "intent_buy": [
+                "mua máy ghi âm bí mật",
+                "thiết bị ghi âm cuộc họp chuyên nghiệp",
+                "máy ghi âm mini giá rẻ",
+                "máy ghi âm cao cấp chính hãng",
+                "ghi âm lén chất lượng cao",
+            ],
+            "intent_feature": [
+                "máy ghi âm pin trâu 24h",
+                "thiết bị ghi âm không phát hiện",
+                "máy ghi âm kích hoạt giọng nói",
+                "ghi âm chuyển text tự động",
+            ],
+            "intent_use": [
+                "ghi âm cuộc họp quan trọng",
+                "ghi âm phỏng vấn",
+                "ghi âm lớp học sinh viên",
+            ],
+            "reason": "Intent use-case cụ thể + feature premium",
+        },
+        "CAMCALL": {
+            "intent_buy": [
+                "mua camera gọi 2 chiều chính hãng",
+                "camera giám sát có loa",
+                "camera wifi đàm thoại",
+                "camera xoay 360 gọi video",
+            ],
+            "intent_use": [
+                "camera trông trẻ từ xa",
+                "camera giám sát cửa hàng",
+                "camera nhà có người già",
+            ],
+            "intent_feature": [
+                "camera chống nước ngoài trời",
+                "camera ban đêm hồng ngoại",
+                "camera ai phát hiện người",
+            ],
+            "reason": "Use-case cụ thể (trông trẻ, giám sát cửa hàng) CTR cao",
+        },
+        "OTHER_DI": {
+            "intent_buy": [
+                "thiết bị chống nghe lén văn phòng",
+                "máy chống ghi âm cuộc họp",
+                "thiết bị bảo mật phòng họp",
+                "chống nghe lén điện thoại",
+            ],
+            "intent_target": [
+                "chống gián điệp doanh nghiệp",
+                "bảo vệ thông tin cuộc họp",
+            ],
+            "reason": "B2B audience, bảo mật doanh nghiệp",
+        },
+        "OTHER_SIM": {
+            "intent_buy": [
+                "camera sim 4g ngoài trời",
+                "camera 4g không wifi",
+                "camera 4g chống nước",
+            ],
+            "reason": "Feature-specific cho người không có wifi",
+        },
+        "OTHER_CAM": {
+            "intent_buy": [
+                "camera mini siêu nhỏ",
+                "camera wifi không dây chính hãng",
+                "camera năng lượng mặt trời",
+                "camera kết nối điện thoại",
+            ],
+            "intent_location": [
+                "camera ngoài trời chống nước",
+                "camera gara ô tô",
+                "camera cổng nhà",
+            ],
+            "reason": "Feature + location intent",
+        },
+        "OTHER_RAZOR": {
+            "intent_buy": [
+                "mua máy cạo râu mini chính hãng",
+                "máy cạo râu du lịch",
+                "máy cạo râu không dây giá rẻ",
+            ],
+            "reason": "Intent mua trực tiếp",
+        },
+    }
+
+    seed = SEED_TEMPLATES.get(category_key, {})
+    if not seed:
+        return []
+
+    existing_texts = set(k.get("text", "").lower() for k in existing_keywords)
+    suggestions = []
+
+    for intent_type, keywords_list in seed.items():
+        if intent_type == "reason":
+            continue
+        for kw in keywords_list:
+            if kw.lower() in existing_texts:
+                continue  # Skip keyword đã có
+            suggestions.append({
+                "keyword": kw,
+                "intent_group": intent_type.replace("intent_", "").upper(),
+                "suggested_match_type": "PHRASE" if "mua" in kw or "giá" in kw else "BROAD",
+                "estimated_volume": "medium",
+                "reason": seed.get("reason", ""),
+            })
+
+    return suggestions[:15]  # Top 15 per category
+
+
+def generate_banner_improvement_tips(banners, category_key):
+    """Tạo gợi ý CỤ THỂ về content/color/layout cho banner CTR thấp."""
+    tips = []
+    # Template cho mỗi category
+    VISUAL_TEMPLATES = {
+        "MAYDO": {
+            "colors": ["Đỏ cam #ef4444 + đen #1f2937 (tạo cảm giác urgent + bảo mật)"],
+            "visual": "Hình máy dò rõ nét + icon tia sóng phát hiện + hình ảnh người lén nhìn (ẩn dụ threat)",
+            "headline": "Phát hiện 100% thiết bị ẩn trong 30 giây · Bảo vệ quyền riêng tư",
+            "cta": "Đặt ngay · Giao 2h nội thành",
+            "social_proof": "Sao ★★★★★ 4.9/5 · Hơn 15.000 khách hàng tin dùng",
+        },
+        "DINHVI": {
+            "colors": ["Xanh dương #2563eb + trắng (tin cậy, công nghệ)"],
+            "visual": "Hình map + vị trí pin + hình xe máy/ô tô, có đường gps thật",
+            "headline": "Định vị chính xác 1m · Pin 30 ngày · Chống nước IP68",
+            "cta": "Mua ngay với giá ưu đãi",
+            "social_proof": "Bảo hành 24 tháng · Hơn 20.000 người dùng",
+        },
+        "GHIAM": {
+            "colors": ["Đen #0f172a + vàng #fbbf24 (pro, premium)"],
+            "visual": "Close-up máy ghi âm mini trong tay + waveform + biểu tượng tai nghe",
+            "headline": "Ghi âm chuyên nghiệp · Pin 24h · Chuyển text tự động AI",
+            "cta": "Đặt hàng hôm nay · Giảm 20%",
+            "social_proof": "Top ghi âm 2025 · Đã có 10K đơn hàng",
+        },
+        "CAMCALL": {
+            "colors": ["Xanh lá #10b981 + trắng (an toàn, gần gũi)"],
+            "visual": "Hình gia đình + camera trong phòng khách + icon video call",
+            "headline": "Gọi video 2 chiều · Xoay 360° · Nhìn rõ cả đêm",
+            "cta": "Mua ngay giữ an toàn cả nhà",
+            "social_proof": "Đánh giá 4.8★ · 5.000+ gia đình tin dùng",
+        },
+        "OTHER_CAM": {
+            "colors": ["Xám đen + cam (công nghệ, năng động)"],
+            "visual": "Camera + đèn LED + hình ảnh an ninh/giám sát rõ nét",
+            "headline": "Giám sát 24/7 · Wifi không dây · Xem từ xa qua điện thoại",
+            "cta": "Đặt ngay hôm nay",
+            "social_proof": "Cam kết hoàn tiền 30 ngày",
+        },
+    }
+
+    template = VISUAL_TEMPLATES.get(category_key, VISUAL_TEMPLATES.get("OTHER_CAM"))
+
+    # Filter banner cần improve
+    to_fix = [b for b in banners if b.get("recommendation") in ("REPLACE", "PAUSE", "REVIEW")]
+    if not to_fix:
+        return []
+
+    for b in to_fix[:8]:
+        problem = ""
+        current_ctr = b.get("ctr_30d", 0)
+        if current_ctr < 0.002:
+            problem = "CTR cực thấp (< 0.2%) — visual không thu hút, headline không rõ value"
+        elif current_ctr < 0.005:
+            problem = "CTR thấp (< 0.5%) — có thể do size không tối ưu hoặc message chưa đủ mạnh"
+        elif current_ctr < 0.01:
+            problem = "CTR dưới avg (< 1%) — cần A/B test visual + headline mới"
+
+        tips.append({
+            "ad_id": b.get("ad_id"),
+            "ad_name": b.get("ad_name"),
+            "current_size": b.get("current_size") or "N/A",
+            "current_ctr": current_ctr,
+            "problem": problem,
+            "recommended_size": "300x250 (performance cao nhất GDN), 336x280, 728x90",
+            "recommended_colors": template["colors"][0],
+            "recommended_visual": template["visual"],
+            "recommended_headline": template["headline"],
+            "recommended_cta": template["cta"],
+            "recommended_social_proof": template["social_proof"],
+            "why": "Size 300x250 chiếm 80% traffic GDN. Color high-contrast giúp thu hút attention. Headline ngắn gọn + benefit rõ + social proof tăng trust = CTR tốt hơn 3-5x",
+        })
+
+    return tips
+
+
+def generate_ab_test_suggestions(banners, category_key):
+    """Chi tiết A/B test versions cho banners CTR trung bình."""
+    to_test = [b for b in banners if b.get("recommendation") == "REVIEW"]
+    if not to_test:
+        return []
+
+    AB_TEMPLATES = {
+        "MAYDO": {
+            "test_a": {"headline": "Phát hiện thiết bị ẩn trong 30s", "angle": "Speed/Technology"},
+            "test_b": {"headline": "Bảo vệ quyền riêng tư - Nhà bạn có bị theo dõi?", "angle": "Emotional/Fear"},
+            "test_c": {"headline": "Chuyên gia an ninh khuyên dùng · 15K+ khách", "angle": "Authority/Social"},
+        },
+        "DINHVI": {
+            "test_a": {"headline": "Định vị chính xác 1m · Pin 30 ngày", "angle": "Feature"},
+            "test_b": {"headline": "Yên tâm biết chồng con đang ở đâu", "angle": "Emotional/Family"},
+            "test_c": {"headline": "Ưu đãi 20% · Giao 2h miễn phí", "angle": "Promo/Urgency"},
+        },
+        "GHIAM": {
+            "test_a": {"headline": "Ghi âm HD · Pin 24h · Không bị phát hiện", "angle": "Feature"},
+            "test_b": {"headline": "Bảo vệ bản thân bằng bằng chứng rõ ràng", "angle": "Protection"},
+            "test_c": {"headline": "Top máy ghi âm 2025 · Đánh giá 4.9★", "angle": "Social/Review"},
+        },
+    }
+
+    template = AB_TEMPLATES.get(category_key, {
+        "test_a": {"headline": "Giá tốt · Giao nhanh 2h", "angle": "Promo"},
+        "test_b": {"headline": "Chính hãng · Bảo hành 24 tháng", "angle": "Trust"},
+        "test_c": {"headline": "Hơn 10.000 khách hài lòng · 4.8★", "angle": "Social"},
+    })
+
+    suggestions = []
+    for b in to_test[:5]:
+        suggestions.append({
+            "ad_id": b.get("ad_id"),
+            "ad_name": b.get("ad_name"),
+            "current_ctr": b.get("ctr_30d", 0),
+            "test_variants": [
+                {"variant": "A (Control hiện tại)", "headline": "Giữ nguyên", "angle": "Baseline", "purpose": "Đối chứng"},
+                {"variant": "B", "headline": template["test_a"]["headline"], "angle": template["test_a"]["angle"], "purpose": "Test feature-driven"},
+                {"variant": "C", "headline": template["test_b"]["headline"], "angle": template["test_b"]["angle"], "purpose": "Test emotional"},
+                {"variant": "D", "headline": template["test_c"]["headline"], "angle": template["test_c"]["angle"], "purpose": "Test authority/promo"},
+            ],
+            "budget_split": "25% mỗi variant trong 14 ngày",
+            "success_metric": "CTR > 2x hiện tại + CPA không tăng",
+            "estimated_lift": "CTR có thể tăng 2-4x nếu variant winner rõ ràng",
+        })
+
+    return suggestions
+
+
+def generate_title_analysis(ads_data, category_key, ads_raw_for_cat):
+    """Phân tích tiêu đề quảng cáo RSA per category.
+    Với Windsor free trial không expose text, ta dùng ad_name + ad_id để reference.
+    """
+    # Ads thuộc category có spend meaningful
+    titles = []
+    for ad_id, m in ads_data.get("ad_aggregates", {}).items():
+        if m.get("category") != category_key:
+            continue
+        if m.get("spend_30d", 0) < 30000:
+            continue
+        # Ad có ad_name là RSA text dài (200+ chars) thì coi là title
+        ad_name = m.get("ad_name") or ""
+        if m.get("ad_format") == "RSA" or len(ad_name) > 150:
+            ctr = m.get("ctr_30d", 0)
+            titles.append({
+                "ad_id": ad_id,
+                "title_snippet": ad_name[:150] + ("..." if len(ad_name) > 150 else ""),
+                "full_title": ad_name,
+                "ad_group_name": m.get("ad_group_name", ""),
+                "spend_30d": m.get("spend_30d", 0),
+                "clicks_30d": m.get("clicks_30d", 0),
+                "ctr_30d": ctr,
+                "quality": "tốt" if ctr > 0.05 else ("trung bình" if ctr > 0.02 else "kém"),
+                "recommendation": "GIỮ" if ctr > 0.05 else ("A/B TEST" if ctr > 0.02 else "VIẾT LẠI"),
+                "suggested_improvement": _suggest_title_improvement(ad_name, ctr, category_key) if ctr < 0.05 else "",
+            })
+
+    titles.sort(key=lambda x: -x["spend_30d"])
+    return titles[:10]
+
+
+def _suggest_title_improvement(current, ctr, category_key):
+    templates = {
+        "MAYDO": "Thêm urgency + specific benefit: 'Phát hiện 100% thiết bị ẩn · 30s · Bảo hành 24 tháng'. Pattern: [Benefit cụ thể] · [Speed/Time] · [Trust signal]",
+        "DINHVI": "Thêm proof + feature: 'Định vị 1m · Pin 30 ngày · 20K khách tin dùng'. Dùng số đo đạc cụ thể",
+        "GHIAM": "Professional angle: 'Ghi âm chuyên nghiệp · HD · Chuyển text AI'. Target B2B users",
+        "CAMCALL": "Family angle: 'Gọi 2 chiều · Xoay 360° · Bảo vệ cả nhà 24/7'",
+        "OTHER_DI": "B2B trust: 'Bảo mật phòng họp · Chống nghe lén · Cam kết hoàn tiền'",
+        "OTHER_CAM": "Convenience: 'Wifi không dây · Xem điện thoại · Ban đêm rõ nét'",
+    }
+    return templates.get(category_key, "Rewrite với format: [Benefit] · [Feature cụ thể] · [Social proof]")
+
+
+def build_score_summary(categories, totals, roas):
+    """Bullet points điểm tốt + cần cải thiện, highlight cho UI."""
+    good = []
+    bad = []
+
+    # Analyze từng category
+    for cat_key, c in categories.items():
+        display_name = c.get("display_name", cat_key)
+        cat_roas = c.get("roas_proxy", 0)
+        ads_spend = c.get("ads_spend_30d", 0)
+        rev = c.get("revenue_pancake_30d", 0)
+        ctr = c.get("ads_ctr_30d", 0)
+
+        if ads_spend < 500_000:
+            continue  # Skip category spend quá nhỏ
+
+        # Điểm tốt
+        if cat_roas >= 3:
+            good.append({
+                "icon": "star",
+                "color": "green",
+                "text": f"Nhóm **{display_name}** có ROAS {cat_roas}x (cao hơn target 3x), chi {ads_spend/1_000_000:.1f}tr ra {rev/1_000_000:.1f}tr doanh thu"
+            })
+        if ctr > 0.05:
+            good.append({
+                "icon": "check",
+                "color": "green",
+                "text": f"Nhóm **{display_name}** CTR {ctr*100:.1f}% (rất tốt, cao hơn avg industry ~3-4%)"
+            })
+
+        # Điểm cần cải thiện
+        if 0 < cat_roas < 0.5 and ads_spend > 2_000_000:
+            bad.append({
+                "icon": "warning",
+                "color": "red",
+                "text": f"Nhóm **{display_name}** ROAS chỉ {cat_roas}x (lỗ), spend {ads_spend/1_000_000:.1f}tr mà rev chỉ {rev/1_000_000:.1f}tr — cần urgent review"
+            })
+        if ctr < 0.01 and ads_spend > 1_000_000:
+            bad.append({
+                "icon": "trend-down",
+                "color": "orange",
+                "text": f"Nhóm **{display_name}** CTR quá thấp {ctr*100:.2f}% — phần lớn banner/keyword không liên quan"
+            })
+
+    # Top-level findings
+    if roas.get("roas_overall", 0) < 1:
+        bad.insert(0, {
+            "icon": "alert",
+            "color": "red",
+            "text": f"**ROAS tổng {roas.get('roas_overall', 0)}x dưới 1x** — đang lỗ ngân sách ads (chi nhiều hơn thu từ Website)"
+        })
+    elif roas.get("roas_overall", 0) < 2:
+        bad.insert(0, {
+            "icon": "alert",
+            "color": "orange",
+            "text": f"**ROAS tổng {roas.get('roas_overall', 0)}x** dưới target 3x — cần tối ưu để đạt profitability"
+        })
+
+    total_actions = totals.get("total_actions", 0)
+    urgent = totals.get("urgent_actions", 0)
+    saving = totals.get("estimated_total_saving_vnd", 0)
+
+    if urgent > 0:
+        bad.append({
+            "icon": "clock",
+            "color": "orange",
+            "text": f"**{urgent} hành động urgent** cần làm ngay trong 1-3 ngày tới (chi tiết xem bảng category)"
+        })
+
+    if saving > 5_000_000:
+        good.append({
+            "icon": "saving",
+            "color": "green",
+            "text": f"**Tiết kiệm tiềm năng {saving/1_000_000:.1f}tr/30d** nếu apply hết recommendations (saving = spend lãng phí có thể cắt)"
+        })
+
+    return {"good_points": good, "improvement_points": bad}
 
 
 if __name__ == "__main__":
