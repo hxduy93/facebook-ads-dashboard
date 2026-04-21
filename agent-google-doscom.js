@@ -345,4 +345,85 @@ function renderCategory(c,ck){
 
   var sk=c.suggested_keywords||[];
   html+='<div id="suggest-keywords-'+ck+'" class="suggest-block"><h3>Bộ từ khóa nên THÊM ('+sk.length+' gợi ý)</h3>';
-  if(!sk.length)html+='<p class="
+  if(!sk.length)html+='<p class="text-xs text-gray">Chua co goi y.</p>';
+  else{
+    html+='<div class="tbl-wrap" style="background:white"><table><thead><tr>';
+    html+='<th>Tu khoa de xuat</th><th>Nhom y dinh</th><th>Loai khop nen dung</th><th>Volume</th><th>Ly do</th>';
+    html+='</tr></thead><tbody>';
+    for(var si2=0;si2<sk.length;si2++){
+      var s=sk[si2];
+      html+='<tr><td class="font-bold">'+esc(s.keyword)+'</td>';
+      html+='<td><span class="pill">'+esc(s.intent_group)+'</span></td>';
+      html+='<td class="text-xs">'+esc(trn(s.suggested_match_type,MATCH_VN))+'</td>';
+      html+='<td class="text-xs">'+esc(s.estimated_volume==="medium"?"Trung binh":s.estimated_volume)+'</td>';
+      html+='<td class="text-xs text-gray">'+esc(s.reason)+'</td></tr>';
+    }
+    html+='</tbody></table></div></div>';
+  }
+  var bt=c.banner_improvement_tips||[];
+  html+='<div id="suggest-banners-'+ck+'" class="suggest-block"><h3>Goi y cai thien Banner ('+bt.length+' banner)</h3>';
+  if(!bt.length)html+='<p class="text-xs text-gray">Khong co banner can sua.</p>';
+  else{
+    for(var tii=0;tii<bt.length;tii++){
+      var tip=bt[tii];
+      html+='<div class="tip-card">';
+      html+='<div class="field"><span class="lbl">Banner:</span> <span class="mono">'+esc(tip.ad_name)+'</span> (id '+esc(tip.ad_id)+', size '+esc(tip.current_size)+', CTR '+fmtPct(tip.current_ctr)+')</div>';
+      html+='<div class="field"><span class="lbl">Van de:</span> '+esc(tip.problem)+'</div>';
+      html+='<div class="field"><span class="lbl">Size nen dung:</span> '+esc(tip.recommended_size)+'</div>';
+      html+='<div class="field"><span class="lbl">Mau sac:</span> '+esc(tip.recommended_colors)+'</div>';
+      html+='<div class="field"><span class="lbl">Visual:</span> '+esc(tip.recommended_visual)+'</div>';
+      html+='<div class="field"><span class="lbl">Headline:</span> "'+esc(tip.recommended_headline)+'"</div>';
+      html+='<div class="field"><span class="lbl">CTA:</span> "'+esc(tip.recommended_cta)+'"</div>';
+      html+='<div class="field"><span class="lbl">Social proof:</span> '+esc(tip.recommended_social_proof)+'</div>';
+      html+='<div class="field text-xs" style="color:#6b7280;padding-top:4px;border-top:1px dashed #fde68a;margin-top:6px"><span class="lbl">Vi sao:</span> '+esc(tip.why)+'</div>';
+      html+='</div>';
+    }
+  }
+  html+='</div>';
+  var ab=c.ab_test_suggestions||[];
+  html+='<div id="suggest-abtest-'+ck+'" class="suggest-block"><h3>Goi y A/B Test ('+ab.length+' banner)</h3>';
+  if(!ab.length)html+='<p class="text-xs text-gray">Khong co banner can A/B test.</p>';
+  else{
+    for(var abi=0;abi<ab.length;abi++){
+      var tt=ab[abi];
+      html+='<div class="tip-card">';
+      html+='<div class="field"><span class="lbl">Banner test:</span> <span class="mono">'+esc(tt.ad_name)+'</span> (CTR: '+fmtPct(tt.current_ctr)+')</div>';
+      var vs=tt.test_variants||[];
+      html+='<div class="field"><span class="lbl">Cac variant:</span></div><ol style="margin-left:24px;font-size:12px">';
+      for(var vi=0;vi<vs.length;vi++){
+        var v=vs[vi];
+        html+='<li><strong>'+esc(v.variant)+'</strong> ('+esc(v.angle)+') - "'+esc(v.headline)+'" - '+esc(v.purpose)+'</li>';
+      }
+      html+='</ol>';
+      html+='<div class="field"><span class="lbl">Ngan sach:</span> '+esc(tt.budget_split)+'</div>';
+      html+='<div class="field"><span class="lbl">Tieu chi thang:</span> '+esc(tt.success_metric)+'</div>';
+      html+='<div class="field text-xs" style="color:#047857"><span class="lbl">Ky vong:</span> '+esc(tt.estimated_lift)+'</div>';
+      html+='</div>';
+    }
+  }
+  html+='</div>';
+  var ta=c.title_analysis||[];
+  html+='<div id="suggest-titles-'+ck+'" class="suggest-block"><h3>Phan tich Tieu de Quang cao ('+ta.length+' tieu de)</h3>';
+  if(!ta.length)html+='<p class="text-xs text-gray">Chua co tieu de.</p>';
+  else{
+    html+='<div class="tbl-wrap" style="background:white;max-height:none"><table><thead><tr>';
+    html+='<th>Tieu de</th><th>Ad group</th><th class="t-right">Chi tieu</th><th class="t-right">CTR</th><th>Chat luong</th><th>Hanh dong</th><th>Goi y cai thien</th>';
+    html+='</tr></thead><tbody>';
+    for(var tii2=0;tii2<ta.length;tii2++){
+      var tt2=ta[tii2];
+      html+='<tr><td><span class="truncate" title="'+esc(tt2.full_title)+'">'+esc(tt2.title_snippet)+'</span></td>';
+      html+='<td class="text-xs">'+esc(tt2.ad_group_name)+'</td>';
+      html+='<td class="t-right">'+fmtVND(tt2.spend_30d)+'d</td>';
+      html+='<td class="t-right">'+fmtPct(tt2.ctr_30d)+'</td>';
+      var qC=tt2.quality==="tot"?"pill-green":(tt2.quality==="kem"?"pill-orange":"pill");
+      html+='<td><span class="pill '+qC+'">'+esc(tt2.quality)+'</span></td>';
+      var recCls=tt2.recommendation==="GIU"?"KEEP":(tt2.recommendation==="VIET LAI"?"REPLACE":"REVIEW");
+      html+='<td><span class="rec rec-'+recCls+'">'+esc(tt2.recommendation)+'</span></td>';
+      html+='<td class="text-xs text-gray">'+esc(tt2.suggested_improvement||"-")+'</td></tr>';
+    }
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  return html;
+}
+load();
