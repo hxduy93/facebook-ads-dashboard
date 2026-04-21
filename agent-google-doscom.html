@@ -4,58 +4,127 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Google Doscom - AI Insights v3</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  .rec-KEEP { background: #d1fae5; color: #065f46; }
-  .rec-SCALE { background: #bbf7d0; color: #14532d; font-weight: bold; }
-  .rec-ADD_NEGATIVE { background: #fee2e2; color: #991b1b; font-weight: bold; }
-  .rec-PAUSE { background: #fecaca; color: #7f1d1d; font-weight: bold; }
-  .rec-REPLACE { background: #fed7aa; color: #9a3412; font-weight: bold; }
-  .rec-REVIEW { background: #fef3c7; color: #854d0e; }
-  .rec-MONITOR { background: #e5e7eb; color: #4b5563; }
-  .priority-high { background: #fee2e2; border-left: 4px solid #dc2626; }
-  .priority-medium { background: #fef3c7; border-left: 4px solid #d97706; }
-  .priority-low { background: #dbeafe; border-left: 4px solid #3b82f6; }
-  .score-A { color: #059669; } .score-B { color: #2563eb; } .score-C { color: #d97706; }
-  .score-D { color: #ea580c; } .score-F { color: #dc2626; }
-  .bg-A { background: linear-gradient(135deg, #10b981, #059669); }
-  .bg-B { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-  .bg-C { background: linear-gradient(135deg, #f59e0b, #d97706); }
-  .bg-D { background: linear-gradient(135deg, #f97316, #ea580c); }
-  .bg-F { background: linear-gradient(135deg, #ef4444, #dc2626); }
-  .cat-tab { cursor: pointer; transition: all 0.15s; }
-  .cat-tab:hover { background: #f3f4f6; }
-  .cat-tab.active { background: #2563eb; color: white; }
-  table { border-collapse: collapse; }
-  th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
-  th { background: #f9fafb; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; color: #4b5563; }
-  tbody tr:hover { background: #f9fafb; }
-  .truncate-term { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; }
-  .spinner { border: 3px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 60px auto; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* Inline minimal CSS — không dùng Tailwind CDN để load nhanh */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9fafb; color: #111827; font-size: 14px; line-height: 1.5; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { cursor: pointer; border: 0; background: transparent; font: inherit; }
+
+/* Layout */
+.header { background: white; border-bottom: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 20; }
+.header-inner { max-width: 1280px; margin: 0 auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.header h1 { font-size: 18px; font-weight: 700; }
+.header-sub { font-size: 11px; color: #6b7280; }
+main { max-width: 1280px; margin: 0 auto; padding: 24px 16px; }
+
+/* Cards */
+.card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.card-score { color: white; }
+.bg-A { background: linear-gradient(135deg, #10b981, #059669); }
+.bg-B { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.bg-C { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.bg-D { background: linear-gradient(135deg, #f97316, #ea580c); }
+.bg-F { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+.grid-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+@media (max-width: 768px) { .grid-summary { grid-template-columns: 1fr 1fr; } }
+
+.metric-label { font-size: 11px; text-transform: uppercase; color: #6b7280; letter-spacing: 0.04em; }
+.metric-value { font-size: 32px; font-weight: 700; margin-top: 4px; }
+.metric-sub { font-size: 11px; color: #6b7280; margin-top: 4px; }
+
+section.block { margin-bottom: 20px; }
+.block h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.block h3 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+
+/* Category tabs */
+.cat-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb; margin-bottom: 16px; }
+.cat-tab { padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; background: #f3f4f6; color: #374151; }
+.cat-tab:hover { background: #e5e7eb; }
+.cat-tab.active { background: #2563eb; color: white; }
+.cat-tab .urgent-dot { color: #ef4444; margin-left: 4px; }
+
+/* Overview grid */
+.cat-overview { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 16px; }
+@media (max-width: 768px) { .cat-overview { grid-template-columns: repeat(3, 1fr); } }
+.cat-overview-item { background: #f9fafb; border-radius: 6px; padding: 8px; }
+.cat-overview-item .lbl { font-size: 10px; color: #6b7280; }
+.cat-overview-item .val { font-size: 14px; font-weight: 700; margin-top: 2px; }
+
+/* Priority boxes */
+.priority-high { background: #fee2e2; border-left: 4px solid #dc2626; }
+.priority-medium { background: #fef3c7; border-left: 4px solid #d97706; }
+.priority-low { background: #dbeafe; border-left: 4px solid #3b82f6; }
+.action-box { padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; }
+.action-box .title { font-weight: 600; font-size: 13px; }
+.action-box .detail { font-size: 12px; color: #4b5563; margin-top: 4px; line-height: 1.45; }
+.action-box .save { font-size: 11px; color: #047857; font-weight: 600; margin-top: 4px; }
+.badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+.badge-high { background: #fecaca; color: #7f1d1d; }
+.badge-medium { background: #fde68a; color: #78350f; }
+.badge-low { background: #bfdbfe; color: #1e3a8a; }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: #f9fafb; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #4b5563; text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; }
+td { padding: 6px 8px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+tbody tr:hover { background: #f9fafb; }
+.t-right { text-align: right; }
+.truncate { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: bottom; }
+.mono { font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace; font-size: 11px; }
+
+/* Recommendations */
+.rec { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; display: inline-block; }
+.rec-KEEP { background: #d1fae5; color: #065f46; }
+.rec-SCALE { background: #bbf7d0; color: #14532d; }
+.rec-ADD_NEGATIVE { background: #fee2e2; color: #991b1b; }
+.rec-PAUSE { background: #fecaca; color: #7f1d1d; }
+.rec-REPLACE { background: #fed7aa; color: #9a3412; }
+.rec-REVIEW { background: #fef3c7; color: #854d0e; }
+.rec-MONITOR { background: #e5e7eb; color: #4b5563; }
+
+.pill { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; background: #eff6ff; color: #1e40af; margin-right: 4px; margin-bottom: 2px; }
+.pill-green { background: #d1fae5; color: #065f46; }
+
+.spinner { border: 3px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; margin: 48px auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 24px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.text-red { color: #dc2626; }
+.text-green { color: #047857; }
+.text-gray { color: #6b7280; }
+.font-bold { font-weight: 700; }
+.text-sm { font-size: 13px; }
+.text-xs { font-size: 11px; }
 </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body>
 
-<header class="bg-white border-b shadow-sm sticky top-0 z-20">
-  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl">🤖</span>
+<header class="header">
+  <div class="header-inner">
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <span style="font-size: 22px;">🤖</span>
       <div>
-        <h1 class="text-lg font-bold">Agent Google Doscom</h1>
-        <p class="text-xs text-gray-500">AI Insights v3 · Phân tích chi tiết theo nhóm sản phẩm</p>
+        <h1>Agent Google Doscom</h1>
+        <div class="header-sub">AI Insights v3 · Phân tích chi tiết theo nhóm sản phẩm</div>
       </div>
     </div>
-    <div class="flex items-center gap-3 text-sm">
-      <a href="/" class="text-blue-600 hover:underline">← Dashboard</a>
-      <span class="text-gray-300">|</span>
-      <button onclick="location.reload()" class="text-gray-600 hover:text-gray-900">🔄 Refresh</button>
+    <div style="display: flex; gap: 10px; align-items: center; font-size: 13px;">
+      <a href="/">← Dashboard</a>
+      <span style="color: #d1d5db;">|</span>
+      <button onclick="location.reload()" style="color: #6b7280;">🔄 Refresh</button>
     </div>
   </div>
 </header>
 
-<main id="main" class="max-w-7xl mx-auto px-4 py-6">
+<main id="main">
   <div id="loading"><div class="spinner"></div></div>
 </main>
 
@@ -64,14 +133,16 @@ const REPORT_URL = 'data/google-ads-daily-report.json?v=' + Date.now();
 
 function fmtVND(n) {
   if (n == null || n === 0) return '0';
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'tr';
-  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(0) + 'K';
+  if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(1) + 'tr';
+  if (Math.abs(n) >= 1e3) return (n / 1e3).toFixed(0) + 'K';
   return Math.round(n).toLocaleString('vi-VN');
 }
-function fmtInt(n) { return (n == null ? '—' : n.toLocaleString('vi-VN')); }
+function fmtInt(n) { return n == null ? '—' : n.toLocaleString('vi-VN'); }
 function fmtPct(n, d = 2) { return n == null ? '—' : (n * 100).toFixed(d) + '%'; }
 function esc(s) {
-  return (s ?? '').toString().replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+  return (s ?? '').toString()
+    .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 }
 
 async function load() {
@@ -81,223 +152,150 @@ async function load() {
     const r = await res.json();
     render(r);
   } catch (e) {
-    document.getElementById('main').innerHTML = `
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-        <h2 class="font-bold text-yellow-800">⏳ Báo cáo chưa sẵn sàng</h2>
-        <p class="text-sm text-yellow-700 mt-2">Chờ Cowork agent chạy lần đầu, hoặc bấm Run now.</p>
-        <p class="text-xs text-yellow-600 mt-2">${esc(e.message)}</p>
-      </div>`;
+    document.getElementById('main').innerHTML =
+      '<div class="card" style="border-left: 4px solid #f59e0b;">' +
+      '<h3>⏳ Báo cáo chưa sẵn sàng</h3>' +
+      '<p class="text-sm" style="margin-top: 8px;">Chờ agent chạy lần đầu, hoặc bấm Run now trên Cowork.</p>' +
+      '<p class="text-xs" style="color: #6b7280; margin-top: 4px;">' + esc(e.message) + '</p></div>';
   }
 }
 
 let currentCat = null;
+let REPORT = null;
 
 function render(r) {
+  REPORT = r;
   const g = r.grade || 'F';
   const cats = r.categories || {};
   const catKeys = Object.keys(cats).filter(k => cats[k].ads_spend_30d > 0 || cats[k].keywords_count > 0 || cats[k].banners_count > 0);
   if (!currentCat && catKeys.length) currentCat = catKeys[0];
 
-  document.getElementById('main').innerHTML = `
-    <!-- Summary -->
-    <section class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
-      <div class="bg-${g} text-white rounded-xl p-4 shadow">
-        <p class="text-xs opacity-80 uppercase">Score</p>
-        <div class="flex items-baseline gap-1 mt-1">
-          <span class="text-4xl font-bold">${r.score}</span><span class="opacity-80">/100</span>
-        </div>
-        <p class="text-sm mt-1 font-semibold">Grade ${g}</p>
-      </div>
-      <div class="bg-white rounded-xl p-4 shadow">
-        <p class="text-xs uppercase text-gray-500">ROAS proxy</p>
-        <p class="text-3xl font-bold mt-1 ${r.totals?.roas_overall < 1 ? 'text-red-600' : 'text-gray-900'}">${r.totals?.roas_overall || 0}x</p>
-        <p class="text-xs text-gray-500 mt-1">Spend: ${fmtVND(r.totals?.ads_spend_30d)}đ · Rev: ${fmtVND(r.totals?.website_revenue_30d)}đ</p>
-      </div>
-      <div class="bg-white rounded-xl p-4 shadow">
-        <p class="text-xs uppercase text-gray-500">Hành động</p>
-        <p class="text-3xl font-bold mt-1">${r.totals?.total_actions || 0}</p>
-        <p class="text-xs text-red-600 mt-1">${r.totals?.urgent_actions || 0} urgent (priority cao)</p>
-      </div>
-      <div class="bg-white rounded-xl p-4 shadow">
-        <p class="text-xs uppercase text-gray-500">Tiết kiệm tiềm năng</p>
-        <p class="text-3xl font-bold mt-1 text-green-600">${fmtVND(r.totals?.estimated_total_saving_vnd)}đ</p>
-        <p class="text-xs text-gray-500 mt-1">/30 ngày nếu apply hết</p>
-      </div>
-    </section>
+  const t = r.totals || {};
 
-    <!-- Headline + Verdict -->
-    <section class="bg-white rounded-xl p-4 shadow mb-5">
-      <p class="font-semibold text-sm">${esc(r.headline)}</p>
-      <p class="text-sm text-gray-700 mt-2 leading-relaxed">${esc(r.verdict)}</p>
-      <p class="text-xs text-gray-400 mt-2">Generated: ${r.generated_at} · Kỳ: ${r.period?.start} → ${r.period?.end}</p>
-    </section>
+  let html = '';
 
-    <!-- Products Ranking -->
-    <section class="bg-white rounded-xl p-4 shadow mb-5">
-      <h2 class="text-lg font-bold mb-3">🏆 Xếp hạng Sản phẩm theo Doanh thu (Pancake 30d)</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead><tr>
-            <th>#</th><th>Sản phẩm</th><th>Category</th><th class="text-right">Doanh thu</th>
-            <th class="text-right">Đơn</th><th class="text-right">AOV</th><th>Top keyword có conv</th>
-          </tr></thead>
-          <tbody>
-            ${(r.products_ranking || []).map((p, i) => `
-              <tr>
-                <td class="text-gray-500">${i + 1}</td>
-                <td class="font-semibold">${esc(p.product)}</td>
-                <td><span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">${esc(p.category_name)}</span></td>
-                <td class="text-right font-semibold text-green-700">${fmtVND(p.revenue_30d)}đ</td>
-                <td class="text-right">${fmtInt(p.orders_30d)}</td>
-                <td class="text-right text-xs text-gray-500">${fmtVND(p.avg_order_value)}đ</td>
-                <td class="text-xs">${(p.related_keywords_top_convert || []).map(k => `<span class="inline-block bg-green-50 text-green-800 px-1.5 py-0.5 rounded mr-1 mb-0.5">${esc(k.text)} (${k.conv_30d})</span>`).join('') || '<span class="text-gray-400">—</span>'}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    </section>
+  // Summary
+  html += '<section class="grid-summary">';
+  html += '<div class="card card-score bg-' + g + '"><div class="metric-label" style="color: rgba(255,255,255,0.8);">Score</div>' +
+    '<div class="metric-value">' + r.score + '<span style="font-size: 18px; opacity: 0.8;">/100</span></div>' +
+    '<div style="font-size: 14px; font-weight: 600; margin-top: 4px;">Grade ' + g + '</div></div>';
+  html += '<div class="card"><div class="metric-label">ROAS proxy</div>' +
+    '<div class="metric-value ' + (t.roas_overall < 1 ? 'text-red' : '') + '">' + (t.roas_overall || 0) + 'x</div>' +
+    '<div class="metric-sub">Spend: ' + fmtVND(t.ads_spend_30d) + 'đ · Rev: ' + fmtVND(t.website_revenue_30d) + 'đ</div></div>';
+  html += '<div class="card"><div class="metric-label">Hành động</div>' +
+    '<div class="metric-value">' + (t.total_actions || 0) + '</div>' +
+    '<div class="metric-sub text-red">' + (t.urgent_actions || 0) + ' urgent (priority cao)</div></div>';
+  html += '<div class="card"><div class="metric-label">Tiết kiệm tiềm năng</div>' +
+    '<div class="metric-value text-green">' + fmtVND(t.estimated_total_saving_vnd) + 'đ</div>' +
+    '<div class="metric-sub">/30 ngày</div></div>';
+  html += '</section>';
 
-    <!-- Category Tabs -->
-    <section class="bg-white rounded-xl p-4 shadow mb-5">
-      <h2 class="text-lg font-bold mb-3">📊 Phân tích chi tiết theo Nhóm sản phẩm</h2>
-      <div class="flex flex-wrap gap-2 mb-4 border-b pb-3">
-        ${catKeys.map(k => {
-          const c = cats[k];
-          const isActive = k === currentCat;
-          const hasUrgent = (c.summary_actions || []).some(a => a.priority === 'high');
-          return `<button class="cat-tab ${isActive ? 'active' : 'bg-gray-100'} rounded-lg px-3 py-1.5 text-sm font-medium" onclick="switchCat('${k}')">${esc(c.display_name)}${hasUrgent ? ' <span class="text-red-500">●</span>' : ''}</button>`;
-        }).join('')}
-      </div>
-      <div id="cat-content">${renderCategory(cats[currentCat], currentCat)}</div>
-    </section>
+  // Verdict
+  html += '<section class="block card">' +
+    '<p style="font-weight: 600; font-size: 13px;">' + esc(r.headline) + '</p>' +
+    '<p class="text-sm" style="margin-top: 8px; color: #374151;">' + esc(r.verdict) + '</p>' +
+    '<p class="text-xs" style="color: #9ca3af; margin-top: 6px;">Generated: ' + r.generated_at + ' · Kỳ: ' + r.period?.start + ' → ' + r.period?.end + '</p>' +
+    '</section>';
 
-    <!-- Key Findings -->
-    <section class="bg-blue-50 rounded-xl p-4 mb-5">
-      <h3 class="font-bold mb-2">🔑 Key Findings</h3>
-      <ul class="text-sm space-y-1">
-        ${(r.key_findings || []).filter(x=>x).map(f => `<li>• ${esc(f)}</li>`).join('')}
-      </ul>
-    </section>
+  // Products
+  html += '<section class="block card"><h2>🏆 Xếp hạng Sản phẩm theo Doanh thu (Pancake 30d)</h2>' +
+    '<div class="tbl-wrap"><table><thead><tr>' +
+    '<th>#</th><th>Sản phẩm</th><th>Category</th><th class="t-right">Doanh thu</th>' +
+    '<th class="t-right">Đơn</th><th class="t-right">AOV</th><th>Top keyword có conv</th>' +
+    '</tr></thead><tbody>';
+  (r.products_ranking || []).forEach((p, i) => {
+    const kws = (p.related_keywords_top_convert || []).map(k =>
+      '<span class="pill pill-green">' + esc(k.text) + ' (' + k.conv_30d + ')</span>'
+    ).join('') || '<span class="text-gray">—</span>';
+    html += '<tr>' +
+      '<td class="text-gray">' + (i + 1) + '</td>' +
+      '<td class="font-bold">' + esc(p.product) + '</td>' +
+      '<td><span class="pill">' + esc(p.category_name) + '</span></td>' +
+      '<td class="t-right text-green font-bold">' + fmtVND(p.revenue_30d) + 'đ</td>' +
+      '<td class="t-right">' + fmtInt(p.orders_30d) + '</td>' +
+      '<td class="t-right text-xs text-gray">' + fmtVND(p.avg_order_value) + 'đ</td>' +
+      '<td class="text-xs">' + kws + '</td></tr>';
+  });
+  html += '</tbody></table></div></section>';
 
-    <p class="text-center text-xs text-gray-400 mt-6">Agent Google Doscom v${r.version || '3.0'} · Chạy 3 ngày/lần lúc 7:30 sáng VN</p>
-  `;
+  // Category tabs
+  html += '<section class="block card"><h2>📊 Phân tích chi tiết theo Nhóm sản phẩm</h2>' +
+    '<div class="cat-tabs">';
+  catKeys.forEach(k => {
+    const c = cats[k];
+    const isActive = k === currentCat;
+    const hasUrgent = (c.summary_actions || []).some(a => a.priority === 'high');
+    html += '<button class="cat-tab ' + (isActive ? 'active' : '') + '" onclick="switchCat(\'' + k + '\')">' +
+      esc(c.display_name) + (hasUrgent ? '<span class="urgent-dot">●</span>' : '') + '</button>';
+  });
+  html += '</div><div id="cat-content">' + renderCategory(cats[currentCat]) + '</div></section>';
+
+  // Key findings
+  html += '<section class="block card" style="background: #eff6ff;"><h3>🔑 Key Findings</h3><ul style="margin-left: 16px; font-size: 13px;">';
+  (r.key_findings || []).filter(Boolean).forEach(f => {
+    html += '<li>' + esc(f) + '</li>';
+  });
+  html += '</ul></section>';
+
+  html += '<div class="footer">Agent Google Doscom v' + (r.version || '3.0') + ' · Chạy 3 ngày/lần lúc 7:30 sáng VN</div>';
+
+  document.getElementById('main').innerHTML = html;
 }
 
 function switchCat(key) {
   currentCat = key;
-  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
-  document.querySelectorAll('.cat-tab').forEach(b => b.classList.add('bg-gray-100'));
-  event.target.classList.remove('bg-gray-100');
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-  fetch(REPORT_URL).then(r => r.json()).then(data => {
-    document.getElementById('cat-content').innerHTML = renderCategory(data.categories[key], key);
-  });
+  document.getElementById('cat-content').innerHTML = renderCategory(REPORT.categories[key]);
 }
 
-function renderCategory(c, catKey) {
-  if (!c) return '<p class="text-gray-500">Không có data.</p>';
+function renderCategory(c) {
+  if (!c) return '<p class="text-gray">Không có data.</p>';
 
-  return `
-    <!-- Category Overview -->
-    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">Sản phẩm</p>
-        <p class="text-xs font-semibold mt-1">${(c.products || []).join(', ') || '—'}</p>
-      </div>
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">Ads Spend 30d</p>
-        <p class="font-bold">${fmtVND(c.ads_spend_30d)}đ</p>
-      </div>
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">Revenue (Pancake)</p>
-        <p class="font-bold text-green-700">${fmtVND(c.revenue_pancake_30d)}đ</p>
-      </div>
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">ROAS</p>
-        <p class="font-bold ${c.roas_proxy >= 1.5 ? 'text-green-700' : 'text-red-600'}">${c.roas_proxy}x</p>
-      </div>
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">Đơn</p>
-        <p class="font-bold">${fmtInt(c.orders_pancake_30d)}</p>
-      </div>
-      <div class="bg-gray-50 rounded p-2">
-        <p class="text-xs text-gray-500">Avg CTR</p>
-        <p class="font-bold">${fmtPct(c.ads_ctr_30d)}</p>
-      </div>
-    </div>
+  let html = '';
 
-    <!-- Summary Actions -->
-    ${(c.summary_actions || []).length ? `
-      <div class="mb-4">
-        <h3 class="font-bold mb-2 text-sm">⚡ Hành động đề xuất cho ${esc(c.display_name)}</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-          ${c.summary_actions.map(a => `
-            <div class="priority-${a.priority} rounded p-3">
-              <div class="flex justify-between items-start gap-2">
-                <p class="font-semibold text-sm">${esc(a.title)}</p>
-                <span class="text-xs px-2 py-0.5 rounded ${a.priority === 'high' ? 'bg-red-200 text-red-800' : a.priority === 'medium' ? 'bg-yellow-200 text-yellow-800' : 'bg-blue-200 text-blue-800'}">${a.priority}</span>
-              </div>
-              <p class="text-xs text-gray-700 mt-1 leading-relaxed">${esc(a.detail)}</p>
-              ${a.estimated_saving_vnd > 0 ? `<p class="text-xs text-green-700 font-semibold mt-1">💰 Tiết kiệm: ${fmtVND(a.estimated_saving_vnd)}đ/30d</p>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    ` : '<p class="text-xs text-gray-500 mb-4">Không có hành động cần thực hiện.</p>'}
+  // Overview
+  html += '<div class="cat-overview">' +
+    '<div class="cat-overview-item"><div class="lbl">Sản phẩm</div><div class="val text-xs">' + ((c.products || []).join(', ') || '—') + '</div></div>' +
+    '<div class="cat-overview-item"><div class="lbl">Ads Spend</div><div class="val">' + fmtVND(c.ads_spend_30d) + 'đ</div></div>' +
+    '<div class="cat-overview-item"><div class="lbl">Revenue</div><div class="val text-green">' + fmtVND(c.revenue_pancake_30d) + 'đ</div></div>' +
+    '<div class="cat-overview-item"><div class="lbl">ROAS</div><div class="val ' + (c.roas_proxy >= 1.5 ? 'text-green' : 'text-red') + '">' + c.roas_proxy + 'x</div></div>' +
+    '<div class="cat-overview-item"><div class="lbl">Đơn</div><div class="val">' + fmtInt(c.orders_pancake_30d) + '</div></div>' +
+    '<div class="cat-overview-item"><div class="lbl">Avg CTR</div><div class="val">' + fmtPct(c.ads_ctr_30d) + '</div></div>' +
+    '</div>';
 
-    <!-- Keywords Table -->
-    <div class="mb-4">
-      <h3 class="font-bold mb-2 text-sm">🔑 Keywords (${c.keywords_count || 0} meaningful, hiển thị top ${(c.keywords || []).length})</h3>
-      ${(c.keywords || []).length === 0 ? '<p class="text-xs text-gray-400">Không có keyword meaningful.</p>' : `
-        <div class="overflow-x-auto border rounded">
-          <table class="w-full">
-            <thead><tr>
-              <th>Keyword</th><th>Match</th><th>Status</th>
-              <th class="text-right">Spend</th><th class="text-right">Click</th>
-              <th class="text-right">CTR</th><th class="text-right">Conv</th>
-              <th>Recommendation</th><th>Lý do</th>
-            </tr></thead>
-            <tbody>
-              ${c.keywords.map(k => `
-                <tr>
-                  <td><span class="truncate-term" title="${esc(k.text)}">${esc(k.text)}</span></td>
-                  <td class="text-xs">${esc(k.match_type)}</td>
-                  <td class="text-xs">${esc(k.status)}</td>
-                  <td class="text-right">${fmtVND(k.spend_30d)}đ</td>
-                  <td class="text-right">${fmtInt(k.clicks_30d)}</td>
-                  <td class="text-right">${fmtPct(k.ctr_30d)}</td>
-                  <td class="text-right font-bold ${k.conv_30d > 0 ? 'text-green-700' : 'text-gray-400'}">${k.conv_30d}</td>
-                  <td><span class="rec-${k.recommendation} text-xs px-2 py-0.5 rounded font-semibold">${k.recommendation}</span></td>
-                  <td class="text-xs text-gray-600">${esc(k.reason)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `}
-    </div>
+  // Actions
+  if ((c.summary_actions || []).length) {
+    html += '<h3>⚡ Hành động đề xuất</h3><div class="grid-2">';
+    c.summary_actions.forEach(a => {
+      html += '<div class="action-box priority-' + a.priority + '">' +
+        '<div style="display: flex; justify-content: space-between; gap: 8px;">' +
+        '<span class="title">' + esc(a.title) + '</span>' +
+        '<span class="badge badge-' + a.priority + '">' + a.priority + '</span></div>' +
+        '<div class="detail">' + esc(a.detail) + '</div>' +
+        (a.estimated_saving_vnd > 0 ? '<div class="save">💰 Tiết kiệm: ' + fmtVND(a.estimated_saving_vnd) + 'đ/30d</div>' : '') +
+        '</div>';
+    });
+    html += '</div>';
+  } else {
+    html += '<p class="text-xs text-gray" style="margin-bottom: 12px;">Không có hành động cần thực hiện.</p>';
+  }
 
-    <!-- Banners Table -->
-    <div class="mb-4">
-      <h3 class="font-bold mb-2 text-sm">🎨 Banners / Ads (${c.banners_count || 0} meaningful, hiển thị top ${(c.banners || []).length})</h3>
-      ${(c.banners || []).length === 0 ? '<p class="text-xs text-gray-400">Không có banner meaningful.</p>' : `
-        <div class="overflow-x-auto border rounded">
-          <table class="w-full">
-            <thead><tr>
-              <th>Ad name</th><th>Format</th><th>Size</th><th>Campaign</th>
-              <th class="text-right">Spend</th><th class="text-right">Imp</th>
-              <th class="text-right">Click</th><th class="text-right">CTR</th>
-              <th>Rec</th><th>Lý do</th>
-            </tr></thead>
-            <tbody>
-              ${c.banners.map(b => `
-                <tr>
-                  <td class="font-mono text-xs" title="${esc(b.ad_id)}">${esc(b.ad_name)}</td>
-                  <td class="text-xs">${esc(b.ad_format)}</td>
-                  <td class="text-xs">${esc(b.current_size)}</td>
-                  <td class="text-xs truncate-term" title="${esc(b.campaign)}">${esc(b.campaign)}</td>
-                  <td class="text-right">${fmtVND(b.spend_30d)}đ</td>
-                  <td class="text-right">${fmtInt(b.impressions_30d)}</td>
-                  <td class="text-right">${fmtInt(b.clicks_30d)}</td>
-                  <td cl
+  // Keywords
+  html += '<h3 style="margin-top: 16px;">🔑 Keywords (' + (c.keywords_count || 0) + ' meaningful, hiện top ' + (c.keywords || []).length + ')</h3>';
+  if (!(c.keywords || []).length) {
+    html += '<p class="text-xs text-gray">Không có keyword meaningful.</p>';
+  } else {
+    html += '<div class="tbl-wrap"><table><thead><tr>' +
+      '<th>Keyword</th><th>Match</th><th>Status</th>' +
+      '<th class="t-right">Spend</th><th class="t-right">Click</th>' +
+      '<th class="t-right">CTR</th><th class="t-right">Conv</th>' +
+      '<th>Rec</th><th>Lý do</th></tr></thead><tbody>';
+    c.keywords.forEach(k => {
+      html += '<tr>' +
+        '<td><span class="truncate" title="' + esc(k.text) + '">' + esc(k.text) + '</span></td>' +
+        '<td class="text-xs">' + esc(k.match_type) + '</td>' +
+        '<td class="text-xs">' + esc(k.status) + '</td>' +
+        '<td class="t-right">' + fmtVND(k.spend_30d) + 'đ</td>' +
+        '<td class="t-right">' + fmtInt(k.clicks_30d) + '</td>' +
+        '<td class="t-right">' + fmtPct(k.ctr_30d) + '</td>' 

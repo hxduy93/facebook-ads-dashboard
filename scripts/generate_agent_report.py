@@ -408,8 +408,8 @@ def main():
             "campaign_count": cat_data.get("campaign_count", 0),
             "keywords_count": len(cat_keywords),
             "banners_count": len(cat_banners),
-            "keywords": cat_keywords[:30],  # Top 30 per cat (limit output size)
-            "banners": cat_banners[:20],
+            "keywords": cat_keywords[:12],  # Top 12 per cat (limit output size, tối ưu load speed)
+            "banners": cat_banners[:8],
             "summary_actions": summary_actions,
         }
 

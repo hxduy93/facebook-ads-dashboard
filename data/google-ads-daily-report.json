@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-21 16:57",
+  "generated_at": "2026-04-21 17:09",
   "version": "3.0",
   "period": {
     "start": "2026-03-21",
@@ -33,14 +33,14 @@
       "max": 5
     }
   },
-  "headline": "Score 48/100 (D) · ROAS 0.97x · 7/20 hành động ưu tiên cao · Có thể tiết kiệm ~11.8tr/30d",
-  "verdict": "Google Ads chi 101.8tr/30d ra 99.0tr Website (ROAS 0.97x). Phân tích chi tiết 5 category với 445 keyword active, 200 banner. Tổng có thể tiết kiệm/tối ưu 11.8tr/30d qua 20 hành động. Xem bảng chi tiết từng nhóm sản phẩm bên dưới.",
+  "headline": "Score 48/100 (D) · ROAS 0.97x · 8/21 hành động ưu tiên cao · Có thể tiết kiệm ~11.8tr/30d",
+  "verdict": "Google Ads chi 101.8tr/30d ra 99.0tr Website (ROAS 0.97x). Phân tích chi tiết 7 category với 445 keyword active, 200 banner. Tổng có thể tiết kiệm/tối ưu 11.8tr/30d qua 21 hành động. Xem bảng chi tiết từng nhóm sản phẩm bên dưới.",
   "totals": {
     "ads_spend_30d": 101812775.0,
     "website_revenue_30d": 99029000.0,
     "roas_overall": 0.97,
-    "total_actions": 20,
-    "urgent_actions": 7,
+    "total_actions": 21,
+    "urgent_actions": 8,
     "estimated_total_saving_vnd": 11754357
   },
   "categories": {
@@ -64,35 +64,187 @@
       "orders_pancake_30d": 228,
       "roas_proxy": 31.44,
       "campaign_count": 2,
-      "keywords_count": 2,
+      "keywords_count": 71,
       "banners_count": 37,
       "keywords": [
         {
-          "text": "detectors",
-          "match_type": "BROAD",
+          "text": "máy dò định vị trên xe ô tô",
+          "match_type": "BROAD/EXACT/PHRASE",
           "status": "NONE",
-          "spend_30d": 67133.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.3333,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 67K, 1 click, 0 conv, chưa add negative",
+          "spend_30d": 362938.0,
+          "clicks_30d": 33,
+          "ctr_30d": 0.2102,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 21.0%, giữ nguyên",
           "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TBĐV GPS"
+          ]
+        },
+        {
+          "text": "định vị xe",
+          "match_type": "BROAD/EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 286241.0,
+          "clicks_30d": 85,
+          "ctr_30d": 0.042,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 4.2%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TBĐV GPS"
+          ]
+        },
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 192791.0,
+          "clicks_30d": 63,
+          "ctr_30d": 0.0415,
+          "conv_30d": 2.33,
+          "recommendation": "KEEP",
+          "reason": "Có 2.33 conv/30d, CTR 4.2%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TBĐV GPS"
+          ]
+        },
+        {
+          "text": "tìm camera",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 153930.0,
+          "clicks_30d": 12,
+          "ctr_30d": 0.2264,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 22.6%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị dò định vị",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 144387.0,
+          "clicks_30d": 14,
+          "ctr_30d": 0.1556,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 15.6%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 122406.0,
+          "clicks_30d": 14,
+          "ctr_30d": 0.1148,
+          "conv_30d": 2.0,
+          "recommendation": "KEEP",
+          "reason": "Có 2.0 conv/30d, CTR 11.5%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy dò máy nghe lén",
+          "match_type": "EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 78943.0,
+          "clicks_30d": 10,
+          "ctr_30d": 0.1961,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 19.6%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
             "8/5/2025 Search - TB Dò Nghe Lén"
           ]
         },
         {
-          "text": "cách phá sóng camera",
-          "match_type": "BROAD",
+          "text": "máy dò camera ghi âm",
+          "match_type": "EXACT/NEAR_PHRASE",
           "status": "NONE",
-          "spend_30d": 53272.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 53K, 1 click, 0 conv, chưa add negative",
+          "spend_30d": 60126.0,
+          "clicks_30d": 5,
+          "ctr_30d": 0.1282,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 12.8%, giữ nguyên",
           "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
             "8/5/2025 Search - TB Dò Nghe Lén"
+          ]
+        },
+        {
+          "text": "thiết bị kiểm tra camera quay lén",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 54143.0,
+          "clicks_30d": 7,
+          "ctr_30d": 0.1094,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 10.9%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị theo dõi vị trí",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 21939.0,
+          "clicks_30d": 9,
+          "ctr_30d": 0.0709,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 7.1%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TBĐV GPS"
+          ]
+        },
+        {
+          "text": "dò định vị trên xe ô tô",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 6479.0,
+          "clicks_30d": 2,
+          "ctr_30d": 0.1429,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 14.3%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy phát hiện quay lén",
+          "match_type": "EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 235.0,
+          "clicks_30d": 1,
+          "ctr_30d": 0.0833,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 8.3%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "Shopping - 6/6 - ĐV"
           ]
         }
       ],
@@ -208,183 +360,22 @@
           "ctr_30d": 0.0039,
           "recommendation": "REPLACE",
           "reason": "CTR 0.39% quá thấp (2,077 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "787079587334",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 304270.0,
-          "clicks_30d": 152,
-          "impressions_30d": 17869,
-          "ctr_30d": 0.0085,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.85%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "787079587346",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 278090.0,
-          "clicks_30d": 157,
-          "impressions_30d": 29218,
-          "ctr_30d": 0.0054,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.54%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "787079587331",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 94825.0,
-          "clicks_30d": 65,
-          "impressions_30d": 6940,
-          "ctr_30d": 0.0094,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.94%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802509637155",
-          "ad_name": "728X90-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 89412.0,
-          "clicks_30d": 56,
-          "impressions_30d": 7576,
-          "ctr_30d": 0.0074,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.74%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "787079587352",
-          "ad_name": "580X400-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 84085.0,
-          "clicks_30d": 58,
-          "impressions_30d": 6657,
-          "ctr_30d": 0.0087,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.87%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "787079587322",
-          "ad_name": "250X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 62805.0,
-          "clicks_30d": 37,
-          "impressions_30d": 5171,
-          "ctr_30d": 0.0072,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.72%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802509637113",
-          "ad_name": "160X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 58721.0,
-          "clicks_30d": 24,
-          "impressions_30d": 3735,
-          "ctr_30d": 0.0064,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.64%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "787079587340",
-          "ad_name": "320X50-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 21133.0,
-          "clicks_30d": 9,
-          "impressions_30d": 1627,
-          "ctr_30d": 0.0055,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.55%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802509637167",
-          "ad_name": "980X120-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 13724.0,
-          "clicks_30d": 12,
-          "impressions_30d": 1739,
-          "ctr_30d": 0.0069,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.69%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "759916989292",
-          "ad_name": "Máy Dò Camera Ẩn Siêu Nhạy | Phát Hiện Camera Giấu Kín | Máy Dò Thiết Bị Nghe Lén | Máy Dò Định Vị GPS Giấu Kín | Thiết Bị Dò Camera Mini | Phát Hiện GPS Gắn Trong Xe | Máy Dò Thiết Bị Theo Dõi | Bảo Vệ Quyền Riêng Tư | Dò Camera Trong Vài Giây | Quét Camera Ẩn Chính Xác | Phát Hiện Tín Hiệu Lạ Ngay | Máy Dò Tín Hiệu Siêu Nhạy | Kiểm Tra Phòng Trong 10 Giây | Phát Hiện Thiết Bị Giám Sát | Bắt Sóng Camera Tức Thì",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "8/5/2025 Search - TB Dò Nghe Lén",
-          "ad_group_name": "nhóm 2",
-          "spend_30d": 15653807.0,
-          "clicks_30d": 1697,
-          "impressions_30d": 6371,
-          "ctr_30d": 0.2664,
-          "recommendation": "KEEP",
-          "reason": "CTR 26.64% tốt, 6,371 imp — giữ"
-        },
-        {
-          "ad_id": "802509637152",
-          "ad_name": "580X400-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 1244465.0,
-          "clicks_30d": 813,
-          "impressions_30d": 76717,
-          "ctr_30d": 0.0106,
-          "recommendation": "MONITOR",
-          "reason": "CTR 1.06%, spend 1244K — theo dõi"
-        },
-        {
-          "ad_id": "802509637134",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Máy dò - 2024 - nmt",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 1068038.0,
-          "clicks_30d": 624,
-          "impressions_30d": 61355,
-          "ctr_30d": 0.0102,
-          "recommendation": "MONITOR",
-          "reason": "CTR 1.02%, spend 1068K — theo dõi"
         }
       ],
       "summary_actions": [
         {
           "type": "ADD_NEGATIVE_KEYWORDS",
           "priority": "high",
-          "title": "Add 2 negative keyword",
-          "detail": "Top: \"detectors\", \"cách phá sóng camera\"",
-          "estimated_saving_vnd": 120405
+          "title": "Add 25 negative keyword",
+          "detail": "Top: \"thiết bị dò máy nghe lén\", \"máy dò định vị xe\", \"máy dò thiết bị định vị ô tô\" và 22 từ khóa khác",
+          "estimated_saving_vnd": 2000864
+        },
+        {
+          "type": "PAUSE_KEYWORDS",
+          "priority": "high",
+          "title": "Pause 1 keyword đã ADDED nhưng 0 conv",
+          "detail": "Top: \"máy dò camera\"",
+          "estimated_saving_vnd": 202790
         },
         {
           "type": "REPLACE_BANNERS",
@@ -418,7 +409,7 @@
       "orders_pancake_30d": 6,
       "roas_proxy": 0.57,
       "campaign_count": 3,
-      "keywords_count": 335,
+      "keywords_count": 147,
       "banners_count": 35,
       "keywords": [
         {
@@ -432,36 +423,6 @@
           "recommendation": "SCALE",
           "reason": "CTR 5.1% cao, 3.0 conv/30d, còn room tăng bid",
           "campaigns": [
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "ghi âm",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 1358375.0,
-          "clicks_30d": 209,
-          "ctr_30d": 0.0345,
-          "conv_30d": 2.0,
-          "recommendation": "KEEP",
-          "reason": "Có 2.0 conv/30d, CTR 3.5%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "máy cạo râu",
-          "match_type": "EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 1224214.0,
-          "clicks_30d": 272,
-          "ctr_30d": 0.0458,
-          "conv_30d": 6.35,
-          "recommendation": "KEEP",
-          "reason": "Có 6.35 conv/30d, CTR 4.6%, giữ nguyên",
-          "campaigns": [
-            "7/3/26 Search - Máy Cạo Râu",
             "Shopping - 6/6 - ĐV"
           ]
         },
@@ -511,36 +472,6 @@
           ]
         },
         {
-          "text": "máy dò định vị trên xe ô tô",
-          "match_type": "BROAD/EXACT/PHRASE",
-          "status": "NONE",
-          "spend_30d": 362938.0,
-          "clicks_30d": 33,
-          "ctr_30d": 0.2102,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 21.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "8/5/2025 Search - TBĐV GPS"
-          ]
-        },
-        {
-          "text": "định vị xe",
-          "match_type": "BROAD/EXACT/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 286241.0,
-          "clicks_30d": 85,
-          "ctr_30d": 0.042,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 4.2%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "8/5/2025 Search - TBĐV GPS"
-          ]
-        },
-        {
           "text": "thiết bị định vị theo dõi người",
           "match_type": "BROAD/EXACT",
           "status": "NONE",
@@ -552,66 +483,6 @@
           "reason": "Có 1.0 conv/30d, CTR 4.6%, giữ nguyên",
           "campaigns": [
             "8/5/2025 Search - TBĐV GPS",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 192791.0,
-          "clicks_30d": 63,
-          "ctr_30d": 0.0415,
-          "conv_30d": 2.33,
-          "recommendation": "KEEP",
-          "reason": "Có 2.33 conv/30d, CTR 4.2%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "8/5/2025 Search - TBĐV GPS"
-          ]
-        },
-        {
-          "text": "tìm camera",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 153930.0,
-          "clicks_30d": 12,
-          "ctr_30d": 0.2264,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 22.6%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "thiết bị dò định vị",
-          "match_type": "EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 144387.0,
-          "clicks_30d": 14,
-          "ctr_30d": 0.1556,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 15.6%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "máy cạo râu panasonic",
-          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
-          "status": "NONE",
-          "spend_30d": 144240.0,
-          "clicks_30d": 33,
-          "ctr_30d": 0.0347,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 3.5%, giữ nguyên",
-          "campaigns": [
-            "7/3/26 Search - Máy Cạo Râu",
             "Shopping - 6/6 - ĐV"
           ]
         },
@@ -631,36 +502,6 @@
           ]
         },
         {
-          "text": "thiết bị phát hiện camera quay lén",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 122406.0,
-          "clicks_30d": 14,
-          "ctr_30d": 0.1148,
-          "conv_30d": 2.0,
-          "recommendation": "KEEP",
-          "reason": "Có 2.0 conv/30d, CTR 11.5%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "máy ghi âm cuộc họp",
-          "match_type": "EXACT/PHRASE",
-          "status": "NONE",
-          "spend_30d": 107875.0,
-          "clicks_30d": 19,
-          "ctr_30d": 0.0655,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 6.6%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
           "text": "thiết bị định vị theo dõi chồng",
           "match_type": "BROAD/EXACT/PHRASE",
           "status": "NONE",
@@ -676,51 +517,6 @@
           ]
         },
         {
-          "text": "máy dò máy nghe lén",
-          "match_type": "EXACT/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 78943.0,
-          "clicks_30d": 10,
-          "ctr_30d": 0.1961,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 19.6%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Chống Ghi Âm",
-            "8/5/2025 Search - TB Dò Nghe Lén"
-          ]
-        },
-        {
-          "text": "máy ghi âm cao cấp",
-          "match_type": "EXACT/PHRASE",
-          "status": "NONE",
-          "spend_30d": 75764.0,
-          "clicks_30d": 3,
-          "ctr_30d": 0.1154,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 11.5%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "doscom hà nội",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 70206.0,
-          "clicks_30d": 12,
-          "ctr_30d": 0.1348,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 13.5%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam mini",
-            "8/5/2025 Search - TB Ghi Âm"
-          ]
-        },
-        {
           "text": "thiết bị định vị xe",
           "match_type": "BROAD/EXACT",
           "status": "NONE",
@@ -733,21 +529,6 @@
           "campaigns": [
             "8/5/2025 Search - TBĐV GPS",
             "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "máy dò camera ghi âm",
-          "match_type": "EXACT/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 60126.0,
-          "clicks_30d": 5,
-          "ctr_30d": 0.1282,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 12.8%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Chống Ghi Âm",
-            "8/5/2025 Search - TB Dò Nghe Lén"
           ]
         },
         {
@@ -780,93 +561,33 @@
           ]
         },
         {
-          "text": "thiết bị kiểm tra camera quay lén",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 54143.0,
-          "clicks_30d": 7,
-          "ctr_30d": 0.1094,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 10.9%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "mua máy cạo râu",
-          "match_type": "EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 48158.0,
-          "clicks_30d": 11,
-          "ctr_30d": 0.0965,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 9.7%, giữ nguyên",
-          "campaigns": [
-            "7/3/26 Search - Máy Cạo Râu",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "máy ghi âm chuyển thành văn bản",
-          "match_type": "BROAD/EXACT",
-          "status": "NONE",
-          "spend_30d": 47173.0,
-          "clicks_30d": 11,
-          "ctr_30d": 0.0458,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 4.6%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "mua máy ghi âm ở hà nội",
-          "match_type": "EXACT/PHRASE",
-          "status": "NONE",
-          "spend_30d": 46377.0,
-          "clicks_30d": 6,
-          "ctr_30d": 0.0968,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 9.7%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm",
-            "Shopping - 6/6 - ĐV"
-          ]
-        },
-        {
-          "text": "thiết bị ghi âm bí mật",
+          "text": "định vị ko dây",
           "match_type": "BROAD/EXACT/NEAR_PHRASE",
           "status": "NONE",
-          "spend_30d": 46251.0,
+          "spend_30d": 33278.0,
           "clicks_30d": 8,
-          "ctr_30d": 0.0952,
+          "ctr_30d": 0.0988,
           "conv_30d": 1.0,
           "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 9.5%, giữ nguyên",
+          "reason": "Có 1.0 conv/30d, CTR 9.9%, giữ nguyên",
           "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "8/5/2025 Search - TB Ghi Âm"
+            "8/5/2025 Search - TBĐV GPS",
+            "Shopping - 6/6 - ĐV"
           ]
         },
         {
-          "text": "định vị nghe lén",
-          "match_type": "BROAD/EXACT/NEAR_PHRASE",
+          "text": "định vị cho xe máy",
+          "match_type": "EXACT/NEAR_PHRASE",
           "status": "NONE",
-          "spend_30d": 35875.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.0167,
+          "spend_30d": 31910.0,
+          "clicks_30d": 9,
+          "ctr_30d": 0.0539,
           "conv_30d": 1.0,
           "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 1.7%, giữ nguyên",
+          "reason": "Có 1.0 conv/30d, CTR 5.4%, giữ nguyên",
           "campaigns": [
-            "8/5/2025 Search - TB Dò Nghe Lén",
-            "8/5/2025 Search - TB Ghi Âm"
+            "8/5/2025 Search - TBĐV GPS",
+            "Shopping - 6/6 - ĐV"
           ]
         }
       ],
@@ -982,183 +703,15 @@
           "ctr_30d": 0.0039,
           "recommendation": "REPLACE",
           "reason": "CTR 0.39% quá thấp (2,571 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551887905",
-          "ad_name": "728X90-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 12730.0,
-          "clicks_30d": 5,
-          "impressions_30d": 2592,
-          "ctr_30d": 0.0019,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.19% quá thấp (2,592 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "789304979668",
-          "ad_name": "320X50-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 6292.0,
-          "clicks_30d": 3,
-          "impressions_30d": 904,
-          "ctr_30d": 0.0033,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.33% quá thấp (904 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551887917",
-          "ad_name": "980X120-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 3877.0,
-          "clicks_30d": 2,
-          "impressions_30d": 606,
-          "ctr_30d": 0.0033,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.33% quá thấp (606 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "752150644978",
-          "ad_name": "160x600.gif",
-          "ad_format": "DISPLAY_BANNER",
-          "current_size": "160x600",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 3665.0,
-          "clicks_30d": 1,
-          "impressions_30d": 1128,
-          "ctr_30d": 0.0009,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.09% quá thấp (1,128 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "789304979692",
-          "ad_name": "970X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 200.0,
-          "clicks_30d": 1,
-          "impressions_30d": 648,
-          "ctr_30d": 0.0015,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.15% quá thấp (648 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551887896",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 1167972.0,
-          "clicks_30d": 1149,
-          "impressions_30d": 121048,
-          "ctr_30d": 0.0095,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.95%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551887887",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 182548.0,
-          "clicks_30d": 71,
-          "impressions_30d": 10267,
-          "ctr_30d": 0.0069,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.69%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551887758",
-          "ad_name": "250X360-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 153898.0,
-          "clicks_30d": 76,
-          "impressions_30d": 8417,
-          "ctr_30d": 0.009,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.90%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551887902",
-          "ad_name": "580X400-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 138094.0,
-          "clicks_30d": 119,
-          "impressions_30d": 15095,
-          "ctr_30d": 0.0079,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.79%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "789304979653",
-          "ad_name": "250X360-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 60503.0,
-          "clicks_30d": 19,
-          "impressions_30d": 1979,
-          "ctr_30d": 0.0096,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.96%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "789304979674",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 53799.0,
-          "clicks_30d": 32,
-          "impressions_30d": 5007,
-          "ctr_30d": 0.0064,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.64%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551887755",
-          "ad_name": "250X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị định vị",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 45012.0,
-          "clicks_30d": 34,
-          "impressions_30d": 4736,
-          "ctr_30d": 0.0072,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.72%, dưới avg GDN (~1%) — A/B test visual mới"
         }
       ],
       "summary_actions": [
         {
           "type": "ADD_NEGATIVE_KEYWORDS",
           "priority": "high",
-          "title": "Add 73 negative keyword",
-          "detail": "Top: \"máy nghe lén\", \"định vị gps\", \"máy cạo râu philips\" và 70 từ khóa khác",
-          "estimated_saving_vnd": 6355167
+          "title": "Add 19 negative keyword",
+          "detail": "Top: \"định vị gps\", \"thiết bị định vị xe máy qua điện thoại\", \"định vị ô tô\" và 16 từ khóa khác",
+          "estimated_saving_vnd": 1548827
         },
         {
           "type": "SCALE_KEYWORDS",
@@ -1166,13 +719,6 @@
           "title": "Tăng bid 1 keyword converting",
           "detail": "Top converting: \"máy ghi âm sony\"",
           "estimated_saving_vnd": 0
-        },
-        {
-          "type": "PAUSE_KEYWORDS",
-          "priority": "high",
-          "title": "Pause 2 keyword đã ADDED nhưng 0 conv",
-          "detail": "Top: \"thiết bị ghi âm\", \"máy dò camera\"",
-          "estimated_saving_vnd": 414096
         },
         {
           "type": "REPLACE_BANNERS",
@@ -1207,9 +753,114 @@
       "orders_pancake_30d": 142,
       "roas_proxy": 11.99,
       "campaign_count": 2,
-      "keywords_count": 6,
+      "keywords_count": 92,
       "banners_count": 13,
       "keywords": [
+        {
+          "text": "ghi âm",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 1358375.0,
+          "clicks_30d": 209,
+          "ctr_30d": 0.0345,
+          "conv_30d": 2.0,
+          "recommendation": "KEEP",
+          "reason": "Có 2.0 conv/30d, CTR 3.5%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy ghi âm cuộc họp",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 107875.0,
+          "clicks_30d": 19,
+          "ctr_30d": 0.0655,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 6.6%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy ghi âm cao cấp",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 75764.0,
+          "clicks_30d": 3,
+          "ctr_30d": 0.1154,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 11.5%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy ghi âm chuyển thành văn bản",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 47173.0,
+          "clicks_30d": 11,
+          "ctr_30d": 0.0458,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 4.6%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "mua máy ghi âm ở hà nội",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 46377.0,
+          "clicks_30d": 6,
+          "ctr_30d": 0.0968,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 9.7%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị ghi âm bí mật",
+          "match_type": "BROAD/EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 46251.0,
+          "clicks_30d": 8,
+          "ctr_30d": 0.0952,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 9.5%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TB Ghi Âm"
+          ]
+        },
+        {
+          "text": "định vị nghe lén",
+          "match_type": "BROAD/EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 35875.0,
+          "clicks_30d": 2,
+          "ctr_30d": 0.0167,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 1.7%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
+            "8/5/2025 Search - TB Ghi Âm"
+          ]
+        },
         {
           "text": "đinh vị nghe lén net",
           "match_type": "BROAD",
@@ -1226,73 +877,63 @@
           ]
         },
         {
-          "text": "dji osmo pocket 4",
-          "match_type": "BROAD",
+          "text": "máy ghi âm suntech",
+          "match_type": "EXACT/PHRASE",
           "status": "NONE",
-          "spend_30d": 65501.0,
+          "spend_30d": 22926.0,
           "clicks_30d": 2,
-          "ctr_30d": 0.0345,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 66K, 2 click, 0 conv, chưa add negative",
+          "ctr_30d": 0.3333,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 33.3%, giữ nguyên",
           "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm"
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
           ]
         },
         {
-          "text": "nxn8 s",
-          "match_type": "BROAD",
+          "text": "máy ghi âm bán ở đâu",
+          "match_type": "EXACT/PHRASE",
           "status": "NONE",
-          "spend_30d": 33393.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 33K, CTR 50.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm"
-          ]
-        },
-        {
-          "text": "công ty tnhh doscom holdings",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 33038.0,
-          "clicks_30d": 3,
+          "spend_30d": 18777.0,
+          "clicks_30d": 4,
           "ctr_30d": 0.1111,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 33K, CTR 11.1%, 0.0 conv — theo dõi thêm",
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 11.1%, giữ nguyên",
           "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm"
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
           ]
         },
         {
-          "text": "jts",
-          "match_type": "BROAD",
-          "status": "EXCLUDED",
-          "spend_30d": 32389.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 32K, CTR 50.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - TB Ghi Âm"
-          ]
-        },
-        {
-          "text": "u87 microphone",
-          "match_type": "BROAD",
+          "text": "ghi âm giấu kín",
+          "match_type": "BROAD/EXACT",
           "status": "NONE",
-          "spend_30d": 31708.0,
-          "clicks_30d": 2,
-          "ctr_30d": 2.0,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 32K, CTR 200.0%, 0.0 conv — theo dõi thêm",
+          "spend_30d": 6412.0,
+          "clicks_30d": 1,
+          "ctr_30d": 0.0909,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 9.1%, giữ nguyên",
           "campaigns": [
+            "8/5/2025 Search - TB Dò Nghe Lén",
             "8/5/2025 Search - TB Ghi Âm"
+          ]
+        },
+        {
+          "text": "máy ghi âm loại tốt",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 4937.0,
+          "clicks_30d": 1,
+          "ctr_30d": 0.25,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 25.0%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Ghi Âm",
+            "Shopping - 6/6 - ĐV"
           ]
         }
       ],
@@ -1408,85 +1049,22 @@
           "ctr_30d": 0.0069,
           "recommendation": "REVIEW",
           "reason": "CTR 0.69%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802509422349",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị ghi âm #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 11478.0,
-          "clicks_30d": 16,
-          "impressions_30d": 2786,
-          "ctr_30d": 0.0057,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.57%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "759916989298",
-          "ad_name": "Máy Ghi Âm Mini Siêu Nhỏ | Ghi Âm Rõ Nét Từng Âm Thanh | Máy Ghi Âm Lọc Ồn Thông Minh | Máy Ghi Âm Pin Lâu 900 Giờ | Thiết Bị Ghi Âm Siêu Kín Đáo | Máy Ghi Âm Cầm Tay Mini | Máy Ghi Âm Siêu Nhạy | Ghi Âm Rõ Trong Môi Trường Ồn | Máy Ghi Âm Nhỏ Như USB | Ghi Âm Một Chạm Dễ Dùng | Máy Ghi Âm Chuyên Nghiệp | Ghi Âm Xa Rõ Từng Lời | Máy Ghi Âm Nhỏ Gọn Bỏ Túi | Ghi Âm Họp, Phỏng Vấn Rõ Nét | Thiết Bị Ghi Âm Chính Hãng",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "8/5/2025 Search - TB Ghi Âm",
-          "ad_group_name": "nhóm 2",
-          "spend_30d": 14920628.0,
-          "clicks_30d": 2262,
-          "impressions_30d": 19951,
-          "ctr_30d": 0.1134,
-          "recommendation": "KEEP",
-          "reason": "CTR 11.34% tốt, 19,951 imp — giữ"
-        },
-        {
-          "ad_id": "802509422322",
-          "ad_name": "200X200-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị ghi âm #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 13638.0,
-          "clicks_30d": 22,
-          "impressions_30d": 909,
-          "ctr_30d": 0.0242,
-          "recommendation": "MONITOR",
-          "reason": "CTR 2.42%, spend 14K — theo dõi"
-        },
-        {
-          "ad_id": "802509422340",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị ghi âm #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 11702.0,
-          "clicks_30d": 5,
-          "impressions_30d": 742,
-          "ctr_30d": 0.0067,
-          "recommendation": "MONITOR",
-          "reason": "CTR 0.67%, spend 12K — theo dõi"
-        },
-        {
-          "ad_id": "788989873822",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - thiết bị ghi âm #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 7589.0,
-          "clicks_30d": 6,
-          "impressions_30d": 600,
-          "ctr_30d": 0.01,
-          "recommendation": "MONITOR",
-          "reason": "CTR 1.00%, spend 8K — theo dõi"
         }
       ],
       "summary_actions": [
         {
           "type": "ADD_NEGATIVE_KEYWORDS",
           "priority": "high",
-          "title": "Add 1 negative keyword",
-          "detail": "Top: \"dji osmo pocket 4\"",
-          "estimated_saving_vnd": 65501
+          "title": "Add 26 negative keyword",
+          "detail": "Top: \"máy nghe lén\", \"thiết bị nghe lén\", \"thiết bị chống nghe lén\" và 23 từ khóa khác",
+          "estimated_saving_vnd": 2448286
+        },
+        {
+          "type": "PAUSE_KEYWORDS",
+          "priority": "high",
+          "title": "Pause 1 keyword đã ADDED nhưng 0 conv",
+          "detail": "Top: \"thiết bị ghi âm\"",
+          "estimated_saving_vnd": 211306
         },
         {
           "type": "REPLACE_BANNERS",
@@ -1634,174 +1212,6 @@
           "ctr_30d": 0.0023,
           "recommendation": "REPLACE",
           "reason": "CTR 0.23% quá thấp (854 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551763864",
-          "ad_name": "970X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 135.0,
-          "clicks_30d": 1,
-          "impressions_30d": 554,
-          "ctr_30d": 0.0018,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.18% quá thấp (554 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551763846",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 174535.0,
-          "clicks_30d": 86,
-          "impressions_30d": 14031,
-          "ctr_30d": 0.0061,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.61%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551763822",
-          "ad_name": "250X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 152134.0,
-          "clicks_30d": 75,
-          "impressions_30d": 8475,
-          "ctr_30d": 0.0088,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.88%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "790244813935",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 116748.0,
-          "clicks_30d": 51,
-          "impressions_30d": 7358,
-          "ctr_30d": 0.0069,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.69%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551763852",
-          "ad_name": "580X400-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 98893.0,
-          "clicks_30d": 37,
-          "impressions_30d": 6974,
-          "ctr_30d": 0.0053,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.53%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "790244813926",
-          "ad_name": "250X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 51892.0,
-          "clicks_30d": 22,
-          "impressions_30d": 3826,
-          "ctr_30d": 0.0058,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.58%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "802551763825",
-          "ad_name": "250X360-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 48193.0,
-          "clicks_30d": 27,
-          "impressions_30d": 3356,
-          "ctr_30d": 0.008,
-          "recommendation": "REVIEW",
-          "reason": "CTR 0.80%, dưới avg GDN (~1%) — A/B test visual mới"
-        },
-        {
-          "ad_id": "790244813920",
-          "ad_name": "200X200-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 388106.0,
-          "clicks_30d": 249,
-          "impressions_30d": 7971,
-          "ctr_30d": 0.0312,
-          "recommendation": "KEEP",
-          "reason": "CTR 3.12% tốt, 7,971 imp — giữ"
-        },
-        {
-          "ad_id": "802551763849",
-          "ad_name": "468X60-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 33949.0,
-          "clicks_30d": 29,
-          "impressions_30d": 789,
-          "ctr_30d": 0.0368,
-          "recommendation": "KEEP",
-          "reason": "CTR 3.68% tốt, 789 imp — giữ"
-        },
-        {
-          "ad_id": "802551763816",
-          "ad_name": "200X200-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 149414.0,
-          "clicks_30d": 66,
-          "impressions_30d": 3272,
-          "ctr_30d": 0.0202,
-          "recommendation": "MONITOR",
-          "reason": "CTR 2.02%, spend 149K — theo dõi"
-        },
-        {
-          "ad_id": "802551763834",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 126090.0,
-          "clicks_30d": 56,
-          "impressions_30d": 4153,
-          "ctr_30d": 0.0135,
-          "recommendation": "MONITOR",
-          "reason": "CTR 1.35%, spend 126K — theo dõi"
-        },
-        {
-          "ad_id": "802551763819",
-          "ad_name": "240X400-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera Gọi 2 chiều",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 50508.0,
-          "clicks_30d": 26,
-          "impressions_30d": 1544,
-          "ctr_30d": 0.0168,
-          "recommendation": "MONITOR",
-          "reason": "CTR 1.68%, spend 51K — theo dõi"
         }
       ],
       "summary_actions": [
@@ -1833,9 +1243,85 @@
       "orders_pancake_30d": 0,
       "roas_proxy": 0.0,
       "campaign_count": 2,
-      "keywords_count": 0,
+      "keywords_count": 5,
       "banners_count": 6,
-      "keywords": [],
+      "keywords": [
+        {
+          "text": "thiết bị phát hiện máy ghi âm",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 24263.0,
+          "clicks_30d": 7,
+          "ctr_30d": 0.0933,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 9.3%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị dò máy ghi âm",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 22385.0,
+          "clicks_30d": 6,
+          "ctr_30d": 0.0882,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 8.8%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy chống ghi âm",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 34694.0,
+          "clicks_30d": 12,
+          "ctr_30d": 0.0851,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 35K, CTR 8.5%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "thiết bị phát hiện ghi âm",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 26381.0,
+          "clicks_30d": 8,
+          "ctr_30d": 0.1404,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 26K, CTR 14.0%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy dò ghi âm",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 15314.0,
+          "clicks_30d": 5,
+          "ctr_30d": 0.0704,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 15K, CTR 7.0%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "8/5/2025 Search - TB Chống Ghi Âm",
+            "Shopping - 6/6 - ĐV"
+          ]
+        }
+      ],
       "banners": [
         {
           "ad_id": "752128818627",
@@ -1944,8 +1430,84 @@
       "orders_pancake_30d": 0,
       "roas_proxy": 0.0,
       "campaign_count": 1,
-      "keywords_count": 79,
+      "keywords_count": 3,
       "banners_count": 1,
+      "keywords": [
+        {
+          "text": "nii8",
+          "match_type": "BROAD",
+          "status": "NONE",
+          "spend_30d": 29572.0,
+          "clicks_30d": 1,
+          "ctr_30d": 1.0,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - Sim 4G"
+          ]
+        },
+        {
+          "text": "camera sim 4g",
+          "match_type": "EXACT",
+          "status": "ADDED",
+          "spend_30d": 23730.0,
+          "clicks_30d": 7,
+          "ctr_30d": 0.1458,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 24K, CTR 14.6%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "8/5/2025 Search - Sim 4G"
+          ]
+        },
+        {
+          "text": "camera gắn sim",
+          "match_type": "BROAD",
+          "status": "NONE",
+          "spend_30d": 15407.0,
+          "clicks_30d": 5,
+          "ctr_30d": 0.4167,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 15K, CTR 41.7%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "8/5/2025 Search - Sim 4G"
+          ]
+        }
+      ],
+      "banners": [
+        {
+          "ad_id": "759917282551",
+          "ad_name": "Camera SIM 4G Không Cần WiFi | Camera 4G Xoay 360 | Camera SIM 4G Ngoài Trời | Camera SIM 4G Chống Nước | Camera 4G Quan Sát Từ Xa | Camera SIM 4G Báo Động Trộm | Camera 4G Hình Ảnh Siêu Nét | Camera SIM 4G Không Dây | Camera 4G Ban Đêm Rõ Nét | Camera SIM 4G Thu Âm 2 Chiều | Camera 4G Lắp Đặt Mọi Nơi | Camera 4G Giám Sát 24/7 | Camera SIM 4G Cho Nhà Vườn | Camera 4G Cho Kho Bãi | Camera SIM 4G Chính Hãng",
+          "ad_format": "OTHER",
+          "current_size": "—",
+          "campaign": "8/5/2025 Search - Sim 4G",
+          "ad_group_name": "nhóm 2",
+          "spend_30d": 5869599.0,
+          "clicks_30d": 1040,
+          "impressions_30d": 7032,
+          "ctr_30d": 0.1479,
+          "recommendation": "KEEP",
+          "reason": "CTR 14.79% tốt, 7,032 imp — giữ"
+        }
+      ],
+      "summary_actions": []
+    },
+    "OTHER_CAM": {
+      "display_name": "Camera mini/WiFi/4G/NLMT",
+      "products": [],
+      "ads_spend_30d": 22174714.0,
+      "ads_clicks_30d": 6367,
+      "ads_impressions_30d": 740289,
+      "ads_ctr_30d": 0.0086,
+      "ads_cpc_30d": 3483.0,
+      "revenue_pancake_30d": 0,
+      "orders_pancake_30d": 0,
+      "roas_proxy": 0.0,
+      "campaign_count": 7,
+      "keywords_count": 103,
+      "banners_count": 82,
       "keywords": [
         {
           "text": "doscom",
@@ -2008,6 +1570,36 @@
           ]
         },
         {
+          "text": "doscom hà nội",
+          "match_type": "BROAD/EXACT",
+          "status": "NONE",
+          "spend_30d": 70206.0,
+          "clicks_30d": 12,
+          "ctr_30d": 0.1348,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 13.5%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - Cam mini",
+            "8/5/2025 Search - TB Ghi Âm"
+          ]
+        },
+        {
+          "text": "cctv camera",
+          "match_type": "BROAD",
+          "status": "NONE",
+          "spend_30d": 61227.0,
+          "clicks_30d": 6,
+          "ctr_30d": 0.2143,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 21.4%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - Cam NLMT",
+            "8/5/2025 Search - Cam WIFI"
+          ]
+        },
+        {
           "text": "camera năng lượng",
           "match_type": "BROAD/NEAR_PHRASE",
           "status": "NONE",
@@ -2020,6 +1612,20 @@
           "campaigns": [
             "8/5/2025 Search - Cam NLMT",
             "8/5/2025 Search - Sim 4G"
+          ]
+        },
+        {
+          "text": "camera miền bắc",
+          "match_type": "BROAD",
+          "status": "NONE",
+          "spend_30d": 38713.0,
+          "clicks_30d": 1,
+          "ctr_30d": 1.0,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
+          "campaigns": [
+            "8/5/2025 Search - Cam WIFI"
           ]
         },
         {
@@ -2053,435 +1659,6 @@
           ]
         },
         {
-          "text": "nii8",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 29572.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Sim 4G"
-          ]
-        },
-        {
-          "text": "camera chạy bằng pin 4g",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 17915.0,
-          "clicks_30d": 5,
-          "ctr_30d": 0.3333,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 33.3%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "cài đặt camera giám sát",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 7013.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 50.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam mini",
-            "8/5/2025 Search - Sim 4G"
-          ]
-        },
-        {
-          "text": "camera không dây",
-          "match_type": "BROAD/NEAR_EXACT/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 144769.0,
-          "clicks_30d": 42,
-          "ctr_30d": 0.1329,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 145K, 42 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "xem camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 104864.0,
-          "clicks_30d": 16,
-          "ctr_30d": 0.1951,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 105K, 16 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "doscom camera",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 86525.0,
-          "clicks_30d": 13,
-          "ctr_30d": 0.5,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 87K, 13 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "mua camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 73634.0,
-          "clicks_30d": 10,
-          "ctr_30d": 0.1538,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 74K, 10 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "f32fp",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 72428.0,
-          "clicks_30d": 3,
-          "ctr_30d": 0.3333,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 72K, 3 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "đặt camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 72259.0,
-          "clicks_30d": 6,
-          "ctr_30d": 0.1714,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 72K, 6 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera 4g",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 67202.0,
-          "clicks_30d": 21,
-          "ctr_30d": 0.1382,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 67K, 21 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera trong nhà",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 66968.0,
-          "clicks_30d": 9,
-          "ctr_30d": 0.0826,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 67K, 9 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "lắp camera trong nhà",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 65535.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.1818,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 66K, 2 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera imou",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 65054.0,
-          "clicks_30d": 7,
-          "ctr_30d": 0.0504,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 65K, 7 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "camera yoosee",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 62685.0,
-          "clicks_30d": 7,
-          "ctr_30d": 0.1489,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 63K, 7 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera giám sát",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 58603.0,
-          "clicks_30d": 10,
-          "ctr_30d": 0.1042,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 59K, 10 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera không cần wifi",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 58573.0,
-          "clicks_30d": 26,
-          "ctr_30d": 0.2,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 59K, 26 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "ezviz camera",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 54568.0,
-          "clicks_30d": 6,
-          "ctr_30d": 0.0769,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 55K, 6 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "h7c ezviz",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 52518.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.3333,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 53K, 2 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "camera năng lượng mặt trời",
-          "match_type": "BROAD/EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 232915.0,
-          "clicks_30d": 69,
-          "ctr_30d": 0.0994,
-          "conv_30d": 0.0,
-          "recommendation": "PAUSE",
-          "reason": "Đã ADDED nhưng spend 233K với 0 conv — pause keyword",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "lắp đặt camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 115004.0,
-          "clicks_30d": 6,
-          "ctr_30d": 0.1111,
-          "conv_30d": 0.6,
-          "recommendation": "MONITOR",
-          "reason": "Spend 115K, CTR 11.1%, 0.6 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera dùng năng lượng mặt trời",
-          "match_type": "BROAD/EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 80412.0,
-          "clicks_30d": 13,
-          "ctr_30d": 0.2766,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 80K, CTR 27.7%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera năng lượng mặt trời sim 4g",
-          "match_type": "EXACT/PHRASE",
-          "status": "ADDED/NONE",
-          "spend_30d": 78462.0,
-          "clicks_30d": 12,
-          "ctr_30d": 0.0923,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 78K, CTR 9.2%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Sim 4G"
-          ]
-        },
-        {
-          "text": "camera mini",
-          "match_type": "BROAD/EXACT",
-          "status": "ADDED/NONE",
-          "spend_30d": 58571.0,
-          "clicks_30d": 18,
-          "ctr_30d": 0.0822,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 59K, CTR 8.2%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        }
-      ],
-      "banners": [
-        {
-          "ad_id": "759917282551",
-          "ad_name": "Camera SIM 4G Không Cần WiFi | Camera 4G Xoay 360 | Camera SIM 4G Ngoài Trời | Camera SIM 4G Chống Nước | Camera 4G Quan Sát Từ Xa | Camera SIM 4G Báo Động Trộm | Camera 4G Hình Ảnh Siêu Nét | Camera SIM 4G Không Dây | Camera 4G Ban Đêm Rõ Nét | Camera SIM 4G Thu Âm 2 Chiều | Camera 4G Lắp Đặt Mọi Nơi | Camera 4G Giám Sát 24/7 | Camera SIM 4G Cho Nhà Vườn | Camera 4G Cho Kho Bãi | Camera SIM 4G Chính Hãng",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "8/5/2025 Search - Sim 4G",
-          "ad_group_name": "nhóm 2",
-          "spend_30d": 5869599.0,
-          "clicks_30d": 1040,
-          "impressions_30d": 7032,
-          "ctr_30d": 0.1479,
-          "recommendation": "KEEP",
-          "reason": "CTR 14.79% tốt, 7,032 imp — giữ"
-        }
-      ],
-      "summary_actions": [
-        {
-          "type": "ADD_NEGATIVE_KEYWORDS",
-          "priority": "high",
-          "title": "Add 15 negative keyword",
-          "detail": "Top: \"camera không dây\", \"xem camera\", \"doscom camera\" và 12 từ khóa khác",
-          "estimated_saving_vnd": 1106185
-        },
-        {
-          "type": "SCALE_KEYWORDS",
-          "priority": "medium",
-          "title": "Tăng bid 1 keyword converting",
-          "detail": "Top converting: \"doscom\"",
-          "estimated_saving_vnd": 0
-        },
-        {
-          "type": "PAUSE_KEYWORDS",
-          "priority": "high",
-          "title": "Pause 1 keyword đã ADDED nhưng 0 conv",
-          "detail": "Top: \"camera năng lượng mặt trời\"",
-          "estimated_saving_vnd": 232915
-        }
-      ]
-    },
-    "OTHER_CAM": {
-      "display_name": "Camera mini/WiFi/4G/NLMT",
-      "products": [],
-      "ads_spend_30d": 22174714.0,
-      "ads_clicks_30d": 6367,
-      "ads_impressions_30d": 740289,
-      "ads_ctr_30d": 0.0086,
-      "ads_cpc_30d": 3483.0,
-      "revenue_pancake_30d": 0,
-      "orders_pancake_30d": 0,
-      "roas_proxy": 0.0,
-      "campaign_count": 7,
-      "keywords_count": 23,
-      "banners_count": 82,
-      "keywords": [
-        {
-          "text": "cctv camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 61227.0,
-          "clicks_30d": 6,
-          "ctr_30d": 0.2143,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 21.4%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera miền bắc",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 38713.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
           "text": "vitacam",
           "match_type": "BROAD",
           "status": "EXCLUDED",
@@ -2508,281 +1685,6 @@
           "reason": "Có 1.0 conv/30d, CTR 25.0%, giữ nguyên",
           "campaigns": [
             "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera ezviz c6n",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 22876.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "camera an ninh mini",
-          "match_type": "BROAD/PHRASE",
-          "status": "NONE",
-          "spend_30d": 21180.0,
-          "clicks_30d": 3,
-          "ctr_30d": 0.75,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 75.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "camera nhà dân",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 14756.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.3333,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 33.3%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "s3ep imou",
-          "match_type": "NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 11549.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 100.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera đàm thoại 2 chiều có màn hình",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 3351.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.2,
-          "conv_30d": 2.0,
-          "recommendation": "KEEP",
-          "reason": "Có 2.0 conv/30d, CTR 20.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera soi ban đêm",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 3077.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 50.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "onehome camera",
-          "match_type": "NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 0.0,
-          "clicks_30d": 0,
-          "ctr_30d": 0.0,
-          "conv_30d": 1.0,
-          "recommendation": "KEEP",
-          "reason": "Có 1.0 conv/30d, CTR 0.0%, giữ nguyên",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "kết nối camera",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 85183.0,
-          "clicks_30d": 10,
-          "ctr_30d": 0.3125,
-          "conv_30d": 0.0,
-          "recommendation": "ADD_NEGATIVE",
-          "reason": "Spend 85K, 10 click, 0 conv, chưa add negative",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam mini"
-          ]
-        },
-        {
-          "text": "s51fep",
-          "match_type": "BROAD",
-          "status": "EXCLUDED/NONE",
-          "spend_30d": 44296.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.2857,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 44K, CTR 28.6%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera hikvision ngoài trời góc rộng",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 38082.0,
-          "clicks_30d": 2,
-          "ctr_30d": 2.0,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 38K, CTR 200.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT"
-          ]
-        },
-        {
-          "text": "imou life playback",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 35487.0,
-          "clicks_30d": 2,
-          "ctr_30d": 2.0,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 35K, CTR 200.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "c6c 4k 8mp",
-          "match_type": "NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 33366.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 33K, CTR 100.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "h8c pro 3mp",
-          "match_type": "BROAD/NEAR_PHRASE",
-          "status": "NONE",
-          "spend_30d": 32462.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.5,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 32K, CTR 50.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera không dây không wifi",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 32192.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.1667,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 32K, CTR 16.7%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT"
-          ]
-        },
-        {
-          "text": "lắp camera wifi",
-          "match_type": "BROAD/PHRASE",
-          "status": "NONE",
-          "spend_30d": 31207.0,
-          "clicks_30d": 1,
-          "ctr_30d": 0.25,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 31K, CTR 25.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "dahua",
-          "match_type": "BROAD",
-          "status": "EXCLUDED/NONE",
-          "spend_30d": 30861.0,
-          "clicks_30d": 3,
-          "ctr_30d": 0.25,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 31K, CTR 25.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "cài đặt camera trên điện thoại",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 30705.0,
-          "clicks_30d": 4,
-          "ctr_30d": 0.6667,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 31K, CTR 66.7%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "camera wifi ezviz c6n xoay 360",
-          "match_type": "BROAD/PHRASE",
-          "status": "NONE",
-          "spend_30d": 30480.0,
-          "clicks_30d": 2,
-          "ctr_30d": 0.6667,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 30K, CTR 66.7%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam NLMT",
-            "8/5/2025 Search - Cam WIFI"
-          ]
-        },
-        {
-          "text": "h6c pro 5m",
-          "match_type": "BROAD",
-          "status": "NONE",
-          "spend_30d": 30180.0,
-          "clicks_30d": 1,
-          "ctr_30d": 1.0,
-          "conv_30d": 0.0,
-          "recommendation": "MONITOR",
-          "reason": "Spend 30K, CTR 100.0%, 0.0 conv — theo dõi thêm",
-          "campaigns": [
-            "8/5/2025 Search - Cam mini"
           ]
         }
       ],
@@ -2898,183 +1800,29 @@
           "ctr_30d": 0.0035,
           "recommendation": "REPLACE",
           "reason": "CTR 0.35% quá thấp (17,516 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802509491253",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera mini",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 137363.0,
-          "clicks_30d": 58,
-          "impressions_30d": 12652,
-          "ctr_30d": 0.0046,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.46% quá thấp (12,652 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551717334",
-          "ad_name": "300X600-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera 4G",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 134492.0,
-          "clicks_30d": 63,
-          "impressions_30d": 15500,
-          "ctr_30d": 0.0041,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.41% quá thấp (15,500 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551717331",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera 4G",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 110230.0,
-          "clicks_30d": 64,
-          "impressions_30d": 15828,
-          "ctr_30d": 0.004,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.40% quá thấp (15,828 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802509491247",
-          "ad_name": "250X360-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera mini",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 108412.0,
-          "clicks_30d": 56,
-          "impressions_30d": 11751,
-          "ctr_30d": 0.0048,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.48% quá thấp (11,751 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551717343",
-          "ad_name": "320X100-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera 4G",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 106380.0,
-          "clicks_30d": 59,
-          "impressions_30d": 20893,
-          "ctr_30d": 0.0028,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.28% quá thấp (20,893 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802625575397",
-          "ad_name": "300X50-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - NLMT #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 102527.0,
-          "clicks_30d": 45,
-          "impressions_30d": 17560,
-          "ctr_30d": 0.0026,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.26% quá thấp (17,560 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551717322",
-          "ad_name": "250X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera 4G",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 85753.0,
-          "clicks_30d": 42,
-          "impressions_30d": 8708,
-          "ctr_30d": 0.0048,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.48% quá thấp (8,708 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802551717328",
-          "ad_name": "300X50-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera 4G",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 81500.0,
-          "clicks_30d": 31,
-          "impressions_30d": 9432,
-          "ctr_30d": 0.0033,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.33% quá thấp (9,432 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "789120567551",
-          "ad_name": "320X100-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera mini",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 67902.0,
-          "clicks_30d": 31,
-          "impressions_30d": 12979,
-          "ctr_30d": 0.0024,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.24% quá thấp (12,979 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "802509491250",
-          "ad_name": "300X50-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera mini",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 47272.0,
-          "clicks_30d": 25,
-          "impressions_30d": 7927,
-          "ctr_30d": 0.0032,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.32% quá thấp (7,927 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "789120567518",
-          "ad_name": "336X280-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - Camera mini",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 46367.0,
-          "clicks_30d": 21,
-          "impressions_30d": 5302,
-          "ctr_30d": 0.004,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.40% quá thấp (5,302 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
-        },
-        {
-          "ad_id": "790332005426",
-          "ad_name": "300X250-100.jpg",
-          "ad_format": "OTHER",
-          "current_size": "—",
-          "campaign": "RMK - NLMT #2",
-          "ad_group_name": "Ad group 1",
-          "spend_30d": 44237.0,
-          "clicks_30d": 19,
-          "impressions_30d": 4527,
-          "ctr_30d": 0.0042,
-          "recommendation": "REPLACE",
-          "reason": "CTR 0.42% quá thấp (4,527 imp). Thử size khác (300x250 thường tốt nhất GDN) hoặc đổi visual + headline"
         }
       ],
       "summary_actions": [
         {
           "type": "ADD_NEGATIVE_KEYWORDS",
           "priority": "high",
-          "title": "Add 1 negative keyword",
-          "detail": "Top: \"kết nối camera\"",
-          "estimated_saving_vnd": 85183
+          "title": "Add 18 negative keyword",
+          "detail": "Top: \"camera không dây\", \"máy ghi âm giấu kín\", \"xem camera\" và 15 từ khóa khác",
+          "estimated_saving_vnd": 1395340
+        },
+        {
+          "type": "SCALE_KEYWORDS",
+          "priority": "medium",
+          "title": "Tăng bid 1 keyword converting",
+          "detail": "Top converting: \"doscom\"",
+          "estimated_saving_vnd": 0
+        },
+        {
+          "type": "PAUSE_KEYWORDS",
+          "priority": "high",
+          "title": "Pause 1 keyword đã ADDED nhưng 0 conv",
+          "detail": "Top: \"camera năng lượng mặt trời\"",
+          "estimated_saving_vnd": 232915
         },
         {
           "type": "REPLACE_BANNERS",
@@ -3104,9 +1852,190 @@
       "orders_pancake_30d": 0,
       "roas_proxy": 0.0,
       "campaign_count": 1,
-      "keywords_count": 0,
+      "keywords_count": 24,
       "banners_count": 1,
-      "keywords": [],
+      "keywords": [
+        {
+          "text": "máy cạo râu",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 1224214.0,
+          "clicks_30d": 272,
+          "ctr_30d": 0.0458,
+          "conv_30d": 6.35,
+          "recommendation": "KEEP",
+          "reason": "Có 6.35 conv/30d, CTR 4.6%, giữ nguyên",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu panasonic",
+          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
+          "status": "NONE",
+          "spend_30d": 144240.0,
+          "clicks_30d": 33,
+          "ctr_30d": 0.0347,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 3.5%, giữ nguyên",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "mua máy cạo râu",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 48158.0,
+          "clicks_30d": 11,
+          "ctr_30d": 0.0965,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 9.7%, giữ nguyên",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "gillette styler",
+          "match_type": "EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 4990.0,
+          "clicks_30d": 1,
+          "ctr_30d": 0.1,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 10.0%, giữ nguyên",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu xiaomi chính hãng",
+          "match_type": "EXACT/PHRASE",
+          "status": "NONE",
+          "spend_30d": 3255.0,
+          "clicks_30d": 1,
+          "ctr_30d": 0.05,
+          "conv_30d": 1.0,
+          "recommendation": "KEEP",
+          "reason": "Có 1.0 conv/30d, CTR 5.0%, giữ nguyên",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu philips",
+          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
+          "status": "NONE",
+          "spend_30d": 159125.0,
+          "clicks_30d": 35,
+          "ctr_30d": 0.031,
+          "conv_30d": 0.0,
+          "recommendation": "ADD_NEGATIVE",
+          "reason": "Spend 159K, 35 click, 0 conv, chưa add negative",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "dao cạo râu",
+          "match_type": "EXACT/NEAR_PHRASE",
+          "status": "NONE",
+          "spend_30d": 63058.0,
+          "clicks_30d": 17,
+          "ctr_30d": 0.0127,
+          "conv_30d": 0.0,
+          "recommendation": "ADD_NEGATIVE",
+          "reason": "Spend 63K, 17 click, 0 conv, chưa add negative",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "may cao rau",
+          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
+          "status": "NONE",
+          "spend_30d": 58595.0,
+          "clicks_30d": 13,
+          "ctr_30d": 0.0458,
+          "conv_30d": 0.0,
+          "recommendation": "ADD_NEGATIVE",
+          "reason": "Spend 59K, 13 click, 0 conv, chưa add negative",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu xiaomi",
+          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
+          "status": "NONE",
+          "spend_30d": 58346.0,
+          "clicks_30d": 13,
+          "ctr_30d": 0.025,
+          "conv_30d": 0.0,
+          "recommendation": "ADD_NEGATIVE",
+          "reason": "Spend 58K, 13 click, 0 conv, chưa add negative",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu mini",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 109310.0,
+          "clicks_30d": 23,
+          "ctr_30d": 0.0509,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 109K, CTR 5.1%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu tốt nhất",
+          "match_type": "EXACT/NEAR_PHRASE/PHRASE",
+          "status": "NONE",
+          "spend_30d": 58920.0,
+          "clicks_30d": 13,
+          "ctr_30d": 0.067,
+          "conv_30d": 0.2,
+          "recommendation": "MONITOR",
+          "reason": "Spend 59K, CTR 6.7%, 0.2 conv — theo dõi thêm",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        },
+        {
+          "text": "máy cạo râu cao cấp",
+          "match_type": "EXACT",
+          "status": "ADDED/NONE",
+          "spend_30d": 49626.0,
+          "clicks_30d": 11,
+          "ctr_30d": 0.041,
+          "conv_30d": 0.0,
+          "recommendation": "MONITOR",
+          "reason": "Spend 50K, CTR 4.1%, 0.0 conv — theo dõi thêm",
+          "campaigns": [
+            "7/3/26 Search - Máy Cạo Râu",
+            "Shopping - 6/6 - ĐV"
+          ]
+        }
+      ],
       "banners": [
         {
           "ad_id": "799376286151",
@@ -3123,7 +2052,15 @@
           "reason": "CTR 10.77% tốt, 8,146 imp — giữ"
         }
       ],
-      "summary_actions": []
+      "summary_actions": [
+        {
+          "type": "ADD_NEGATIVE_KEYWORDS",
+          "priority": "high",
+          "title": "Add 4 negative keyword",
+          "detail": "Top: \"máy cạo râu philips\", \"dao cạo râu\", \"may cao rau\" và 1 từ khóa khác",
+          "estimated_saving_vnd": 339124
+        }
+      ]
     },
     "OTHER": {
       "display_name": "Khác",
@@ -3161,7 +2098,23 @@
       "revenue_30d": 412500000.0,
       "orders_30d": 165,
       "avg_order_value": 2500000.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "DA8.1",
@@ -3181,9 +2134,19 @@
       "avg_order_value": 1249624.0,
       "related_keywords_top_convert": [
         {
-          "text": "đinh vị nghe lén net",
+          "text": "ghi âm",
+          "conv_30d": 2.0,
+          "spend_30d": 1358375.0
+        },
+        {
+          "text": "máy ghi âm cuộc họp",
           "conv_30d": 1.0,
-          "spend_30d": 28461.0
+          "spend_30d": 107875.0
+        },
+        {
+          "text": "máy ghi âm cao cấp",
+          "conv_30d": 1.0,
+          "spend_30d": 75764.0
         }
       ]
     },
@@ -3194,7 +2157,23 @@
       "revenue_30d": 140000000.0,
       "orders_30d": 40,
       "avg_order_value": 3500000.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "D8 Pro",
@@ -3203,7 +2182,23 @@
       "revenue_30d": 50000000.0,
       "orders_30d": 3,
       "avg_order_value": 16666667.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "D2",
@@ -3212,7 +2207,23 @@
       "revenue_30d": 36400000.0,
       "orders_30d": 13,
       "avg_order_value": 2800000.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "D4",
@@ -3221,7 +2232,23 @@
       "revenue_30d": 30000000.0,
       "orders_30d": 5,
       "avg_order_value": 6000000.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "D3",
@@ -3230,7 +2257,23 @@
       "revenue_30d": 23880000.0,
       "orders_30d": 2,
       "avg_order_value": 11940000.0,
-      "related_keywords_top_convert": []
+      "related_keywords_top_convert": [
+        {
+          "text": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+          "conv_30d": 2.33,
+          "spend_30d": 192791.0
+        },
+        {
+          "text": "thiết bị phát hiện camera quay lén",
+          "conv_30d": 2.0,
+          "spend_30d": 122406.0
+        },
+        {
+          "text": "máy dò định vị trên xe ô tô",
+          "conv_30d": 1.0,
+          "spend_30d": 362938.0
+        }
+      ]
     },
     {
       "product": "Noma 922",
@@ -3250,11 +2293,6 @@
       "avg_order_value": 2658333.0,
       "related_keywords_top_convert": [
         {
-          "text": "máy cạo râu",
-          "conv_30d": 6.35,
-          "spend_30d": 1224214.0
-        },
-        {
           "text": "máy ghi âm sony",
           "conv_30d": 3.0,
           "spend_30d": 92676.0
@@ -3263,6 +2301,11 @@
           "text": "định vị",
           "conv_30d": 3.0,
           "spend_30d": 847489.0
+        },
+        {
+          "text": "thiết bị định vị xe máy",
+          "conv_30d": 2.0,
+          "spend_30d": 506919.0
         }
       ]
     },
@@ -3284,15 +2327,25 @@
       "avg_order_value": 1444444.0,
       "related_keywords_top_convert": [
         {
-          "text": "đinh vị nghe lén net",
+          "text": "ghi âm",
+          "conv_30d": 2.0,
+          "spend_30d": 1358375.0
+        },
+        {
+          "text": "máy ghi âm cuộc họp",
           "conv_30d": 1.0,
-          "spend_30d": 28461.0
+          "spend_30d": 107875.0
+        },
+        {
+          "text": "máy ghi âm cao cấp",
+          "conv_30d": 1.0,
+          "spend_30d": 75764.0
         }
       ]
     }
   ],
   "key_findings": [
-    "Tổng 20 action từ 9 category (urgent: 7)",
+    "Tổng 21 action từ 9 category (urgent: 8)",
     "Tiết kiệm tiềm năng: 11.8tr/30d",
     "Top SP revenue: Noma 911 (610tr, 2631 đơn)",
     "Search terms: 445 meaningful / 18,631 total",
