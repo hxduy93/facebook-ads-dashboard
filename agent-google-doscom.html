@@ -3,163 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Google Doscom — AI Insights</title>
+<title>Agent Google Doscom - AI Insights v3</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  .score-A { color: #10b981; }
-  .score-B { color: #3b82f6; }
-  .score-C { color: #f59e0b; }
-  .score-D { color: #f97316; }
-  .score-F { color: #ef4444; }
-  .bg-A { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-  .bg-B { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-  .bg-C { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-  .bg-D { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-  .bg-F { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-  .cat-KEYWORD { background: #dbeafe; color: #1e40af; }
-  .cat-CREATIVE { background: #fce7f3; color: #9d174d; }
-  .cat-BUDGET { background: #fef3c7; color: #854d0e; }
-  .cat-PLACEMENT { background: #d1fae5; color: #065f46; }
-  .cat-TREND { background: #e0e7ff; color: #3730a3; }
-  .status-OK { background: #d1fae5; color: #065f46; }
-  .status-WARN { background: #fef3c7; color: #854d0e; }
-  .status-CRITICAL { background: #fee2e2; color: #991b1b; }
-  .status-DATA_GAP { background: #e5e7eb; color: #4b5563; }
-  .loading { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
-  .spinner { border: 3px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+  .rec-KEEP { background: #d1fae5; color: #065f46; }
+  .rec-SCALE { background: #bbf7d0; color: #14532d; font-weight: bold; }
+  .rec-ADD_NEGATIVE { background: #fee2e2; color: #991b1b; font-weight: bold; }
+  .rec-PAUSE { background: #fecaca; color: #7f1d1d; font-weight: bold; }
+  .rec-REPLACE { background: #fed7aa; color: #9a3412; font-weight: bold; }
+  .rec-REVIEW { background: #fef3c7; color: #854d0e; }
+  .rec-MONITOR { background: #e5e7eb; color: #4b5563; }
+  .priority-high { background: #fee2e2; border-left: 4px solid #dc2626; }
+  .priority-medium { background: #fef3c7; border-left: 4px solid #d97706; }
+  .priority-low { background: #dbeafe; border-left: 4px solid #3b82f6; }
+  .score-A { color: #059669; } .score-B { color: #2563eb; } .score-C { color: #d97706; }
+  .score-D { color: #ea580c; } .score-F { color: #dc2626; }
+  .bg-A { background: linear-gradient(135deg, #10b981, #059669); }
+  .bg-B { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+  .bg-C { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .bg-D { background: linear-gradient(135deg, #f97316, #ea580c); }
+  .bg-F { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .cat-tab { cursor: pointer; transition: all 0.15s; }
+  .cat-tab:hover { background: #f3f4f6; }
+  .cat-tab.active { background: #2563eb; color: white; }
+  table { border-collapse: collapse; }
+  th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
+  th { background: #f9fafb; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; color: #4b5563; }
+  tbody tr:hover { background: #f9fafb; }
+  .truncate-term { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; }
+  .spinner { border: 3px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 60px auto; }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
 
-<header class="bg-white border-b shadow-sm sticky top-0 z-10">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+<header class="bg-white border-b shadow-sm sticky top-0 z-20">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
     <div class="flex items-center gap-3">
       <span class="text-2xl">🤖</span>
       <div>
         <h1 class="text-lg font-bold">Agent Google Doscom</h1>
-        <p class="text-xs text-gray-500">AI Insights · Google Ads MHDI · v2</p>
+        <p class="text-xs text-gray-500">AI Insights v3 · Phân tích chi tiết theo nhóm sản phẩm</p>
       </div>
     </div>
-    <div class="flex items-center gap-2 text-sm">
-      <a href="/" class="text-blue-600 hover:underline">← Dashboard chính</a>
+    <div class="flex items-center gap-3 text-sm">
+      <a href="/" class="text-blue-600 hover:underline">← Dashboard</a>
       <span class="text-gray-300">|</span>
       <button onclick="location.reload()" class="text-gray-600 hover:text-gray-900">🔄 Refresh</button>
     </div>
   </div>
 </header>
 
-<main id="main" class="max-w-6xl mx-auto px-4 py-6">
-  <div id="loading" class="loading"><div class="spinner"></div></div>
+<main id="main" class="max-w-7xl mx-auto px-4 py-6">
+  <div id="loading"><div class="spinner"></div></div>
 </main>
-
-<footer class="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-gray-400">
-  Generated bởi Cowork Scheduled Task · Chạy 3 ngày/lần lúc 7:30 sáng VN
-</footer>
 
 <script>
 const REPORT_URL = 'data/google-ads-daily-report.json?v=' + Date.now();
 
 function fmtVND(n) {
-  if (n == null) return '—';
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'tr';
-  if (n >= 1_000) return (n / 1_000).toFixed(0) + 'K';
+  if (n == null || n === 0) return '0';
+  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'tr';
+  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(0) + 'K';
   return Math.round(n).toLocaleString('vi-VN');
 }
-
-function fmtPct(n, digits = 2) {
-  if (n == null) return '—';
-  return (n * 100).toFixed(digits) + '%';
-}
-
-function escapeHtml(s) {
-  return (s ?? '').toString()
-    .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+function fmtInt(n) { return (n == null ? '—' : n.toLocaleString('vi-VN')); }
+function fmtPct(n, d = 2) { return n == null ? '—' : (n * 100).toFixed(d) + '%'; }
+function esc(s) {
+  return (s ?? '').toString().replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
 async function load() {
   try {
     const res = await fetch(REPORT_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const r = await res.json();
     render(r);
   } catch (e) {
     document.getElementById('main').innerHTML = `
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-        <h2 class="text-lg font-bold text-yellow-800">⏳ Báo cáo chưa sẵn sàng</h2>
-        <p class="text-sm text-yellow-700 mt-2">Cowork scheduled task chưa chạy lần đầu. Vào <b>Cowork → Scheduled → google-ads-daily-analyst</b> bấm <b>Run now</b> để sinh báo cáo.</p>
-        <p class="text-xs text-yellow-600 mt-3">Lỗi: ${escapeHtml(e.message)}</p>
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+        <h2 class="font-bold text-yellow-800">⏳ Báo cáo chưa sẵn sàng</h2>
+        <p class="text-sm text-yellow-700 mt-2">Chờ Cowork agent chạy lần đầu, hoặc bấm Run now.</p>
+        <p class="text-xs text-yellow-600 mt-2">${esc(e.message)}</p>
       </div>`;
   }
 }
 
+let currentCat = null;
+
 function render(r) {
-  const grade = r.grade || 'F';
-  const html = `
-    <!-- Header Score Card -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-${grade} text-white rounded-xl p-6 shadow-lg">
-        <p class="text-xs uppercase tracking-wide opacity-80">Overall Score</p>
-        <div class="flex items-baseline gap-2 mt-1">
-          <span class="text-5xl font-bold">${r.score}</span>
-          <span class="text-2xl opacity-80">/100</span>
+  const g = r.grade || 'F';
+  const cats = r.categories || {};
+  const catKeys = Object.keys(cats).filter(k => cats[k].ads_spend_30d > 0 || cats[k].keywords_count > 0 || cats[k].banners_count > 0);
+  if (!currentCat && catKeys.length) currentCat = catKeys[0];
+
+  document.getElementById('main').innerHTML = `
+    <!-- Summary -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+      <div class="bg-${g} text-white rounded-xl p-4 shadow">
+        <p class="text-xs opacity-80 uppercase">Score</p>
+        <div class="flex items-baseline gap-1 mt-1">
+          <span class="text-4xl font-bold">${r.score}</span><span class="opacity-80">/100</span>
         </div>
-        <p class="text-lg font-semibold mt-1">Grade ${grade}</p>
-        <p class="text-xs opacity-80 mt-2">Kỳ: ${r.period?.start} → ${r.period?.end}</p>
+        <p class="text-sm mt-1 font-semibold">Grade ${g}</p>
       </div>
-
-      <div class="md:col-span-2 bg-white rounded-xl p-6 shadow">
-        <p class="text-xs uppercase text-gray-500">Headline</p>
-        <p class="text-base font-semibold mt-2">${escapeHtml(r.headline || '')}</p>
-        <p class="text-xs uppercase text-gray-500 mt-4">Verdict</p>
-        <p class="text-sm mt-2 text-gray-700 leading-relaxed">${escapeHtml(r.verdict || '')}</p>
-        <p class="text-xs text-gray-400 mt-3">Generated: ${r.generated_at || '—'}</p>
+      <div class="bg-white rounded-xl p-4 shadow">
+        <p class="text-xs uppercase text-gray-500">ROAS proxy</p>
+        <p class="text-3xl font-bold mt-1 ${r.totals?.roas_overall < 1 ? 'text-red-600' : 'text-gray-900'}">${r.totals?.roas_overall || 0}x</p>
+        <p class="text-xs text-gray-500 mt-1">Spend: ${fmtVND(r.totals?.ads_spend_30d)}đ · Rev: ${fmtVND(r.totals?.website_revenue_30d)}đ</p>
       </div>
-    </section>
-
-    <!-- Top 5 Actions -->
-    <section class="mb-6">
-      <h2 class="text-xl font-bold mb-3">⚡ Top 5 khuyến nghị (5 category)</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        ${(r.top_actions || []).map(a => `
-          <div class="bg-white rounded-lg p-4 shadow border-l-4 border-${a.risk === 'low' ? 'green-400' : a.risk === 'medium' ? 'yellow-400' : 'red-400'}">
-            <div class="flex items-center justify-between mb-2">
-              <span class="cat-${a.category} text-xs font-bold px-2 py-1 rounded">${a.category}</span>
-              <span class="text-xs text-gray-500">#${a.priority} · Risk: ${a.risk}</span>
-            </div>
-            <p class="font-semibold text-sm">${escapeHtml(a.action)}</p>
-            <p class="text-xs text-gray-600 mt-2 leading-relaxed">${escapeHtml(a.reason)}</p>
-            <div class="flex items-center justify-between mt-3 pt-2 border-t text-xs">
-              <span class="text-green-700 font-semibold">💰 ${a.estimated_saving_vnd > 0 ? fmtVND(a.estimated_saving_vnd) + 'đ/30d' : '—'}</span>
-              <span class="text-gray-500">⏱ ${escapeHtml(a.time_cost || '')}</span>
-            </div>
-          </div>
-        `).join('')}
+      <div class="bg-white rounded-xl p-4 shadow">
+        <p class="text-xs uppercase text-gray-500">Hành động</p>
+        <p class="text-3xl font-bold mt-1">${r.totals?.total_actions || 0}</p>
+        <p class="text-xs text-red-600 mt-1">${r.totals?.urgent_actions || 0} urgent (priority cao)</p>
+      </div>
+      <div class="bg-white rounded-xl p-4 shadow">
+        <p class="text-xs uppercase text-gray-500">Tiết kiệm tiềm năng</p>
+        <p class="text-3xl font-bold mt-1 text-green-600">${fmtVND(r.totals?.estimated_total_saving_vnd)}đ</p>
+        <p class="text-xs text-gray-500 mt-1">/30 ngày nếu apply hết</p>
       </div>
     </section>
 
-    <!-- Scorecard -->
-    <section class="mb-6">
-      <h2 class="text-xl font-bold mb-3">📋 Scorecard 10 dimensions</h2>
-      <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="w-full text-sm">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="text-left px-4 py-2">Dimension</th>
-              <th class="text-center px-4 py-2">Score</th>
-              <th class="text-center px-4 py-2">Status</th>
-              <th class="text-left px-4 py-2">Note</th>
-            </tr>
-          </thead>
+    <!-- Headline + Verdict -->
+    <section class="bg-white rounded-xl p-4 shadow mb-5">
+      <p class="font-semibold text-sm">${esc(r.headline)}</p>
+      <p class="text-sm text-gray-700 mt-2 leading-relaxed">${esc(r.verdict)}</p>
+      <p class="text-xs text-gray-400 mt-2">Generated: ${r.generated_at} · Kỳ: ${r.period?.start} → ${r.period?.end}</p>
+    </section>
+
+    <!-- Products Ranking -->
+    <section class="bg-white rounded-xl p-4 shadow mb-5">
+      <h2 class="text-lg font-bold mb-3">🏆 Xếp hạng Sản phẩm theo Doanh thu (Pancake 30d)</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead><tr>
+            <th>#</th><th>Sản phẩm</th><th>Category</th><th class="text-right">Doanh thu</th>
+            <th class="text-right">Đơn</th><th class="text-right">AOV</th><th>Top keyword có conv</th>
+          </tr></thead>
           <tbody>
-            ${(r.score_breakdown || []).map((s, i) => `
-              <tr class="${i % 2 ? 'bg-gray-50' : ''}">
-                <td class="px-4 py-2 font-medium">${escapeHtml(s.dimension)}</td>
-                <td class="px-4 py-2 text-center"><span class="font-bold">${s.score}</span>/${s.max}</td>
-                <td class="px-4 py-2 text-center"><span class="status-${s.status} text-xs font-bold px-2 py-1 rounded">${s.status}</span></td>
-                <td class="px-4 py-2 text-xs text-gray-600">${escapeHtml(s.note || '')}</td>
+            ${(r.products_ranking || []).map((p, i) => `
+              <tr>
+                <td class="text-gray-500">${i + 1}</td>
+                <td class="font-semibold">${esc(p.product)}</td>
+                <td><span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">${esc(p.category_name)}</span></td>
+                <td class="text-right font-semibold text-green-700">${fmtVND(p.revenue_30d)}đ</td>
+                <td class="text-right">${fmtInt(p.orders_30d)}</td>
+                <td class="text-right text-xs text-gray-500">${fmtVND(p.avg_order_value)}đ</td>
+                <td class="text-xs">${(p.related_keywords_top_convert || []).map(k => `<span class="inline-block bg-green-50 text-green-800 px-1.5 py-0.5 rounded mr-1 mb-0.5">${esc(k.text)} (${k.conv_30d})</span>`).join('') || '<span class="text-gray-400">—</span>'}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -167,172 +158,146 @@ function render(r) {
       </div>
     </section>
 
-    <!-- Search Term Deep Dive -->
-    <section class="mb-6">
-      <h2 class="text-xl font-bold mb-3">🔑 Search Term Deep Dive</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        ${renderTermBox('🟢 Top Converting', r.search_term_deep_dive?.top_converting || [], 'conversions_30d', 'conv')}
-        ${renderTermBox('🔴 Top Waste', r.search_term_deep_dive?.top_waste || [], 'spend_30d', 'đ')}
-        ${renderTermBox('⚠ Negative Gap', r.search_term_deep_dive?.negative_gap || [], 'spend_30d', 'đ')}
+    <!-- Category Tabs -->
+    <section class="bg-white rounded-xl p-4 shadow mb-5">
+      <h2 class="text-lg font-bold mb-3">📊 Phân tích chi tiết theo Nhóm sản phẩm</h2>
+      <div class="flex flex-wrap gap-2 mb-4 border-b pb-3">
+        ${catKeys.map(k => {
+          const c = cats[k];
+          const isActive = k === currentCat;
+          const hasUrgent = (c.summary_actions || []).some(a => a.priority === 'high');
+          return `<button class="cat-tab ${isActive ? 'active' : 'bg-gray-100'} rounded-lg px-3 py-1.5 text-sm font-medium" onclick="switchCat('${k}')">${esc(c.display_name)}${hasUrgent ? ' <span class="text-red-500">●</span>' : ''}</button>`;
+        }).join('')}
       </div>
-      ${r.search_term_deep_dive?.match_type_breakdown ? `
-        <div class="mt-4 bg-white rounded-lg p-4 shadow">
-          <h3 class="text-sm font-bold mb-2">Match Type Breakdown</h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-            ${Object.entries(r.search_term_deep_dive.match_type_breakdown).map(([mt, m]) => `
-              <div class="border rounded p-2">
-                <p class="font-bold">${escapeHtml(mt)}</p>
-                <p class="text-xs text-gray-600">${fmtVND(m.spend_30d)}đ · ${m.clicks_30d} click · ${m.conversions_30d} conv · ${m.term_count} term</p>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      ` : ''}
+      <div id="cat-content">${renderCategory(cats[currentCat], currentCat)}</div>
     </section>
 
-    <!-- Placement & Banner -->
-    <section class="mb-6">
-      <h2 class="text-xl font-bold mb-3">📍 Placement & Banner Deep Dive</h2>
-      <div class="bg-white rounded-lg p-4 shadow mb-3">
-        <h3 class="text-sm font-bold mb-2">Network Breakdown</h3>
-        <p class="text-sm text-gray-700">${escapeHtml(r.placement_banner_deep_dive?.network_breakdown_summary || '')}</p>
-        ${r.placement_banner_deep_dive?.network_breakdown ? `
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 text-sm">
-            ${Object.entries(r.placement_banner_deep_dive.network_breakdown).map(([nt, m]) => `
-              <div class="border rounded p-2">
-                <p class="font-bold text-xs">${escapeHtml(nt)}</p>
-                <p class="text-xs text-gray-600 mt-1">Spend: ${fmtVND(m.spend_30d)}đ</p>
-                <p class="text-xs text-gray-600">Clicks: ${m.clicks_30d?.toLocaleString()} · CTR ${fmtPct(m.ctr_30d)}</p>
+    <!-- Key Findings -->
+    <section class="bg-blue-50 rounded-xl p-4 mb-5">
+      <h3 class="font-bold mb-2">🔑 Key Findings</h3>
+      <ul class="text-sm space-y-1">
+        ${(r.key_findings || []).filter(x=>x).map(f => `<li>• ${esc(f)}</li>`).join('')}
+      </ul>
+    </section>
+
+    <p class="text-center text-xs text-gray-400 mt-6">Agent Google Doscom v${r.version || '3.0'} · Chạy 3 ngày/lần lúc 7:30 sáng VN</p>
+  `;
+}
+
+function switchCat(key) {
+  currentCat = key;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.add('bg-gray-100'));
+  event.target.classList.remove('bg-gray-100');
+  event.target.classList.add('active');
+  fetch(REPORT_URL).then(r => r.json()).then(data => {
+    document.getElementById('cat-content').innerHTML = renderCategory(data.categories[key], key);
+  });
+}
+
+function renderCategory(c, catKey) {
+  if (!c) return '<p class="text-gray-500">Không có data.</p>';
+
+  return `
+    <!-- Category Overview -->
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">Sản phẩm</p>
+        <p class="text-xs font-semibold mt-1">${(c.products || []).join(', ') || '—'}</p>
+      </div>
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">Ads Spend 30d</p>
+        <p class="font-bold">${fmtVND(c.ads_spend_30d)}đ</p>
+      </div>
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">Revenue (Pancake)</p>
+        <p class="font-bold text-green-700">${fmtVND(c.revenue_pancake_30d)}đ</p>
+      </div>
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">ROAS</p>
+        <p class="font-bold ${c.roas_proxy >= 1.5 ? 'text-green-700' : 'text-red-600'}">${c.roas_proxy}x</p>
+      </div>
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">Đơn</p>
+        <p class="font-bold">${fmtInt(c.orders_pancake_30d)}</p>
+      </div>
+      <div class="bg-gray-50 rounded p-2">
+        <p class="text-xs text-gray-500">Avg CTR</p>
+        <p class="font-bold">${fmtPct(c.ads_ctr_30d)}</p>
+      </div>
+    </div>
+
+    <!-- Summary Actions -->
+    ${(c.summary_actions || []).length ? `
+      <div class="mb-4">
+        <h3 class="font-bold mb-2 text-sm">⚡ Hành động đề xuất cho ${esc(c.display_name)}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          ${c.summary_actions.map(a => `
+            <div class="priority-${a.priority} rounded p-3">
+              <div class="flex justify-between items-start gap-2">
+                <p class="font-semibold text-sm">${esc(a.title)}</p>
+                <span class="text-xs px-2 py-0.5 rounded ${a.priority === 'high' ? 'bg-red-200 text-red-800' : a.priority === 'medium' ? 'bg-yellow-200 text-yellow-800' : 'bg-blue-200 text-blue-800'}">${a.priority}</span>
               </div>
-            `).join('')}
-          </div>
-        ` : ''}
+              <p class="text-xs text-gray-700 mt-1 leading-relaxed">${esc(a.detail)}</p>
+              ${a.estimated_saving_vnd > 0 ? `<p class="text-xs text-green-700 font-semibold mt-1">💰 Tiết kiệm: ${fmtVND(a.estimated_saving_vnd)}đ/30d</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
       </div>
+    ` : '<p class="text-xs text-gray-500 mb-4">Không có hành động cần thực hiện.</p>'}
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        ${renderPlacementBox('🔴 Top Waste Placements (spend, 0 click)', r.placement_banner_deep_dive?.top_waste_placements || [])}
-        ${renderPlacementBox('⚠ Low CTR Placements', r.placement_banner_deep_dive?.low_ctr_placements || [])}
-      </div>
-
-      ${r.placement_banner_deep_dive?.worst_banners?.length ? `
-        <div class="mt-3 bg-white rounded-lg p-4 shadow">
-          <h3 class="text-sm font-bold mb-2">🎨 Worst Performing Banners (review trong Google Ads UI)</h3>
-          <table class="w-full text-xs">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="text-left px-2 py-1">Banner</th>
-                <th class="text-left px-2 py-1">Campaign</th>
-                <th class="text-right px-2 py-1">Spend</th>
-                <th class="text-right px-2 py-1">Impressions</th>
-                <th class="text-right px-2 py-1">CTR</th>
-                <th class="text-left px-2 py-1">Ad ID</th>
-              </tr>
-            </thead>
+    <!-- Keywords Table -->
+    <div class="mb-4">
+      <h3 class="font-bold mb-2 text-sm">🔑 Keywords (${c.keywords_count || 0} meaningful, hiển thị top ${(c.keywords || []).length})</h3>
+      ${(c.keywords || []).length === 0 ? '<p class="text-xs text-gray-400">Không có keyword meaningful.</p>' : `
+        <div class="overflow-x-auto border rounded">
+          <table class="w-full">
+            <thead><tr>
+              <th>Keyword</th><th>Match</th><th>Status</th>
+              <th class="text-right">Spend</th><th class="text-right">Click</th>
+              <th class="text-right">CTR</th><th class="text-right">Conv</th>
+              <th>Recommendation</th><th>Lý do</th>
+            </tr></thead>
             <tbody>
-              ${r.placement_banner_deep_dive.worst_banners.map((b, i) => `
-                <tr class="${i % 2 ? 'bg-gray-50' : ''}">
-                  <td class="px-2 py-1 font-mono">${escapeHtml(b.ad_name || '(no name)')}</td>
-                  <td class="px-2 py-1">${escapeHtml(b.campaign || '')}</td>
-                  <td class="px-2 py-1 text-right">${fmtVND(b.spend_30d)}đ</td>
-                  <td class="px-2 py-1 text-right">${b.impressions_30d?.toLocaleString()}</td>
-                  <td class="px-2 py-1 text-right">${fmtPct(b.ctr_30d)}</td>
-                  <td class="px-2 py-1 text-gray-500">${escapeHtml(b.ad_id)}</td>
+              ${c.keywords.map(k => `
+                <tr>
+                  <td><span class="truncate-term" title="${esc(k.text)}">${esc(k.text)}</span></td>
+                  <td class="text-xs">${esc(k.match_type)}</td>
+                  <td class="text-xs">${esc(k.status)}</td>
+                  <td class="text-right">${fmtVND(k.spend_30d)}đ</td>
+                  <td class="text-right">${fmtInt(k.clicks_30d)}</td>
+                  <td class="text-right">${fmtPct(k.ctr_30d)}</td>
+                  <td class="text-right font-bold ${k.conv_30d > 0 ? 'text-green-700' : 'text-gray-400'}">${k.conv_30d}</td>
+                  <td><span class="rec-${k.recommendation} text-xs px-2 py-0.5 rounded font-semibold">${k.recommendation}</span></td>
+                  <td class="text-xs text-gray-600">${esc(k.reason)}</td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
         </div>
-      ` : ''}
-    </section>
+      `}
+    </div>
 
-    <!-- Warnings + Evidence -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      <div class="bg-white rounded-lg p-4 shadow">
-        <h3 class="text-sm font-bold mb-2">⚠ Cảnh báo</h3>
-        <ul class="text-xs space-y-2 text-gray-700">
-          ${(r.warnings || []).map(w => `<li class="flex gap-2"><span class="text-yellow-500">●</span><span>${escapeHtml(w)}</span></li>`).join('') || '<li class="text-gray-400">Không có cảnh báo.</li>'}
-        </ul>
-      </div>
-
-      <div class="bg-white rounded-lg p-4 shadow">
-        <h3 class="text-sm font-bold mb-2">📎 Evidence</h3>
-        <ul class="text-xs space-y-2 text-gray-700">
-          ${(r.evidence || []).map(e => `<li class="flex gap-2"><span class="text-blue-500">●</span><span>${escapeHtml(e)}</span></li>`).join('')}
-        </ul>
-      </div>
-    </section>
-
-    <!-- Pause Candidates -->
-    ${r.pause_candidates?.length ? `
-      <section class="mb-6">
-        <h2 class="text-xl font-bold mb-3">⏸ Ứng cử viên Pause</h2>
-        <div class="bg-white rounded-lg p-4 shadow">
-          <table class="w-full text-xs">
-            <thead class="bg-gray-100">
-              <tr>
-                <th class="text-left px-2 py-1">Campaign</th>
-                <th class="text-left px-2 py-1">Category</th>
-                <th class="text-right px-2 py-1">Spend 30d</th>
-                <th class="text-right px-2 py-1">CTR</th>
-                <th class="text-left px-2 py-1">Reason</th>
-              </tr>
-            </thead>
+    <!-- Banners Table -->
+    <div class="mb-4">
+      <h3 class="font-bold mb-2 text-sm">🎨 Banners / Ads (${c.banners_count || 0} meaningful, hiển thị top ${(c.banners || []).length})</h3>
+      ${(c.banners || []).length === 0 ? '<p class="text-xs text-gray-400">Không có banner meaningful.</p>' : `
+        <div class="overflow-x-auto border rounded">
+          <table class="w-full">
+            <thead><tr>
+              <th>Ad name</th><th>Format</th><th>Size</th><th>Campaign</th>
+              <th class="text-right">Spend</th><th class="text-right">Imp</th>
+              <th class="text-right">Click</th><th class="text-right">CTR</th>
+              <th>Rec</th><th>Lý do</th>
+            </tr></thead>
             <tbody>
-              ${r.pause_candidates.map((c, i) => `
-                <tr class="${i % 2 ? 'bg-gray-50' : ''}">
-                  <td class="px-2 py-1 font-medium">${escapeHtml(c.campaign)}</td>
-                  <td class="px-2 py-1">${escapeHtml(c.category || '')}</td>
-                  <td class="px-2 py-1 text-right">${fmtVND(c.spend_30d)}đ</td>
-                  <td class="px-2 py-1 text-right">${fmtPct(c.ctr_30d)}</td>
-                  <td class="px-2 py-1 text-gray-600">${escapeHtml(c.reason || '')}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    ` : ''}
-  `;
-  document.getElementById('main').innerHTML = html;
-}
-
-function renderTermBox(title, items, valueKey, valueSuffix) {
-  return `
-    <div class="bg-white rounded-lg p-4 shadow">
-      <h3 class="text-sm font-bold mb-2">${title}</h3>
-      ${items.length === 0 ? '<p class="text-xs text-gray-400">Rỗng</p>' : `
-        <ul class="text-xs space-y-2">
-          ${items.slice(0, 5).map(t => `
-            <li class="border-b pb-1 last:border-0">
-              <p class="font-medium">"${escapeHtml(t.search_term)}"</p>
-              <p class="text-gray-500">${fmtVND(t[valueKey])}${valueSuffix} · CTR ${fmtPct(t.ctr_30d)} · ${(t.match_types || []).join('/')}</p>
-            </li>
-          `).join('')}
-        </ul>
-      `}
-    </div>
-  `;
-}
-
-function renderPlacementBox(title, items) {
-  return `
-    <div class="bg-white rounded-lg p-4 shadow">
-      <h3 class="text-sm font-bold mb-2">${title}</h3>
-      ${items.length === 0 ? '<p class="text-xs text-gray-400">Rỗng</p>' : `
-        <ul class="text-xs space-y-2">
-          ${items.slice(0, 5).map(p => `
-            <li class="border-b pb-1 last:border-0">
-              <p class="font-mono truncate" title="${escapeHtml(p.placement)}">${escapeHtml(p.placement)}</p>
-              <p class="text-gray-500">${fmtVND(p.spend_30d)}đ · ${p.clicks_30d} click · CTR ${fmtPct(p.ctr_30d)} · ${escapeHtml(p.placement_type || '')}</p>
-            </li>
-          `).join('')}
-        </ul>
-      `}
-    </div>
-  `;
-}
-
-load();
-</script>
-</body>
-</html>
+              ${c.banners.map(b => `
+                <tr>
+                  <td class="font-mono text-xs" title="${esc(b.ad_id)}">${esc(b.ad_name)}</td>
+                  <td class="text-xs">${esc(b.ad_format)}</td>
+                  <td class="text-xs">${esc(b.current_size)}</td>
+                  <td class="text-xs truncate-term" title="${esc(b.campaign)}">${esc(b.campaign)}</td>
+                  <td class="text-right">${fmtVND(b.spend_30d)}đ</td>
+                  <td class="text-right">${fmtInt(b.impressions_30d)}</td>
+                  <td class="text-right">${fmtInt(b.clicks_30d)}</td>
+                  <td cl
