@@ -902,16 +902,12 @@ function FacebookAdsDashboard() {
             >
               <Megaphone /> Tạo quảng cáo
             </button>
-            <button
-              onClick={() => setCurrentView("agent-google")}
-              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
-                currentView === "agent-google"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
-              }`}
+            <a
+              href="/agent-google-doscom.html"
+              className="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 transition flex items-center gap-2"
             >
-              <BarChart3 /> Agent Google Doscom
-            </button>
+              <BarChart3 /> Agent Google Doscom ↗
+            </a>
           </nav>
         </div>
 
@@ -923,9 +919,6 @@ function FacebookAdsDashboard() {
           <AdsCreatorPanel />
         )}
 
-        {currentView === "agent-google" && (
-          <AgentGoogleView />
-        )}
 
         {currentView === "main" && (<>
 
@@ -1344,18 +1337,6 @@ const DOSCOM_COUNTRIES = [
   { code: "DE", name: "Đức" },
   { code: "FR", name: "Pháp" },
 ]
-
-// AGENT GOOGLE VIEW - embed agent-google-doscom.html qua iframe
-function AgentGoogleView() {
-  return React.createElement("div", { className: "bg-white rounded-xl shadow-sm overflow-hidden" },
-    React.createElement("iframe", {
-      src: "agent-google-doscom.html",
-      title: "Agent Google Doscom",
-      className: "w-full",
-      style: { minHeight: "calc(100vh - 180px)", border: 0 }
-    })
-  );
-}
 
 function AdsCreatorPanel() {
   // ── Product ──
@@ -5488,13 +5469,4 @@ function PerformanceAnalysis({ kpis, weekComp, productsData, campaignsFiltered, 
 // RENDER — render directly from the baked-in snapshot
 // =============================================================
 // Live-fetch via Netlify Function đã bị tắt (function chưa deploy được nên
-// cứ trả 404 và hiện banner đỏ). Dashboard lấy dữ liệu trực tiếp từ DATA
-// đã được GitHub Actions cron inject mỗi 30 phút — đủ tươi cho nhu cầu
-// của Facebook Ads (Meta API cũng không realtime).
-const rootEl = document.getElementById('root');
-ReactDOM.createRoot(rootEl).render(React.createElement(FacebookAdsDashboard));
-
-</script>
-</body>
-</html>
-  
+// cứ trả 404 và hiện banner đỏ). Dashboard lấ
