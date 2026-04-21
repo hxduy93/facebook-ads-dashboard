@@ -66,10 +66,10 @@ function compareFn(c,p){function pct(a,b){if(!b)return null;return (a-b)/b*100;}
 
 
 function renderProductRanking(){
-  if(\!REPORT) return;
+  if(!REPORT) return;
   var tp = REPORT.time_periods || {};
   var cur = tp[selectedPeriod];
-  if(\!cur){ return; }
+  if(!cur){ return; }
   var prev = cur.compare_to ? tp[cur.compare_to] : null;
   var tp_prods = cur.top_products || [];
   // Map prev for compare
@@ -100,7 +100,7 @@ function renderProductRanking(){
     if(prev) h += '<td class="t-right">'+fmtChange(ch)+'</td>';
     h += '</tr>';
   }
-  if(\!tp_prods.length) h += '<tr><td colspan="7" class="text-gray" style="text-align:center">Không có đơn hàng trong kỳ này.</td></tr>';
+  if(!tp_prods.length) h += '<tr><td colspan="7" class="text-gray" style="text-align:center">Không có đơn hàng trong kỳ này.</td></tr>';
   h += '</tbody></table></div>';
   var container = document.getElementById('product-ranking-container');
   if(container) container.innerHTML = h;
