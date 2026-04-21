@@ -111,6 +111,35 @@ function renderTimeFilterSection(r){
     }
     h+='</tbody></table></div>';
   }
+  // Top products trong period
+  var tp_prods = cur.top_products || [];
+  if(tp_prods.length){
+    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Top sản phẩm trong kỳ (3 nguồn: Website + Hotline + Zalo OA)</h3>';
+    h+='<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th>';
+    if(prev){h+='<th class="t-right">Δ Doanh thu vs kỳ trước</th>';}
+    h+='</tr></thead><tbody>';
+    var prev_map = {};
+    if(prev && prev.top_products){
+      for(var pi=0;pi<prev.top_products.length;pi++){ prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
+    }
+    for(var pi2=0;pi2<tp_prods.length;pi2++){
+      var pp = tp_prods[pi2];
+      h+='<tr><td class="text-gray">'+(pi2+1)+'</td><td class="font-bold">'+esc(pp.product)+'</td>';
+      h+='<td class="t-right text-green">'+fmtVND(pp.revenue)+'đ</td>';
+      h+='<td class="t-right">'+fmtInt(pp.orders)+'</td>';
+      if(prev){
+        var pr_prev = prev_map[pp.product];
+        var ch = (pr_prev && pr_prev.revenue) ? ((pp.revenue - pr_prev.revenue) / pr_prev.revenue * 100) : null;
+        h+='<td class="t-right">'+fmtChange(ch)+'</td>';
+      }
+      h+='</tr>';
+    }
+    h+='</tbody></table></div>';
+  }
+
+  // Note về keyword/banner không filter theo period
+  h+='<p class="text-xs text-gray" style="margin-top:12px;padding:8px;background:#f9fafb;border-radius:4px">Lưu ý: Bộ lọc thời gian ảnh hưởng các số liệu phía trên (chi phí, doanh thu, đơn) và bảng Top sản phẩm. Các bảng Keywords/Banners/Placements/Suggestions ở dưới là <strong>tổng hợp 30 ngày</strong> vì Windsor.ai free trial không export dữ liệu daily cho keyword/banner. Nếu cần filter daily cho keyword/banner, phải nâng cấp Windsor gói trả phí hoặc chuyển sang Google Ads API trực tiếp.</p>';
+
   document.getElementById("time-filter-content").innerHTML=h;
 }
 

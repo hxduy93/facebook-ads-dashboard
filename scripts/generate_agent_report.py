@@ -342,28 +342,34 @@ def build_product_ranking(rev_data, st_data, keywords_by_cat):
         for prod in meta["products"]:
             product_to_cat[prod] = cat
 
+    # Merge products từ 3 source: WEBSITE + ZALO_OA + HOTLINE
+    source_groups = rev_data.get("source_groups", {})
+    merged_products = {}  # prod_name -> {"total", "orders", "by_date"}
+    for src_name in ["WEBSITE", "ZALO_OA", "HOTLINE"]:
+        s = source_groups.get(src_name, {})
+        src_prods = s.get("products", {}) or {}
+        for prod_name, pd in src_prods.items():
+            if prod_name not in merged_products:
+                merged_products[prod_name] = {"total": 0, "orders": 0, "by_date": {}}
+            merged_products[prod_name]["total"] += pd.get("total", 0) or 0
+            merged_products[prod_name]["orders"] += pd.get("orders", 0) or 0
+            for d, v in (pd.get("by_date", {}) or {}).items():
+                merged_products[prod_name]["by_date"][d] = merged_products[prod_name]["by_date"].get(d, 0) + v
+
     ranking = []
-    for prod_name, p in products.items():
+    # Dùng merged_products thay vì products cũ để loại DUY/PN
+    all_products = set(list(products.keys()) + list(merged_products.keys()))
+    for prod_name in all_products:
         cat = product_to_cat.get(prod_name, "OTHER")
         cat_keywords = keywords_by_cat.get(cat, [])
 
-        # Revenue từ 3 nguồn (nếu có by_source data)
-        by_source = p.get("by_source", {}) or {}
-        if by_source:
-            rev_3src = 0
-            orders_3src = 0
-            for src_name in ["WEBSITE", "HOTLINE", "ZALO_OA"]:
-                s = by_source.get(src_name) or by_source.get(src_name.lower()) or {}
-                rev_3src += s.get("revenue", 0) or s.get("total", 0) or 0
-                orders_3src += s.get("orders", 0) or 0
-            # Nếu by_source có data nhưng 3src = 0 thì fallback
-            if rev_3src == 0:
-                rev_3src = p.get("total", 0)
-                orders_3src = p.get("orders", 0)
-        else:
-            # Fallback: dùng total của product (chưa biết có bao gồm DUY/PN staff không)
-            rev_3src = p.get("total", 0)
-            orders_3src = p.get("orders", 0)
+        mp = merged_products.get(prod_name, {"total": 0, "orders": 0})
+        rev_3src = mp["total"]
+        orders_3src = mp["orders"]
+
+        # Skip nếu không có revenue từ 3 source
+        if rev_3src == 0 and orders_3src == 0:
+            continue
 
         linked_kws = sorted(
             [k for k in cat_keywords if k["conv_30d"] > 0],
@@ -1109,24 +1115,34 @@ def compute_period_totals(ga_data, rev_data, start, end):
         per_cat[cat]["clicks"] += c
         per_cat[cat]["impressions"] += i
 
-    # Revenue từ Pancake WEBSITE source
+    # Revenue từ Pancake 3 sources: WEBSITE + ZALO_OA + HOTLINE (loại DUY/PN)
     groups = rev_data.get("source_groups", {})
-    website = groups.get("WEBSITE", {})
-    rsbd = website.get("order_revenue_by_status_by_date", {})
-    cbsd = website.get("order_count_by_status_by_date", {})
     total_rev = 0
     total_orders = 0
-    for st in ["delivered", "other"]:
-        for d, v in (rsbd.get(st) or {}).items():
-            if start <= d <= end:
-                total_rev += v
-        for d, c in (cbsd.get(st) or {}).items():
-            if start <= d <= end:
-                total_orders += c
+    for src_name in ["WEBSITE", "ZALO_OA", "HOTLINE"]:
+        s = groups.get(src_name, {})
+        rsbd = s.get("order_revenue_by_status_by_date", {}) or {}
+        cbsd = s.get("order_count_by_status_by_date", {}) or {}
+        for st in ["delivered", "other"]:
+            for d, v in (rsbd.get(st) or {}).items():
+                if start <= d <= end:
+                    total_rev += v
+            for d, c in (cbsd.get(st) or {}).items():
+                if start <= d <= end:
+                    total_orders += c
 
-    # Revenue per product theo category - dùng products by_date
-    products = rev_data.get("products", {})
-    for prod_name, p in products.items():
+    # Revenue per product theo category - merge 3 sources
+    merged_products = {}
+    for src_name in ["WEBSITE", "ZALO_OA", "HOTLINE"]:
+        s = groups.get(src_name, {})
+        src_prods = s.get("products", {}) or {}
+        for prod_name, pd in src_prods.items():
+            if prod_name not in merged_products:
+                merged_products[prod_name] = {"by_date": {}}
+            for d, v in (pd.get("by_date", {}) or {}).items():
+                merged_products[prod_name]["by_date"][d] = merged_products[prod_name]["by_date"].get(d, 0) + v
+
+    for prod_name, p in merged_products.items():
         # Map product → category
         cat = "OTHER"
         for ck, meta in CATEGORY_META.items():
@@ -1160,6 +1176,24 @@ def compute_period_totals(ga_data, rev_data, start, end):
             "roas": round(m_roas, 2),
         }
 
+    # Top products trong period này (3 source)
+    top_prods = []
+    for prod_name, pp in merged_products.items():
+        by_date = pp.get("by_date", {}) or {}
+        prev_rev = 0
+        prev_orders = 0
+        for d, v in by_date.items():
+            if start <= d <= end:
+                prev_rev += v
+                prev_orders += 1
+        if prev_rev > 0 or prev_orders > 0:
+            top_prods.append({
+                "product": prod_name,
+                "revenue": round(prev_rev, 0),
+                "orders": prev_orders,
+            })
+    top_prods.sort(key=lambda x: -x["revenue"])
+
     return {
         "date_range": {"start": start, "end": end},
         "totals": {
@@ -1173,6 +1207,7 @@ def compute_period_totals(ga_data, rev_data, start, end):
             "roas": round(roas, 2),
         },
         "per_category": per_cat_out,
+        "top_products": top_prods,
     }
 
 
