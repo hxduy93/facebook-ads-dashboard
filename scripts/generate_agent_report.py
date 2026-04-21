@@ -151,8 +151,8 @@ def analyze_keywords_by_category(st_data, campaign_to_cat):
     by_cat = defaultdict(list)
 
     for term_text, m in terms.items():
-        # Filter: chỉ lấy term đủ "ý nghĩa" (spend >= 30k hoặc clicks >= 5 hoặc conversions >= 1)
-        if not (m["spend_30d"] >= 30_000 or m["clicks_30d"] >= 5 or m["conversions_30d"] >= 1):
+        # Filter: hiển thị hết keyword đang chạy (có spend hoặc clicks hoặc conversions)
+        if not (m["spend_30d"] > 0 or m["clicks_30d"] > 0 or m["conversions_30d"] > 0):
             continue
 
         # Xác định category qua campaigns
@@ -180,7 +180,13 @@ def analyze_keywords_by_category(st_data, campaign_to_cat):
     # Sort per cat: priority actions trên đầu (SCALE/KEEP đầu, rồi ADD_NEGATIVE/PAUSE/REVIEW)
     priority_order = {"SCALE": 0, "KEEP": 1, "ADD_NEGATIVE": 2, "PAUSE": 3, "REVIEW": 4, "MONITOR": 5}
     for cat in by_cat:
+        # Sort theo priority action trước
         by_cat[cat].sort(key=lambda k: (priority_order.get(k["recommendation"], 99), -k["spend_30d"]))
+        # Thêm rank (xếp hạng nội bộ) theo hiệu quả: conv DESC, spend DESC, ctr DESC
+        ranked = sorted(by_cat[cat], key=lambda k: (-k["conv_30d"], -k["spend_30d"], -k["ctr_30d"]))
+        rank_map = {id(k): i+1 for i, k in enumerate(ranked)}
+        for kw in by_cat[cat]:
+            kw["rank_effectiveness"] = rank_map.get(id(kw), 999)
 
     return dict(by_cat)
 
@@ -408,14 +414,15 @@ def main():
             "campaign_count": cat_data.get("campaign_count", 0),
             "keywords_count": len(cat_keywords),
             "banners_count": len(cat_banners),
-            "keywords": cat_keywords[:12],  # Top 12 per cat (limit output size, tối ưu load speed)
-            "banners": cat_banners[:8],
+            "keywords": cat_keywords[:100],  # Top 12 per cat (limit output size, tối ưu load speed)
+            "banners": cat_banners[:50],
             "summary_actions": summary_actions,
             "suggested_keywords": suggest_keywords_for_category(cat_key, cat_keywords),
             "banner_improvement_tips": generate_banner_improvement_tips(cat_banners, cat_key),
             "ab_test_suggestions": generate_ab_test_suggestions(cat_banners, cat_key),
             "title_analysis": generate_title_analysis(ads, cat_key, None),
         }
+        categories_report[cat_key]["evaluation"] = build_category_evaluation(categories_report[cat_key], cat_key)
 
     # Overall score từ v2 schema (giữ compatible)
     total_spend = summary.get("total_spend_30d_vnd", 0)
@@ -669,7 +676,15 @@ def suggest_keywords_for_category(category_key, existing_keywords):
                 continue  # Skip keyword đã có
             suggestions.append({
                 "keyword": kw,
-                "intent_group": intent_type.replace("intent_", "").upper(),
+                "intent_group": {
+                "buy": "Mua hàng",
+                "compare": "So sánh",
+                "location": "Địa điểm",
+                "brand": "Thương hiệu",
+                "feature": "Tính năng",
+                "use": "Sử dụng",
+                "target": "Đối tượng mục tiêu",
+            }.get(intent_type.replace("intent_", ""), intent_type.replace("intent_", "")),
                 "suggested_match_type": "PHRASE" if "mua" in kw or "giá" in kw else "BROAD",
                 "estimated_volume": "medium",
                 "reason": seed.get("reason", ""),
@@ -818,7 +833,8 @@ def generate_title_analysis(ads_data, category_key, ads_raw_for_cat):
             continue
         # Ad có ad_name là RSA text dài (200+ chars) thì coi là title
         ad_name = m.get("ad_name") or ""
-        if m.get("ad_format") == "RSA" or len(ad_name) > 150:
+        # Show tất cả ads có tên đủ ý nghĩa (>= 30 chars) hoặc format RSA
+        if m.get("ad_format") == "RSA" or len(ad_name) >= 30:
             ctr = m.get("ctr_30d", 0)
             titles.append({
                 "ad_id": ad_id,
@@ -834,7 +850,7 @@ def generate_title_analysis(ads_data, category_key, ads_raw_for_cat):
             })
 
     titles.sort(key=lambda x: -x["spend_30d"])
-    return titles[:10]
+    return titles[:50]
 
 
 def _suggest_title_improvement(current, ctr, category_key):
@@ -927,6 +943,54 @@ def build_score_summary(categories, totals, roas):
 
     return {"good_points": good, "improvement_points": bad}
 
+
+
+
+def build_category_evaluation(c, cat_key):
+    """Box đánh giá cho 1 category: bullet tốt + cần cải thiện."""
+    good = []
+    bad = []
+    roas = c.get("roas_proxy", 0)
+    spend = c.get("ads_spend_30d", 0)
+    rev = c.get("revenue_pancake_30d", 0)
+    ctr = c.get("ads_ctr_30d", 0)
+    orders = c.get("orders_pancake_30d", 0)
+    kws = c.get("keywords", [])
+    banners = c.get("banners", [])
+
+    # Điểm tốt
+    if roas >= 3 and spend > 0:
+        good.append(f"ROAS **{roas}x** (cao hơn target 3x) - chi {spend/1_000_000:.1f}tr ra {rev/1_000_000:.1f}tr doanh thu")
+    elif roas >= 1.5 and spend > 0:
+        good.append(f"ROAS **{roas}x** (trên mức hòa vốn) - có lãi từ ads")
+    if ctr >= 0.05:
+        good.append(f"CTR trung bình **{ctr*100:.1f}%** rất tốt (cao hơn avg industry 3-4%)")
+    elif ctr >= 0.03:
+        good.append(f"CTR trung bình **{ctr*100:.1f}%** ở mức khá")
+    converting_kws = [k for k in kws if k.get("conv_30d", 0) > 0]
+    if len(converting_kws) >= 5:
+        good.append(f"Có **{len(converting_kws)} từ khóa** đang tạo chuyển đổi")
+    if orders >= 50:
+        good.append(f"**{orders} đơn hàng** từ nhóm này trong 30 ngày")
+
+    # Điểm cần cải thiện
+    if spend > 1_000_000 and roas < 1:
+        bad.append(f"ROAS **{roas}x** đang lỗ - spend {spend/1_000_000:.1f}tr mà rev chỉ {rev/1_000_000:.1f}tr")
+    elif spend > 1_000_000 and roas < 1.5:
+        bad.append(f"ROAS **{roas}x** chưa hòa vốn - cần tối ưu")
+    if ctr > 0 and ctr < 0.01 and spend > 500_000:
+        bad.append(f"CTR TB quá thấp **{ctr*100:.2f}%** - đa phần ads không thu hút")
+    neg_needed = [k for k in kws if k.get("recommendation") == "ADD_NEGATIVE"]
+    if len(neg_needed) >= 5:
+        waste = sum(k.get("spend_30d", 0) for k in neg_needed)
+        bad.append(f"**{len(neg_needed)} từ khóa** cần thêm negative - waste {waste/1_000_000:.1f}tr/30d")
+    banners_replace = [b for b in banners if b.get("recommendation") == "REPLACE"]
+    if len(banners_replace) >= 3:
+        bad.append(f"**{len(banners_replace)} banner** CTR rất thấp - cần thay mới")
+    if orders == 0 and spend > 500_000:
+        bad.append(f"**0 đơn hàng** mà chi {spend/1_000_000:.1f}tr - verify tracking hoặc cắt budget")
+
+    return {"good": good, "bad": bad}
 
 if __name__ == "__main__":
     main()
