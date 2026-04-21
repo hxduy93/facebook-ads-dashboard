@@ -675,7 +675,7 @@ function CompareCard({ title, current, previous, isMoneyMetric, inverseGood }) {
 // MAIN COMPONENT
 // =============================================================
 function FacebookAdsDashboard() {
-  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator"
+  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator" | "agent-google"
   const [selectedAccount, setSelectedAccount] = useState("all")
   const [timeFilter, setTimeFilter] = useState("30d")
   // customRange — chỉ active khi timeFilter === "custom". Default 7 ngày gần nhất.
@@ -902,6 +902,16 @@ function FacebookAdsDashboard() {
             >
               <Megaphone /> Tạo quảng cáo
             </button>
+            <button
+              onClick={() => setCurrentView("agent-google")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "agent-google"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              🤖 Agent Google Doscom
+            </button>
           </nav>
         </div>
 
@@ -911,6 +921,10 @@ function FacebookAdsDashboard() {
 
         {currentView === "ads-creator" && (
           <AdsCreatorPanel />
+        )}
+
+        {currentView === "agent-google" && (
+          <AgentGoogleView />
         )}
 
         {currentView === "main" && (<>
@@ -1330,6 +1344,22 @@ const DOSCOM_COUNTRIES = [
   { code: "DE", name: "Đức" },
   { code: "FR", name: "Pháp" },
 ]
+
+// ═══════════════════════════════════════════════════════════════════
+// AGENT GOOGLE VIEW — embed agent-google-doscom.html qua iframe
+// ═══════════════════════════════════════════════════════════════════
+function AgentGoogleView() {
+  return (
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <iframe
+        src="agent-google-doscom.html"
+        title="Agent Google Doscom"
+        className="w-full"
+        style={{ minHeight: "calc(100vh - 180px)", border: 0 }}
+      />
+    </div>
+  );
+}
 
 function AdsCreatorPanel() {
   // ── Product ──
@@ -5447,28 +5477,4 @@ function PerformanceAnalysis({ kpis, weekComp, productsData, campaignsFiltered, 
         <ol className="text-xs text-blue-900 space-y-1.5 list-decimal ml-5">
           <li><span className="font-semibold">Ngày 1–2:</span> Tạm dừng tất cả campaign 0 đăng ký ({fmtVND(wastedSpend)}₫/{filterLabel.toLowerCase()}). Phân ngân sách này sang các campaign improving.</li>
           <li><span className="font-semibold">Ngày 1–3:</span> Refresh creative cho {needsFix.length ? needsFix.map(p => p.name).join(", ") : "các sản phẩm CPL cao"} — chuẩn bị 3 hook mới + 2 format (video dọc, carousel).</li>
-          <li><span className="font-semibold">Ngày 2–4:</span> Với campaign improving, tăng budget từ từ +15%/2 ngày. Theo dõi CPL không vượt 1.3x mức hiện tại.</li>
-          <li><span className="font-semibold">Ngày 3–5:</span> A/B test creative mới ở nhóm 1 ad set, giữ creative cũ ở 1 ad set khác để so sánh.</li>
-          <li><span className="font-semibold">Ngày 5–7:</span> Đánh giá lại — campaign nào không cải thiện sau refresh thì cắt; campaign nào cải thiện thì nhân bản sang Lookalike 1–3%.</li>
-          <li><span className="font-semibold">Liên tục:</span> Đặt automated rule: tắt ad set nếu CPL &gt; 1.5x trung bình sản phẩm trong 2 ngày liên tiếp với spend &gt; 200K₫.</li>
-        </ol>
-      </div>
-    </div>
-  )
-}
-
-
-// =============================================================
-// RENDER — render directly from the baked-in snapshot
-// =============================================================
-// Live-fetch via Netlify Function đã bị tắt (function chưa deploy được nên
-// cứ trả 404 và hiện banner đỏ). Dashboard lấy dữ liệu trực tiếp từ DATA
-// đã được GitHub Actions cron inject mỗi 30 phút — đủ tươi cho nhu cầu
-// của Facebook Ads (Meta API cũng không realtime).
-const rootEl = document.getElementById('root');
-ReactDOM.createRoot(rootEl).render(React.createElement(FacebookAdsDashboard));
-
-</script>
-</body>
-</html>
-  
+          <li><span className="font-semibold">Ngày 2–4:</span> Với campaign improving, tăng budget từ từ +15%/2
