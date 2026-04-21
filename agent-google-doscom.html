@@ -1,4 +1,4 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -98,14 +98,14 @@ function fmtVND(n){if(n==null||n===0)return '0';if(Math.abs(n)>=1e6)return (n/1e
 function fmtInt(n){return n==null?'-':n.toLocaleString('vi-VN')}
 function fmtPct(n,d){if(d==null)d=2;return n==null?'-':(n*100).toFixed(d)+'%'}
 function esc(s){if(s==null)return '';return String(s).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('"').join('&quot;')}
-function get(o,k,d){return (o&&o[k]\!=null)?o[k]:d}
+function get(o,k,d){return (o&&o[k]!=null)?o[k]:d}
 
 function load(){
   console.log('[AgentPage] load() called');
   var url = 'data/google-ads-daily-report.json?v='+Date.now();
   fetch(url).then(function(res){
     console.log('[AgentPage] fetch status:', res.status);
-    if(\!res.ok) throw new Error('HTTP '+res.status);
+    if(!res.ok) throw new Error('HTTP '+res.status);
     return res.json();
   }).then(function(r){
     console.log('[AgentPage] JSON parsed, score:', r.score, 'categories:', Object.keys(r.categories||{}).length);
@@ -129,7 +129,7 @@ function render(r){
   for(var k in cats){
     if(cats[k].ads_spend_30d>0 || cats[k].keywords_count>0 || cats[k].banners_count>0) catKeys.push(k);
   }
-  if(\!currentCat && catKeys.length) currentCat = catKeys[0];
+  if(!currentCat && catKeys.length) currentCat = catKeys[0];
   var t = r.totals || {};
   var html = '';
 
@@ -171,7 +171,7 @@ function render(r){
     for(var j=0;j<krel.length;j++){
       kws += '<span class="pill pill-green">'+esc(krel[j].text)+' ('+krel[j].conv_30d+')</span>';
     }
-    if(\!kws) kws = '<span class="text-gray">-</span>';
+    if(!kws) kws = '<span class="text-gray">-</span>';
     html += '<tr><td class="text-gray">'+(i+1)+'</td>';
     html += '<td class="font-bold">'+esc(p.product)+'</td>';
     html += '<td><span class="pill">'+esc(p.category_name)+'</span></td>';
@@ -216,7 +216,7 @@ function switchCat(key, ev){
 }
 
 function renderCategory(c){
-  if(\!c) return '<p class="text-gray">Khong co data.</p>';
+  if(!c) return '<p class="text-gray">Khong co data.</p>';
   var html = '';
 
   // Overview
@@ -250,7 +250,7 @@ function renderCategory(c){
   // Keywords
   var kws = c.keywords || [];
   html += '<h3 style="margin-top:16px">Keywords ('+(c.keywords_count||0)+' meaningful, top '+kws.length+')</h3>';
-  if(\!kws.length){
+  if(!kws.length){
     html += '<p class="text-xs text-gray">Khong co keyword.</p>';
   } else {
     html += '<div class="tbl-wrap"><table><thead><tr>';
@@ -275,7 +275,7 @@ function renderCategory(c){
   // Banners
   var bs = c.banners || [];
   html += '<h3 style="margin-top:16px">Banners / Ads ('+(c.banners_count||0)+' meaningful, top '+bs.length+')</h3>';
-  if(\!bs.length){
+  if(!bs.length){
     html += '<p class="text-xs text-gray">Khong co banner.</p>';
   } else {
     html += '<div class="tbl-wrap"><table><thead><tr>';
