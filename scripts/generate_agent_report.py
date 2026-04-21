@@ -145,6 +145,33 @@ def classify_banner(m: dict) -> tuple:
     return "MONITOR", f"CTR {ctr*100:.2f}%, spend {spend/1000:.0f}K — theo dõi", size
 
 
+
+
+
+def detect_category_from_keyword_text(kw_text):
+    """Detect category based on keyword text itself (ưu tiên hơn campaign name)."""
+    import re
+    n = (kw_text or "").lower()
+    # Ghi âm (highest priority vì text rõ nhất)
+    if re.search(r"\bghi âm\b|máy ghi âm|thiết bị ghi âm|máy ghi âm", n) and "chống" not in n:
+        return "GHIAM"
+    if re.search(r"chống ghi âm|chống nghe lén|chống quay lén|bảo mật cuộc họp", n):
+        return "OTHER_DI"
+    if re.search(r"\bdò\b|phát hiện.*(?:camera|nghe lén|quay lén|ẩn)|thiết bị phát hiện", n):
+        return "MAYDO"
+    if re.search(r"\bđịnh vị\b|gps tracker|theo dõi.*xe|định vị gps", n) and "ghi âm" not in n:
+        return "DINHVI"
+    if re.search(r"camera.*(?:gọi|2 chiều|gia đình|trẻ|người già)|camera.*(?:video call|đàm thoại)", n):
+        return "CAMCALL"
+    if re.search(r"cạo râu|cao rau", n):
+        return "OTHER_RAZOR"
+    if re.search(r"sim\s*4g|camera\s*4g|camera\s*sim", n):
+        return "OTHER_SIM"
+    if re.search(r"camera\s*(?:mini|wifi|nlmt|năng lượng|ngoài trời)", n):
+        return "OTHER_CAM"
+    return None  # Không match rõ → fallback dùng campaign
+
+
 def analyze_keywords_by_category(st_data, campaign_to_cat):
     """Group search terms theo category (via campaign), return per-category keyword table."""
     terms = st_data.get("term_aggregates", {})
@@ -155,13 +182,13 @@ def analyze_keywords_by_category(st_data, campaign_to_cat):
         if not (m["spend_30d"] > 0 or m["clicks_30d"] > 0 or m["conversions_30d"] > 0):
             continue
 
-        # Xác định category qua campaigns
-        cats = set()
-        for camp in m.get("campaigns", []):
-            cats.add(detect_category(camp))
-
-        # Nếu term span nhiều category → chọn category có campaign đầu tiên
-        primary_cat = list(cats)[0] if cats else "OTHER"
+        # Xác định category: ưu tiên detect từ keyword text, fallback campaign name
+        primary_cat = detect_category_from_keyword_text(term_text)
+        if not primary_cat:
+            cats = set()
+            for camp in m.get("campaigns", []):
+                cats.add(detect_category(camp))
+            primary_cat = list(cats)[0] if cats else "OTHER"
 
         rec, reason = classify_keyword(m)
         by_cat[primary_cat].append({
@@ -174,7 +201,9 @@ def analyze_keywords_by_category(st_data, campaign_to_cat):
             "conv_30d": m["conversions_30d"],
             "recommendation": rec,
             "reason": reason,
-            "campaigns": list(m.get("campaigns", []))[:2],
+            "campaigns": list(m.get("campaigns", []))[:3],
+            "top_impression_share": m.get("top_impression_share", 0),
+            "abs_top_impression_share": m.get("abs_top_impression_share", 0),
         })
 
     # Sort per cat: priority actions trên đầu (SCALE/KEEP đầu, rồi ADD_NEGATIVE/PAUSE/REVIEW)

@@ -301,7 +301,7 @@ function renderCategory(c,ck){
   // Keywords table with sort
   var kws=c.keywords||[];
   h+='<h3 style="margin-top:16px">Bảng Từ khóa ('+kws.length+' từ khóa đang chạy) <span class="text-xs text-gray">— Click header để sắp xếp</span></h3>';
-  h+='<p class="text-xs text-gray" style="margin:4px 0">Ghi chú: Cột <strong>Hiệu quả #</strong> là xếp hạng nội bộ theo conv/spend/CTR (không phải SEO rank Google). Google Ads cho phép đặt <strong>Loại khớp</strong> RIÊNG cho TỪNG từ khóa. Muốn có SEO position thật (vị trí TB trên SERP) cần fetch thêm field từ Windsor.</p>';
+  h+='<p class="text-xs text-gray" style="margin:4px 0">Ghi chú: Cột <strong>Hiệu quả #</strong> là xếp hạng nội bộ theo conv/spend/CTR (không phải SEO rank Google). Google Ads cho phép đặt <strong>Loại khớp</strong> RIÊNG cho TỪNG từ khóa. Cột <strong>% Top IS</strong> = Top Impression Share (% lần hiển thị ở top 4 kết quả Google). <strong>% #1</strong> = Absolute Top IS (% lần ở vị trí #1). Hiển thị "—" khi Windsor chưa có data (sau khi trigger fetch workflow mới).</p>';
   if(!kws.length)h+='<p class="text-xs text-gray">-</p>';
   else{
     var tid="tbl-kw-"+ck;
@@ -324,6 +324,10 @@ function renderCategory(c,ck){
       h+='<td class="t-right">'+fmtVND(kw.spend_30d)+'đ</td>';
       h+='<td class="t-right">'+fmtInt(kw.clicks_30d)+'</td>';
       h+='<td class="t-right">'+fmtPct(kw.ctr_30d)+'</td>';
+      var topIs = kw.top_impression_share || 0;
+      var absTop = kw.abs_top_impression_share || 0;
+      h+='<td class="t-right '+(topIs>=0.5?"text-green font-bold":(topIs>0?"":"text-gray"))+'">'+(topIs>0?fmtPct(topIs,0):"—")+'</td>';
+      h+='<td class="t-right '+(absTop>=0.3?"text-green font-bold":(absTop>0?"":"text-gray"))+'">'+(absTop>0?fmtPct(absTop,0):"—")+'</td>';
       h+='<td class="t-right '+(kw.conv_30d>0?"text-green font-bold":"text-gray")+'">'+kw.conv_30d+'</td>';
       h+='<td><span class="rec rec-'+kw.recommendation+'">'+esc(REC_VN[kw.recommendation]||kw.recommendation)+'</span></td>';
       h+='<td class="text-xs text-gray">'+esc(kw.reason)+'</td></tr>';
