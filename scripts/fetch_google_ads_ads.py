@@ -237,7 +237,6 @@ def main():
                 "flag ad underperform, user review text manually trên Google Ads UI."
             ),
         },
-        "ads_raw": ads_raw,
         "ad_aggregates": ad_aggregates,
         "format_aggregates": format_aggregates,
     }
@@ -263,4 +262,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()

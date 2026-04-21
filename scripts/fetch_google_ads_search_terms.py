@@ -181,7 +181,6 @@ def main():
         "currency": "VND",
         "rows_raw": len(rows),
         "unique_search_terms": len(term_aggregates),
-        "terms_raw": terms_raw,
         "term_aggregates": term_aggregates,
     }
 
@@ -200,8 +199,3 @@ def main():
     for term, m in top:
         conv = m["conversions_30d"]
         status = "🟢" if conv > 0 else "🔴"
-        print(f"         {status} [{m['spend_30d']:>10,.0f}đ · {m['clicks_30d']:>4} clicks · conv {conv}] \"{term[:60]}\"")
-
-
-if __name__ == "__main__":
-    main()

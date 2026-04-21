@@ -195,7 +195,6 @@ def main():
         "currency": "VND",
         "rows_raw": len(rows),
         "unique_placements": len(placement_aggregates),
-        "placements_raw": placements_raw,
         "placement_aggregates": placement_aggregates,
         "network_aggregates": network_aggregates,
     }
@@ -224,4 +223,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()
