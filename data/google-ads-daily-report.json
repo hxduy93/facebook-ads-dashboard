@@ -1,0 +1,569 @@
+{
+  "generated_at": "2026-04-21 15:56",
+  "period": {
+    "start": "2026-03-21",
+    "end": "2026-04-19"
+  },
+  "model": "claude-opus-4-7",
+  "version": "2.0",
+  "ga_account": {
+    "id": "477-705-2298",
+    "name": "MHDI"
+  },
+  "score": 54,
+  "grade": "D",
+  "score_breakdown": [
+    {
+      "dimension": "Conversion tracking",
+      "score": 5,
+      "max": 5,
+      "status": "OK",
+      "note": "Website revenue 99,029,000đ = 97% spend"
+    },
+    {
+      "dimension": "Campaign structure",
+      "score": 3,
+      "max": 5,
+      "status": "WARN",
+      "note": "22 camp, 9 category, OTHER=34%"
+    },
+    {
+      "dimension": "Keyword health",
+      "score": 5,
+      "max": 5,
+      "status": "OK",
+      "note": "Mix 3 match type: BROAD/PHRASE/EXACT"
+    },
+    {
+      "dimension": "Negative keyword hygiene",
+      "score": 1,
+      "max": 5,
+      "status": "CRITICAL",
+      "note": "15 term spend 0 conv chưa add negative"
+    },
+    {
+      "dimension": "Ad copy / RSA",
+      "score": 4,
+      "max": 5,
+      "status": "WARN",
+      "note": "Mix RSA + Banner (Windsor free chưa expose text)"
+    },
+    {
+      "dimension": "GDN banner health",
+      "score": 3,
+      "max": 5,
+      "status": "WARN",
+      "note": "3 banner review"
+    },
+    {
+      "dimension": "GDN placement hygiene",
+      "score": 1,
+      "max": 5,
+      "status": "WARN",
+      "note": "15 placement waste"
+    },
+    {
+      "dimension": "Impression share",
+      "score": 3,
+      "max": 5,
+      "status": "DATA_GAP",
+      "note": "Chưa fetch từ Windsor"
+    },
+    {
+      "dimension": "Spend efficiency",
+      "score": 1,
+      "max": 5,
+      "status": "CRITICAL",
+      "note": "ROAS 0.97x vs target 3x"
+    },
+    {
+      "dimension": "Trend momentum",
+      "score": 1,
+      "max": 5,
+      "status": "WARN",
+      "note": "5 down / 1 up — negative"
+    }
+  ],
+  "headline": "Score 54/100 (D) — ROAS 0.97x (target 3x). Chi 101.8tr/30d ra 99.0tr Website. 15 keyword cần add negative.",
+  "verdict": "ROAS Website 0.97x đang dưới target 3x rất nhiều. Cấu trúc 22 campaign/9 category OK. Vấn đề chính: 15 search term spend cao 0 conv chưa add negative (có thể tiết kiệm ~1.1tr/30d), 3 banner GDN CTR < 0.2%, và network CONTENT CTR 1.23% thấp hơn SEARCH 4.34%. Ưu tiên: add negative keyword, review banner GDN kém, verify ROAS attribution qua Zalo/Hotline.",
+  "top_actions": [
+    {
+      "category": "KEYWORD",
+      "priority": 1,
+      "action": "Add negative keyword 'máy nghe lén'",
+      "reason": "Spend 250,087đ với 59 click, 0 conversion. Match BROAD/EXACT. Camp: 8/5/2025 Search - TB Chống Ghi Âm, 8/5/2025 Search - TB Dò Nghe Lén",
+      "estimated_saving_vnd": 250087,
+      "risk": "low",
+      "time_cost": "5 phút"
+    },
+    {
+      "category": "CREATIVE",
+      "priority": 2,
+      "action": "Review banner 728x90.gif (ad_id 752150324395)",
+      "reason": "CTR 0.15% với 1,336 impressions, camp 'RMK - Camera 4G'",
+      "estimated_saving_vnd": 3040,
+      "risk": "low",
+      "time_cost": "15 phút"
+    },
+    {
+      "category": "BUDGET",
+      "priority": 3,
+      "action": "Review spend keyword 'camera năng lượng mặt trời'",
+      "reason": "Spend 232,915đ/30d, 0 conv, 69 click. Consider pause hoặc lower bid.",
+      "estimated_saving_vnd": 163040,
+      "risk": "medium",
+      "time_cost": "10 phút"
+    },
+    {
+      "category": "PLACEMENT",
+      "priority": 4,
+      "action": "Exclude placement 'dantri.com.vn'",
+      "reason": "CTR 0.19%, 36,759 imp, spend 220,278đ",
+      "estimated_saving_vnd": 110139,
+      "risk": "low",
+      "time_cost": "3 phút"
+    },
+    {
+      "category": "TREND",
+      "priority": 5,
+      "action": "Verify ROAS camp 'RMK - Camera wifi' trước khi tăng budget (+60.3% 7d)",
+      "reason": "Spend 7d 287,596đ vs prior 179,383đ",
+      "estimated_saving_vnd": 0,
+      "risk": "medium",
+      "time_cost": "10 phút"
+    }
+  ],
+  "search_term_deep_dive": {
+    "top_converting": [
+      {
+        "search_term": "máy cạo râu",
+        "spend_30d": 1224214.0,
+        "clicks_30d": 272,
+        "conversions_30d": 6.35,
+        "ctr_30d": 0.0458,
+        "match_types": [
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ]
+      },
+      {
+        "search_term": "camera",
+        "spend_30d": 2869658.0,
+        "clicks_30d": 279,
+        "conversions_30d": 6.0,
+        "ctr_30d": 0.0767,
+        "match_types": [
+          "BROAD"
+        ],
+        "statuses": [
+          "NONE"
+        ]
+      },
+      {
+        "search_term": "doscom",
+        "spend_30d": 160974.0,
+        "clicks_30d": 106,
+        "conversions_30d": 3.0,
+        "ctr_30d": 0.0958,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ]
+      },
+      {
+        "search_term": "máy ghi âm sony",
+        "spend_30d": 92676.0,
+        "clicks_30d": 38,
+        "conversions_30d": 3.0,
+        "ctr_30d": 0.0514,
+        "match_types": [
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ]
+      },
+      {
+        "search_term": "định vị",
+        "spend_30d": 847489.0,
+        "clicks_30d": 189,
+        "conversions_30d": 3.0,
+        "ctr_30d": 0.026,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ]
+      }
+    ],
+    "top_waste": [
+      {
+        "search_term": "máy nghe lén",
+        "spend_30d": 250087.0,
+        "clicks_30d": 59,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.0472,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "camera năng lượng mặt trời",
+        "spend_30d": 232915.0,
+        "clicks_30d": 69,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.0994,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - Cam NLMT",
+          "8/5/2025 Search - Cam WIFI",
+          "8/5/2025 Search - Sim 4G"
+        ]
+      },
+      {
+        "search_term": "thiết bị ghi âm",
+        "spend_30d": 211306.0,
+        "clicks_30d": 34,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.0773,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy dò camera",
+        "spend_30d": 202790.0,
+        "clicks_30d": 23,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.081,
+        "match_types": [
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "định vị gps",
+        "spend_30d": 187548.0,
+        "clicks_30d": 53,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.034,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "NEAR_PHRASE"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TBĐV GPS",
+          "Shopping - 6/6 - ĐV"
+        ]
+      }
+    ],
+    "negative_gap": [
+      {
+        "search_term": "máy nghe lén",
+        "spend_30d": 250087.0,
+        "clicks_30d": 59,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "camera năng lượng mặt trời",
+        "spend_30d": 232915.0,
+        "clicks_30d": 69,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - Cam NLMT",
+          "8/5/2025 Search - Cam WIFI",
+          "8/5/2025 Search - Sim 4G"
+        ]
+      },
+      {
+        "search_term": "thiết bị ghi âm",
+        "spend_30d": 211306.0,
+        "clicks_30d": 34,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy dò camera",
+        "spend_30d": 202790.0,
+        "clicks_30d": 23,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "EXACT"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "định vị gps",
+        "spend_30d": 187548.0,
+        "clicks_30d": 53,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "NEAR_PHRASE"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TBĐV GPS",
+          "Shopping - 6/6 - ĐV"
+        ]
+      }
+    ],
+    "summary": {
+      "total_unique_terms": 18631,
+      "terms_with_conversions": 87,
+      "conv_rate_terms": 0.005,
+      "total_spend_30d": 44227842.0
+    },
+    "match_type_breakdown": {
+      "EXACT": {
+        "spend_30d": 31364831.0,
+        "clicks_30d": 7133,
+        "conversions_30d": 79.23,
+        "term_count": 14172
+      },
+      "NEAR_PHRASE": {
+        "spend_30d": 8806828.0,
+        "clicks_30d": 1857,
+        "conversions_30d": 19.53,
+        "term_count": 1700
+      },
+      "BROAD": {
+        "spend_30d": 28962887.0,
+        "clicks_30d": 5401,
+        "conversions_30d": 59.27,
+        "term_count": 5175
+      },
+      "PHRASE": {
+        "spend_30d": 8491461.0,
+        "clicks_30d": 1676,
+        "conversions_30d": 15.65,
+        "term_count": 1192
+      },
+      "NEAR_EXACT": {
+        "spend_30d": 144769.0,
+        "clicks_30d": 42,
+        "conversions_30d": 0.0,
+        "term_count": 2
+      }
+    }
+  },
+  "placement_banner_deep_dive": {
+    "network_breakdown_summary": "CONTENT: 23,992,575đ, CTR 1.23% | SEARCH: 79,639,846đ, CTR 4.34%",
+    "network_breakdown": {
+      "CONTENT": {
+        "spend_30d": 23992575.0,
+        "clicks_30d": 15541,
+        "impressions_30d": 1261277,
+        "ctr_30d": 0.0123,
+        "cpc_30d": 1544.0,
+        "campaign_count": 9
+      },
+      "SEARCH": {
+        "spend_30d": 79639846.0,
+        "clicks_30d": 15686,
+        "impressions_30d": 361730,
+        "ctr_30d": 0.0434,
+        "cpc_30d": 5077.0,
+        "campaign_count": 10
+      }
+    },
+    "top_waste_placements": [],
+    "low_ctr_placements": [
+      {
+        "placement": "dantri.com.vn",
+        "spend_30d": 220278.0,
+        "clicks_30d": 70,
+        "impressions_30d": 36759,
+        "ctr_30d": 0.0019,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
+        "spend_30d": 206205.0,
+        "clicks_30d": 62,
+        "impressions_30d": 27278,
+        "ctr_30d": 0.0023,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "xsmn.mobi",
+        "spend_30d": 154450.0,
+        "clicks_30d": 128,
+        "impressions_30d": 32630,
+        "ctr_30d": 0.0039,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "giacaphe.com/gia-ca-phe-noi-dia",
+        "spend_30d": 60303.0,
+        "clicks_30d": 28,
+        "impressions_30d": 6262,
+        "ctr_30d": 0.0045,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "giavang.org/the-gioi",
+        "spend_30d": 58673.0,
+        "clicks_30d": 20,
+        "impressions_30d": 11849,
+        "ctr_30d": 0.0017,
+        "placement_type": "WEBSITE"
+      }
+    ],
+    "worst_banners": [
+      {
+        "ad_id": "752150324395",
+        "campaign": "RMK - Camera 4G",
+        "ad_group_name": "Ad group 1",
+        "ad_name": "728x90.gif",
+        "spend_30d": 4343.0,
+        "impressions_30d": 1336,
+        "ctr_30d": 0.0015
+      },
+      {
+        "ad_id": "752150644978",
+        "campaign": "RMK - thiết bị định vị",
+        "ad_group_name": "Ad group 1",
+        "ad_name": "160x600.gif",
+        "spend_30d": 3665.0,
+        "impressions_30d": 1128,
+        "ctr_30d": 0.0009
+      },
+      {
+        "ad_id": "752234163116",
+        "campaign": "RMK - Camera mini",
+        "ad_group_name": "Ad group 1",
+        "ad_name": "160x600.gif",
+        "spend_30d": 0.0,
+        "impressions_30d": 714,
+        "ctr_30d": 0.0
+      }
+    ],
+    "format_breakdown": {
+      "DISPLAY_BANNER": {
+        "spend_30d": 4307518.0,
+        "clicks_30d": 3371,
+        "impressions_30d": 363977,
+        "ctr_30d": 0.0093,
+        "ad_count": 29
+      },
+      "OTHER": {
+        "spend_30d": 89685900.0,
+        "clicks_30d": 24685,
+        "impressions_30d": 1615298,
+        "ctr_30d": 0.0153,
+        "ad_count": 267
+      },
+      "RSA": {
+        "spend_30d": 9607740.0,
+        "clicks_30d": 3135,
+        "impressions_30d": 268510,
+        "ctr_30d": 0.0117,
+        "ad_count": 1
+      }
+    }
+  },
+  "pause_candidates": [],
+  "warnings": [
+    "ROAS 0.97x dưới target — verify attribution: khách qua Zalo/Hotline không count Website",
+    "Search term conversion rate thấp: 0.5%",
+    "Network CONTENT CTR 1.23% thấp hơn SEARCH 4.34%"
+  ],
+  "evidence": [
+    "Spend 30d: 101,812,775đ · Revenue Website: 99,029,000đ · ROAS 0.97x",
+    "19/22 campaigns active, 9 category",
+    "Search terms: 18,631 unique (87 convert)",
+    "Placements: 19,967 unique",
+    "Ads: 297 (Banner: 29, RSA: 1)"
+  ],
+  "raw_markdown": "# Báo cáo Google Ads Doscom — 21/04/2026 (v2)\n\n**Kỳ**: 2026-03-21 → 2026-04-19 (30 ngày) · Account MHDI\n**Score**: 54/100 (Grade D)\n\n## Verdict\nROAS Website 0.97x đang dưới target 3x rất nhiều. Cấu trúc 22 campaign/9 category OK. Vấn đề chính: 15 search term spend cao 0 conv chưa add negative (có thể tiết kiệm ~1.1tr/30d), 3 banner GDN CTR < 0.2%, và network CONTENT CTR 1.23% thấp hơn SEARCH 4.34%. Ưu tiên: add negative keyword, review banner GDN kém, verify ROAS attribution qua Zalo/Hotline.\n\n## Top 5 khuyến nghị\n\n### 1. KEYWORD — Add negative keyword 'máy nghe lén'\n- Spend 250,087đ với 59 click, 0 conversion. Match BROAD/EXACT. Camp: 8/5/2025 Search - TB Chống Ghi Âm, 8/5/2025 Search - TB Dò Nghe Lén\n- **Tiết kiệm**: 250,087đ · Risk: low · 5 phút\n\n### 2. CREATIVE — Review banner 728x90.gif (ad_id 752150324395)\n- CTR 0.15% với 1,336 impressions, camp 'RMK - Camera 4G'\n- **Tiết kiệm**: 3,040đ · Risk: low · 15 phút\n\n### 3. BUDGET — Review spend keyword 'camera năng lượng mặt trời'\n- Spend 232,915đ/30d, 0 conv, 69 click. Consider pause hoặc lower bid.\n- **Tiết kiệm**: 163,040đ · Risk: medium · 10 phút\n\n### 4. PLACEMENT — Exclude placement 'dantri.com.vn'\n- CTR 0.19%, 36,759 imp, spend 220,278đ\n- **Tiết kiệm**: 110,139đ · Risk: low · 3 phút\n\n### 5. TREND — Verify ROAS camp 'RMK - Camera wifi' trước khi tăng budget (+60.3% 7d)\n- Spend 7d 287,596đ vs prior 179,383đ"
+}

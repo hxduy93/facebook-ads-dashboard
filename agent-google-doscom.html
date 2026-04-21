@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Google Doscom — AI Insights</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .score-A { color: #10b981; }
+  .score-B { color: #3b82f6; }
+  .score-C { color: #f59e0b; }
+  .score-D { color: #f97316; }
+  .score-F { color: #ef4444; }
+  .bg-A { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+  .bg-B { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+  .bg-C { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+  .bg-D { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
+  .bg-F { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+  .cat-KEYWORD { background: #dbeafe; color: #1e40af; }
+  .cat-CREATIVE { background: #fce7f3; color: #9d174d; }
+  .cat-BUDGET { background: #fef3c7; color: #854d0e; }
+  .cat-PLACEMENT { background: #d1fae5; color: #065f46; }
+  .cat-TREND { background: #e0e7ff; color: #3730a3; }
+  .status-OK { background: #d1fae5; color: #065f46; }
+  .status-WARN { background: #fef3c7; color: #854d0e; }
+  .status-CRITICAL { background: #fee2e2; color: #991b1b; }
+  .status-DATA_GAP { background: #e5e7eb; color: #4b5563; }
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 50vh; }
+  .spinner { border: 3px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<header class="bg-white border-b shadow-sm sticky top-0 z-10">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">🤖</span>
+      <div>
+        <h1 class="text-lg font-bold">Agent Google Doscom</h1>
+        <p class="text-xs text-gray-500">AI Insights · Google Ads MHDI · v2</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 text-sm">
+      <a href="/" class="text-blue-600 hover:underline">← Dashboard chính</a>
+      <span class="text-gray-300">|</span>
+      <button onclick="location.reload()" class="text-gray-600 hover:text-gray-900">🔄 Refresh</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="max-w-6xl mx-auto px-4 py-6">
+  <div id="loading" class="loading"><div class="spinner"></div></div>
+</main>
+
+<footer class="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-gray-400">
+  Generated bởi Cowork Scheduled Task · Chạy 3 ngày/lần lúc 7:30 sáng VN
+</footer>
+
+<script>
+const REPORT_URL = 'data/google-ads-daily-report.json?v=' + Date.now();
+
+function fmtVND(n) {
+  if (n == null) return '—';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'tr';
+  if (n >= 1_000) return (n / 1_000).toFixed(0) + 'K';
+  return Math.round(n).toLocaleString('vi-VN');
+}
+
+function fmtPct(n, digits = 2) {
+  if (n == null) return '—';
+  return (n * 100).toFixed(digits) + '%';
+}
+
+function escapeHtml(s) {
+  return (s ?? '').toString()
+    .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+}
+
+async function load() {
+  try {
+    const res = await fetch(REPORT_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const r = await res.json();
+    render(r);
+  } catch (e) {
+    document.getElementById('main').innerHTML = `
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+        <h2 class="text-lg font-bold text-yellow-800">⏳ Báo cáo chưa sẵn sàng</h2>
+        <p class="text-sm text-yellow-700 mt-2">Cowork scheduled task chưa chạy lần đầu. Vào <b>Cowork → Scheduled → google-ads-daily-analyst</b> bấm <b>Run now</b> để sinh báo cáo.</p>
+        <p class="text-xs text-yellow-600 mt-3">Lỗi: ${escapeHtml(e.message)}</p>
+      </div>`;
+  }
+}
+
+function render(r) {
+  const grade = r.grade || 'F';
+  const html = `
+    <!-- Header Score Card -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-${grade} text-white rounded-xl p-6 shadow-lg">
+        <p class="text-xs uppercase tracking-wide opacity-80">Overall Score</p>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span class="text-5xl font-bold">${r.score}</span>
+          <span class="text-2xl opacity-80">/100</span>
+        </div>
+        <p class="text-lg font-semibold mt-1">Grade ${grade}</p>
+        <p class="text-xs opacity-80 mt-2">Kỳ: ${r.period?.start} → ${r.period?.end}</p>
+      </div>
+
+      <div class="md:col-span-2 bg-white rounded-xl p-6 shadow">
+        <p class="text-xs uppercase text-gray-500">Headline</p>
+        <p class="text-base font-semibold mt-2">${escapeHtml(r.headline || '')}</p>
+        <p class="text-xs uppercase text-gray-500 mt-4">Verdict</p>
+        <p class="text-sm mt-2 text-gray-700 leading-relaxed">${escapeHtml(r.verdict || '')}</p>
+        <p class="text-xs text-gray-400 mt-3">Generated: ${r.generated_at || '—'}</p>
+      </div>
+    </section>
+
+    <!-- Top 5 Actions -->
+    <section class="mb-6">
+      <h2 class="text-xl font-bold mb-3">⚡ Top 5 khuyến nghị (5 category)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        ${(r.top_actions || []).map(a => `
+          <div class="bg-white rounded-lg p-4 shadow border-l-4 border-${a.risk === 'low' ? 'green-400' : a.risk === 'medium' ? 'yellow-400' : 'red-400'}">
+            <div class="flex items-center justify-between mb-2">
+              <span class="cat-${a.category} text-xs font-bold px-2 py-1 rounded">${a.category}</span>
+              <span class="text-xs text-gray-500">#${a.priority} · Risk: ${a.risk}</span>
+            </div>
+            <p class="font-semibold text-sm">${escapeHtml(a.action)}</p>
+            <p class="text-xs text-gray-600 mt-2 leading-relaxed">${escapeHtml(a.reason)}</p>
+            <div class="flex items-center justify-between mt-3 pt-2 border-t text-xs">
+              <span class="text-green-700 font-semibold">💰 ${a.estimated_saving_vnd > 0 ? fmtVND(a.estimated_saving_vnd) + 'đ/30d' : '—'}</span>
+              <span class="text-gray-500">⏱ ${escapeHtml(a.time_cost || '')}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <!-- Scorecard -->
+    <section class="mb-6">
+      <h2 class="text-xl font-bold mb-3">📋 Scorecard 10 dimensions</h2>
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="text-left px-4 py-2">Dimension</th>
+              <th class="text-center px-4 py-2">Score</th>
+              <th class="text-center px-4 py-2">Status</th>
+              <th class="text-left px-4 py-2">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(r.score_breakdown || []).map((s, i) => `
+              <tr class="${i % 2 ? 'bg-gray-50' : ''}">
+                <td class="px-4 py-2 font-medium">${escapeHtml(s.dimension)}</td>
+                <td class="px-4 py-2 text-center"><span class="font-bold">${s.score}</span>/${s.max}</td>
+                <td class="px-4 py-2 text-center"><span class="status-${s.status} text-xs font-bold px-2 py-1 rounded">${s.status}</span></td>
+                <td class="px-4 py-2 text-xs text-gray-600">${escapeHtml(s.note || '')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Search Term Deep Dive -->
+    <section class="mb-6">
+      <h2 class="text-xl font-bold mb-3">🔑 Search Term Deep Dive</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        ${renderTermBox('🟢 Top Converting', r.search_term_deep_dive?.top_converting || [], 'conversions_30d', 'conv')}
+        ${renderTermBox('🔴 Top Waste', r.search_term_deep_dive?.top_waste || [], 'spend_30d', 'đ')}
+        ${renderTermBox('⚠ Negative Gap', r.search_term_deep_dive?.negative_gap || [], 'spend_30d', 'đ')}
+      </div>
+      ${r.search_term_deep_dive?.match_type_breakdown ? `
+        <div class="mt-4 bg-white rounded-lg p-4 shadow">
+          <h3 class="text-sm font-bold mb-2">Match Type Breakdown</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            ${Object.entries(r.search_term_deep_dive.match_type_breakdown).map(([mt, m]) => `
+              <div class="border rounded p-2">
+                <p class="font-bold">${escapeHtml(mt)}</p>
+                <p class="text-xs text-gray-600">${fmtVND(m.spend_30d)}đ · ${m.clicks_30d} click · ${m.conversions_30d} conv · ${m.term_count} term</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+    </section>
+
+    <!-- Placement & Banner -->
+    <section class="mb-6">
+      <h2 class="text-xl font-bold mb-3">📍 Placement & Banner Deep Dive</h2>
+      <div class="bg-white rounded-lg p-4 shadow mb-3">
+        <h3 class="text-sm font-bold mb-2">Network Breakdown</h3>
+        <p class="text-sm text-gray-700">${escapeHtml(r.placement_banner_deep_dive?.network_breakdown_summary || '')}</p>
+        ${r.placement_banner_deep_dive?.network_breakdown ? `
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 text-sm">
+            ${Object.entries(r.placement_banner_deep_dive.network_breakdown).map(([nt, m]) => `
+              <div class="border rounded p-2">
+                <p class="font-bold text-xs">${escapeHtml(nt)}</p>
+                <p class="text-xs text-gray-600 mt-1">Spend: ${fmtVND(m.spend_30d)}đ</p>
+                <p class="text-xs text-gray-600">Clicks: ${m.clicks_30d?.toLocaleString()} · CTR ${fmtPct(m.ctr_30d)}</p>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${renderPlacementBox('🔴 Top Waste Placements (spend, 0 click)', r.placement_banner_deep_dive?.top_waste_placements || [])}
+        ${renderPlacementBox('⚠ Low CTR Placements', r.placement_banner_deep_dive?.low_ctr_placements || [])}
+      </div>
+
+      ${r.placement_banner_deep_dive?.worst_banners?.length ? `
+        <div class="mt-3 bg-white rounded-lg p-4 shadow">
+          <h3 class="text-sm font-bold mb-2">🎨 Worst Performing Banners (review trong Google Ads UI)</h3>
+          <table class="w-full text-xs">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="text-left px-2 py-1">Banner</th>
+                <th class="text-left px-2 py-1">Campaign</th>
+                <th class="text-right px-2 py-1">Spend</th>
+                <th class="text-right px-2 py-1">Impressions</th>
+                <th class="text-right px-2 py-1">CTR</th>
+                <th class="text-left px-2 py-1">Ad ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${r.placement_banner_deep_dive.worst_banners.map((b, i) => `
+                <tr class="${i % 2 ? 'bg-gray-50' : ''}">
+                  <td class="px-2 py-1 font-mono">${escapeHtml(b.ad_name || '(no name)')}</td>
+                  <td class="px-2 py-1">${escapeHtml(b.campaign || '')}</td>
+                  <td class="px-2 py-1 text-right">${fmtVND(b.spend_30d)}đ</td>
+                  <td class="px-2 py-1 text-right">${b.impressions_30d?.toLocaleString()}</td>
+                  <td class="px-2 py-1 text-right">${fmtPct(b.ctr_30d)}</td>
+                  <td class="px-2 py-1 text-gray-500">${escapeHtml(b.ad_id)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : ''}
+    </section>
+
+    <!-- Warnings + Evidence -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div class="bg-white rounded-lg p-4 shadow">
+        <h3 class="text-sm font-bold mb-2">⚠ Cảnh báo</h3>
+        <ul class="text-xs space-y-2 text-gray-700">
+          ${(r.warnings || []).map(w => `<li class="flex gap-2"><span class="text-yellow-500">●</span><span>${escapeHtml(w)}</span></li>`).join('') || '<li class="text-gray-400">Không có cảnh báo.</li>'}
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-lg p-4 shadow">
+        <h3 class="text-sm font-bold mb-2">📎 Evidence</h3>
+        <ul class="text-xs space-y-2 text-gray-700">
+          ${(r.evidence || []).map(e => `<li class="flex gap-2"><span class="text-blue-500">●</span><span>${escapeHtml(e)}</span></li>`).join('')}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Pause Candidates -->
+    ${r.pause_candidates?.length ? `
+      <section class="mb-6">
+        <h2 class="text-xl font-bold mb-3">⏸ Ứng cử viên Pause</h2>
+        <div class="bg-white rounded-lg p-4 shadow">
+          <table class="w-full text-xs">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="text-left px-2 py-1">Campaign</th>
+                <th class="text-left px-2 py-1">Category</th>
+                <th class="text-right px-2 py-1">Spend 30d</th>
+                <th class="text-right px-2 py-1">CTR</th>
+                <th class="text-left px-2 py-1">Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${r.pause_candidates.map((c, i) => `
+                <tr class="${i % 2 ? 'bg-gray-50' : ''}">
+                  <td class="px-2 py-1 font-medium">${escapeHtml(c.campaign)}</td>
+                  <td class="px-2 py-1">${escapeHtml(c.category || '')}</td>
+                  <td class="px-2 py-1 text-right">${fmtVND(c.spend_30d)}đ</td>
+                  <td class="px-2 py-1 text-right">${fmtPct(c.ctr_30d)}</td>
+                  <td class="px-2 py-1 text-gray-600">${escapeHtml(c.reason || '')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ` : ''}
+  `;
+  document.getElementById('main').innerHTML = html;
+}
+
+function renderTermBox(title, items, valueKey, valueSuffix) {
+  return `
+    <div class="bg-white rounded-lg p-4 shadow">
+      <h3 class="text-sm font-bold mb-2">${title}</h3>
+      ${items.length === 0 ? '<p class="text-xs text-gray-400">Rỗng</p>' : `
+        <ul class="text-xs space-y-2">
+          ${items.slice(0, 5).map(t => `
+            <li class="border-b pb-1 last:border-0">
+              <p class="font-medium">"${escapeHtml(t.search_term)}"</p>
+              <p class="text-gray-500">${fmtVND(t[valueKey])}${valueSuffix} · CTR ${fmtPct(t.ctr_30d)} · ${(t.match_types || []).join('/')}</p>
+            </li>
+          `).join('')}
+        </ul>
+      `}
+    </div>
+  `;
+}
+
+function renderPlacementBox(title, items) {
+  return `
+    <div class="bg-white rounded-lg p-4 shadow">
+      <h3 class="text-sm font-bold mb-2">${title}</h3>
+      ${items.length === 0 ? '<p class="text-xs text-gray-400">Rỗng</p>' : `
+        <ul class="text-xs space-y-2">
+          ${items.slice(0, 5).map(p => `
+            <li class="border-b pb-1 last:border-0">
+              <p class="font-mono truncate" title="${escapeHtml(p.placement)}">${escapeHtml(p.placement)}</p>
+              <p class="text-gray-500">${fmtVND(p.spend_30d)}đ · ${p.clicks_30d} click · CTR ${fmtPct(p.ctr_30d)} · ${escapeHtml(p.placement_type || '')}</p>
+            </li>
+          `).join('')}
+        </ul>
+      `}
+    </div>
+  `;
+}
+
+load();
+</script>
+</body>
+</html>
