@@ -64,6 +64,48 @@ function changePeriod(k){selectedPeriod=k;renderTimeFilterSection(REPORT);}
 
 function compareFn(c,p){function pct(a,b){if(!b)return null;return (a-b)/b*100;}return{spend:pct(c.totals.spend,p.totals.spend),clicks:pct(c.totals.clicks,p.totals.clicks),ctr:pct(c.totals.ctr,p.totals.ctr),revenue:pct(c.totals.revenue,p.totals.revenue),orders:pct(c.totals.orders,p.totals.orders),roas:pct(c.totals.roas,p.totals.roas)};}
 
+
+function renderProductRanking(){
+  if(\!REPORT) return;
+  var tp = REPORT.time_periods || {};
+  var cur = tp[selectedPeriod];
+  if(\!cur){ return; }
+  var prev = cur.compare_to ? tp[cur.compare_to] : null;
+  var tp_prods = cur.top_products || [];
+  // Map prev for compare
+  var prev_map = {};
+  if(prev && prev.top_products){ for(var pi=0;pi<prev.top_products.length;pi++) prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
+  // Map category cho prod
+  var catMap = {};
+  (REPORT.products_ranking || []).forEach(function(p){ catMap[p.product] = p.category_name; });
+
+  var h = '<h2>Xếp hạng Sản phẩm theo Doanh thu — Kỳ: '+esc(cur.label)+'</h2>';
+  h += '<p class="text-xs text-gray" style="margin-bottom:6px">Nguồn: Website + Hotline + Zalo OA (loại DUY/PN staff). Thay đổi bộ lọc thời gian ở trên để xem kỳ khác.</p>';
+  h += '<div class="tbl-wrap"><table id="tbl-prod"><thead><tr>';
+  h += '<th>#</th><th>Sản phẩm</th><th>Nhóm</th><th class="t-right">Doanh thu</th>';
+  h += '<th class="t-right">Đơn</th><th class="t-right">AOV</th>';
+  if(prev) h += '<th class="t-right">Δ Doanh thu vs '+esc(prev.label)+'</th>';
+  h += '</tr></thead><tbody>';
+  for(var pi=0;pi<tp_prods.length;pi++){
+    var p = tp_prods[pi];
+    var pr_prev = prev_map[p.product];
+    var ch = (pr_prev && pr_prev.revenue) ? ((p.revenue - pr_prev.revenue) / pr_prev.revenue * 100) : null;
+    var aov = p.orders > 0 ? (p.revenue / p.orders) : 0;
+    h += '<tr><td class="text-gray">'+(pi+1)+'</td>';
+    h += '<td class="font-bold">'+esc(p.product)+'</td>';
+    h += '<td><span class="pill">'+esc(catMap[p.product] || '-')+'</span></td>';
+    h += '<td class="t-right text-green font-bold">'+fmtVND(p.revenue)+'đ</td>';
+    h += '<td class="t-right">'+fmtInt(p.orders)+'</td>';
+    h += '<td class="t-right text-xs text-gray">'+fmtVND(aov)+'đ</td>';
+    if(prev) h += '<td class="t-right">'+fmtChange(ch)+'</td>';
+    h += '</tr>';
+  }
+  if(\!tp_prods.length) h += '<tr><td colspan="7" class="text-gray" style="text-align:center">Không có đơn hàng trong kỳ này.</td></tr>';
+  h += '</tbody></table></div>';
+  var container = document.getElementById('product-ranking-container');
+  if(container) container.innerHTML = h;
+}
+
 function renderTimeFilterSection(r){
   var tp=r.time_periods||{};
   var cur=tp[selectedPeriod]; if(!cur)return;
@@ -141,6 +183,7 @@ function renderTimeFilterSection(r){
   h+='<p class="text-xs text-gray" style="margin-top:12px;padding:8px;background:#f9fafb;border-radius:4px">Lưu ý: Bộ lọc thời gian ảnh hưởng các số liệu phía trên (chi phí, doanh thu, đơn) và bảng Top sản phẩm. Các bảng Keywords/Banners/Placements/Suggestions ở dưới là <strong>tổng hợp 30 ngày</strong> vì Windsor.ai free trial không export dữ liệu daily cho keyword/banner. Nếu cần filter daily cho keyword/banner, phải nâng cấp Windsor gói trả phí hoặc chuyển sang Google Ads API trực tiếp.</p>';
 
   document.getElementById("time-filter-content").innerHTML=h;
+  renderProductRanking();
 }
 
 function render(r){
@@ -180,28 +223,8 @@ function render(r){
   var pd=r.period||{};
   h+='<p class="text-xs" style="color:#9ca3af;margin-top:6px">Cập nhật: '+esc(r.generated_at)+' · Kỳ 30d: '+esc(pd.start)+' đến '+esc(pd.end)+'</p></section>';
 
-  // Product ranking
-  h+='<section class="block card"><h2>Xếp hạng Sản phẩm theo Doanh thu</h2>';
-  h+='<p class="text-xs text-gray" style="margin-bottom:6px">Chỉ lấy từ 3 nguồn: Website + Hotline + Zalo OA (không bao gồm DUY/PN staff)</p>';
-  h+='<div class="tbl-wrap"><table id="tbl-prod"><thead><tr>';
-  h+='<th>#</th><th onclick="sortTable(\'tbl-prod\',1,\'str\')" style="cursor:pointer">Sản phẩm</th>';
-  h+='<th onclick="sortTable(\'tbl-prod\',2,\'str\')" style="cursor:pointer">Nhóm</th>';
-  h+='<th class="t-right" onclick="sortTable(\'tbl-prod\',3,\'num\')" style="cursor:pointer">Doanh thu</th>';
-  h+='<th class="t-right" onclick="sortTable(\'tbl-prod\',4,\'num\')" style="cursor:pointer">Đơn</th>';
-  h+='<th class="t-right" onclick="sortTable(\'tbl-prod\',5,\'num\')" style="cursor:pointer">AOV</th><th>Từ khóa có chuyển đổi</th></tr></thead><tbody>';
-  var pr=r.products_ranking||[];
-  for(var pi=0;pi<pr.length;pi++){
-    var p=pr[pi],kws="",krel=p.related_keywords_top_convert||[];
-    for(var kj=0;kj<krel.length;kj++)kws+='<span class="pill pill-green">'+esc(krel[kj].text)+' ('+krel[kj].conv_30d+')</span>';
-    if(!kws)kws='<span class="text-gray">—</span>';
-    h+='<tr><td class="text-gray">'+(pi+1)+'</td><td class="font-bold">'+esc(p.product)+'</td>';
-    h+='<td><span class="pill">'+esc(p.category_name)+'</span></td>';
-    h+='<td class="t-right text-green font-bold">'+fmtVND(p.revenue_30d)+'đ</td>';
-    h+='<td class="t-right">'+fmtInt(p.orders_30d)+'</td>';
-    h+='<td class="t-right text-xs text-gray">'+fmtVND(p.avg_order_value)+'đ</td>';
-    h+='<td class="text-xs">'+kws+'</td></tr>';
-  }
-  h+='</tbody></table></div></section>';
+    // Product ranking - render qua container để nhảy theo period
+  h+='<section class="block card" id="product-ranking-container"></section>';;
 
   // Tabs
   h+='<section class="block card"><h2>Phân tích chi tiết theo Nhóm sản phẩm</h2><div class="cat-tabs">';
@@ -278,12 +301,12 @@ function renderCategory(c,ck){
   // Keywords table with sort
   var kws=c.keywords||[];
   h+='<h3 style="margin-top:16px">Bảng Từ khóa ('+kws.length+' từ khóa đang chạy) <span class="text-xs text-gray">— Click header để sắp xếp</span></h3>';
-  h+='<p class="text-xs text-gray" style="margin:4px 0">Ghi chú: Google Ads cho phép đặt <strong>Loại khớp</strong> RIÊNG cho TỪNG từ khóa (không phải cho toàn chiến dịch). Cột Loại khớp hiển thị match type hiện tại của keyword đó.</p>';
+  h+='<p class="text-xs text-gray" style="margin:4px 0">Ghi chú: Cột <strong>Hiệu quả #</strong> là xếp hạng nội bộ theo conv/spend/CTR (không phải SEO rank Google). Google Ads cho phép đặt <strong>Loại khớp</strong> RIÊNG cho TỪNG từ khóa. Muốn có SEO position thật (vị trí TB trên SERP) cần fetch thêm field từ Windsor.</p>';
   if(!kws.length)h+='<p class="text-xs text-gray">-</p>';
   else{
     var tid="tbl-kw-"+ck;
     h+='<div class="tbl-wrap"><table id="'+tid+'"><thead><tr>';
-    h+='<th class="t-center" onclick="sortTable(\''+tid+'\',0,\'num\')" style="cursor:pointer">Xếp hạng</th>';
+    h+='<th class="t-center" onclick="sortTable(\''+tid+'\',0,\'num\')" style="cursor:pointer" title="Xếp hạng hiệu quả nội bộ (theo conv/spend/CTR) — KHÔNG phải xếp hạng SEO trên Google">Hiệu quả #</th>';
     h+='<th onclick="sortTable(\''+tid+'\',1,\'str\')" style="cursor:pointer">Từ khóa</th>';
     h+='<th onclick="sortTable(\''+tid+'\',2,\'str\')" style="cursor:pointer">Loại khớp</th>';
     h+='<th onclick="sortTable(\''+tid+'\',3,\'str\')" style="cursor:pointer">Trạng thái</th>';
