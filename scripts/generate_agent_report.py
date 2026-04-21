@@ -468,9 +468,18 @@ def main():
         "estimated_total_saving_vnd": total_saving,
     }, roas)
 
+    # Build time_periods block — load spend file để có campaigns_raw theo ngày
+    GA_SPEND_FILE = os.path.join(REPO_ROOT, "data", "google-ads-spend.json")
+    ga_spend_data = _load_json(GA_SPEND_FILE)
+    _all_dates = sorted(set(r.get("date", "") for r in ga_spend_data.get("campaigns_raw", []) if r.get("date")))
+    today_str = _all_dates[-1] if _all_dates else now_vn.strftime("%Y-%m-%d")
+    print(f"[INFO] Computing time periods (reference date: {today_str})...")
+    time_periods = build_time_periods(ga_spend_data, rev, today_str)
+
     report = {
         "generated_at": now_vn.strftime("%Y-%m-%d %H:%M"),
         "score_summary": score_summary_data,
+        "time_periods": time_periods,
         "version": "3.0",
         "period": {
             "start": ctx.get("source_data_date_range", {}).get("start_30d", ""),
@@ -991,6 +1000,199 @@ def build_category_evaluation(c, cat_key):
         bad.append(f"**0 đơn hàng** mà chi {spend/1_000_000:.1f}tr - verify tracking hoặc cắt budget")
 
     return {"good": good, "bad": bad}
+
+
+
+def _period_dates(today_str, period_key):
+    """Return (start, end) for a period based on today."""
+    from datetime import datetime, timedelta
+    tdy = datetime.strptime(today_str, "%Y-%m-%d")
+    if period_key == "today":
+        return today_str, today_str
+    if period_key == "yesterday":
+        y = (tdy - timedelta(days=1)).strftime("%Y-%m-%d")
+        return y, y
+    if period_key == "this_week":
+        # Monday → today
+        wd = tdy.weekday()  # Mon=0
+        mon = (tdy - timedelta(days=wd)).strftime("%Y-%m-%d")
+        return mon, today_str
+    if period_key == "last_week":
+        wd = tdy.weekday()
+        mon_this = tdy - timedelta(days=wd)
+        mon_last = mon_this - timedelta(days=7)
+        sun_last = mon_this - timedelta(days=1)
+        return mon_last.strftime("%Y-%m-%d"), sun_last.strftime("%Y-%m-%d")
+    if period_key == "this_month":
+        first = tdy.replace(day=1).strftime("%Y-%m-%d")
+        return first, today_str
+    if period_key == "last_month":
+        first_this = tdy.replace(day=1)
+        last_prev = first_this - timedelta(days=1)
+        first_prev = last_prev.replace(day=1)
+        return first_prev.strftime("%Y-%m-%d"), last_prev.strftime("%Y-%m-%d")
+    if period_key == "last_7d":
+        return (tdy - timedelta(days=6)).strftime("%Y-%m-%d"), today_str
+    if period_key == "last_30d":
+        return (tdy - timedelta(days=29)).strftime("%Y-%m-%d"), today_str
+    if period_key == "last_90d":
+        return (tdy - timedelta(days=89)).strftime("%Y-%m-%d"), today_str
+    if period_key == "prior_7d":
+        end_p = (tdy - timedelta(days=7)).strftime("%Y-%m-%d")
+        start_p = (tdy - timedelta(days=13)).strftime("%Y-%m-%d")
+        return start_p, end_p
+    if period_key == "prior_30d":
+        end_p = (tdy - timedelta(days=30)).strftime("%Y-%m-%d")
+        start_p = (tdy - timedelta(days=59)).strftime("%Y-%m-%d")
+        return start_p, end_p
+    return today_str, today_str
+
+
+def compute_period_totals(ga_data, rev_data, start, end):
+    """Tổng hợp spend/clicks/impressions/revenue cho 1 period [start, end]."""
+    spend = 0.0
+    clicks = 0
+    imps = 0
+    per_cat = {}
+    campaigns_raw = ga_data.get("campaigns_raw", [])
+    for r in campaigns_raw:
+        d = r.get("date", "")
+        if not d or not (start <= d <= end):
+            continue
+        cat = r.get("category", "OTHER")
+        s = float(r.get("spend", 0) or 0)
+        c = int(r.get("clicks", 0) or 0)
+        i = int(r.get("impressions", 0) or 0)
+        spend += s
+        clicks += c
+        imps += i
+        if cat not in per_cat:
+            per_cat[cat] = {"spend": 0.0, "clicks": 0, "impressions": 0, "revenue": 0.0, "orders": 0}
+        per_cat[cat]["spend"] += s
+        per_cat[cat]["clicks"] += c
+        per_cat[cat]["impressions"] += i
+
+    # Revenue từ Pancake WEBSITE source
+    groups = rev_data.get("source_groups", {})
+    website = groups.get("WEBSITE", {})
+    rsbd = website.get("order_revenue_by_status_by_date", {})
+    cbsd = website.get("order_count_by_status_by_date", {})
+    total_rev = 0
+    total_orders = 0
+    for st in ["delivered", "other"]:
+        for d, v in (rsbd.get(st) or {}).items():
+            if start <= d <= end:
+                total_rev += v
+        for d, c in (cbsd.get(st) or {}).items():
+            if start <= d <= end:
+                total_orders += c
+
+    # Revenue per product theo category - dùng products by_date
+    products = rev_data.get("products", {})
+    for prod_name, p in products.items():
+        # Map product → category
+        cat = "OTHER"
+        for ck, meta in CATEGORY_META.items():
+            if prod_name in meta["products"]:
+                cat = ck
+                break
+        by_date = p.get("by_date", {}) or {}
+        for d, v in by_date.items():
+            if start <= d <= end:
+                if cat not in per_cat:
+                    per_cat[cat] = {"spend": 0.0, "clicks": 0, "impressions": 0, "revenue": 0.0, "orders": 0}
+                per_cat[cat]["revenue"] += v
+                per_cat[cat]["orders"] += 1  # ước lượng 1 đơn/1 date entry (không chính xác lắm)
+
+    ctr = (clicks / imps) if imps > 0 else 0
+    cpc = (spend / clicks) if clicks > 0 else 0
+    roas = (total_rev / spend) if spend > 0 else 0
+
+    # Finalize per_cat
+    per_cat_out = {}
+    for cat, m in per_cat.items():
+        m_ctr = (m["clicks"] / m["impressions"]) if m["impressions"] > 0 else 0
+        m_roas = (m["revenue"] / m["spend"]) if m["spend"] > 0 else 0
+        per_cat_out[cat] = {
+            "spend": round(m["spend"], 0),
+            "clicks": m["clicks"],
+            "impressions": m["impressions"],
+            "ctr": round(m_ctr, 4),
+            "revenue": round(m["revenue"], 0),
+            "orders": m["orders"],
+            "roas": round(m_roas, 2),
+        }
+
+    return {
+        "date_range": {"start": start, "end": end},
+        "totals": {
+            "spend": round(spend, 0),
+            "clicks": clicks,
+            "impressions": imps,
+            "ctr": round(ctr, 4),
+            "cpc": round(cpc, 0),
+            "revenue": round(total_rev, 0),
+            "orders": total_orders,
+            "roas": round(roas, 2),
+        },
+        "per_category": per_cat_out,
+    }
+
+
+def build_time_periods(ga_data, rev_data, today_str):
+    """Build dict of multiple periods + compare pairs."""
+    period_keys = ["today", "yesterday", "this_week", "last_week", "this_month", "last_month", "last_7d", "last_30d", "last_90d", "prior_7d", "prior_30d"]
+    labels = {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "this_week": "Tuần này",
+        "last_week": "Tuần trước",
+        "this_month": "Tháng này",
+        "last_month": "Tháng trước",
+        "last_7d": "7 ngày qua",
+        "last_30d": "30 ngày qua",
+        "last_90d": "90 ngày qua",
+        "prior_7d": "7 ngày trước đó",
+        "prior_30d": "30 ngày trước đó",
+    }
+    compare_map = {
+        "today": "yesterday",
+        "yesterday": None,
+        "this_week": "last_week",
+        "last_week": None,
+        "this_month": "last_month",
+        "last_month": None,
+        "last_7d": "prior_7d",
+        "last_30d": "prior_30d",
+        "last_90d": None,
+    }
+
+    periods = {}
+    for pk in period_keys:
+        start, end = _period_dates(today_str, pk)
+        data = compute_period_totals(ga_data, rev_data, start, end)
+        data["label"] = labels[pk]
+        data["compare_to"] = compare_map.get(pk)
+        periods[pk] = data
+
+    return periods
+
+
+def compute_comparison(current, previous):
+    """Tính % thay đổi giữa 2 period totals."""
+    def pct(a, b):
+        if b == 0:
+            return None
+        return round((a - b) / b * 100, 1)
+
+    return {
+        "spend_change_pct": pct(current["totals"]["spend"], previous["totals"]["spend"]),
+        "clicks_change_pct": pct(current["totals"]["clicks"], previous["totals"]["clicks"]),
+        "ctr_change_pct": pct(current["totals"]["ctr"], previous["totals"]["ctr"]),
+        "revenue_change_pct": pct(current["totals"]["revenue"], previous["totals"]["revenue"]),
+        "orders_change_pct": pct(current["totals"]["orders"], previous["totals"]["orders"]),
+        "roas_change_pct": pct(current["totals"]["roas"], previous["totals"]["roas"]),
+    }
 
 if __name__ == "__main__":
     main()

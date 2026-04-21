@@ -1,6 +1,6 @@
-// Agent Google Doscom v3.2 — JS logic tách khỏi HTML để tránh truncate
-console.log("[AgentPage] JS loaded");
-var REPORT=null, currentCat=null;
+// Agent Google Doscom v3.3 — Thêm bộ lọc thời gian + bảng so sánh
+console.log("[AgentPage] JS v3.3 loaded");
+var REPORT=null, currentCat=null, selectedPeriod="last_30d";
 var REC_VN={"KEEP":"Giữ nguyên","SCALE":"Tăng bid","ADD_NEGATIVE":"Thêm negative","PAUSE":"Tạm dừng","REPLACE":"Thay banner","REVIEW":"Xem lại","MONITOR":"Theo dõi"};
 var MATCH_VN={"BROAD":"Rộng","EXACT":"Chính xác","PHRASE":"Cụm","NEAR_PHRASE":"Gần cụm","UNKNOWN":"-"};
 var STATUS_VN={"NONE":"Chưa xử lý","ADDED":"Đã thêm","EXCLUDED":"Đã loại trừ"};
@@ -8,6 +8,13 @@ var STATUS_VN={"NONE":"Chưa xử lý","ADDED":"Đã thêm","EXCLUDED":"Đã lo�
 function fmtVND(n){if(n==null||n===0)return "0";if(Math.abs(n)>=1e6)return (n/1e6).toFixed(1)+"tr";if(Math.abs(n)>=1e3)return (n/1e3).toFixed(0)+"K";return Math.round(n).toLocaleString("vi-VN")}
 function fmtInt(n){return n==null?"-":n.toLocaleString("vi-VN")}
 function fmtPct(n,d){if(d==null)d=2;return n==null?"-":(n*100).toFixed(d)+"%"}
+function fmtChange(pct){
+  if(pct==null)return '<span class="text-gray">-</span>';
+  var cls = pct > 0 ? "text-green" : (pct < 0 ? "text-red" : "text-gray");
+  var sign = pct > 0 ? "+" : "";
+  var arrow = pct > 0 ? "▲" : (pct < 0 ? "▼" : "●");
+  return '<span class="'+cls+' font-bold">'+arrow+" "+sign+pct.toFixed(1)+"%</span>";
+}
 function esc(s){if(s==null)return "";return String(s).split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;").split("\"").join("&quot;")}
 function mdBold(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")}
 function trn(s,d){if(!s)return "-";return s.split("/").map(function(p){return d[p]||p}).join(" / ")}
@@ -17,9 +24,9 @@ function load(){
     if(!res.ok)throw new Error("HTTP "+res.status);
     return res.json();
   }).then(function(r){
-    console.log("[AgentPage] loaded score:",r.score);
+    console.log("[AgentPage] loaded");
     REPORT=r;
-    try{render(r);}catch(err){console.error(err);showError("Lỗi render: "+err.message);}
+    try{render(r);}catch(err){console.error(err);showError("Lỗi: "+err.message);}
   }).catch(function(e){showError("Không tải được: "+esc(e.message));});
 }
 
@@ -40,6 +47,107 @@ function switchCat(key,ev){
   for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("active");
   if(ev&&ev.target)ev.target.classList.add("active");
   document.getElementById("cat-content").innerHTML=renderCategory(REPORT.categories[key],key);
+}
+
+function changePeriod(key){
+  selectedPeriod = key;
+  renderTimeFilterSection(REPORT);
+}
+
+function computeCompare(cur, prev){
+  function pct(a, b){ if(!b) return null; return (a-b)/b*100; }
+  return {
+    spend: pct(cur.totals.spend, prev.totals.spend),
+    clicks: pct(cur.totals.clicks, prev.totals.clicks),
+    ctr: pct(cur.totals.ctr, prev.totals.ctr),
+    revenue: pct(cur.totals.revenue, prev.totals.revenue),
+    orders: pct(cur.totals.orders, prev.totals.orders),
+    roas: pct(cur.totals.roas, prev.totals.roas),
+  };
+}
+
+function renderTimeFilterSection(r){
+  var tp = r.time_periods || {};
+  var cur = tp[selectedPeriod];
+  if(!cur) return;
+  var compareKey = cur.compare_to;
+  var prev = compareKey ? tp[compareKey] : null;
+  var cmp = prev ? computeCompare(cur, prev) : null;
+
+  var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
+  html += '<h2 style="font-size:16px;font-weight:700">Bộ lọc thời gian</h2>';
+  html += '<select onchange="changePeriod(this.value)" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;background:white">';
+  var periodList = ["today","yesterday","this_week","last_week","this_month","last_month","last_7d","last_30d","last_90d"];
+  for(var i=0;i<periodList.length;i++){
+    var k = periodList[i];
+    if(!tp[k]) continue;
+    var sel = k === selectedPeriod ? " selected" : "";
+    html += '<option value="'+k+'"'+sel+'>'+esc(tp[k].label)+'</option>';
+  }
+  html += '</select></div>';
+
+  // Date range
+  html += '<p class="text-xs text-gray" style="margin-bottom:12px">Kỳ: <strong>'+esc(cur.date_range.start)+' → '+esc(cur.date_range.end)+'</strong>';
+  if(prev) html += ' · So sánh với <strong>'+esc(prev.label)+'</strong> ('+esc(prev.date_range.start)+' → '+esc(prev.date_range.end)+')';
+  html += '</p>';
+
+  // Totals + compare
+  var t = cur.totals;
+  html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px" class="tf-grid">';
+  function metricBox(label, value, changeHtml){
+    return '<div style="background:#f9fafb;border-radius:6px;padding:10px"><div style="font-size:10px;color:#6b7280;text-transform:uppercase">'+label+'</div>'+
+      '<div style="font-size:18px;font-weight:700;margin-top:4px">'+value+'</div>'+
+      (changeHtml?'<div style="font-size:11px;margin-top:2px">'+changeHtml+'</div>':'')+'</div>';
+  }
+  html += metricBox("Chi phí ads", fmtVND(t.spend)+'đ', cmp?fmtChange(cmp.spend):'');
+  html += metricBox("Click", fmtInt(t.clicks), cmp?fmtChange(cmp.clicks):'');
+  html += metricBox("CTR", fmtPct(t.ctr), cmp?fmtChange(cmp.ctr):'');
+  html += metricBox("Doanh thu", fmtVND(t.revenue)+'đ', cmp?fmtChange(cmp.revenue):'');
+  html += metricBox("Đơn hàng", fmtInt(t.orders), cmp?fmtChange(cmp.orders):'');
+  html += metricBox("ROAS", t.roas+'x', cmp?fmtChange(cmp.roas):'');
+  html += '</div>';
+
+  // Per-category table trong period này
+  var pc = cur.per_category || {};
+  var catList = [];
+  for(var k in pc) if(pc[k].spend > 0 || pc[k].revenue > 0) catList.push(k);
+  catList.sort(function(a,b){return pc[b].spend - pc[a].spend;});
+
+  if(catList.length){
+    var catMeta = {};
+    if(REPORT.categories) for(var ck in REPORT.categories) catMeta[ck] = REPORT.categories[ck].display_name || ck;
+
+    html += '<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ</h3>';
+    html += '<div class="tbl-wrap"><table><thead><tr>';
+    html += '<th>Nhóm sản phẩm</th><th class="t-right">Chi phí</th><th class="t-right">Click</th>';
+    html += '<th class="t-right">CTR</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">ROAS</th>';
+    if(prev) html += '<th class="t-right">Thay đổi Spend</th><th class="t-right">Thay đổi Revenue</th>';
+    html += '</tr></thead><tbody>';
+    for(var ci=0;ci<catList.length;ci++){
+      var ck2 = catList[ci];
+      var c = pc[ck2];
+      var pcPrev = prev ? (prev.per_category[ck2] || {}) : null;
+      html += '<tr><td class="font-bold">'+esc(catMeta[ck2]||ck2)+'</td>';
+      html += '<td class="t-right">'+fmtVND(c.spend)+'đ</td>';
+      html += '<td class="t-right">'+fmtInt(c.clicks)+'</td>';
+      html += '<td class="t-right">'+fmtPct(c.ctr)+'</td>';
+      html += '<td class="t-right text-green">'+fmtVND(c.revenue)+'đ</td>';
+      html += '<td class="t-right">'+fmtInt(c.orders)+'</td>';
+      var roasCls = c.roas >= 1.5 ? "text-green font-bold" : (c.roas > 0 ? "text-red" : "text-gray");
+      html += '<td class="t-right '+roasCls+'">'+c.roas+'x</td>';
+      if(prev){
+        function catPct(a,b){if(!b||b===0)return null;return (a-b)/b*100;}
+        var sCh = pcPrev ? catPct(c.spend, pcPrev.spend||0) : null;
+        var rCh = pcPrev ? catPct(c.revenue, pcPrev.revenue||0) : null;
+        html += '<td class="t-right">'+fmtChange(sCh)+'</td>';
+        html += '<td class="t-right">'+fmtChange(rCh)+'</td>';
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+  }
+
+  document.getElementById("time-filter-content").innerHTML = html;
 }
 
 function render(r){
@@ -67,6 +175,9 @@ function render(r){
   html+='<div class="metric-sub">trong 30 ngày</div></div>';
   html+='</section>';
 
+  // NEW: Time filter section
+  html+='<section class="block card"><div id="time-filter-content"></div></section>';
+
   // Score summary
   var ss=r.score_summary||{};
   html+='<section class="block card"><h2>Tổng quan đánh giá</h2>';
@@ -87,14 +198,14 @@ function render(r){
   html+='<p style="font-weight:600;font-size:13px">'+esc(r.headline)+'</p>';
   html+='<p class="text-sm" style="margin-top:8px;color:#374151">'+esc(r.verdict)+'</p>';
   var pd=r.period||{};
-  html+='<p class="text-xs" style="color:#9ca3af;margin-top:6px">Cập nhật: '+esc(r.generated_at)+' · Kỳ: '+esc(pd.start)+' đến '+esc(pd.end)+'</p>';
+  html+='<p class="text-xs" style="color:#9ca3af;margin-top:6px">Cập nhật: '+esc(r.generated_at)+' · Kỳ 30d: '+esc(pd.start)+' đến '+esc(pd.end)+'</p>';
   html+='</section>';
 
   // Product ranking
   html+='<section class="block card"><h2>Xếp hạng Sản phẩm theo Doanh thu (Pancake 30 ngày)</h2>';
   html+='<div class="tbl-wrap"><table><thead><tr>';
   html+='<th>#</th><th>Sản phẩm</th><th>Nhóm</th><th class="t-right">Doanh thu</th>';
-  html+='<th class="t-right">Đơn</th><th class="t-right">AOV (giá đơn TB)</th><th>Từ khóa có chuyển đổi</th>';
+  html+='<th class="t-right">Đơn</th><th class="t-right">AOV</th><th>Từ khóa có chuyển đổi</th>';
   html+='</tr></thead><tbody>';
   var pr=r.products_ranking||[];
   for(var pi=0;pi<pr.length;pi++){
@@ -128,15 +239,17 @@ function render(r){
   for(var ki=0;ki<kf.length;ki++)if(kf[ki])html+='<li>'+esc(kf[ki])+'</li>';
   html+='</ul></section>';
 
-  html+='<div class="footer">Agent Google Doscom v'+(r.version||"3.2")+' · Chạy 3 ngày/lần lúc 7:30 sáng VN</div>';
+  html+='<div class="footer">Agent Google Doscom v'+(r.version||"3.3")+' · Chạy 3 ngày/lần lúc 7:30 sáng VN</div>';
   document.getElementById("main").innerHTML=html;
+
+  // Render time filter sau khi DOM có
+  renderTimeFilterSection(r);
 }
 
 function renderCategory(c,ck){
   if(!c)return '<p class="text-gray">Không có dữ liệu.</p>';
   var html="";
 
-  // Overview
   html+='<div class="cat-overview">';
   html+='<div class="cat-overview-item"><div class="lbl">Sản phẩm</div><div class="val text-xs">'+((c.products||[]).join(", ")||"-")+'</div></div>';
   html+='<div class="cat-overview-item"><div class="lbl">Chi phí ads 30d</div><div class="val">'+fmtVND(c.ads_spend_30d)+'đ</div></div>';
@@ -146,7 +259,6 @@ function renderCategory(c,ck){
   html+='<div class="cat-overview-item"><div class="lbl">CTR TB</div><div class="val">'+fmtPct(c.ads_ctr_30d)+'</div></div>';
   html+='</div>';
 
-  // Category Evaluation
   var ev=c.evaluation||{good:[],bad:[]};
   html+='<div class="cat-eval">';
   html+='<div class="cat-eval-box good"><h4>✓ Điểm mạnh nhóm này</h4><ul>';
@@ -158,7 +270,6 @@ function renderCategory(c,ck){
   for(var bi=0;bi<ev.bad.length;bi++)html+='<li>'+mdBold(ev.bad[bi])+'</li>';
   html+='</ul></div></div>';
 
-  // Actions
   var sa=c.summary_actions||[];
   if(sa.length){
     html+='<h3>Hành động đề xuất</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
@@ -178,7 +289,6 @@ function renderCategory(c,ck){
     html+='</div>';
   } else html+='<p class="text-xs text-gray" style="margin-bottom:12px">Không có hành động cần thực hiện.</p>';
 
-  // Keywords table (full list with rank)
   var kws=c.keywords||[];
   html+='<h3 style="margin-top:16px">Bảng Từ khóa ('+kws.length+' từ khóa đang chạy)</h3>';
   if(!kws.length)html+='<p class="text-xs text-gray">Chưa có dữ liệu từ khóa.</p>';
@@ -205,9 +315,8 @@ function renderCategory(c,ck){
     html+='</tbody></table></div>';
   }
 
-  // Banners
   var bs=c.banners||[];
-  html+='<h3 style="margin-top:16px">Bảng Banner / Quảng cáo ('+bs.length+' banner)</h3>';
+  html+='<h3 style="margin-top:16px">Bảng Banner ('+bs.length+' banner)</h3>';
   if(!bs.length)html+='<p class="text-xs text-gray">Chưa có dữ liệu banner.</p>';
   else{
     html+='<div class="tbl-wrap"><table><thead><tr>';
@@ -232,99 +341,8 @@ function renderCategory(c,ck){
       html+='<td class="text-xs text-gray">'+esc(b.reason)+'</td></tr>';
     }
     html+='</tbody></table></div>';
-    html+='<p class="text-xs text-gray" style="margin-top:4px">Ghi chú: Chuyển đổi ở banner đang là "—" vì Windsor chưa xuất field này (sẽ bổ sung sau).</p>';
   }
 
-  // Suggested Keywords
   var sk=c.suggested_keywords||[];
   html+='<div id="suggest-keywords-'+ck+'" class="suggest-block"><h3>Bộ từ khóa nên THÊM ('+sk.length+' gợi ý)</h3>';
-  if(!sk.length)html+='<p class="text-xs text-gray">Chưa có gợi ý cho nhóm này.</p>';
-  else{
-    html+='<div class="tbl-wrap" style="background:white"><table><thead><tr>';
-    html+='<th>Từ khóa đề xuất</th><th>Nhóm ý định (intent)</th><th>Loại khớp nên dùng</th><th>Volume ước tính</th><th>Lý do</th>';
-    html+='</tr></thead><tbody>';
-    for(var si2=0;si2<sk.length;si2++){
-      var s=sk[si2];
-      html+='<tr><td class="font-bold">'+esc(s.keyword)+'</td>';
-      html+='<td><span class="pill">'+esc(s.intent_group)+'</span></td>';
-      html+='<td class="text-xs">'+esc(trn(s.suggested_match_type,MATCH_VN))+'</td>';
-      html+='<td class="text-xs">'+esc(s.estimated_volume==="medium"?"Trung bình":s.estimated_volume)+'</td>';
-      html+='<td class="text-xs text-gray">'+esc(s.reason)+'</td></tr>';
-    }
-    html+='</tbody></table></div></div>';
-  }
-
-  // Banner Tips
-  var bt=c.banner_improvement_tips||[];
-  html+='<div id="suggest-banners-'+ck+'" class="suggest-block"><h3>Gợi ý cải thiện Banner ('+bt.length+' banner cần sửa)</h3>';
-  if(!bt.length)html+='<p class="text-xs text-gray">Không có banner cần cải thiện.</p>';
-  else{
-    for(var tii=0;tii<bt.length;tii++){
-      var tip=bt[tii];
-      html+='<div class="tip-card">';
-      html+='<div class="field"><span class="lbl">Banner:</span> <span class="mono">'+esc(tip.ad_name)+'</span> (id '+esc(tip.ad_id)+', size '+esc(tip.current_size)+', CTR '+fmtPct(tip.current_ctr)+')</div>';
-      html+='<div class="field"><span class="lbl">Vấn đề:</span> '+esc(tip.problem)+'</div>';
-      html+='<div class="field"><span class="lbl">Size nên dùng:</span> '+esc(tip.recommended_size)+'</div>';
-      html+='<div class="field"><span class="lbl">Màu sắc:</span> '+esc(tip.recommended_colors)+'</div>';
-      html+='<div class="field"><span class="lbl">Visual:</span> '+esc(tip.recommended_visual)+'</div>';
-      html+='<div class="field"><span class="lbl">Headline:</span> "'+esc(tip.recommended_headline)+'"</div>';
-      html+='<div class="field"><span class="lbl">CTA:</span> "'+esc(tip.recommended_cta)+'"</div>';
-      html+='<div class="field"><span class="lbl">Social proof:</span> '+esc(tip.recommended_social_proof)+'</div>';
-      html+='<div class="field text-xs" style="color:#6b7280;padding-top:4px;border-top:1px dashed #fde68a;margin-top:6px"><span class="lbl">Vì sao:</span> '+esc(tip.why)+'</div>';
-      html+='</div>';
-    }
-  }
-  html+='</div>';
-
-  // A/B Test
-  var ab=c.ab_test_suggestions||[];
-  html+='<div id="suggest-abtest-'+ck+'" class="suggest-block"><h3>Gợi ý A/B Test ('+ab.length+' banner)</h3>';
-  if(!ab.length)html+='<p class="text-xs text-gray">Không có banner cần A/B test.</p>';
-  else{
-    for(var abi=0;abi<ab.length;abi++){
-      var tt=ab[abi];
-      html+='<div class="tip-card">';
-      html+='<div class="field"><span class="lbl">Banner test:</span> <span class="mono">'+esc(tt.ad_name)+'</span> (CTR: '+fmtPct(tt.current_ctr)+')</div>';
-      var vs=tt.test_variants||[];
-      html+='<div class="field"><span class="lbl">Các variant:</span></div><ol style="margin-left:24px;font-size:12px">';
-      for(var vi=0;vi<vs.length;vi++){
-        var v=vs[vi];
-        html+='<li><strong>'+esc(v.variant)+'</strong> ('+esc(v.angle)+') — "'+esc(v.headline)+'" · '+esc(v.purpose)+'</li>';
-      }
-      html+='</ol>';
-      html+='<div class="field"><span class="lbl">Ngân sách:</span> '+esc(tt.budget_split)+'</div>';
-      html+='<div class="field"><span class="lbl">Tiêu chí thắng:</span> '+esc(tt.success_metric)+'</div>';
-      html+='<div class="field text-xs" style="color:#047857"><span class="lbl">Kỳ vọng:</span> '+esc(tt.estimated_lift)+'</div>';
-      html+='</div>';
-    }
-  }
-  html+='</div>';
-
-  // Title Analysis
-  var ta=c.title_analysis||[];
-  html+='<div id="suggest-titles-'+ck+'" class="suggest-block"><h3>Phân tích Tiêu đề Quảng cáo ('+ta.length+' tiêu đề)</h3>';
-  if(!ta.length)html+='<p class="text-xs text-gray">Chưa có tiêu đề để phân tích.</p>';
-  else{
-    html+='<div class="tbl-wrap" style="background:white;max-height:none"><table><thead><tr>';
-    html+='<th>Tiêu đề</th><th>Ad group</th><th class="t-right">Chi tiêu</th><th class="t-right">CTR</th><th>Chất lượng</th><th>Hành động</th><th>Gợi ý cải thiện</th>';
-    html+='</tr></thead><tbody>';
-    for(var tii2=0;tii2<ta.length;tii2++){
-      var tt2=ta[tii2];
-      html+='<tr><td><span class="truncate" title="'+esc(tt2.full_title)+'">'+esc(tt2.title_snippet)+'</span></td>';
-      html+='<td class="text-xs">'+esc(tt2.ad_group_name)+'</td>';
-      html+='<td class="t-right">'+fmtVND(tt2.spend_30d)+'đ</td>';
-      html+='<td class="t-right">'+fmtPct(tt2.ctr_30d)+'</td>';
-      var qC=tt2.quality==="tốt"?"pill-green":(tt2.quality==="kém"?"pill-orange":"pill");
-      html+='<td><span class="pill '+qC+'">'+esc(tt2.quality)+'</span></td>';
-      var recCls=tt2.recommendation==="GIỮ"?"KEEP":(tt2.recommendation==="VIẾT LẠI"?"REPLACE":"REVIEW");
-      html+='<td><span class="rec rec-'+recCls+'">'+esc(tt2.recommendation)+'</span></td>';
-      html+='<td class="text-xs text-gray">'+esc(tt2.suggested_improvement||"-")+'</td></tr>';
-    }
-    html+='</tbody></table></div>';
-  }
-  html+='</div>';
-
-  return html;
-}
-
-load();
+  if(!sk.length)html+='<p class="
