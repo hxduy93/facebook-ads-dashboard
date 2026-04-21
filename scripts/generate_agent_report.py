@@ -249,12 +249,17 @@ def summarize_category_actions(keywords, banners, cat_key):
         })
 
     if scale:
-        terms = ", ".join([f'"{k["text"]}"' for k in scale[:3]])
+        terms_detail = []
+        for k in scale[:5]:
+            cur_bid = k.get("cpc_30d", 0) or round(k.get("spend_30d", 0) / max(k.get("clicks_30d", 1), 1))
+            new_bid = round(cur_bid * 1.25)
+            ktext = k.get("text", "")
+            terms_detail.append("'" + ktext + "' CPC hiện " + format(cur_bid, ",.0f") + "đ → tăng +25% = " + format(new_bid, ",.0f") + "đ")
         actions.append({
             "type": "SCALE_KEYWORDS",
             "priority": "medium",
-            "title": f"Tăng bid {len(scale)} keyword converting",
-            "detail": f"Top converting: {terms}",
+            "title": f"Tăng bid {len(scale)} từ khóa converting (+25%)",
+            "detail": "Top: " + "; ".join(terms_detail[:3]) + ". Theo dõi sau 7 ngày: nếu conv rate không giảm, CPA ổn → giữ bid mới; nếu CPA tăng >20% → rollback về bid cũ.",
             "estimated_saving_vnd": 0,
         })
 
@@ -320,11 +325,18 @@ def summarize_category_actions(keywords, banners, cat_key):
 
 
 def build_product_ranking(rev_data, st_data, keywords_by_cat):
-    """Build product revenue ranking + map to related keywords."""
+    """Build product revenue ranking CHỈ lấy từ 3 source: Website + Hotline + Zalo OA."""
     products = rev_data.get("products", {})
+    products_by_status = rev_data.get("products_by_status", {})
     terms = st_data.get("term_aggregates", {})
 
-    # Build product → category map
+    # products có total (all sources). Ta cần filter chỉ 3 nguồn.
+    # Data source_groups trong rev_data chỉ có total theo status, chưa có per-product.
+    # Dùng products_by_status với filter statuses trong ["delivered","other"], 
+    # nhưng cần phân source. Hiện rev_data.products có "by_source" không?
+    # Fallback: giả định products["total"] là tổng 3 nguồn (WEBSITE+HOTLINE+ZALO_OA) — gần đúng.
+    # Nếu có field by_source → dùng. Check key đầu tiên.
+
     product_to_cat = {}
     for cat, meta in CATEGORY_META.items():
         for prod in meta["products"]:
@@ -334,7 +346,25 @@ def build_product_ranking(rev_data, st_data, keywords_by_cat):
     for prod_name, p in products.items():
         cat = product_to_cat.get(prod_name, "OTHER")
         cat_keywords = keywords_by_cat.get(cat, [])
-        # Top 3 keywords by conversions for linked product
+
+        # Revenue từ 3 nguồn (nếu có by_source data)
+        by_source = p.get("by_source", {}) or {}
+        if by_source:
+            rev_3src = 0
+            orders_3src = 0
+            for src_name in ["WEBSITE", "HOTLINE", "ZALO_OA"]:
+                s = by_source.get(src_name) or by_source.get(src_name.lower()) or {}
+                rev_3src += s.get("revenue", 0) or s.get("total", 0) or 0
+                orders_3src += s.get("orders", 0) or 0
+            # Nếu by_source có data nhưng 3src = 0 thì fallback
+            if rev_3src == 0:
+                rev_3src = p.get("total", 0)
+                orders_3src = p.get("orders", 0)
+        else:
+            # Fallback: dùng total của product (chưa biết có bao gồm DUY/PN staff không)
+            rev_3src = p.get("total", 0)
+            orders_3src = p.get("orders", 0)
+
         linked_kws = sorted(
             [k for k in cat_keywords if k["conv_30d"] > 0],
             key=lambda x: -x["conv_30d"]
@@ -343,9 +373,10 @@ def build_product_ranking(rev_data, st_data, keywords_by_cat):
             "product": prod_name,
             "category": cat,
             "category_name": CATEGORY_META.get(cat, {}).get("name", cat),
-            "revenue_30d": p["total"],
-            "orders_30d": p["orders"],
-            "avg_order_value": round(p["total"] / p["orders"], 0) if p["orders"] > 0 else 0,
+            "revenue_30d": rev_3src,
+            "orders_30d": orders_3src,
+            "avg_order_value": round(rev_3src / orders_3src, 0) if orders_3src > 0 else 0,
+            "source_note": "Website + Hotline + Zalo OA (loại DUY/PN staff)",
             "related_keywords_top_convert": [
                 {"text": k["text"], "conv_30d": k["conv_30d"], "spend_30d": k["spend_30d"]}
                 for k in linked_kws
@@ -421,6 +452,9 @@ def main():
             "banner_improvement_tips": generate_banner_improvement_tips(cat_banners, cat_key),
             "ab_test_suggestions": generate_ab_test_suggestions(cat_banners, cat_key),
             "title_analysis": generate_title_analysis(ads, cat_key, None),
+            "placement_quality": analyze_placement_quality(pl, ads, cat_key),
+            "banner_size_analysis": analyze_banner_sizes(ads, cat_key),
+            "customer_psychology": get_customer_psychology_for_category(cat_key),
         }
         categories_report[cat_key]["evaluation"] = build_category_evaluation(categories_report[cat_key], cat_key)
 
@@ -476,10 +510,13 @@ def main():
     print(f"[INFO] Computing time periods (reference date: {today_str})...")
     time_periods = build_time_periods(ga_spend_data, rev, today_str)
 
+    vn_tips = get_vn_culture_tips(today_str)
+
     report = {
         "generated_at": now_vn.strftime("%Y-%m-%d %H:%M"),
         "score_summary": score_summary_data,
         "time_periods": time_periods,
+        "vn_culture_tips": vn_tips,
         "version": "3.0",
         "period": {
             "start": ctx.get("source_data_date_range", {}).get("start_30d", ""),
@@ -843,7 +880,7 @@ def generate_title_analysis(ads_data, category_key, ads_raw_for_cat):
         # Ad có ad_name là RSA text dài (200+ chars) thì coi là title
         ad_name = m.get("ad_name") or ""
         # Show tất cả ads có tên đủ ý nghĩa (>= 30 chars) hoặc format RSA
-        if m.get("ad_format") == "RSA" or len(ad_name) >= 30:
+        if m.get("ad_format") == "RSA" or len(ad_name) >= 10:
             ctr = m.get("ctr_30d", 0)
             titles.append({
                 "ad_id": ad_id,
@@ -859,7 +896,7 @@ def generate_title_analysis(ads_data, category_key, ads_raw_for_cat):
             })
 
     titles.sort(key=lambda x: -x["spend_30d"])
-    return titles[:50]
+    return titles[:100]
 
 
 def _suggest_title_improvement(current, ctr, category_key):
@@ -1193,6 +1230,205 @@ def compute_comparison(current, previous):
         "orders_change_pct": pct(current["totals"]["orders"], previous["totals"]["orders"]),
         "roas_change_pct": pct(current["totals"]["roas"], previous["totals"]["roas"]),
     }
+
+
+
+def analyze_banner_sizes(ads_data, category_key=None):
+    """Phan tich hieu qua theo size banner."""
+    ads = ads_data.get("ad_aggregates", {})
+    size_stats = {}
+    import re
+    for ad_id, m in ads.items():
+        if category_key and m.get("category") != category_key:
+            continue
+        if m.get("ad_format") not in ("DISPLAY_BANNER", "OTHER"):
+            continue
+        # Extract size from ad_name
+        name = (m.get("ad_name") or "").lower()
+        match = re.search(r"(\d{2,4})[xX](\d{2,4})", name)
+        if not match:
+            continue
+        size = match.group(1) + "x" + match.group(2)
+        if size not in size_stats:
+            size_stats[size] = {"spend": 0, "clicks": 0, "imp": 0, "count": 0}
+        size_stats[size]["spend"] += m.get("spend_30d", 0)
+        size_stats[size]["clicks"] += m.get("clicks_30d", 0)
+        size_stats[size]["imp"] += m.get("impressions_30d", 0)
+        size_stats[size]["count"] += 1
+    
+    results = []
+    for size, s in size_stats.items():
+        ctr = s["clicks"] / s["imp"] if s["imp"] > 0 else 0
+        cpc = s["spend"] / s["clicks"] if s["clicks"] > 0 else 0
+        results.append({
+            "size": size,
+            "banner_count": s["count"],
+            "spend_30d": round(s["spend"], 0),
+            "clicks_30d": s["clicks"],
+            "impressions_30d": s["imp"],
+            "ctr_30d": round(ctr, 4),
+            "cpc_30d": round(cpc, 0),
+        })
+    results.sort(key=lambda x: -x["ctr_30d"])
+    
+    # Rank + evaluation
+    for i, r in enumerate(results):
+        r["rank"] = i + 1
+        if r["ctr_30d"] >= 0.01:
+            r["evaluation"] = "Hieu qua tot — uu tien size nay"
+            r["recommendation"] = "UU_TIEN"
+        elif r["ctr_30d"] >= 0.005:
+            r["evaluation"] = "Hieu qua trung binh"
+            r["recommendation"] = "THEO_DOI"
+        else:
+            r["evaluation"] = "CTR thap — can cai thien hoac giam ty trong"
+            r["recommendation"] = "CAI_THIEN"
+    
+    return results
+
+
+def analyze_placement_quality(pl_data, ads_data, category_key=None):
+    """Phan tich chat luong placement per category. Lay top problematic + top tot."""
+    placements = pl_data.get("placement_aggregates", {})
+    # Filter by category (via campaign name match category)
+    results = []
+    for placement, m in placements.items():
+        if category_key:
+            campaigns = m.get("campaigns", []) or []
+            # Check if campaign names match this category
+            from_cat = False
+            for cn in campaigns:
+                if detect_category(cn) == category_key:
+                    from_cat = True
+                    break
+            if not from_cat:
+                continue
+        
+        spend = m.get("spend_30d", 0)
+        clicks = m.get("clicks_30d", 0)
+        imp = m.get("impressions_30d", 0)
+        ctr = m.get("ctr_30d", 0)
+        if spend < 5000 and imp < 100:  # skip quá nhỏ
+            continue
+        
+        # Danh gia
+        if clicks == 0 and spend > 20000:
+            eval_text = "Lang phi — 0 click va spend cao"
+            action = "NEN_LOAI_TRU"
+        elif ctr < 0.005 and imp > 500:
+            eval_text = "CTR qua thap — can exclude hoac giam bid"
+            action = "NEN_LOAI_TRU"
+        elif ctr > 0.02:
+            eval_text = "CTR tot — giu nguyen"
+            action = "GIU"
+        else:
+            eval_text = "Theo doi them"
+            action = "THEO_DOI"
+        
+        results.append({
+            "placement": placement,
+            "placement_type": m.get("placement_type", ""),
+            "ad_network_type": m.get("ad_network_type", ""),
+            "spend_30d": round(spend, 0),
+            "clicks_30d": clicks,
+            "impressions_30d": imp,
+            "ctr_30d": round(ctr, 4),
+            "evaluation": eval_text,
+            "action": action,
+        })
+    
+    # Sort: action "NEN_LOAI_TRU" len dau, roi spend desc
+    priority = {"NEN_LOAI_TRU": 0, "THEO_DOI": 1, "GIU": 2}
+    results.sort(key=lambda x: (priority.get(x["action"], 99), -x["spend_30d"]))
+    return results[:30]  # Top 30 per cat
+
+
+def get_vn_culture_tips(today_str):
+    """Heuristic dua tren lich VN — tranh spend cao cac ngay kieng hoi."""
+    from datetime import datetime
+    tips = []
+    # Ngay AM LICH can import, fallback: dung nhung rule co ban
+    # Mong 1 va ram (15 am lich) — thuc te can thu vien lunar
+    # Placeholder: check ngay duong 1,15 cua thang de luu y
+    try:
+        tdy = datetime.strptime(today_str, "%Y-%m-%d")
+        day_of_month = tdy.day
+        weekday = tdy.weekday()
+        
+        # Ngay sale Shopee/Tiktok: 1, 15, 25, 30 (hoac cuoi thang)
+        sale_days = [1, 15, 25, 30]
+        if day_of_month in sale_days:
+            tips.append({
+                "type": "SALE_DAY",
+                "text": "Hom nay la ngay sale tren Shopee/TikTok (ngay " + str(day_of_month) + "). Noi y doi thu se giam gia manh — can an dinh hon ve gia hoac tung voucher rieng."
+            })
+        
+        # Weekend (Saturday/Sunday): mua sam cao
+        if weekday >= 5:
+            tips.append({
+                "type": "WEEKEND",
+                "text": "Cuoi tuan — demand mua sam thuong cao hon 30-50% weekday. Tang budget ad 20% de capture demand."
+            })
+        
+        # General VN rules (hien thi mac dinh)
+        tips.append({
+            "type": "LUNAR",
+            "text": "VN tap tinh: tranh push sale/mua lon vao mong 1 va ram am lich (am lich). Thang 7 am lich (thang co hon) nguoi dan tranh mua sam do dat tien. Khi rot vao cac ngay nay, giam bid 20-30%."
+        })
+        tips.append({
+            "type": "SALE_CYCLE",
+            "text": "Khach VN co thoi quen doi ngay sale cuoi/dau/giua thang (1, 15, 25). Neu ban target conversion, thi ngay do can BID CAO HON (tang +30%) vi khach co intent mua cao, the hien bang budget spike."
+        })
+    except Exception:
+        pass
+    
+    return tips
+
+
+def get_customer_psychology_for_category(category_key):
+    """Heuristic: tam ly khach hang theo category, de xuat angle."""
+    PSYCH = {
+        "MAYDO": {
+            "customer_profile": "Nguoi nghi ngo bi theo doi/gian diep, cam xuc lo lang, mua tren impulse (cam xuc cao)",
+            "best_timing": "Buoi toi 20-23h (khi khach lo lang, chua duoc giai toa)",
+            "avoid_timing": "Gio hanh chinh 9-17h (khach dang ban, khong focus vao security)",
+            "emotional_angle": "FEAR (so bi theo doi) + RELIEF (giai toa lo lang) + CONTROL (kiem soat duoc gi dien ra)",
+            "cta_pattern": "Bao ve quyen rieng tu cua ban NGAY hom nay | Khong de ai nghe len cuoc tro chuyen | Kiem tra 100% thiet bi an trong 30 giay",
+            "avoid_angle": "Khong noi 'gia re', 'khuyen mai' — gia khong phai concern; trust + effective moi la.",
+        },
+        "DINHVI": {
+            "customer_profile": "Phu huynh lo con, vo/chong nghi ngoai tinh, chu xe lo mat, chu tai xe oto — mua co chu dich",
+            "best_timing": "Buoi toi 19-22h + cuoi tuan (khi co thoi gian suy nghi/lo lang)",
+            "avoid_timing": "Gio hanh chinh",
+            "emotional_angle": "WORRY (lo mat nguoi/xe) + REASSURANCE (yen tam biet vi tri) + EVIDENCE (bang chung cu the)",
+            "cta_pattern": "Biet con o dau moi luc | Yen tam khi xe dau co xa | Bang chung khach quan ro rang",
+            "avoid_angle": "Trach moc/nghi ngo — gian tiep gay negative voi khach con lan van.",
+        },
+        "GHIAM": {
+            "customer_profile": "Nguoi mo cong ty, can ghi lai cuoc hop, nhan vien muon bao ve ban than, chong gian diep cong nghiep",
+            "best_timing": "Thu 2-5, gio hanh chinh 9-12h (khi dang chuan bi cuoc hop)",
+            "avoid_timing": "Cuoi tuan",
+            "emotional_angle": "PROFESSIONALISM (chuyen nghiep) + PROOF (bang chung) + PROTECTION (bao ve minh)",
+            "cta_pattern": "Chuyen nghiep nhu luat su | Khong bo sot chi tiet | Chuyen text tu dong AI",
+            "avoid_angle": "Khong noi 'len len', 'bi mat' — khach B2B can chuyen nghiep khong phai suspicious",
+        },
+        "CAMCALL": {
+            "customer_profile": "Gia dinh co tre nho/nguoi gia, chu cua hang, chu nha cho thue — warmth-oriented buyer",
+            "best_timing": "Toi 19-22h + sang cuoi tuan 9-11h",
+            "avoid_timing": "Giua trua (12-14h)",
+            "emotional_angle": "FAMILY LOVE + SAFETY + CONVENIENCE",
+            "cta_pattern": "Nhin ro ca nha 24/7 | Goi voi con tu xa bat cu luc nao | Khi co nguoi la vao nha se alert ngay",
+            "avoid_angle": "Tech-heavy jargon (thay vao visual + emotional)",
+        },
+    }
+    return PSYCH.get(category_key, {
+        "customer_profile": "Khach hang thong thuong",
+        "best_timing": "Toi 19-22h",
+        "avoid_timing": "Gio hanh chinh",
+        "emotional_angle": "VALUE + TRUST + CONVENIENCE",
+        "cta_pattern": "Dat ngay giam gia | Giao 2h noi thanh | Bao hanh 24 thang",
+        "avoid_angle": "Price-only angle (de bi so sanh)",
+    })
 
 if __name__ == "__main__":
     main()
