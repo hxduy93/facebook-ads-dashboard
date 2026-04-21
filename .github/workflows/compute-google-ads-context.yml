@@ -1,0 +1,49 @@
+name: Compute Google Ads Context
+
+# Chạy sau khi các workflow fetch Google Ads xong (spend phút 5,35; search-terms 10;
+# placement 15; ads 20). Gộp 5 file data/*.json → data/google-ads-context.json
+# để agent AI đọc.
+#
+# Cron: phút 25 và 55 — 5 phút sau khi fetch cuối cùng xong ở nửa đầu và nửa sau giờ.
+on:
+  schedule:
+    - cron: "25,55 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run compute metrics script
+        run: python scripts/compute_google_ads_metrics.py
+
+      - name: Commit updated context
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/google-ads-context.json)" ]; then
+            git add data/google-ads-context.json
+            git commit -m "chore: recompute Google Ads context (v2)"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No context changes to commit."
+          fi

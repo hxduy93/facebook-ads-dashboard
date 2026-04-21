@@ -1,0 +1,48 @@
+name: Fetch Google Ads Placement
+
+# Cron mỗi 60 phút phút 15 — lệch cron của fetch-google-ads (5,35), fetch-pancake (0,30),
+# search-terms (10), để tránh race condition.
+on:
+  schedule:
+    - cron: "15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run placement fetch script
+        env:
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+        run: python scripts/fetch_google_ads_placement.py
+
+      - name: Commit updated placement snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/google-ads-placement.json)" ]; then
+            git add data/google-ads-placement.json
+            git commit -m "chore: auto-sync Google Ads placement (Windsor.ai)"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No placement changes to commit."
+          fi

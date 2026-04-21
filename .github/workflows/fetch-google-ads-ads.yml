@@ -1,0 +1,48 @@
+name: Fetch Google Ads Ad-Level
+
+# Cron mỗi 60 phút phút 20 — lệch cron của fetch-google-ads (5,35), fetch-pancake (0,30),
+# search-terms (10), placement (15), tránh race condition.
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run ads fetch script
+        env:
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+        run: python scripts/fetch_google_ads_ads.py
+
+      - name: Commit updated ads snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/google-ads-ads.json)" ]; then
+            git add data/google-ads-ads.json
+            git commit -m "chore: auto-sync Google Ads ad-level (Windsor.ai)"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No ads-level changes to commit."
+          fi
