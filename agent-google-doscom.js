@@ -199,13 +199,9 @@ function render(r){
   h+='</section>';
   h+='<section class="block card"><div id="time-filter-content"></div></section>';
 
-  // VN culture tips
-  var vn=r.vn_culture_tips||[];
-  if(vn.length){
-    h+='<section class="block card" style="background:#fffbeb;border-left:4px solid #f59e0b"><h3>Lưu ý văn hóa & lịch mua sắm VN</h3><ul style="margin-left:16px;font-size:13px;margin-top:6px">';
-    for(var vi=0;vi<vn.length;vi++)h+='<li style="margin-bottom:4px">'+esc(vn[vi].text)+'</li>';
-    h+='</ul></section>';
-  }
+  // VN culture tips - KHONG HIEN THI UI (chi dung lam du lieu backend analysis)
+  // Field r.vn_culture_tips van giu trong JSON de Cowork task + suggested_keywords dung
+  // Ly do an: user request 22/04/2026 - khong can show UI, chi dung phan tich timing quang cao
 
   var ss=r.score_summary||{};
   h+='<section class="block card"><h2>Tổng quan đánh giá</h2><div class="score-summary">';
