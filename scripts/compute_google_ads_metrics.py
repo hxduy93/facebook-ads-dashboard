@@ -1,4 +1,4 @@
-#\!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Pre-compute Google Ads metrics v2 (deterministic) — output data/google-ads-context.json
 cho AI agent doc phan tich.
@@ -185,35 +185,74 @@ def compute_category_metrics(camp_metrics):
 
 
 def compute_website_revenue(rev_data, start, end):
+    """Gộp doanh thu từ 3 nguồn POS Pancake: WEBSITE + ZALO_OA + HOTLINE
+    (tương đương filter 'Website' trên POS - loại DUY và PHUONG_NAM là team FB Ads).
+    Đây là nguồn tracking Google Ads chính xác: khách tự vào website/gọi hotline/chat Zalo OA.
+    """
     groups = rev_data.get("source_groups", {})
-    website = groups.get("WEBSITE", {})
-    if not website:
-        return {"total_30d": 0, "orders_30d": 0, "by_status": {}, "note": "No WEBSITE source group"}
-    rsbd = website.get("order_revenue_by_status_by_date", {})
-    cbsd = website.get("order_count_by_status_by_date", {})
+    SRC_KEYS = ["WEBSITE", "ZALO_OA", "HOTLINE"]
     STATUSES = ["delivered", "other"]
+    EXCLUDED = ["returning", "returned", "canceled", "refunded"]
+
     total = 0
     orders = 0
     by_status = {}
-    for st in STATUSES + ["returning", "returned", "canceled"]:
-        st_rev = 0
-        st_orders = 0
-        for date, v in (rsbd.get(st) or {}).items():
-            if in_range(date, start, end):
-                st_rev += v
-                if st in STATUSES:
+    by_source = {}
+
+    for src_key in SRC_KEYS:
+        src = groups.get(src_key, {}) or {}
+        if not src:
+            by_source[src_key] = {"revenue": 0, "orders": 0, "note": "Source group missing"}
+            continue
+        rsbd = src.get("order_revenue_by_status_by_date", {}) or {}
+        cbsd = src.get("order_count_by_status_by_date", {}) or {}
+        src_rev = 0
+        src_orders = 0
+        for st in STATUSES:
+            for date, v in (rsbd.get(st) or {}).items():
+                if in_range(date, start, end):
+                    src_rev += v
                     total += v
-        for date, c in (cbsd.get(st) or {}).items():
-            if in_range(date, start, end):
-                st_orders += c
-                if st in STATUSES:
+                    if st not in by_status:
+                        by_status[st] = {"revenue": 0, "orders": 0}
+                    by_status[st]["revenue"] += v
+            for date, c in (cbsd.get(st) or {}).items():
+                if in_range(date, start, end):
+                    src_orders += c
                     orders += c
-        by_status[st] = {"revenue": round(st_rev, 0), "orders": st_orders}
+                    if st not in by_status:
+                        by_status[st] = {"revenue": 0, "orders": 0}
+                    by_status[st]["orders"] += c
+        for st in EXCLUDED:
+            for date, v in (rsbd.get(st) or {}).items():
+                if in_range(date, start, end):
+                    if st not in by_status:
+                        by_status[st] = {"revenue": 0, "orders": 0}
+                    by_status[st]["revenue"] += v
+            for date, c in (cbsd.get(st) or {}).items():
+                if in_range(date, start, end):
+                    if st not in by_status:
+                        by_status[st] = {"revenue": 0, "orders": 0}
+                    by_status[st]["orders"] += c
+        by_source[src_key] = {
+            "revenue": round(src_rev, 0),
+            "orders": src_orders,
+        }
+
+    # Round revenue in by_status
+    for st in by_status:
+        by_status[st]["revenue"] = round(by_status[st]["revenue"], 0)
+
     return {
         "total_30d": round(total, 0),
         "orders_30d": orders,
         "by_status": by_status,
-        "note": "Match POS: delivered + other. Excluded returning/returned/canceled.",
+        "by_source": by_source,
+        "note": (
+            "Gộp 3 nguồn POS: WEBSITE + ZALO_OA + HOTLINE (filter 'Website' trên POS). "
+            "Loại DUY + PHUONG_NAM (team FB Ads). Match: delivered + other. "
+            "Excluded returning/returned/canceled/refunded."
+        ),
     }
 
 

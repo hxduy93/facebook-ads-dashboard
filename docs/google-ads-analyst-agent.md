@@ -39,6 +39,22 @@ Output report chỉ 1 dòng: "🚨 CRITICAL: Không detect được doanh thu Pa
 
 Save JSON với `score=0`, `grade="F"`, `headline="Tracking issue — stop"`. Skip tất cả bước còn lại.
 
+#### ⚠️ Định nghĩa "Website revenue" (đọc file `google-ads-context.json` → `website_revenue_pancake`)
+
+Đây **KHÔNG** phải chỉ source group `WEBSITE` trên POS Pancake. Field này đã được script `compute_google_ads_metrics.py` **gộp 3 nguồn**:
+
+| Source group | Gộp? | Ghi chú |
+|---|---|---|
+| WEBSITE | ✅ | Khách tự vào landing page/website |
+| ZALO_OA | ✅ | Khách chat Zalo OA (inbound từ quảng cáo) |
+| HOTLINE | ✅ | Khách gọi hotline (inbound từ quảng cáo) |
+| DUY | ❌ | Team FB Ads (lead FB do Duy chạy — loại) |
+| PHUONG_NAM | ❌ | Team FB Ads (lead FB do PN chạy — loại) |
+
+Tương đương filter **"Website"** trên POS Pancake UI. Đây là 3 nguồn inbound từ quảng cáo Google Ads + SEO + Zalo OA ads — phản ánh đúng hiệu quả Google Ads spend.
+
+Dùng `website_revenue_pancake.by_source` nếu cần tách từng nguồn. Không tự lấy `rev_data.source_groups.WEBSITE` hay tính lại.
+
 ### Bước 3 — Scoring v2 (10 dimensions, 0-5 điểm mỗi dim)
 
 | # | Dimension | Cách chấm |
@@ -310,32 +326,4 @@ Tự check:
 - [ ] `score_breakdown` có đủ 10 dimension?
 - [ ] `search_term_deep_dive` + `placement_banner_deep_dive` có data (không rỗng)?
 - [ ] `raw_markdown` dài 500-1000 từ (không ngắn, không quá dài)?
-- [ ] Không có câu vague ("tối ưu tốt hơn", "cải thiện creative")?
-
-Fail check nào → sửa trước khi save.
-
----
-
-## 6. Commit & Deploy
-
-Sau khi save `data/google-ads-daily-report.json`:
-
-```bash
-cd "E:\Facebook Ads\github-repo"
-git add data/google-ads-daily-report.json
-git commit -m "chore: daily AI insights report ($(date +%Y-%m-%d))"
-git push origin main
-```
-
-Dashboard Cloudflare Pages auto-rebuild.
-
----
-
-## 7. Troubleshooting
-
-- **Context file stale** → chạy `python3 scripts/compute_google_ads_metrics.py` trước
-- **`search_term_insights` rỗng** → check `data/google-ads-search-terms.json` có không, workflow `fetch-google-ads-search-terms.yml` có chạy không
-- **`placement_insights` rỗng** → tương tự với `fetch-google-ads-placement.yml`
-- **`ad_insights` rỗng** → tương tự với `fetch-google-ads-ads.yml`
-- **ROAS = 0** → check Pancake Website source, có thể API sync lỗi
-- **Score < 40 nhiều ngày liên tục** → escalate cho Duy
+- [ ] Không có câu vague ("t
