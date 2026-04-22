@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22 05:27",
+  "generated_at": "2026-04-22 13:13",
   "source_data_date_range": {
     "start_7d": "2026-04-14",
     "end": "2026-04-20",
@@ -1495,14 +1495,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19973,
+      "total_unique_placements": 19974,
       "total_spend_30d": 23992558.0
     },
     "network_breakdown": {
       "CONTENT": {
         "spend_30d": 23992575.0,
         "clicks_30d": 15541,
-        "impressions_30d": 1261274,
+        "impressions_30d": 1261272,
         "ctr_30d": 0.0123,
         "cpc_30d": 1544.0,
         "campaign_count": 9
@@ -1520,9 +1520,9 @@
       "WEBSITE": {
         "spend_30d": 23992558.0,
         "clicks_30d": 15541,
-        "impressions_30d": 1234205,
+        "impressions_30d": 1234208,
         "ctr_30d": 0.0126,
-        "placement_count": 19973
+        "placement_count": 19974
       }
     },
     "top_waste_placements": [],
@@ -1595,7 +1595,7 @@
         "placement": "xskt.com.vn/xsmn",
         "spend_30d": 46806.0,
         "clicks_30d": 28,
-        "impressions_30d": 6136,
+        "impressions_30d": 6135,
         "ctr_30d": 0.0046,
         "placement_type": "WEBSITE"
       },
@@ -1734,19 +1734,19 @@
   "ad_insights": {
     "summary": {
       "total_ads": 297,
-      "total_spend_30d": 103601158.0
+      "total_spend_30d": 103590194.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 4307518.0,
-        "clicks_30d": 3371,
+        "spend_30d": 4304900.0,
+        "clicks_30d": 3369,
         "impressions_30d": 363977,
         "ctr_30d": 0.0093,
         "ad_count": 29
       },
       "OTHER": {
-        "spend_30d": 89685900.0,
-        "clicks_30d": 24685,
+        "spend_30d": 89677554.0,
+        "clicks_30d": 24680,
         "impressions_30d": 1615293,
         "ctr_30d": 0.0153,
         "ad_count": 267
@@ -1766,8 +1766,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 893118.0,
-        "clicks_30d": 1141,
+        "spend_30d": 892656.0,
+        "clicks_30d": 1140,
         "ctr_30d": 0.0131
       },
       {
@@ -1776,8 +1776,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 835981.0,
-        "clicks_30d": 442,
+        "spend_30d": 833825.0,
+        "clicks_30d": 441,
         "ctr_30d": 0.0088
       },
       {
