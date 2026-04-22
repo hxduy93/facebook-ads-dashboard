@@ -1160,16 +1160,21 @@ def compute_period_totals(ga_data, rev_data, start, end):
                 if start <= d <= end:
                     total_orders += c
 
-    # Revenue per product theo category - merge 3 sources
+    # Revenue per product theo category - merge 3 sources (WEBSITE + ZALO_OA + HOTLINE)
+    # Dùng orders_by_date (số đơn thật) thay vì +=1 per date entry
     merged_products = {}
     for src_name in ["WEBSITE", "ZALO_OA", "HOTLINE"]:
         s = groups.get(src_name, {})
         src_prods = s.get("products", {}) or {}
         for prod_name, pd in src_prods.items():
             if prod_name not in merged_products:
-                merged_products[prod_name] = {"by_date": {}}
+                merged_products[prod_name] = {"by_date": {}, "orders_by_date": {}, "units_by_date": {}}
             for d, v in (pd.get("by_date", {}) or {}).items():
                 merged_products[prod_name]["by_date"][d] = merged_products[prod_name]["by_date"].get(d, 0) + v
+            for d, c in (pd.get("orders_by_date", {}) or {}).items():
+                merged_products[prod_name]["orders_by_date"][d] = merged_products[prod_name]["orders_by_date"].get(d, 0) + c
+            for d, u in (pd.get("units_by_date", {}) or {}).items():
+                merged_products[prod_name]["units_by_date"][d] = merged_products[prod_name]["units_by_date"].get(d, 0) + u
 
     for prod_name, p in merged_products.items():
         # Map product → category
@@ -1179,12 +1184,17 @@ def compute_period_totals(ga_data, rev_data, start, end):
                 cat = ck
                 break
         by_date = p.get("by_date", {}) or {}
+        orders_by_date = p.get("orders_by_date", {}) or {}
         for d, v in by_date.items():
             if start <= d <= end:
                 if cat not in per_cat:
                     per_cat[cat] = {"spend": 0.0, "clicks": 0, "impressions": 0, "revenue": 0.0, "orders": 0}
                 per_cat[cat]["revenue"] += v
-                per_cat[cat]["orders"] += 1  # ước lượng 1 đơn/1 date entry (không chính xác lắm)
+        for d, c in orders_by_date.items():
+            if start <= d <= end:
+                if cat not in per_cat:
+                    per_cat[cat] = {"spend": 0.0, "clicks": 0, "impressions": 0, "revenue": 0.0, "orders": 0}
+                per_cat[cat]["orders"] += c
 
     ctr = (clicks / imps) if imps > 0 else 0
     cpc = (spend / clicks) if clicks > 0 else 0
@@ -1205,21 +1215,30 @@ def compute_period_totals(ga_data, rev_data, start, end):
             "roas": round(m_roas, 2),
         }
 
-    # Top products trong period này (3 source)
+    # Top products trong period này (3 source) - dùng orders_by_date (đúng số đơn)
     top_prods = []
     for prod_name, pp in merged_products.items():
         by_date = pp.get("by_date", {}) or {}
-        prev_rev = 0
-        prev_orders = 0
+        orders_by_date = pp.get("orders_by_date", {}) or {}
+        units_by_date = pp.get("units_by_date", {}) or {}
+        p_rev = 0
+        p_orders = 0
+        p_units = 0
         for d, v in by_date.items():
             if start <= d <= end:
-                prev_rev += v
-                prev_orders += 1
-        if prev_rev > 0 or prev_orders > 0:
+                p_rev += v
+        for d, c in orders_by_date.items():
+            if start <= d <= end:
+                p_orders += c
+        for d, u in units_by_date.items():
+            if start <= d <= end:
+                p_units += u
+        if p_rev > 0 or p_orders > 0:
             top_prods.append({
                 "product": prod_name,
-                "revenue": round(prev_rev, 0),
-                "orders": prev_orders,
+                "revenue": round(p_rev, 0),
+                "orders": p_orders,
+                "units": p_units,
             })
     top_prods.sort(key=lambda x: -x["revenue"])
 
