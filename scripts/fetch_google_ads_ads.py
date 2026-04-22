@@ -262,4 +262,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()
+m in top:
+        print(f"         [{m['spend_30d']:>10,.0f}d - {m['clicks_30d']:>4} clicks - CTR {m['ctr_30d']*100:.2f}% - {m['ad_format']}] {m['ad_name'] or '(no name)'} (id={ad_id})")
+
+
+if __name__ == "__main__":
+    main()
+  main()

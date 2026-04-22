@@ -223,4 +223,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()
+cement, m in top_waste:
+            print(f"         [{m['spend_30d']:>10,.0f}d - 0 clicks - {m['placement_type']}] {placement[:60]}")
+
+
+if __name__ == "__main__":
+    main()
+ main()
