@@ -279,9 +279,16 @@ def extract_items(order):
             retail = _num(vi.get("retail_price") or li.get("price") or 0)
             line_rev = retail * qty
 
+        # Lấy thêm name để log unmapped variations (audit SP ngoài PRODUCT_MAPPING)
+        name = (vi.get("name") or prod.get("name") or "").strip()
         if code:
-            items.append((str(code).strip(), qty, line_rev))
+            items.append((str(code).strip(), qty, line_rev, name))
     return items
+
+
+# Dict tích lũy các variation codes KHÔNG có trong PRODUCT_MAPPING (audit mode)
+# Format: {code_lower: {"name": str, "count_orders": int, "total_units": int, "total_revenue": float}}
+UNMAPPED_VARIATIONS = {}
 
 
 def empty_bucket():
@@ -374,9 +381,25 @@ def aggregate(orders):
             order_count_by_status_by_date[bucket_key].get(date, 0) + 1
 
         products_in_order = set()
-        for code, qty, line_rev in extract_items(o):
+        for code, qty, line_rev, name in extract_items(o):
             mapping = PRODUCT_MAPPING.get(code.lower())
             if not mapping:
+                # AUDIT: log SP ngoài PRODUCT_MAPPING để sau bổ sung
+                key = code.lower()
+                if key not in UNMAPPED_VARIATIONS:
+                    UNMAPPED_VARIATIONS[key] = {
+                        "code": code,
+                        "name": name,
+                        "count_line_items": 0,
+                        "total_units": 0,
+                        "total_revenue": 0.0,
+                    }
+                UNMAPPED_VARIATIONS[key]["count_line_items"] += 1
+                UNMAPPED_VARIATIONS[key]["total_units"] += qty
+                UNMAPPED_VARIATIONS[key]["total_revenue"] += float(line_rev)
+                # Cập nhật name nếu entry trước đó chưa có
+                if not UNMAPPED_VARIATIONS[key]["name"] and name:
+                    UNMAPPED_VARIATIONS[key]["name"] = name
                 continue
             # Nếu combo có N sản phẩm + thẻ nhớ, line_rev là của cả combo.
             # Entry đầu tiên trong mapping nhận full revenue; entry sau = 0 (tránh double count).
@@ -471,6 +494,7 @@ def main():
         d = total_products[p]
         print(f"    {p:12s} | {d['total']:>15,.2f}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
 
+
     output = {
         "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),
         "window_days": LOOKBACK_DAYS,
@@ -496,6 +520,38 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
     print(f"\n[INFO] Wrote {out_path}")
+
+    # AUDIT: Dump UNMAPPED_VARIATIONS ra file để biết SP nào đang bán mà PRODUCT_MAPPING
+    # chưa cover. Dashboard bảng Xếp hạng SP chỉ hiển thị đúng khi PRODUCT_MAPPING đủ.
+    unmapped_out = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "..", "data", "pancake-unmapped.json"
+    ))
+    unmapped_list = sorted(
+        UNMAPPED_VARIATIONS.values(),
+        key=lambda x: -x.get("total_revenue", 0),
+    )
+    with open(unmapped_out, "w", encoding="utf-8") as f:
+        json.dump({
+            "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),
+            "window_days": LOOKBACK_DAYS,
+            "note": (
+                "Danh sach variation codes xuat hien trong don Pancake nhung KHONG "
+                "co trong PRODUCT_MAPPING (scripts/fetch_pancake_revenue.py). Can bo "
+                "sung vao PRODUCT_MAPPING + PRODUCT_LIST de dashboard bang Xep hang "
+                "SP hien du revenue per-product."
+            ),
+            "unmapped_count": len(unmapped_list),
+            "total_unmapped_revenue": round(sum(x["total_revenue"] for x in unmapped_list), 0),
+            "unmapped_variations": unmapped_list,
+        }, f, ensure_ascii=False, indent=2)
+    print(f"[INFO] Wrote {unmapped_out}")
+    print(f"       {len(unmapped_list)} unmapped variations · "
+          f"total revenue {sum(x['total_revenue'] for x in unmapped_list)/1e6:.1f}tr")
+    if unmapped_list:
+        print(f"       Top 10 unmapped by revenue:")
+        for u in unmapped_list[:10]:
+            print(f"         [{u['total_revenue']/1e6:>6.1f}tr · {u['total_units']:>3} units] "
+                  f"{u['code'][:40]:40s}  {u['name'][:50]}")
 
 
 if __name__ == "__main__":
