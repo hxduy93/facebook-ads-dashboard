@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-22 22:53",
+  "generated_at": "2026-04-23 02:56",
   "source_data_date_range": {
     "start_7d": "2026-04-15",
     "end": "2026-04-21",
@@ -23,14 +23,14 @@
     "ad_waste_min_spend": 100000
   },
   "summary": {
-    "total_spend_30d_vnd": 105527068.0,
-    "total_clicks_30d": 31422,
-    "total_impressions_30d": 2268980,
+    "total_spend_30d_vnd": 105525843.0,
+    "total_clicks_30d": 31421,
+    "total_impressions_30d": 2268982,
     "active_campaigns_30d": 19,
     "total_campaigns": 22
   },
   "roas_proxy": {
-    "google_ads_spend_30d": 105527068.0,
+    "google_ads_spend_30d": 105525843.0,
     "website_revenue_30d_vnd": 260907750.0,
     "roas_overall": 2.47,
     "target_roas": 3.0,
@@ -42,12 +42,12 @@
     "orders_30d": 125,
     "by_status": {
       "delivered": {
-        "revenue": 236811750.0,
-        "orders": 112
+        "revenue": 239701750.0,
+        "orders": 113
       },
       "other": {
-        "revenue": 24096000.0,
-        "orders": 13
+        "revenue": 21206000.0,
+        "orders": 12
       },
       "returning": {
         "revenue": 19730000.0,
@@ -76,13 +76,13 @@
   },
   "per_category": {
     "OTHER_DI": {
-      "spend_30d": 2646656.0,
-      "spend_7d": 353747.0,
-      "clicks_30d": 1890,
-      "impressions_30d": 152996,
-      "ctr_30d": 0.0124,
+      "spend_30d": 2645431.0,
+      "spend_7d": 352522.0,
+      "clicks_30d": 1889,
+      "impressions_30d": 152997,
+      "ctr_30d": 0.0123,
       "cpc_30d": 1400.0,
-      "spend_trend_7d_pct": -42.8,
+      "spend_trend_7d_pct": -43.0,
       "campaign_count": 2
     },
     "DINHVI": {
@@ -109,7 +109,7 @@
       "spend_30d": 23390046.0,
       "spend_7d": 5325468.0,
       "clicks_30d": 6156,
-      "impressions_30d": 478005,
+      "impressions_30d": 478006,
       "ctr_30d": 0.0129,
       "cpc_30d": 3800.0,
       "spend_trend_7d_pct": -4.9,
@@ -169,24 +169,24 @@
   "per_campaign": {
     "RMK - chống ghi âm": {
       "category": "OTHER_DI",
-      "spend_30d": 1934974.0,
-      "spend_7d": 250643.0,
+      "spend_30d": 1933749.0,
+      "spend_7d": 249418.0,
       "spend_prior_7d": 434130.0,
-      "clicks_30d": 1685,
-      "clicks_7d": 254,
-      "impressions_30d": 151427,
-      "impressions_7d": 22473,
+      "clicks_30d": 1684,
+      "clicks_7d": 253,
+      "impressions_30d": 151428,
+      "impressions_7d": 22474,
       "ctr_30d": 0.0111,
       "ctr_7d": 0.0113,
       "ctr_prior_7d": 0.0111,
       "cpc_30d": 1148.0,
-      "cpc_7d": 987.0,
+      "cpc_7d": 986.0,
       "cpc_prior_7d": 984.0,
       "active_days_30d": 29,
-      "avg_daily_spend_30d": 66723.0,
-      "spend_trend_pct": -42.3,
-      "ctr_trend_pct": 1.5,
-      "cpc_trend_pct": 0.2,
+      "avg_daily_spend_30d": 66681.0,
+      "spend_trend_pct": -42.5,
+      "ctr_trend_pct": 1.1,
+      "cpc_trend_pct": 0.1,
       "flags": []
     },
     "RMK - thiết bị định vị": {
@@ -240,8 +240,8 @@
       "spend_prior_7d": 1628560.0,
       "clicks_30d": 4440,
       "clicks_7d": 965,
-      "impressions_30d": 471381,
-      "impressions_7d": 92028,
+      "impressions_30d": 471382,
+      "impressions_7d": 92029,
       "ctr_30d": 0.0094,
       "ctr_7d": 0.0105,
       "ctr_prior_7d": 0.0111,
@@ -731,9 +731,9 @@
       {
         "campaign": "RMK - chống ghi âm",
         "category": "OTHER_DI",
-        "spend_7d": 250643.0,
+        "spend_7d": 249418.0,
         "spend_prior_7d": 434130.0,
-        "spend_trend_pct": -42.3
+        "spend_trend_pct": -42.5
       }
     ]
   },
