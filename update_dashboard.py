@@ -306,11 +306,20 @@ def build_data():
         "ads": [],
     }
 
+    skipped_accounts = []
     for acc in ACCOUNTS:
         print(f"→ account {acc['short']} ({acc['id']})")
 
-        # --- ACCOUNT LEVEL ---
-        acc_rows = fetch_insights(acc["id"], "account")
+        # Wrap fetch 3 level (account/campaign/ad) trong try/except.
+        # Nếu 1 account bị 403 Forbidden (token expire / permission rút) → skip
+        # account đó, không kéo chết cả build. Dashboard vẫn deploy với 5 account
+        # còn lại; agent Google không bị ảnh hưởng (agent đọc file data/ khác).
+        try:
+            acc_rows = fetch_insights(acc["id"], "account")
+        except Exception as e:
+            print(f"  ⚠ SKIP account {acc['id']}: {type(e).__name__}: {str(e)[:120]}")
+            skipped_accounts.append({"id": acc["id"], "name": acc["short"], "error": str(e)[:200]})
+            continue
         daily = []
         for r in acc_rows:
             daily.append({
@@ -330,7 +339,11 @@ def build_data():
         })
 
         # --- CAMPAIGN LEVEL ---
-        camp_rows = fetch_insights(acc["id"], "campaign")
+        try:
+            camp_rows = fetch_insights(acc["id"], "campaign")
+        except Exception as e:
+            print(f"  ⚠ SKIP campaign-level account {acc['id']}: {type(e).__name__}: {str(e)[:120]}")
+            camp_rows = []
         camps = {}
         for r in camp_rows:
             cid = r.get("campaign_id")
@@ -356,7 +369,11 @@ def build_data():
             data["campaigns"].append(c)
 
         # --- AD LEVEL ---
-        ad_rows = fetch_insights(acc["id"], "ad")
+        try:
+            ad_rows = fetch_insights(acc["id"], "ad")
+        except Exception as e:
+            print(f"  ⚠ SKIP ad-level account {acc['id']}: {type(e).__name__}: {str(e)[:120]}")
+            ad_rows = []
         ads = {}
         for r in ad_rows:
             aid = r.get("ad_id")
