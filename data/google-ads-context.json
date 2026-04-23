@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-23 13:26",
+  "generated_at": "2026-04-23 17:58",
   "source_data_date_range": {
     "start_7d": "2026-04-16",
     "end": "2026-04-22",
@@ -31,27 +31,27 @@
   },
   "roas_proxy": {
     "google_ads_spend_30d": 106456995.0,
-    "website_revenue_30d_vnd": 246118750.0,
-    "roas_overall": 2.31,
+    "website_revenue_30d_vnd": 244318750.0,
+    "roas_overall": 2.29,
     "target_roas": 3.0,
     "status": "borderline",
     "note": "ROAS = Pancake Website revenue (30d) / Google Ads spend (30d). Proxy — mua qua Zalo/Hotline sau khi thay Google Ads khong count vao day."
   },
   "website_revenue_pancake": {
-    "total_30d": 246118750.0,
-    "orders_30d": 124,
+    "total_30d": 244318750.0,
+    "orders_30d": 123,
     "by_status": {
       "delivered": {
-        "revenue": 221602750.0,
-        "orders": 109
+        "revenue": 225202750.0,
+        "orders": 111
       },
       "other": {
-        "revenue": 24516000.0,
-        "orders": 15
+        "revenue": 19116000.0,
+        "orders": 12
       },
       "returning": {
-        "revenue": 20229000.0,
-        "orders": 5
+        "revenue": 22029000.0,
+        "orders": 6
       },
       "returned": {
         "revenue": 12745000.0,
@@ -60,8 +60,8 @@
     },
     "by_source": {
       "WEBSITE": {
-        "revenue": 99889000.0,
-        "orders": 64
+        "revenue": 98089000.0,
+        "orders": 63
       },
       "ZALO_OA": {
         "revenue": 80461000.0,
