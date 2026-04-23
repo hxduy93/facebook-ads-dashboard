@@ -117,8 +117,9 @@ function changePeriod(k){selectedPeriod=k;renderTimeFilterSection(REPORT);}
 function compareFn(c,p){function pct(a,b){if(!b)return null;return (a-b)/b*100;}return{spend:pct(c.totals.spend,p.totals.spend),clicks:pct(c.totals.clicks,p.totals.clicks),ctr:pct(c.totals.ctr,p.totals.ctr),revenue:pct(c.totals.revenue,p.totals.revenue),orders:pct(c.totals.orders,p.totals.orders),roas:pct(c.totals.roas,p.totals.roas)};}
 
 
-function renderYesterdayPanel(r, rev){
-  // Yesterday = hôm qua VN
+function _removedRenderYesterdayPanel_placeholder(r, rev){
+  // [REMOVED 2026-04-23] User feedback: bỏ panel "Đánh giá doanh thu hôm qua",
+  // merge data vào bộ lọc thời gian bên dưới để tránh trùng lặp. Xem git history.
   var yStr = vnDateShift(-1);
   var pStr = vnDateShift(-2); // hôm kia để so sánh
 
@@ -279,6 +280,12 @@ function renderTimeFilterSection(r){
   var cur=tp[selectedPeriod]; if(!cur)return;
   var prev=cur.compare_to?tp[cur.compare_to]:null;
   var cmp=prev?compareFn(cur,prev):null;
+
+  // ── POS-direct revenue/orders cho period hiện tại (3 nguồn Web+Zalo+Hotline) ──
+  // Dùng cùng cấu trúc với section "Đánh giá doanh thu hôm qua" để đảm bảo consistency.
+  var posCur  = REVDATA ? computePosRevenue(REVDATA, cur.date_range.start, cur.date_range.end) : null;
+  var posPrev = (REVDATA && prev) ? computePosRevenue(REVDATA, prev.date_range.start, prev.date_range.end) : null;
+
   var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
   h+='<h2 style="font-size:16px;font-weight:700">Bộ lọc thời gian</h2>';
   h+='<select onchange="changePeriod(this.value)" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;background:white">';
@@ -288,16 +295,45 @@ function renderTimeFilterSection(r){
   h+='<p class="text-xs text-gray" style="margin-bottom:12px">Kỳ: <strong>'+esc(cur.date_range.start)+' → '+esc(cur.date_range.end)+'</strong>';
   if(prev)h+=' · So sánh với <strong>'+esc(prev.label)+'</strong>';
   h+='</p>';
+
   var t=cur.totals;
+  // Eff totals: revenue/orders từ POS (nếu có), ROAS tính lại từ POS rev / Ads spend
+  var effRevenue = posCur ? posCur.revenue : t.revenue;
+  var effOrders  = posCur ? posCur.orders  : t.orders;
+  var effRoas    = (t.spend && t.spend > 0) ? (effRevenue / t.spend) : 0;
+
+  // Override cmp revenue/orders/roas theo POS nếu có
+  if(cmp && posCur && posPrev){
+    function _pct(a,b){ if(!b||b===0) return null; return (a-b)/b*100; }
+    var prevRoas = (prev.totals.spend && prev.totals.spend > 0) ? (posPrev.revenue / prev.totals.spend) : 0;
+    cmp.revenue = _pct(effRevenue, posPrev.revenue);
+    cmp.orders  = _pct(effOrders,  posPrev.orders);
+    cmp.roas    = _pct(effRoas,    prevRoas);
+  }
+
   h+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">';
   function mb(l,v,c){return '<div style="background:#f9fafb;border-radius:6px;padding:10px"><div style="font-size:10px;color:#6b7280;text-transform:uppercase">'+l+'</div><div style="font-size:18px;font-weight:700;margin-top:4px">'+v+'</div>'+(c?'<div style="font-size:11px;margin-top:2px">'+c+'</div>':'')+'</div>';}
   h+=mb("Chi phí ads",fmtVND(t.spend)+'đ',cmp?fmtChange(cmp.spend):'');
   h+=mb("Click",fmtInt(t.clicks),cmp?fmtChange(cmp.clicks):'');
   h+=mb("CTR",fmtPct(t.ctr),cmp?fmtChange(cmp.ctr):'');
-  h+=mb("Doanh thu",fmtVND(t.revenue)+'đ',cmp?fmtChange(cmp.revenue):'');
-  h+=mb("Đơn hàng",fmtInt(t.orders),cmp?fmtChange(cmp.orders):'');
-  h+=mb("ROAS",t.roas+'x',cmp?fmtChange(cmp.roas):'');
+  h+=mb("Doanh thu",fmtVND(effRevenue)+'đ',cmp?fmtChange(cmp.revenue):'');
+  h+=mb("Đơn hàng",fmtInt(effOrders),cmp?fmtChange(cmp.orders):'');
+  h+=mb("ROAS",effRoas.toFixed(2)+'x',cmp?fmtChange(cmp.roas):'');
   h+='</div>';
+
+  // Breakdown 3 nguồn (POS) — giúp trace khi có gap
+  if(posCur){
+    h+='<div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:10px;margin-top:8px;font-size:12px">';
+    h+='<strong>Breakdown 3 nguồn POS:</strong> ';
+    var srcDisplay=[["WEBSITE","Website"],["ZALO_OA","Zalo OA"],["HOTLINE","Hotline"]];
+    var parts=[];
+    for(var si=0;si<srcDisplay.length;si++){
+      var skey=srcDisplay[si][0], lb=srcDisplay[si][1], b=posCur.bySrc[skey]||{revenue:0,orders:0};
+      parts.push(lb+': <strong>'+fmtVND(b.revenue)+'đ</strong> / <strong>'+b.orders+'</strong> đơn');
+    }
+    h+=parts.join(' · ');
+    h+='</div>';
+  }
   var pc=cur.per_category||{};
   var cls=[];
   for(var k in pc)if(pc[k].spend>0||pc[k].revenue>0)cls.push(k);
@@ -351,6 +387,23 @@ function renderTimeFilterSection(r){
     h+='</tbody></table></div>';
   }
 
+  // Dòng freshness POS — hiển thị thời điểm data POS cập nhật + freshness guard
+  if(REVDATA && REVDATA.generated_at){
+    var genDt = parseGenAtUTC(REVDATA.generated_at);
+    // Freshness: nếu generated_at < 17:30 VN hôm qua → data có thể thiếu đơn hôm qua/hôm nay
+    var isStalePos = false;
+    if(genDt){
+      var yStr = vnDateShift(-1).split("-");
+      var yStop = new Date(Date.UTC(+yStr[0],+yStr[1]-1,+yStr[2], 10, 30));
+      isStalePos = genDt < yStop;
+    }
+    h+='<p class="text-xs" style="margin-top:10px;padding:8px;background:'+(isStalePos?'#fef3c7':'#eff6ff')+';border-left:3px solid '+(isStalePos?'#f59e0b':'#2563eb')+';border-radius:4px">';
+    h+=(isStalePos?'<strong>⚠ Dữ liệu POS có thể trễ</strong> · ':'<strong>Dữ liệu POS cập nhật lúc:</strong> ');
+    h+='<strong>'+esc(genDt?fmtVNDateTime(genDt):REVDATA.generated_at)+'</strong> · ';
+    h+='Cron fetch mỗi 30 phút từ 09:00-17:30 VN · Nguồn: 3 filter POS Pancake (Website + Zalo OA + Hotline, loại DUY/PN staff)';
+    h+='</p>';
+  }
+
   // Note về keyword/banner không filter theo period
   h+='<p class="text-xs text-gray" style="margin-top:12px;padding:8px;background:#f9fafb;border-radius:4px">Lưu ý: Bộ lọc thời gian ảnh hưởng các số liệu phía trên (chi phí, doanh thu, đơn) và bảng Top sản phẩm. Các bảng Keywords/Banners/Placements/Suggestions ở dưới là <strong>tổng hợp 30 ngày</strong> vì Windsor.ai free trial không export dữ liệu daily cho keyword/banner. Nếu cần filter daily cho keyword/banner, phải nâng cấp Windsor gói trả phí hoặc chuyển sang Google Ads API trực tiếp.</p>';
 
@@ -369,9 +422,6 @@ function render(r){
   h+='<div class="card"><div class="metric-label">Hành động cần làm</div><div class="metric-value">'+(t.total_actions||0)+'</div><div class="metric-sub text-red">'+(t.urgent_actions||0)+' urgent</div></div>';
   h+='<div class="card"><div class="metric-label">Tiết kiệm tiềm năng</div><div class="metric-value text-green">'+fmtVND(t.estimated_total_saving_vnd)+'đ</div><div class="metric-sub">trong 30 ngày</div></div>';
   h+='</section>';
-
-  // ── Section "Đánh giá doanh thu hôm qua" — data từ POS Pancake trực tiếp (3 nguồn Web+Zalo+Hotline) ──
-  h+=renderYesterdayPanel(r, REVDATA);
 
   h+='<section class="block card"><div id="time-filter-content"></div></section>';
 
