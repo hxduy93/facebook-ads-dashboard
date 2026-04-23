@@ -423,6 +423,119 @@ def aggregate(orders):
             order_revenue_by_status_by_date, order_count_by_status_by_date)
 
 
+# ── Build top products from raw orders (3 nguồn Website+Zalo+Hotline, tất cả SKU) ──
+# Khác với `products` aggregate bị giới hạn bởi PRODUCT_MAPPING (13 SP) — function này
+# gom TẤT CẢ variation.name xuất hiện trong đơn, cho 5 period chuẩn (yesterday/7d/tháng
+# này/30d/90d) tính theo ngày VN. Dùng để hiển thị bảng "Top sản phẩm trong kỳ" chính
+# xác 100% với POS, không silent-drop SP như DT2/DV1 mini/DR8/A002/...
+def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
+    """Aggregate top products cho 3 nguồn Web+Zalo+Hotline theo 5 period (ngày VN).
+
+    Logic filter status giống compute_google_ads_metrics.compute_website_revenue:
+      - INCLUDE: delivered (3) + other (0, 1, 2, 8, 9)
+      - EXCLUDE: canceled (6), returning (4), returned (5)
+
+    orders_list: list of orders đã fetch từ 3 nguồn Website+ZaloOA+Hotline
+    today_vn: date object giờ VN (dùng để tính range cho mỗi period)
+    top_n: số SP tối đa trả về mỗi period (default 10)
+    """
+    INCLUDE_ST = {STATUS_DELIVERED, 0, 1, 2, 8, 9}
+    EXCLUDE_ST = {STATUS_CANCELED, STATUS_RETURNING, STATUS_RETURNED}
+
+    y = today_vn - timedelta(days=1)
+    periods = {
+        "yesterday":  (y.isoformat(), y.isoformat()),
+        "last_7d":    ((y - timedelta(days=6)).isoformat(), y.isoformat()),
+        "this_month": (today_vn.replace(day=1).isoformat(), today_vn.isoformat()),
+        "last_30d":   ((y - timedelta(days=29)).isoformat(), y.isoformat()),
+        "last_90d":   ((y - timedelta(days=89)).isoformat(), y.isoformat()),
+    }
+    labels = {
+        "yesterday": "Hôm qua",
+        "last_7d":   "7 ngày gần",
+        "this_month":"Tháng này",
+        "last_30d":  "30 ngày gần",
+        "last_90d":  "90 ngày gần",
+    }
+
+    # Pre-compute VN date cho mỗi đơn (parse 1 lần, reuse cho 5 period)
+    orders_with_vn_date = []
+    for o in orders_list:
+        st = o.get("status")
+        if st in EXCLUDE_ST or st not in INCLUDE_ST:
+            continue
+        ins_str = (o.get("inserted_at") or "")[:26]  # cắt microseconds dài
+        if not ins_str:
+            continue
+        try:
+            dt_utc = datetime.fromisoformat(ins_str).replace(tzinfo=timezone.utc)
+        except Exception:
+            continue
+        vn_date = (dt_utc + timedelta(hours=7)).date().isoformat()
+        orders_with_vn_date.append((vn_date, o))
+
+    result = {}
+    for pk, (pstart, pend) in periods.items():
+        prod_agg = {}   # name -> {revenue, units, order_ids(set)}
+        order_ids_in_period = set()
+        total_rev = 0.0
+
+        for vn_date, o in orders_with_vn_date:
+            if not (pstart <= vn_date <= pend):
+                continue
+            order_id = o.get("id")
+            order_ids_in_period.add(order_id)
+            total_rev += order_revenue(o)
+
+            for li in (o.get("items") or []):
+                vi = li.get("variation_info") or {}
+                prod = li.get("product") or {}
+                # Ưu tiên name (dễ đọc), fallback id/display_id nếu name rỗng
+                name = (vi.get("name") or prod.get("name") or "").strip()
+                if not name:
+                    code = vi.get("id") or li.get("display_id") or ""
+                    name = str(code).strip()
+                if not name:
+                    continue
+                qty = int(_num(li.get("quantity", 1), 1) or 1)
+
+                line_rev = 0.0
+                for key in ("total_price_after_sub_discount", "total_price"):
+                    v = li.get(key)
+                    if v is not None and _num(v, 0) > 0:
+                        line_rev = _num(v)
+                        break
+                if line_rev == 0.0:
+                    retail = _num(vi.get("retail_price") or li.get("price") or 0)
+                    line_rev = retail * qty
+
+                if name not in prod_agg:
+                    prod_agg[name] = {"revenue": 0.0, "units": 0, "order_ids": set()}
+                prod_agg[name]["revenue"] += line_rev
+                prod_agg[name]["units"] += qty
+                prod_agg[name]["order_ids"].add(order_id)
+
+        items = [
+            {
+                "product": n,
+                "revenue": round(a["revenue"]),
+                "orders":  len(a["order_ids"]),
+                "units":   a["units"],
+            }
+            for n, a in prod_agg.items()
+        ]
+        items.sort(key=lambda x: x["revenue"], reverse=True)
+
+        result[pk] = {
+            "label":        labels[pk],
+            "date_range":   {"start": pstart, "end": pend},
+            "total_revenue": round(total_rev),
+            "total_orders":  len(order_ids_in_period),
+            "top_products":  items[:top_n],
+        }
+    return result
+
+
 def main():
     if not API_KEY or not SHOP_ID:
         print("[FATAL] Missing PANCAKE_API_KEY or PANCAKE_SHOP_ID", file=sys.stderr)
@@ -436,6 +549,7 @@ def main():
 
     # Per-group aggregates
     per_group = {}
+    per_group_orders = {}   # NEW: cache raw orders để build top_products_website_by_period
     grand_total_orders = 0
     all_orders_combined = []
 
@@ -479,6 +593,7 @@ def main():
         }
         grand_total_orders += group_total
         all_orders_combined.extend(orders)
+        per_group_orders[key] = orders  # NEW: cache cho build_top_products_website_by_period
 
     # ── Aggregate tổng hợp (all 5 groups combined) — giữ backward-compat với dashboard cũ ──
     print("─── [TỔNG HỢP 5 NHÓM] ───────────────────────────")
@@ -495,10 +610,29 @@ def main():
         print(f"    {p:12s} | {d['total']:>15,.2f}đ | {d['orders']:>4} đơn | {d['units']:>4} sp")
 
 
+    # ── Build top_products_website_by_period (3 nguồn Web+Zalo+Hotline, TẤT CẢ SKU) ──
+    web_sources_orders = (
+        per_group_orders.get("WEBSITE", []) +
+        per_group_orders.get("ZALO_OA", []) +
+        per_group_orders.get("HOTLINE", [])
+    )
+    today_vn = (end_dt + timedelta(hours=7)).date()
+    top_products_website_by_period = build_top_products_website_by_period(
+        web_sources_orders, today_vn, top_n=10
+    )
+    print("\n─── [TOP PRODUCTS WEBSITE (3 nguồn, all SKU) theo 5 period] ───")
+    for pk, pdata in top_products_website_by_period.items():
+        print(f"  {pk:12s} ({pdata['date_range']['start']} → {pdata['date_range']['end']}): "
+              f"{pdata['total_revenue']:>15,.0f}đ / {pdata['total_orders']:>4} đơn / "
+              f"{len(pdata['top_products'])} SP")
+
     output = {
         "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),
         "window_days": LOOKBACK_DAYS,
         "total_orders": total_count,
+        # MỚI: top SP tổng cho 3 nguồn Web+Zalo+Hotline, TẤT CẢ SKU (không filter MAPPING),
+        # 5 period chuẩn (yesterday / last_7d / this_month / last_30d / last_90d) tính theo VN.
+        "top_products_website_by_period": top_products_website_by_period,
         # MỚI: tổng đơn theo ngày (tất cả 5 nhóm)
         "total_orders_by_date": total_orders_by_date,
         # MỚI: doanh thu THỰC THU per status per date (top-level, gộp 5 nguồn)

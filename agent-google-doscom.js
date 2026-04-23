@@ -1,6 +1,6 @@
-// Agent Google Doscom v3.4 — Phase 3A
-console.log("[AgentPage] JS v3.4 loaded");
-var REPORT=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+// Agent Google Doscom v3.5 — Phase 3B (POS-direct top products + yesterday panel)
+console.log("[AgentPage] JS v3.5 loaded");
+var REPORT=null, REVDATA=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
 var REC_VN={"KEEP":"Giữ nguyên","SCALE":"Tăng bid","ADD_NEGATIVE":"Thêm negative","PAUSE":"Tạm dừng","REPLACE":"Thay banner","REVIEW":"Xem lại","MONITOR":"Theo dõi","UU_TIEN":"Ưu tiên","THEO_DOI":"Theo dõi","CAI_THIEN":"Cải thiện","GIU":"Giữ","NEN_LOAI_TRU":"Nên loại trừ"};
 var MATCH_VN={"BROAD":"Rộng","EXACT":"Chính xác","PHRASE":"Cụm","NEAR_PHRASE":"Gần cụm","UNKNOWN":"-"};
 var STATUS_VN={"NONE":"Chưa xử lý","ADDED":"Đã thêm","EXCLUDED":"Đã loại trừ"};
@@ -39,13 +39,65 @@ function sortTable(tblId, colIdx, type){
 }
 
 function load(){
-  fetch("data/google-ads-daily-report.json?v="+Date.now()).then(function(r){
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    return r.json();
-  }).then(function(r){
-    REPORT=r;
-    try{render(r);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
+  // Fetch song song daily-report + product-revenue (POS) để top SP dùng data POS trực tiếp
+  var v = Date.now();
+  var p1 = fetch("data/google-ads-daily-report.json?v="+v).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status+" daily-report"); return r.json();});
+  var p2 = fetch("data/product-revenue.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2]).then(function(results){
+    REPORT=results[0];
+    REVDATA=results[1]; // có thể null nếu fetch fail — UI fallback về field cũ
+    try{render(REPORT);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
   }).catch(function(e){showError("Không tải: "+esc(e.message));});
+}
+
+// ── Helpers POS-direct ──────────────────────────────────────
+// Parse "2026-04-23 04:41 UTC" → Date UTC. Trả null nếu fail.
+function parseGenAtUTC(s){
+  if(!s) return null;
+  var m = /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})\s+UTC$/.exec(s);
+  if(!m) return null;
+  return new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]));
+}
+function fmtVNDateTime(d){ // Date → "DD/MM HH:mm VN"
+  if(!d) return "-";
+  var vn = new Date(d.getTime() + 7*3600000);
+  var pad = function(n){return n<10?"0"+n:""+n;};
+  return pad(vn.getUTCDate())+"/"+pad(vn.getUTCMonth()+1)+" "+pad(vn.getUTCHours())+":"+pad(vn.getUTCMinutes())+" VN";
+}
+function toVNDateStr(d){ // Date → YYYY-MM-DD theo VN
+  var vn = new Date(d.getTime() + 7*3600000);
+  var pad = function(n){return n<10?"0"+n:""+n;};
+  return vn.getUTCFullYear()+"-"+pad(vn.getUTCMonth()+1)+"-"+pad(vn.getUTCDate());
+}
+function vnDateNow(){
+  return toVNDateStr(new Date());
+}
+function vnDateShift(daysDelta){
+  // shift từ hôm nay (VN) ± daysDelta ngày
+  var today = vnDateNow().split("-");
+  var base = new Date(Date.UTC(+today[0],+today[1]-1,+today[2]));
+  base.setUTCDate(base.getUTCDate()+daysDelta);
+  var pad = function(n){return n<10?"0"+n:""+n;};
+  return base.getUTCFullYear()+"-"+pad(base.getUTCMonth()+1)+"-"+pad(base.getUTCDate());
+}
+// Compute revenue cho 3 nguồn Web+Zalo+Hotline, range [start,end], status delivered+other
+function computePosRevenue(rev, start, end){
+  if(!rev || !rev.source_groups) return null;
+  var SRC=["WEBSITE","ZALO_OA","HOTLINE"], INCL=["delivered","other"];
+  var total_r=0, total_o=0, bySrc={};
+  for(var si=0; si<SRC.length; si++){
+    var s=SRC[si], src=rev.source_groups[s]||{};
+    var rsbd=src.order_revenue_by_status_by_date||{}, cbsd=src.order_count_by_status_by_date||{};
+    var sr=0, so=0;
+    for(var ii=0; ii<INCL.length; ii++){
+      var st=INCL[ii];
+      var rb=rsbd[st]||{}, cb=cbsd[st]||{};
+      for(var d in rb) if(d>=start && d<=end){sr+=rb[d]; total_r+=rb[d];}
+      for(var d2 in cb) if(d2>=start && d2<=end){so+=cb[d2]; total_o+=cb[d2];}
+    }
+    bySrc[s]={revenue:Math.round(sr), orders:so, label:src.label||s};
+  }
+  return {revenue:Math.round(total_r), orders:total_o, bySrc:bySrc};
 }
 
 function showError(m){document.getElementById("main").innerHTML='<div class="card" style="border-left:4px solid #dc2626;background:#fef2f2"><h3 style="color:#991b1b">Lỗi</h3><div>'+m+'</div></div>';}
@@ -65,13 +117,129 @@ function changePeriod(k){selectedPeriod=k;renderTimeFilterSection(REPORT);}
 function compareFn(c,p){function pct(a,b){if(!b)return null;return (a-b)/b*100;}return{spend:pct(c.totals.spend,p.totals.spend),clicks:pct(c.totals.clicks,p.totals.clicks),ctr:pct(c.totals.ctr,p.totals.ctr),revenue:pct(c.totals.revenue,p.totals.revenue),orders:pct(c.totals.orders,p.totals.orders),roas:pct(c.totals.roas,p.totals.roas)};}
 
 
+function renderYesterdayPanel(r, rev){
+  // Yesterday = hôm qua VN
+  var yStr = vnDateShift(-1);
+  var pStr = vnDateShift(-2); // hôm kia để so sánh
+
+  // Data Pancake POS
+  var cur = rev ? computePosRevenue(rev, yStr, yStr) : null;
+  var prv = rev ? computePosRevenue(rev, pStr, pStr) : null;
+
+  // Data Google Ads spend hôm qua từ daily-report.time_periods.yesterday
+  // (Lưu ý: `today` trong daily-report đôi khi map với "hôm qua" vì report gen sáng — ưu tiên key yesterday)
+  var tp = r.time_periods || {};
+  var spendY = null, spendP = null;
+  if(tp.yesterday && tp.yesterday.totals) spendY = tp.yesterday.totals.spend;
+  // Không có "day_before_yesterday" — bỏ compare spend (chỉ hiển thị số)
+
+  // Top SP hôm qua từ field mới top_products_website_by_period
+  var topY = null;
+  if(rev && rev.top_products_website_by_period && rev.top_products_website_by_period.yesterday){
+    topY = rev.top_products_website_by_period.yesterday;
+  }
+
+  // Freshness guard: compare generated_at với 17:30 VN hôm qua
+  var genDt = rev ? parseGenAtUTC(rev.generated_at) : null;
+  var isStale = false, staleNote = "";
+  if(genDt){
+    // 17:30 VN hôm qua = UTC 10:30 của hôm qua
+    var ym = yStr.split("-");
+    var yStop = new Date(Date.UTC(+ym[0],+ym[1]-1,+ym[2], 10, 30));
+    if(genDt < yStop){
+      isStale = true;
+      staleNote = "Dữ liệu POS cập nhật lúc "+fmtVNDateTime(genDt)+" — cron fetch có thể bị gián đoạn. Số hôm qua có thể chưa đủ.";
+    }
+  }
+
+  function pct(a,b){ if(!b||b===0) return null; return (a-b)/b*100; }
+
+  var h='<section class="block card" style="border-left:4px solid #2563eb;background:#eff6ff">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:8px">';
+  h+='<h2 style="margin:0">Đánh giá doanh thu hôm qua <span style="font-size:13px;font-weight:500;color:#6b7280">('+esc(yStr)+')</span></h2>';
+  h+='<span class="text-xs text-gray">Nguồn: 3 filter POS — Website + Zalo OA + Hotline (loại DUY / PN staff)</span>';
+  h+='</div>';
+
+  if(!rev){
+    h+='<div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:4px;padding:10px 12px;font-size:12px;color:#7f1d1d">';
+    h+='<strong>⚠ Không tải được product-revenue.json</strong> — panel này sẽ hiển thị khi cron fetch Pancake chạy xong.';
+    h+='</div></section>';
+    return h;
+  }
+  if(isStale){
+    h+='<div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:4px;padding:8px 12px;margin-bottom:10px;font-size:12px">';
+    h+='<strong>⚠ Dữ liệu POS trễ:</strong> '+esc(staleNote);
+    h+='</div>';
+  }
+
+  // 4 card metric
+  var revCh = (cur && prv) ? pct(cur.revenue, prv.revenue) : null;
+  var ordCh = (cur && prv) ? pct(cur.orders, prv.orders) : null;
+  var roas = (spendY && spendY>0 && cur) ? (cur.revenue/spendY) : null;
+  var roasCls = roas==null ? "text-gray" : (roas>=3 ? "text-green" : (roas>=1 ? "" : "text-red"));
+
+  function mb(label, val, chg, extra){
+    return '<div style="background:white;border-radius:6px;padding:10px;border:1px solid #e5e7eb">'+
+      '<div style="font-size:10px;color:#6b7280;text-transform:uppercase">'+label+'</div>'+
+      '<div style="font-size:20px;font-weight:700;margin-top:4px'+(extra?' '+extra:'')+'">'+val+'</div>'+
+      (chg?'<div style="font-size:11px;margin-top:2px">'+chg+' vs hôm kia</div>':'')+
+      '</div>';
+  }
+  h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">';
+  h+=mb("Doanh thu hôm qua", cur?fmtVND(cur.revenue)+'đ':'-', cur && prv?fmtChange(revCh):null);
+  h+=mb("Số đơn",            cur?fmtInt(cur.orders):'-',       cur && prv?fmtChange(ordCh):null);
+  h+=mb("Chi Google Ads",    spendY==null?'-':fmtVND(spendY)+'đ', null);
+  h+=mb("ROAS hôm qua",      roas==null?'-':roas.toFixed(2)+'x', '<span class="text-xs text-gray">Target 3x</span>', roasCls);
+  h+='</div>';
+
+  // Breakdown 3 nguồn
+  if(cur){
+    h+='<div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:10px;margin-bottom:10px;font-size:12px">';
+    h+='<strong>Breakdown 3 nguồn:</strong> ';
+    var srcDisplay=[["WEBSITE","Website"],["ZALO_OA","Zalo OA"],["HOTLINE","Hotline"]];
+    var parts=[];
+    for(var si=0;si<srcDisplay.length;si++){
+      var k=srcDisplay[si][0], lb=srcDisplay[si][1], b=cur.bySrc[k]||{revenue:0,orders:0};
+      parts.push(lb+': <strong>'+fmtVND(b.revenue)+'đ</strong> / <strong>'+b.orders+'</strong> đơn');
+    }
+    h+=parts.join(' · ');
+    h+='</div>';
+  }
+
+  // Top SP hôm qua (tất cả SKU, không filter MAPPING)
+  if(topY && topY.top_products && topY.top_products.length){
+    h+='<div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:10px;margin-bottom:8px">';
+    h+='<div style="font-size:12px;font-weight:600;margin-bottom:6px">Top sản phẩm hôm qua ('+topY.top_products.length+' SP)</div>';
+    h+='<div class="tbl-wrap"><table class="compact-tbl"><thead><tr><th>#</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">SL</th></tr></thead><tbody>';
+    for(var ti=0;ti<topY.top_products.length;ti++){
+      var p=topY.top_products[ti];
+      h+='<tr><td class="text-gray">'+(ti+1)+'</td>';
+      h+='<td class="text-xs"><span class="truncate" title="'+esc(p.product)+'" style="max-width:380px;display:inline-block">'+esc(p.product)+'</span></td>';
+      h+='<td class="t-right text-green font-bold">'+fmtVND(p.revenue)+'đ</td>';
+      h+='<td class="t-right">'+p.orders+'</td>';
+      h+='<td class="t-right text-xs text-gray">'+p.units+'</td></tr>';
+    }
+    h+='</tbody></table></div></div>';
+  }
+
+  // Footer freshness
+  h+='<p class="text-xs text-gray" style="margin:0">Dữ liệu POS cập nhật lúc <strong>'+esc(genDt?fmtVNDateTime(genDt):rev.generated_at||'-')+'</strong>. ';
+  h+='Cron fetch mỗi 30 phút từ 09:00-17:30 VN. Chi Google Ads lấy từ JSON agent (kỳ '+esc((r.period||{}).start||'-')+' → '+esc((r.period||{}).end||'-')+').</p>';
+  h+='</section>';
+  return h;
+}
+
 function renderProductRanking(){
   if(!REPORT) return;
   var tp = REPORT.time_periods || {};
   var cur = tp[selectedPeriod];
   if(!cur){ return; }
   var prev = cur.compare_to ? tp[cur.compare_to] : null;
-  var tp_prods = cur.top_products || [];
+  // ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU, không filter MAPPING)
+  // Fallback về cur.top_products nếu REVDATA chưa có hoặc period không match
+  var tp_prods = (REVDATA && REVDATA.top_products_website_by_period && REVDATA.top_products_website_by_period[selectedPeriod])
+    ? (REVDATA.top_products_website_by_period[selectedPeriod].top_products || [])
+    : (cur.top_products || []);
   // Map prev for compare
   var prev_map = {};
   if(prev && prev.top_products){ for(var pi=0;pi<prev.top_products.length;pi++) prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
@@ -153,11 +321,14 @@ function renderTimeFilterSection(r){
     }
     h+='</tbody></table></div>';
   }
-  // Top products trong period
-  var tp_prods = cur.top_products || [];
+  // Top products trong period — ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU), fallback cur.top_products
+  var posPeriodData = (REVDATA && REVDATA.top_products_website_by_period)
+    ? REVDATA.top_products_website_by_period[selectedPeriod] : null;
+  var tp_prods = posPeriodData ? (posPeriodData.top_products || []) : (cur.top_products || []);
+  var srcTag = posPeriodData ? " <span class=\"text-xs text-gray\">(POS Pancake, tất cả SKU)</span>" : "";
   if(tp_prods.length){
-    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Top sản phẩm trong kỳ (3 nguồn: Website + Hotline + Zalo OA)</h3>';
-    h+='<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th>';
+    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Top sản phẩm trong kỳ (3 nguồn: Website + Hotline + Zalo OA)'+srcTag+'</h3>';
+    h+='<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">SL</th>';
     if(prev){h+='<th class="t-right">Δ Doanh thu vs kỳ trước</th>';}
     h+='</tr></thead><tbody>';
     var prev_map = {};
@@ -169,6 +340,7 @@ function renderTimeFilterSection(r){
       h+='<tr><td class="text-gray">'+(pi2+1)+'</td><td class="font-bold">'+esc(pp.product)+'</td>';
       h+='<td class="t-right text-green">'+fmtVND(pp.revenue)+'đ</td>';
       h+='<td class="t-right">'+fmtInt(pp.orders)+'</td>';
+      h+='<td class="t-right text-xs text-gray">'+fmtInt(pp.units||0)+'</td>';
       if(prev){
         var pr_prev = prev_map[pp.product];
         var ch = (pr_prev && pr_prev.revenue) ? ((pp.revenue - pr_prev.revenue) / pr_prev.revenue * 100) : null;
@@ -197,6 +369,10 @@ function render(r){
   h+='<div class="card"><div class="metric-label">Hành động cần làm</div><div class="metric-value">'+(t.total_actions||0)+'</div><div class="metric-sub text-red">'+(t.urgent_actions||0)+' urgent</div></div>';
   h+='<div class="card"><div class="metric-label">Tiết kiệm tiềm năng</div><div class="metric-value text-green">'+fmtVND(t.estimated_total_saving_vnd)+'đ</div><div class="metric-sub">trong 30 ngày</div></div>';
   h+='</section>';
+
+  // ── Section "Đánh giá doanh thu hôm qua" — data từ POS Pancake trực tiếp (3 nguồn Web+Zalo+Hotline) ──
+  h+=renderYesterdayPanel(r, REVDATA);
+
   h+='<section class="block card"><div id="time-filter-content"></div></section>';
 
   // VN culture tips - KHONG HIEN THI UI (chi dung lam du lieu backend analysis)
