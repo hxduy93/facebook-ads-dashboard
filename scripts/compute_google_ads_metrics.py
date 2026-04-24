@@ -72,26 +72,36 @@ def compute_spend_breakdown_by_period(ga_data):
     Return: {period: {total_spend, total_clicks, total_impressions,
                       categories: {KEY: {label, spend, clicks, impressions}}}}
     """
-    end_str = (ga_data.get("date_range") or {}).get("end")
-    if not end_str:
-        return {}
+    # Today VN = lúc chạy script (GitHub Actions UTC + 7h)
+    today_vn = (datetime.now(timezone.utc) + timedelta(hours=7)).date()
+    yday = today_vn - timedelta(days=1)
 
-    end_dt = datetime.strptime(end_str, "%Y-%m-%d")
+    # 9 period khớp UI
+    wd = today_vn.weekday()  # Mon=0, Sun=6
+    mon_this = today_vn - timedelta(days=wd)
+    mon_last = mon_this - timedelta(days=7)
+    sun_last = mon_this - timedelta(days=1)
+    first_this_month = today_vn.replace(day=1)
+    last_prev_month_day = first_this_month - timedelta(days=1)
+    first_prev_month = last_prev_month_day.replace(day=1)
 
-    def offset(days):
-        return (end_dt - timedelta(days=days)).strftime("%Y-%m-%d")
-
-    # Period start inclusive, end inclusive
+    def s(d): return d.strftime("%Y-%m-%d")
     periods = {
-        "yesterday":  (end_str, end_str),
-        "last_7d":    (offset(6), end_str),
-        "this_month": (end_dt.replace(day=1).strftime("%Y-%m-%d"), end_str),
-        "last_30d":   (offset(29), end_str),
-        "last_90d":   (offset(89), end_str),
+        "today":      (s(today_vn),           s(today_vn)),
+        "yesterday":  (s(yday),               s(yday)),
+        "this_week":  (s(mon_this),           s(today_vn)),
+        "last_week":  (s(mon_last),           s(sun_last)),
+        "this_month": (s(first_this_month),   s(today_vn)),
+        "last_month": (s(first_prev_month),   s(last_prev_month_day)),
+        "last_7d":    (s(yday - timedelta(days=6)),  s(yday)),
+        "last_30d":   (s(yday - timedelta(days=29)), s(yday)),
+        "last_90d":   (s(yday - timedelta(days=89)), s(yday)),
     }
     labels = {
-        "yesterday": "Hôm qua", "last_7d": "7 ngày gần", "this_month": "Tháng này",
-        "last_30d": "30 ngày gần", "last_90d": "90 ngày gần",
+        "today": "Hôm nay", "yesterday": "Hôm qua",
+        "this_week": "Tuần này", "last_week": "Tuần trước",
+        "this_month": "Tháng này", "last_month": "Tháng trước",
+        "last_7d": "7 ngày qua", "last_30d": "30 ngày qua", "last_90d": "90 ngày qua",
     }
 
     rows = ga_data.get("campaigns_raw") or []

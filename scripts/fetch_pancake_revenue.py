@@ -579,6 +579,46 @@ def aggregate(orders):
             order_revenue_by_status_by_date, order_count_by_status_by_date)
 
 
+# ── 9 period chuẩn khớp UI (today/yesterday/this_week/last_week/this_month/last_month/last_7d/last_30d/last_90d) ──
+PERIOD_LABELS_9 = {
+    "today":      "Hôm nay",
+    "yesterday":  "Hôm qua",
+    "this_week":  "Tuần này",
+    "last_week":  "Tuần trước",
+    "this_month": "Tháng này",
+    "last_month": "Tháng trước",
+    "last_7d":    "7 ngày qua",
+    "last_30d":   "30 ngày qua",
+    "last_90d":   "90 ngày qua",
+}
+
+
+def _compute_period_dates_9(today_vn):
+    """Tính date_range cho 9 period, theo ngày VN."""
+    y = today_vn - timedelta(days=1)
+    # Tuần này: Monday → today_vn (Mon=0, Sun=6)
+    wd = today_vn.weekday()
+    mon_this = today_vn - timedelta(days=wd)
+    # Tuần trước: Monday tuần trước → Sunday tuần trước
+    mon_last = mon_this - timedelta(days=7)
+    sun_last = mon_this - timedelta(days=1)
+    # Tháng này + tháng trước
+    first_this_month = today_vn.replace(day=1)
+    last_prev_month_day = first_this_month - timedelta(days=1)
+    first_prev_month = last_prev_month_day.replace(day=1)
+    return {
+        "today":      (today_vn.isoformat(),        today_vn.isoformat()),
+        "yesterday":  (y.isoformat(),                y.isoformat()),
+        "this_week":  (mon_this.isoformat(),         today_vn.isoformat()),
+        "last_week":  (mon_last.isoformat(),         sun_last.isoformat()),
+        "this_month": (first_this_month.isoformat(), today_vn.isoformat()),
+        "last_month": (first_prev_month.isoformat(), last_prev_month_day.isoformat()),
+        "last_7d":    ((y - timedelta(days=6)).isoformat(),  y.isoformat()),
+        "last_30d":   ((y - timedelta(days=29)).isoformat(), y.isoformat()),
+        "last_90d":   ((y - timedelta(days=89)).isoformat(), y.isoformat()),
+    }
+
+
 # ── Build top products from raw orders (3 nguồn Website+Zalo+Hotline, tất cả SKU) ──
 # Khác với `products` aggregate bị giới hạn bởi PRODUCT_MAPPING (13 SP) — function này
 # gom TẤT CẢ variation.name xuất hiện trong đơn, cho 5 period chuẩn (yesterday/7d/tháng
@@ -598,23 +638,10 @@ def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
     INCLUDE_ST = None   # None = không filter, lấy tất cả status
     EXCLUDE_ST = set()  # Không exclude gì
 
-    y = today_vn - timedelta(days=1)
-    periods = {
-        "yesterday":  (y.isoformat(), y.isoformat()),
-        "last_7d":    ((y - timedelta(days=6)).isoformat(), y.isoformat()),
-        "this_month": (today_vn.replace(day=1).isoformat(), today_vn.isoformat()),
-        "last_30d":   ((y - timedelta(days=29)).isoformat(), y.isoformat()),
-        "last_90d":   ((y - timedelta(days=89)).isoformat(), y.isoformat()),
-    }
-    labels = {
-        "yesterday": "Hôm qua",
-        "last_7d":   "7 ngày gần",
-        "this_month":"Tháng này",
-        "last_30d":  "30 ngày gần",
-        "last_90d":  "90 ngày gần",
-    }
+    periods = _compute_period_dates_9(today_vn)
+    labels = PERIOD_LABELS_9
 
-    # Pre-compute VN date cho mỗi đơn (parse 1 lần, reuse cho 5 period)
+    # Pre-compute VN date cho mỗi đơn (parse 1 lần, reuse cho 9 period)
     orders_with_vn_date = []
     for o in orders_list:
         # 2026-04-24: KHÔNG filter status — lấy tất cả đơn
@@ -707,18 +734,8 @@ def build_category_breakdown_by_period(orders_list, today_vn):
     INCLUDE_ST = None
     EXCLUDE_ST = set()
 
-    y = today_vn - timedelta(days=1)
-    periods = {
-        "yesterday":  (y.isoformat(), y.isoformat()),
-        "last_7d":    ((y - timedelta(days=6)).isoformat(), y.isoformat()),
-        "this_month": (today_vn.replace(day=1).isoformat(), today_vn.isoformat()),
-        "last_30d":   ((y - timedelta(days=29)).isoformat(), y.isoformat()),
-        "last_90d":   ((y - timedelta(days=89)).isoformat(), y.isoformat()),
-    }
-    labels = {
-        "yesterday": "Hôm qua", "last_7d": "7 ngày gần", "this_month": "Tháng này",
-        "last_30d": "30 ngày gần", "last_90d": "90 ngày gần",
-    }
+    periods = _compute_period_dates_9(today_vn)
+    labels = PERIOD_LABELS_9
 
     # Pre-compute VN date + classify cho mỗi order/item
     processed = []  # list of (vn_date, order_id, order_items_with_category)

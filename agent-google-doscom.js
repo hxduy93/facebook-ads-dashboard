@@ -535,12 +535,7 @@ function render(r){
   h+='<div class="card"><div class="metric-label">Tiết kiệm tiềm năng</div><div class="metric-value text-green">'+fmtVND(t.estimated_total_saving_vnd)+'đ</div><div class="metric-sub">trong 30 ngày</div></div>';
   h+='</section>';
 
-  h+='<section class="block card"><div id="time-filter-content"></div></section>';
-
-  // VN culture tips - KHONG HIEN THI UI (chi dung lam du lieu backend analysis)
-  // Field r.vn_culture_tips van giu trong JSON de Cowork task + suggested_keywords dung
-  // Ly do an: user request 22/04/2026 - khong can show UI, chi dung phan tich timing quang cao
-
+  // ── Tổng quan đánh giá (user request 2026-04-24: đẩy lên ngay sau thẻ điểm) ──
   var ss=r.score_summary||{};
   h+='<section class="block card"><h2>Tổng quan đánh giá</h2><div class="score-summary">';
   h+='<div class="score-block good"><h4>✓ Điểm tốt</h4><ul>';
@@ -553,9 +548,13 @@ function render(r){
   for(var j=0;j<bp.length;j++)h+='<li>'+mdBold(bp[j].text)+'</li>';
   h+='</ul></div></div></section>';
 
+  // Headline + verdict (kỳ 30d)
   h+='<section class="block card"><p style="font-weight:600;font-size:13px">'+esc(r.headline)+'</p><p class="text-sm" style="margin-top:8px;color:#374151">'+esc(r.verdict)+'</p>';
   var pd=r.period||{};
   h+='<p class="text-xs" style="color:#9ca3af;margin-top:6px">Cập nhật: '+esc(r.generated_at)+' · Kỳ 30d: '+esc(pd.start)+' đến '+esc(pd.end)+'</p></section>';
+
+  // Bộ lọc thời gian (xuống sau Tổng quan đánh giá)
+  h+='<section class="block card"><div id="time-filter-content"></div></section>';
 
     // Product ranking - render qua container để nhảy theo period
   h+='<section class="block card" id="product-ranking-container"></section>';;
