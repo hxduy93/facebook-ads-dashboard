@@ -97,6 +97,44 @@ function vnDateShift(daysDelta){
   var pad = function(n){return n<10?"0"+n:""+n;};
   return base.getUTCFullYear()+"-"+pad(base.getUTCMonth()+1)+"-"+pad(base.getUTCDate());
 }
+// Compute date_range DYNAMIC cho mỗi period, theo ngày VN hiện tại
+// KHÔNG dựa vào daily-report.json (file đó có thể gen 1-2 ngày trước → sai ngày)
+function computePeriodDates(key){
+  var today = vnDateNow();  // YYYY-MM-DD
+  var parts = today.split("-").map(Number);
+  var y = parts[0], m = parts[1], d = parts[2];
+  var base = new Date(Date.UTC(y, m-1, d));
+  var pad = function(n){ return n<10?"0"+n:""+n; };
+  function toStr(dt){ return dt.getUTCFullYear()+"-"+pad(dt.getUTCMonth()+1)+"-"+pad(dt.getUTCDate()); }
+  function shift(n){ var x=new Date(base); x.setUTCDate(x.getUTCDate()+n); return toStr(x); }
+  function mondayThisWeek(){
+    var dow = base.getUTCDay();   // 0=Sun, 1=Mon, ..., 6=Sat
+    var diff = (dow === 0) ? -6 : (1 - dow);
+    return shift(diff);
+  }
+  function firstOfMonth(){ return y+"-"+pad(m)+"-01"; }
+  function lastDayPrevMonth(){ var x=new Date(Date.UTC(y,m-1,0)); return toStr(x); }
+  function firstOfPrevMonth(){ var x=new Date(Date.UTC(y,m-1,0)); return x.getUTCFullYear()+"-"+pad(x.getUTCMonth()+1)+"-01"; }
+
+  switch(key){
+    case "today":      return {start: today,              end: today};
+    case "yesterday":  return {start: shift(-1),          end: shift(-1)};
+    case "this_week":  return {start: mondayThisWeek(),   end: today};
+    case "last_week":  {
+      var mon = mondayThisWeek().split("-").map(Number);
+      var mp = new Date(Date.UTC(mon[0], mon[1]-1, mon[2])); mp.setUTCDate(mp.getUTCDate()-7);
+      var sp = new Date(mp); sp.setUTCDate(sp.getUTCDate()+6);
+      return {start: toStr(mp), end: toStr(sp)};
+    }
+    case "this_month": return {start: firstOfMonth(),     end: today};
+    case "last_month": return {start: firstOfPrevMonth(), end: lastDayPrevMonth()};
+    case "last_7d":    return {start: shift(-6),          end: today};
+    case "last_30d":   return {start: shift(-29),         end: today};
+    case "last_90d":   return {start: shift(-89),         end: today};
+    default:           return {start: today,              end: today};
+  }
+}
+
 // Compute revenue cho 3 nguồn Web+Zalo+Hotline, range [start,end]
 // 2026-04-24: LẤY TẤT CẢ status (không exclude hoàn/huỷ — bộ phận khác xử lý)
 function computePosRevenue(rev, start, end){
@@ -253,13 +291,17 @@ function renderProductRanking(){
   if(!REPORT) return;
   var tp = REPORT.time_periods || {};
   var cur = tp[selectedPeriod];
-  if(!cur){ return; }
-  var prev = cur.compare_to ? tp[cur.compare_to] : null;
+  var prev = (cur && cur.compare_to) ? tp[cur.compare_to] : null;
+  // Dynamic date range cho period hiện tại
+  var curDates = computePeriodDates(selectedPeriod);
+  var labelMap = {today:"Hôm nay",yesterday:"Hôm qua",this_week:"Tuần này",last_week:"Tuần trước",this_month:"Tháng này",last_month:"Tháng trước",last_7d:"7 ngày qua",last_30d:"30 ngày qua",last_90d:"90 ngày qua"};
+  var curLabel = (cur && cur.label) || labelMap[selectedPeriod] || selectedPeriod;
+  var prevLabel = (prev && prev.label) || (cur && cur.compare_to ? labelMap[cur.compare_to] : null);
+
   // ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU, không filter MAPPING)
-  // Fallback về cur.top_products nếu REVDATA chưa có hoặc period không match
   var tp_prods = (REVDATA && REVDATA.top_products_website_by_period && REVDATA.top_products_website_by_period[selectedPeriod])
     ? (REVDATA.top_products_website_by_period[selectedPeriod].top_products || [])
-    : (cur.top_products || []);
+    : ((cur && cur.top_products) || []);
   // Map prev for compare
   var prev_map = {};
   if(prev && prev.top_products){ for(var pi=0;pi<prev.top_products.length;pi++) prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
@@ -267,12 +309,12 @@ function renderProductRanking(){
   var catMap = {};
   (REPORT.products_ranking || []).forEach(function(p){ catMap[p.product] = p.category_name; });
 
-  var h = '<h2>Xếp hạng Sản phẩm theo Doanh thu — Kỳ: '+esc(cur.label)+'</h2>';
+  var h = '<h2>Xếp hạng Sản phẩm theo Doanh thu — Kỳ: '+esc(curLabel)+' ('+esc(curDates.start)+' → '+esc(curDates.end)+')</h2>';
   h += '<p class="text-xs text-gray" style="margin-bottom:6px">Nguồn: Website + Hotline + Zalo OA (loại DUY/PN staff). Thay đổi bộ lọc thời gian ở trên để xem kỳ khác.</p>';
   h += '<div class="tbl-wrap"><table id="tbl-prod"><thead><tr>';
   h += '<th>#</th><th>Sản phẩm</th><th>Nhóm</th><th class="t-right">Doanh thu</th>';
   h += '<th class="t-right">Đơn</th><th class="t-right">AOV</th>';
-  if(prev) h += '<th class="t-right">Δ Doanh thu vs '+esc(prev.label)+'</th>';
+  if(prev) h += '<th class="t-right">Δ Doanh thu vs '+esc(prevLabel||'-')+'</th>';
   h += '</tr></thead><tbody>';
   for(var pi=0;pi<tp_prods.length;pi++){
     var p = tp_prods[pi];
@@ -296,35 +338,54 @@ function renderProductRanking(){
 
 function renderTimeFilterSection(r){
   var tp=r.time_periods||{};
-  var cur=tp[selectedPeriod]; if(!cur)return;
-  var prev=cur.compare_to?tp[cur.compare_to]:null;
-  var cmp=prev?compareFn(cur,prev):null;
+  var cur=tp[selectedPeriod] || null;   // có thể null nếu daily-report thiếu period
+  var prev=(cur && cur.compare_to) ? tp[cur.compare_to] : null;
+  var cmp=(prev && cur)?compareFn(cur,prev):null;
+
+  // ── Compute date_range DYNAMIC từ ngày VN hiện tại (không dựa vào daily-report cũ) ──
+  // Fix bug: daily-report gen 22/04 → date_range trong đó bị lệch 1-2 ngày
+  var curDates  = computePeriodDates(selectedPeriod);
+  var prevDates = cur.compare_to ? computePeriodDates(cur.compare_to) : null;
 
   // ── POS-direct revenue/orders cho period hiện tại (3 nguồn Web+Zalo+Hotline) ──
-  // Dùng cùng cấu trúc với section "Đánh giá doanh thu hôm qua" để đảm bảo consistency.
-  var posCur  = REVDATA ? computePosRevenue(REVDATA, cur.date_range.start, cur.date_range.end) : null;
-  var posPrev = (REVDATA && prev) ? computePosRevenue(REVDATA, prev.date_range.start, prev.date_range.end) : null;
+  var posCur  = REVDATA ? computePosRevenue(REVDATA, curDates.start, curDates.end) : null;
+  var posPrev = (REVDATA && prevDates) ? computePosRevenue(REVDATA, prevDates.start, prevDates.end) : null;
+
+  // Labels cho dropdown (từ daily-report nếu có, fallback hard-code)
+  var labelMap = {
+    today: "Hôm nay", yesterday: "Hôm qua",
+    this_week: "Tuần này", last_week: "Tuần trước",
+    this_month: "Tháng này", last_month: "Tháng trước",
+    last_7d: "7 ngày qua", last_30d: "30 ngày qua", last_90d: "90 ngày qua",
+  };
 
   var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
   h+='<h2 style="font-size:16px;font-weight:700">Bộ lọc thời gian</h2>';
   h+='<select onchange="changePeriod(this.value)" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;background:white">';
   var ks=["today","yesterday","this_week","last_week","this_month","last_month","last_7d","last_30d","last_90d"];
-  for(var i=0;i<ks.length;i++){if(!tp[ks[i]])continue;var sel=ks[i]===selectedPeriod?" selected":"";h+='<option value="'+ks[i]+'"'+sel+'>'+esc(tp[ks[i]].label)+'</option>';}
+  for(var i=0;i<ks.length;i++){
+    var sel=ks[i]===selectedPeriod?" selected":"";
+    var lbl=(tp[ks[i]] && tp[ks[i]].label) || labelMap[ks[i]] || ks[i];
+    h+='<option value="'+ks[i]+'"'+sel+'>'+esc(lbl)+'</option>';
+  }
   h+='</select></div>';
-  h+='<p class="text-xs text-gray" style="margin-bottom:12px">Kỳ: <strong>'+esc(cur.date_range.start)+' → '+esc(cur.date_range.end)+'</strong>';
-  if(prev)h+=' · So sánh với <strong>'+esc(prev.label)+'</strong>';
+  var prevLbl = cur.compare_to ? ((tp[cur.compare_to] && tp[cur.compare_to].label) || labelMap[cur.compare_to]) : null;
+  h+='<p class="text-xs text-gray" style="margin-bottom:12px">Kỳ: <strong>'+esc(curDates.start)+' → '+esc(curDates.end)+'</strong>';
+  if(prevDates && prevLbl) h+=' · So sánh với <strong>'+esc(prevLbl)+'</strong> ('+esc(prevDates.start)+' → '+esc(prevDates.end)+')';
   h+='</p>';
 
-  var t=cur.totals;
-  // Eff totals: revenue/orders từ POS (nếu có), ROAS tính lại từ POS rev / Ads spend
-  var effRevenue = posCur ? posCur.revenue : t.revenue;
-  var effOrders  = posCur ? posCur.orders  : t.orders;
+  // Fallback cho totals nếu daily-report thiếu period
+  var t = (cur && cur.totals) ? cur.totals : {spend:0,clicks:0,impressions:0,ctr:0,cpc:0,revenue:0,orders:0,roas:0};
+  // Ưu tiên spend từ GACTX spend_breakdown_by_period nếu có (nhưng date_range trong đó có thể cũ → không dùng)
+  var effRevenue = posCur ? posCur.revenue : (t.revenue||0);
+  var effOrders  = posCur ? posCur.orders  : (t.orders||0);
   var effRoas    = (t.spend && t.spend > 0) ? (effRevenue / t.spend) : 0;
 
   // Override cmp revenue/orders/roas theo POS nếu có
-  if(cmp && posCur && posPrev){
+  if(cmp && posCur && posPrev && prev){
     function _pct(a,b){ if(!b||b===0) return null; return (a-b)/b*100; }
-    var prevRoas = (prev.totals.spend && prev.totals.spend > 0) ? (posPrev.revenue / prev.totals.spend) : 0;
+    var prevT = prev.totals || {spend:0};
+    var prevRoas = (prevT.spend && prevT.spend > 0) ? (posPrev.revenue / prevT.spend) : 0;
     cmp.revenue = _pct(effRevenue, posPrev.revenue);
     cmp.orders  = _pct(effOrders,  posPrev.orders);
     cmp.roas    = _pct(effRoas,    prevRoas);
