@@ -144,31 +144,60 @@ function lookupCost(productName){
   if(!PCOSTS || !PCOSTS.products) return 0;
   var n = (productName||"").toLowerCase().trim();
   var P = PCOSTS.products;
-  // Direct match
+  // 1) Direct match
   if(P[n] && P[n].gia_nhap_vnd) return Number(P[n].gia_nhap_vnd)||0;
-  // Các regex pattern cho mã SP chính
+
+  // 2) A002 có dung tích (key trong file: "a002 -500ml" / "a002 -300ml")
+  var aM = n.match(/a002[^0-9]*(500|300)?\s*ml/);
+  if(aM){
+    var vol = aM[1] || "500";  // default 500ml
+    var k = "a002 -" + vol + "ml";
+    if(P[k] && P[k].gia_nhap_vnd) return Number(P[k].gia_nhap_vnd)||0;
+  }
+  if(n.indexOf("a002") >= 0){
+    // fallback a002 generic
+    var fallbacks = ["a002 -500ml","a002 -300ml","a002"];
+    for(var i=0;i<fallbacks.length;i++){
+      if(P[fallbacks[i]] && P[fallbacks[i]].gia_nhap_vnd) return Number(P[fallbacks[i]].gia_nhap_vnd)||0;
+    }
+  }
+
+  // 3) Khăn lau / khăn microfiber
+  if(n.indexOf("khăn") >= 0 || n.indexOf("microfiber") >= 0){
+    if(P["khăn lau"] && P["khăn lau"].gia_nhap_vnd) return Number(P["khăn lau"].gia_nhap_vnd)||0;
+  }
+
+  // 4) Các pattern chuẩn cho mã SP
   var patterns = [
-    /\bd\s*8\.1\s*pro\b/,   // DA8.1 Pro
-    /\bda\s*8\.1\b/,        // DA8.1
+    /\bda\s*8\.1\s*pro\b/,  // DA8.1 Pro (ưu tiên pro trước base)
+    /\bda\s*8\.1\b/,
     /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
     /\bdr\d+(?:\s*plus|\s*pro)?\b/,
-    /\bdv\d+(?:\s*pro|\s*mini)?\b/,
+    /\bdv\d+(?:\s*pro|\s*mini|\.\d+)?\b/,
     /\bdt\d+\b/,
     /\bdi\d+(?:\s*pro|\s*plus)?\b/,
     /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/,  // D1-D9 Pro (máy dò)
     /\bnoma\s*\d+/,
-    /\ba002\b/,
   ];
   for(var i=0;i<patterns.length;i++){
     var m = n.match(patterns[i]);
     if(m){
       var k = m[0].replace(/\s+/g," ").trim();
       if(P[k] && P[k].gia_nhap_vnd) return Number(P[k].gia_nhap_vnd)||0;
-      // Thử bỏ space
       var k2 = m[0].replace(/\s+/g,"");
       if(P[k2] && P[k2].gia_nhap_vnd) return Number(P[k2].gia_nhap_vnd)||0;
     }
   }
+
+  // 5) Fallback cuối: substring search — tìm key dài nhất là substring của n
+  var bestKey = null, bestLen = 0;
+  for(var k in P){
+    if(k.length > 2 && n.indexOf(k) >= 0 && P[k].gia_nhap_vnd){
+      if(k.length > bestLen){ bestKey = k; bestLen = k.length; }
+    }
+  }
+  if(bestKey) return Number(P[bestKey].gia_nhap_vnd)||0;
+
   return 0;
 }
 
@@ -713,39 +742,85 @@ function renderTimeFilterSection(r){
     h+='</tbody></table></div>';
   }
 
-  // ── Bảng "Danh sách đơn hàng trong kỳ" (mỗi row = 1 đơn, kèm VAT + lợi nhuận) ──
+  // ── Bảng "Thống kê sản phẩm trong kỳ" (mỗi row = 1 SP: đơn · SL · doanh thu · VAT · giá vốn · ads TB · lợi nhuận) ──
   if(REVDATA && REVDATA.web_items_flat){
-    var orders = groupOrders(REVDATA.web_items_flat, curDates.start, curDates.end);
-    if(orders.length){
-      h+='<h3 style="margin-top:20px;margin-bottom:8px;font-size:13px">Danh sách đơn hàng trong kỳ <span class="text-xs text-gray">('+orders.length+' đơn · Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Ads TB)</span></h3>';
-      h+='<div class="tbl-wrap" style="max-height:480px;overflow-y:auto"><table class="compact-tbl"><thead style="position:sticky;top:0;background:#f9fafb;z-index:1"><tr>';
-      h+='<th>#</th><th>Ngày</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th>';
-      h+='<th class="t-right">VAT 10%</th><th class="t-right">Giá vốn</th><th class="t-right">Ads TB</th><th class="t-right">Lợi nhuận</th>';
-      h+='</tr></thead><tbody>';
-      for(var oi=0; oi<orders.length; oi++){
-        var o = orders[oi];
-        var rev = o.revenue;
-        var vat = rev * 0.10;
-        var cost = 0, adsAvg = 0;
-        var catsInOrder = {};
-        for(var ii=0;ii<o.items.length;ii++){
-          cost += lookupCost(o.items[ii].name) * o.items[ii].qty;
-          catsInOrder[o.items[ii].category] = 1;
-        }
-        for(var cc in catsInOrder){ adsAvg += (adsAvgPerCat[cc] || 0); }
-        var profit = rev - vat - cost - adsAvg;
-        var profCls = profit>0 ? "text-green" : (profit<0 ? "text-red" : "text-gray");
-        var itemsTxt = o.items.map(function(it){ return esc(it.name) + (it.qty>1 ? " ×"+it.qty : ""); }).join(" · ");
-        h+='<tr><td class="text-gray text-xs">'+(oi+1)+'</td>';
-        h+='<td class="text-xs">'+esc(o.date)+'</td>';
-        h+='<td class="text-xs"><span style="display:inline-block;max-width:380px" title="'+itemsTxt.replace(/"/g,"&quot;")+'">'+itemsTxt+'</span></td>';
-        h+='<td class="t-right text-xs text-green">'+fmtVND(rev)+'đ</td>';
-        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(vat))+'đ</td>';
-        h+='<td class="t-right text-xs text-gray">'+(cost>0 ? fmtVND(cost)+'đ' : '-')+'</td>';
-        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(adsAvg))+'đ</td>';
-        h+='<td class="t-right text-xs font-bold '+profCls+'">'+fmtVND(Math.round(profit))+'đ</td>';
-        h+='</tr>';
+    // Gộp flat items theo tên SP
+    var prodAgg = {};
+    var flatAll = REVDATA.web_items_flat;
+    for(var i=0;i<flatAll.length;i++){
+      var it = flatAll[i];
+      if(!(it.d >= curDates.start && it.d <= curDates.end)) continue;
+      if(!prodAgg[it.n]){
+        prodAgg[it.n] = {
+          name: it.n, category: it.c,
+          orderIds: {}, units: 0, revenue: 0,
+        };
       }
+      prodAgg[it.n].orderIds[it.oid] = 1;
+      prodAgg[it.n].units += it.q;
+      prodAgg[it.n].revenue += it.r;
+    }
+    // Convert + compute
+    var prodRows = [];
+    for(var pn in prodAgg){
+      var pp = prodAgg[pn];
+      var numOrders = Object.keys(pp.orderIds).length;
+      var rev = pp.revenue;
+      var vat = rev * 0.10;
+      var cost = lookupCost(pp.name) * pp.units;
+      var adsAvg = (adsAvgPerCat[pp.category] || 0) * numOrders;
+      var profit = rev - vat - cost - adsAvg;
+      prodRows.push({
+        name: pp.name, category: pp.category,
+        orders: numOrders, units: pp.units,
+        revenue: rev, vat: vat, cost: cost, ads: adsAvg, profit: profit,
+      });
+    }
+    prodRows.sort(function(a,b){ return b.revenue - a.revenue; });
+
+    if(prodRows.length){
+      // Category label lookup
+      var catLblMap = {};
+      for(var ci2=0; ci2<CAT_ORDER.length; ci2++){ catLblMap[CAT_ORDER[ci2].key] = CAT_ORDER[ci2].label; }
+
+      h+='<h3 style="margin-top:20px;margin-bottom:8px;font-size:13px">Thống kê sản phẩm trong kỳ <span class="text-xs text-gray">('+prodRows.length+' SP · Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Ads TB)</span></h3>';
+      h+='<div class="tbl-wrap" style="max-height:520px;overflow-y:auto"><table class="compact-tbl"><thead style="position:sticky;top:0;background:#f9fafb;z-index:1"><tr>';
+      h+='<th>#</th><th>Sản phẩm</th><th>Nhóm</th>';
+      h+='<th class="t-right">Đơn</th><th class="t-right">SL</th>';
+      h+='<th class="t-right">Doanh thu</th><th class="t-right">VAT 10%</th>';
+      h+='<th class="t-right">Giá vốn</th><th class="t-right">Ads TB</th>';
+      h+='<th class="t-right">Lợi nhuận</th>';
+      h+='</tr></thead><tbody>';
+      var sTotRev=0, sTotVat=0, sTotCost=0, sTotAds=0, sTotProfit=0, sTotOrders=0, sTotUnits=0;
+      for(var pi3=0; pi3<prodRows.length; pi3++){
+        var r2 = prodRows[pi3];
+        var profCls = r2.profit>0 ? "text-green" : (r2.profit<0 ? "text-red" : "text-gray");
+        h+='<tr>';
+        h+='<td class="text-gray text-xs">'+(pi3+1)+'</td>';
+        h+='<td class="text-xs"><span style="display:inline-block;max-width:320px" title="'+esc(r2.name)+'">'+esc(r2.name)+'</span></td>';
+        h+='<td class="text-xs"><span class="pill">'+esc(catLblMap[r2.category]||r2.category)+'</span></td>';
+        h+='<td class="t-right text-xs">'+fmtInt(r2.orders)+'</td>';
+        h+='<td class="t-right text-xs text-gray">'+fmtInt(r2.units)+'</td>';
+        h+='<td class="t-right text-xs text-green">'+fmtVND(r2.revenue)+'đ</td>';
+        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(r2.vat))+'đ</td>';
+        h+='<td class="t-right text-xs text-gray">'+(r2.cost>0 ? fmtVND(r2.cost)+'đ' : '-')+'</td>';
+        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(r2.ads))+'đ</td>';
+        h+='<td class="t-right text-xs font-bold '+profCls+'">'+fmtVND(Math.round(r2.profit))+'đ</td>';
+        h+='</tr>';
+        sTotRev+=r2.revenue; sTotVat+=r2.vat; sTotCost+=r2.cost; sTotAds+=r2.ads;
+        sTotProfit+=r2.profit; sTotOrders+=r2.orders; sTotUnits+=r2.units;
+      }
+      var sProfCls = sTotProfit>0 ? "text-green font-bold" : (sTotProfit<0 ? "text-red font-bold" : "");
+      h+='<tr style="background:#f9fafb;font-weight:700;position:sticky;bottom:0">';
+      h+='<td colspan="2">TỔNG</td><td></td>';
+      h+='<td class="t-right">'+fmtInt(sTotOrders)+'</td>';
+      h+='<td class="t-right">'+fmtInt(sTotUnits)+'</td>';
+      h+='<td class="t-right text-green">'+fmtVND(sTotRev)+'đ</td>';
+      h+='<td class="t-right">'+fmtVND(Math.round(sTotVat))+'đ</td>';
+      h+='<td class="t-right">'+fmtVND(sTotCost)+'đ</td>';
+      h+='<td class="t-right">'+fmtVND(Math.round(sTotAds))+'đ</td>';
+      h+='<td class="t-right '+sProfCls+'">'+fmtVND(Math.round(sTotProfit))+'đ</td>';
+      h+='</tr>';
       h+='</tbody></table></div>';
     }
   }
