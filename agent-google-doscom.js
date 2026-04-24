@@ -1,6 +1,21 @@
-// Agent Google Doscom v3.5 — Phase 3B (POS-direct top products + yesterday panel)
-console.log("[AgentPage] JS v3.5 loaded");
-var REPORT=null, REVDATA=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+// Agent Google Doscom v4.0 — Đập đi xây lại phần dữ liệu (2026-04-23)
+// Doanh thu: từ POS Pancake 3 nguồn, phân 9 nhóm theo classify_sku
+// Chi phí:   từ Google Ads, phân 9 nhóm theo classify_campaign (match tên chiến dịch)
+console.log("[AgentPage] JS v4.0 loaded");
+var REPORT=null, REVDATA=null, GACTX=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+
+// 9 nhóm chuẩn Doscom (thứ tự hiển thị)
+var CAT_ORDER = [
+  {key:"MAY_DO",            label:"Máy dò"},
+  {key:"CAMERA_WIFI",       label:"Camera wifi"},
+  {key:"CAMERA_4G",         label:"Camera 4G"},
+  {key:"CAMERA_VIDEO_CALL", label:"Camera gọi video 2 chiều"},
+  {key:"GHI_AM",            label:"Máy ghi âm"},
+  {key:"CHONG_GHI_AM",      label:"Chống ghi âm"},
+  {key:"DINH_VI",           label:"Định vị"},
+  {key:"NOMA",              label:"NOMA"},
+  {key:"OTHER",             label:"Khác"},
+];
 var REC_VN={"KEEP":"Giữ nguyên","SCALE":"Tăng bid","ADD_NEGATIVE":"Thêm negative","PAUSE":"Tạm dừng","REPLACE":"Thay banner","REVIEW":"Xem lại","MONITOR":"Theo dõi","UU_TIEN":"Ưu tiên","THEO_DOI":"Theo dõi","CAI_THIEN":"Cải thiện","GIU":"Giữ","NEN_LOAI_TRU":"Nên loại trừ"};
 var MATCH_VN={"BROAD":"Rộng","EXACT":"Chính xác","PHRASE":"Cụm","NEAR_PHRASE":"Gần cụm","UNKNOWN":"-"};
 var STATUS_VN={"NONE":"Chưa xử lý","ADDED":"Đã thêm","EXCLUDED":"Đã loại trừ"};
@@ -39,13 +54,15 @@ function sortTable(tblId, colIdx, type){
 }
 
 function load(){
-  // Fetch song song daily-report + product-revenue (POS) để top SP dùng data POS trực tiếp
+  // Fetch song song 3 file: daily-report (AI) + product-revenue (POS) + google-ads-context (spend breakdown)
   var v = Date.now();
   var p1 = fetch("data/google-ads-daily-report.json?v="+v).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status+" daily-report"); return r.json();});
   var p2 = fetch("data/product-revenue.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  Promise.all([p1,p2]).then(function(results){
+  var p3 = fetch("data/google-ads-context.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2,p3]).then(function(results){
     REPORT=results[0];
-    REVDATA=results[1]; // có thể null nếu fetch fail — UI fallback về field cũ
+    REVDATA=results[1];
+    GACTX=results[2];
     try{render(REPORT);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
   }).catch(function(e){showError("Không tải: "+esc(e.message));});
 }
@@ -334,27 +351,56 @@ function renderTimeFilterSection(r){
     h+=parts.join(' · ');
     h+='</div>';
   }
-  var pc=cur.per_category||{};
-  var cls=[];
-  for(var k in pc)if(pc[k].spend>0||pc[k].revenue>0)cls.push(k);
-  cls.sort(function(a,b){return pc[b].spend-pc[a].spend;});
-  if(cls.length){
-    var cm={};
-    if(REPORT.categories)for(var ck in REPORT.categories)cm[ck]=REPORT.categories[ck].display_name||ck;
-    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm SP trong kỳ</h3>';
-    h+='<div class="tbl-wrap"><table><thead><tr><th>Nhóm SP</th><th class="t-right">Chi phí</th><th class="t-right">Click</th><th class="t-right">CTR</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">ROAS</th>';
-    if(prev)h+='<th class="t-right">Δ Spend</th><th class="t-right">Δ Revenue</th>';
-    h+='</tr></thead><tbody>';
-    for(var ci=0;ci<cls.length;ci++){
-      var ck2=cls[ci],c=pc[ck2],pp=prev?(prev.per_category[ck2]||{}):null;
-      h+='<tr><td class="font-bold">'+esc(cm[ck2]||ck2)+'</td>';
-      h+='<td class="t-right">'+fmtVND(c.spend)+'đ</td><td class="t-right">'+fmtInt(c.clicks)+'</td><td class="t-right">'+fmtPct(c.ctr)+'</td>';
-      h+='<td class="t-right text-green">'+fmtVND(c.revenue)+'đ</td><td class="t-right">'+fmtInt(c.orders)+'</td>';
-      var rc=c.roas>=1.5?"text-green font-bold":(c.roas>0?"text-red":"text-gray");
-      h+='<td class="t-right '+rc+'">'+c.roas+'x</td>';
-      if(prev){function pct2(a,b){if(!b)return null;return (a-b)/b*100;}var sCh=pp?pct2(c.spend,pp.spend||0):null;var rCh=pp?pct2(c.revenue,pp.revenue||0):null;h+='<td class="t-right">'+fmtChange(sCh)+'</td><td class="t-right">'+fmtChange(rCh)+'</td>';}
+  // ── Bảng "Phân chia theo nhóm SP trong kỳ" — v4.0 dùng 9 nhóm chuẩn ──
+  // Doanh thu từ POS (REVDATA.category_breakdown_by_period[period])
+  // Chi phí từ Google Ads (GACTX.spend_breakdown_by_period[period])
+  var revBreak  = (REVDATA && REVDATA.category_breakdown_by_period) ? REVDATA.category_breakdown_by_period[selectedPeriod] : null;
+  var spendBreak= (GACTX  && GACTX.spend_breakdown_by_period)      ? GACTX.spend_breakdown_by_period[selectedPeriod] : null;
+  if(revBreak || spendBreak){
+    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(chi phí từ Google Ads · doanh thu từ POS · 9 nhóm chuẩn)</span></h3>';
+    h+='<div class="tbl-wrap"><table><thead><tr><th>Nhóm SP</th>';
+    h+='<th class="t-right">Chi phí</th><th class="t-right">Click</th><th class="t-right">CTR</th>';
+    h+='<th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">Số lượng</th>';
+    h+='<th class="t-right">ROAS</th></tr></thead><tbody>';
+    var totSpend=0, totClicks=0, totImps=0, totRev=0, totOrders=0, totUnits=0;
+    for(var ci=0;ci<CAT_ORDER.length;ci++){
+      var co=CAT_ORDER[ci];
+      var rc=revBreak && revBreak.categories ? revBreak.categories[co.key] : null;
+      var sc=spendBreak && spendBreak.categories ? spendBreak.categories[co.key] : null;
+      var spend = sc ? sc.spend : 0;
+      var clicks= sc ? sc.clicks : 0;
+      var imps  = sc ? sc.impressions : 0;
+      var ctr   = imps>0 ? clicks/imps : 0;
+      var rev   = rc ? rc.revenue : 0;
+      var orders= rc ? rc.orders : 0;
+      var units = rc ? rc.units : 0;
+      var roas  = spend>0 ? rev/spend : 0;
+      // Ẩn nhóm hoàn toàn 0 để bảng gọn
+      if(spend===0 && rev===0 && orders===0) continue;
+      var roasCls = roas>=3 ? "text-green font-bold" : (roas>=1 ? "" : (roas>0 ? "text-red" : "text-gray"));
+      h+='<tr><td class="font-bold">'+esc(co.label)+'</td>';
+      h+='<td class="t-right">'+fmtVND(spend)+'đ</td>';
+      h+='<td class="t-right">'+fmtInt(clicks)+'</td>';
+      h+='<td class="t-right">'+fmtPct(ctr)+'</td>';
+      h+='<td class="t-right text-green">'+fmtVND(rev)+'đ</td>';
+      h+='<td class="t-right">'+fmtInt(orders)+'</td>';
+      h+='<td class="t-right text-xs text-gray">'+fmtInt(units)+'</td>';
+      h+='<td class="t-right '+roasCls+'">'+(roas>0 ? roas.toFixed(2)+'x' : '-')+'</td>';
       h+='</tr>';
+      totSpend+=spend; totClicks+=clicks; totImps+=imps; totRev+=rev; totOrders+=orders; totUnits+=units;
     }
+    // Dòng tổng
+    var totCtr = totImps>0 ? totClicks/totImps : 0;
+    var totRoas= totSpend>0 ? totRev/totSpend : 0;
+    h+='<tr style="background:#f9fafb;font-weight:700"><td>TỔNG</td>';
+    h+='<td class="t-right">'+fmtVND(totSpend)+'đ</td>';
+    h+='<td class="t-right">'+fmtInt(totClicks)+'</td>';
+    h+='<td class="t-right">'+fmtPct(totCtr)+'</td>';
+    h+='<td class="t-right text-green">'+fmtVND(totRev)+'đ</td>';
+    h+='<td class="t-right">'+fmtInt(totOrders)+'</td>';
+    h+='<td class="t-right text-xs text-gray">'+fmtInt(totUnits)+'</td>';
+    h+='<td class="t-right">'+(totRoas>0 ? totRoas.toFixed(2)+'x' : '-')+'</td>';
+    h+='</tr>';
     h+='</tbody></table></div>';
   }
   // Top products trong period — ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU), fallback cur.top_products
@@ -402,6 +448,9 @@ function renderTimeFilterSection(r){
     h+='<strong>'+esc(genDt?fmtVNDateTime(genDt):REVDATA.generated_at)+'</strong> · ';
     h+='Cron fetch mỗi 30 phút từ 09:00-17:30 VN · Nguồn: 3 filter POS Pancake (Website + Zalo OA + Hotline, loại DUY/PN staff)';
     h+='</p>';
+  }
+  if(GACTX && GACTX.generated_at){
+    h+='<p class="text-xs text-gray" style="margin-top:4px">Chi phí Google Ads cập nhật lúc: <strong>'+esc(GACTX.generated_at)+'</strong> · Tài khoản: '+esc((GACTX.ga_account||{}).name||'-')+'</p>';
   }
 
   // Note về keyword/banner không filter theo period

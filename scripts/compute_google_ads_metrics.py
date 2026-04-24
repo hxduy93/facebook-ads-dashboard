@@ -17,6 +17,129 @@ import sys
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 
+
+# ── Phân loại chiến dịch Google Ads vào 9 nhóm chuẩn Doscom (2026-04-23 v2) ──
+# 22 chiến dịch Doscom đặt tên theo quy ước:
+#   - "Search - Cam WIFI", "RMK - Camera wifi", "Cam mini" → Camera wifi
+#   - "Search - Cam NLMT", "Search - Sim 4G", "RMK - Camera 4G", "RMK - NLMT" → Camera 4G
+#   - "RMK - Camera Gọi 2 chiều" → Camera video call
+#   - "Search - TB Dò Nghe Lén", "RMK - Máy dò" → Máy dò
+#   - "Search - TB Ghi Âm", "RMK - thiết bị ghi âm" → Ghi âm
+#   - "Search - TB Chống Ghi Âm", "RMK - chống ghi âm" → Chống ghi âm
+#   - "Search - TBĐV GPS", "RMK - thiết bị định vị", "Shopping - ĐV" → Định vị
+#   - Còn lại (Máy cạo râu, Máy massage, Gia dụng...) → Khác
+CAMPAIGN_CATEGORY_ORDER = [
+    ("MAY_DO",            "Máy dò"),
+    ("CAMERA_WIFI",       "Camera wifi"),
+    ("CAMERA_4G",         "Camera 4G"),
+    ("CAMERA_VIDEO_CALL", "Camera gọi video 2 chiều"),
+    ("GHI_AM",            "Máy ghi âm"),
+    ("CHONG_GHI_AM",      "Chống ghi âm"),
+    ("DINH_VI",           "Định vị"),
+    ("NOMA",              "NOMA"),
+    ("OTHER",             "Khác"),
+]
+
+
+def classify_campaign_v2(name):
+    """Phân 1 tên chiến dịch Google Ads vào 1 trong 9 nhóm chuẩn Doscom."""
+    if not name:
+        return "OTHER"
+    n = name.lower()
+    if "gọi 2 chiều" in n or "goi 2 chieu" in n or "2 chiều" in n:
+        return "CAMERA_VIDEO_CALL"
+    if "4g" in n or "nlmt" in n or "năng lượng" in n:
+        return "CAMERA_4G"
+    if "wifi" in n or "cam mini" in n or "camera mini" in n:
+        return "CAMERA_WIFI"
+    if "chống ghi âm" in n or "chong ghi am" in n:
+        return "CHONG_GHI_AM"
+    if "ghi âm" in n or "ghi am" in n:
+        return "GHI_AM"
+    if "dò nghe lén" in n or "do nghe len" in n or "máy dò" in n or "may do" in n or "tb dò" in n:
+        return "MAY_DO"
+    if ("định vị" in n or "dinh vi" in n or "tbđv" in n or "tbdv" in n
+            or "gps" in n or "- đv" in n or "-đv" in n or " đv" in n.replace("máy", "")):
+        return "DINH_VI"
+    if "noma" in n:
+        return "NOMA"
+    return "OTHER"
+
+
+def compute_spend_breakdown_by_period(ga_data):
+    """Tổng chi phí Google Ads theo 9 nhóm cho 5 period chuẩn.
+
+    Return: {period: {total_spend, total_clicks, total_impressions,
+                      categories: {KEY: {label, spend, clicks, impressions}}}}
+    """
+    end_str = (ga_data.get("date_range") or {}).get("end")
+    if not end_str:
+        return {}
+
+    end_dt = datetime.strptime(end_str, "%Y-%m-%d")
+
+    def offset(days):
+        return (end_dt - timedelta(days=days)).strftime("%Y-%m-%d")
+
+    # Period start inclusive, end inclusive
+    periods = {
+        "yesterday":  (end_str, end_str),
+        "last_7d":    (offset(6), end_str),
+        "this_month": (end_dt.replace(day=1).strftime("%Y-%m-%d"), end_str),
+        "last_30d":   (offset(29), end_str),
+        "last_90d":   (offset(89), end_str),
+    }
+    labels = {
+        "yesterday": "Hôm qua", "last_7d": "7 ngày gần", "this_month": "Tháng này",
+        "last_30d": "30 ngày gần", "last_90d": "90 ngày gần",
+    }
+
+    rows = ga_data.get("campaigns_raw") or []
+    result = {}
+    for pk, (pstart, pend) in periods.items():
+        cats = {ck: {"label": lbl, "spend": 0.0, "clicks": 0, "impressions": 0, "campaigns": set()}
+                for ck, lbl in CAMPAIGN_CATEGORY_ORDER}
+        total_spend, total_clicks, total_imps = 0.0, 0, 0
+        for r in rows:
+            d = r.get("date", "")
+            if not (d and pstart <= d <= pend):
+                continue
+            cat = classify_campaign_v2(r.get("campaign", ""))
+            s = float(r.get("spend", 0) or 0)
+            c = int(r.get("clicks", 0) or 0)
+            i = int(r.get("impressions", 0) or 0)
+            cats[cat]["spend"] += s
+            cats[cat]["clicks"] += c
+            cats[cat]["impressions"] += i
+            cats[cat]["campaigns"].add(r.get("campaign", ""))
+            total_spend += s
+            total_clicks += c
+            total_imps += i
+        # Finalize
+        out_cats = {}
+        for ck, lbl in CAMPAIGN_CATEGORY_ORDER:
+            c = cats[ck]
+            ctr = (c["clicks"] / c["impressions"]) if c["impressions"] > 0 else 0
+            cpc = (c["spend"] / c["clicks"]) if c["clicks"] > 0 else 0
+            out_cats[ck] = {
+                "label": c["label"],
+                "spend": round(c["spend"]),
+                "clicks": c["clicks"],
+                "impressions": c["impressions"],
+                "ctr": round(ctr, 4),
+                "cpc": round(cpc),
+                "campaigns_count": len(c["campaigns"]),
+            }
+        result[pk] = {
+            "label": labels[pk],
+            "date_range": {"start": pstart, "end": pend},
+            "total_spend": round(total_spend),
+            "total_clicks": total_clicks,
+            "total_impressions": total_imps,
+            "categories": out_cats,
+        }
+    return result
+
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 GA_FILE = os.path.join(REPO_ROOT, "data", "google-ads-spend.json")
 REV_FILE = os.path.join(REPO_ROOT, "data", "product-revenue.json")
@@ -498,6 +621,15 @@ def main():
     print("[INFO] Computing ad-level insights...")
     ad_insights = compute_ad_insights(ads_data) if ads_data else {"note": "ads.json not available"}
 
+    print("[INFO] Computing spend breakdown by 9 categories x 5 periods...")
+    spend_breakdown_by_period = compute_spend_breakdown_by_period(ga_data)
+    for pk, pdata in spend_breakdown_by_period.items():
+        print(f"  [{pk}] spend={pdata['total_spend']:,}đ / clicks={pdata['total_clicks']:,}")
+        for ck, _ in CAMPAIGN_CATEGORY_ORDER:
+            c = pdata["categories"][ck]
+            if c["spend"] > 0:
+                print(f"    {ck:20s} | {c['spend']:>13,}đ | {c['clicks']:>5} click | {c['campaigns_count']} camp")
+
     now_vn = datetime.now(timezone(timedelta(hours=7)))
     output = {
         "generated_at": now_vn.strftime("%Y-%m-%d %H:%M"),
@@ -517,6 +649,10 @@ def main():
         },
         "roas_proxy": roas,
         "website_revenue_pancake": website_rev,
+        # MỚI (2026-04-23 v2): chi phí Google Ads phân theo 9 nhóm chuẩn Doscom
+        # (match tên chiến dịch) cho 5 period: yesterday/7d/this_month/30d/90d
+        "spend_breakdown_by_period": spend_breakdown_by_period,
+        "category_order": [{"key": k, "label": l} for k, l in CAMPAIGN_CATEGORY_ORDER],
         "per_category": cat_metrics,
         "per_campaign": camp_metrics,
         "top_lists": top_lists,

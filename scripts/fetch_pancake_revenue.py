@@ -15,6 +15,7 @@ Logic:
 """
 
 import os
+import re
 import json
 import sys
 import time
@@ -23,6 +24,161 @@ from urllib.parse import urlencode
 import urllib.request
 import urllib.error
 from collections import Counter
+
+
+# ── Phân loại sản phẩm Doscom vào 9 nhóm chuẩn (2026-04-23 v2) ───────────
+# 1. MAY_DO            — D1-D9 (máy dò nghe lén / máy dò kim loại)
+# 2. CAMERA_WIFI       — DA* có "wifi" / các mã DA wifi (DA3.x, DA4, DA5, DA7, DA9...)
+# 3. CAMERA_4G         — DA* có "4g"/"sim"/"nlmt" / các mã DA 4G (DA1 4G, DA2.x, DA5.1, DA6.x...)
+# 4. CAMERA_VIDEO_CALL — DA8.1 và DA8.1 Pro (camera gọi video 2 chiều)
+# 5. GHI_AM            — DR* (máy ghi âm)
+# 6. CHONG_GHI_AM      — DI* (thiết bị chống ghi âm)
+# 7. DINH_VI           — DV*, DT*, Air Tag (gồm định vị có SIM + thẻ định vị)
+# 8. NOMA              — Noma*, A002, combo Noma, khăn lau, chà kính, bảo vệ lốp
+# 9. OTHER             — Các SP khác (sim, thẻ nhớ, pin, phụ kiện...)
+
+CATEGORY_ORDER = [
+    ("MAY_DO",            "Máy dò"),
+    ("CAMERA_WIFI",       "Camera wifi"),
+    ("CAMERA_4G",         "Camera 4G"),
+    ("CAMERA_VIDEO_CALL", "Camera gọi video 2 chiều"),
+    ("GHI_AM",            "Máy ghi âm"),
+    ("CHONG_GHI_AM",      "Chống ghi âm"),
+    ("DINH_VI",           "Định vị"),
+    ("NOMA",              "NOMA"),
+    ("OTHER",             "Khác"),
+]
+CATEGORY_LABELS = dict(CATEGORY_ORDER)
+
+# Mã DA hardcoded theo CLAUDE.md (fallback khi tên variation không có keyword rõ)
+DA_WIFI_CODES = {
+    "da1 pro wifi", "da3.1", "da3.1 pro", "da3.2", "da3.3", "da4",
+    "da3 pro zoom", "da5", "da6.1 wifi", "da7", "da7.1", "da9",
+}
+DA_4G_CODES = {
+    "da1 pro 4g", "da1 pro zoom", "da2.1", "da2.4", "da3 pro 4g",
+    "da5.1", "da5.1 pro", "da6", "da6 pro", "da6.1 4g", "da6.2",
+}
+
+
+def classify_sku(name):
+    """Phân 1 tên variation sản phẩm POS vào 1 trong 9 nhóm.
+
+    Quy tắc ưu tiên từ trên xuống:
+      1. Noma / A002 / phụ kiện Noma (chà kính, bảo vệ lốp, khăn lau...)
+      2. DA8.1 / DA8.1 Pro → Camera gọi video 2 chiều
+      3. DA* có keyword "4G", "Sim", "NLMT" → Camera 4G
+      4. DA* có keyword "Wifi", "không dây" → Camera wifi
+      5. DA* còn lại → tra bảng cứng DA_WIFI_CODES / DA_4G_CODES
+      6. DR* → Ghi âm
+      7. DI* → Chống ghi âm
+      8. DV*, DT*, Air Tag → Định vị
+      9. D1-D9 (không thuộc DA/DR/DI/DV/DT/DE) → Máy dò
+      10. Còn lại → OTHER
+    """
+    if not name:
+        return "OTHER"
+    n = name.lower().strip()
+
+    # 1. Noma + phụ kiện chăm sóc xe
+    if ("noma" in n or "a002" in n or "chà kính" in n or "chat kinh" in n
+            or "bảo vệ lốp" in n or "bao ve lop" in n or "tẩy ố" in n or "tay o" in n
+            or "microfiber" in n or "khăn lau" in n or "khan lau" in n):
+        return "NOMA"
+
+    # 2. Camera gọi video 2 chiều — DA8.1 ưu tiên trước DA chung
+    if re.search(r"\bda\s*8\.1", n):
+        return "CAMERA_VIDEO_CALL"
+
+    # 3-5. Camera DA*
+    if re.search(r"\bda\s*\d", n):
+        # Tín hiệu 4G: từ "4g", "nlmt", hoặc "sim" (trừ "thẻ nhớ")
+        name_no_storage = n.replace("thẻ nhớ", "").replace("the nho", "")
+        if ("4g" in n or "nlmt" in n or "năng lượng mặt trời" in n
+                or "sim" in name_no_storage or "vstarcam" in n):
+            return "CAMERA_4G"
+        if "wifi" in n or "không dây" in n or "khong day" in n:
+            return "CAMERA_WIFI"
+        # Fallback: tra bảng cứng
+        for code in DA_4G_CODES:
+            if code in n:
+                return "CAMERA_4G"
+        for code in DA_WIFI_CODES:
+            if code in n:
+                return "CAMERA_WIFI"
+        return "CAMERA_WIFI"  # Default cho DA không rõ
+
+    # 6. Máy ghi âm
+    if re.search(r"\bdr\s*\d", n) or "máy ghi âm" in n or "may ghi am" in n:
+        return "GHI_AM"
+
+    # 7. Chống ghi âm
+    if re.search(r"\bdi\s*\d", n):
+        return "CHONG_GHI_AM"
+
+    # 8. Định vị
+    if (re.search(r"\bdv\s*\d", n) or re.search(r"\bdt\s*\d", n)
+            or "air tag" in n or "định vị" in n or "dinh vi" in n or "doscom tag" in n):
+        return "DINH_VI"
+
+    # 9. Máy dò — D1-D9 (không phải các prefix ở trên)
+    if re.match(r"^d\s*\d", n) or "máy dò" in n or "may do" in n:
+        return "MAY_DO"
+
+    return "OTHER"
+
+
+def classify_campaign(name):
+    """Phân 1 tên chiến dịch Google Ads vào 1 trong 9 nhóm.
+
+    Tên chiến dịch Doscom đặt theo quy ước (22 chiến dịch hiện tại):
+      - "Search - Cam WIFI" / "RMK - Camera wifi" / "Cam mini"  → Camera wifi
+      - "Search - Cam NLMT" / "Search - Sim 4G" / "RMK - Camera 4G" / "RMK - NLMT" → Camera 4G
+      - "RMK - Camera Gọi 2 chiều"  → Camera video call
+      - "Search - TB Dò Nghe Lén" / "RMK - Máy dò" → Máy dò
+      - "Search - TB Ghi Âm" / "RMK - thiết bị ghi âm" → Ghi âm
+      - "Search - TB Chống Ghi Âm" / "RMK - chống ghi âm" → Chống ghi âm
+      - "Search - TBĐV GPS" / "RMK - thiết bị định vị" / "Shopping - ĐV" → Định vị
+      - Còn lại (Máy cạo râu, Máy massage, Shopping gia dụng...) → Khác
+    """
+    if not name:
+        return "OTHER"
+    n = name.lower()
+
+    # Camera gọi 2 chiều (ưu tiên trước camera chung)
+    if "gọi 2 chiều" in n or "goi 2 chieu" in n or "2 chiều" in n:
+        return "CAMERA_VIDEO_CALL"
+
+    # Camera 4G - NLMT / Sim 4G / Camera 4G
+    if "4g" in n or "nlmt" in n or "năng lượng" in n:
+        return "CAMERA_4G"
+
+    # Camera wifi - bao gồm "cam mini", "camera wifi"
+    if "wifi" in n or "cam mini" in n or "camera mini" in n:
+        return "CAMERA_WIFI"
+
+    # Chống ghi âm (check trước ghi âm)
+    if "chống ghi âm" in n or "chong ghi am" in n:
+        return "CHONG_GHI_AM"
+
+    # Máy ghi âm
+    if "ghi âm" in n or "ghi am" in n:
+        return "GHI_AM"
+
+    # Máy dò
+    if "dò nghe lén" in n or "do nghe len" in n or "máy dò" in n or "may do" in n or "tb dò" in n:
+        return "MAY_DO"
+
+    # Định vị - GPS, TBĐV, thiết bị định vị, ĐV
+    if ("định vị" in n or "dinh vi" in n or "tbđv" in n or "tbdv" in n
+            or "gps" in n or "- đv" in n or "-đv" in n or " đv" in n.replace("máy", "")):
+        return "DINH_VI"
+
+    # Noma (nếu có)
+    if "noma" in n:
+        return "NOMA"
+
+    return "OTHER"
 
 # ── Config ─────────────────────────────────────────────
 API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
@@ -536,6 +692,138 @@ def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
     return result
 
 
+# ── Build category breakdown per period (3 nguồn Web+Zalo+Hotline, 9 nhóm chuẩn) ─
+def build_category_breakdown_by_period(orders_list, today_vn):
+    """Aggregate doanh thu theo 9 nhóm sản phẩm cho 5 period.
+
+    Cùng logic filter status với build_top_products_website_by_period:
+      - INCLUDE: delivered (3) + other (0, 1, 2, 8, 9)
+      - EXCLUDE: canceled (6), returning (4), returned (5)
+
+    Return:
+      {period_key: {
+         "label", "date_range", "total_revenue", "total_orders",
+         "categories": {
+             "MAY_DO": {"revenue", "orders", "units", "top_products": [top 3 SP]},
+             ...
+         }
+      }}
+    """
+    INCLUDE_ST = {STATUS_DELIVERED, 0, 1, 2, 8, 9}
+    EXCLUDE_ST = {STATUS_CANCELED, STATUS_RETURNING, STATUS_RETURNED}
+
+    y = today_vn - timedelta(days=1)
+    periods = {
+        "yesterday":  (y.isoformat(), y.isoformat()),
+        "last_7d":    ((y - timedelta(days=6)).isoformat(), y.isoformat()),
+        "this_month": (today_vn.replace(day=1).isoformat(), today_vn.isoformat()),
+        "last_30d":   ((y - timedelta(days=29)).isoformat(), y.isoformat()),
+        "last_90d":   ((y - timedelta(days=89)).isoformat(), y.isoformat()),
+    }
+    labels = {
+        "yesterday": "Hôm qua", "last_7d": "7 ngày gần", "this_month": "Tháng này",
+        "last_30d": "30 ngày gần", "last_90d": "90 ngày gần",
+    }
+
+    # Pre-compute VN date + classify cho mỗi order/item
+    processed = []  # list of (vn_date, order_id, order_items_with_category)
+    for o in orders_list:
+        st = o.get("status")
+        if st in EXCLUDE_ST or st not in INCLUDE_ST:
+            continue
+        ins_str = (o.get("inserted_at") or "")[:26]
+        if not ins_str:
+            continue
+        try:
+            dt_utc = datetime.fromisoformat(ins_str).replace(tzinfo=timezone.utc)
+        except Exception:
+            continue
+        vn_date = (dt_utc + timedelta(hours=7)).date().isoformat()
+        order_id = o.get("id")
+
+        items_classified = []
+        for li in (o.get("items") or []):
+            vi = li.get("variation_info") or {}
+            prod = li.get("product") or {}
+            name = (vi.get("name") or prod.get("name") or "").strip()
+            if not name:
+                code = vi.get("id") or li.get("display_id") or ""
+                name = str(code).strip()
+            if not name:
+                continue
+
+            qty = int(_num(li.get("quantity", 1), 1) or 1)
+            line_rev = 0.0
+            for key in ("total_price_after_sub_discount", "total_price"):
+                v = li.get(key)
+                if v is not None and _num(v, 0) > 0:
+                    line_rev = _num(v)
+                    break
+            if line_rev == 0.0:
+                retail = _num(vi.get("retail_price") or li.get("price") or 0)
+                line_rev = retail * qty
+
+            cat = classify_sku(name)
+            items_classified.append({
+                "name": name, "qty": qty, "revenue": line_rev, "category": cat,
+            })
+
+        processed.append((vn_date, order_id, items_classified))
+
+    result = {}
+    for pk, (pstart, pend) in periods.items():
+        # Init all 9 categories
+        cats = {ck: {"revenue": 0.0, "order_ids": set(), "units": 0, "products": {}}
+                for ck, _ in CATEGORY_ORDER}
+        all_order_ids = set()
+        total_rev = 0.0
+
+        for vn_date, order_id, items in processed:
+            if not (pstart <= vn_date <= pend):
+                continue
+            all_order_ids.add(order_id)
+            for it in items:
+                cat = it["category"]
+                c = cats[cat]
+                c["revenue"] += it["revenue"]
+                c["order_ids"].add(order_id)
+                c["units"] += it["qty"]
+                total_rev += it["revenue"]
+                # aggregate top SP trong category
+                pname = it["name"]
+                if pname not in c["products"]:
+                    c["products"][pname] = {"revenue": 0.0, "orders": set(), "units": 0}
+                c["products"][pname]["revenue"] += it["revenue"]
+                c["products"][pname]["orders"].add(order_id)
+                c["products"][pname]["units"] += it["qty"]
+
+        # Finalize
+        out_cats = {}
+        for ck, label in CATEGORY_ORDER:
+            c = cats[ck]
+            top_list = sorted(
+                ({"product": n, "revenue": round(d["revenue"]), "orders": len(d["orders"]), "units": d["units"]}
+                 for n, d in c["products"].items()),
+                key=lambda x: -x["revenue"]
+            )[:5]
+            out_cats[ck] = {
+                "label": label,
+                "revenue": round(c["revenue"]),
+                "orders": len(c["order_ids"]),
+                "units": c["units"],
+                "top_products": top_list,
+            }
+
+        result[pk] = {
+            "label": labels[pk],
+            "date_range": {"start": pstart, "end": pend},
+            "total_revenue": round(total_rev),
+            "total_orders": len(all_order_ids),
+            "categories": out_cats,
+        }
+    return result
+
+
 def main():
     if not API_KEY or not SHOP_ID:
         print("[FATAL] Missing PANCAKE_API_KEY or PANCAKE_SHOP_ID", file=sys.stderr)
@@ -626,6 +914,18 @@ def main():
               f"{pdata['total_revenue']:>15,.0f}đ / {pdata['total_orders']:>4} đơn / "
               f"{len(pdata['top_products'])} SP")
 
+    # ── Build category_breakdown_by_period — 9 nhóm chuẩn Doscom ──
+    category_breakdown_by_period = build_category_breakdown_by_period(
+        web_sources_orders, today_vn
+    )
+    print("\n─── [CATEGORY BREAKDOWN (9 nhóm) theo 5 period] ───")
+    for pk, pdata in category_breakdown_by_period.items():
+        print(f"  [{pk}] {pdata['total_revenue']:,}đ / {pdata['total_orders']} đơn")
+        for ck, _lbl in CATEGORY_ORDER:
+            c = pdata["categories"][ck]
+            if c["revenue"] > 0 or c["orders"] > 0:
+                print(f"    {ck:20s} | {c['revenue']:>13,}đ | {c['orders']:>3} đơn | {c['units']:>3} SP")
+
     output = {
         "generated_at": end_dt.strftime("%Y-%m-%d %H:%M UTC"),
         "window_days": LOOKBACK_DAYS,
@@ -633,6 +933,11 @@ def main():
         # MỚI: top SP tổng cho 3 nguồn Web+Zalo+Hotline, TẤT CẢ SKU (không filter MAPPING),
         # 5 period chuẩn (yesterday / last_7d / this_month / last_30d / last_90d) tính theo VN.
         "top_products_website_by_period": top_products_website_by_period,
+        # MỚI (2026-04-23 v2): breakdown theo 9 nhóm chuẩn Doscom, cho cả 5 period.
+        # Thay thế logic PRODUCT_MAPPING cũ (13 SP) bằng classify_sku() cover TẤT CẢ SKU.
+        "category_breakdown_by_period": category_breakdown_by_period,
+        # MỚI: thứ tự + label 9 nhóm để UI đọc và render đúng thứ tự
+        "category_order": [{"key": k, "label": l} for k, l in CATEGORY_ORDER],
         # MỚI: tổng đơn theo ngày (tất cả 5 nhóm)
         "total_orders_by_date": total_orders_by_date,
         # MỚI: doanh thu THỰC THU per status per date (top-level, gộp 5 nguồn)
