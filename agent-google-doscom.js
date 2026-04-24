@@ -3,7 +3,7 @@
 // Chi phí:   JS compute từ GSPEND.campaigns_raw cho bất kỳ date range
 // Không phụ thuộc period key có sẵn trong backend → hỗ trợ custom
 console.log("[AgentPage] JS v4.1 loaded");
-var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, PCOSTS=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
 var customStart=null, customEnd=null;
 
 // 9 nhóm chuẩn Doscom (thứ tự hiển thị)
@@ -62,11 +62,13 @@ function load(){
   var p2 = fetch("data/product-revenue.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p3 = fetch("data/google-ads-context.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p4 = fetch("data/google-ads-spend.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  Promise.all([p1,p2,p3,p4]).then(function(results){
+  var p5 = fetch("data/product-costs.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2,p3,p4,p5]).then(function(results){
     REPORT=results[0];
     REVDATA=results[1];
     GACTX=results[2];
     GSPEND=results[3];  // raw Google Ads rows: {campaign, date, spend, clicks, impressions}
+    PCOSTS=results[4];  // product costs: {products: {key_lower: {gia_nhap_vnd}}}
     try{render(REPORT);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
   }).catch(function(e){showError("Không tải: "+esc(e.message));});
 }
@@ -135,6 +137,62 @@ function computeTopFromFlat(items, start, end, topN){
   for(var k in agg){ var a = agg[k]; arr.push({product:a.product, revenue:Math.round(a.revenue), orders:Object.keys(a.orders).length, units:a.units}); }
   arr.sort(function(a,b){return b.revenue - a.revenue;});
   return {total_revenue:Math.round(totRev), total_orders:Object.keys(totOrders).length, top_products:arr.slice(0, topN||50), all_products:arr};
+}
+
+// ── Lookup giá vốn từ product-costs.json ──
+function lookupCost(productName){
+  if(!PCOSTS || !PCOSTS.products) return 0;
+  var n = (productName||"").toLowerCase().trim();
+  var P = PCOSTS.products;
+  // Direct match
+  if(P[n] && P[n].gia_nhap_vnd) return Number(P[n].gia_nhap_vnd)||0;
+  // Các regex pattern cho mã SP chính
+  var patterns = [
+    /\bd\s*8\.1\s*pro\b/,   // DA8.1 Pro
+    /\bda\s*8\.1\b/,        // DA8.1
+    /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
+    /\bdr\d+(?:\s*plus|\s*pro)?\b/,
+    /\bdv\d+(?:\s*pro|\s*mini)?\b/,
+    /\bdt\d+\b/,
+    /\bdi\d+(?:\s*pro|\s*plus)?\b/,
+    /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/,  // D1-D9 Pro (máy dò)
+    /\bnoma\s*\d+/,
+    /\ba002\b/,
+  ];
+  for(var i=0;i<patterns.length;i++){
+    var m = n.match(patterns[i]);
+    if(m){
+      var k = m[0].replace(/\s+/g," ").trim();
+      if(P[k] && P[k].gia_nhap_vnd) return Number(P[k].gia_nhap_vnd)||0;
+      // Thử bỏ space
+      var k2 = m[0].replace(/\s+/g,"");
+      if(P[k2] && P[k2].gia_nhap_vnd) return Number(P[k2].gia_nhap_vnd)||0;
+    }
+  }
+  return 0;
+}
+
+// ── Group flat items thành đơn hàng (group by order_id) ──
+function groupOrders(items, start, end){
+  if(!items || !items.length) return [];
+  var map = {};
+  for(var i=0;i<items.length;i++){
+    var it = items[i];
+    if(!(it.d >= start && it.d <= end)) continue;
+    if(!map[it.oid]){
+      map[it.oid] = {order_id: it.oid, date: it.d, items: [], revenue: 0, categories: {}};
+    }
+    map[it.oid].items.push({name: it.n, qty: it.q, revenue: it.r, category: it.c});
+    map[it.oid].revenue += it.r;
+    map[it.oid].categories[it.c] = 1;
+  }
+  var arr = [];
+  for(var k in map) arr.push(map[k]);
+  arr.sort(function(a,b){
+    if(a.date !== b.date) return b.date.localeCompare(a.date);
+    return (b.order_id||0) - (a.order_id||0);
+  });
+  return arr;
 }
 
 // Compute spend breakdown 9 nhóm từ campaigns_raw (GSPEND)
@@ -558,17 +616,57 @@ function renderTimeFilterSection(r){
   if(!spendBreak && GACTX && GACTX.spend_breakdown_by_period){
     spendBreak = GACTX.spend_breakdown_by_period[selectedPeriod];
   }
+  // ── Tính ads_avg per category: chi phí QC nhóm / số đơn thuộc nhóm ──
+  var adsAvgPerCat = {};
+  for(var ci=0;ci<CAT_ORDER.length;ci++){
+    var k = CAT_ORDER[ci].key;
+    var rc = revBreak && revBreak.categories ? revBreak.categories[k] : null;
+    var sc = spendBreak && spendBreak.categories ? spendBreak.categories[k] : null;
+    var ord = rc ? rc.orders : 0;
+    var spd = sc ? sc.spend : 0;
+    adsAvgPerCat[k] = ord > 0 ? spd / ord : 0;
+  }
+
+  // ── Compute giá vốn + lợi nhuận per category (dùng flat items) ──
+  var catProfitMap = {};  // {cat: {cost, ads, profit}}
+  for(var ci=0;ci<CAT_ORDER.length;ci++){ catProfitMap[CAT_ORDER[ci].key] = {cost:0, ads:0, profit:0}; }
+  if(REVDATA && REVDATA.web_items_flat){
+    var flat = REVDATA.web_items_flat;
+    for(var i=0;i<flat.length;i++){
+      var it = flat[i];
+      if(!(it.d >= curDates.start && it.d <= curDates.end)) continue;
+      var c = it.c || "OTHER";
+      if(!catProfitMap[c]) catProfitMap[c] = {cost:0, ads:0, profit:0};
+      catProfitMap[c].cost += lookupCost(it.n) * it.q;
+    }
+  }
+  // Ads per category = ads_avg × số đơn nhóm (chính là tổng spend vì avg = spend/orders)
+  // 2026-04-24: Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Chi phí QC
+  var VAT_RATE = 0.10;
+  for(var ci=0;ci<CAT_ORDER.length;ci++){
+    var k = CAT_ORDER[ci].key;
+    var sc = spendBreak && spendBreak.categories ? spendBreak.categories[k] : null;
+    catProfitMap[k].ads = sc ? sc.spend : 0;
+    var rc = revBreak && revBreak.categories ? revBreak.categories[k] : null;
+    var rev = rc ? rc.revenue : 0;
+    catProfitMap[k].vat = rev * VAT_RATE;
+    catProfitMap[k].profit = rev - catProfitMap[k].vat - catProfitMap[k].cost - catProfitMap[k].ads;
+  }
+
+  // ── Bảng Phân chia theo nhóm SP: Chi phí QC · Click · CTR · Doanh thu · Đơn · SL · VAT 10% · Giá vốn · Lợi nhuận · ROAS ──
   if(revBreak || spendBreak){
-    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(chi phí từ Google Ads · doanh thu từ POS · 9 nhóm chuẩn)</span></h3>';
+    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Chi phí QC)</span></h3>';
     h+='<div class="tbl-wrap"><table><thead><tr><th>Nhóm SP</th>';
-    h+='<th class="t-right">Chi phí</th><th class="t-right">Click</th><th class="t-right">CTR</th>';
-    h+='<th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">Số lượng</th>';
+    h+='<th class="t-right">Chi phí QC</th><th class="t-right">Click</th><th class="t-right">CTR</th>';
+    h+='<th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">SL</th>';
+    h+='<th class="t-right">VAT 10%</th><th class="t-right">Giá vốn</th><th class="t-right">Lợi nhuận</th>';
     h+='<th class="t-right">ROAS</th></tr></thead><tbody>';
-    var totSpend=0, totClicks=0, totImps=0, totRev=0, totOrders=0, totUnits=0;
+    var totSpend=0, totClicks=0, totImps=0, totRev=0, totOrders=0, totUnits=0, totVat=0, totCost=0, totProfit=0;
     for(var ci=0;ci<CAT_ORDER.length;ci++){
       var co=CAT_ORDER[ci];
       var rc=revBreak && revBreak.categories ? revBreak.categories[co.key] : null;
       var sc=spendBreak && spendBreak.categories ? spendBreak.categories[co.key] : null;
+      var pc=catProfitMap[co.key] || {cost:0, ads:0, vat:0, profit:0};
       var spend = sc ? sc.spend : 0;
       var clicks= sc ? sc.clicks : 0;
       var imps  = sc ? sc.impressions : 0;
@@ -576,10 +674,13 @@ function renderTimeFilterSection(r){
       var rev   = rc ? rc.revenue : 0;
       var orders= rc ? rc.orders : 0;
       var units = rc ? rc.units : 0;
+      var vat   = pc.vat;
+      var cost  = pc.cost;
+      var profit= pc.profit;
       var roas  = spend>0 ? rev/spend : 0;
-      // Ẩn nhóm hoàn toàn 0 để bảng gọn
       if(spend===0 && rev===0 && orders===0) continue;
       var roasCls = roas>=3 ? "text-green font-bold" : (roas>=1 ? "" : (roas>0 ? "text-red" : "text-gray"));
+      var profCls = profit>0 ? "text-green font-bold" : (profit<0 ? "text-red font-bold" : "text-gray");
       h+='<tr><td class="font-bold">'+esc(co.label)+'</td>';
       h+='<td class="t-right">'+fmtVND(spend)+'đ</td>';
       h+='<td class="t-right">'+fmtInt(clicks)+'</td>';
@@ -587,13 +688,16 @@ function renderTimeFilterSection(r){
       h+='<td class="t-right text-green">'+fmtVND(rev)+'đ</td>';
       h+='<td class="t-right">'+fmtInt(orders)+'</td>';
       h+='<td class="t-right text-xs text-gray">'+fmtInt(units)+'</td>';
+      h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(vat))+'đ</td>';
+      h+='<td class="t-right">'+(cost>0 ? fmtVND(cost)+'đ' : '-')+'</td>';
+      h+='<td class="t-right '+profCls+'">'+fmtVND(Math.round(profit))+'đ</td>';
       h+='<td class="t-right '+roasCls+'">'+(roas>0 ? roas.toFixed(2)+'x' : '-')+'</td>';
       h+='</tr>';
-      totSpend+=spend; totClicks+=clicks; totImps+=imps; totRev+=rev; totOrders+=orders; totUnits+=units;
+      totSpend+=spend; totClicks+=clicks; totImps+=imps; totRev+=rev; totOrders+=orders; totUnits+=units; totVat+=vat; totCost+=cost; totProfit+=profit;
     }
-    // Dòng tổng
     var totCtr = totImps>0 ? totClicks/totImps : 0;
     var totRoas= totSpend>0 ? totRev/totSpend : 0;
+    var totProfCls = totProfit>0 ? "text-green font-bold" : (totProfit<0 ? "text-red font-bold" : "");
     h+='<tr style="background:#f9fafb;font-weight:700"><td>TỔNG</td>';
     h+='<td class="t-right">'+fmtVND(totSpend)+'đ</td>';
     h+='<td class="t-right">'+fmtInt(totClicks)+'</td>';
@@ -601,38 +705,49 @@ function renderTimeFilterSection(r){
     h+='<td class="t-right text-green">'+fmtVND(totRev)+'đ</td>';
     h+='<td class="t-right">'+fmtInt(totOrders)+'</td>';
     h+='<td class="t-right text-xs text-gray">'+fmtInt(totUnits)+'</td>';
+    h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(totVat))+'đ</td>';
+    h+='<td class="t-right">'+fmtVND(totCost)+'đ</td>';
+    h+='<td class="t-right '+totProfCls+'">'+fmtVND(Math.round(totProfit))+'đ</td>';
     h+='<td class="t-right">'+(totRoas>0 ? totRoas.toFixed(2)+'x' : '-')+'</td>';
     h+='</tr>';
     h+='</tbody></table></div>';
   }
-  // Top products trong period — ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU), fallback cur.top_products
-  var posPeriodData = (REVDATA && REVDATA.top_products_website_by_period)
-    ? REVDATA.top_products_website_by_period[selectedPeriod] : null;
-  var tp_prods = posPeriodData ? (posPeriodData.top_products || []) : (cur.top_products || []);
-  var srcTag = posPeriodData ? " <span class=\"text-xs text-gray\">(POS Pancake, tất cả SKU)</span>" : "";
-  if(tp_prods.length){
-    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Top sản phẩm trong kỳ (3 nguồn: Website + Hotline + Zalo OA)'+srcTag+'</h3>';
-    h+='<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">SL</th>';
-    if(prev){h+='<th class="t-right">Δ Doanh thu vs kỳ trước</th>';}
-    h+='</tr></thead><tbody>';
-    var prev_map = {};
-    if(prev && prev.top_products){
-      for(var pi=0;pi<prev.top_products.length;pi++){ prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
-    }
-    for(var pi2=0;pi2<tp_prods.length;pi2++){
-      var pp = tp_prods[pi2];
-      h+='<tr><td class="text-gray">'+(pi2+1)+'</td><td class="font-bold">'+esc(pp.product)+'</td>';
-      h+='<td class="t-right text-green">'+fmtVND(pp.revenue)+'đ</td>';
-      h+='<td class="t-right">'+fmtInt(pp.orders)+'</td>';
-      h+='<td class="t-right text-xs text-gray">'+fmtInt(pp.units||0)+'</td>';
-      if(prev){
-        var pr_prev = prev_map[pp.product];
-        var ch = (pr_prev && pr_prev.revenue) ? ((pp.revenue - pr_prev.revenue) / pr_prev.revenue * 100) : null;
-        h+='<td class="t-right">'+fmtChange(ch)+'</td>';
+
+  // ── Bảng "Danh sách đơn hàng trong kỳ" (mỗi row = 1 đơn, kèm VAT + lợi nhuận) ──
+  if(REVDATA && REVDATA.web_items_flat){
+    var orders = groupOrders(REVDATA.web_items_flat, curDates.start, curDates.end);
+    if(orders.length){
+      h+='<h3 style="margin-top:20px;margin-bottom:8px;font-size:13px">Danh sách đơn hàng trong kỳ <span class="text-xs text-gray">('+orders.length+' đơn · Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Ads TB)</span></h3>';
+      h+='<div class="tbl-wrap" style="max-height:480px;overflow-y:auto"><table class="compact-tbl"><thead style="position:sticky;top:0;background:#f9fafb;z-index:1"><tr>';
+      h+='<th>#</th><th>Ngày</th><th>Sản phẩm</th><th class="t-right">Doanh thu</th>';
+      h+='<th class="t-right">VAT 10%</th><th class="t-right">Giá vốn</th><th class="t-right">Ads TB</th><th class="t-right">Lợi nhuận</th>';
+      h+='</tr></thead><tbody>';
+      for(var oi=0; oi<orders.length; oi++){
+        var o = orders[oi];
+        var rev = o.revenue;
+        var vat = rev * 0.10;
+        var cost = 0, adsAvg = 0;
+        var catsInOrder = {};
+        for(var ii=0;ii<o.items.length;ii++){
+          cost += lookupCost(o.items[ii].name) * o.items[ii].qty;
+          catsInOrder[o.items[ii].category] = 1;
+        }
+        for(var cc in catsInOrder){ adsAvg += (adsAvgPerCat[cc] || 0); }
+        var profit = rev - vat - cost - adsAvg;
+        var profCls = profit>0 ? "text-green" : (profit<0 ? "text-red" : "text-gray");
+        var itemsTxt = o.items.map(function(it){ return esc(it.name) + (it.qty>1 ? " ×"+it.qty : ""); }).join(" · ");
+        h+='<tr><td class="text-gray text-xs">'+(oi+1)+'</td>';
+        h+='<td class="text-xs">'+esc(o.date)+'</td>';
+        h+='<td class="text-xs"><span style="display:inline-block;max-width:380px" title="'+itemsTxt.replace(/"/g,"&quot;")+'">'+itemsTxt+'</span></td>';
+        h+='<td class="t-right text-xs text-green">'+fmtVND(rev)+'đ</td>';
+        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(vat))+'đ</td>';
+        h+='<td class="t-right text-xs text-gray">'+(cost>0 ? fmtVND(cost)+'đ' : '-')+'</td>';
+        h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(adsAvg))+'đ</td>';
+        h+='<td class="t-right text-xs font-bold '+profCls+'">'+fmtVND(Math.round(profit))+'đ</td>';
+        h+='</tr>';
       }
-      h+='</tr>';
+      h+='</tbody></table></div>';
     }
-    h+='</tbody></table></div>';
   }
 
   // Dòng freshness POS — hiển thị thời điểm data POS cập nhật + freshness guard
@@ -659,7 +774,7 @@ function renderTimeFilterSection(r){
   h+='<p class="text-xs text-gray" style="margin-top:12px;padding:8px;background:#f9fafb;border-radius:4px">Lưu ý: Bộ lọc thời gian ảnh hưởng các số liệu phía trên (chi phí, doanh thu, đơn) và bảng Top sản phẩm. Các bảng Keywords/Banners/Placements/Suggestions ở dưới là <strong>tổng hợp 30 ngày</strong> vì Windsor.ai free trial không export dữ liệu daily cho keyword/banner. Nếu cần filter daily cho keyword/banner, phải nâng cấp Windsor gói trả phí hoặc chuyển sang Google Ads API trực tiếp.</p>';
 
   document.getElementById("time-filter-content").innerHTML=h;
-  renderProductRanking();
+  // 2026-04-24: bỏ renderProductRanking() - thay bằng bảng "Danh sách đơn hàng trong kỳ" đã render inline ở trên
 }
 
 function render(r){
@@ -730,7 +845,7 @@ function render(r){
   h+='<section class="block card"><div id="time-filter-content"></div></section>';
 
     // Product ranking - render qua container để nhảy theo period
-  h+='<section class="block card" id="product-ranking-container"></section>';;
+  // 2026-04-24: Section "Xếp hạng Sản phẩm theo Doanh thu" đã bỏ — thay bằng bảng "Danh sách đơn hàng trong kỳ" trong Bộ lọc thời gian
 
   // Tabs — 9 nhóm chuẩn Doscom
   h+='<section class="block card"><h2>Phân tích chi tiết theo Nhóm sản phẩm</h2>';
