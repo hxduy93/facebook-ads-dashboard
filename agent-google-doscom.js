@@ -1,8 +1,10 @@
-// Agent Google Doscom v4.0 — Đập đi xây lại phần dữ liệu (2026-04-23)
-// Doanh thu: từ POS Pancake 3 nguồn, phân 9 nhóm theo classify_sku
-// Chi phí:   từ Google Ads, phân 9 nhóm theo classify_campaign (match tên chiến dịch)
-console.log("[AgentPage] JS v4.0 loaded");
-var REPORT=null, REVDATA=null, GACTX=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+// Agent Google Doscom v4.1 — Dynamic compute + custom date range (2026-04-24)
+// Doanh thu: JS compute từ REVDATA.web_items_flat cho bất kỳ date range
+// Chi phí:   JS compute từ GSPEND.campaigns_raw cho bất kỳ date range
+// Không phụ thuộc period key có sẵn trong backend → hỗ trợ custom
+console.log("[AgentPage] JS v4.1 loaded");
+var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+var customStart=null, customEnd=null;
 
 // 9 nhóm chuẩn Doscom (thứ tự hiển thị)
 var CAT_ORDER = [
@@ -54,17 +56,116 @@ function sortTable(tblId, colIdx, type){
 }
 
 function load(){
-  // Fetch song song 3 file: daily-report (AI) + product-revenue (POS) + google-ads-context (spend breakdown)
+  // Fetch 4 file: daily-report (AI) + product-revenue (POS) + google-ads-context + google-ads-spend (raw)
   var v = Date.now();
   var p1 = fetch("data/google-ads-daily-report.json?v="+v).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status+" daily-report"); return r.json();});
   var p2 = fetch("data/product-revenue.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p3 = fetch("data/google-ads-context.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  Promise.all([p1,p2,p3]).then(function(results){
+  var p4 = fetch("data/google-ads-spend.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2,p3,p4]).then(function(results){
     REPORT=results[0];
     REVDATA=results[1];
     GACTX=results[2];
+    GSPEND=results[3];  // raw Google Ads rows: {campaign, date, spend, clicks, impressions}
     try{render(REPORT);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
   }).catch(function(e){showError("Không tải: "+esc(e.message));});
+}
+
+// ── Classify campaign (mirror Python classify_campaign_v2) ─────────────────
+function classifyCampaign(name){
+  if(!name) return "OTHER";
+  var n = name.toLowerCase();
+  if(n.indexOf("gọi 2 chiều")>=0 || n.indexOf("goi 2 chieu")>=0 || n.indexOf("2 chiều")>=0) return "CAMERA_VIDEO_CALL";
+  if(n.indexOf("4g")>=0 || n.indexOf("nlmt")>=0 || n.indexOf("năng lượng")>=0) return "CAMERA_4G";
+  if(n.indexOf("wifi")>=0 || n.indexOf("cam mini")>=0 || n.indexOf("camera mini")>=0) return "CAMERA_WIFI";
+  if(n.indexOf("chống ghi âm")>=0 || n.indexOf("chong ghi am")>=0) return "CHONG_GHI_AM";
+  if(n.indexOf("ghi âm")>=0 || n.indexOf("ghi am")>=0) return "GHI_AM";
+  if(n.indexOf("dò nghe lén")>=0 || n.indexOf("do nghe len")>=0 || n.indexOf("máy dò")>=0 || n.indexOf("may do")>=0 || n.indexOf("tb dò")>=0) return "MAY_DO";
+  var nStripped = n.replace("máy", "");
+  if(n.indexOf("định vị")>=0 || n.indexOf("dinh vi")>=0 || n.indexOf("tbđv")>=0 || n.indexOf("tbdv")>=0
+     || n.indexOf("gps")>=0 || n.indexOf("- đv")>=0 || n.indexOf("-đv")>=0 || nStripped.indexOf(" đv")>=0) return "DINH_VI";
+  if(n.indexOf("noma")>=0) return "NOMA";
+  return "OTHER";
+}
+
+// ── Dynamic compute từ flat items (web_items_flat) ────────────────────────
+// items: [{d, oid, n, q, r, c}]
+function computeBreakdownFromFlat(items, start, end){
+  if(!items || !items.length) return null;
+  var cats = {};
+  for(var i=0;i<CAT_ORDER.length;i++){
+    cats[CAT_ORDER[i].key] = {
+      label: CAT_ORDER[i].label, revenue:0, orders:{}, units:0
+    };
+  }
+  var totRev=0, totOrders={};
+  for(var i=0;i<items.length;i++){
+    var it = items[i];
+    if(!(it.d >= start && it.d <= end)) continue;
+    var c = cats[it.c] || cats.OTHER;
+    c.revenue += it.r;
+    c.orders[it.oid] = 1;
+    c.units += it.q;
+    totRev += it.r;
+    totOrders[it.oid] = 1;
+  }
+  var out = {};
+  for(var k in cats){
+    var c = cats[k];
+    out[k] = {label:c.label, revenue:Math.round(c.revenue), orders:Object.keys(c.orders).length, units:c.units};
+  }
+  return {total_revenue:Math.round(totRev), total_orders:Object.keys(totOrders).length, categories:out};
+}
+
+function computeTopFromFlat(items, start, end, topN){
+  if(!items || !items.length) return null;
+  var agg = {};
+  var totRev=0, totOrders={};
+  for(var i=0;i<items.length;i++){
+    var it = items[i];
+    if(!(it.d >= start && it.d <= end)) continue;
+    if(!agg[it.n]) agg[it.n] = {product:it.n, revenue:0, orders:{}, units:0};
+    agg[it.n].revenue += it.r;
+    agg[it.n].orders[it.oid] = 1;
+    agg[it.n].units += it.q;
+    totRev += it.r;
+    totOrders[it.oid] = 1;
+  }
+  var arr = [];
+  for(var k in agg){ var a = agg[k]; arr.push({product:a.product, revenue:Math.round(a.revenue), orders:Object.keys(a.orders).length, units:a.units}); }
+  arr.sort(function(a,b){return b.revenue - a.revenue;});
+  return {total_revenue:Math.round(totRev), total_orders:Object.keys(totOrders).length, top_products:arr.slice(0, topN||50), all_products:arr};
+}
+
+// Compute spend breakdown 9 nhóm từ campaigns_raw (GSPEND)
+function computeSpendFromRaw(rows, start, end){
+  if(!rows || !rows.length) return null;
+  var cats = {};
+  for(var i=0;i<CAT_ORDER.length;i++){
+    cats[CAT_ORDER[i].key] = {label:CAT_ORDER[i].label, spend:0, clicks:0, impressions:0, campaigns:{}};
+  }
+  var totSpend=0, totClicks=0, totImps=0;
+  for(var i=0;i<rows.length;i++){
+    var r = rows[i];
+    var d = r.date || "";
+    if(!(d >= start && d <= end)) continue;
+    var cat = classifyCampaign(r.campaign || "");
+    var s = Number(r.spend||0), c = Number(r.clicks||0), im = Number(r.impressions||0);
+    cats[cat].spend += s; cats[cat].clicks += c; cats[cat].impressions += im;
+    cats[cat].campaigns[r.campaign || ""] = 1;
+    totSpend += s; totClicks += c; totImps += im;
+  }
+  var out = {};
+  for(var k in cats){
+    var c = cats[k];
+    var ctr = c.impressions>0 ? c.clicks/c.impressions : 0;
+    var cpc = c.clicks>0 ? c.spend/c.clicks : 0;
+    out[k] = {
+      label: c.label, spend:Math.round(c.spend), clicks:c.clicks, impressions:c.impressions,
+      ctr:ctr, cpc:Math.round(cpc), campaigns_count: Object.keys(c.campaigns).length,
+    };
+  }
+  return {total_spend:Math.round(totSpend), total_clicks:totClicks, total_impressions:totImps, categories:out};
 }
 
 // ── Helpers POS-direct ──────────────────────────────────────
@@ -131,8 +232,15 @@ function computePeriodDates(key){
     case "last_7d":    return {start: shift(-6),          end: today};
     case "last_30d":   return {start: shift(-29),         end: today};
     case "last_90d":   return {start: shift(-89),         end: today};
+    case "custom":     return {start: customStart || shift(-29), end: customEnd || today};
     default:           return {start: today,              end: today};
   }
+}
+
+function changeCustomDate(which, val){
+  if(which === "start") customStart = val;
+  else customEnd = val;
+  if(selectedPeriod === "custom") renderTimeFilterSection(REPORT);
 }
 
 // Compute revenue cho 3 nguồn Web+Zalo+Hotline, range [start,end]
@@ -298,10 +406,18 @@ function renderProductRanking(){
   var curLabel = (cur && cur.label) || labelMap[selectedPeriod] || selectedPeriod;
   var prevLabel = (prev && prev.label) || (cur && cur.compare_to ? labelMap[cur.compare_to] : null);
 
-  // ƯU TIÊN data POS Pancake trực tiếp (tất cả SKU, không filter MAPPING)
-  var tp_prods = (REVDATA && REVDATA.top_products_website_by_period && REVDATA.top_products_website_by_period[selectedPeriod])
-    ? (REVDATA.top_products_website_by_period[selectedPeriod].top_products || [])
-    : ((cur && cur.top_products) || []);
+  // v4.1: DYNAMIC compute từ flat items cho BẤT KỲ date range (kể cả custom)
+  var tp_prods = [];
+  if(REVDATA && REVDATA.web_items_flat){
+    var dynTop = computeTopFromFlat(REVDATA.web_items_flat, curDates.start, curDates.end, 50);
+    tp_prods = dynTop ? dynTop.top_products : [];
+  }
+  if(!tp_prods.length && REVDATA && REVDATA.top_products_website_by_period && REVDATA.top_products_website_by_period[selectedPeriod]){
+    tp_prods = REVDATA.top_products_website_by_period[selectedPeriod].top_products || [];
+  }
+  if(!tp_prods.length){
+    tp_prods = (cur && cur.top_products) || [];
+  }
   // Map prev for compare
   var prev_map = {};
   if(prev && prev.top_products){ for(var pi=0;pi<prev.top_products.length;pi++) prev_map[prev.top_products[pi].product] = prev.top_products[pi]; }
@@ -361,15 +477,25 @@ function renderTimeFilterSection(r){
 
   var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
   h+='<h2 style="font-size:16px;font-weight:700">Bộ lọc thời gian</h2>';
+  h+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
   h+='<select onchange="changePeriod(this.value)" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;background:white">';
-  var ks=["today","yesterday","this_week","last_week","this_month","last_month","last_7d","last_30d","last_90d"];
+  var ks=["today","yesterday","this_week","last_week","this_month","last_month","last_7d","last_30d","last_90d","custom"];
+  var labelMap2 = Object.assign({}, labelMap, {custom: "Tuỳ chỉnh…"});
   for(var i=0;i<ks.length;i++){
     var sel=ks[i]===selectedPeriod?" selected":"";
-    var lbl=(tp[ks[i]] && tp[ks[i]].label) || labelMap[ks[i]] || ks[i];
+    var lbl=(tp[ks[i]] && tp[ks[i]].label) || labelMap2[ks[i]] || ks[i];
     h+='<option value="'+ks[i]+'"'+sel+'>'+esc(lbl)+'</option>';
   }
-  h+='</select></div>';
-  var prevLbl = cur.compare_to ? ((tp[cur.compare_to] && tp[cur.compare_to].label) || labelMap[cur.compare_to]) : null;
+  h+='</select>';
+  // Khi chọn custom — show 2 date inputs
+  if(selectedPeriod === "custom"){
+    h+='<span class="text-xs text-gray">Từ</span>';
+    h+='<input type="date" value="'+esc(customStart||curDates.start)+'" onchange="changeCustomDate(\'start\', this.value)" style="padding:4px 6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">';
+    h+='<span class="text-xs text-gray">Đến</span>';
+    h+='<input type="date" value="'+esc(customEnd||curDates.end)+'" onchange="changeCustomDate(\'end\', this.value)" style="padding:4px 6px;border:1px solid #d1d5db;border-radius:4px;font-size:12px">';
+  }
+  h+='</div></div>';
+  var prevLbl = (cur && cur.compare_to) ? ((tp[cur.compare_to] && tp[cur.compare_to].label) || labelMap[cur.compare_to]) : null;
   h+='<p class="text-xs text-gray" style="margin-bottom:12px">Kỳ: <strong>'+esc(curDates.start)+' → '+esc(curDates.end)+'</strong>';
   if(prevDates && prevLbl) h+=' · So sánh với <strong>'+esc(prevLbl)+'</strong> ('+esc(prevDates.start)+' → '+esc(prevDates.end)+')';
   h+='</p>';
@@ -414,11 +540,22 @@ function renderTimeFilterSection(r){
     h+=parts.join(' · ');
     h+='</div>';
   }
-  // ── Bảng "Phân chia theo nhóm SP trong kỳ" — v4.0 dùng 9 nhóm chuẩn ──
-  // Doanh thu từ POS (REVDATA.category_breakdown_by_period[period])
-  // Chi phí từ Google Ads (GACTX.spend_breakdown_by_period[period])
-  var revBreak  = (REVDATA && REVDATA.category_breakdown_by_period) ? REVDATA.category_breakdown_by_period[selectedPeriod] : null;
-  var spendBreak= (GACTX  && GACTX.spend_breakdown_by_period)      ? GACTX.spend_breakdown_by_period[selectedPeriod] : null;
+  // ── Bảng "Phân chia theo nhóm SP trong kỳ" — v4.1 DYNAMIC compute ──
+  // Ưu tiên compute từ REVDATA.web_items_flat và GSPEND.campaigns_raw cho BẤT KỲ date range
+  // Fallback về pre-computed period nếu flat data thiếu
+  var revBreak = null, spendBreak = null;
+  if(REVDATA && REVDATA.web_items_flat){
+    revBreak = computeBreakdownFromFlat(REVDATA.web_items_flat, curDates.start, curDates.end);
+  }
+  if(!revBreak && REVDATA && REVDATA.category_breakdown_by_period){
+    revBreak = REVDATA.category_breakdown_by_period[selectedPeriod];
+  }
+  if(GSPEND && GSPEND.campaigns_raw){
+    spendBreak = computeSpendFromRaw(GSPEND.campaigns_raw, curDates.start, curDates.end);
+  }
+  if(!spendBreak && GACTX && GACTX.spend_breakdown_by_period){
+    spendBreak = GACTX.spend_breakdown_by_period[selectedPeriod];
+  }
   if(revBreak || spendBreak){
     h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(chi phí từ Google Ads · doanh thu từ POS · 9 nhóm chuẩn)</span></h3>';
     h+='<div class="tbl-wrap"><table><thead><tr><th>Nhóm SP</th>';

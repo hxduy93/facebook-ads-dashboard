@@ -924,6 +924,49 @@ def main():
               f"{pdata['total_revenue']:>15,.0f}đ / {pdata['total_orders']:>4} đơn / "
               f"{len(pdata['top_products'])} SP")
 
+    # ── Build flat items list (cho JS compute dynamic theo mọi date range) ──
+    # Mỗi item 1 row: date VN, order_id, name, quantity, revenue, category
+    # Dùng key ngắn (d/oid/n/q/r/c) để giảm size JSON
+    web_items_flat = []
+    for _o in web_sources_orders:
+        _ins = (_o.get("inserted_at") or "")[:26]
+        if not _ins:
+            continue
+        try:
+            _dt = datetime.fromisoformat(_ins).replace(tzinfo=timezone.utc)
+        except Exception:
+            continue
+        _vd = (_dt + timedelta(hours=7)).date().isoformat()
+        _oid = _o.get("id")
+        for _li in (_o.get("items") or []):
+            _vi = _li.get("variation_info") or {}
+            _prod = _li.get("product") or {}
+            _name = (_vi.get("name") or _prod.get("name") or "").strip()
+            if not _name:
+                _code = _vi.get("id") or _li.get("display_id") or ""
+                _name = str(_code).strip()
+            if not _name:
+                continue
+            _qty = int(_num(_li.get("quantity", 1), 1) or 1)
+            _rev = 0.0
+            for _key in ("total_price_after_sub_discount", "total_price"):
+                _v = _li.get(_key)
+                if _v is not None and _num(_v, 0) > 0:
+                    _rev = _num(_v)
+                    break
+            if _rev == 0.0:
+                _retail = _num(_vi.get("retail_price") or _li.get("price") or 0)
+                _rev = _retail * _qty
+            web_items_flat.append({
+                "d":   _vd,
+                "oid": _oid,
+                "n":   _name,
+                "q":   _qty,
+                "r":   round(_rev),
+                "c":   classify_sku(_name),
+            })
+    print(f"\n[INFO] web_items_flat: {len(web_items_flat)} items exported cho JS dynamic compute")
+
     # ── Build category_breakdown_by_period — 9 nhóm chuẩn Doscom ──
     category_breakdown_by_period = build_category_breakdown_by_period(
         web_sources_orders, today_vn
@@ -943,9 +986,12 @@ def main():
         # MỚI: top SP tổng cho 3 nguồn Web+Zalo+Hotline, TẤT CẢ SKU (không filter MAPPING),
         # 5 period chuẩn (yesterday / last_7d / this_month / last_30d / last_90d) tính theo VN.
         "top_products_website_by_period": top_products_website_by_period,
-        # MỚI (2026-04-23 v2): breakdown theo 9 nhóm chuẩn Doscom, cho cả 5 period.
+        # MỚI (2026-04-23 v2): breakdown theo 9 nhóm chuẩn Doscom, cho cả 9 period.
         # Thay thế logic PRODUCT_MAPPING cũ (13 SP) bằng classify_sku() cover TẤT CẢ SKU.
         "category_breakdown_by_period": category_breakdown_by_period,
+        # MỚI (2026-04-24): flat items từ 3 nguồn Web+Zalo+Hotline — cho JS compute
+        # dynamic theo BẤT KỲ date range nào (kể cả custom). Không giới hạn 9 period.
+        "web_items_flat": web_items_flat,
         # MỚI: thứ tự + label 9 nhóm để UI đọc và render đúng thứ tự
         "category_order": [{"key": k, "label": l} for k, l in CATEGORY_ORDER],
         # MỚI: tổng đơn theo ngày (tất cả 5 nhóm)
