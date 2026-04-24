@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24 22:50",
+  "generated_at": "2026-04-25 01:04",
   "source_data_date_range": {
     "start_7d": "2026-04-17",
     "end": "2026-04-23",
@@ -78,8 +78,8 @@
     "today": {
       "label": "Hôm nay",
       "date_range": {
-        "start": "2026-04-24",
-        "end": "2026-04-24"
+        "start": "2026-04-25",
+        "end": "2026-04-25"
       },
       "total_spend": 0,
       "total_clicks": 0,
@@ -171,75 +171,75 @@
     "yesterday": {
       "label": "Hôm qua",
       "date_range": {
-        "start": "2026-04-23",
-        "end": "2026-04-23"
+        "start": "2026-04-24",
+        "end": "2026-04-24"
       },
-      "total_spend": 3247108,
-      "total_clicks": 862,
-      "total_impressions": 63559,
+      "total_spend": 0,
+      "total_clicks": 0,
+      "total_impressions": 0,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 734000,
-          "clicks": 170,
-          "impressions": 16225,
-          "ctr": 0.0105,
-          "cpc": 4318,
-          "campaigns_count": 2
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 395326,
-          "clicks": 82,
-          "impressions": 5834,
-          "ctr": 0.0141,
-          "cpc": 4821,
-          "campaigns_count": 3
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 745366,
-          "clicks": 169,
-          "impressions": 15170,
-          "ctr": 0.0111,
-          "cpc": 4410,
-          "campaigns_count": 4
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 28174,
-          "clicks": 16,
-          "impressions": 1753,
-          "ctr": 0.0091,
-          "cpc": 1761,
-          "campaigns_count": 1
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 548360,
-          "clicks": 80,
-          "impressions": 1430,
-          "ctr": 0.0559,
-          "cpc": 6855,
-          "campaigns_count": 2
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 73374,
-          "clicks": 42,
-          "impressions": 4495,
-          "ctr": 0.0093,
-          "cpc": 1747,
-          "campaigns_count": 2
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 722509,
-          "clicks": 303,
-          "impressions": 18652,
-          "ctr": 0.0162,
-          "cpc": 2385,
-          "campaigns_count": 3
+          "spend": 0,
+          "clicks": 0,
+          "impressions": 0,
+          "ctr": 0,
+          "cpc": 0,
+          "campaigns_count": 0
         },
         "NOMA": {
           "label": "NOMA",
@@ -265,7 +265,7 @@
       "label": "Tuần này",
       "date_range": {
         "start": "2026-04-20",
-        "end": "2026-04-24"
+        "end": "2026-04-25"
       },
       "total_spend": 18532460,
       "total_clicks": 4731,
@@ -451,7 +451,7 @@
       "label": "Tháng này",
       "date_range": {
         "start": "2026-04-01",
-        "end": "2026-04-24"
+        "end": "2026-04-25"
       },
       "total_spend": 80496247,
       "total_clicks": 23147,
@@ -636,74 +636,74 @@
     "last_7d": {
       "label": "7 ngày qua",
       "date_range": {
-        "start": "2026-04-17",
-        "end": "2026-04-23"
+        "start": "2026-04-18",
+        "end": "2026-04-24"
       },
-      "total_spend": 21240787,
-      "total_clicks": 5395,
-      "total_impressions": 373497,
+      "total_spend": 18603551,
+      "total_clicks": 4767,
+      "total_impressions": 327005,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 5153676,
-          "clicks": 1136,
-          "impressions": 94680,
-          "ctr": 0.012,
-          "cpc": 4537,
+          "spend": 4509604,
+          "clicks": 996,
+          "impressions": 84650,
+          "ctr": 0.0118,
+          "cpc": 4528,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 2946708,
-          "clicks": 612,
-          "impressions": 46828,
-          "ctr": 0.0131,
-          "cpc": 4815,
+          "spend": 2577399,
+          "clicks": 535,
+          "impressions": 37475,
+          "ctr": 0.0143,
+          "cpc": 4818,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 3911778,
-          "clicks": 857,
-          "impressions": 74624,
+          "spend": 3713994,
+          "clicks": 814,
+          "impressions": 70603,
           "ctr": 0.0115,
-          "cpc": 4565,
+          "cpc": 4563,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 252553,
-          "clicks": 113,
-          "impressions": 11250,
-          "ctr": 0.01,
-          "cpc": 2235,
+          "spend": 222562,
+          "clicks": 98,
+          "impressions": 9728,
+          "ctr": 0.0101,
+          "cpc": 2271,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 3362143,
-          "clicks": 454,
-          "impressions": 7705,
-          "ctr": 0.0589,
-          "cpc": 7406,
+          "spend": 2794968,
+          "clicks": 389,
+          "impressions": 6655,
+          "ctr": 0.0585,
+          "cpc": 7185,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 321308,
-          "clicks": 210,
-          "impressions": 20026,
-          "ctr": 0.0105,
-          "cpc": 1530,
+          "spend": 276061,
+          "clicks": 181,
+          "impressions": 17524,
+          "ctr": 0.0103,
+          "cpc": 1525,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 4811197,
-          "clicks": 1915,
-          "impressions": 117398,
-          "ctr": 0.0163,
-          "cpc": 2512,
+          "spend": 4121333,
+          "clicks": 1675,
+          "impressions": 99520,
+          "ctr": 0.0168,
+          "cpc": 2460,
           "campaigns_count": 3
         },
         "NOMA": {
@@ -717,11 +717,11 @@
         },
         "OTHER": {
           "label": "Khác",
-          "spend": 481424,
-          "clicks": 98,
-          "impressions": 986,
-          "ctr": 0.0994,
-          "cpc": 4912,
+          "spend": 387629,
+          "clicks": 79,
+          "impressions": 850,
+          "ctr": 0.0929,
+          "cpc": 4907,
           "campaigns_count": 1
         }
       }
@@ -729,74 +729,74 @@
     "last_30d": {
       "label": "30 ngày qua",
       "date_range": {
-        "start": "2026-03-25",
-        "end": "2026-04-23"
+        "start": "2026-03-26",
+        "end": "2026-04-24"
       },
-      "total_spend": 105831280,
-      "total_clicks": 31227,
-      "total_impressions": 2247669,
+      "total_spend": 102052798,
+      "total_clicks": 30090,
+      "total_impressions": 2162718,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 23580875,
-          "clicks": 6175,
-          "impressions": 471458,
-          "ctr": 0.0131,
-          "cpc": 3819,
+          "spend": 22815385,
+          "clicks": 5980,
+          "impressions": 452645,
+          "ctr": 0.0132,
+          "cpc": 3815,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 13750891,
-          "clicks": 3311,
-          "impressions": 315621,
+          "spend": 13258066,
+          "clicks": 3212,
+          "impressions": 304957,
           "ctr": 0.0105,
-          "cpc": 4153,
+          "cpc": 4128,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 16632825,
-          "clicks": 4500,
-          "impressions": 457528,
+          "spend": 16085918,
+          "clicks": 4365,
+          "impressions": 443178,
           "ctr": 0.0098,
-          "cpc": 3696,
+          "cpc": 3685,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 1539995,
-          "clicks": 746,
-          "impressions": 87841,
-          "ctr": 0.0085,
-          "cpc": 2064,
+          "spend": 1436224,
+          "clicks": 678,
+          "impressions": 81610,
+          "ctr": 0.0083,
+          "cpc": 2118,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 15698834,
-          "clicks": 2441,
-          "impressions": 43722,
-          "ctr": 0.0558,
-          "cpc": 6431,
+          "spend": 15174524,
+          "clicks": 2347,
+          "impressions": 41702,
+          "ctr": 0.0563,
+          "cpc": 6465,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 2611430,
-          "clicks": 1876,
-          "impressions": 153731,
+          "spend": 2514433,
+          "clicks": 1822,
+          "impressions": 148893,
           "ctr": 0.0122,
-          "cpc": 1392,
+          "cpc": 1380,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 28039131,
-          "clicks": 11371,
-          "impressions": 710260,
+          "spend": 26938870,
+          "clicks": 10909,
+          "impressions": 682479,
           "ctr": 0.016,
-          "cpc": 2466,
+          "cpc": 2469,
           "campaigns_count": 3
         },
         "NOMA": {
@@ -810,10 +810,10 @@
         },
         "OTHER": {
           "label": "Khác",
-          "spend": 3977299,
-          "clicks": 807,
-          "impressions": 7508,
-          "ctr": 0.1075,
+          "spend": 3829378,
+          "clicks": 777,
+          "impressions": 7254,
+          "ctr": 0.1071,
           "cpc": 4928,
           "campaigns_count": 1
         }
@@ -822,74 +822,74 @@
     "last_90d": {
       "label": "90 ngày qua",
       "date_range": {
-        "start": "2026-01-24",
-        "end": "2026-04-23"
+        "start": "2026-01-25",
+        "end": "2026-04-24"
       },
-      "total_spend": 272078524,
-      "total_clicks": 77563,
-      "total_impressions": 5520389,
+      "total_spend": 268960042,
+      "total_clicks": 76497,
+      "total_impressions": 5445955,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 56934249,
-          "clicks": 16463,
-          "impressions": 1394164,
+          "spend": 56137181,
+          "clicks": 16101,
+          "impressions": 1362277,
           "ctr": 0.0118,
-          "cpc": 3458,
+          "cpc": 3487,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 36974281,
-          "clicks": 8649,
-          "impressions": 770705,
-          "ctr": 0.0112,
-          "cpc": 4275,
+          "spend": 36589457,
+          "clicks": 8561,
+          "impressions": 760379,
+          "ctr": 0.0113,
+          "cpc": 4274,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 47001625,
-          "clicks": 10588,
-          "impressions": 918883,
+          "spend": 46313305,
+          "clicks": 10452,
+          "impressions": 911939,
           "ctr": 0.0115,
-          "cpc": 4439,
+          "cpc": 4431,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 4256928,
-          "clicks": 2386,
-          "impressions": 266032,
+          "spend": 4215057,
+          "clicks": 2354,
+          "impressions": 261523,
           "ctr": 0.009,
-          "cpc": 1784,
+          "cpc": 1791,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 38129387,
-          "clicks": 5702,
-          "impressions": 104152,
-          "ctr": 0.0547,
-          "cpc": 6687,
+          "spend": 37789458,
+          "clicks": 5644,
+          "impressions": 103015,
+          "ctr": 0.0548,
+          "cpc": 6696,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 5480711,
-          "clicks": 3279,
-          "impressions": 278692,
-          "ctr": 0.0118,
-          "cpc": 1671,
+          "spend": 5403612,
+          "clicks": 3237,
+          "impressions": 275792,
+          "ctr": 0.0117,
+          "cpc": 1669,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 70671425,
-          "clicks": 28021,
-          "impressions": 1645525,
+          "spend": 69882055,
+          "clicks": 27673,
+          "impressions": 1628794,
           "ctr": 0.017,
-          "cpc": 2522,
+          "cpc": 2525,
           "campaigns_count": 3
         },
         "NOMA": {
