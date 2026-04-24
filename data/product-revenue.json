@@ -1,20 +1,50 @@
 {
-  "generated_at": "2026-04-23 10:52 UTC",
+  "generated_at": "2026-04-24 03:11 UTC",
   "window_days": 90,
-  "total_orders": 3684,
+  "total_orders": 3691,
   "top_products_website_by_period": {
     "yesterday": {
       "label": "Hôm qua",
       "date_range": {
-        "start": "2026-04-22",
-        "end": "2026-04-22"
+        "start": "2026-04-23",
+        "end": "2026-04-23"
       },
-      "total_revenue": 3809000,
-      "total_orders": 4,
+      "total_revenue": 15680000,
+      "total_orders": 8,
       "top_products": [
         {
-          "product": "Máy ghi âm DR8",
-          "revenue": 1900000,
+          "product": "Máy dò D1 Pro",
+          "revenue": 3500000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 2600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+          "revenue": 2300000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR9",
+          "revenue": 2100000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+          "revenue": 1750000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR4 pro",
+          "revenue": 1600000,
           "orders": 1,
           "units": 1
         },
@@ -25,20 +55,14 @@
           "units": 1
         },
         {
-          "product": "Doscom Tag DT2",
-          "revenue": 599000,
+          "product": "Thẻ 128GB",
+          "revenue": 690000,
           "orders": 1,
           "units": 1
         },
         {
-          "product": "Sim trắng multi 4G",
-          "revenue": 200000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "A002 500ml - APK-8508",
-          "revenue": 120000,
+          "product": "Sim Vstarcam",
+          "revenue": 25000,
           "orders": 1,
           "units": 1
         }
@@ -47,17 +71,23 @@
     "last_7d": {
       "label": "7 ngày gần",
       "date_range": {
-        "start": "2026-04-16",
-        "end": "2026-04-22"
+        "start": "2026-04-17",
+        "end": "2026-04-23"
       },
-      "total_revenue": 49040000,
-      "total_orders": 29,
+      "total_revenue": 60120000,
+      "total_orders": 35,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 7000000,
-          "orders": 2,
-          "units": 2
+          "revenue": 10500000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Máy ghi âm DR4 pro",
+          "revenue": 6720000,
+          "orders": 4,
+          "units": 4
         },
         {
           "product": "MÁY DÒ D4",
@@ -66,28 +96,28 @@
           "units": 1
         },
         {
-          "product": "DV1 + Sim ĐV",
-          "revenue": 5400000,
-          "orders": 3,
-          "units": 3
-        },
-        {
-          "product": "Máy ghi âm DR4 pro",
-          "revenue": 5120000,
-          "orders": 3,
-          "units": 3
-        },
-        {
           "product": "Định vị DV1 mini",
-          "revenue": 3870000,
-          "orders": 2,
+          "revenue": 5160000,
+          "orders": 3,
+          "units": 4
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 3900000,
+          "orders": 3,
           "units": 3
         },
         {
-          "product": "Máy dò D2",
-          "revenue": 2800000,
-          "orders": 1,
-          "units": 1
+          "product": "DV1 + Sim ĐV",
+          "revenue": 3600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+          "revenue": 3500000,
+          "orders": 2,
+          "units": 2
         },
         {
           "product": "Định vị DV1 Pro",
@@ -96,22 +126,16 @@
           "units": 1
         },
         {
+          "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+          "revenue": 2300000,
+          "orders": 1,
+          "units": 1
+        },
+        {
           "product": "CAMERA DA6.2 - H6",
           "revenue": 2200000,
           "orders": 1,
           "units": 1
-        },
-        {
-          "product": "Máy ghi âm DR8",
-          "revenue": 1900000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "Doscom Tag DT2",
-          "revenue": 1797000,
-          "orders": 3,
-          "units": 3
         }
       ]
     },
@@ -119,16 +143,16 @@
       "label": "Tháng này",
       "date_range": {
         "start": "2026-04-01",
-        "end": "2026-04-23"
+        "end": "2026-04-24"
       },
-      "total_revenue": 204146750,
-      "total_orders": 101,
+      "total_revenue": 207646750,
+      "total_orders": 102,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 45500000,
-          "orders": 13,
-          "units": 13
+          "revenue": 49000000,
+          "orders": 14,
+          "units": 14
         },
         {
           "product": "Máy ghi âm DR1",
@@ -189,11 +213,11 @@
     "last_30d": {
       "label": "30 ngày gần",
       "date_range": {
-        "start": "2026-03-24",
-        "end": "2026-04-22"
+        "start": "2026-03-25",
+        "end": "2026-04-23"
       },
-      "total_revenue": 244318750,
-      "total_orders": 123,
+      "total_revenue": 244414750,
+      "total_orders": 124,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
@@ -202,16 +226,16 @@
           "units": 15
         },
         {
-          "product": "MÁY DÒ D4",
-          "revenue": 24000000,
-          "orders": 4,
-          "units": 4
+          "product": "Máy ghi âm DR1",
+          "revenue": 22100000,
+          "orders": 17,
+          "units": 17
         },
         {
-          "product": "Máy ghi âm DR1",
-          "revenue": 20800000,
-          "orders": 16,
-          "units": 16
+          "product": "MÁY DÒ D4",
+          "revenue": 18000000,
+          "orders": 3,
+          "units": 3
         },
         {
           "product": "Máy dò D2",
@@ -226,16 +250,16 @@
           "units": 1
         },
         {
-          "product": "Máy dò D1",
-          "revenue": 10000000,
-          "orders": 4,
-          "units": 4
+          "product": "Doscom Tag DT2",
+          "revenue": 7787000,
+          "orders": 13,
+          "units": 13
         },
         {
-          "product": "Doscom Tag DT2",
-          "revenue": 8386000,
-          "orders": 14,
-          "units": 14
+          "product": "Máy dò D1",
+          "revenue": 7500000,
+          "orders": 3,
+          "units": 3
         },
         {
           "product": "DV1 + Sim ĐV",
@@ -244,33 +268,33 @@
           "units": 4
         },
         {
-          "product": "DV1 mini + Sim ĐV",
-          "revenue": 6579000,
-          "orders": 5,
-          "units": 5
+          "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+          "revenue": 6850000,
+          "orders": 4,
+          "units": 4
         },
         {
-          "product": "DV2 + Sim ĐV",
-          "revenue": 6250000,
-          "orders": 1,
-          "units": 5
+          "product": "Máy ghi âm DR4 pro",
+          "revenue": 6720000,
+          "orders": 4,
+          "units": 4
         }
       ]
     },
     "last_90d": {
       "label": "90 ngày gần",
       "date_range": {
-        "start": "2026-01-23",
-        "end": "2026-04-22"
+        "start": "2026-01-24",
+        "end": "2026-04-23"
       },
-      "total_revenue": 602928417,
-      "total_orders": 312,
+      "total_revenue": 618608417,
+      "total_orders": 320,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 108500000,
-          "orders": 31,
-          "units": 31
+          "revenue": 112000000,
+          "orders": 32,
+          "units": 32
         },
         {
           "product": "Thiết bị dò D8 Pro",
@@ -291,16 +315,16 @@
           "units": 13
         },
         {
+          "product": "Máy ghi âm DR1",
+          "revenue": 31000000,
+          "orders": 24,
+          "units": 24
+        },
+        {
           "product": "MÁY DÒ D4",
           "revenue": 30000000,
           "orders": 5,
           "units": 5
-        },
-        {
-          "product": "Máy ghi âm DR1",
-          "revenue": 28400000,
-          "orders": 22,
-          "units": 22
         },
         {
           "product": "Máy dò D3 Doscom",
@@ -329,8 +353,1282 @@
       ]
     }
   },
+  "category_breakdown_by_period": {
+    "yesterday": {
+      "label": "Hôm qua",
+      "date_range": {
+        "start": "2026-04-23",
+        "end": "2026-04-23"
+      },
+      "total_revenue": 15855000,
+      "total_orders": 8,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 3500000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 3500000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 4050000,
+          "orders": 2,
+          "units": 2,
+          "top_products": [
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 2300000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 1750000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 6300000,
+          "orders": 4,
+          "units": 4,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 2600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 1600000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 1290000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 1290000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 715000,
+          "orders": 1,
+          "units": 2,
+          "top_products": [
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 690000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Sim Vstarcam",
+              "revenue": 25000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "last_7d": {
+      "label": "7 ngày gần",
+      "date_range": {
+        "start": "2026-04-17",
+        "end": "2026-04-23"
+      },
+      "total_revenue": 60066000,
+      "total_orders": 35,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 16500000,
+          "orders": 4,
+          "units": 4,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 10500000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 6000000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 8000000,
+          "orders": 4,
+          "units": 4,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 3500000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 2300000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "CAMERA DA6.2 - H6",
+              "revenue": 2200000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 16920000,
+          "orders": 11,
+          "units": 11,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 6720000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 3900000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy ghi âm DR8",
+              "revenue": 1900000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 1300000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 14347000,
+          "orders": 10,
+          "units": 11,
+          "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 5160000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 3600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Định vị DV1 Pro",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 1797000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 1290000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 518000,
+          "orders": 3,
+          "units": 3,
+          "top_products": [
+            {
+              "product": "Noma 911",
+              "revenue": 398000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "A002 500ml - APK-8508",
+              "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 3781000,
+          "orders": 9,
+          "units": 12,
+          "top_products": [
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 1497000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 1380000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 800000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "sim trắng",
+              "revenue": 79000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Sim Vstarcam",
+              "revenue": 25000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "this_month": {
+      "label": "Tháng này",
+      "date_range": {
+        "start": "2026-04-01",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 208689000,
+      "total_orders": 102,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 89080000,
+          "orders": 23,
+          "units": 23,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 49000000,
+              "orders": 14,
+              "units": 14
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 12000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 11880000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 11200000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 5000000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 5000000,
+          "orders": 3,
+          "units": 3,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA5",
+              "revenue": 1500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA1 Pro Wifi - CB70W",
+              "revenue": 1400000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 21750000,
+          "orders": 9,
+          "units": 10,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 5250000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA3 Pro 4G + Sim Vstarcam",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA6",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 2300000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 5660000,
+          "orders": 4,
+          "units": 5,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 4190000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "DA8.1 + Thẻ nhớ 64GB",
+              "revenue": 1470000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 38420000,
+          "orders": 27,
+          "units": 28,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 19500000,
+              "orders": 15,
+              "units": 15
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 6720000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 5200000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 3000000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 37199000,
+          "orders": 25,
+          "units": 30,
+          "top_products": [
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 7200000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DV2 + Sim ĐV",
+              "revenue": 6250000,
+              "orders": 1,
+              "units": 5
+            },
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 5990000,
+              "orders": 10,
+              "units": 10
+            },
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 5160000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 3999000,
+              "orders": 3,
+              "units": 3
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 1512000,
+          "orders": 5,
+          "units": 7,
+          "top_products": [
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 796000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Noma 911",
+              "revenue": 398000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 198000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "A002 500ml - APK-8508",
+              "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 10068000,
+          "orders": 21,
+          "units": 29,
+          "top_products": [
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 4140000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 2994000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 1200000,
+              "orders": 5,
+              "units": 6
+            },
+            {
+              "product": "Thẻ 64GB",
+              "revenue": 980000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "Bàn chải điện Winki B86",
+              "revenue": 650000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "last_30d": {
+      "label": "30 ngày gần",
+      "date_range": {
+        "start": "2026-03-25",
+        "end": "2026-04-23"
+      },
+      "total_revenue": 245248000,
+      "total_orders": 124,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 106680000,
+          "orders": 28,
+          "units": 28,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 52500000,
+              "orders": 15,
+              "units": 15
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 18000000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 16800000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 11880000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 7500000,
+              "orders": 3,
+              "units": 3
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 7280000,
+          "orders": 5,
+          "units": 5,
+          "top_products": [
+            {
+              "product": "Camera DA5",
+              "revenue": 3000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA1 Pro Wifi - CB70W",
+              "revenue": 1400000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA3.2",
+              "revenue": 780000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 23350000,
+          "orders": 10,
+          "units": 11,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 6850000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA3 Pro 4G + Sim Vstarcam",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA6",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 2300000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 6640000,
+          "orders": 5,
+          "units": 6,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 5170000,
+              "orders": 4,
+              "units": 5
+            },
+            {
+              "product": "DA8.1 + Thẻ nhớ 64GB",
+              "revenue": 1470000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 41020000,
+          "orders": 29,
+          "units": 30,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 22100000,
+              "orders": 17,
+              "units": 17
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 6720000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 5200000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 3000000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 44661000,
+          "orders": 32,
+          "units": 37,
+          "top_products": [
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 7787000,
+              "orders": 13,
+              "units": 13
+            },
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 7200000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 6579000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "DV2 + Sim ĐV",
+              "revenue": 6250000,
+              "orders": 1,
+              "units": 5
+            },
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 5160000,
+              "orders": 3,
+              "units": 4
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 1512000,
+          "orders": 5,
+          "units": 7,
+          "top_products": [
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 796000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Noma 911",
+              "revenue": 398000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 198000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "A002 500ml - APK-8508",
+              "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 14105000,
+          "orders": 26,
+          "units": 34,
+          "top_products": [
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 4491000,
+              "orders": 9,
+              "units": 9
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 4140000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Máy massage mắt FJ-E10",
+              "revenue": 2050000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Thẻ 64GB",
+              "revenue": 1470000,
+              "orders": 2,
+              "units": 3
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 1200000,
+              "orders": 5,
+              "units": 6
+            }
+          ]
+        }
+      }
+    },
+    "last_90d": {
+      "label": "90 ngày gần",
+      "date_range": {
+        "start": "2026-01-24",
+        "end": "2026-04-23"
+      },
+      "total_revenue": 628318000,
+      "total_orders": 320,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 231980000,
+          "orders": 64,
+          "units": 64,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 112000000,
+              "orders": 32,
+              "units": 32
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 33600000,
+              "orders": 12,
+              "units": 12
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 32500000,
+              "orders": 13,
+              "units": 13
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 30000000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 23880000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 47741000,
+          "orders": 30,
+          "units": 32,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+              "revenue": 17910000,
+              "orders": 9,
+              "units": 10
+            },
+            {
+              "product": "Camera DA5",
+              "revenue": 12300000,
+              "orders": 7,
+              "units": 8
+            },
+            {
+              "product": "Camera DA3 Pro Zoom x10",
+              "revenue": 7101000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DA1 Pro Wifi - CB70W",
+              "revenue": 4100000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Camera DA3.3",
+              "revenue": 3950000,
+              "orders": 5,
+              "units": 5
+            }
+          ]
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 73940000,
+          "orders": 31,
+          "units": 36,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 11450000,
+              "orders": 7,
+              "units": 7
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+              "revenue": 10390000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Camera DA6",
+              "revenue": 10000000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 8380000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DA 1 Pro Zoom + Thẻ nhớ 128GB + Sim Vstarcam",
+              "revenue": 6720000,
+              "orders": 1,
+              "units": 3
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 24520000,
+          "orders": 21,
+          "units": 24,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 20450000,
+              "orders": 18,
+              "units": 21
+            },
+            {
+              "product": "Camera DA8.1 pro",
+              "revenue": 2600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "DA8.1 + Thẻ nhớ 64GB",
+              "revenue": 1470000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 88370000,
+          "orders": 62,
+          "units": 65,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 31000000,
+              "orders": 24,
+              "units": 24
+            },
+            {
+              "product": "Máy ghi âm DR8",
+              "revenue": 16300000,
+              "orders": 9,
+              "units": 9
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 15320000,
+              "orders": 9,
+              "units": 10
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 9100000,
+              "orders": 6,
+              "units": 7
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 8000000,
+              "orders": 7,
+              "units": 8
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 80745000,
+          "orders": 65,
+          "units": 77,
+          "top_products": [
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 20366000,
+              "orders": 29,
+              "units": 34
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 14319000,
+              "orders": 10,
+              "units": 11
+            },
+            {
+              "product": "DV1 Pro + Sim ĐV",
+              "revenue": 10000000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 9000000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 7740000,
+              "orders": 5,
+              "units": 6
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 7573000,
+          "orders": 21,
+          "units": 35,
+          "top_products": [
+            {
+              "product": "Combo kính xe Noma 911+ Noma 922",
+              "revenue": 1990000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Noma 911",
+              "revenue": 1592000,
+              "orders": 7,
+              "units": 8
+            },
+            {
+              "product": "Noma 922",
+              "revenue": 1393000,
+              "orders": 7,
+              "units": 7
+            },
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 796000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 693000,
+              "orders": 7,
+              "units": 7
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 73449000,
+          "orders": 87,
+          "units": 107,
+          "top_products": [
+            {
+              "product": "Thiết bị dò D8 Pro",
+              "revenue": 35000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 12475000,
+              "orders": 25,
+              "units": 25
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 10640000,
+              "orders": 18,
+              "units": 19
+            },
+            {
+              "product": "Thẻ 64GB",
+              "revenue": 7170000,
+              "orders": 20,
+              "units": 22
+            },
+            {
+              "product": "Máy massage mắt FJ-E10",
+              "revenue": 2050000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    }
+  },
+  "category_order": [
+    {
+      "key": "MAY_DO",
+      "label": "Máy dò"
+    },
+    {
+      "key": "CAMERA_WIFI",
+      "label": "Camera wifi"
+    },
+    {
+      "key": "CAMERA_4G",
+      "label": "Camera 4G"
+    },
+    {
+      "key": "CAMERA_VIDEO_CALL",
+      "label": "Camera gọi video 2 chiều"
+    },
+    {
+      "key": "GHI_AM",
+      "label": "Máy ghi âm"
+    },
+    {
+      "key": "CHONG_GHI_AM",
+      "label": "Chống ghi âm"
+    },
+    {
+      "key": "DINH_VI",
+      "label": "Định vị"
+    },
+    {
+      "key": "NOMA",
+      "label": "NOMA"
+    },
+    {
+      "key": "OTHER",
+      "label": "Khác"
+    }
+  ],
   "total_orders_by_date": {
-    "2026-04-23": 38,
+    "2026-04-24": 9,
+    "2026-04-23": 39,
     "2026-04-22": 29,
     "2026-04-21": 37,
     "2026-04-20": 38,
@@ -415,14 +1713,14 @@
     "2026-01-27": 59,
     "2026-01-26": 64,
     "2026-01-25": 25,
-    "2026-01-24": 27
+    "2026-01-24": 24
   },
   "order_revenue_by_status_by_date": {
     "delivered": {
-      "2026-04-22": 1194000.0,
-      "2026-04-21": 14076000.0,
-      "2026-04-20": 10827000.0,
-      "2026-04-19": 10778000.0,
+      "2026-04-22": 1791000.0,
+      "2026-04-21": 15071000.0,
+      "2026-04-20": 14620000.0,
+      "2026-04-19": 15977000.0,
       "2026-04-18": 9095000.0,
       "2026-04-17": 13923000.0,
       "2026-04-16": 16025000.0,
@@ -498,16 +1796,17 @@
       "2026-01-27": 21822000.0,
       "2026-01-26": 25066000.0,
       "2026-01-25": 9376000.0,
-      "2026-01-24": 10875000.0
+      "2026-01-24": 10477000.0
     },
     "returning": {
-      "2026-04-16": 897000.0,
-      "2026-04-15": 2898000.0,
-      "2026-04-14": 1499000.0,
-      "2026-04-13": 5998000.0,
+      "2026-04-17": 199000.0,
+      "2026-04-16": 1096000.0,
+      "2026-04-15": 4198000.0,
+      "2026-04-14": 1698000.0,
+      "2026-04-13": 6197000.0,
       "2026-04-11": 398000.0,
       "2026-04-10": 796000.0,
-      "2026-04-09": 5397000.0,
+      "2026-04-09": 5596000.0,
       "2026-04-08": 199000.0,
       "2026-04-07": 597000.0,
       "2026-04-06": 14547000.0,
@@ -621,7 +1920,7 @@
       "2026-01-28": 1298000.0,
       "2026-01-27": 4758000.0,
       "2026-01-26": 2994000.0,
-      "2026-01-24": 2598000.0
+      "2026-01-24": 2200000.0
     },
     "canceled": {
       "2026-04-07": 398000.0,
@@ -638,20 +1937,21 @@
       "2026-02-24": 1198000.0
     },
     "other": {
-      "2026-04-23": 28802000.0,
-      "2026-04-22": 7988000.0,
-      "2026-04-21": 10740000.0,
-      "2026-04-20": 17783000.0,
-      "2026-04-19": 5995000.0,
+      "2026-04-24": 5092000.0,
+      "2026-04-23": 29001000.0,
+      "2026-04-22": 7391000.0,
+      "2026-04-21": 9745000.0,
+      "2026-04-20": 13990000.0,
+      "2026-04-19": 796000.0,
       "2026-04-18": 3097000.0,
-      "2026-04-17": 11449000.0,
-      "2026-04-16": 398000.0,
-      "2026-04-15": 5598000.0,
-      "2026-04-14": 7699000.0,
-      "2026-04-13": 597000.0,
+      "2026-04-17": 11250000.0,
+      "2026-04-16": 199000.0,
+      "2026-04-15": 4298000.0,
+      "2026-04-14": 7500000.0,
+      "2026-04-13": 398000.0,
       "2026-04-11": 199000.0,
       "2026-04-10": 0.0,
-      "2026-04-09": 398000.0,
+      "2026-04-09": 199000.0,
       "2026-04-07": 0.0,
       "2026-04-06": 0.0,
       "2026-04-05": 0.0,
@@ -713,10 +2013,10 @@
   },
   "order_count_by_status_by_date": {
     "delivered": {
-      "2026-04-22": 5,
-      "2026-04-21": 17,
-      "2026-04-20": 18,
-      "2026-04-19": 22,
+      "2026-04-22": 8,
+      "2026-04-21": 21,
+      "2026-04-20": 23,
+      "2026-04-19": 25,
       "2026-04-18": 16,
       "2026-04-17": 19,
       "2026-04-16": 28,
@@ -792,16 +2092,17 @@
       "2026-01-27": 45,
       "2026-01-26": 52,
       "2026-01-25": 22,
-      "2026-01-24": 23
+      "2026-01-24": 21
     },
     "returning": {
-      "2026-04-16": 2,
-      "2026-04-15": 2,
-      "2026-04-14": 2,
-      "2026-04-13": 5,
+      "2026-04-17": 1,
+      "2026-04-16": 3,
+      "2026-04-15": 3,
+      "2026-04-14": 3,
+      "2026-04-13": 6,
       "2026-04-11": 2,
       "2026-04-10": 4,
-      "2026-04-09": 4,
+      "2026-04-09": 5,
       "2026-04-08": 1,
       "2026-04-07": 2,
       "2026-04-06": 4,
@@ -915,7 +2216,7 @@
       "2026-01-28": 3,
       "2026-01-27": 8,
       "2026-01-26": 5,
-      "2026-01-24": 3
+      "2026-01-24": 2
     },
     "canceled": {
       "2026-04-07": 1,
@@ -932,20 +2233,21 @@
       "2026-02-24": 1
     },
     "other": {
-      "2026-04-23": 38,
-      "2026-04-22": 24,
-      "2026-04-21": 20,
-      "2026-04-20": 20,
-      "2026-04-19": 8,
+      "2026-04-24": 9,
+      "2026-04-23": 39,
+      "2026-04-22": 21,
+      "2026-04-21": 16,
+      "2026-04-20": 15,
+      "2026-04-19": 5,
       "2026-04-18": 4,
-      "2026-04-17": 7,
-      "2026-04-16": 4,
-      "2026-04-15": 6,
-      "2026-04-14": 6,
-      "2026-04-13": 6,
+      "2026-04-17": 6,
+      "2026-04-16": 3,
+      "2026-04-15": 5,
+      "2026-04-14": 5,
+      "2026-04-13": 5,
       "2026-04-11": 2,
       "2026-04-10": 2,
-      "2026-04-09": 2,
+      "2026-04-09": 1,
       "2026-04-07": 2,
       "2026-04-06": 2,
       "2026-04-05": 2,
@@ -1007,24 +2309,24 @@
   },
   "summary": {
     "delivered": {
-      "orders": 2936,
-      "total": 1667820417.0
+      "orders": 2949,
+      "total": 1678006417.0
     },
     "returning": {
-      "orders": 194,
-      "total": 151277000.0
+      "orders": 200,
+      "total": 153572000.0
     },
     "returned": {
-      "orders": 252,
-      "total": 221169000.0
+      "orders": 251,
+      "total": 220771000.0
     },
     "canceled": {
       "orders": 14,
       "total": 14469000.0
     },
     "other": {
-      "orders": 288,
-      "total": 107692000.0
+      "orders": 277,
+      "total": 100104000.0
     }
   },
   "products": {
@@ -1033,6 +2335,7 @@
       "orders": 163,
       "units": 163,
       "by_date": {
+        "2026-04-20": 7500000.0,
         "2026-04-19": 5000000.0,
         "2026-04-17": 12500000.0,
         "2026-04-13": 12500000.0,
@@ -1088,11 +2391,11 @@
         "2026-02-06": 2500000.0,
         "2026-04-23": 2500000.0,
         "2026-04-21": 2500000.0,
-        "2026-04-20": 7500000.0,
         "2026-04-18": 2500000.0,
         "2026-04-14": 7500000.0
       },
       "orders_by_date": {
+        "2026-04-20": 3,
         "2026-04-19": 2,
         "2026-04-17": 5,
         "2026-04-13": 5,
@@ -1148,11 +2451,11 @@
         "2026-02-06": 1,
         "2026-04-23": 1,
         "2026-04-21": 1,
-        "2026-04-20": 3,
         "2026-04-18": 1,
         "2026-04-14": 3
       },
       "units_by_date": {
+        "2026-04-20": 3,
         "2026-04-19": 2,
         "2026-04-17": 5,
         "2026-04-13": 5,
@@ -1208,15 +2511,14 @@
         "2026-02-06": 1,
         "2026-04-23": 1,
         "2026-04-21": 1,
-        "2026-04-20": 3,
         "2026-04-18": 1,
         "2026-04-14": 3
       }
     },
     "D1 Pro": {
-      "total": 140000000.0,
-      "orders": 40,
-      "units": 40,
+      "total": 143500000.0,
+      "orders": 41,
+      "units": 41,
       "by_date": {
         "2026-03-21": 3500000.0,
         "2026-04-19": 3500000.0,
@@ -1250,7 +2552,8 @@
         "2026-03-20": 3500000.0,
         "2026-03-15": 3500000.0,
         "2026-03-18": 3500000.0,
-        "2026-04-23": 3500000.0
+        "2026-04-23": 3500000.0,
+        "2026-04-24": 3500000.0
       },
       "orders_by_date": {
         "2026-03-21": 1,
@@ -1285,7 +2588,8 @@
         "2026-03-20": 1,
         "2026-03-15": 1,
         "2026-03-18": 1,
-        "2026-04-23": 1
+        "2026-04-23": 1,
+        "2026-04-24": 1
       },
       "units_by_date": {
         "2026-03-21": 1,
@@ -1320,7 +2624,8 @@
         "2026-03-20": 1,
         "2026-03-15": 1,
         "2026-03-18": 1,
-        "2026-04-23": 1
+        "2026-04-23": 1,
+        "2026-04-24": 1
       }
     },
     "D2": {
@@ -1614,30 +2919,30 @@
       "units": 11,
       "by_date": {
         "2026-04-21": 1800000.0,
+        "2026-04-19": 2500000.0,
         "2026-04-16": 1800000.0,
         "2026-04-18": 1800000.0,
         "2026-04-13": 1800000.0,
         "2026-03-11": 1800000.0,
-        "2026-04-06": 6250000.0,
-        "2026-04-19": 2500000.0
+        "2026-04-06": 6250000.0
       },
       "orders_by_date": {
         "2026-04-21": 1,
+        "2026-04-19": 1,
         "2026-04-16": 1,
         "2026-04-18": 1,
         "2026-04-13": 1,
         "2026-03-11": 1,
-        "2026-04-06": 1,
-        "2026-04-19": 1
+        "2026-04-06": 1
       },
       "units_by_date": {
         "2026-04-21": 1,
+        "2026-04-19": 1,
         "2026-04-16": 1,
         "2026-04-18": 1,
         "2026-04-13": 1,
         "2026-03-11": 1,
-        "2026-04-06": 5,
-        "2026-04-19": 1
+        "2026-04-06": 5
       }
     },
     "DA8.1": {
@@ -1861,9 +3166,9 @@
       }
     },
     "Noma 911": {
-      "total": 608940000.0,
-      "orders": 2627,
-      "units": 2886,
+      "total": 609935000.0,
+      "orders": 2633,
+      "units": 2892,
       "by_date": {
         "2026-04-22": 5373000.0,
         "2026-04-21": 6169000.0,
@@ -1944,8 +3249,9 @@
         "2026-01-27": 9353000.0,
         "2026-01-26": 10945000.0,
         "2026-01-25": 5174000.0,
-        "2026-01-24": 4975000.0,
-        "2026-04-23": 5572000.0
+        "2026-01-24": 4179000.0,
+        "2026-04-24": 1592000.0,
+        "2026-04-23": 5771000.0
       },
       "orders_by_date": {
         "2026-04-22": 24,
@@ -2027,8 +3333,9 @@
         "2026-01-27": 42,
         "2026-01-26": 50,
         "2026-01-25": 21,
-        "2026-01-24": 18,
-        "2026-04-23": 24
+        "2026-01-24": 15,
+        "2026-04-24": 8,
+        "2026-04-23": 25
       },
       "units_by_date": {
         "2026-04-22": 27,
@@ -2110,14 +3417,15 @@
         "2026-01-27": 46,
         "2026-01-26": 54,
         "2026-01-25": 25,
-        "2026-01-24": 24,
-        "2026-04-23": 27
+        "2026-01-24": 21,
+        "2026-04-24": 8,
+        "2026-04-23": 28
       }
     },
     "Noma 922": {
       "total": 14925000.0,
-      "orders": 248,
-      "units": 249,
+      "orders": 247,
+      "units": 248,
       "by_date": {
         "2026-04-21": 0.0,
         "2026-04-18": 0.0,
@@ -2184,7 +3492,6 @@
         "2026-01-25": 0.0,
         "2026-03-21": 0.0,
         "2026-03-26": 199000.0,
-        "2026-01-24": 0.0,
         "2026-04-23": 0.0
       },
       "orders_by_date": {
@@ -2253,7 +3560,6 @@
         "2026-01-25": 1,
         "2026-03-21": 1,
         "2026-03-26": 1,
-        "2026-01-24": 1,
         "2026-04-23": 1
       },
       "units_by_date": {
@@ -2322,7 +3628,6 @@
         "2026-01-25": 1,
         "2026-03-21": 1,
         "2026-03-26": 1,
-        "2026-01-24": 1,
         "2026-04-23": 1
       }
     }
@@ -2330,11 +3635,12 @@
   "products_by_status": {
     "delivered": {
       "D1": {
-        "total": 232500000.0,
-        "orders": 93,
-        "units": 93,
+        "total": 237500000.0,
+        "orders": 95,
+        "units": 95,
         "by_date": {
-          "2026-04-19": 2500000.0,
+          "2026-04-20": 2500000.0,
+          "2026-04-19": 5000000.0,
           "2026-04-17": 2500000.0,
           "2026-04-13": 10000000.0,
           "2026-04-09": 5000000.0,
@@ -2384,7 +3690,8 @@
           "2026-03-16": 2500000.0
         },
         "orders_by_date": {
-          "2026-04-19": 1,
+          "2026-04-20": 1,
+          "2026-04-19": 2,
           "2026-04-17": 1,
           "2026-04-13": 4,
           "2026-04-09": 2,
@@ -2434,7 +3741,8 @@
           "2026-03-16": 1
         },
         "units_by_date": {
-          "2026-04-19": 1,
+          "2026-04-20": 1,
+          "2026-04-19": 2,
           "2026-04-17": 1,
           "2026-04-13": 4,
           "2026-04-09": 2,
@@ -2841,11 +4149,12 @@
         }
       },
       "DV1 Pro": {
-        "total": 15250000.0,
-        "orders": 6,
-        "units": 10,
+        "total": 17750000.0,
+        "orders": 7,
+        "units": 11,
         "by_date": {
           "2026-04-21": 1800000.0,
+          "2026-04-19": 2500000.0,
           "2026-04-16": 1800000.0,
           "2026-04-18": 1800000.0,
           "2026-04-13": 1800000.0,
@@ -2854,6 +4163,7 @@
         },
         "orders_by_date": {
           "2026-04-21": 1,
+          "2026-04-19": 1,
           "2026-04-16": 1,
           "2026-04-18": 1,
           "2026-04-13": 1,
@@ -2862,6 +4172,7 @@
         },
         "units_by_date": {
           "2026-04-21": 1,
+          "2026-04-19": 1,
           "2026-04-16": 1,
           "2026-04-18": 1,
           "2026-04-13": 1,
@@ -3081,14 +4392,14 @@
         }
       },
       "Noma 911": {
-        "total": 519987000.0,
-        "orders": 2246,
-        "units": 2455,
+        "total": 522574000.0,
+        "orders": 2256,
+        "units": 2468,
         "by_date": {
-          "2026-04-22": 1194000.0,
-          "2026-04-21": 2189000.0,
-          "2026-04-20": 2587000.0,
-          "2026-04-19": 4179000.0,
+          "2026-04-22": 1791000.0,
+          "2026-04-21": 3184000.0,
+          "2026-04-20": 3781000.0,
+          "2026-04-19": 4378000.0,
           "2026-04-18": 2985000.0,
           "2026-04-17": 2985000.0,
           "2026-04-16": 4975000.0,
@@ -3164,13 +4475,13 @@
           "2026-01-27": 7562000.0,
           "2026-01-26": 9154000.0,
           "2026-01-25": 4776000.0,
-          "2026-01-24": 4577000.0
+          "2026-01-24": 4179000.0
         },
         "orders_by_date": {
-          "2026-04-22": 5,
-          "2026-04-21": 10,
-          "2026-04-20": 13,
-          "2026-04-19": 19,
+          "2026-04-22": 8,
+          "2026-04-21": 14,
+          "2026-04-20": 17,
+          "2026-04-19": 20,
           "2026-04-18": 12,
           "2026-04-17": 12,
           "2026-04-16": 21,
@@ -3246,13 +4557,13 @@
           "2026-01-27": 35,
           "2026-01-26": 42,
           "2026-01-25": 19,
-          "2026-01-24": 17
+          "2026-01-24": 15
         },
         "units_by_date": {
-          "2026-04-22": 6,
-          "2026-04-21": 10,
-          "2026-04-20": 13,
-          "2026-04-19": 21,
+          "2026-04-22": 9,
+          "2026-04-21": 15,
+          "2026-04-20": 19,
+          "2026-04-19": 22,
           "2026-04-18": 13,
           "2026-04-17": 15,
           "2026-04-16": 21,
@@ -3328,7 +4639,7 @@
           "2026-01-27": 37,
           "2026-01-26": 45,
           "2026-01-25": 23,
-          "2026-01-24": 23
+          "2026-01-24": 21
         }
       },
       "Noma 922": {
@@ -3654,10 +4965,11 @@
         }
       },
       "DR1": {
-        "total": 6500000.0,
-        "orders": 5,
-        "units": 5,
+        "total": 7800000.0,
+        "orders": 6,
+        "units": 6,
         "by_date": {
+          "2026-04-15": 1300000.0,
           "2026-04-14": 1300000.0,
           "2026-04-09": 1300000.0,
           "2026-03-26": 1300000.0,
@@ -3665,6 +4977,7 @@
           "2026-03-15": 1300000.0
         },
         "orders_by_date": {
+          "2026-04-15": 1,
           "2026-04-14": 1,
           "2026-04-09": 1,
           "2026-03-26": 1,
@@ -3672,6 +4985,7 @@
           "2026-03-15": 1
         },
         "units_by_date": {
+          "2026-04-15": 1,
           "2026-04-14": 1,
           "2026-04-09": 1,
           "2026-03-26": 1,
@@ -3763,17 +5077,18 @@
         "units_by_date": {}
       },
       "Noma 911": {
-        "total": 32835000.0,
-        "orders": 138,
-        "units": 154,
+        "total": 33830000.0,
+        "orders": 143,
+        "units": 159,
         "by_date": {
-          "2026-04-16": 398000.0,
+          "2026-04-17": 199000.0,
+          "2026-04-16": 597000.0,
           "2026-04-15": 398000.0,
-          "2026-04-14": 199000.0,
-          "2026-04-13": 398000.0,
+          "2026-04-14": 398000.0,
+          "2026-04-13": 597000.0,
           "2026-04-11": 398000.0,
           "2026-04-10": 796000.0,
-          "2026-04-09": 597000.0,
+          "2026-04-09": 796000.0,
           "2026-04-08": 199000.0,
           "2026-04-07": 597000.0,
           "2026-04-06": 597000.0,
@@ -3825,13 +5140,14 @@
           "2026-01-25": 398000.0
         },
         "orders_by_date": {
-          "2026-04-16": 1,
+          "2026-04-17": 1,
+          "2026-04-16": 2,
           "2026-04-15": 1,
-          "2026-04-14": 1,
-          "2026-04-13": 2,
+          "2026-04-14": 2,
+          "2026-04-13": 3,
           "2026-04-11": 2,
           "2026-04-10": 4,
-          "2026-04-09": 2,
+          "2026-04-09": 3,
           "2026-04-08": 1,
           "2026-04-07": 2,
           "2026-04-06": 3,
@@ -3883,13 +5199,14 @@
           "2026-01-25": 2
         },
         "units_by_date": {
-          "2026-04-16": 2,
+          "2026-04-17": 1,
+          "2026-04-16": 3,
           "2026-04-15": 2,
-          "2026-04-14": 1,
-          "2026-04-13": 2,
+          "2026-04-14": 2,
+          "2026-04-13": 3,
           "2026-04-11": 2,
           "2026-04-10": 4,
-          "2026-04-09": 2,
+          "2026-04-09": 3,
           "2026-04-08": 1,
           "2026-04-07": 3,
           "2026-04-06": 3,
@@ -4271,9 +5588,9 @@
         "units_by_date": {}
       },
       "Noma 911": {
-        "total": 34029000.0,
-        "orders": 144,
-        "units": 167,
+        "total": 33631000.0,
+        "orders": 143,
+        "units": 166,
         "by_date": {
           "2026-04-05": 597000.0,
           "2026-04-04": 597000.0,
@@ -4326,8 +5643,7 @@
           "2026-01-29": 199000.0,
           "2026-01-28": 398000.0,
           "2026-01-27": 1393000.0,
-          "2026-01-26": 995000.0,
-          "2026-01-24": 398000.0
+          "2026-01-26": 995000.0
         },
         "orders_by_date": {
           "2026-04-05": 2,
@@ -4381,8 +5697,7 @@
           "2026-01-29": 1,
           "2026-01-28": 2,
           "2026-01-27": 5,
-          "2026-01-26": 4,
-          "2026-01-24": 1
+          "2026-01-26": 4
         },
         "units_by_date": {
           "2026-04-05": 3,
@@ -4436,22 +5751,20 @@
           "2026-01-29": 1,
           "2026-01-28": 2,
           "2026-01-27": 7,
-          "2026-01-26": 5,
-          "2026-01-24": 1
+          "2026-01-26": 5
         }
       },
       "Noma 922": {
         "total": 796000.0,
-        "orders": 8,
-        "units": 8,
+        "orders": 7,
+        "units": 7,
         "by_date": {
           "2026-03-26": 199000.0,
           "2026-03-08": 0.0,
           "2026-03-03": 199000.0,
           "2026-02-23": 199000.0,
           "2026-02-02": 0.0,
-          "2026-01-26": 199000.0,
-          "2026-01-24": 0.0
+          "2026-01-26": 199000.0
         },
         "orders_by_date": {
           "2026-03-26": 1,
@@ -4459,8 +5772,7 @@
           "2026-03-03": 1,
           "2026-02-23": 1,
           "2026-02-02": 1,
-          "2026-01-26": 1,
-          "2026-01-24": 1
+          "2026-01-26": 1
         },
         "units_by_date": {
           "2026-03-26": 1,
@@ -4468,8 +5780,7 @@
           "2026-03-03": 1,
           "2026-02-23": 1,
           "2026-02-02": 1,
-          "2026-01-26": 1,
-          "2026-01-24": 1
+          "2026-01-26": 1
         }
       }
     },
@@ -4620,14 +5931,13 @@
     },
     "other": {
       "D1": {
-        "total": 35000000.0,
-        "orders": 14,
-        "units": 14,
+        "total": 30000000.0,
+        "orders": 12,
+        "units": 12,
         "by_date": {
           "2026-04-23": 2500000.0,
           "2026-04-21": 2500000.0,
-          "2026-04-20": 7500000.0,
-          "2026-04-19": 2500000.0,
+          "2026-04-20": 5000000.0,
           "2026-04-18": 2500000.0,
           "2026-04-17": 10000000.0,
           "2026-04-14": 7500000.0
@@ -4635,8 +5945,7 @@
         "orders_by_date": {
           "2026-04-23": 1,
           "2026-04-21": 1,
-          "2026-04-20": 3,
-          "2026-04-19": 1,
+          "2026-04-20": 2,
           "2026-04-18": 1,
           "2026-04-17": 4,
           "2026-04-14": 3
@@ -4644,25 +5953,27 @@
         "units_by_date": {
           "2026-04-23": 1,
           "2026-04-21": 1,
-          "2026-04-20": 3,
-          "2026-04-19": 1,
+          "2026-04-20": 2,
           "2026-04-18": 1,
           "2026-04-17": 4,
           "2026-04-14": 3
         }
       },
       "D1 Pro": {
-        "total": 3500000.0,
-        "orders": 1,
-        "units": 1,
+        "total": 7000000.0,
+        "orders": 2,
+        "units": 2,
         "by_date": {
-          "2026-04-23": 3500000.0
+          "2026-04-23": 3500000.0,
+          "2026-04-24": 3500000.0
         },
         "orders_by_date": {
-          "2026-04-23": 1
+          "2026-04-23": 1,
+          "2026-04-24": 1
         },
         "units_by_date": {
-          "2026-04-23": 1
+          "2026-04-23": 1,
+          "2026-04-24": 1
         }
       },
       "D2": {
@@ -4704,20 +6015,17 @@
         "units_by_date": {}
       },
       "DR1": {
-        "total": 5200000.0,
-        "orders": 4,
-        "units": 4,
+        "total": 3900000.0,
+        "orders": 3,
+        "units": 3,
         "by_date": {
-          "2026-04-23": 3900000.0,
-          "2026-04-15": 1300000.0
+          "2026-04-23": 3900000.0
         },
         "orders_by_date": {
-          "2026-04-23": 3,
-          "2026-04-15": 1
+          "2026-04-23": 3
         },
         "units_by_date": {
-          "2026-04-23": 3,
-          "2026-04-15": 1
+          "2026-04-23": 3
         }
       },
       "DR4 Plus": {
@@ -4729,18 +6037,12 @@
         "units_by_date": {}
       },
       "DV1 Pro": {
-        "total": 2500000.0,
-        "orders": 1,
-        "units": 1,
-        "by_date": {
-          "2026-04-19": 2500000.0
-        },
-        "orders_by_date": {
-          "2026-04-19": 1
-        },
-        "units_by_date": {
-          "2026-04-19": 1
-        }
+        "total": 0.0,
+        "orders": 0,
+        "units": 0,
+        "by_date": {},
+        "orders_by_date": {},
+        "units_by_date": {}
       },
       "DA8.1": {
         "total": 10900000.0,
@@ -4777,55 +6079,52 @@
         "units_by_date": {}
       },
       "Noma 911": {
-        "total": 20696000.0,
-        "orders": 93,
-        "units": 103,
+        "total": 18507000.0,
+        "orders": 85,
+        "units": 92,
         "by_date": {
-          "2026-04-23": 5572000.0,
-          "2026-04-22": 4179000.0,
-          "2026-04-21": 3980000.0,
-          "2026-04-20": 2985000.0,
-          "2026-04-19": 995000.0,
+          "2026-04-24": 1592000.0,
+          "2026-04-23": 5771000.0,
+          "2026-04-22": 3582000.0,
+          "2026-04-21": 2985000.0,
+          "2026-04-20": 1791000.0,
+          "2026-04-19": 796000.0,
           "2026-04-18": 597000.0,
-          "2026-04-17": 199000.0,
-          "2026-04-16": 398000.0,
+          "2026-04-16": 199000.0,
           "2026-04-15": 199000.0,
-          "2026-04-14": 199000.0,
-          "2026-04-13": 597000.0,
+          "2026-04-13": 398000.0,
           "2026-04-11": 199000.0,
-          "2026-04-09": 398000.0,
+          "2026-04-09": 199000.0,
           "2026-04-01": 199000.0
         },
         "orders_by_date": {
-          "2026-04-23": 24,
-          "2026-04-22": 19,
-          "2026-04-21": 17,
-          "2026-04-20": 13,
-          "2026-04-19": 5,
+          "2026-04-24": 8,
+          "2026-04-23": 25,
+          "2026-04-22": 16,
+          "2026-04-21": 13,
+          "2026-04-20": 9,
+          "2026-04-19": 4,
           "2026-04-18": 3,
-          "2026-04-17": 1,
-          "2026-04-16": 2,
+          "2026-04-16": 1,
           "2026-04-15": 1,
-          "2026-04-14": 1,
-          "2026-04-13": 3,
+          "2026-04-13": 2,
           "2026-04-11": 1,
-          "2026-04-09": 2,
+          "2026-04-09": 1,
           "2026-04-01": 1
         },
         "units_by_date": {
-          "2026-04-23": 27,
-          "2026-04-22": 21,
-          "2026-04-21": 20,
-          "2026-04-20": 15,
-          "2026-04-19": 5,
+          "2026-04-24": 8,
+          "2026-04-23": 28,
+          "2026-04-22": 18,
+          "2026-04-21": 15,
+          "2026-04-20": 9,
+          "2026-04-19": 4,
           "2026-04-18": 3,
-          "2026-04-17": 1,
-          "2026-04-16": 2,
+          "2026-04-16": 1,
           "2026-04-15": 1,
-          "2026-04-14": 1,
-          "2026-04-13": 3,
+          "2026-04-13": 2,
           "2026-04-11": 1,
-          "2026-04-09": 2,
+          "2026-04-09": 1,
           "2026-04-01": 1
         }
       },
@@ -4855,9 +6154,10 @@
   "source_groups": {
     "DUY": {
       "label": "DUY",
-      "total_orders": 3281,
+      "total_orders": 3284,
       "total_orders_by_date": {
-        "2026-04-23": 22,
+        "2026-04-24": 5,
+        "2026-04-23": 23,
         "2026-04-22": 17,
         "2026-04-21": 24,
         "2026-04-20": 26,
@@ -4942,14 +6242,14 @@
         "2026-01-27": 56,
         "2026-01-26": 54,
         "2026-01-25": 25,
-        "2026-01-24": 27
+        "2026-01-24": 24
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 995000.0,
-          "2026-04-21": 5342000.0,
-          "2026-04-20": 5342000.0,
-          "2026-04-19": 5286000.0,
+          "2026-04-22": 1393000.0,
+          "2026-04-21": 6337000.0,
+          "2026-04-20": 9135000.0,
+          "2026-04-19": 7786000.0,
           "2026-04-18": 3638000.0,
           "2026-04-17": 5286000.0,
           "2026-04-16": 11425000.0,
@@ -5025,16 +6325,17 @@
           "2026-01-27": 18422000.0,
           "2026-01-26": 12013000.0,
           "2026-01-25": 9376000.0,
-          "2026-01-24": 10875000.0
+          "2026-01-24": 10477000.0
         },
         "returning": {
-          "2026-04-16": 398000.0,
-          "2026-04-15": 2898000.0,
-          "2026-04-14": 1499000.0,
-          "2026-04-13": 2898000.0,
+          "2026-04-17": 199000.0,
+          "2026-04-16": 597000.0,
+          "2026-04-15": 4198000.0,
+          "2026-04-14": 1698000.0,
+          "2026-04-13": 3097000.0,
           "2026-04-11": 398000.0,
           "2026-04-10": 796000.0,
-          "2026-04-09": 1897000.0,
+          "2026-04-09": 2096000.0,
           "2026-04-08": 199000.0,
           "2026-04-07": 597000.0,
           "2026-04-06": 597000.0,
@@ -5148,7 +6449,7 @@
           "2026-01-28": 1298000.0,
           "2026-01-27": 4173000.0,
           "2026-01-26": 1194000.0,
-          "2026-01-24": 2598000.0
+          "2026-01-24": 2200000.0
         },
         "canceled": {
           "2026-04-07": 398000.0,
@@ -5164,20 +6465,21 @@
           "2026-01-30": 2500000.0
         },
         "other": {
-          "2026-04-23": 11331000.0,
-          "2026-04-22": 2587000.0,
-          "2026-04-21": 8184000.0,
-          "2026-04-20": 9987000.0,
-          "2026-04-19": 3097000.0,
+          "2026-04-24": 995000.0,
+          "2026-04-23": 11530000.0,
+          "2026-04-22": 2189000.0,
+          "2026-04-21": 7189000.0,
+          "2026-04-20": 6194000.0,
+          "2026-04-19": 597000.0,
           "2026-04-18": 2699000.0,
-          "2026-04-17": 11449000.0,
-          "2026-04-16": 398000.0,
-          "2026-04-15": 3999000.0,
-          "2026-04-14": 7699000.0,
-          "2026-04-13": 597000.0,
+          "2026-04-17": 11250000.0,
+          "2026-04-16": 199000.0,
+          "2026-04-15": 2699000.0,
+          "2026-04-14": 7500000.0,
+          "2026-04-13": 398000.0,
           "2026-04-11": 199000.0,
           "2026-04-10": 0.0,
-          "2026-04-09": 398000.0,
+          "2026-04-09": 199000.0,
           "2026-04-07": 0.0,
           "2026-04-06": 0.0,
           "2026-04-05": 0.0,
@@ -5239,10 +6541,10 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 4,
-          "2026-04-21": 9,
-          "2026-04-20": 11,
-          "2026-04-19": 13,
+          "2026-04-22": 6,
+          "2026-04-21": 13,
+          "2026-04-20": 16,
+          "2026-04-19": 14,
           "2026-04-18": 10,
           "2026-04-17": 12,
           "2026-04-16": 26,
@@ -5318,16 +6620,17 @@
           "2026-01-27": 43,
           "2026-01-26": 43,
           "2026-01-25": 22,
-          "2026-01-24": 23
+          "2026-01-24": 21
         },
         "returning": {
-          "2026-04-16": 1,
-          "2026-04-15": 2,
-          "2026-04-14": 2,
-          "2026-04-13": 3,
+          "2026-04-17": 1,
+          "2026-04-16": 2,
+          "2026-04-15": 3,
+          "2026-04-14": 3,
+          "2026-04-13": 4,
           "2026-04-11": 2,
           "2026-04-10": 4,
-          "2026-04-09": 3,
+          "2026-04-09": 4,
           "2026-04-08": 1,
           "2026-04-07": 2,
           "2026-04-06": 3,
@@ -5441,7 +6744,7 @@
           "2026-01-28": 3,
           "2026-01-27": 7,
           "2026-01-26": 4,
-          "2026-01-24": 3
+          "2026-01-24": 2
         },
         "canceled": {
           "2026-04-07": 1,
@@ -5457,20 +6760,21 @@
           "2026-01-30": 1
         },
         "other": {
-          "2026-04-23": 22,
-          "2026-04-22": 13,
-          "2026-04-21": 15,
-          "2026-04-20": 15,
-          "2026-04-19": 5,
+          "2026-04-24": 5,
+          "2026-04-23": 23,
+          "2026-04-22": 11,
+          "2026-04-21": 11,
+          "2026-04-20": 10,
+          "2026-04-19": 4,
           "2026-04-18": 2,
-          "2026-04-17": 7,
-          "2026-04-16": 4,
-          "2026-04-15": 4,
-          "2026-04-14": 6,
-          "2026-04-13": 6,
+          "2026-04-17": 6,
+          "2026-04-16": 3,
+          "2026-04-15": 3,
+          "2026-04-14": 5,
+          "2026-04-13": 5,
           "2026-04-11": 2,
           "2026-04-10": 2,
-          "2026-04-09": 2,
+          "2026-04-09": 1,
           "2026-04-07": 2,
           "2026-04-06": 2,
           "2026-04-05": 2,
@@ -5532,24 +6836,24 @@
       },
       "summary": {
         "delivered": {
-          "orders": 2616,
-          "total": 1078977000.0
+          "orders": 2626,
+          "total": 1086265000.0
         },
         "returning": {
-          "orders": 178,
-          "total": 112732000.0
+          "orders": 184,
+          "total": 115027000.0
         },
         "returned": {
-          "orders": 233,
-          "total": 185955000.0
+          "orders": 232,
+          "total": 185557000.0
         },
         "canceled": {
           "orders": 11,
           "total": 9273000.0
         },
         "other": {
-          "orders": 243,
-          "total": 67523000.0
+          "orders": 231,
+          "total": 58736000.0
         }
       },
       "products": {
@@ -5558,6 +6862,7 @@
           "orders": 150,
           "units": 150,
           "by_date": {
+            "2026-04-20": 7500000.0,
             "2026-04-19": 5000000.0,
             "2026-04-17": 12500000.0,
             "2026-04-13": 12500000.0,
@@ -5611,11 +6916,11 @@
             "2026-02-06": 2500000.0,
             "2026-04-23": 2500000.0,
             "2026-04-21": 2500000.0,
-            "2026-04-20": 7500000.0,
             "2026-04-18": 2500000.0,
             "2026-04-14": 7500000.0
           },
           "orders_by_date": {
+            "2026-04-20": 3,
             "2026-04-19": 2,
             "2026-04-17": 5,
             "2026-04-13": 5,
@@ -5669,11 +6974,11 @@
             "2026-02-06": 1,
             "2026-04-23": 1,
             "2026-04-21": 1,
-            "2026-04-20": 3,
             "2026-04-18": 1,
             "2026-04-14": 3
           },
           "units_by_date": {
+            "2026-04-20": 3,
             "2026-04-19": 2,
             "2026-04-17": 5,
             "2026-04-13": 5,
@@ -5727,7 +7032,6 @@
             "2026-02-06": 1,
             "2026-04-23": 1,
             "2026-04-21": 1,
-            "2026-04-20": 3,
             "2026-04-18": 1,
             "2026-04-14": 3
           }
@@ -6110,9 +7414,9 @@
           }
         },
         "Noma 911": {
-          "total": 594612000.0,
-          "orders": 2567,
-          "units": 2821,
+          "total": 595010000.0,
+          "orders": 2570,
+          "units": 2824,
           "by_date": {
             "2026-04-22": 3582000.0,
             "2026-04-21": 4776000.0,
@@ -6193,8 +7497,9 @@
             "2026-01-27": 9353000.0,
             "2026-01-26": 10547000.0,
             "2026-01-25": 5174000.0,
-            "2026-01-24": 4975000.0,
-            "2026-04-23": 3781000.0
+            "2026-01-24": 4179000.0,
+            "2026-04-24": 995000.0,
+            "2026-04-23": 3980000.0
           },
           "orders_by_date": {
             "2026-04-22": 16,
@@ -6276,8 +7581,9 @@
             "2026-01-27": 42,
             "2026-01-26": 48,
             "2026-01-25": 21,
-            "2026-01-24": 18,
-            "2026-04-23": 16
+            "2026-01-24": 15,
+            "2026-04-24": 5,
+            "2026-04-23": 17
           },
           "units_by_date": {
             "2026-04-22": 18,
@@ -6359,14 +7665,15 @@
             "2026-01-27": 46,
             "2026-01-26": 52,
             "2026-01-25": 25,
-            "2026-01-24": 24,
-            "2026-04-23": 19
+            "2026-01-24": 21,
+            "2026-04-24": 5,
+            "2026-04-23": 20
           }
         },
         "Noma 922": {
           "total": 13532000.0,
-          "orders": 234,
-          "units": 235,
+          "orders": 233,
+          "units": 234,
           "by_date": {
             "2026-04-21": 0.0,
             "2026-04-18": 0.0,
@@ -6431,8 +7738,7 @@
             "2026-01-27": 0.0,
             "2026-01-26": 796000.0,
             "2026-01-25": 0.0,
-            "2026-03-26": 199000.0,
-            "2026-01-24": 0.0
+            "2026-03-26": 199000.0
           },
           "orders_by_date": {
             "2026-04-21": 1,
@@ -6498,8 +7804,7 @@
             "2026-01-27": 1,
             "2026-01-26": 5,
             "2026-01-25": 1,
-            "2026-03-26": 1,
-            "2026-01-24": 1
+            "2026-03-26": 1
           },
           "units_by_date": {
             "2026-04-21": 1,
@@ -6565,19 +7870,19 @@
             "2026-01-27": 1,
             "2026-01-26": 5,
             "2026-01-25": 1,
-            "2026-03-26": 1,
-            "2026-01-24": 1
+            "2026-03-26": 1
           }
         }
       },
       "products_by_status": {
         "delivered": {
           "D1": {
-            "total": 200000000.0,
-            "orders": 80,
-            "units": 80,
+            "total": 205000000.0,
+            "orders": 82,
+            "units": 82,
             "by_date": {
-              "2026-04-19": 2500000.0,
+              "2026-04-20": 2500000.0,
+              "2026-04-19": 5000000.0,
               "2026-04-17": 2500000.0,
               "2026-04-13": 10000000.0,
               "2026-04-09": 2500000.0,
@@ -6625,7 +7930,8 @@
               "2026-01-24": 2500000.0
             },
             "orders_by_date": {
-              "2026-04-19": 1,
+              "2026-04-20": 1,
+              "2026-04-19": 2,
               "2026-04-17": 1,
               "2026-04-13": 4,
               "2026-04-09": 1,
@@ -6673,7 +7979,8 @@
               "2026-01-24": 1
             },
             "units_by_date": {
-              "2026-04-19": 1,
+              "2026-04-20": 1,
+              "2026-04-19": 2,
               "2026-04-17": 1,
               "2026-04-13": 4,
               "2026-04-09": 1,
@@ -7078,13 +8385,13 @@
             }
           },
           "Noma 911": {
-            "total": 512027000.0,
-            "orders": 2214,
-            "units": 2420,
+            "total": 514216000.0,
+            "orders": 2222,
+            "units": 2431,
             "by_date": {
-              "2026-04-22": 995000.0,
-              "2026-04-21": 1592000.0,
-              "2026-04-20": 1592000.0,
+              "2026-04-22": 1393000.0,
+              "2026-04-21": 2587000.0,
+              "2026-04-20": 2786000.0,
               "2026-04-19": 2786000.0,
               "2026-04-18": 2388000.0,
               "2026-04-17": 2786000.0,
@@ -7161,12 +8468,12 @@
               "2026-01-27": 7562000.0,
               "2026-01-26": 8756000.0,
               "2026-01-25": 4776000.0,
-              "2026-01-24": 4577000.0
+              "2026-01-24": 4179000.0
             },
             "orders_by_date": {
-              "2026-04-22": 4,
-              "2026-04-21": 7,
-              "2026-04-20": 8,
+              "2026-04-22": 6,
+              "2026-04-21": 11,
+              "2026-04-20": 12,
               "2026-04-19": 12,
               "2026-04-18": 9,
               "2026-04-17": 11,
@@ -7243,12 +8550,12 @@
               "2026-01-27": 35,
               "2026-01-26": 40,
               "2026-01-25": 19,
-              "2026-01-24": 17
+              "2026-01-24": 15
             },
             "units_by_date": {
-              "2026-04-22": 5,
-              "2026-04-21": 7,
-              "2026-04-20": 8,
+              "2026-04-22": 7,
+              "2026-04-21": 12,
+              "2026-04-20": 14,
               "2026-04-19": 14,
               "2026-04-18": 10,
               "2026-04-17": 14,
@@ -7325,7 +8632,7 @@
               "2026-01-27": 37,
               "2026-01-26": 43,
               "2026-01-25": 23,
-              "2026-01-24": 23
+              "2026-01-24": 21
             }
           },
           "Noma 922": {
@@ -7630,10 +8937,11 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 6500000.0,
-            "orders": 5,
-            "units": 5,
+            "total": 7800000.0,
+            "orders": 6,
+            "units": 6,
             "by_date": {
+              "2026-04-15": 1300000.0,
               "2026-04-14": 1300000.0,
               "2026-04-09": 1300000.0,
               "2026-03-26": 1300000.0,
@@ -7641,6 +8949,7 @@
               "2026-03-15": 1300000.0
             },
             "orders_by_date": {
+              "2026-04-15": 1,
               "2026-04-14": 1,
               "2026-04-09": 1,
               "2026-03-26": 1,
@@ -7648,6 +8957,7 @@
               "2026-03-15": 1
             },
             "units_by_date": {
+              "2026-04-15": 1,
               "2026-04-14": 1,
               "2026-04-09": 1,
               "2026-03-26": 1,
@@ -7727,17 +9037,18 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 32437000.0,
-            "orders": 137,
-            "units": 153,
+            "total": 33432000.0,
+            "orders": 142,
+            "units": 158,
             "by_date": {
-              "2026-04-16": 398000.0,
+              "2026-04-17": 199000.0,
+              "2026-04-16": 597000.0,
               "2026-04-15": 398000.0,
-              "2026-04-14": 199000.0,
-              "2026-04-13": 398000.0,
+              "2026-04-14": 398000.0,
+              "2026-04-13": 597000.0,
               "2026-04-11": 398000.0,
               "2026-04-10": 796000.0,
-              "2026-04-09": 597000.0,
+              "2026-04-09": 796000.0,
               "2026-04-08": 199000.0,
               "2026-04-07": 597000.0,
               "2026-04-06": 597000.0,
@@ -7789,13 +9100,14 @@
               "2026-01-25": 398000.0
             },
             "orders_by_date": {
-              "2026-04-16": 1,
+              "2026-04-17": 1,
+              "2026-04-16": 2,
               "2026-04-15": 1,
-              "2026-04-14": 1,
-              "2026-04-13": 2,
+              "2026-04-14": 2,
+              "2026-04-13": 3,
               "2026-04-11": 2,
               "2026-04-10": 4,
-              "2026-04-09": 2,
+              "2026-04-09": 3,
               "2026-04-08": 1,
               "2026-04-07": 2,
               "2026-04-06": 3,
@@ -7847,13 +9159,14 @@
               "2026-01-25": 2
             },
             "units_by_date": {
-              "2026-04-16": 2,
+              "2026-04-17": 1,
+              "2026-04-16": 3,
               "2026-04-15": 2,
-              "2026-04-14": 1,
-              "2026-04-13": 2,
+              "2026-04-14": 2,
+              "2026-04-13": 3,
               "2026-04-11": 2,
               "2026-04-10": 4,
-              "2026-04-09": 2,
+              "2026-04-09": 3,
               "2026-04-08": 1,
               "2026-04-07": 3,
               "2026-04-06": 3,
@@ -8217,9 +9530,9 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 33631000.0,
-            "orders": 143,
-            "units": 165,
+            "total": 33233000.0,
+            "orders": 142,
+            "units": 164,
             "by_date": {
               "2026-04-05": 597000.0,
               "2026-04-04": 597000.0,
@@ -8272,8 +9585,7 @@
               "2026-01-29": 199000.0,
               "2026-01-28": 398000.0,
               "2026-01-27": 1393000.0,
-              "2026-01-26": 995000.0,
-              "2026-01-24": 398000.0
+              "2026-01-26": 995000.0
             },
             "orders_by_date": {
               "2026-04-05": 2,
@@ -8327,8 +9639,7 @@
               "2026-01-29": 1,
               "2026-01-28": 2,
               "2026-01-27": 5,
-              "2026-01-26": 4,
-              "2026-01-24": 1
+              "2026-01-26": 4
             },
             "units_by_date": {
               "2026-04-05": 3,
@@ -8382,22 +9693,20 @@
               "2026-01-29": 1,
               "2026-01-28": 2,
               "2026-01-27": 7,
-              "2026-01-26": 5,
-              "2026-01-24": 1
+              "2026-01-26": 5
             }
           },
           "Noma 922": {
             "total": 796000.0,
-            "orders": 8,
-            "units": 8,
+            "orders": 7,
+            "units": 7,
             "by_date": {
               "2026-03-26": 199000.0,
               "2026-03-08": 0.0,
               "2026-03-03": 199000.0,
               "2026-02-23": 199000.0,
               "2026-02-02": 0.0,
-              "2026-01-26": 199000.0,
-              "2026-01-24": 0.0
+              "2026-01-26": 199000.0
             },
             "orders_by_date": {
               "2026-03-26": 1,
@@ -8405,8 +9714,7 @@
               "2026-03-03": 1,
               "2026-02-23": 1,
               "2026-02-02": 1,
-              "2026-01-26": 1,
-              "2026-01-24": 1
+              "2026-01-26": 1
             },
             "units_by_date": {
               "2026-03-26": 1,
@@ -8414,8 +9722,7 @@
               "2026-03-03": 1,
               "2026-02-23": 1,
               "2026-02-02": 1,
-              "2026-01-26": 1,
-              "2026-01-24": 1
+              "2026-01-26": 1
             }
           }
         },
@@ -8560,14 +9867,13 @@
         },
         "other": {
           "D1": {
-            "total": 35000000.0,
-            "orders": 14,
-            "units": 14,
+            "total": 30000000.0,
+            "orders": 12,
+            "units": 12,
             "by_date": {
               "2026-04-23": 2500000.0,
               "2026-04-21": 2500000.0,
-              "2026-04-20": 7500000.0,
-              "2026-04-19": 2500000.0,
+              "2026-04-20": 5000000.0,
               "2026-04-18": 2500000.0,
               "2026-04-17": 10000000.0,
               "2026-04-14": 7500000.0
@@ -8575,8 +9881,7 @@
             "orders_by_date": {
               "2026-04-23": 1,
               "2026-04-21": 1,
-              "2026-04-20": 3,
-              "2026-04-19": 1,
+              "2026-04-20": 2,
               "2026-04-18": 1,
               "2026-04-17": 4,
               "2026-04-14": 3
@@ -8584,8 +9889,7 @@
             "units_by_date": {
               "2026-04-23": 1,
               "2026-04-21": 1,
-              "2026-04-20": 3,
-              "2026-04-19": 1,
+              "2026-04-20": 2,
               "2026-04-18": 1,
               "2026-04-17": 4,
               "2026-04-14": 3
@@ -8632,20 +9936,17 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 2600000.0,
-            "orders": 2,
-            "units": 2,
+            "total": 1300000.0,
+            "orders": 1,
+            "units": 1,
             "by_date": {
-              "2026-04-23": 1300000.0,
-              "2026-04-15": 1300000.0
+              "2026-04-23": 1300000.0
             },
             "orders_by_date": {
-              "2026-04-23": 1,
-              "2026-04-15": 1
+              "2026-04-23": 1
             },
             "units_by_date": {
-              "2026-04-23": 1,
-              "2026-04-15": 1
+              "2026-04-23": 1
             }
           },
           "DR4 Plus": {
@@ -8699,55 +10000,52 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 15124000.0,
-            "orders": 67,
-            "units": 76,
+            "total": 12736000.0,
+            "orders": 58,
+            "units": 64,
             "by_date": {
-              "2026-04-23": 3781000.0,
-              "2026-04-22": 2587000.0,
-              "2026-04-21": 3184000.0,
-              "2026-04-20": 2388000.0,
+              "2026-04-24": 995000.0,
+              "2026-04-23": 3980000.0,
+              "2026-04-22": 2189000.0,
+              "2026-04-21": 2189000.0,
+              "2026-04-20": 1194000.0,
               "2026-04-19": 597000.0,
               "2026-04-18": 199000.0,
-              "2026-04-17": 199000.0,
-              "2026-04-16": 398000.0,
+              "2026-04-16": 199000.0,
               "2026-04-15": 199000.0,
-              "2026-04-14": 199000.0,
-              "2026-04-13": 597000.0,
+              "2026-04-13": 398000.0,
               "2026-04-11": 199000.0,
-              "2026-04-09": 398000.0,
+              "2026-04-09": 199000.0,
               "2026-04-01": 199000.0
             },
             "orders_by_date": {
-              "2026-04-23": 16,
-              "2026-04-22": 12,
-              "2026-04-21": 13,
-              "2026-04-20": 10,
+              "2026-04-24": 5,
+              "2026-04-23": 17,
+              "2026-04-22": 10,
+              "2026-04-21": 9,
+              "2026-04-20": 6,
               "2026-04-19": 3,
               "2026-04-18": 1,
-              "2026-04-17": 1,
-              "2026-04-16": 2,
+              "2026-04-16": 1,
               "2026-04-15": 1,
-              "2026-04-14": 1,
-              "2026-04-13": 3,
+              "2026-04-13": 2,
               "2026-04-11": 1,
-              "2026-04-09": 2,
+              "2026-04-09": 1,
               "2026-04-01": 1
             },
             "units_by_date": {
-              "2026-04-23": 19,
-              "2026-04-22": 13,
-              "2026-04-21": 16,
-              "2026-04-20": 12,
+              "2026-04-24": 5,
+              "2026-04-23": 20,
+              "2026-04-22": 11,
+              "2026-04-21": 11,
+              "2026-04-20": 6,
               "2026-04-19": 3,
               "2026-04-18": 1,
-              "2026-04-17": 1,
-              "2026-04-16": 2,
+              "2026-04-16": 1,
               "2026-04-15": 1,
-              "2026-04-14": 1,
-              "2026-04-13": 3,
+              "2026-04-13": 2,
               "2026-04-11": 1,
-              "2026-04-09": 2,
+              "2026-04-09": 1,
               "2026-04-01": 1
             }
           },
@@ -8764,8 +10062,9 @@
     },
     "PHUONG_NAM": {
       "label": "PHƯƠNG NAM",
-      "total_orders": 45,
+      "total_orders": 48,
       "total_orders_by_date": {
+        "2026-04-24": 3,
         "2026-04-23": 8,
         "2026-04-22": 8,
         "2026-04-21": 8,
@@ -8775,48 +10074,50 @@
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 199000.0,
+          "2026-04-22": 398000.0,
           "2026-04-21": 1847000.0,
           "2026-04-20": 995000.0,
-          "2026-04-19": 1393000.0,
+          "2026-04-19": 1592000.0,
           "2026-04-18": 597000.0
         },
         "returning": {},
         "returned": {},
         "canceled": {},
         "other": {
+          "2026-04-24": 597000.0,
           "2026-04-23": 1791000.0,
-          "2026-04-22": 1592000.0,
+          "2026-04-22": 1393000.0,
           "2026-04-21": 796000.0,
           "2026-04-20": 597000.0,
-          "2026-04-19": 398000.0,
+          "2026-04-19": 199000.0,
           "2026-04-18": 199000.0
         }
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 1,
+          "2026-04-22": 2,
           "2026-04-21": 4,
           "2026-04-20": 5,
-          "2026-04-19": 7,
+          "2026-04-19": 8,
           "2026-04-18": 3
         },
         "returning": {},
         "returned": {},
         "canceled": {},
         "other": {
+          "2026-04-24": 3,
           "2026-04-23": 8,
-          "2026-04-22": 7,
+          "2026-04-22": 6,
           "2026-04-21": 4,
           "2026-04-20": 3,
-          "2026-04-19": 2,
+          "2026-04-19": 1,
           "2026-04-18": 1
         }
       },
       "summary": {
         "delivered": {
-          "orders": 20,
-          "total": 5031000.0
+          "orders": 22,
+          "total": 5429000.0
         },
         "returning": {
           "orders": 0,
@@ -8831,8 +10132,8 @@
           "total": 0.0
         },
         "other": {
-          "orders": 25,
-          "total": 5373000.0
+          "orders": 26,
+          "total": 5572000.0
         }
       },
       "products": {
@@ -8931,15 +10232,16 @@
           "units_by_date": {}
         },
         "Noma 911": {
-          "total": 9154000.0,
-          "orders": 44,
-          "units": 45,
+          "total": 9751000.0,
+          "orders": 47,
+          "units": 48,
           "by_date": {
             "2026-04-22": 1791000.0,
             "2026-04-21": 1393000.0,
             "2026-04-20": 1592000.0,
             "2026-04-19": 1791000.0,
             "2026-04-18": 796000.0,
+            "2026-04-24": 597000.0,
             "2026-04-23": 1791000.0
           },
           "orders_by_date": {
@@ -8948,6 +10250,7 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
+            "2026-04-24": 3,
             "2026-04-23": 8
           },
           "units_by_date": {
@@ -8956,6 +10259,7 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
+            "2026-04-24": 3,
             "2026-04-23": 8
           }
         },
@@ -9071,28 +10375,28 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 3781000.0,
-            "orders": 19,
-            "units": 19,
+            "total": 4179000.0,
+            "orders": 21,
+            "units": 21,
             "by_date": {
-              "2026-04-22": 199000.0,
+              "2026-04-22": 398000.0,
               "2026-04-21": 597000.0,
               "2026-04-20": 995000.0,
-              "2026-04-19": 1393000.0,
+              "2026-04-19": 1592000.0,
               "2026-04-18": 597000.0
             },
             "orders_by_date": {
-              "2026-04-22": 1,
+              "2026-04-22": 2,
               "2026-04-21": 3,
               "2026-04-20": 5,
-              "2026-04-19": 7,
+              "2026-04-19": 8,
               "2026-04-18": 3
             },
             "units_by_date": {
-              "2026-04-22": 1,
+              "2026-04-22": 2,
               "2026-04-21": 3,
               "2026-04-20": 5,
-              "2026-04-19": 7,
+              "2026-04-19": 8,
               "2026-04-18": 3
             }
           },
@@ -9513,31 +10817,34 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 5373000.0,
-            "orders": 25,
-            "units": 26,
+            "total": 5572000.0,
+            "orders": 26,
+            "units": 27,
             "by_date": {
+              "2026-04-24": 597000.0,
               "2026-04-23": 1791000.0,
-              "2026-04-22": 1592000.0,
+              "2026-04-22": 1393000.0,
               "2026-04-21": 796000.0,
               "2026-04-20": 597000.0,
-              "2026-04-19": 398000.0,
+              "2026-04-19": 199000.0,
               "2026-04-18": 199000.0
             },
             "orders_by_date": {
+              "2026-04-24": 3,
+              "2026-04-23": 8,
+              "2026-04-22": 6,
+              "2026-04-21": 4,
+              "2026-04-20": 3,
+              "2026-04-19": 1,
+              "2026-04-18": 1
+            },
+            "units_by_date": {
+              "2026-04-24": 3,
               "2026-04-23": 8,
               "2026-04-22": 7,
               "2026-04-21": 4,
               "2026-04-20": 3,
-              "2026-04-19": 2,
-              "2026-04-18": 1
-            },
-            "units_by_date": {
-              "2026-04-23": 8,
-              "2026-04-22": 8,
-              "2026-04-21": 4,
-              "2026-04-20": 3,
-              "2026-04-19": 2,
+              "2026-04-19": 1,
               "2026-04-18": 1
             }
           },
@@ -9629,7 +10936,7 @@
       "order_revenue_by_status_by_date": {
         "delivered": {
           "2026-04-21": 4049000.0,
-          "2026-04-19": 3500000.0,
+          "2026-04-19": 6000000.0,
           "2026-04-17": 2288000.0,
           "2026-04-16": 4600000.0,
           "2026-04-14": 1000000.0,
@@ -9716,7 +11023,6 @@
           "2026-04-23": 8240000.0,
           "2026-04-22": 3210000.0,
           "2026-04-20": 599000.0,
-          "2026-04-19": 2500000.0,
           "2026-04-18": 199000.0,
           "2026-04-15": 1599000.0,
           "2026-03-30": 2050000.0
@@ -9725,7 +11031,7 @@
       "order_count_by_status_by_date": {
         "delivered": {
           "2026-04-21": 3,
-          "2026-04-19": 1,
+          "2026-04-19": 2,
           "2026-04-17": 3,
           "2026-04-16": 2,
           "2026-04-14": 1,
@@ -9812,7 +11118,6 @@
           "2026-04-23": 3,
           "2026-04-22": 3,
           "2026-04-20": 1,
-          "2026-04-19": 1,
           "2026-04-18": 1,
           "2026-04-15": 2,
           "2026-03-30": 1
@@ -9820,8 +11125,8 @@
       },
       "summary": {
         "delivered": {
-          "orders": 140,
-          "total": 226417000.0
+          "orders": 141,
+          "total": 228917000.0
         },
         "returning": {
           "orders": 9,
@@ -9836,8 +11141,8 @@
           "total": 0.0
         },
         "other": {
-          "orders": 12,
-          "total": 18397000.0
+          "orders": 11,
+          "total": 15897000.0
         }
       },
       "products": {
@@ -10046,18 +11351,18 @@
           "units": 3,
           "by_date": {
             "2026-04-21": 1800000.0,
-            "2026-04-16": 1800000.0,
-            "2026-04-19": 2500000.0
+            "2026-04-19": 2500000.0,
+            "2026-04-16": 1800000.0
           },
           "orders_by_date": {
             "2026-04-21": 1,
-            "2026-04-16": 1,
-            "2026-04-19": 1
+            "2026-04-19": 1,
+            "2026-04-16": 1
           },
           "units_by_date": {
             "2026-04-21": 1,
-            "2026-04-16": 1,
-            "2026-04-19": 1
+            "2026-04-19": 1,
+            "2026-04-16": 1
           }
         },
         "DA8.1": {
@@ -10316,19 +11621,22 @@
             }
           },
           "DV1 Pro": {
-            "total": 3600000.0,
-            "orders": 2,
-            "units": 2,
+            "total": 6100000.0,
+            "orders": 3,
+            "units": 3,
             "by_date": {
               "2026-04-21": 1800000.0,
+              "2026-04-19": 2500000.0,
               "2026-04-16": 1800000.0
             },
             "orders_by_date": {
               "2026-04-21": 1,
+              "2026-04-19": 1,
               "2026-04-16": 1
             },
             "units_by_date": {
               "2026-04-21": 1,
+              "2026-04-19": 1,
               "2026-04-16": 1
             }
           },
@@ -10821,18 +12129,12 @@
             "units_by_date": {}
           },
           "DV1 Pro": {
-            "total": 2500000.0,
-            "orders": 1,
-            "units": 1,
-            "by_date": {
-              "2026-04-19": 2500000.0
-            },
-            "orders_by_date": {
-              "2026-04-19": 1
-            },
-            "units_by_date": {
-              "2026-04-19": 1
-            }
+            "total": 0.0,
+            "orders": 0,
+            "units": 0,
+            "by_date": {},
+            "orders_by_date": {},
+            "units_by_date": {}
           },
           "DA8.1": {
             "total": 0.0,
@@ -10877,8 +12179,9 @@
     },
     "ZALO_OA": {
       "label": "Zalo OA",
-      "total_orders": 125,
+      "total_orders": 126,
       "total_orders_by_date": {
+        "2026-04-24": 1,
         "2026-04-23": 4,
         "2026-04-22": 1,
         "2026-04-21": 2,
@@ -11011,6 +12314,7 @@
           "2026-03-14": 2800000.0
         },
         "other": {
+          "2026-04-24": 3500000.0,
           "2026-04-23": 5490000.0,
           "2026-04-22": 599000.0,
           "2026-04-21": 1760000.0
@@ -11089,6 +12393,7 @@
           "2026-03-14": 1
         },
         "other": {
+          "2026-04-24": 1,
           "2026-04-23": 4,
           "2026-04-22": 1,
           "2026-04-21": 1
@@ -11112,8 +12417,8 @@
           "total": 2800000.0
         },
         "other": {
-          "orders": 6,
-          "total": 7849000.0
+          "orders": 7,
+          "total": 11349000.0
         }
       },
       "products": {
@@ -11144,9 +12449,9 @@
           }
         },
         "D1 Pro": {
-          "total": 42000000.0,
-          "orders": 12,
-          "units": 12,
+          "total": 45500000.0,
+          "orders": 13,
+          "units": 13,
           "by_date": {
             "2026-04-17": 3500000.0,
             "2026-04-13": 10500000.0,
@@ -11157,7 +12462,8 @@
             "2026-03-11": 3500000.0,
             "2026-03-10": 3500000.0,
             "2026-02-04": 3500000.0,
-            "2026-03-18": 3500000.0
+            "2026-03-18": 3500000.0,
+            "2026-04-24": 3500000.0
           },
           "orders_by_date": {
             "2026-04-17": 1,
@@ -11169,7 +12475,8 @@
             "2026-03-11": 1,
             "2026-03-10": 1,
             "2026-02-04": 1,
-            "2026-03-18": 1
+            "2026-03-18": 1,
+            "2026-04-24": 1
           },
           "units_by_date": {
             "2026-04-17": 1,
@@ -11181,7 +12488,8 @@
             "2026-03-11": 1,
             "2026-03-10": 1,
             "2026-02-04": 1,
-            "2026-03-18": 1
+            "2026-03-18": 1,
+            "2026-04-24": 1
           }
         },
         "D2": {
@@ -12158,12 +13466,18 @@
             "units_by_date": {}
           },
           "D1 Pro": {
-            "total": 0.0,
-            "orders": 0,
-            "units": 0,
-            "by_date": {},
-            "orders_by_date": {},
-            "units_by_date": {}
+            "total": 3500000.0,
+            "orders": 1,
+            "units": 1,
+            "by_date": {
+              "2026-04-24": 3500000.0
+            },
+            "orders_by_date": {
+              "2026-04-24": 1
+            },
+            "units_by_date": {
+              "2026-04-24": 1
+            }
           },
           "D2": {
             "total": 0.0,
