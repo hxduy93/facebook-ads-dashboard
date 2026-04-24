@@ -1,8 +1,43 @@
 {
-  "generated_at": "2026-04-24 03:42 UTC",
+  "generated_at": "2026-04-24 07:32 UTC",
   "window_days": 90,
-  "total_orders": 3695,
+  "total_orders": 3707,
   "top_products_website_by_period": {
+    "today": {
+      "label": "Hôm nay",
+      "date_range": {
+        "start": "2026-04-24",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 4857000,
+      "total_orders": 4,
+      "top_products": [
+        {
+          "product": "Máy dò D1 Pro",
+          "revenue": 3500000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR4",
+          "revenue": 1000000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Noma 911",
+          "revenue": 199000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Giá đỡ camera",
+          "revenue": 158000,
+          "orders": 1,
+          "units": 2
+        }
+      ]
+    },
     "yesterday": {
       "label": "Hôm qua",
       "date_range": {
@@ -68,8 +103,292 @@
         }
       ]
     },
+    "this_week": {
+      "label": "Tuần này",
+      "date_range": {
+        "start": "2026-04-20",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 44682000,
+      "total_orders": 25,
+      "top_products": [
+        {
+          "product": "Máy dò D1 Pro",
+          "revenue": 7000000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "MÁY DÒ D4",
+          "revenue": 6000000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Định vị DV1 mini",
+          "revenue": 5160000,
+          "orders": 3,
+          "units": 4
+        },
+        {
+          "product": "Máy ghi âm DR4 pro",
+          "revenue": 4960000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+          "revenue": 3500000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 2600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+          "revenue": 2300000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "CAMERA DA6.2 - H6",
+          "revenue": 2200000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR9",
+          "revenue": 2100000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR8",
+          "revenue": 1900000,
+          "orders": 1,
+          "units": 1
+        }
+      ]
+    },
+    "last_week": {
+      "label": "Tuần trước",
+      "date_range": {
+        "start": "2026-04-13",
+        "end": "2026-04-19"
+      },
+      "total_revenue": 72225000,
+      "total_orders": 37,
+      "top_products": [
+        {
+          "product": "Máy dò D1 Pro",
+          "revenue": 21000000,
+          "orders": 6,
+          "units": 6
+        },
+        {
+          "product": "Máy dò D3 Doscom",
+          "revenue": 11880000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy dò D2",
+          "revenue": 5600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "DV1 + Sim ĐV",
+          "revenue": 5400000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 3900000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Định vị DV1",
+          "revenue": 3600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "Máy ghi âm DR4",
+          "revenue": 3000000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+          "revenue": 2800000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR4 plus",
+          "revenue": 2600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "Định vị DV1 Pro",
+          "revenue": 2500000,
+          "orders": 1,
+          "units": 1
+        }
+      ]
+    },
+    "this_month": {
+      "label": "Tháng này",
+      "date_range": {
+        "start": "2026-04-01",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 235612750,
+      "total_orders": 113,
+      "top_products": [
+        {
+          "product": "Máy dò D1 Pro",
+          "revenue": 52500000,
+          "orders": 15,
+          "units": 15
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 19500000,
+          "orders": 15,
+          "units": 15
+        },
+        {
+          "product": "Thiết bị dò D8 Pro",
+          "revenue": 15000000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "MÁY DÒ D4",
+          "revenue": 12000000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "Máy dò D3 Doscom",
+          "revenue": 11880000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy dò D2",
+          "revenue": 11200000,
+          "orders": 4,
+          "units": 4
+        },
+        {
+          "product": "DV1 + Sim ĐV",
+          "revenue": 7200000,
+          "orders": 4,
+          "units": 4
+        },
+        {
+          "product": "Máy ghi âm DR4 pro",
+          "revenue": 6720000,
+          "orders": 4,
+          "units": 4
+        },
+        {
+          "product": "Máy ghi âm DR4 plus",
+          "revenue": 6500000,
+          "orders": 4,
+          "units": 5
+        },
+        {
+          "product": "DV2 + Sim ĐV",
+          "revenue": 6250000,
+          "orders": 1,
+          "units": 5
+        }
+      ]
+    },
+    "last_month": {
+      "label": "Tháng trước",
+      "date_range": {
+        "start": "2026-03-01",
+        "end": "2026-03-31"
+      },
+      "total_revenue": 292116667,
+      "total_orders": 154,
+      "top_products": [
+        {
+          "product": "Máy dò D1 Pro",
+          "revenue": 52500000,
+          "orders": 15,
+          "units": 15
+        },
+        {
+          "product": "Máy dò D2",
+          "revenue": 22400000,
+          "orders": 8,
+          "units": 8
+        },
+        {
+          "product": "Máy dò D1",
+          "revenue": 20000000,
+          "orders": 8,
+          "units": 8
+        },
+        {
+          "product": "MÁY DÒ D4",
+          "revenue": 18000000,
+          "orders": 3,
+          "units": 3
+        },
+        {
+          "product": "Thiết bị dò D8 Pro",
+          "revenue": 15000000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 12800000,
+          "orders": 10,
+          "units": 10
+        },
+        {
+          "product": "Máy dò D3 Doscom",
+          "revenue": 12000000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Camera DA5",
+          "revenue": 10800000,
+          "orders": 6,
+          "units": 7
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+          "revenue": 10780000,
+          "orders": 10,
+          "units": 11
+        },
+        {
+          "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+          "revenue": 10740000,
+          "orders": 5,
+          "units": 6
+        }
+      ]
+    },
     "last_7d": {
-      "label": "7 ngày gần",
+      "label": "7 ngày qua",
       "date_range": {
         "start": "2026-04-17",
         "end": "2026-04-23"
@@ -139,91 +458,20 @@
         }
       ]
     },
-    "this_month": {
-      "label": "Tháng này",
-      "date_range": {
-        "start": "2026-04-01",
-        "end": "2026-04-24"
-      },
-      "total_revenue": 207646750,
-      "total_orders": 102,
-      "top_products": [
-        {
-          "product": "Máy dò D1 Pro",
-          "revenue": 49000000,
-          "orders": 14,
-          "units": 14
-        },
-        {
-          "product": "Máy ghi âm DR1",
-          "revenue": 19500000,
-          "orders": 15,
-          "units": 15
-        },
-        {
-          "product": "MÁY DÒ D4",
-          "revenue": 12000000,
-          "orders": 2,
-          "units": 2
-        },
-        {
-          "product": "Máy dò D3 Doscom",
-          "revenue": 11880000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "Máy dò D2",
-          "revenue": 11200000,
-          "orders": 4,
-          "units": 4
-        },
-        {
-          "product": "DV1 + Sim ĐV",
-          "revenue": 7200000,
-          "orders": 4,
-          "units": 4
-        },
-        {
-          "product": "Máy ghi âm DR4 pro",
-          "revenue": 6720000,
-          "orders": 4,
-          "units": 4
-        },
-        {
-          "product": "DV2 + Sim ĐV",
-          "revenue": 6250000,
-          "orders": 1,
-          "units": 5
-        },
-        {
-          "product": "Doscom Tag DT2",
-          "revenue": 5990000,
-          "orders": 10,
-          "units": 10
-        },
-        {
-          "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
-          "revenue": 5250000,
-          "orders": 3,
-          "units": 3
-        }
-      ]
-    },
     "last_30d": {
-      "label": "30 ngày gần",
+      "label": "30 ngày qua",
       "date_range": {
         "start": "2026-03-25",
         "end": "2026-04-23"
       },
-      "total_revenue": 244414750,
-      "total_orders": 124,
+      "total_revenue": 278603750,
+      "total_orders": 134,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 52500000,
-          "orders": 15,
-          "units": 15
+          "revenue": 56000000,
+          "orders": 16,
+          "units": 16
         },
         {
           "product": "Máy ghi âm DR1",
@@ -242,6 +490,12 @@
           "revenue": 16800000,
           "orders": 6,
           "units": 6
+        },
+        {
+          "product": "Thiết bị dò D8 Pro",
+          "revenue": 15000000,
+          "orders": 1,
+          "units": 1
         },
         {
           "product": "Máy dò D3 Doscom",
@@ -272,53 +526,47 @@
           "revenue": 6850000,
           "orders": 4,
           "units": 4
-        },
-        {
-          "product": "Máy ghi âm DR4 pro",
-          "revenue": 6720000,
-          "orders": 4,
-          "units": 4
         }
       ]
     },
     "last_90d": {
-      "label": "90 ngày gần",
+      "label": "90 ngày qua",
       "date_range": {
         "start": "2026-01-24",
         "end": "2026-04-23"
       },
-      "total_revenue": 618608417,
-      "total_orders": 320,
+      "total_revenue": 697563417,
+      "total_orders": 358,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 112000000,
-          "orders": 32,
-          "units": 32
+          "revenue": 129500000,
+          "orders": 37,
+          "units": 37
         },
         {
           "product": "Thiết bị dò D8 Pro",
-          "revenue": 35000000,
-          "orders": 2,
-          "units": 2
+          "revenue": 50000000,
+          "orders": 3,
+          "units": 3
         },
         {
           "product": "Máy dò D2",
-          "revenue": 33600000,
-          "orders": 12,
-          "units": 12
+          "revenue": 36400000,
+          "orders": 13,
+          "units": 13
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 33500000,
+          "orders": 26,
+          "units": 26
         },
         {
           "product": "Máy dò D1",
           "revenue": 32500000,
           "orders": 13,
           "units": 13
-        },
-        {
-          "product": "Máy ghi âm DR1",
-          "revenue": 31000000,
-          "orders": 24,
-          "units": 24
         },
         {
           "product": "MÁY DÒ D4",
@@ -333,27 +581,129 @@
           "units": 2
         },
         {
-          "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
-          "revenue": 20450000,
-          "orders": 18,
-          "units": 21
+          "product": "Doscom Tag DT2",
+          "revenue": 22762000,
+          "orders": 32,
+          "units": 38
         },
         {
-          "product": "Doscom Tag DT2",
-          "revenue": 20366000,
-          "orders": 29,
-          "units": 34
+          "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+          "revenue": 22330000,
+          "orders": 20,
+          "units": 23
         },
         {
           "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
-          "revenue": 17910000,
-          "orders": 9,
-          "units": 10
+          "revenue": 19700000,
+          "orders": 10,
+          "units": 11
         }
       ]
     }
   },
   "category_breakdown_by_period": {
+    "today": {
+      "label": "Hôm nay",
+      "date_range": {
+        "start": "2026-04-24",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 4857000,
+      "total_orders": 4,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 3500000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 3500000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 1000000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 1000000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 199000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Noma 911",
+              "revenue": 199000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 158000,
+          "orders": 1,
+          "units": 2,
+          "top_products": [
+            {
+              "product": "Giá đỡ camera",
+              "revenue": 158000,
+              "orders": 1,
+              "units": 2
+            }
+          ]
+        }
+      }
+    },
     "yesterday": {
       "label": "Hôm qua",
       "date_range": {
@@ -487,8 +837,1011 @@
         }
       }
     },
+    "this_week": {
+      "label": "Tuần này",
+      "date_range": {
+        "start": "2026-04-20",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 44778000,
+      "total_orders": 25,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 13000000,
+          "orders": 3,
+          "units": 3,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 7000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 6000000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 8000000,
+          "orders": 4,
+          "units": 4,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 3500000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
+              "revenue": 2300000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "CAMERA DA6.2 - H6",
+              "revenue": 2200000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 12560000,
+          "orders": 8,
+          "units": 8,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 4960000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 2600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy ghi âm DR8",
+              "revenue": 1900000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 1000000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 8158000,
+          "orders": 6,
+          "units": 7,
+          "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 5160000,
+              "orders": 3,
+              "units": 4
+            },
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 1800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 1198000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 319000,
+          "orders": 2,
+          "units": 2,
+          "top_products": [
+            {
+              "product": "Noma 911",
+              "revenue": 199000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "A002 500ml - APK-8508",
+              "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 2741000,
+          "orders": 7,
+          "units": 11,
+          "top_products": [
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 1380000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 600000,
+              "orders": 2,
+              "units": 3
+            },
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 499000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Giá đỡ camera",
+              "revenue": 158000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "sim trắng",
+              "revenue": 79000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "last_week": {
+      "label": "Tuần trước",
+      "date_range": {
+        "start": "2026-04-13",
+        "end": "2026-04-19"
+      },
+      "total_revenue": 72709000,
+      "total_orders": 37,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 38480000,
+          "orders": 9,
+          "units": 9,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 21000000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 11880000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 5600000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 2800000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 1250000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 1250000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 11260000,
+          "orders": 9,
+          "units": 9,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 3900000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 3000000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 2600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 1760000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 14587000,
+          "orders": 10,
+          "units": 10,
+          "top_products": [
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 5400000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Định vị DV1",
+              "revenue": 3600000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Định vị DV1 Pro",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 1797000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 1290000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 895000,
+          "orders": 3,
+          "units": 4,
+          "top_products": [
+            {
+              "product": "Noma 911",
+              "revenue": 398000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 398000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 99000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 3437000,
+          "orders": 8,
+          "units": 9,
+          "top_products": [
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 1497000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 690000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Bàn chải điện Winki B86",
+              "revenue": 650000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 600000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Sim Viettel trắng",
+              "revenue": 0,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "this_month": {
+      "label": "Tháng này",
+      "date_range": {
+        "start": "2026-04-01",
+        "end": "2026-04-24"
+      },
+      "total_revenue": 237905000,
+      "total_orders": 113,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 92580000,
+          "orders": 24,
+          "units": 24,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 52500000,
+              "orders": 15,
+              "units": 15
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 12000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 11880000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 11200000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 5000000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 5000000,
+          "orders": 3,
+          "units": 3,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA5",
+              "revenue": 1500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA1 Pro Wifi - CB70W",
+              "revenue": 1400000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 25330000,
+          "orders": 10,
+          "units": 12,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+              "revenue": 5250000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "DA1 Pro + Sim Vstarcam",
+              "revenue": 3580000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA3 Pro 4G + Sim Vstarcam",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA6",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 6640000,
+          "orders": 5,
+          "units": 6,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 5170000,
+              "orders": 4,
+              "units": 5
+            },
+            {
+              "product": "DA8.1 + Thẻ nhớ 64GB",
+              "revenue": 1470000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 41720000,
+          "orders": 30,
+          "units": 31,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 19500000,
+              "orders": 15,
+              "units": 15
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 6720000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 6500000,
+              "orders": 4,
+              "units": 5
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 5000000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 38999000,
+          "orders": 26,
+          "units": 31,
+          "top_products": [
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 7200000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "DV2 + Sim ĐV",
+              "revenue": 6250000,
+              "orders": 1,
+              "units": 5
+            },
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 5990000,
+              "orders": 10,
+              "units": 10
+            },
+            {
+              "product": "Định vị DV1",
+              "revenue": 5400000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 5160000,
+              "orders": 3,
+              "units": 4
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 1711000,
+          "orders": 6,
+          "units": 8,
+          "top_products": [
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 796000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Noma 911",
+              "revenue": 597000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 198000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "A002 500ml - APK-8508",
+              "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 25925000,
+          "orders": 25,
+          "units": 34,
+          "top_products": [
+            {
+              "product": "Thiết bị dò D8 Pro",
+              "revenue": 15000000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 4140000,
+              "orders": 6,
+              "units": 6
+            },
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 3493000,
+              "orders": 7,
+              "units": 7
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 1400000,
+              "orders": 6,
+              "units": 7
+            },
+            {
+              "product": "Thẻ 64GB",
+              "revenue": 980000,
+              "orders": 1,
+              "units": 2
+            }
+          ]
+        }
+      }
+    },
+    "last_month": {
+      "label": "Tháng trước",
+      "date_range": {
+        "start": "2026-03-01",
+        "end": "2026-03-31"
+      },
+      "total_revenue": 295590000,
+      "total_orders": 154,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 124900000,
+          "orders": 35,
+          "units": 35,
+          "top_products": [
+            {
+              "product": "Máy dò D1 Pro",
+              "revenue": 52500000,
+              "orders": 15,
+              "units": 15
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 22400000,
+              "orders": 8,
+              "units": 8
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 20000000,
+              "orders": 8,
+              "units": 8
+            },
+            {
+              "product": "MÁY DÒ D4",
+              "revenue": 18000000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy dò D3 Doscom",
+              "revenue": 12000000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 25300000,
+          "orders": 15,
+          "units": 17,
+          "top_products": [
+            {
+              "product": "Camera DA5",
+              "revenue": 10800000,
+              "orders": 6,
+              "units": 7
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+              "revenue": 10740000,
+              "orders": 5,
+              "units": 6
+            },
+            {
+              "product": "Camera DA3.3",
+              "revenue": 1580000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "DA1 Pro Wifi - CB70W",
+              "revenue": 1400000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA3.2",
+              "revenue": 780000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 23290000,
+          "orders": 8,
+          "units": 10,
+          "top_products": [
+            {
+              "product": "Camera DA6 pro",
+              "revenue": 6400000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+              "revenue": 4200000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 2800000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Camera DA6",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DA6.2 4G + Sim Vstarcam",
+              "revenue": 2200000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 12080000,
+          "orders": 11,
+          "units": 12,
+          "top_products": [
+            {
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+              "revenue": 10780000,
+              "orders": 10,
+              "units": 11
+            },
+            {
+              "product": "Camera DA8.1 pro",
+              "revenue": 1300000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 35900000,
+          "orders": 25,
+          "units": 27,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 12800000,
+              "orders": 10,
+              "units": 10
+            },
+            {
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 8600000,
+              "orders": 5,
+              "units": 6
+            },
+            {
+              "product": "Máy ghi âm DR8",
+              "revenue": 5400000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR4 plus",
+              "revenue": 3900000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy ghi âm DR4",
+              "revenue": 3000000,
+              "orders": 2,
+              "units": 3
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 36026000,
+          "orders": 34,
+          "units": 38,
+          "top_products": [
+            {
+              "product": "Doscom Tag DT2",
+              "revenue": 10183000,
+              "orders": 15,
+              "units": 17
+            },
+            {
+              "product": "DV1 mini + Sim ĐV",
+              "revenue": 9030000,
+              "orders": 6,
+              "units": 7
+            },
+            {
+              "product": "DV1 Pro + Sim ĐV",
+              "revenue": 7500000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Doscom Tag DT3",
+              "revenue": 2925000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "DV1 + Sim ĐV",
+              "revenue": 1800000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 2368000,
+          "orders": 6,
+          "units": 11,
+          "top_products": [
+            {
+              "product": "Noma 922",
+              "revenue": 796000,
+              "orders": 4,
+              "units": 4
+            },
+            {
+              "product": "Combo kính xe Noma 911+ Noma 922",
+              "revenue": 398000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+              "revenue": 398000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Noma 911",
+              "revenue": 398000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 198000,
+              "orders": 2,
+              "units": 2
+            }
+          ]
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 35726000,
+          "orders": 42,
+          "units": 50,
+          "top_products": [
+            {
+              "product": "Thiết bị dò D8 Pro",
+              "revenue": 15000000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Máy cạo râu Winki",
+              "revenue": 9980000,
+              "orders": 20,
+              "units": 20
+            },
+            {
+              "product": "Thẻ 64GB",
+              "revenue": 3190000,
+              "orders": 9,
+              "units": 10
+            },
+            {
+              "product": "Máy massage mắt FJ-E10",
+              "revenue": 2050000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Thẻ 128GB",
+              "revenue": 2000000,
+              "orders": 3,
+              "units": 4
+            }
+          ]
+        }
+      }
+    },
     "last_7d": {
-      "label": "7 ngày gần",
+      "label": "7 ngày qua",
       "date_range": {
         "start": "2026-04-17",
         "end": "2026-04-23"
@@ -699,312 +2052,26 @@
         }
       }
     },
-    "this_month": {
-      "label": "Tháng này",
-      "date_range": {
-        "start": "2026-04-01",
-        "end": "2026-04-24"
-      },
-      "total_revenue": 208689000,
-      "total_orders": 102,
-      "categories": {
-        "MAY_DO": {
-          "label": "Máy dò",
-          "revenue": 89080000,
-          "orders": 23,
-          "units": 23,
-          "top_products": [
-            {
-              "product": "Máy dò D1 Pro",
-              "revenue": 49000000,
-              "orders": 14,
-              "units": 14
-            },
-            {
-              "product": "MÁY DÒ D4",
-              "revenue": 12000000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "Máy dò D3 Doscom",
-              "revenue": 11880000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "Máy dò D2",
-              "revenue": 11200000,
-              "orders": 4,
-              "units": 4
-            },
-            {
-              "product": "Máy dò D1",
-              "revenue": 5000000,
-              "orders": 2,
-              "units": 2
-            }
-          ]
-        },
-        "CAMERA_WIFI": {
-          "label": "Camera wifi",
-          "revenue": 5000000,
-          "orders": 3,
-          "units": 3,
-          "top_products": [
-            {
-              "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
-              "revenue": 2100000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "Camera DA5",
-              "revenue": 1500000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "DA1 Pro Wifi - CB70W",
-              "revenue": 1400000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "CAMERA_4G": {
-          "label": "Camera 4G",
-          "revenue": 21750000,
-          "orders": 9,
-          "units": 10,
-          "top_products": [
-            {
-              "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
-              "revenue": 5250000,
-              "orders": 3,
-              "units": 3
-            },
-            {
-              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
-              "revenue": 2800000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "DA3 Pro 4G + Sim Vstarcam",
-              "revenue": 2800000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "Camera DA6",
-              "revenue": 2500000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
-              "revenue": 2300000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "CAMERA_VIDEO_CALL": {
-          "label": "Camera gọi video 2 chiều",
-          "revenue": 5660000,
-          "orders": 4,
-          "units": 5,
-          "top_products": [
-            {
-              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
-              "revenue": 4190000,
-              "orders": 3,
-              "units": 4
-            },
-            {
-              "product": "DA8.1 + Thẻ nhớ 64GB",
-              "revenue": 1470000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "GHI_AM": {
-          "label": "Máy ghi âm",
-          "revenue": 38420000,
-          "orders": 27,
-          "units": 28,
-          "top_products": [
-            {
-              "product": "Máy ghi âm DR1",
-              "revenue": 19500000,
-              "orders": 15,
-              "units": 15
-            },
-            {
-              "product": "Máy ghi âm DR4 pro",
-              "revenue": 6720000,
-              "orders": 4,
-              "units": 4
-            },
-            {
-              "product": "Máy ghi âm DR4 plus",
-              "revenue": 5200000,
-              "orders": 3,
-              "units": 4
-            },
-            {
-              "product": "Máy ghi âm DR4",
-              "revenue": 3000000,
-              "orders": 3,
-              "units": 3
-            },
-            {
-              "product": "Máy ghi âm DR9",
-              "revenue": 2100000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "CHONG_GHI_AM": {
-          "label": "Chống ghi âm",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "DINH_VI": {
-          "label": "Định vị",
-          "revenue": 37199000,
-          "orders": 25,
-          "units": 30,
-          "top_products": [
-            {
-              "product": "DV1 + Sim ĐV",
-              "revenue": 7200000,
-              "orders": 4,
-              "units": 4
-            },
-            {
-              "product": "DV2 + Sim ĐV",
-              "revenue": 6250000,
-              "orders": 1,
-              "units": 5
-            },
-            {
-              "product": "Doscom Tag DT2",
-              "revenue": 5990000,
-              "orders": 10,
-              "units": 10
-            },
-            {
-              "product": "Định vị DV1 mini",
-              "revenue": 5160000,
-              "orders": 3,
-              "units": 4
-            },
-            {
-              "product": "DV1 mini + Sim ĐV",
-              "revenue": 3999000,
-              "orders": 3,
-              "units": 3
-            }
-          ]
-        },
-        "NOMA": {
-          "label": "NOMA",
-          "revenue": 1512000,
-          "orders": 5,
-          "units": 7,
-          "top_products": [
-            {
-              "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
-              "revenue": 796000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "Noma 911",
-              "revenue": 398000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "NOMA 250",
-              "revenue": 198000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "A002 500ml - APK-8508",
-              "revenue": 120000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "OTHER": {
-          "label": "Khác",
-          "revenue": 10068000,
-          "orders": 21,
-          "units": 29,
-          "top_products": [
-            {
-              "product": "Thẻ 128GB",
-              "revenue": 4140000,
-              "orders": 6,
-              "units": 6
-            },
-            {
-              "product": "Máy cạo râu Winki",
-              "revenue": 2994000,
-              "orders": 6,
-              "units": 6
-            },
-            {
-              "product": "Sim trắng multi 4G",
-              "revenue": 1200000,
-              "orders": 5,
-              "units": 6
-            },
-            {
-              "product": "Thẻ 64GB",
-              "revenue": 980000,
-              "orders": 1,
-              "units": 2
-            },
-            {
-              "product": "Bàn chải điện Winki B86",
-              "revenue": 650000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        }
-      }
-    },
     "last_30d": {
-      "label": "30 ngày gần",
+      "label": "30 ngày qua",
       "date_range": {
         "start": "2026-03-25",
         "end": "2026-04-23"
       },
-      "total_revenue": 245248000,
-      "total_orders": 124,
+      "total_revenue": 281007000,
+      "total_orders": 134,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "revenue": 106680000,
-          "orders": 28,
-          "units": 28,
+          "revenue": 110180000,
+          "orders": 29,
+          "units": 29,
           "top_products": [
             {
               "product": "Máy dò D1 Pro",
-              "revenue": 52500000,
-              "orders": 15,
-              "units": 15
+              "revenue": 56000000,
+              "orders": 16,
+              "units": 16
             },
             {
               "product": "MÁY DÒ D4",
@@ -1034,15 +2101,15 @@
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "revenue": 7280000,
-          "orders": 5,
-          "units": 5,
+          "revenue": 8780000,
+          "orders": 6,
+          "units": 6,
           "top_products": [
             {
               "product": "Camera DA5",
-              "revenue": 3000000,
-              "orders": 2,
-              "units": 2
+              "revenue": 4500000,
+              "orders": 3,
+              "units": 3
             },
             {
               "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
@@ -1066,15 +2133,27 @@
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "revenue": 23350000,
-          "orders": 10,
-          "units": 11,
+          "revenue": 33330000,
+          "orders": 12,
+          "units": 15,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
               "revenue": 6850000,
               "orders": 4,
               "units": 4
+            },
+            {
+              "product": "Camera DA6 pro",
+              "revenue": 6400000,
+              "orders": 1,
+              "units": 2
+            },
+            {
+              "product": "DA1 Pro + Sim Vstarcam",
+              "revenue": 3580000,
+              "orders": 1,
+              "units": 2
             },
             {
               "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
@@ -1087,32 +2166,20 @@
               "revenue": 2800000,
               "orders": 1,
               "units": 1
-            },
-            {
-              "product": "Camera DA6",
-              "revenue": 2500000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
-              "revenue": 2300000,
-              "orders": 1,
-              "units": 1
             }
           ]
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "revenue": 6640000,
-          "orders": 5,
-          "units": 6,
+          "revenue": 7620000,
+          "orders": 6,
+          "units": 7,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
-              "revenue": 5170000,
-              "orders": 4,
-              "units": 5
+              "revenue": 6150000,
+              "orders": 5,
+              "units": 6
             },
             {
               "product": "DA8.1 + Thẻ nhớ 64GB",
@@ -1124,9 +2191,9 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 41020000,
-          "orders": 29,
-          "units": 30,
+          "revenue": 43320000,
+          "orders": 31,
+          "units": 32,
           "top_products": [
             {
               "product": "Máy ghi âm DR1",
@@ -1142,15 +2209,15 @@
             },
             {
               "product": "Máy ghi âm DR4 plus",
-              "revenue": 5200000,
-              "orders": 3,
-              "units": 4
+              "revenue": 6500000,
+              "orders": 4,
+              "units": 5
             },
             {
               "product": "Máy ghi âm DR4",
-              "revenue": 3000000,
-              "orders": 3,
-              "units": 3
+              "revenue": 4000000,
+              "orders": 4,
+              "units": 4
             },
             {
               "product": "Máy ghi âm DR9",
@@ -1169,9 +2236,9 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 44661000,
-          "orders": 32,
-          "units": 37,
+          "revenue": 46461000,
+          "orders": 33,
+          "units": 38,
           "top_products": [
             {
               "product": "Doscom Tag DT2",
@@ -1198,10 +2265,10 @@
               "units": 5
             },
             {
-              "product": "Định vị DV1 mini",
-              "revenue": 5160000,
+              "product": "Định vị DV1",
+              "revenue": 5400000,
               "orders": 3,
-              "units": 4
+              "units": 3
             }
           ]
         },
@@ -1239,15 +2306,21 @@
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 14105000,
-          "orders": 26,
-          "units": 34,
+          "revenue": 29804000,
+          "orders": 30,
+          "units": 39,
           "top_products": [
             {
+              "product": "Thiết bị dò D8 Pro",
+              "revenue": 15000000,
+              "orders": 1,
+              "units": 1
+            },
+            {
               "product": "Máy cạo râu Winki",
-              "revenue": 4491000,
-              "orders": 9,
-              "units": 9
+              "revenue": 4990000,
+              "orders": 10,
+              "units": 10
             },
             {
               "product": "Thẻ 128GB",
@@ -1266,43 +2339,37 @@
               "revenue": 1470000,
               "orders": 2,
               "units": 3
-            },
-            {
-              "product": "Sim trắng multi 4G",
-              "revenue": 1200000,
-              "orders": 5,
-              "units": 6
             }
           ]
         }
       }
     },
     "last_90d": {
-      "label": "90 ngày gần",
+      "label": "90 ngày qua",
       "date_range": {
         "start": "2026-01-24",
         "end": "2026-04-23"
       },
-      "total_revenue": 628318000,
-      "total_orders": 320,
+      "total_revenue": 709730000,
+      "total_orders": 358,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "revenue": 231980000,
-          "orders": 64,
-          "units": 64,
+          "revenue": 252280000,
+          "orders": 70,
+          "units": 70,
           "top_products": [
             {
               "product": "Máy dò D1 Pro",
-              "revenue": 112000000,
-              "orders": 32,
-              "units": 32
+              "revenue": 129500000,
+              "orders": 37,
+              "units": 37
             },
             {
               "product": "Máy dò D2",
-              "revenue": 33600000,
-              "orders": 12,
-              "units": 12
+              "revenue": 36400000,
+              "orders": 13,
+              "units": 13
             },
             {
               "product": "Máy dò D1",
@@ -1326,53 +2393,53 @@
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "revenue": 47741000,
-          "orders": 30,
-          "units": 32,
+          "revenue": 53621000,
+          "orders": 34,
+          "units": 36,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
-              "revenue": 17910000,
-              "orders": 9,
-              "units": 10
+              "revenue": 19700000,
+              "orders": 10,
+              "units": 11
             },
             {
               "product": "Camera DA5",
-              "revenue": 12300000,
-              "orders": 7,
-              "units": 8
+              "revenue": 13800000,
+              "orders": 8,
+              "units": 9
             },
             {
               "product": "Camera DA3 Pro Zoom x10",
-              "revenue": 7101000,
-              "orders": 4,
-              "units": 4
+              "revenue": 8901000,
+              "orders": 5,
+              "units": 5
+            },
+            {
+              "product": "Camera DA3.3",
+              "revenue": 4740000,
+              "orders": 6,
+              "units": 6
             },
             {
               "product": "DA1 Pro Wifi - CB70W",
               "revenue": 4100000,
               "orders": 3,
               "units": 3
-            },
-            {
-              "product": "Camera DA3.3",
-              "revenue": 3950000,
-              "orders": 5,
-              "units": 5
             }
           ]
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "revenue": 73940000,
-          "orders": 31,
-          "units": 36,
+          "revenue": 90010000,
+          "orders": 36,
+          "units": 43,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
-              "revenue": 11450000,
-              "orders": 7,
-              "units": 7
+              "revenue": 12950000,
+              "orders": 8,
+              "units": 8
             },
             {
               "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
@@ -1393,24 +2460,24 @@
               "units": 4
             },
             {
-              "product": "DA 1 Pro Zoom + Thẻ nhớ 128GB + Sim Vstarcam",
-              "revenue": 6720000,
-              "orders": 1,
+              "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+              "revenue": 8250000,
+              "orders": 3,
               "units": 3
             }
           ]
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "revenue": 24520000,
-          "orders": 21,
-          "units": 24,
+          "revenue": 26400000,
+          "orders": 23,
+          "units": 26,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
-              "revenue": 20450000,
-              "orders": 18,
-              "units": 21
+              "revenue": 22330000,
+              "orders": 20,
+              "units": 23
             },
             {
               "product": "Camera DA8.1 pro",
@@ -1428,21 +2495,21 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 88370000,
-          "orders": 62,
-          "units": 65,
+          "revenue": 97570000,
+          "orders": 69,
+          "units": 72,
           "top_products": [
             {
               "product": "Máy ghi âm DR1",
-              "revenue": 31000000,
-              "orders": 24,
-              "units": 24
+              "revenue": 33500000,
+              "orders": 26,
+              "units": 26
             },
             {
               "product": "Máy ghi âm DR8",
-              "revenue": 16300000,
-              "orders": 9,
-              "units": 9
+              "revenue": 18100000,
+              "orders": 10,
+              "units": 10
             },
             {
               "product": "Máy ghi âm DR4 pro",
@@ -1452,15 +2519,15 @@
             },
             {
               "product": "Máy ghi âm DR4 plus",
-              "revenue": 9100000,
-              "orders": 6,
-              "units": 7
+              "revenue": 13000000,
+              "orders": 9,
+              "units": 10
             },
             {
               "product": "Máy ghi âm DR4",
-              "revenue": 8000000,
-              "orders": 7,
-              "units": 8
+              "revenue": 9000000,
+              "orders": 8,
+              "units": 9
             }
           ]
         },
@@ -1473,15 +2540,15 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 80745000,
-          "orders": 65,
-          "units": 77,
+          "revenue": 90396000,
+          "orders": 75,
+          "units": 90,
           "top_products": [
             {
               "product": "Doscom Tag DT2",
-              "revenue": 20366000,
-              "orders": 29,
-              "units": 34
+              "revenue": 22762000,
+              "orders": 32,
+              "units": 38
             },
             {
               "product": "DV1 mini + Sim ĐV",
@@ -1496,30 +2563,30 @@
               "units": 4
             },
             {
+              "product": "Định vị DV1 mini",
+              "revenue": 9030000,
+              "orders": 6,
+              "units": 7
+            },
+            {
               "product": "DV1 + Sim ĐV",
               "revenue": 9000000,
               "orders": 5,
               "units": 5
-            },
-            {
-              "product": "Định vị DV1 mini",
-              "revenue": 7740000,
-              "orders": 5,
-              "units": 6
             }
           ]
         },
         "NOMA": {
           "label": "NOMA",
-          "revenue": 7573000,
-          "orders": 21,
-          "units": 35,
+          "revenue": 8548000,
+          "orders": 23,
+          "units": 39,
           "top_products": [
             {
               "product": "Combo kính xe Noma 911+ Noma 922",
-              "revenue": 1990000,
-              "orders": 5,
-              "units": 5
+              "revenue": 2388000,
+              "orders": 6,
+              "units": 6
             },
             {
               "product": "Noma 911",
@@ -1535,35 +2602,35 @@
             },
             {
               "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
-              "revenue": 796000,
-              "orders": 2,
-              "units": 2
+              "revenue": 1194000,
+              "orders": 3,
+              "units": 3
             },
             {
               "product": "NOMA 250",
-              "revenue": 693000,
-              "orders": 7,
-              "units": 7
+              "revenue": 792000,
+              "orders": 8,
+              "units": 8
             }
           ]
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 73449000,
-          "orders": 87,
-          "units": 107,
+          "revenue": 90905000,
+          "orders": 96,
+          "units": 120,
           "top_products": [
             {
               "product": "Thiết bị dò D8 Pro",
-              "revenue": 35000000,
-              "orders": 2,
-              "units": 2
+              "revenue": 50000000,
+              "orders": 3,
+              "units": 3
             },
             {
               "product": "Máy cạo râu Winki",
-              "revenue": 12475000,
-              "orders": 25,
-              "units": 25
+              "revenue": 13473000,
+              "orders": 27,
+              "units": 27
             },
             {
               "product": "Thẻ 128GB",
@@ -1573,9 +2640,9 @@
             },
             {
               "product": "Thẻ 64GB",
-              "revenue": 7170000,
-              "orders": 20,
-              "units": 22
+              "revenue": 8070000,
+              "orders": 23,
+              "units": 25
             },
             {
               "product": "Máy massage mắt FJ-E10",
@@ -1588,6 +2655,3768 @@
       }
     }
   },
+  "web_items_flat": [
+    {
+      "d": "2026-04-24",
+      "oid": 88912,
+      "n": "Giá đỡ camera",
+      "q": 2,
+      "r": 158000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-24",
+      "oid": 88900,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88747,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88678,
+      "n": "DA1 Pro ZoomX6 + Sim Vstarcam",
+      "q": 1,
+      "r": 2300000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88655,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1750000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88655,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88655,
+      "n": "Sim Vstarcam",
+      "q": 1,
+      "r": 25000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-22",
+      "oid": 88512,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-22",
+      "oid": 88512,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-22",
+      "oid": 88506,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1900000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-22",
+      "oid": 88440,
+      "n": "A002 500ml - APK-8508",
+      "q": 1,
+      "r": 120000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88291,
+      "n": "DV1 + Sim ĐV",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88252,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1750000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88252,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88230,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88048,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-19",
+      "oid": 87804,
+      "n": "Định vị DV1 Pro",
+      "q": 1,
+      "r": 2500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-19",
+      "oid": 87804,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-19",
+      "oid": 87800,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-18",
+      "oid": 87623,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87474,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87468,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87467,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-16",
+      "oid": 87349,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-16",
+      "oid": 87318,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-16",
+      "oid": 87260,
+      "n": "DV1 + Sim ĐV",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87061,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87050,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-14",
+      "oid": 86865,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86672,
+      "n": "Bàn chải điện Winki B86",
+      "q": 1,
+      "r": 650000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86657,
+      "n": "Định vị DV1",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86657,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 86078,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 86059,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 86057,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 85960,
+      "n": "DA8.1 + Thẻ nhớ 64GB",
+      "q": 1,
+      "r": 1470000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85848,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85764,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85643,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "DA6.1 4G - BG54",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 490000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 490000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85642,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85640,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85625,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85574,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-07",
+      "oid": 85429,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-07",
+      "oid": 85405,
+      "n": "MÁY DÒ D4",
+      "q": 1,
+      "r": 6000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-06",
+      "oid": 85296,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-06",
+      "oid": 85255,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-05",
+      "oid": 85088,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-04-05",
+      "oid": 85087,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-04",
+      "oid": 84868,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-04",
+      "oid": 84867,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-04",
+      "oid": 84851,
+      "n": "DA1 Pro + Sim Vstarcam",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-04",
+      "oid": 84851,
+      "n": "DA1 Pro + Sim Vstarcam",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84490,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84478,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84472,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84467,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84183,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84166,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84166,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84166,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84162,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 84035,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 84026,
+      "n": "DV1 Pro + Sim ĐV",
+      "q": 1,
+      "r": 2500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 84019,
+      "n": "Camera DA3.2",
+      "q": 1,
+      "r": 780000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 83971,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 83965,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 83960,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83749,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83743,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83734,
+      "n": "Máy massage mắt FJ-E10",
+      "q": 1,
+      "r": 2050000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83723,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83712,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-28",
+      "oid": 83268,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-27",
+      "oid": 83033,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-26",
+      "oid": 82884,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-26",
+      "oid": 82874,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-25",
+      "oid": 82647,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-25",
+      "oid": 82606,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82492,
+      "n": "MÁY DÒ D4",
+      "q": 1,
+      "r": 6000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82464,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82463,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82461,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82429,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82406,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-23",
+      "oid": 82127,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-23",
+      "oid": 82094,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81391,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81095,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80966,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80964,
+      "n": "Camera DA6",
+      "q": 1,
+      "r": 2500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80964,
+      "n": "Thẻ 128GB",
+      "q": 2,
+      "r": 1000000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80964,
+      "n": "Sim Viettel trắng",
+      "q": 2,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80964,
+      "n": "DA6.1 4G - BG54",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80959,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80954,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-19",
+      "oid": 80945,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80522,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80520,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80492,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 2,
+      "r": 1960000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80492,
+      "n": "Thẻ 64GB",
+      "q": 2,
+      "r": 600000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-17",
+      "oid": 80263,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-17",
+      "oid": 80115,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79985,
+      "n": "DA1 Pro Wifi - CB70W",
+      "q": 1,
+      "r": 1400000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79985,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79966,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79955,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 2,
+      "r": 3580000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79955,
+      "n": "Sim Viettel trắng",
+      "q": 2,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79951,
+      "n": "Định vị DT4",
+      "q": 1,
+      "r": 600000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-15",
+      "oid": 79121,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-15",
+      "oid": 79120,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-15",
+      "oid": 78990,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78619,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78546,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78526,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78479,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78432,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78395,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78237,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78227,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78227,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78226,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77404,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 2,
+      "r": 2580000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77354,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77347,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77300,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77231,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77231,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77230,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77203,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77179,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76775,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76775,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+      "q": 1,
+      "r": 2800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76775,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76732,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76732,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76729,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76720,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1400000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-08",
+      "oid": 76044,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-07",
+      "oid": 75652,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-07",
+      "oid": 75640,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-06",
+      "oid": 75426,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-06",
+      "oid": 75334,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-06",
+      "oid": 75311,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 74915,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 74915,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74722,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74658,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74640,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74616,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74407,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1200000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74298,
+      "n": "DV1 Pro + Sim ĐV",
+      "q": 1,
+      "r": 2500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74286,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74286,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-02",
+      "oid": 73879,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-02",
+      "oid": 73875,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73657,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73654,
+      "n": "DA1 Pro + Sim Vstarcam",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73652,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73651,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73497,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73497,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71973,
+      "n": "Định vị DV3",
+      "q": 1,
+      "r": 1360000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71973,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71972,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71972,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71972,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71745,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71515,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71515,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71515,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71398,
+      "n": "DT2 + Pin DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71125,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-12",
+      "oid": 68889,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1600000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-12",
+      "oid": 68889,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-12",
+      "oid": 68725,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 900000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-02-12",
+      "oid": 68725,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67858,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67858,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67858,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66894,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66824,
+      "n": "DA5.1 + Sim Vstarcam",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66824,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66806,
+      "n": "Camera DA3 Pro Zoom x10",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66806,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-06",
+      "oid": 66799,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66553,
+      "n": "DA1 Pro ZoomX6 + Sim Vstarcam",
+      "q": 1,
+      "r": 1990000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66553,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66426,
+      "n": "Camera DA3 Pro Zoom x10",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66355,
+      "n": "DA3 Pro 4G + Sim Vstarcam",
+      "q": 1,
+      "r": 2650000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66355,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-03",
+      "oid": 65601,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65100,
+      "n": "DA1 Pro ZoomX6 + Sim Vstarcam",
+      "q": 1,
+      "r": 1990000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65100,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65046,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-01",
+      "oid": 64832,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-01",
+      "oid": 64660,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64459,
+      "n": "Camera DA6",
+      "q": 2,
+      "r": 5000000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64459,
+      "n": "Sim Viettel trắng",
+      "q": 2,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63780,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63753,
+      "n": "DA5.1 + Sim Vstarcam",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63753,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63491,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63345,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63345,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63345,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63330,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 2,
+      "r": 1800000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63255,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-28",
+      "oid": 63055,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-28",
+      "oid": 62987,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-28",
+      "oid": 62958,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 900000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-01-28",
+      "oid": 62958,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-27",
+      "oid": 62712,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-27",
+      "oid": 62579,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 900000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62303,
+      "n": "Camera DA3 Pro Zoom x10",
+      "q": 1,
+      "r": 1701000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62280,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1050000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62239,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62239,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62239,
+      "n": "Sim Vstarcam",
+      "q": 1,
+      "r": 25000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62237,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62237,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62237,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62145,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1690000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62145,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-24",
+      "oid": 88865,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88734,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88716,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88656,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88638,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1600000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-22",
+      "oid": 88516,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88266,
+      "n": "Định vị DV1 mini",
+      "q": 2,
+      "r": 2580000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88266,
+      "n": "Sim trắng multi 4G",
+      "q": 2,
+      "r": 400000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-21",
+      "oid": 88235,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1760000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88065,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1600000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88018,
+      "n": "CAMERA DA6.2 - H6",
+      "q": 1,
+      "r": 2200000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88018,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88018,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-19",
+      "oid": 87875,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-18",
+      "oid": 87614,
+      "n": "DV1 + Sim ĐV",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87513,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87498,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87482,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87109,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+      "q": 1,
+      "r": 2800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87109,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87109,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87089,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87068,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87045,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87037,
+      "n": "Định vị DV1",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87037,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-14",
+      "oid": 86801,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 1250000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86682,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86630,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86605,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86550,
+      "n": "DV1 + Sim ĐV",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-11",
+      "oid": 86210,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85853,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85795,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85627,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-06",
+      "oid": 85283,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1419000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-05",
+      "oid": 85078,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-05",
+      "oid": 85077,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84500,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84492,
+      "n": "Camera DA6",
+      "q": 1,
+      "r": 2500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84492,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-02",
+      "oid": 84463,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84240,
+      "n": "DA1 Pro Wifi - CB70W",
+      "q": 1,
+      "r": 1400000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84240,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84229,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 2,
+      "r": 1960000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84177,
+      "n": "DV1 Pro + Sim ĐV",
+      "q": 1,
+      "r": 2500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84153,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 84037,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-31",
+      "oid": 84036,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-29",
+      "oid": 83485,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-29",
+      "oid": 83468,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-28",
+      "oid": 83354,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-26",
+      "oid": 82855,
+      "n": "Camera DA6 pro",
+      "q": 2,
+      "r": 6400000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-26",
+      "oid": 82855,
+      "n": "Sim Viettel trắng",
+      "q": 2,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82489,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-24",
+      "oid": 82356,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-23",
+      "oid": 82170,
+      "n": "DA6.2 4G + Sim Vstarcam",
+      "q": 1,
+      "r": 2200000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-23",
+      "oid": 82170,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-23",
+      "oid": 82077,
+      "n": "Máy dò D3 Doscom",
+      "q": 1,
+      "r": 12000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-22",
+      "oid": 81814,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81431,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81430,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81430,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81216,
+      "n": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81216,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81177,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81140,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81140,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81140,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81139,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81139,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80502,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80430,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 80006,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 80006,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79975,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-15",
+      "oid": 79033,
+      "n": "DV1 Pro + Sim ĐV",
+      "q": 1,
+      "r": 2500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-14",
+      "oid": 78866,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-14",
+      "oid": 78744,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78608,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78452,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78091,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78058,
+      "n": "Camera DA5",
+      "q": 2,
+      "r": 3300000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77343,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77296,
+      "n": "DV1 + Sim ĐV",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77296,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1200000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76931,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76796,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76761,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1400000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-10",
+      "oid": 76761,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1400000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-09",
+      "oid": 76396,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-09",
+      "oid": 76264,
+      "n": "Noma 911",
+      "q": 2,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-09",
+      "oid": 76264,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-09",
+      "oid": 76264,
+      "n": "NOMA 310",
+      "q": 1,
+      "r": 180000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-03-07",
+      "oid": 75783,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-07",
+      "oid": 75667,
+      "n": "DV4 + Sim ĐV",
+      "q": 1,
+      "r": 1500000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 75144,
+      "n": "Máy cạo râu Winki",
+      "q": 1,
+      "r": 499000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 75005,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 75005,
+      "n": "DE-1 CHUÔNG CỬA THÔNG MINH KHÔNG DÂY DOSCOM",
+      "q": 1,
+      "r": 1500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-05",
+      "oid": 75005,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74561,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74416,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-03",
+      "oid": 74362,
+      "n": "Camera DA8.1 pro",
+      "q": 1,
+      "r": 1300000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73491,
+      "n": "MÁY DÒ D4",
+      "q": 1,
+      "r": 6000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73488,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-28",
+      "oid": 73367,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-27",
+      "oid": 72877,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-02-27",
+      "oid": 72877,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-27",
+      "oid": 72709,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-26",
+      "oid": 72425,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-26",
+      "oid": 72425,
+      "n": "A002 300ml- APK-8507",
+      "q": 1,
+      "r": 80000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-26",
+      "oid": 72422,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-26",
+      "oid": 72305,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71931,
+      "n": "Thiết bị dò D8 Pro",
+      "q": 1,
+      "r": 20000000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71707,
+      "n": "Camera DA8.1 pro",
+      "q": 1,
+      "r": 1300000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71707,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71706,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-25",
+      "oid": 71706,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71386,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71386,
+      "n": "Noma 955",
+      "q": 1,
+      "r": 200000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71386,
+      "n": "Noma 620",
+      "q": 1,
+      "r": 280000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-23",
+      "oid": 70601,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-23",
+      "oid": 70500,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-23",
+      "oid": 70498,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-23",
+      "oid": 70498,
+      "n": "A002 300ml- APK-8507",
+      "q": 1,
+      "r": 80000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-13",
+      "oid": 69039,
+      "n": "DA1 Pro ZoomX6 + Sim Vstarcam",
+      "q": 1,
+      "r": 2100000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-13",
+      "oid": 69039,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-11",
+      "oid": 68618,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1690000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-11",
+      "oid": 68618,
+      "n": "sim trắng",
+      "q": 1,
+      "r": 79000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-11",
+      "oid": 68606,
+      "n": "DA3 pro - CS621SR",
+      "q": 1,
+      "r": 1600000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 68017,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67912,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67874,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67868,
+      "n": "Camera DA3 Pro Zoom x10",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67868,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-07",
+      "oid": 67193,
+      "n": "Noma 922",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-07",
+      "oid": 67176,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-07",
+      "oid": 67170,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 900000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-02-07",
+      "oid": 67089,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1690000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66584,
+      "n": "DA5.1 + Sim Vstarcam",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-05",
+      "oid": 66584,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-04",
+      "oid": 66116,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-04",
+      "oid": 66115,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-04",
+      "oid": 66115,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-03",
+      "oid": 65755,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65152,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65152,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65115,
+      "n": "DA1 Pro Wifi - CB70W",
+      "q": 1,
+      "r": 1300000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65115,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64421,
+      "n": "Thiết bị ghi âm DR7 16Gb",
+      "q": 1,
+      "r": 1100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64298,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64298,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63990,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63825,
+      "n": "Camera mini DA5.1 PRO",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63825,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-30",
+      "oid": 63825,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 150000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63526,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) DA3 pro 4G Năng lượng mặt trời (BG621SR)",
+      "q": 1,
+      "r": 2650000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63521,
+      "n": "Doscom Tag DT2",
+      "q": 2,
+      "r": 1198000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63478,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63420,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63248,
+      "n": "Doscom Tag DT2",
+      "q": 3,
+      "r": 1797000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63248,
+      "n": "Doscom Tag DT3",
+      "q": 1,
+      "r": 585000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62323,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
+      "q": 1,
+      "r": 1990000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62323,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62323,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62085,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62085,
+      "n": "Noma 890",
+      "q": 1,
+      "r": 249000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62085,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62083,
+      "n": "Camera DA3.3",
+      "q": 1,
+      "r": 790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62081,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-24",
+      "oid": 88958,
+      "n": "Noma 911",
+      "q": 1,
+      "r": 199000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-23",
+      "oid": 88645,
+      "n": "Máy ghi âm DR9",
+      "q": 1,
+      "r": 2100000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-20",
+      "oid": 88015,
+      "n": "MÁY DÒ D4",
+      "q": 1,
+      "r": 6000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-18",
+      "oid": 87629,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1760000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-18",
+      "oid": 87617,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-17",
+      "oid": 87486,
+      "n": "Máy ghi âm DR4",
+      "q": 1,
+      "r": 1000000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-15",
+      "oid": 87158,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-14",
+      "oid": 86873,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-14",
+      "oid": 86828,
+      "n": "Máy dò D3 Doscom",
+      "q": 1,
+      "r": 11880000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86615,
+      "n": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86615,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-13",
+      "oid": 86604,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 86082,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 2,
+      "r": 2600000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-10",
+      "oid": 86072,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85849,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85741,
+      "n": "DA3 Pro 4G + Sim Vstarcam",
+      "q": 1,
+      "r": 2800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85741,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-09",
+      "oid": 85741,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1750000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85629,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-04-08",
+      "oid": 85628,
+      "n": "Máy ghi âm DR4 plus",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-04-06",
+      "oid": 85309,
+      "n": "Thiết bị dò D8 Pro",
+      "q": 1,
+      "r": 15000000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-04-06",
+      "oid": 85300,
+      "n": "DV2 + Sim ĐV",
+      "q": 5,
+      "r": 6250000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-03",
+      "oid": 84713,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-03",
+      "oid": 84713,
+      "n": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84227,
+      "n": "Định vị DV1",
+      "q": 1,
+      "r": 1800000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-04-01",
+      "oid": 84227,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83805,
+      "n": "Camera giám sát ghi hình ảnh dùng trong gia đình DA5.1 ( CB77)",
+      "q": 1,
+      "r": 1600000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-03-30",
+      "oid": 83805,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 490000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-27",
+      "oid": 83126,
+      "n": "MÁY DÒ D4",
+      "q": 1,
+      "r": 6000000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-22",
+      "oid": 81825,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81703,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81703,
+      "n": "Thẻ 64GB",
+      "q": 1,
+      "r": 300000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81498,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-21",
+      "oid": 81498,
+      "n": "Doscom Tag DT2",
+      "q": 1,
+      "r": 599000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-20",
+      "oid": 81185,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1600000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80539,
+      "n": "Súng massage FJ-M02",
+      "q": 1,
+      "r": 1690000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-18",
+      "oid": 80393,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-17",
+      "oid": 80226,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1300000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-17",
+      "oid": 80224,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 80014,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79962,
+      "n": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
+      "q": 1,
+      "r": 1790000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-03-16",
+      "oid": 79962,
+      "n": "Sim Viettel trắng",
+      "q": 1,
+      "r": 0,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-13",
+      "oid": 78539,
+      "n": "Thiết bị dò D8 Pro",
+      "q": 1,
+      "r": 15000000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78249,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78095,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-12",
+      "oid": 78055,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1400000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-11",
+      "oid": 77397,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-03-07",
+      "oid": 75551,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-06",
+      "oid": 75415,
+      "n": "Doscom Tag DT2",
+      "q": 2,
+      "r": 1198000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-06",
+      "oid": 75413,
+      "n": "DT2 + Pin DT2",
+      "q": 2,
+      "r": 1198000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-03-04",
+      "oid": 74727,
+      "n": "Máy ghi âm DR4 pro",
+      "q": 1,
+      "r": 1400000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-02",
+      "oid": 73905,
+      "n": "Máy dò D2",
+      "q": 1,
+      "r": 2800000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73686,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73686,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-03-01",
+      "oid": 73541,
+      "n": "Camera giám sát ghi hình ảnh (dùng trong gia đình) - DA8.1 DOSCOM màu trắng",
+      "q": 1,
+      "r": 980000,
+      "c": "CAMERA_VIDEO_CALL"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71411,
+      "n": "DT2 + Pin DT2",
+      "q": 2,
+      "r": 1198000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-02-24",
+      "oid": 71377,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-23",
+      "oid": 70600,
+      "n": "DA5.1 + Thẻ nhớ 64GB + Sim Vstarcam",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 68091,
+      "n": "Camera DA3 Pro Zoom x10",
+      "q": 1,
+      "r": 1800000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 68091,
+      "n": "Thẻ 128GB",
+      "q": 1,
+      "r": 500000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-02-09",
+      "oid": 67862,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-07",
+      "oid": 67164,
+      "n": "Máy ghi âm DR8",
+      "q": 1,
+      "r": 1800000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-02-04",
+      "oid": 65969,
+      "n": "Combo kính xe Noma 911+ Noma 922",
+      "q": 1,
+      "r": 398000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-04",
+      "oid": 65969,
+      "n": "NOMA 250",
+      "q": 1,
+      "r": 99000,
+      "c": "NOMA"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65218,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-02-02",
+      "oid": 65153,
+      "n": "Máy ghi âm DR1",
+      "q": 1,
+      "r": 1200000,
+      "c": "GHI_AM"
+    },
+    {
+      "d": "2026-01-31",
+      "oid": 64413,
+      "n": "DA 1 Pro Zoom + Thẻ nhớ 128GB + Sim Vstarcam",
+      "q": 3,
+      "r": 6720000,
+      "c": "CAMERA_4G"
+    },
+    {
+      "d": "2026-01-29",
+      "oid": 63523,
+      "n": "DV1 mini + Sim ĐV",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-01-28",
+      "oid": 62914,
+      "n": "Camera DA5",
+      "q": 1,
+      "r": 1500000,
+      "c": "CAMERA_WIFI"
+    },
+    {
+      "d": "2026-01-27",
+      "oid": 62701,
+      "n": "Máy dò D1",
+      "q": 1,
+      "r": 2500000,
+      "c": "MAY_DO"
+    },
+    {
+      "d": "2026-01-26",
+      "oid": 62232,
+      "n": "Máy dò D1 Pro",
+      "q": 1,
+      "r": 3500000,
+      "c": "MAY_DO"
+    }
+  ],
   "category_order": [
     {
       "key": "MAY_DO",
@@ -1627,7 +6456,7 @@
     }
   ],
   "total_orders_by_date": {
-    "2026-04-24": 18,
+    "2026-04-24": 41,
     "2026-04-23": 39,
     "2026-04-22": 29,
     "2026-04-21": 37,
@@ -1713,15 +6542,16 @@
     "2026-01-27": 59,
     "2026-01-26": 64,
     "2026-01-25": 25,
-    "2026-01-24": 19
+    "2026-01-24": 8
   },
   "order_revenue_by_status_by_date": {
     "delivered": {
-      "2026-04-22": 1791000.0,
-      "2026-04-21": 15071000.0,
-      "2026-04-20": 14620000.0,
+      "2026-04-23": 796000.0,
+      "2026-04-22": 2110000.0,
+      "2026-04-21": 15469000.0,
+      "2026-04-20": 14819000.0,
       "2026-04-19": 15977000.0,
-      "2026-04-18": 9095000.0,
+      "2026-04-18": 9294000.0,
       "2026-04-17": 13923000.0,
       "2026-04-16": 16025000.0,
       "2026-04-15": 22048000.0,
@@ -1744,7 +6574,7 @@
       "2026-03-28": 8491000.0,
       "2026-03-27": 15167000.0,
       "2026-03-26": 13200000.0,
-      "2026-03-25": 16210000.0,
+      "2026-03-25": 18110000.0,
       "2026-03-24": 22447000.0,
       "2026-03-23": 33700000.0,
       "2026-03-22": 15274000.0,
@@ -1796,7 +6626,7 @@
       "2026-01-27": 21822000.0,
       "2026-01-26": 25066000.0,
       "2026-01-25": 9376000.0,
-      "2026-01-24": 9283000.0
+      "2026-01-24": 3694000.0
     },
     "returning": {
       "2026-04-17": 199000.0,
@@ -1920,7 +6750,7 @@
       "2026-01-28": 1298000.0,
       "2026-01-27": 4758000.0,
       "2026-01-26": 2994000.0,
-      "2026-01-24": 2200000.0
+      "2026-01-24": 1100000.0
     },
     "canceled": {
       "2026-04-07": 398000.0,
@@ -1937,13 +6767,13 @@
       "2026-02-24": 1198000.0
     },
     "other": {
-      "2026-04-24": 7281000.0,
-      "2026-04-23": 29001000.0,
-      "2026-04-22": 7391000.0,
-      "2026-04-21": 9745000.0,
-      "2026-04-20": 13990000.0,
+      "2026-04-24": 16822000.0,
+      "2026-04-23": 28205000.0,
+      "2026-04-22": 7072000.0,
+      "2026-04-21": 9347000.0,
+      "2026-04-20": 13791000.0,
       "2026-04-19": 796000.0,
-      "2026-04-18": 3097000.0,
+      "2026-04-18": 2898000.0,
       "2026-04-17": 11250000.0,
       "2026-04-16": 199000.0,
       "2026-04-15": 4298000.0,
@@ -1960,7 +6790,7 @@
       "2026-03-30": 2050000.0,
       "2026-03-28": 0.0,
       "2026-03-27": 0.0,
-      "2026-03-25": 1900000.0,
+      "2026-03-25": 0.0,
       "2026-03-23": 1900000.0,
       "2026-03-22": 0.0,
       "2026-03-21": 0.0,
@@ -2013,11 +6843,12 @@
   },
   "order_count_by_status_by_date": {
     "delivered": {
-      "2026-04-22": 8,
-      "2026-04-21": 21,
-      "2026-04-20": 23,
+      "2026-04-23": 3,
+      "2026-04-22": 10,
+      "2026-04-21": 23,
+      "2026-04-20": 24,
       "2026-04-19": 25,
-      "2026-04-18": 16,
+      "2026-04-18": 17,
       "2026-04-17": 19,
       "2026-04-16": 28,
       "2026-04-15": 34,
@@ -2040,7 +6871,7 @@
       "2026-03-28": 11,
       "2026-03-27": 18,
       "2026-03-26": 24,
-      "2026-03-25": 21,
+      "2026-03-25": 22,
       "2026-03-24": 23,
       "2026-03-23": 28,
       "2026-03-22": 28,
@@ -2092,7 +6923,7 @@
       "2026-01-27": 45,
       "2026-01-26": 52,
       "2026-01-25": 22,
-      "2026-01-24": 16
+      "2026-01-24": 6
     },
     "returning": {
       "2026-04-17": 1,
@@ -2216,7 +7047,7 @@
       "2026-01-28": 3,
       "2026-01-27": 8,
       "2026-01-26": 5,
-      "2026-01-24": 2
+      "2026-01-24": 1
     },
     "canceled": {
       "2026-04-07": 1,
@@ -2233,13 +7064,13 @@
       "2026-02-24": 1
     },
     "other": {
-      "2026-04-24": 18,
-      "2026-04-23": 39,
-      "2026-04-22": 21,
-      "2026-04-21": 16,
-      "2026-04-20": 15,
+      "2026-04-24": 41,
+      "2026-04-23": 36,
+      "2026-04-22": 19,
+      "2026-04-21": 14,
+      "2026-04-20": 14,
       "2026-04-19": 5,
-      "2026-04-18": 4,
+      "2026-04-18": 3,
       "2026-04-17": 6,
       "2026-04-16": 3,
       "2026-04-15": 5,
@@ -2256,7 +7087,7 @@
       "2026-03-30": 2,
       "2026-03-28": 1,
       "2026-03-27": 2,
-      "2026-03-25": 2,
+      "2026-03-25": 1,
       "2026-03-23": 2,
       "2026-03-22": 1,
       "2026-03-21": 2,
@@ -2310,30 +7141,30 @@
   "summary": {
     "delivered": {
       "orders": 2944,
-      "total": 1676812417.0
+      "total": 1675034417.0
     },
     "returning": {
       "orders": 200,
       "total": 153572000.0
     },
     "returned": {
-      "orders": 251,
-      "total": 220771000.0
+      "orders": 250,
+      "total": 219671000.0
     },
     "canceled": {
       "orders": 14,
       "total": 14469000.0
     },
     "other": {
-      "orders": 286,
-      "total": 102293000.0
+      "orders": 299,
+      "total": 108023000.0
     }
   },
   "products": {
     "D1": {
-      "total": 407500000.0,
-      "orders": 163,
-      "units": 163,
+      "total": 410000000.0,
+      "orders": 164,
+      "units": 164,
       "by_date": {
         "2026-04-20": 7500000.0,
         "2026-04-19": 5000000.0,
@@ -2389,6 +7220,7 @@
         "2026-04-03": 2500000.0,
         "2026-03-30": 2500000.0,
         "2026-02-06": 2500000.0,
+        "2026-04-24": 2500000.0,
         "2026-04-23": 2500000.0,
         "2026-04-21": 2500000.0,
         "2026-04-18": 2500000.0,
@@ -2449,6 +7281,7 @@
         "2026-04-03": 1,
         "2026-03-30": 1,
         "2026-02-06": 1,
+        "2026-04-24": 1,
         "2026-04-23": 1,
         "2026-04-21": 1,
         "2026-04-18": 1,
@@ -2509,6 +7342,7 @@
         "2026-04-03": 1,
         "2026-03-30": 1,
         "2026-02-06": 1,
+        "2026-04-24": 1,
         "2026-04-23": 1,
         "2026-04-21": 1,
         "2026-04-18": 1,
@@ -2736,9 +7570,9 @@
       }
     },
     "DR1": {
-      "total": 162400000.0,
-      "orders": 129,
-      "units": 129,
+      "total": 160200000.0,
+      "orders": 127,
+      "units": 127,
       "by_date": {
         "2026-04-16": 5200000.0,
         "2026-04-15": 6500000.0,
@@ -2771,7 +7605,6 @@
         "2026-02-04": 1200000.0,
         "2026-02-02": 2400000.0,
         "2026-01-27": 1200000.0,
-        "2026-01-24": 3300000.0,
         "2026-04-07": 1300000.0,
         "2026-04-06": 2600000.0,
         "2026-03-30": 1300000.0,
@@ -2782,6 +7615,7 @@
         "2026-03-24": 1300000.0,
         "2026-03-20": 5100000.0,
         "2026-04-18": 1300000.0,
+        "2026-01-24": 1100000.0,
         "2026-03-03": 1200000.0,
         "2026-04-23": 3900000.0
       },
@@ -2817,7 +7651,6 @@
         "2026-02-04": 1,
         "2026-02-02": 2,
         "2026-01-27": 1,
-        "2026-01-24": 3,
         "2026-04-07": 1,
         "2026-04-06": 2,
         "2026-03-30": 1,
@@ -2828,6 +7661,7 @@
         "2026-03-24": 1,
         "2026-03-20": 4,
         "2026-04-18": 1,
+        "2026-01-24": 1,
         "2026-03-03": 1,
         "2026-04-23": 3
       },
@@ -2863,7 +7697,6 @@
         "2026-02-04": 1,
         "2026-02-02": 2,
         "2026-01-27": 1,
-        "2026-01-24": 3,
         "2026-04-07": 1,
         "2026-04-06": 2,
         "2026-03-30": 1,
@@ -2874,6 +7707,7 @@
         "2026-03-24": 1,
         "2026-03-20": 4,
         "2026-04-18": 1,
+        "2026-01-24": 1,
         "2026-03-03": 1,
         "2026-04-23": 3
       }
@@ -2946,9 +7780,9 @@
       }
     },
     "DA8.1": {
-      "total": 242540000.0,
-      "orders": 229,
-      "units": 246,
+      "total": 245040000.0,
+      "orders": 231,
+      "units": 248,
       "by_date": {
         "2026-04-21": 7500000.0,
         "2026-04-20": 3750000.0,
@@ -3007,6 +7841,7 @@
         "2026-04-01": 1960000.0,
         "2026-03-31": 980000.0,
         "2026-02-06": 900000.0,
+        "2026-04-24": 2500000.0,
         "2026-04-23": 3750000.0,
         "2026-04-17": 1250000.0
       },
@@ -3068,6 +7903,7 @@
         "2026-04-01": 1,
         "2026-03-31": 1,
         "2026-02-06": 1,
+        "2026-04-24": 2,
         "2026-04-23": 3,
         "2026-04-17": 1
       },
@@ -3129,20 +7965,20 @@
         "2026-04-01": 2,
         "2026-03-31": 1,
         "2026-02-06": 1,
+        "2026-04-24": 2,
         "2026-04-23": 3,
         "2026-04-17": 1
       }
     },
     "DA8.1 Pro": {
-      "total": 12200000.0,
-      "orders": 10,
-      "units": 10,
+      "total": 11000000.0,
+      "orders": 9,
+      "units": 9,
       "by_date": {
         "2026-02-02": 1200000.0,
         "2026-01-29": 4800000.0,
         "2026-01-28": 1200000.0,
         "2026-01-25": 1200000.0,
-        "2026-01-24": 1200000.0,
         "2026-03-03": 1300000.0,
         "2026-02-25": 1300000.0
       },
@@ -3151,7 +7987,6 @@
         "2026-01-29": 4,
         "2026-01-28": 1,
         "2026-01-25": 1,
-        "2026-01-24": 1,
         "2026-03-03": 1,
         "2026-02-25": 1
       },
@@ -3160,16 +7995,16 @@
         "2026-01-29": 4,
         "2026-01-28": 1,
         "2026-01-25": 1,
-        "2026-01-24": 1,
         "2026-03-03": 1,
         "2026-02-25": 1
       }
     },
     "Noma 911": {
-      "total": 610930000.0,
-      "orders": 2637,
-      "units": 2897,
+      "total": 612522000.0,
+      "orders": 2649,
+      "units": 2905,
       "by_date": {
+        "2026-04-23": 5771000.0,
         "2026-04-22": 5373000.0,
         "2026-04-21": 6169000.0,
         "2026-04-20": 5572000.0,
@@ -3249,11 +8084,11 @@
         "2026-01-27": 9353000.0,
         "2026-01-26": 10945000.0,
         "2026-01-25": 5174000.0,
-        "2026-01-24": 2985000.0,
-        "2026-04-24": 3781000.0,
-        "2026-04-23": 5771000.0
+        "2026-01-24": 1194000.0,
+        "2026-04-24": 7164000.0
       },
       "orders_by_date": {
+        "2026-04-23": 25,
         "2026-04-22": 24,
         "2026-04-21": 27,
         "2026-04-20": 26,
@@ -3333,11 +8168,11 @@
         "2026-01-27": 42,
         "2026-01-26": 50,
         "2026-01-25": 21,
-        "2026-01-24": 10,
-        "2026-04-24": 17,
-        "2026-04-23": 25
+        "2026-01-24": 5,
+        "2026-04-24": 34
       },
       "units_by_date": {
+        "2026-04-23": 28,
         "2026-04-22": 27,
         "2026-04-21": 30,
         "2026-04-20": 28,
@@ -3417,9 +8252,8 @@
         "2026-01-27": 46,
         "2026-01-26": 54,
         "2026-01-25": 25,
-        "2026-01-24": 15,
-        "2026-04-24": 19,
-        "2026-04-23": 28
+        "2026-01-24": 6,
+        "2026-04-24": 36
       }
     },
     "Noma 922": {
@@ -3986,9 +8820,9 @@
         }
       },
       "DR1": {
-        "total": 122600000.0,
-        "orders": 97,
-        "units": 97,
+        "total": 121500000.0,
+        "orders": 96,
+        "units": 96,
         "by_date": {
           "2026-04-16": 5200000.0,
           "2026-04-15": 5200000.0,
@@ -4021,7 +8855,6 @@
           "2026-02-04": 1200000.0,
           "2026-02-02": 2400000.0,
           "2026-01-27": 1200000.0,
-          "2026-01-24": 1100000.0,
           "2026-04-07": 1300000.0,
           "2026-04-06": 2600000.0,
           "2026-03-30": 1300000.0,
@@ -4065,7 +8898,6 @@
           "2026-02-04": 1,
           "2026-02-02": 2,
           "2026-01-27": 1,
-          "2026-01-24": 1,
           "2026-04-07": 1,
           "2026-04-06": 2,
           "2026-03-30": 1,
@@ -4109,7 +8941,6 @@
           "2026-02-04": 1,
           "2026-02-02": 2,
           "2026-01-27": 1,
-          "2026-01-24": 1,
           "2026-04-07": 1,
           "2026-04-06": 2,
           "2026-03-30": 1,
@@ -4360,15 +9191,14 @@
         }
       },
       "DA8.1 Pro": {
-        "total": 12200000.0,
-        "orders": 10,
-        "units": 10,
+        "total": 11000000.0,
+        "orders": 9,
+        "units": 9,
         "by_date": {
           "2026-02-02": 1200000.0,
           "2026-01-29": 4800000.0,
           "2026-01-28": 1200000.0,
           "2026-01-25": 1200000.0,
-          "2026-01-24": 1200000.0,
           "2026-03-03": 1300000.0,
           "2026-02-25": 1300000.0
         },
@@ -4377,7 +9207,6 @@
           "2026-01-29": 4,
           "2026-01-28": 1,
           "2026-01-25": 1,
-          "2026-01-24": 1,
           "2026-03-03": 1,
           "2026-02-25": 1
         },
@@ -4386,21 +9215,21 @@
           "2026-01-29": 4,
           "2026-01-28": 1,
           "2026-01-25": 1,
-          "2026-01-24": 1,
           "2026-03-03": 1,
           "2026-02-25": 1
         }
       },
       "Noma 911": {
         "total": 521380000.0,
-        "orders": 2251,
+        "orders": 2254,
         "units": 2462,
         "by_date": {
-          "2026-04-22": 1791000.0,
-          "2026-04-21": 3184000.0,
-          "2026-04-20": 3781000.0,
+          "2026-04-23": 796000.0,
+          "2026-04-22": 1990000.0,
+          "2026-04-21": 3582000.0,
+          "2026-04-20": 3980000.0,
           "2026-04-19": 4378000.0,
-          "2026-04-18": 2985000.0,
+          "2026-04-18": 3184000.0,
           "2026-04-17": 2985000.0,
           "2026-04-16": 4975000.0,
           "2026-04-15": 5970000.0,
@@ -4475,14 +9304,15 @@
           "2026-01-27": 7562000.0,
           "2026-01-26": 9154000.0,
           "2026-01-25": 4776000.0,
-          "2026-01-24": 2985000.0
+          "2026-01-24": 1194000.0
         },
         "orders_by_date": {
-          "2026-04-22": 8,
-          "2026-04-21": 14,
-          "2026-04-20": 17,
+          "2026-04-23": 3,
+          "2026-04-22": 9,
+          "2026-04-21": 16,
+          "2026-04-20": 18,
           "2026-04-19": 20,
-          "2026-04-18": 12,
+          "2026-04-18": 13,
           "2026-04-17": 12,
           "2026-04-16": 21,
           "2026-04-15": 24,
@@ -4557,14 +9387,15 @@
           "2026-01-27": 35,
           "2026-01-26": 42,
           "2026-01-25": 19,
-          "2026-01-24": 10
+          "2026-01-24": 5
         },
         "units_by_date": {
-          "2026-04-22": 9,
-          "2026-04-21": 15,
-          "2026-04-20": 19,
+          "2026-04-23": 4,
+          "2026-04-22": 10,
+          "2026-04-21": 17,
+          "2026-04-20": 20,
           "2026-04-19": 22,
-          "2026-04-18": 13,
+          "2026-04-18": 14,
           "2026-04-17": 15,
           "2026-04-16": 21,
           "2026-04-15": 28,
@@ -4639,7 +9470,7 @@
           "2026-01-27": 37,
           "2026-01-26": 45,
           "2026-01-25": 23,
-          "2026-01-24": 15
+          "2026-01-24": 6
         }
       },
       "Noma 922": {
@@ -5449,9 +10280,9 @@
         "units_by_date": {}
       },
       "DR1": {
-        "total": 28100000.0,
-        "orders": 23,
-        "units": 23,
+        "total": 27000000.0,
+        "orders": 22,
+        "units": 22,
         "by_date": {
           "2026-04-03": 1300000.0,
           "2026-03-23": 1300000.0,
@@ -5462,7 +10293,7 @@
           "2026-02-24": 3600000.0,
           "2026-02-23": 6000000.0,
           "2026-02-07": 2400000.0,
-          "2026-01-24": 2200000.0,
+          "2026-01-24": 1100000.0,
           "2026-03-03": 1200000.0
         },
         "orders_by_date": {
@@ -5475,7 +10306,7 @@
           "2026-02-24": 3,
           "2026-02-23": 5,
           "2026-02-07": 2,
-          "2026-01-24": 2,
+          "2026-01-24": 1,
           "2026-03-03": 1
         },
         "units_by_date": {
@@ -5488,7 +10319,7 @@
           "2026-02-24": 3,
           "2026-02-23": 5,
           "2026-02-07": 2,
-          "2026-01-24": 2,
+          "2026-01-24": 1,
           "2026-03-03": 1
         }
       },
@@ -5931,10 +10762,11 @@
     },
     "other": {
       "D1": {
-        "total": 30000000.0,
-        "orders": 12,
-        "units": 12,
+        "total": 32500000.0,
+        "orders": 13,
+        "units": 13,
         "by_date": {
+          "2026-04-24": 2500000.0,
           "2026-04-23": 2500000.0,
           "2026-04-21": 2500000.0,
           "2026-04-20": 5000000.0,
@@ -5943,6 +10775,7 @@
           "2026-04-14": 7500000.0
         },
         "orders_by_date": {
+          "2026-04-24": 1,
           "2026-04-23": 1,
           "2026-04-21": 1,
           "2026-04-20": 2,
@@ -5951,6 +10784,7 @@
           "2026-04-14": 3
         },
         "units_by_date": {
+          "2026-04-24": 1,
           "2026-04-23": 1,
           "2026-04-21": 1,
           "2026-04-20": 2,
@@ -6045,10 +10879,11 @@
         "units_by_date": {}
       },
       "DA8.1": {
-        "total": 10900000.0,
-        "orders": 8,
-        "units": 9,
+        "total": 13400000.0,
+        "orders": 10,
+        "units": 11,
         "by_date": {
+          "2026-04-24": 2500000.0,
           "2026-04-23": 3750000.0,
           "2026-04-21": 2500000.0,
           "2026-04-17": 1250000.0,
@@ -6056,6 +10891,7 @@
           "2026-01-29": 900000.0
         },
         "orders_by_date": {
+          "2026-04-24": 2,
           "2026-04-23": 3,
           "2026-04-21": 1,
           "2026-04-17": 1,
@@ -6063,6 +10899,7 @@
           "2026-01-29": 1
         },
         "units_by_date": {
+          "2026-04-24": 2,
           "2026-04-23": 3,
           "2026-04-21": 2,
           "2026-04-17": 1,
@@ -6079,17 +10916,17 @@
         "units_by_date": {}
       },
       "Noma 911": {
-        "total": 20696000.0,
-        "orders": 94,
-        "units": 103,
+        "total": 22288000.0,
+        "orders": 103,
+        "units": 111,
         "by_date": {
-          "2026-04-24": 3781000.0,
-          "2026-04-23": 5771000.0,
-          "2026-04-22": 3582000.0,
-          "2026-04-21": 2985000.0,
-          "2026-04-20": 1791000.0,
+          "2026-04-24": 7164000.0,
+          "2026-04-23": 4975000.0,
+          "2026-04-22": 3383000.0,
+          "2026-04-21": 2587000.0,
+          "2026-04-20": 1592000.0,
           "2026-04-19": 796000.0,
-          "2026-04-18": 597000.0,
+          "2026-04-18": 398000.0,
           "2026-04-16": 199000.0,
           "2026-04-15": 199000.0,
           "2026-04-13": 398000.0,
@@ -6098,13 +10935,13 @@
           "2026-04-01": 199000.0
         },
         "orders_by_date": {
-          "2026-04-24": 17,
-          "2026-04-23": 25,
-          "2026-04-22": 16,
-          "2026-04-21": 13,
-          "2026-04-20": 9,
+          "2026-04-24": 34,
+          "2026-04-23": 22,
+          "2026-04-22": 15,
+          "2026-04-21": 11,
+          "2026-04-20": 8,
           "2026-04-19": 4,
-          "2026-04-18": 3,
+          "2026-04-18": 2,
           "2026-04-16": 1,
           "2026-04-15": 1,
           "2026-04-13": 2,
@@ -6113,13 +10950,13 @@
           "2026-04-01": 1
         },
         "units_by_date": {
-          "2026-04-24": 19,
-          "2026-04-23": 28,
-          "2026-04-22": 18,
-          "2026-04-21": 15,
-          "2026-04-20": 9,
+          "2026-04-24": 36,
+          "2026-04-23": 24,
+          "2026-04-22": 17,
+          "2026-04-21": 13,
+          "2026-04-20": 8,
           "2026-04-19": 4,
-          "2026-04-18": 3,
+          "2026-04-18": 2,
           "2026-04-16": 1,
           "2026-04-15": 1,
           "2026-04-13": 2,
@@ -6154,9 +10991,9 @@
   "source_groups": {
     "DUY": {
       "label": "DUY",
-      "total_orders": 3283,
+      "total_orders": 3290,
       "total_orders_by_date": {
-        "2026-04-24": 9,
+        "2026-04-24": 27,
         "2026-04-23": 23,
         "2026-04-22": 17,
         "2026-04-21": 24,
@@ -6242,13 +11079,14 @@
         "2026-01-27": 56,
         "2026-01-26": 54,
         "2026-01-25": 25,
-        "2026-01-24": 19
+        "2026-01-24": 8
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 1393000.0,
-          "2026-04-21": 6337000.0,
-          "2026-04-20": 9135000.0,
+          "2026-04-23": 796000.0,
+          "2026-04-22": 1592000.0,
+          "2026-04-21": 6536000.0,
+          "2026-04-20": 9334000.0,
           "2026-04-19": 7786000.0,
           "2026-04-18": 3638000.0,
           "2026-04-17": 5286000.0,
@@ -6273,7 +11111,7 @@
           "2026-03-28": 5392000.0,
           "2026-03-27": 8582000.0,
           "2026-03-26": 9700000.0,
-          "2026-03-25": 14321000.0,
+          "2026-03-25": 16221000.0,
           "2026-03-24": 6863000.0,
           "2026-03-23": 15601000.0,
           "2026-03-22": 12184000.0,
@@ -6325,7 +11163,7 @@
           "2026-01-27": 18422000.0,
           "2026-01-26": 12013000.0,
           "2026-01-25": 9376000.0,
-          "2026-01-24": 9283000.0
+          "2026-01-24": 3694000.0
         },
         "returning": {
           "2026-04-17": 199000.0,
@@ -6449,7 +11287,7 @@
           "2026-01-28": 1298000.0,
           "2026-01-27": 4173000.0,
           "2026-01-26": 1194000.0,
-          "2026-01-24": 2200000.0
+          "2026-01-24": 1100000.0
         },
         "canceled": {
           "2026-04-07": 398000.0,
@@ -6465,11 +11303,11 @@
           "2026-01-30": 2500000.0
         },
         "other": {
-          "2026-04-24": 1990000.0,
-          "2026-04-23": 11530000.0,
-          "2026-04-22": 2189000.0,
-          "2026-04-21": 7189000.0,
-          "2026-04-20": 6194000.0,
+          "2026-04-24": 9776000.0,
+          "2026-04-23": 10734000.0,
+          "2026-04-22": 1990000.0,
+          "2026-04-21": 6990000.0,
+          "2026-04-20": 5995000.0,
           "2026-04-19": 597000.0,
           "2026-04-18": 2699000.0,
           "2026-04-17": 11250000.0,
@@ -6488,7 +11326,7 @@
           "2026-03-30": 0.0,
           "2026-03-28": 0.0,
           "2026-03-27": 0.0,
-          "2026-03-25": 1900000.0,
+          "2026-03-25": 0.0,
           "2026-03-23": 1900000.0,
           "2026-03-22": 0.0,
           "2026-03-21": 0.0,
@@ -6541,9 +11379,10 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-04-22": 6,
-          "2026-04-21": 13,
-          "2026-04-20": 16,
+          "2026-04-23": 3,
+          "2026-04-22": 7,
+          "2026-04-21": 14,
+          "2026-04-20": 17,
           "2026-04-19": 14,
           "2026-04-18": 10,
           "2026-04-17": 12,
@@ -6568,7 +11407,7 @@
           "2026-03-28": 9,
           "2026-03-27": 16,
           "2026-03-26": 23,
-          "2026-03-25": 19,
+          "2026-03-25": 20,
           "2026-03-24": 16,
           "2026-03-23": 24,
           "2026-03-22": 26,
@@ -6620,7 +11459,7 @@
           "2026-01-27": 43,
           "2026-01-26": 43,
           "2026-01-25": 22,
-          "2026-01-24": 16
+          "2026-01-24": 6
         },
         "returning": {
           "2026-04-17": 1,
@@ -6744,7 +11583,7 @@
           "2026-01-28": 3,
           "2026-01-27": 7,
           "2026-01-26": 4,
-          "2026-01-24": 2
+          "2026-01-24": 1
         },
         "canceled": {
           "2026-04-07": 1,
@@ -6760,11 +11599,11 @@
           "2026-01-30": 1
         },
         "other": {
-          "2026-04-24": 9,
-          "2026-04-23": 23,
-          "2026-04-22": 11,
-          "2026-04-21": 11,
-          "2026-04-20": 10,
+          "2026-04-24": 27,
+          "2026-04-23": 20,
+          "2026-04-22": 10,
+          "2026-04-21": 10,
+          "2026-04-20": 9,
           "2026-04-19": 4,
           "2026-04-18": 2,
           "2026-04-17": 6,
@@ -6783,7 +11622,7 @@
           "2026-03-30": 1,
           "2026-03-28": 1,
           "2026-03-27": 2,
-          "2026-03-25": 2,
+          "2026-03-25": 1,
           "2026-03-23": 2,
           "2026-03-22": 1,
           "2026-03-21": 2,
@@ -6836,31 +11675,31 @@
       },
       "summary": {
         "delivered": {
-          "orders": 2621,
-          "total": 1085071000.0
+          "orders": 2618,
+          "total": 1082775000.0
         },
         "returning": {
           "orders": 184,
           "total": 115027000.0
         },
         "returned": {
-          "orders": 232,
-          "total": 185557000.0
+          "orders": 231,
+          "total": 184457000.0
         },
         "canceled": {
           "orders": 11,
           "total": 9273000.0
         },
         "other": {
-          "orders": 235,
-          "total": 59731000.0
+          "orders": 246,
+          "total": 64224000.0
         }
       },
       "products": {
         "D1": {
-          "total": 375000000.0,
-          "orders": 150,
-          "units": 150,
+          "total": 377500000.0,
+          "orders": 151,
+          "units": 151,
           "by_date": {
             "2026-04-20": 7500000.0,
             "2026-04-19": 5000000.0,
@@ -6914,6 +11753,7 @@
             "2026-04-03": 2500000.0,
             "2026-03-30": 2500000.0,
             "2026-02-06": 2500000.0,
+            "2026-04-24": 2500000.0,
             "2026-04-23": 2500000.0,
             "2026-04-21": 2500000.0,
             "2026-04-18": 2500000.0,
@@ -6972,6 +11812,7 @@
             "2026-04-03": 1,
             "2026-03-30": 1,
             "2026-02-06": 1,
+            "2026-04-24": 1,
             "2026-04-23": 1,
             "2026-04-21": 1,
             "2026-04-18": 1,
@@ -7030,6 +11871,7 @@
             "2026-04-03": 1,
             "2026-03-30": 1,
             "2026-02-06": 1,
+            "2026-04-24": 1,
             "2026-04-23": 1,
             "2026-04-21": 1,
             "2026-04-18": 1,
@@ -7089,9 +11931,9 @@
           "units_by_date": {}
         },
         "DR1": {
-          "total": 128900000.0,
-          "orders": 103,
-          "units": 103,
+          "total": 126700000.0,
+          "orders": 101,
+          "units": 101,
           "by_date": {
             "2026-04-16": 5200000.0,
             "2026-04-15": 3900000.0,
@@ -7124,8 +11966,8 @@
             "2026-02-04": 1200000.0,
             "2026-02-02": 1200000.0,
             "2026-01-27": 1200000.0,
-            "2026-01-24": 3300000.0,
             "2026-03-20": 2500000.0,
+            "2026-01-24": 1100000.0,
             "2026-04-23": 1300000.0
           },
           "orders_by_date": {
@@ -7160,8 +12002,8 @@
             "2026-02-04": 1,
             "2026-02-02": 1,
             "2026-01-27": 1,
-            "2026-01-24": 3,
             "2026-03-20": 2,
+            "2026-01-24": 1,
             "2026-04-23": 1
           },
           "units_by_date": {
@@ -7196,8 +12038,8 @@
             "2026-02-04": 1,
             "2026-02-02": 1,
             "2026-01-27": 1,
-            "2026-01-24": 3,
             "2026-03-20": 2,
+            "2026-01-24": 1,
             "2026-04-23": 1
           }
         },
@@ -7218,9 +12060,9 @@
           "units_by_date": {}
         },
         "DA8.1": {
-          "total": 217490000.0,
-          "orders": 207,
-          "units": 221,
+          "total": 219990000.0,
+          "orders": 209,
+          "units": 223,
           "by_date": {
             "2026-04-21": 6250000.0,
             "2026-04-20": 3750000.0,
@@ -7273,6 +12115,7 @@
             "2026-01-26": 1800000.0,
             "2026-01-25": 900000.0,
             "2026-02-06": 900000.0,
+            "2026-04-24": 2500000.0,
             "2026-04-23": 3750000.0,
             "2026-04-17": 1250000.0
           },
@@ -7328,6 +12171,7 @@
             "2026-01-26": 2,
             "2026-01-25": 1,
             "2026-02-06": 1,
+            "2026-04-24": 2,
             "2026-04-23": 3,
             "2026-04-17": 1
           },
@@ -7383,41 +12227,40 @@
             "2026-01-26": 2,
             "2026-01-25": 1,
             "2026-02-06": 1,
+            "2026-04-24": 2,
             "2026-04-23": 3,
             "2026-04-17": 1
           }
         },
         "DA8.1 Pro": {
-          "total": 9600000.0,
-          "orders": 8,
-          "units": 8,
+          "total": 8400000.0,
+          "orders": 7,
+          "units": 7,
           "by_date": {
             "2026-02-02": 1200000.0,
             "2026-01-29": 4800000.0,
             "2026-01-28": 1200000.0,
-            "2026-01-25": 1200000.0,
-            "2026-01-24": 1200000.0
+            "2026-01-25": 1200000.0
           },
           "orders_by_date": {
             "2026-02-02": 1,
             "2026-01-29": 4,
             "2026-01-28": 1,
-            "2026-01-25": 1,
-            "2026-01-24": 1
+            "2026-01-25": 1
           },
           "units_by_date": {
             "2026-02-02": 1,
             "2026-01-29": 4,
             "2026-01-28": 1,
-            "2026-01-25": 1,
-            "2026-01-24": 1
+            "2026-01-25": 1
           }
         },
         "Noma 911": {
-          "total": 594811000.0,
-          "orders": 2569,
-          "units": 2823,
+          "total": 595806000.0,
+          "orders": 2578,
+          "units": 2828,
           "by_date": {
+            "2026-04-23": 3980000.0,
             "2026-04-22": 3582000.0,
             "2026-04-21": 4776000.0,
             "2026-04-20": 3980000.0,
@@ -7497,11 +12340,11 @@
             "2026-01-27": 9353000.0,
             "2026-01-26": 10547000.0,
             "2026-01-25": 5174000.0,
-            "2026-01-24": 2985000.0,
-            "2026-04-24": 1990000.0,
-            "2026-04-23": 3980000.0
+            "2026-01-24": 1194000.0,
+            "2026-04-24": 4776000.0
           },
           "orders_by_date": {
+            "2026-04-23": 17,
             "2026-04-22": 16,
             "2026-04-21": 20,
             "2026-04-20": 18,
@@ -7581,11 +12424,11 @@
             "2026-01-27": 42,
             "2026-01-26": 48,
             "2026-01-25": 21,
-            "2026-01-24": 10,
-            "2026-04-24": 9,
-            "2026-04-23": 17
+            "2026-01-24": 5,
+            "2026-04-24": 23
           },
           "units_by_date": {
+            "2026-04-23": 20,
             "2026-04-22": 18,
             "2026-04-21": 23,
             "2026-04-20": 20,
@@ -7665,9 +12508,8 @@
             "2026-01-27": 46,
             "2026-01-26": 52,
             "2026-01-25": 25,
-            "2026-01-24": 15,
-            "2026-04-24": 10,
-            "2026-04-23": 20
+            "2026-01-24": 6,
+            "2026-04-24": 24
           }
         },
         "Noma 922": {
@@ -8075,9 +12917,9 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 94200000.0,
-            "orders": 75,
-            "units": 75,
+            "total": 93100000.0,
+            "orders": 74,
+            "units": 74,
             "by_date": {
               "2026-04-16": 5200000.0,
               "2026-04-15": 2600000.0,
@@ -8109,8 +12951,7 @@
               "2026-02-05": 3600000.0,
               "2026-02-04": 1200000.0,
               "2026-02-02": 1200000.0,
-              "2026-01-27": 1200000.0,
-              "2026-01-24": 1100000.0
+              "2026-01-27": 1200000.0
             },
             "orders_by_date": {
               "2026-04-16": 4,
@@ -8143,8 +12984,7 @@
               "2026-02-05": 3,
               "2026-02-04": 1,
               "2026-02-02": 1,
-              "2026-01-27": 1,
-              "2026-01-24": 1
+              "2026-01-27": 1
             },
             "units_by_date": {
               "2026-04-16": 4,
@@ -8177,8 +13017,7 @@
               "2026-02-05": 3,
               "2026-02-04": 1,
               "2026-02-02": 1,
-              "2026-01-27": 1,
-              "2026-01-24": 1
+              "2026-01-27": 1
             }
           },
           "DR4 Plus": {
@@ -8359,39 +13198,37 @@
             }
           },
           "DA8.1 Pro": {
-            "total": 9600000.0,
-            "orders": 8,
-            "units": 8,
+            "total": 8400000.0,
+            "orders": 7,
+            "units": 7,
             "by_date": {
               "2026-02-02": 1200000.0,
               "2026-01-29": 4800000.0,
               "2026-01-28": 1200000.0,
-              "2026-01-25": 1200000.0,
-              "2026-01-24": 1200000.0
+              "2026-01-25": 1200000.0
             },
             "orders_by_date": {
               "2026-02-02": 1,
               "2026-01-29": 4,
               "2026-01-28": 1,
-              "2026-01-25": 1,
-              "2026-01-24": 1
+              "2026-01-25": 1
             },
             "units_by_date": {
               "2026-02-02": 1,
               "2026-01-29": 4,
               "2026-01-28": 1,
-              "2026-01-25": 1,
-              "2026-01-24": 1
+              "2026-01-25": 1
             }
           },
           "Noma 911": {
-            "total": 513022000.0,
-            "orders": 2217,
-            "units": 2425,
+            "total": 512624000.0,
+            "orders": 2218,
+            "units": 2423,
             "by_date": {
-              "2026-04-22": 1393000.0,
-              "2026-04-21": 2587000.0,
-              "2026-04-20": 2786000.0,
+              "2026-04-23": 796000.0,
+              "2026-04-22": 1592000.0,
+              "2026-04-21": 2786000.0,
+              "2026-04-20": 2985000.0,
               "2026-04-19": 2786000.0,
               "2026-04-18": 2388000.0,
               "2026-04-17": 2786000.0,
@@ -8468,12 +13305,13 @@
               "2026-01-27": 7562000.0,
               "2026-01-26": 8756000.0,
               "2026-01-25": 4776000.0,
-              "2026-01-24": 2985000.0
+              "2026-01-24": 1194000.0
             },
             "orders_by_date": {
-              "2026-04-22": 6,
-              "2026-04-21": 11,
-              "2026-04-20": 12,
+              "2026-04-23": 3,
+              "2026-04-22": 7,
+              "2026-04-21": 12,
+              "2026-04-20": 13,
               "2026-04-19": 12,
               "2026-04-18": 9,
               "2026-04-17": 11,
@@ -8550,12 +13388,13 @@
               "2026-01-27": 35,
               "2026-01-26": 40,
               "2026-01-25": 19,
-              "2026-01-24": 10
+              "2026-01-24": 5
             },
             "units_by_date": {
-              "2026-04-22": 7,
-              "2026-04-21": 12,
-              "2026-04-20": 14,
+              "2026-04-23": 4,
+              "2026-04-22": 8,
+              "2026-04-21": 13,
+              "2026-04-20": 15,
               "2026-04-19": 14,
               "2026-04-18": 10,
               "2026-04-17": 14,
@@ -8632,7 +13471,7 @@
               "2026-01-27": 37,
               "2026-01-26": 43,
               "2026-01-25": 23,
-              "2026-01-24": 15
+              "2026-01-24": 6
             }
           },
           "Noma 922": {
@@ -9403,9 +14242,9 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 25600000.0,
-            "orders": 21,
-            "units": 21,
+            "total": 24500000.0,
+            "orders": 20,
+            "units": 20,
             "by_date": {
               "2026-04-03": 1300000.0,
               "2026-03-23": 1300000.0,
@@ -9416,7 +14255,7 @@
               "2026-02-24": 3600000.0,
               "2026-02-23": 6000000.0,
               "2026-02-07": 2400000.0,
-              "2026-01-24": 2200000.0
+              "2026-01-24": 1100000.0
             },
             "orders_by_date": {
               "2026-04-03": 1,
@@ -9428,7 +14267,7 @@
               "2026-02-24": 3,
               "2026-02-23": 5,
               "2026-02-07": 2,
-              "2026-01-24": 2
+              "2026-01-24": 1
             },
             "units_by_date": {
               "2026-04-03": 1,
@@ -9440,7 +14279,7 @@
               "2026-02-24": 3,
               "2026-02-23": 5,
               "2026-02-07": 2,
-              "2026-01-24": 2
+              "2026-01-24": 1
             }
           },
           "DR4 Plus": {
@@ -9867,10 +14706,11 @@
         },
         "other": {
           "D1": {
-            "total": 30000000.0,
-            "orders": 12,
-            "units": 12,
+            "total": 32500000.0,
+            "orders": 13,
+            "units": 13,
             "by_date": {
+              "2026-04-24": 2500000.0,
               "2026-04-23": 2500000.0,
               "2026-04-21": 2500000.0,
               "2026-04-20": 5000000.0,
@@ -9879,6 +14719,7 @@
               "2026-04-14": 7500000.0
             },
             "orders_by_date": {
+              "2026-04-24": 1,
               "2026-04-23": 1,
               "2026-04-21": 1,
               "2026-04-20": 2,
@@ -9887,6 +14728,7 @@
               "2026-04-14": 3
             },
             "units_by_date": {
+              "2026-04-24": 1,
               "2026-04-23": 1,
               "2026-04-21": 1,
               "2026-04-20": 2,
@@ -9966,10 +14808,11 @@
             "units_by_date": {}
           },
           "DA8.1": {
-            "total": 10900000.0,
-            "orders": 8,
-            "units": 9,
+            "total": 13400000.0,
+            "orders": 10,
+            "units": 11,
             "by_date": {
+              "2026-04-24": 2500000.0,
               "2026-04-23": 3750000.0,
               "2026-04-21": 2500000.0,
               "2026-04-17": 1250000.0,
@@ -9977,6 +14820,7 @@
               "2026-01-29": 900000.0
             },
             "orders_by_date": {
+              "2026-04-24": 2,
               "2026-04-23": 3,
               "2026-04-21": 1,
               "2026-04-17": 1,
@@ -9984,6 +14828,7 @@
               "2026-01-29": 1
             },
             "units_by_date": {
+              "2026-04-24": 2,
               "2026-04-23": 3,
               "2026-04-21": 2,
               "2026-04-17": 1,
@@ -10000,15 +14845,15 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 13731000.0,
-            "orders": 62,
-            "units": 69,
+            "total": 15124000.0,
+            "orders": 70,
+            "units": 76,
             "by_date": {
-              "2026-04-24": 1990000.0,
-              "2026-04-23": 3980000.0,
-              "2026-04-22": 2189000.0,
-              "2026-04-21": 2189000.0,
-              "2026-04-20": 1194000.0,
+              "2026-04-24": 4776000.0,
+              "2026-04-23": 3184000.0,
+              "2026-04-22": 1990000.0,
+              "2026-04-21": 1990000.0,
+              "2026-04-20": 995000.0,
               "2026-04-19": 597000.0,
               "2026-04-18": 199000.0,
               "2026-04-16": 199000.0,
@@ -10019,11 +14864,11 @@
               "2026-04-01": 199000.0
             },
             "orders_by_date": {
-              "2026-04-24": 9,
-              "2026-04-23": 17,
-              "2026-04-22": 10,
-              "2026-04-21": 9,
-              "2026-04-20": 6,
+              "2026-04-24": 23,
+              "2026-04-23": 14,
+              "2026-04-22": 9,
+              "2026-04-21": 8,
+              "2026-04-20": 5,
               "2026-04-19": 3,
               "2026-04-18": 1,
               "2026-04-16": 1,
@@ -10034,11 +14879,11 @@
               "2026-04-01": 1
             },
             "units_by_date": {
-              "2026-04-24": 10,
-              "2026-04-23": 20,
-              "2026-04-22": 11,
-              "2026-04-21": 11,
-              "2026-04-20": 6,
+              "2026-04-24": 24,
+              "2026-04-23": 16,
+              "2026-04-22": 10,
+              "2026-04-21": 10,
+              "2026-04-20": 5,
               "2026-04-19": 3,
               "2026-04-18": 1,
               "2026-04-16": 1,
@@ -10062,9 +14907,9 @@
     },
     "PHUONG_NAM": {
       "label": "PHƯƠNG NAM",
-      "total_orders": 53,
+      "total_orders": 55,
       "total_orders_by_date": {
-        "2026-04-24": 8,
+        "2026-04-24": 10,
         "2026-04-23": 8,
         "2026-04-22": 8,
         "2026-04-21": 8,
@@ -10075,49 +14920,47 @@
       "order_revenue_by_status_by_date": {
         "delivered": {
           "2026-04-22": 398000.0,
-          "2026-04-21": 1847000.0,
+          "2026-04-21": 2046000.0,
           "2026-04-20": 995000.0,
           "2026-04-19": 1592000.0,
-          "2026-04-18": 597000.0
+          "2026-04-18": 796000.0
         },
         "returning": {},
         "returned": {},
         "canceled": {},
         "other": {
-          "2026-04-24": 1791000.0,
+          "2026-04-24": 2189000.0,
           "2026-04-23": 1791000.0,
           "2026-04-22": 1393000.0,
-          "2026-04-21": 796000.0,
+          "2026-04-21": 597000.0,
           "2026-04-20": 597000.0,
-          "2026-04-19": 199000.0,
-          "2026-04-18": 199000.0
+          "2026-04-19": 199000.0
         }
       },
       "order_count_by_status_by_date": {
         "delivered": {
           "2026-04-22": 2,
-          "2026-04-21": 4,
+          "2026-04-21": 5,
           "2026-04-20": 5,
           "2026-04-19": 8,
-          "2026-04-18": 3
+          "2026-04-18": 4
         },
         "returning": {},
         "returned": {},
         "canceled": {},
         "other": {
-          "2026-04-24": 8,
+          "2026-04-24": 10,
           "2026-04-23": 8,
           "2026-04-22": 6,
-          "2026-04-21": 4,
+          "2026-04-21": 3,
           "2026-04-20": 3,
-          "2026-04-19": 1,
-          "2026-04-18": 1
+          "2026-04-19": 1
         }
       },
       "summary": {
         "delivered": {
-          "orders": 22,
-          "total": 5429000.0
+          "orders": 24,
+          "total": 5827000.0
         },
         "returning": {
           "orders": 0,
@@ -10232,16 +15075,16 @@
           "units_by_date": {}
         },
         "Noma 911": {
-          "total": 10945000.0,
-          "orders": 52,
-          "units": 54,
+          "total": 11343000.0,
+          "orders": 54,
+          "units": 56,
           "by_date": {
             "2026-04-22": 1791000.0,
             "2026-04-21": 1393000.0,
             "2026-04-20": 1592000.0,
             "2026-04-19": 1791000.0,
             "2026-04-18": 796000.0,
-            "2026-04-24": 1791000.0,
+            "2026-04-24": 2189000.0,
             "2026-04-23": 1791000.0
           },
           "orders_by_date": {
@@ -10250,7 +15093,7 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
-            "2026-04-24": 8,
+            "2026-04-24": 10,
             "2026-04-23": 8
           },
           "units_by_date": {
@@ -10259,7 +15102,7 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
-            "2026-04-24": 9,
+            "2026-04-24": 11,
             "2026-04-23": 8
           }
         },
@@ -10375,29 +15218,29 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 4179000.0,
-            "orders": 21,
-            "units": 21,
+            "total": 4577000.0,
+            "orders": 23,
+            "units": 23,
             "by_date": {
               "2026-04-22": 398000.0,
-              "2026-04-21": 597000.0,
+              "2026-04-21": 796000.0,
               "2026-04-20": 995000.0,
               "2026-04-19": 1592000.0,
-              "2026-04-18": 597000.0
+              "2026-04-18": 796000.0
             },
             "orders_by_date": {
               "2026-04-22": 2,
-              "2026-04-21": 3,
+              "2026-04-21": 4,
               "2026-04-20": 5,
               "2026-04-19": 8,
-              "2026-04-18": 3
+              "2026-04-18": 4
             },
             "units_by_date": {
               "2026-04-22": 2,
-              "2026-04-21": 3,
+              "2026-04-21": 4,
               "2026-04-20": 5,
               "2026-04-19": 8,
-              "2026-04-18": 3
+              "2026-04-18": 4
             }
           },
           "Noma 922": {
@@ -10821,31 +15664,28 @@
             "orders": 31,
             "units": 33,
             "by_date": {
-              "2026-04-24": 1791000.0,
+              "2026-04-24": 2189000.0,
               "2026-04-23": 1791000.0,
               "2026-04-22": 1393000.0,
-              "2026-04-21": 796000.0,
+              "2026-04-21": 597000.0,
               "2026-04-20": 597000.0,
-              "2026-04-19": 199000.0,
-              "2026-04-18": 199000.0
+              "2026-04-19": 199000.0
             },
             "orders_by_date": {
-              "2026-04-24": 8,
+              "2026-04-24": 10,
               "2026-04-23": 8,
               "2026-04-22": 6,
-              "2026-04-21": 4,
+              "2026-04-21": 3,
               "2026-04-20": 3,
-              "2026-04-19": 1,
-              "2026-04-18": 1
+              "2026-04-19": 1
             },
             "units_by_date": {
-              "2026-04-24": 9,
+              "2026-04-24": 11,
               "2026-04-23": 8,
               "2026-04-22": 7,
-              "2026-04-21": 4,
+              "2026-04-21": 3,
               "2026-04-20": 3,
-              "2026-04-19": 1,
-              "2026-04-18": 1
+              "2026-04-19": 1
             }
           },
           "Noma 922": {
@@ -10867,8 +15707,9 @@
     },
     "WEBSITE": {
       "label": "Website",
-      "total_orders": 175,
+      "total_orders": 177,
       "total_orders_by_date": {
+        "2026-04-24": 2,
         "2026-04-23": 3,
         "2026-04-22": 3,
         "2026-04-21": 3,
@@ -10935,6 +15776,7 @@
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
+          "2026-04-22": 120000.0,
           "2026-04-21": 4049000.0,
           "2026-04-19": 6000000.0,
           "2026-04-17": 2288000.0,
@@ -11020,8 +15862,9 @@
         },
         "canceled": {},
         "other": {
+          "2026-04-24": 1158000.0,
           "2026-04-23": 8240000.0,
-          "2026-04-22": 3210000.0,
+          "2026-04-22": 3090000.0,
           "2026-04-20": 599000.0,
           "2026-04-18": 199000.0,
           "2026-04-15": 1599000.0,
@@ -11030,6 +15873,7 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
+          "2026-04-22": 1,
           "2026-04-21": 3,
           "2026-04-19": 2,
           "2026-04-17": 3,
@@ -11115,8 +15959,9 @@
         },
         "canceled": {},
         "other": {
+          "2026-04-24": 2,
           "2026-04-23": 3,
-          "2026-04-22": 3,
+          "2026-04-22": 2,
           "2026-04-20": 1,
           "2026-04-18": 1,
           "2026-04-15": 2,
@@ -11125,8 +15970,8 @@
       },
       "summary": {
         "delivered": {
-          "orders": 141,
-          "total": 228917000.0
+          "orders": 142,
+          "total": 229037000.0
         },
         "returning": {
           "orders": 9,
@@ -11141,8 +15986,8 @@
           "total": 0.0
         },
         "other": {
-          "orders": 11,
-          "total": 15897000.0
+          "orders": 12,
+          "total": 16935000.0
         }
       },
       "products": {
@@ -13578,8 +18423,9 @@
     },
     "HOTLINE": {
       "label": "Hotline",
-      "total_orders": 58,
+      "total_orders": 59,
       "total_orders_by_date": {
+        "2026-04-24": 1,
         "2026-04-23": 1,
         "2026-04-20": 1,
         "2026-04-18": 2,
@@ -13675,6 +18521,7 @@
           "2026-02-24": 1198000.0
         },
         "other": {
+          "2026-04-24": 199000.0,
           "2026-04-23": 1950000.0,
           "2026-04-20": 6600000.0
         }
@@ -13733,6 +18580,7 @@
           "2026-02-24": 1
         },
         "other": {
+          "2026-04-24": 1,
           "2026-04-23": 1,
           "2026-04-20": 1
         }
@@ -13755,8 +18603,8 @@
           "total": 2396000.0
         },
         "other": {
-          "orders": 2,
-          "total": 8550000.0
+          "orders": 3,
+          "total": 8749000.0
         }
       },
       "products": {
@@ -13969,23 +18817,26 @@
           "units_by_date": {}
         },
         "Noma 911": {
-          "total": 1194000.0,
-          "orders": 3,
-          "units": 5,
+          "total": 1393000.0,
+          "orders": 4,
+          "units": 6,
           "by_date": {
             "2026-04-13": 398000.0,
             "2026-04-03": 398000.0,
-            "2026-02-04": 398000.0
+            "2026-02-04": 398000.0,
+            "2026-04-24": 199000.0
           },
           "orders_by_date": {
             "2026-04-13": 1,
             "2026-04-03": 1,
-            "2026-02-04": 1
+            "2026-02-04": 1,
+            "2026-04-24": 1
           },
           "units_by_date": {
             "2026-04-13": 2,
             "2026-04-03": 2,
-            "2026-02-04": 1
+            "2026-02-04": 1,
+            "2026-04-24": 1
           }
         },
         "Noma 922": {
@@ -14674,12 +19525,18 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 0.0,
-            "orders": 0,
-            "units": 0,
-            "by_date": {},
-            "orders_by_date": {},
-            "units_by_date": {}
+            "total": 199000.0,
+            "orders": 1,
+            "units": 1,
+            "by_date": {
+              "2026-04-24": 199000.0
+            },
+            "orders_by_date": {
+              "2026-04-24": 1
+            },
+            "units_by_date": {
+              "2026-04-24": 1
+            }
           },
           "Noma 922": {
             "total": 0.0,
