@@ -609,6 +609,19 @@ def main():
         print("[FATAL] google-ads-spend.json missing or empty campaigns_raw", file=sys.stderr)
         sys.exit(1)
 
+    # 2026-04-24: Override category field bằng classify_campaign_v2 (9 nhóm chuẩn Doscom)
+    # để tất cả downstream (per_category, per_campaign, roas_proxy, per_category_categories)
+    # đều nhất quán theo 9 nhóm mới (không còn OTHER_DI, OTHER_RAZOR cũ)
+    print("[INFO] Override category field theo classify_campaign_v2 (9 nhóm chuẩn Doscom)...")
+    _overridden_count = 0
+    for _r in ga_data.get("campaigns_raw", []):
+        _old = _r.get("category", "")
+        _new = classify_campaign_v2(_r.get("campaign", ""))
+        if _old != _new:
+            _overridden_count += 1
+        _r["category"] = _new
+    print(f"[INFO] Overridden {_overridden_count} rows (total {len(ga_data['campaigns_raw'])} rows)")
+
     print("[INFO] Computing per-campaign metrics...")
     camp_metrics, date_ranges = compute_campaign_metrics(ga_data)
 

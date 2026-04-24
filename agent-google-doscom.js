@@ -274,7 +274,9 @@ function switchCat(key,ev){
   var tabs=document.querySelectorAll(".cat-tab");
   for(var i=0;i<tabs.length;i++)tabs[i].classList.remove("active");
   if(ev&&ev.target)ev.target.classList.add("active");
-  document.getElementById("cat-content").innerHTML=renderCategory(REPORT.categories[key],key);
+  // v4.1: ưu tiên merged cats (9 nhóm), fallback REPORT.categories
+  var cat = (window.__CATS_MERGED && window.__CATS_MERGED[key]) || (REPORT.categories && REPORT.categories[key]) || {};
+  document.getElementById("cat-content").innerHTML=renderCategory(cat,key);
 }
 
 function changePeriod(k){selectedPeriod=k;renderTimeFilterSection(REPORT);}
@@ -661,9 +663,43 @@ function renderTimeFilterSection(r){
 }
 
 function render(r){
-  var g=r.grade||"F",cats=r.categories||{},catKeys=[];
-  for(var k in cats)if(cats[k].ads_spend_30d>0||cats[k].keywords_count>0||cats[k].banners_count>0)catKeys.push(k);
+  var g=r.grade||"F";
+  // v4.1 — merge categories: ưu tiên 9 nhóm chuẩn Doscom từ GACTX.per_category
+  // nếu không có → fallback về r.categories (Cowork task AI gen, có thể nhóm cũ)
+  var cats = {};
+  if(GACTX && GACTX.per_category){
+    for(var ci=0;ci<CAT_ORDER.length;ci++){
+      var co = CAT_ORDER[ci];
+      var src = GACTX.per_category[co.key];
+      if(!src) continue;
+      // Merge thêm data AI từ r.categories nếu có key trùng
+      var aiData = (r.categories && r.categories[co.key]) || {};
+      cats[co.key] = Object.assign({
+        display_name: co.label,
+        ads_spend_30d: src.spend_30d || 0,
+        ads_clicks_30d: src.clicks_30d || 0,
+        ads_impressions_30d: src.impressions_30d || 0,
+        ads_ctr_30d: src.ctr_30d || 0,
+        revenue_pancake_30d: src.revenue_30d || 0,
+        orders_pancake_30d: src.orders_30d || 0,
+        roas_proxy: src.roas_proxy || 0,
+        products: (src.products || []),
+      }, aiData, {display_name: co.label});  // display_name luôn dùng nhóm mới
+    }
+  } else {
+    cats = r.categories || {};
+  }
+  var catKeys=[];
+  for(var k in cats)if((cats[k].ads_spend_30d||0)>0 || (cats[k].keywords_count||0)>0 || (cats[k].banners_count||0)>0 || (cats[k].revenue_pancake_30d||0)>0)catKeys.push(k);
+  // Sắp xếp theo thứ tự CAT_ORDER
+  catKeys.sort(function(a,b){
+    var ai = CAT_ORDER.findIndex(function(x){return x.key===a;});
+    var bi = CAT_ORDER.findIndex(function(x){return x.key===b;});
+    return (ai<0?99:ai) - (bi<0?99:bi);
+  });
   if(!currentCat&&catKeys.length)currentCat=catKeys[0];
+  // Lưu cats cho switchCat dùng
+  window.__CATS_MERGED = cats;
   var t=r.totals||{},h="";
   h+='<section class="grid-summary">';
   h+='<div class="card card-score bg-'+g+'"><div class="metric-label" style="color:rgba(255,255,255,.8)">Điểm số</div><div class="metric-value">'+r.score+'<span style="font-size:18px;opacity:.8">/100</span></div><div style="font-size:14px;font-weight:600;margin-top:4px">Xếp hạng '+g+'</div></div>';
@@ -696,14 +732,17 @@ function render(r){
     // Product ranking - render qua container để nhảy theo period
   h+='<section class="block card" id="product-ranking-container"></section>';;
 
-  // Tabs
-  h+='<section class="block card"><h2>Phân tích chi tiết theo Nhóm sản phẩm</h2><div class="cat-tabs">';
+  // Tabs — 9 nhóm chuẩn Doscom
+  h+='<section class="block card"><h2>Phân tích chi tiết theo Nhóm sản phẩm</h2>';
+  h+='<p class="text-xs text-gray" style="margin-bottom:8px">9 nhóm chuẩn: Máy dò · Camera wifi · Camera 4G · Camera gọi video 2 chiều · Máy ghi âm · Chống ghi âm · Định vị · NOMA · Khác</p>';
+  h+='<div class="cat-tabs">';
   for(var ti=0;ti<catKeys.length;ti++){
-    var ck=catKeys[ti],cc=cats[ck],act=ck===currentCat,hasUrg=false,sa=cc.summary_actions||[];
+    var ck=catKeys[ti],cc=cats[ck],act=ck===currentCat,hasUrg=false,sa=(cc && cc.summary_actions)||[];
     for(var si=0;si<sa.length;si++)if(sa[si].priority==="high"){hasUrg=true;break;}
-    h+='<button class="cat-tab '+(act?"active":"")+'" onclick="switchCat(\''+ck+'\',event)">'+esc(cc.display_name)+(hasUrg?' <span style="color:#ef4444">●</span>':'')+'</button>';
+    var dn = (cc && cc.display_name) || ck;
+    h+='<button class="cat-tab '+(act?"active":"")+'" onclick="switchCat(\''+ck+'\',event)">'+esc(dn)+(hasUrg?' <span style="color:#ef4444">●</span>':'')+'</button>';
   }
-  h+='</div><div id="cat-content">'+renderCategory(cats[currentCat],currentCat)+'</div></section>';
+  h+='</div><div id="cat-content">'+renderCategory(cats[currentCat]||{},currentCat)+'</div></section>';
 
   h+='<section class="block card" style="background:#eff6ff"><h3>Thông tin chính</h3><ul style="margin-left:16px;font-size:13px">';
   var kf=r.key_findings||[];
