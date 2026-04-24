@@ -587,16 +587,16 @@ def aggregate(orders):
 def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
     """Aggregate top products cho 3 nguồn Web+Zalo+Hotline theo 5 period (ngày VN).
 
-    Logic filter status giống compute_google_ads_metrics.compute_website_revenue:
-      - INCLUDE: delivered (3) + other (0, 1, 2, 8, 9)
-      - EXCLUDE: canceled (6), returning (4), returned (5)
+    Logic (2026-04-24 update): LẤY TẤT CẢ ĐƠN (không loại trừ hoàn/huỷ/đang gửi).
+    User request: "Lấy doanh thu của toàn bộ các đơn hàng, cột trạng thái không cần đắn đo.
+    Bộ lọc website trên trình duyệt có bao nhiêu đơn thì lấy hết. Hoàn huỷ là của bộ phận khác."
 
     orders_list: list of orders đã fetch từ 3 nguồn Website+ZaloOA+Hotline
-    today_vn: date object giờ VN (dùng để tính range cho mỗi period)
+    today_vn: date object giờ VN
     top_n: số SP tối đa trả về mỗi period (default 10)
     """
-    INCLUDE_ST = {STATUS_DELIVERED, 0, 1, 2, 8, 9}
-    EXCLUDE_ST = {STATUS_CANCELED, STATUS_RETURNING, STATUS_RETURNED}
+    INCLUDE_ST = None   # None = không filter, lấy tất cả status
+    EXCLUDE_ST = set()  # Không exclude gì
 
     y = today_vn - timedelta(days=1)
     periods = {
@@ -617,10 +617,8 @@ def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
     # Pre-compute VN date cho mỗi đơn (parse 1 lần, reuse cho 5 period)
     orders_with_vn_date = []
     for o in orders_list:
-        st = o.get("status")
-        if st in EXCLUDE_ST or st not in INCLUDE_ST:
-            continue
-        ins_str = (o.get("inserted_at") or "")[:26]  # cắt microseconds dài
+        # 2026-04-24: KHÔNG filter status — lấy tất cả đơn
+        ins_str = (o.get("inserted_at") or "")[:26]
         if not ins_str:
             continue
         try:
@@ -696,21 +694,18 @@ def build_top_products_website_by_period(orders_list, today_vn, top_n=10):
 def build_category_breakdown_by_period(orders_list, today_vn):
     """Aggregate doanh thu theo 9 nhóm sản phẩm cho 5 period.
 
-    Cùng logic filter status với build_top_products_website_by_period:
-      - INCLUDE: delivered (3) + other (0, 1, 2, 8, 9)
-      - EXCLUDE: canceled (6), returning (4), returned (5)
+    Logic (2026-04-24 update): LẤY TẤT CẢ ĐƠN (không loại trừ hoàn/huỷ/đang gửi).
+    User request: bộ phận khác xử lý hoàn huỷ, phân tích quảng cáo cần doanh thu tổng.
 
     Return:
       {period_key: {
          "label", "date_range", "total_revenue", "total_orders",
-         "categories": {
-             "MAY_DO": {"revenue", "orders", "units", "top_products": [top 3 SP]},
-             ...
-         }
+         "categories": { "MAY_DO": {revenue, orders, units, top_products}, ... }
       }}
     """
-    INCLUDE_ST = {STATUS_DELIVERED, 0, 1, 2, 8, 9}
-    EXCLUDE_ST = {STATUS_CANCELED, STATUS_RETURNING, STATUS_RETURNED}
+    # 2026-04-24: KHÔNG filter status
+    INCLUDE_ST = None
+    EXCLUDE_ST = set()
 
     y = today_vn - timedelta(days=1)
     periods = {
@@ -728,9 +723,7 @@ def build_category_breakdown_by_period(orders_list, today_vn):
     # Pre-compute VN date + classify cho mỗi order/item
     processed = []  # list of (vn_date, order_id, order_items_with_category)
     for o in orders_list:
-        st = o.get("status")
-        if st in EXCLUDE_ST or st not in INCLUDE_ST:
-            continue
+        # 2026-04-24: KHÔNG filter status — lấy tất cả đơn
         ins_str = (o.get("inserted_at") or "")[:26]
         if not ins_str:
             continue

@@ -97,10 +97,12 @@ function vnDateShift(daysDelta){
   var pad = function(n){return n<10?"0"+n:""+n;};
   return base.getUTCFullYear()+"-"+pad(base.getUTCMonth()+1)+"-"+pad(base.getUTCDate());
 }
-// Compute revenue cho 3 nguồn Web+Zalo+Hotline, range [start,end], status delivered+other
+// Compute revenue cho 3 nguồn Web+Zalo+Hotline, range [start,end]
+// 2026-04-24: LẤY TẤT CẢ status (không exclude hoàn/huỷ — bộ phận khác xử lý)
 function computePosRevenue(rev, start, end){
   if(!rev || !rev.source_groups) return null;
-  var SRC=["WEBSITE","ZALO_OA","HOTLINE"], INCL=["delivered","other"];
+  var SRC=["WEBSITE","ZALO_OA","HOTLINE"];
+  var INCL=["delivered","returning","returned","canceled","other"];
   var total_r=0, total_o=0, bySrc={};
   for(var si=0; si<SRC.length; si++){
     var s=SRC[si], src=rev.source_groups[s]||{};

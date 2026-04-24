@@ -308,14 +308,15 @@ def compute_category_metrics(camp_metrics):
 
 
 def compute_website_revenue(rev_data, start, end):
-    """Gộp doanh thu từ 3 nguồn POS Pancake: WEBSITE + ZALO_OA + HOTLINE
-    (tương đương filter 'Website' trên POS - loại DUY và PHUONG_NAM là team FB Ads).
-    Đây là nguồn tracking Google Ads chính xác: khách tự vào website/gọi hotline/chat Zalo OA.
+    """Gộp doanh thu từ 3 nguồn POS Pancake: WEBSITE + ZALO_OA + HOTLINE.
+
+    (2026-04-24 update) LẤY TẤT CẢ ĐƠN — không loại trừ hoàn/huỷ/đang gửi.
+    User request: bộ phận khác xử lý hoàn huỷ, phân tích quảng cáo cần doanh thu tổng.
     """
     groups = rev_data.get("source_groups", {})
     SRC_KEYS = ["WEBSITE", "ZALO_OA", "HOTLINE"]
-    STATUSES = ["delivered", "other"]
-    EXCLUDED = ["returning", "returned", "canceled", "refunded"]
+    STATUSES = ["delivered", "returning", "returned", "canceled", "other"]  # tất cả
+    EXCLUDED = []  # không exclude gì
 
     total = 0
     orders = 0
