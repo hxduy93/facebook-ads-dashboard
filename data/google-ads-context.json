@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-24 17:56",
+  "generated_at": "2026-04-24 22:50",
   "source_data_date_range": {
     "start_7d": "2026-04-17",
     "end": "2026-04-23",
@@ -25,7 +25,7 @@
   "summary": {
     "total_spend_30d_vnd": 105831280.0,
     "total_clicks_30d": 31227,
-    "total_impressions_30d": 2247670,
+    "total_impressions_30d": 2247669,
     "active_campaigns_30d": 19,
     "total_campaigns": 22
   },
@@ -42,8 +42,8 @@
     "orders_30d": 134,
     "by_status": {
       "delivered": {
-        "revenue": 212238750.0,
-        "orders": 106
+        "revenue": 214678750.0,
+        "orders": 107
       },
       "returning": {
         "revenue": 22029000.0,
@@ -54,8 +54,8 @@
         "orders": 4
       },
       "other": {
-        "revenue": 32176000.0,
-        "orders": 18
+        "revenue": 29736000.0,
+        "orders": 17
       }
     },
     "by_source": {
@@ -269,7 +269,7 @@
       },
       "total_spend": 18532460,
       "total_clicks": 4731,
-      "total_impressions": 325196,
+      "total_impressions": 325195,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -320,7 +320,7 @@
           "label": "Chống ghi âm",
           "spend": 275161,
           "clicks": 178,
-          "impressions": 17492,
+          "impressions": 17491,
           "ctr": 0.0102,
           "cpc": 1546,
           "campaigns_count": 2
@@ -455,7 +455,7 @@
       },
       "total_spend": 80496247,
       "total_clicks": 23147,
-      "total_impressions": 1642990,
+      "total_impressions": 1642989,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -506,7 +506,7 @@
           "label": "Chống ghi âm",
           "spend": 1912394,
           "clicks": 1396,
-          "impressions": 117781,
+          "impressions": 117780,
           "ctr": 0.0119,
           "cpc": 1370,
           "campaigns_count": 2
@@ -641,7 +641,7 @@
       },
       "total_spend": 21240787,
       "total_clicks": 5395,
-      "total_impressions": 373498,
+      "total_impressions": 373497,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -692,7 +692,7 @@
           "label": "Chống ghi âm",
           "spend": 321308,
           "clicks": 210,
-          "impressions": 20027,
+          "impressions": 20026,
           "ctr": 0.0105,
           "cpc": 1530,
           "campaigns_count": 2
@@ -734,7 +734,7 @@
       },
       "total_spend": 105831280,
       "total_clicks": 31227,
-      "total_impressions": 2247670,
+      "total_impressions": 2247669,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -785,7 +785,7 @@
           "label": "Chống ghi âm",
           "spend": 2611430,
           "clicks": 1876,
-          "impressions": 153732,
+          "impressions": 153731,
           "ctr": 0.0122,
           "cpc": 1392,
           "campaigns_count": 2
@@ -827,7 +827,7 @@
       },
       "total_spend": 272078524,
       "total_clicks": 77563,
-      "total_impressions": 5520390,
+      "total_impressions": 5520389,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -878,7 +878,7 @@
           "label": "Chống ghi âm",
           "spend": 5480711,
           "clicks": 3279,
-          "impressions": 278693,
+          "impressions": 278692,
           "ctr": 0.0118,
           "cpc": 1671,
           "campaigns_count": 2
@@ -956,7 +956,7 @@
       "spend_30d": 2611430.0,
       "spend_7d": 321308.0,
       "clicks_30d": 1876,
-      "impressions_30d": 153732,
+      "impressions_30d": 153731,
       "ctr_30d": 0.0122,
       "cpc_30d": 1392.0,
       "spend_trend_7d_pct": -41.4,
@@ -1041,8 +1041,8 @@
       "spend_prior_7d": 400031.0,
       "clicks_30d": 1676,
       "clicks_7d": 184,
-      "impressions_30d": 152146,
-      "impressions_7d": 19776,
+      "impressions_30d": 152145,
+      "impressions_7d": 19775,
       "ctr_30d": 0.011,
       "ctr_7d": 0.0093,
       "ctr_prior_7d": 0.0122,
@@ -1052,7 +1052,7 @@
       "active_days_30d": 29,
       "avg_daily_spend_30d": 66097.0,
       "spend_trend_pct": -43.5,
-      "ctr_trend_pct": -23.9,
+      "ctr_trend_pct": -23.8,
       "cpc_trend_pct": 40.1,
       "flags": [
         "cpc_spike"
