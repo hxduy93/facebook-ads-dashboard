@@ -1,7 +1,7 @@
 // Inventory dashboard — quản lý kho Doscom với edit trực tiếp
 // Lưu trữ: Cloudflare KV qua /api/inventory
 // Quyền sửa: chỉ admin email (server-side check)
-console.log("[Inventory] v1.2 loaded — sync POS support, fix admin gate");
+console.log("[Inventory] v1.3 loaded — apply-costs from Excel, thousand separator");
 
 // 2026-04-25: bỏ giới hạn admin — mọi user login đều sửa được
 var ADMIN_EMAIL = "all-logged-in-users";
@@ -193,10 +193,10 @@ function renderTable() {
     h += '<td class="code">' + esc(code) + '</td>';
     h += '<td class="name" title="' + esc(name) + '">' + esc(name) + '</td>';
     h += '<td><span class="badge" style="background:#dbeafe;color:#1e40af">' + esc(grpLabel) + '</span></td>';
-    h += '<td class="t-right"><input type="number" class="inline-edit' + nhCls +
-         '" value="' + giaNhap + '" data-code="' + esc(code) + '" data-field="gia_nhap_vnd" ' + disabled + '></td>';
-    h += '<td class="t-right"><input type="number" class="inline-edit' + bnCls +
-         '" value="' + giaBan + '" data-code="' + esc(code) + '" data-field="gia_ban_vnd" ' + disabled + '></td>';
+    h += '<td class="t-right"><input type="text" inputmode="numeric" class="inline-edit money' + nhCls +
+         '" value="' + Number(giaNhap||0).toLocaleString("vi-VN") + '" data-code="' + esc(code) + '" data-field="gia_nhap_vnd" ' + disabled + '></td>';
+    h += '<td class="t-right"><input type="text" inputmode="numeric" class="inline-edit money' + bnCls +
+         '" value="' + Number(giaBan||0).toLocaleString("vi-VN") + '" data-code="' + esc(code) + '" data-field="gia_ban_vnd" ' + disabled + '></td>';
     h += '<td class="t-right"><input type="number" class="inline-edit' + tkCls +
          '" value="' + ton + '" data-code="' + esc(code) + '" data-field="ton_kho" ' + disabled + '></td>';
     h += '<td><select class="inline-edit' + stCls + '" data-code="' + esc(code) + '" data-field="trang_thai" ' + disabled + '>';
@@ -216,8 +216,27 @@ function renderTable() {
     for (var j = 0; j < inputs.length; j++) {
       inputs[j].addEventListener("change", onCellEdit);
       inputs[j].addEventListener("input", onCellEdit);
+      // Khi rời ô tiền tệ → format lại với dấu phẩy ngàn
+      if (inputs[j].classList.contains("money")) {
+        inputs[j].addEventListener("blur", onMoneyBlur);
+        inputs[j].addEventListener("focus", onMoneyFocus);
+      }
     }
   }
+}
+
+// Khi focus vào ô tiền tệ → bỏ dấu phẩy để dễ chỉnh
+function onMoneyFocus(e) {
+  var raw = String(e.target.value || "").replace(/[^\d-]/g, "");
+  e.target.value = raw;
+  e.target.select();
+}
+
+// Khi rời ô tiền tệ → format lại có dấu phẩy
+function onMoneyBlur(e) {
+  var raw = String(e.target.value || "").replace(/[^\d-]/g, "");
+  var n = Number(raw) || 0;
+  e.target.value = n.toLocaleString("vi-VN");
 }
 
 // ── Cell edit handler ──────────────────────────────────
@@ -226,8 +245,11 @@ function onCellEdit(e) {
   var code = el.getAttribute("data-code");
   var field = el.getAttribute("data-field");
   var newVal = el.tagName === "SELECT" ? el.value : el.value;
-  if (field !== "trang_thai" && field !== "ten_day_du") {
-    newVal = Number(newVal) || 0;
+  if (field === "gia_nhap_vnd" || field === "gia_ban_vnd") {
+    // Bỏ dấu phẩy/chấm/khoảng trắng, chỉ giữ digit và dấu trừ
+    newVal = Number(String(newVal).replace(/[^\d-]/g, "")) || 0;
+  } else if (field === "ton_kho") {
+    newVal = parseInt(String(newVal).replace(/[^\d-]/g, ""), 10) || 0;
   }
   // Lookup original
   var orig = INVENTORY.find(function(x) { return x.code === code; });
@@ -316,28 +338,48 @@ function resetEdits() {
   updateSaveBar();
 }
 
-// ── Import từ Misa ──────────────────────────────────────
-async function importFromMisa() {
-  if (!IS_ADMIN) { toast("Bạn không có quyền import", "error"); return; }
-  if (!confirm("Đọc file Misa và thêm các SP MỚI vào kho?\n\n(SP đã có trong kho sẽ GIỮ NGUYÊN giá hiện tại)")) return;
+// ── Cập nhật giá nhập từ Excel (kho tổng) ──────────────
+// Đọc /data/excel-costs.json (Excel kho tổng) → match SP trong KV theo "mã tên gọi"
+// → ghi gia_nhap_vnd. SP có "thẻ nhớ XGB" sẽ tự cộng giá thẻ tương ứng.
+// Giữ nguyên giá user đã sửa thủ công.
+async function applyCostsFromExcel() {
+  if (!IS_ADMIN) { toast("Bạn không có quyền cập nhật", "error"); return; }
+  if (!confirm("CẬP NHẬT GIÁ NHẬP TỪ EXCEL\n\n" +
+               "• Match từng SP trong kho với 'Mã tên gọi' Excel\n" +
+               "• SP kèm thẻ nhớ (vd 'DA8.1 + thẻ nhớ 64GB') sẽ cộng thêm giá thẻ\n" +
+               "• KHÔNG đè lên SP bạn đã sửa giá vốn thủ công\n\n" +
+               "Tiếp tục?")) return;
 
-  var btn = document.getElementById("btn-import");
-  btn.disabled = true; btn.textContent = "Đang import...";
+  var btn = document.getElementById("btn-apply-costs");
+  btn.disabled = true;
+  var originalText = btn.textContent;
+  btn.textContent = "⏳ Đang cập nhật...";
 
   try {
-    var resp = await fetch("/api/inventory/import", {
+    var resp = await fetch("/api/inventory/apply-costs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ keep_user_edits: true }),
     });
     var data = await resp.json();
     if (!resp.ok) throw new Error(data.error || "HTTP " + resp.status);
-    toast("Import xong: thêm mới " + data.added + " SP, giữ nguyên " + data.kept + " SP", "success");
+    var summary = "✓ Cập nhật giá nhập xong:\n" +
+                  "  • Tổng SP trong kho: " + data.total_kv_items + "\n" +
+                  "  • Đã cập nhật:        " + data.updated + "\n" +
+                  "  • Có thẻ nhớ (cộng): " + data.with_memory_card + "\n" +
+                  "  • Giữ giá user sửa:  " + data.kept_user_edits + "\n" +
+                  "  • Không match Excel: " + data.no_match;
+    console.log("[Apply Costs]", summary, data);
+    if (data.samples_no_match && data.samples_no_match.length) {
+      console.warn("[Apply Costs] Mã KHÔNG có trong Excel:", data.samples_no_match);
+    }
+    toast("Đã cập nhật " + data.updated + " SP từ Excel (+" + data.with_memory_card + " có thẻ nhớ)", "success");
     await loadInventory();
   } catch (e) {
-    toast("Lỗi import: " + e.message, "error");
+    toast("Lỗi: " + e.message, "error");
+    console.error("[Apply Costs]", e);
   } finally {
-    btn.disabled = false; btn.textContent = "📥 Import từ Misa";
+    btn.disabled = false; btn.textContent = originalText;
   }
 }
 
@@ -413,7 +455,6 @@ async function syncFromPos() {
     });
     var data = await resp.json();
     if (!resp.ok) {
-      // Nếu lỗi 401 hoặc token hỏng → xoá token đã lưu
       if (resp.status === 401 || (data.error && data.error.toLowerCase().indexOf("token") >= 0)) {
         try { localStorage.removeItem("doscom_pos_token"); } catch (e) {}
       }
@@ -425,8 +466,7 @@ async function syncFromPos() {
                   "  • Thêm mới:    " + data.added + "\n" +
                   "  • Cập nhật:    " + data.updated + "\n" +
                   "  • Bỏ qua:      " + data.skipped + "\n" +
-                  "  • Giữ giá user sửa: " + data.kept_user_edits + "\n" +
-                  "  • Misa cost loaded: " + data.misa_costs_loaded;
+                  "  • Giữ giá user sửa: " + data.kept_user_edits;
     toast("Đồng bộ POS thành công ✓ (+" + data.added + " mới, " + data.updated + " update)", "success");
     console.log("[Sync POS]", summary);
     await loadInventory();
@@ -443,7 +483,7 @@ async function syncFromPos() {
 window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("btn-save").addEventListener("click", saveChanges);
   document.getElementById("btn-reset").addEventListener("click", resetEdits);
-  document.getElementById("btn-import").addEventListener("click", importFromMisa);
+  document.getElementById("btn-apply-costs").addEventListener("click", applyCostsFromExcel);
   document.getElementById("btn-sync-pos").addEventListener("click", syncFromPos);
   document.getElementById("btn-add").addEventListener("click", addProduct);
   document.getElementById("search-input").addEventListener("input", function() { renderTable(); });
