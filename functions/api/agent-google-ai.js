@@ -310,7 +310,6 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("inventory") && env.INVENTORY) tasks.push(fetchInventoryCompact(env, group).then(items => dataContext.inventory = items));
 
   await Promise.all(tasks);
-
   const systemPrompt = buildSystemPrompt(skills, group);
   const userPrompt = buildUserPrompt(mode, question, dataContext, group);
 
@@ -322,4 +321,17 @@ export async function onRequestPost(context) {
       max_tokens: 3072,
     });
   } catch (e) {
-    return jsonRes
+    return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
+  }
+
+  return jsonResponse({
+    ok: true,
+    mode,
+    group,
+    group_label: GROUP_LABELS[group],
+    model: cfg.model,
+    response: aiResult.response || aiResult.result || "",
+    skills_used: cfg.skills,
+    data_used: cfg.data,
+  });
+}
