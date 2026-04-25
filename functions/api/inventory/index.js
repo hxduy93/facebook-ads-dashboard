@@ -7,7 +7,7 @@
 // KV binding: env.INVENTORY (đã bind DOSCOM_INVENTORY)
 // Auth: dùng verifySession từ ../_middleware.js (yêu cầu đã login)
 
-import { verifySession } from "../_middleware.js";
+import { verifySession } from "../../_middleware.js";
 
 // 2026-04-25: Bỏ giới hạn admin theo yêu cầu của Duy.
 // Tất cả user đã login (qua Google OAuth + ALLOWED_EMAILS) đều có quyền sửa.
