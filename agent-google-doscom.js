@@ -583,7 +583,7 @@ function renderTimeFilterSection(r){
   // ── Compute date_range DYNAMIC từ ngày VN hiện tại (không dựa vào daily-report cũ) ──
   // Fix bug: daily-report gen 22/04 → date_range trong đó bị lệch 1-2 ngày
   var curDates  = computePeriodDates(selectedPeriod);
-  var prevDates = cur.compare_to ? computePeriodDates(cur.compare_to) : null;
+  var prevDates = (cur && cur.compare_to) ? computePeriodDates(cur.compare_to) : null;
 
   // ── POS-direct revenue/orders cho period hiện tại (3 nguồn Web+Zalo+Hotline) ──
   var posCur  = REVDATA ? computePosRevenue(REVDATA, curDates.start, curDates.end) : null;
