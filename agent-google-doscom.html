@@ -143,10 +143,23 @@ function md2html(s) {
   s = s.replace(/^# (.+)$/gm,"<h1>$1</h1>");
   s = s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
   s = s.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g,"<em>$1</em>");
-  s = s.replace(/^(\|.+\|)\n\|[-:| ]+\|\n((?:\|.+\|\n?)+)/gm,function(_,header,body){
-    const hrow = header.split("|").slice(1,-1).map(c=>`<th>${c.trim()}</th>`).join("");
-    const brows = body.trim().split("\n").map(r=>"<tr>"+r.split("|").slice(1,-1).map(c=>`<td>${c.trim()}</td>`).join("")+"</tr>").join("");
-    return `<table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table>`;
+  // Table — cho phep dong trong giua header/separator/rows (linh hoat hon)
+  s = s.replace(/(?:^|\n)((?:\|.+\|\n?)+)/g, function(block){
+    const lines = block.split("\n").map(l => l.trim()).filter(l => l && l.startsWith("|") && l.endsWith("|"));
+    if (lines.length < 2) return block;  // Khong phai bang
+    // Tim separator |---|---|
+    let sepIdx = -1;
+    for (let i = 1; i < lines.length; i++) {
+      if (/^\|[\s\-:|]+\|$/.test(lines[i])) { sepIdx = i; break; }
+    }
+    if (sepIdx === -1) return block;
+    const headerLine = lines[sepIdx - 1];
+    const bodyLines = lines.slice(sepIdx + 1);
+    if (!bodyLines.length) return block;
+    const splitCells = (line) => line.split("|").slice(1, -1).map(c => c.trim());
+    const hrow = splitCells(headerLine).map(c => `<th>${c}</th>`).join("");
+    const brows = bodyLines.map(r => "<tr>" + splitCells(r).map(c => `<td>${c}</td>`).join("") + "</tr>").join("");
+    return `\n<table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table>\n`;
   });
   s = s.replace(/^> (.+)$/gm,"<blockquote>$1</blockquote>");
   s = s.replace(/^- (.+)$/gm,"<li>$1</li>").replace(/(<li>.+<\/li>\n?)+/g,m=>"<ul>"+m+"</ul>");

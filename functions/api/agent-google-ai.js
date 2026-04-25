@@ -28,18 +28,26 @@ const GROUP_LABELS = {
 function classifyByName(name) {
   const n = String(name || "").toLowerCase();
   if (!n) return "OTHER";
-  if (/noma|a002|khăn/.test(n)) return "NOMA";
-  if (/^da\s*8\.1/.test(n)) return "CAMERA_VIDEO_CALL";
-  if (/^da\d/.test(n)) {
+  // Match keyword-style trước (cho ad text dài chứa "máy dò D1 ...")
+  if (/máy\s*dò|may\s*do|phát hiện thiết bị|dò\s*nghe lén|dò\s*định vị/i.test(n)) return "MAY_DO";
+  if (/gọi\s*2.*chiều|video\s*call|trò chuyện|nhìn.*con/i.test(n)) return "CAMERA_VIDEO_CALL";
+  if (/máy\s*ghi\s*âm|ghi âm|recorder/i.test(n)) return "GHI_AM";
+  if (/định\s*vị|dinh\s*vi|gps|tracker/i.test(n) && !/dò.*định vị/.test(n)) return "DINH_VI";
+  if (/chống\s*ghi\s*âm|nhiễu sóng|chống nghe lén/i.test(n)) return "CHONG_GHI_AM";
+  if (/noma|a002|khăn|tẩy ố|chăm sóc xe/i.test(n)) return "NOMA";
+  if (/không.*wifi|năng lượng mặt trời|nlmt|camera.*4g|camera.*sim/i.test(n)) return "CAMERA_4G";
+  // Match SKU-style (cho KV inventory với prefix code)
+  if (/^da\s*8\.1|\bda\s*8\.1\b/.test(n)) return "CAMERA_VIDEO_CALL";
+  if (/^da\d|\bda\d/.test(n)) {
     if (/4g|sim|nlmt|năng lượng/.test(n)) return "CAMERA_4G";
     const g4 = ["da1 pro 4g","da1 zoomx6","da1 pro","da2","da3 pro 4g","da5.1","da6","da6.1","da6.2"];
-    for (const c of g4) if (n.startsWith(c)) return "CAMERA_4G";
+    for (const c of g4) if (n.includes(c)) return "CAMERA_4G";
     return "CAMERA_WIFI";
   }
-  if (/^dr\d/.test(n)) return "GHI_AM";
-  if (/^di\d/.test(n)) return "CHONG_GHI_AM";
-  if (/^dv\d|^dt\d/.test(n)) return "DINH_VI";
-  if (/^d\d/.test(n)) return "MAY_DO";
+  if (/^dr\d|\bdr\d/.test(n)) return "GHI_AM";
+  if (/^di\d|\bdi\d/.test(n)) return "CHONG_GHI_AM";
+  if (/^dv\d|\bdv\d|^dt\d|\bdt\d/.test(n)) return "DINH_VI";
+  if (/^d\d|\bd\d/.test(n)) return "MAY_DO";  // last fallback for "D1", "D8 Pro"
   return "OTHER";
 }
 
@@ -183,20 +191,29 @@ function compactSpend(j, group) {
 
 function compactAds(j, topN, group) {
   if (!j) return null;
-  let ads = j.ads || [];
+  const allAds = j.ads || [];
+  let ads = allAds;
+  let filteredCount = null;
   if (group !== "ALL") {
-    ads = ads.filter(a => {
-      const txt = (a.headlines || []).map(h => h.text || h).join(" ") + " " + (a.descriptions || []).map(d => d.text || d).join(" ");
+    ads = allAds.filter(a => {
+      const headlines = (a.headlines || []).map(h => (typeof h === "string" ? h : h.text || "")).join(" ");
+      const descs = (a.descriptions || []).map(d => (typeof d === "string" ? d : d.text || "")).join(" ");
+      const camp = a.campaign_name || a.ad_group_name || "";
+      const txt = (headlines + " " + descs + " " + camp).toLowerCase();
       return classifyByName(txt) === group || classifySearchTerm(txt) === group;
     });
+    filteredCount = ads.length;
+    // Fallback: nếu 0 ads sau filter, lấy top 5 ads chung để AI có data tham chiếu
+    if (ads.length === 0) ads = allAds.slice(0, 5);
   }
-  return { date_range: j.date_range, group_filter: group, total: ads.length, sample: ads.slice(0, topN) };
+  return { date_range: j.date_range, group_filter: group, total_in_group: filteredCount, total_all: allAds.length, sample: ads.slice(0, topN) };
 }
 
-function compactPlacement(j, topN) {
+function compactPlacement(j, topN, group) {
   if (!j) return null;
+  // Placement là cross-product (trừ khi campaign tách theo nhóm). Lấy top spend chung.
   const list = (j.placements || []).sort((a, b) => (b.cost || 0) - (a.cost || 0)).slice(0, topN);
-  return { date_range: j.date_range, top_spend: list };
+  return { date_range: j.date_range, group_filter: group, note: "Placement la cross-product, khong filter theo nhom SP", top_spend: list };
 }
 
 function buildSystemPrompt(skills, group) {
@@ -289,7 +306,7 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("revenue")) tasks.push(fetchJson(origin, "/data/product-revenue.json", cookieHeader).then(j => dataContext.revenue = compactRevenue(j, group)));
   if (cfg.data.includes("search_terms")) tasks.push(fetchJson(origin, "/data/google-ads-search-terms.json", cookieHeader).then(j => dataContext.search_terms = compactSearchTerms(j, 30, group)));
   if (cfg.data.includes("ads")) tasks.push(fetchJson(origin, "/data/google-ads-ads.json", cookieHeader).then(j => dataContext.ads = compactAds(j, 15, group)));
-  if (cfg.data.includes("placement")) tasks.push(fetchJson(origin, "/data/google-ads-placement.json", cookieHeader).then(j => dataContext.placement = compactPlacement(j, 15)));
+  if (cfg.data.includes("placement")) tasks.push(fetchJson(origin, "/data/google-ads-placement.json", cookieHeader).then(j => dataContext.placement = compactPlacement(j, 15, group)));
   if (cfg.data.includes("inventory") && env.INVENTORY) tasks.push(fetchInventoryCompact(env, group).then(items => dataContext.inventory = items));
 
   await Promise.all(tasks);
@@ -305,17 +322,4 @@ export async function onRequestPost(context) {
       max_tokens: 3072,
     });
   } catch (e) {
-    return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
-  }
-
-  return jsonResponse({
-    ok: true,
-    mode,
-    group,
-    group_label: GROUP_LABELS[group],
-    model: cfg.model,
-    response: aiResult.response || aiResult.result || "",
-    skills_used: cfg.skills,
-    data_used: cfg.data,
-  });
-}
+    return jsonRes
