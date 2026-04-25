@@ -1,135 +1,196 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Google Doscom</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Google Doscom — AI Insight</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f9fafb;color:#111827;font-size:14px;line-height:1.5}
-a{color:#2563eb;text-decoration:none}
-a:hover{text-decoration:underline}
-button{cursor:pointer;border:0;background:transparent;font:inherit}
-.header{background:white;border-bottom:1px solid #e5e7eb;box-shadow:0 1px 2px rgba(0,0,0,.04);position:sticky;top:0;z-index:20}
-.header-inner{max-width:1280px;margin:0 auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.header h1{font-size:18px;font-weight:700}
-.header-sub{font-size:11px;color:#6b7280}
-main{max-width:1280px;margin:0 auto;padding:24px 16px}
-.card{background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.card-score{color:white}
-.bg-A{background:linear-gradient(135deg,#10b981,#059669)}
-.bg-B{background:linear-gradient(135deg,#3b82f6,#2563eb)}
-.bg-C{background:linear-gradient(135deg,#f59e0b,#d97706)}
-.bg-D{background:linear-gradient(135deg,#f97316,#ea580c)}
-.bg-F{background:linear-gradient(135deg,#ef4444,#dc2626)}
-.grid-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-@media(max-width:768px){.grid-summary{grid-template-columns:1fr 1fr}}
-.metric-label{font-size:11px;text-transform:uppercase;color:#6b7280;letter-spacing:.04em}
-.metric-value{font-size:32px;font-weight:700;margin-top:4px}
-.metric-sub{font-size:11px;color:#6b7280;margin-top:4px}
-section.block{margin-bottom:20px}
-.block h2{font-size:16px;font-weight:700;margin-bottom:12px}
-.block h3{font-size:13px;font-weight:700;margin-bottom:8px}
-.score-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:768px){.score-summary{grid-template-columns:1fr}}
-.score-block{border-radius:8px;padding:12px}
-.score-block.good{background:#f0fdf4;border-left:4px solid #10b981}
-.score-block.bad{background:#fef2f2;border-left:4px solid #ef4444}
-.score-block h4{font-size:13px;font-weight:700;margin-bottom:8px}
-.score-block.good h4{color:#065f46}
-.score-block.bad h4{color:#991b1b}
-.score-block ul{list-style:none;padding:0}
-.score-block li{font-size:13px;padding:4px 0 4px 16px;position:relative;line-height:1.5}
-.score-block li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%}
-.score-block.good li::before{background:#10b981}
-.score-block.bad li::before{background:#f59e0b}
-.score-block strong{font-weight:700}
-.score-block.good strong{color:#047857}
-.score-block.bad strong{color:#b91c1c}
-.cat-tabs{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:12px;border-bottom:1px solid #e5e7eb;margin-bottom:16px}
-.cat-tab{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:500;background:#f3f4f6;color:#374151}
-.cat-tab:hover{background:#e5e7eb}
-.cat-tab.active{background:#2563eb;color:white}
-.cat-overview{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
-@media(max-width:768px){.cat-overview{grid-template-columns:repeat(3,1fr)}}
-.cat-overview-item{background:#f9fafb;border-radius:6px;padding:8px}
-.cat-overview-item .lbl{font-size:10px;color:#6b7280}
-.cat-overview-item .val{font-size:14px;font-weight:700;margin-top:2px}
-.priority-high{background:#fee2e2;border-left:4px solid #dc2626}
-.priority-medium{background:#fef3c7;border-left:4px solid #d97706}
-.priority-low{background:#dbeafe;border-left:4px solid #3b82f6}
-.action-box{padding:10px 12px;border-radius:6px;margin-bottom:8px}
-.action-box .title{font-weight:600;font-size:13px}
-.action-box .detail{font-size:12px;color:#4b5563;margin-top:4px;line-height:1.45}
-.action-box .save{font-size:11px;color:#047857;font-weight:600;margin-top:4px}
-.action-box .scroll-btn{display:inline-block;margin-top:6px;padding:4px 10px;background:#2563eb;color:white;border-radius:4px;font-size:11px;font-weight:600;border:0;cursor:pointer}
-.action-box .scroll-btn:hover{background:#1d4ed8}
-.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600}
-.badge-high{background:#fecaca;color:#7f1d1d}
-.badge-medium{background:#fde68a;color:#78350f}
-.badge-low{background:#bfdbfe;color:#1e3a8a}
-.tbl-wrap{overflow:auto;border:1px solid #e5e7eb;border-radius:6px;max-height:600px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:#f9fafb;font-size:10px;font-weight:600;text-transform:uppercase;color:#4b5563;text-align:left;padding:8px;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:1}
-td{padding:4px 8px;border-bottom:1px solid #f3f4f6;vertical-align:top}
-.compact-tbl td{padding:3px 6px}
-.compact-tbl th{padding:6px}
-tbody tr:hover{background:#f9fafb}
-.t-right{text-align:right}
-.t-center{text-align:center}
-.truncate{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-.mono{font-family:'SF Mono',Monaco,monospace;font-size:11px}
-.rec{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;display:inline-block;white-space:nowrap}
-.rec-KEEP{background:#d1fae5;color:#065f46}
-.rec-SCALE{background:#bbf7d0;color:#14532d}
-.rec-ADD_NEGATIVE{background:#fee2e2;color:#991b1b}
-.rec-PAUSE{background:#fecaca;color:#7f1d1d}
-.rec-REPLACE{background:#fed7aa;color:#9a3412}
-.rec-REVIEW{background:#fef3c7;color:#854d0e}
-.rec-MONITOR{background:#e5e7eb;color:#4b5563}
-.pill{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;background:#eff6ff;color:#1e40af;margin-right:4px;margin-bottom:2px}
-.pill-green{background:#d1fae5;color:#065f46}
-.pill-orange{background:#fed7aa;color:#9a3412}
-.rank-badge{display:inline-block;min-width:24px;padding:2px 6px;border-radius:10px;font-size:10px;font-weight:700;text-align:center;background:#eff6ff;color:#1e40af}
-.rank-top3{background:#fef3c7;color:#92400e}
-.spinner{border:3px solid #e5e7eb;border-top-color:#3b82f6;border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:48px auto}
+*{box-sizing:border-box}
+body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f3f4f6;color:#111827;margin:0;font-size:14px}
+.container{max-width:1100px;margin:0 auto;padding:16px}
+.header{background:#1e3a8a;color:white;padding:14px 18px;border-radius:8px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.header h1{margin:0;font-size:18px}
+.header .sub{font-size:11.5px;color:#bfdbfe;margin-top:3px}
+.nav-back{color:#bfdbfe;text-decoration:none;font-size:13px}
+.nav-back:hover{text-decoration:underline}
+.section{background:white;padding:16px 18px;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:16px}
+.section h2{margin:0 0 12px;font-size:15px;color:#1f2937;border-bottom:1px solid #e5e7eb;padding-bottom:8px}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.btn-action{padding:14px;border-radius:8px;border:1px solid #d1d5db;background:#f9fafb;cursor:pointer;text-align:left;font-size:13px;transition:all 0.15s}
+.btn-action:hover:not(:disabled){background:#dbeafe;border-color:#2563eb}
+.btn-action:disabled{opacity:0.5;cursor:wait}
+.btn-action .ico{font-size:18px;margin-right:6px}
+.btn-action .title{font-weight:600;color:#111827;margin-bottom:4px}
+.btn-action .desc{color:#6b7280;font-size:11.5px;line-height:1.4}
+.btn-audit{background:#eff6ff;border-color:#bfdbfe}
+.btn-audit:hover:not(:disabled){background:#bfdbfe}
+.btn-suggest{background:#f0fdf4;border-color:#bbf7d0}
+.btn-suggest:hover:not(:disabled){background:#bbf7d0}
+.ask-box{display:flex;gap:8px;margin-top:8px}
+.ask-box input{flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px}
+.ask-box button{padding:10px 18px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer;font-weight:500}
+.ask-box button:hover:not(:disabled){background:#1d4ed8}
+.ask-box button:disabled{background:#9ca3af;cursor:wait}
+.output{min-height:300px;background:white;padding:18px;border-radius:8px;border:1px solid #e5e7eb;line-height:1.6;font-size:13.5px}
+.output h1,.output h2,.output h3{margin:14px 0 8px;color:#111827}
+.output h1{font-size:18px;border-bottom:2px solid #2563eb;padding-bottom:6px}
+.output h2{font-size:16px}
+.output h3{font-size:14px}
+.output table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+.output th,.output td{padding:6px 10px;border:1px solid #e5e7eb;text-align:left;vertical-align:top}
+.output th{background:#f3f4f6;font-weight:600}
+.output code{background:#f3f4f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace;font-size:12px}
+.output pre{background:#1f2937;color:#f9fafb;padding:12px;border-radius:6px;overflow-x:auto;font-size:12px}
+.output ul,.output ol{margin:8px 0;padding-left:22px}
+.output li{margin:3px 0}
+.output blockquote{border-left:4px solid #2563eb;padding:6px 14px;margin:10px 0;background:#eff6ff;color:#1e3a8a}
+.output strong{color:#1f2937}
+.loading{text-align:center;padding:40px 20px;color:#6b7280}
+.loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.footer{text-align:center;font-size:11px;color:#9ca3af;margin-top:24px}
-.text-red{color:#dc2626}
-.text-green{color:#047857}
-.text-gray{color:#6b7280}
-.font-bold{font-weight:700}
-.text-sm{font-size:13px}
-.text-xs{font-size:11px}
-.suggest-block{background:#fffbeb;border-left:4px solid #f59e0b;border-radius:6px;padding:12px;margin-top:12px;scroll-margin-top:80px}
-.suggest-block h3{color:#92400e;margin-bottom:8px}
-.tip-card{background:white;border-radius:6px;padding:10px;margin-bottom:8px;border:1px solid #fde68a}
-.tip-card .field{margin-bottom:4px;font-size:12px}
-.tip-card .field .lbl{font-weight:600;color:#78350f;min-width:120px;display:inline-block}
-.cat-eval{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-@media(max-width:768px){.cat-eval{grid-template-columns:1fr}}
-.cat-eval-box{border-radius:6px;padding:10px}
-.cat-eval-box.good{background:#f0fdf4;border-left:3px solid #10b981}
-.cat-eval-box.bad{background:#fef2f2;border-left:3px solid #ef4444}
-.cat-eval-box h4{font-size:12px;font-weight:700;margin-bottom:6px}
-.cat-eval-box.good h4{color:#065f46}
-.cat-eval-box.bad h4{color:#991b1b}
-.cat-eval-box ul{list-style:none;padding:0;margin:0}
-.cat-eval-box li{font-size:12px;padding:3px 0 3px 14px;position:relative;line-height:1.4}
-.cat-eval-box li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%}
-.cat-eval-box.good li::before{background:#10b981}
-.cat-eval-box.bad li::before{background:#ef4444}
-.highlight-bg{background:#fef3c7 !important;transition:background 1.5s}
+.meta{font-size:11px;color:#9ca3af;margin-top:10px;padding-top:10px;border-top:1px solid #f3f4f6}
+.copy-btn{float:right;font-size:11px;padding:4px 10px;border:1px solid #d1d5db;background:white;border-radius:4px;cursor:pointer;color:#374151}
+.copy-btn:hover{background:#f3f4f6}
+.error{color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;padding:10px 14px;border-radius:4px;font-size:13px}
+.note{background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:12.5px;color:#78350f;margin-bottom:12px}
+.tag{display:inline-block;padding:2px 8px;background:#dbeafe;color:#1e40af;border-radius:9999px;font-size:10.5px;margin-left:4px}
 </style>
 </head>
 <body>
-<header class="header">
-<div class="header-inner">
-<div style="display:flex;gap:10px;align-items:center"><span style="font-size:22px">AI</span><div><h1>Agent Google Doscom</h1><div class="header-sub">AI Insights v3.2 - Phân tích chi tiết</div></div></div>
-<div style="display:flex;gap:10px;align-items:center;font-size:13px"><a href="/">Dashboard chính</a><a href="/inventory.html">📦 Kho tổng</a><button onclick="location.reload()" style="color:#6b7280">Làm mới</button></div>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>🤖 Agent Google Doscom <span class="tag">AI v2</span></h1>
+      <div class="sub">Cloudflare Workers AI · Llama 3.3 70B + 3.1 8B · 4 skill audit + suggest · Free</div>
+    </div>
+    <div>
+      <a href="/" class="nav-back">← Dashboard chính</a> &nbsp;|&nbsp;
+      <a href="/inventory.html" class="nav-back">📦 Kho tổng</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Audit chuyên sâu — chấm điểm 4 mảng</h2>
+    <div class="btn-grid">
+      <button class="btn-action btn-audit" onclick="runAI('audit_account')"><div class="title"><span class="ico">📊</span>Audit Tổng quan</div><div class="desc">Chấm điểm 8 nhóm, top Quick Win, cảnh báo nguy hiểm</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_keyword')"><div class="title"><span class="ico">🔍</span>Audit Từ khoá</div><div class="desc">Tier 1/2/3, từ khoá lỗ, search term ngon (harvest candidates)</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_gdn')"><div class="title"><span class="ico">🖼️</span>Audit GDN/PMax</div><div class="desc">Banner disapproved, placement lãng phí, brand safety</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_headline')"><div class="title"><span class="ico">📝</span>Audit Tiêu đề</div><div class="desc">Headline cliché, USP chưa cover, công thức copywriting thiếu</div></button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>💡 Đề xuất sáng tạo — sinh nội dung mới</h2>
+    <div class="btn-grid">
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_keyword')"><div class="title"><span class="ico">🌱</span>Đề xuất Từ khoá mới</div><div class="desc">5 cơ chế: Harvest, Replace, Long-tail, Competitor, Seasonal</div></button>
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_headline')"><div class="title"><span class="ico">✍️</span>Sinh Headline mới</div><div class="desc">5 cơ chế, công thức AIDA/FAB/PAS/BAB/Hook</div></button>
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_banner')"><div class="title"><span class="ico">🎨</span>Brief Banner mới</div><div class="desc">Size, layout, color hex, hypothesis, cost dựng</div></button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>💬 Hỏi tự do với AI</h2>
+    <div class="ask-box">
+      <input type="text" id="ask-input" placeholder="Vd: Tại sao DA8.1 lỗ? · Tăng bid keyword nào? · Thiếu USP gì?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <button onclick="askQuestion()" id="ask-btn">Hỏi AI</button>
+    </div>
+    <div style="margin-top:8px;font-size:11.5px;color:#6b7280">AI có quyền truy cập: 4 skill audit + giá vốn KV + doanh thu Pancake 90 ngày + Google Ads 30 ngày</div>
+  </div>
+
+  <div class="section">
+    <h2>📋 Kết quả AI <span class="copy-btn" onclick="copyOutput()">📋 Copy</span></h2>
+    <div class="note" id="status-note">⚠ Audit mất ~20-60 giây vì AI cần đọc skill rule + 90 ngày data. Đợi không tab.</div>
+    <div id="output" class="output"><div style="color:#9ca3af;text-align:center;padding:40px 20px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.<br><br>💡 Gợi ý chạy lần đầu: <strong>📊 Audit Tổng quan</strong> để có cái nhìn toàn diện.</div></div>
+    <div class="meta" id="meta"></div>
+  </div>
 </div>
-</header>
-<main id="main"><div id="loading"><div class="spinner"></div><p style="text-align:center;color:#6b7280;margin-top:8px">Đang tải báo cáo...</p></div></main>
-<script src="agent-google-doscom.js"></script>
+
+<script>
+const MODE_LABELS = {
+  audit_account: "📊 Audit Tổng quan",
+  audit_keyword: "🔍 Audit Từ khoá",
+  audit_gdn: "🖼️ Audit GDN/PMax",
+  audit_headline: "📝 Audit Tiêu đề",
+  suggest_keyword: "🌱 Đề xuất Từ khoá",
+  suggest_headline: "✍️ Sinh Headline",
+  suggest_banner: "🎨 Brief Banner",
+  ask: "💬 Hỏi tự do",
+};
+
+function md2html(s) {
+  if (!s) return "";
+  s = String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  s = s.replace(/```([^`]+)```/gs,(m,c)=>`<pre>${c.trim()}</pre>`);
+  s = s.replace(/`([^`]+)`/g,"<code>$1</code>");
+  s = s.replace(/^### (.+)$/gm,"<h3>$1</h3>");
+  s = s.replace(/^## (.+)$/gm,"<h2>$1</h2>");
+  s = s.replace(/^# (.+)$/gm,"<h1>$1</h1>");
+  s = s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+  s = s.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g,"<em>$1</em>");
+  s = s.replace(/^(\|.+\|)\n\|[-:| ]+\|\n((?:\|.+\|\n?)+)/gm,function(_,header,body){
+    const hrow = header.split("|").slice(1,-1).map(c=>`<th>${c.trim()}</th>`).join("");
+    const brows = body.trim().split("\n").map(r=>"<tr>"+r.split("|").slice(1,-1).map(c=>`<td>${c.trim()}</td>`).join("")+"</tr>").join("");
+    return `<table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table>`;
+  });
+  s = s.replace(/^> (.+)$/gm,"<blockquote>$1</blockquote>");
+  s = s.replace(/^- (.+)$/gm,"<li>$1</li>").replace(/(<li>.+<\/li>\n?)+/g,m=>"<ul>"+m+"</ul>");
+  s = s.replace(/^(\d+)\. (.+)$/gm,"<li>$2</li>");
+  s = s.replace(/^([^<\n].+)$/gm,"<p>$1</p>");
+  s = s.replace(/<p>(<[^p].+)<\/p>/g,"$1").replace(/\n\n+/g,"\n");
+  return s;
+}
+
+function setLoading(on, mode) {
+  document.querySelectorAll('.btn-action').forEach(b => b.disabled = on);
+  document.getElementById('ask-btn').disabled = on;
+  if (on) {
+    document.getElementById('output').innerHTML = `<div class="loading"><div class="spinner"></div><div style="margin-top:14px">${MODE_LABELS[mode] || mode} — đang chạy...</div><div style="font-size:11.5px;color:#9ca3af;margin-top:6px">~20-60 giây · không tab đi nhé</div></div>`;
+    document.getElementById('meta').textContent = "";
+  }
+}
+
+async function runAI(mode, question = null) {
+  setLoading(true, mode);
+  const t0 = Date.now();
+  try {
+    const body = { mode };
+    if (question) body.question = question;
+    const r = await fetch('/api/agent-google-ai', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    const took = Math.round((Date.now() - t0) / 1000);
+    const j = await r.json();
+    if (!r.ok || j.error) {
+      document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi:</strong> ${(j.error||'HTTP '+r.status).replace(/</g,"&lt;")}</div>`;
+      document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
+    } else {
+      document.getElementById('output').innerHTML = md2html(j.response||"(empty)");
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Skill: ${(j.skills_used||[]).join(', ')} · Mode: <code>${j.mode}</code>`;
+    }
+  } catch (e) {
+    document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
+  } finally {
+    setLoading(false);
+  }
+}
+
+function askQuestion() {
+  const q = document.getElementById('ask-input').value.trim();
+  if (!q) { alert('Nhập câu hỏi đã'); return; }
+  runAI('ask', q);
+}
+
+function copyOutput() {
+  const txt = document.getElementById('output').innerText;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = "✓ Đã copy";
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
 </body>
 </html>
