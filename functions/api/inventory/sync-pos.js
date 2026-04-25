@@ -28,22 +28,40 @@ function jsonResponse(obj, status = 200) {
 }
 
 // Fetch tất cả products: loop tới khi POS trả về < page_size hoặc trang rỗng
+// QUAN TRỌNG: phải gửi User-Agent browser-like, nếu không POS sẽ trả 0 SP
+//             (POS Pancake chặn bot User-Agent của Cloudflare Workers)
+const POS_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "Accept": "application/json, text/plain, */*",
+  "Accept-Language": "vi,en;q=0.9",
+  "Origin": "https://pos.pancake.vn",
+  "Referer": "https://pos.pancake.vn/",
+};
+
 async function fetchAllProducts(token) {
   const all = [];
   const PAGE_SIZE = 100;
+  let totalExpected = null;
   for (let page = 1; page <= 50; page++) {
     const url = `https://pos.pancake.vn/api/v1/shops/${SHOP_ID}/products?access_token=${encodeURIComponent(token)}&page=${page}&page_size=${PAGE_SIZE}`;
-    const resp = await fetch(url);
+    const resp = await fetch(url, { headers: POS_HEADERS });
     if (!resp.ok) {
       let bodyText = "";
       try { bodyText = await resp.text(); } catch (e) {}
-      throw new Error(`POS API HTTP ${resp.status} (page ${page}): ${bodyText.slice(0, 200)}`);
+      throw new Error(`POS API HTTP ${resp.status} (page ${page}): ${bodyText.slice(0, 300)}`);
     }
     const j = await resp.json();
     const data = j.data || j.products || [];
-    if (!data.length) break;
+    if (page === 1) totalExpected = j.total_entries || j.total || null;
+    if (!data.length) {
+      if (page === 1) {
+        throw new Error(`POS trả về 0 SP ở page 1. success=${j.success}, error=${j.error || j.message || "(none)"}, raw=${JSON.stringify(j).slice(0, 300)}`);
+      }
+      break;
+    }
     all.push(...data);
     if (data.length < PAGE_SIZE) break;
+    if (totalExpected && all.length >= totalExpected) break;
   }
   return all;
 }
