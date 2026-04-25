@@ -3,7 +3,7 @@
 // Chi phí:   JS compute từ GSPEND.campaigns_raw cho bất kỳ date range
 // Không phụ thuộc period key có sẵn trong backend → hỗ trợ custom
 console.log("[AgentPage] JS v4.1 loaded");
-var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, PCOSTS=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, PCOSTS=null, INVENTORY_KV=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
 var customStart=null, customEnd=null;
 
 // 9 nhóm chuẩn Doscom (thứ tự hiển thị)
@@ -63,12 +63,22 @@ function load(){
   var p3 = fetch("data/google-ads-context.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p4 = fetch("data/google-ads-spend.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p5 = fetch("data/product-costs.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  Promise.all([p1,p2,p3,p4,p5]).then(function(results){
+  // Inventory KV (giá user đã sửa thủ công, ưu tiên hơn Misa)
+  var p6 = fetch("/api/inventory?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
+  Promise.all([p1,p2,p3,p4,p5,p6]).then(function(results){
     REPORT=results[0];
     REVDATA=results[1];
     GACTX=results[2];
-    GSPEND=results[3];  // raw Google Ads rows: {campaign, date, spend, clicks, impressions}
-    PCOSTS=results[4];  // product costs: {products: {key_lower: {gia_nhap_vnd}}}
+    GSPEND=results[3];
+    PCOSTS=results[4];
+    INVENTORY_KV=results[5];  // {items: [{code, gia_nhap_vnd, gia_ban_vnd, ton_kho, trang_thai}]}
+    // Build map nhanh code → item từ KV
+    if(INVENTORY_KV && INVENTORY_KV.items){
+      window.__INV_MAP = {};
+      for(var i=0;i<INVENTORY_KV.items.length;i++){
+        window.__INV_MAP[INVENTORY_KV.items[i].code.toLowerCase()] = INVENTORY_KV.items[i];
+      }
+    }
     try{render(REPORT);}catch(e){console.error(e);showError("Lỗi: "+e.message);}
   }).catch(function(e){showError("Không tải: "+esc(e.message));});
 }
@@ -139,12 +149,35 @@ function computeTopFromFlat(items, start, end, topN){
   return {total_revenue:Math.round(totRev), total_orders:Object.keys(totOrders).length, top_products:arr.slice(0, topN||50), all_products:arr};
 }
 
-// ── Lookup giá vốn từ product-costs.json ──
+// ── Lookup giá vốn từ Inventory KV (ưu tiên) → fallback product-costs.json ──
 function lookupCost(productName){
-  if(!PCOSTS || !PCOSTS.products) return 0;
   var n = (productName||"").toLowerCase().trim();
+  if(!n) return 0;
+
+  // 1a) Ưu tiên Inventory KV (giá user đã sửa)
+  if(window.__INV_MAP){
+    if(window.__INV_MAP[n] && window.__INV_MAP[n].gia_nhap_vnd) {
+      return Number(window.__INV_MAP[n].gia_nhap_vnd)||0;
+    }
+    // Thử match SKU prefix trong KV (vd "DR8" trong tên dài)
+    var patterns = [/\bda\s*8\.1\s*pro\b/, /\bda\s*8\.1\b/, /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
+      /\bdr\d+(?:\s*plus|\s*pro)?\b/, /\bdv\d+(?:\s*pro|\s*mini|\.\d+)?\b/, /\bdt\d+\b/,
+      /\bdi\d+(?:\s*pro|\s*plus)?\b/, /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/, /\bnoma\s*\d+/];
+    for(var pi=0;pi<patterns.length;pi++){
+      var m = n.match(patterns[pi]);
+      if(m){
+        var k = m[0].replace(/\s+/g," ").trim();
+        if(window.__INV_MAP[k] && window.__INV_MAP[k].gia_nhap_vnd){
+          return Number(window.__INV_MAP[k].gia_nhap_vnd)||0;
+        }
+      }
+    }
+  }
+
+  // 1b) Fallback Misa product-costs.json (giá gốc)
+  if(!PCOSTS || !PCOSTS.products) return 0;
   var P = PCOSTS.products;
-  // 1) Direct match
+  // Direct match
   if(P[n] && P[n].gia_nhap_vnd) return Number(P[n].gia_nhap_vnd)||0;
 
   // 2) A002 có dung tích (key trong file: "a002 -500ml" / "a002 -300ml")
@@ -682,13 +715,17 @@ function renderTimeFilterSection(r){
     catProfitMap[k].profit = rev - catProfitMap[k].vat - catProfitMap[k].cost - catProfitMap[k].ads;
   }
 
-  // ── Bảng Phân chia theo nhóm SP: Chi phí QC · Click · CTR · Doanh thu · Đơn · SL · VAT 10% · Giá vốn · Lợi nhuận · ROAS ──
+  // ── Bảng Phân chia theo nhóm SP: thêm cột "% LN" + ngưỡng mục tiêu 30% ──
+  // Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Chi phí QC
+  // Mục tiêu Doscom: % LN / Doanh thu ≥ 30% (đạt) / 15-30% (cảnh báo) / <15% (thất bại)
+  var TARGET_PROFIT_PCT = 30;  // mục tiêu biên lợi nhuận 30%
   if(revBreak || spendBreak){
-    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Chi phí QC)</span></h3>';
+    h+='<h3 style="margin-top:16px;margin-bottom:8px;font-size:13px">Phân chia theo nhóm sản phẩm trong kỳ <span class="text-xs text-gray">(Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Chi phí QC · Mục tiêu: ≥30% Doanh thu)</span></h3>';
     h+='<div class="tbl-wrap"><table><thead><tr><th>Nhóm SP</th>';
     h+='<th class="t-right">Chi phí QC</th><th class="t-right">Click</th><th class="t-right">CTR</th>';
     h+='<th class="t-right">Doanh thu</th><th class="t-right">Đơn</th><th class="t-right">SL</th>';
     h+='<th class="t-right">VAT 10%</th><th class="t-right">Giá vốn</th><th class="t-right">Lợi nhuận</th>';
+    h+='<th class="t-right">% LN</th>';
     h+='<th class="t-right">ROAS</th></tr></thead><tbody>';
     var totSpend=0, totClicks=0, totImps=0, totRev=0, totOrders=0, totUnits=0, totVat=0, totCost=0, totProfit=0;
     for(var ci=0;ci<CAT_ORDER.length;ci++){
@@ -709,6 +746,15 @@ function renderTimeFilterSection(r){
       var roas  = spend>0 ? rev/spend : 0;
       if(spend===0 && rev===0 && orders===0) continue;
       var roasCls = roas>=3 ? "text-green font-bold" : (roas>=1 ? "" : (roas>0 ? "text-red" : "text-gray"));
+      // Tỷ lệ LN / Doanh thu — đánh giá theo mục tiêu 30%
+      // Đạt: ≥30% / Cảnh báo: 15-30% / Cần cải thiện: 0-15% / Lỗ: <0%
+      var pctLN = rev > 0 ? (profit / rev * 100) : 0;
+      var pctCls, pctIcon;
+      if (rev === 0) { pctCls = "text-gray"; pctIcon = ""; }
+      else if (pctLN >= TARGET_PROFIT_PCT) { pctCls = "text-green font-bold"; pctIcon = "🟢 "; }
+      else if (pctLN >= 15) { pctCls = "text-orange font-bold"; pctIcon = "🟡 "; }
+      else if (pctLN >= 0) { pctCls = "text-red"; pctIcon = "🔴 "; }
+      else { pctCls = "text-red font-bold"; pctIcon = "🔴 "; }
       var profCls = profit>0 ? "text-green font-bold" : (profit<0 ? "text-red font-bold" : "text-gray");
       h+='<tr><td class="font-bold">'+esc(co.label)+'</td>';
       h+='<td class="t-right">'+fmtVND(spend)+'đ</td>';
@@ -720,12 +766,20 @@ function renderTimeFilterSection(r){
       h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(vat))+'đ</td>';
       h+='<td class="t-right">'+(cost>0 ? fmtVND(cost)+'đ' : '-')+'</td>';
       h+='<td class="t-right '+profCls+'">'+fmtVND(Math.round(profit))+'đ</td>';
+      h+='<td class="t-right '+pctCls+'">'+pctIcon+(rev>0 ? pctLN.toFixed(1)+'%' : '-')+'</td>';
       h+='<td class="t-right '+roasCls+'">'+(roas>0 ? roas.toFixed(2)+'x' : '-')+'</td>';
       h+='</tr>';
       totSpend+=spend; totClicks+=clicks; totImps+=imps; totRev+=rev; totOrders+=orders; totUnits+=units; totVat+=vat; totCost+=cost; totProfit+=profit;
     }
     var totCtr = totImps>0 ? totClicks/totImps : 0;
     var totRoas= totSpend>0 ? totRev/totSpend : 0;
+    var totPctLN = totRev > 0 ? (totProfit / totRev * 100) : 0;
+    var totPctCls, totPctIcon;
+    if (totRev === 0) { totPctCls = "text-gray"; totPctIcon = ""; }
+    else if (totPctLN >= TARGET_PROFIT_PCT) { totPctCls = "text-green font-bold"; totPctIcon = "🟢 "; }
+    else if (totPctLN >= 15) { totPctCls = "text-orange font-bold"; totPctIcon = "🟡 "; }
+    else if (totPctLN >= 0) { totPctCls = "text-red"; totPctIcon = "🔴 "; }
+    else { totPctCls = "text-red font-bold"; totPctIcon = "🔴 "; }
     var totProfCls = totProfit>0 ? "text-green font-bold" : (totProfit<0 ? "text-red font-bold" : "");
     h+='<tr style="background:#f9fafb;font-weight:700"><td>TỔNG</td>';
     h+='<td class="t-right">'+fmtVND(totSpend)+'đ</td>';
@@ -737,9 +791,33 @@ function renderTimeFilterSection(r){
     h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(totVat))+'đ</td>';
     h+='<td class="t-right">'+fmtVND(totCost)+'đ</td>';
     h+='<td class="t-right '+totProfCls+'">'+fmtVND(Math.round(totProfit))+'đ</td>';
+    h+='<td class="t-right '+totPctCls+'">'+totPctIcon+(totRev>0 ? totPctLN.toFixed(1)+'%' : '-')+'</td>';
     h+='<td class="t-right">'+(totRoas>0 ? totRoas.toFixed(2)+'x' : '-')+'</td>';
     h+='</tr>';
     h+='</tbody></table></div>';
+
+    // Banner cảnh báo dưới bảng — nếu tổng % LN không đạt mục tiêu 30%
+    if(totRev > 0){
+      var bannerBg, bannerBorder, bannerIcon, bannerMsg;
+      if(totPctLN >= TARGET_PROFIT_PCT){
+        bannerBg="#d1fae5"; bannerBorder="#10b981"; bannerIcon="🟢";
+        bannerMsg="<strong>Đạt mục tiêu lợi nhuận!</strong> Tỷ lệ "+totPctLN.toFixed(1)+"% ≥ 30%. Tiếp tục duy trì.";
+      } else if(totPctLN >= 15){
+        bannerBg="#fef3c7"; bannerBorder="#f59e0b"; bannerIcon="🟡";
+        var gap = TARGET_PROFIT_PCT - totPctLN;
+        var gapVnd = Math.round(totRev * gap / 100);
+        bannerMsg="<strong>Chưa đạt mục tiêu 30%.</strong> Hiện "+totPctLN.toFixed(1)+"%, thiếu "+gap.toFixed(1)+" điểm. Cần tăng lợi nhuận thêm "+fmtVND(gapVnd)+"đ hoặc giảm chi phí quảng cáo tương đương.";
+      } else if(totPctLN >= 0){
+        bannerBg="#fee2e2"; bannerBorder="#ef4444"; bannerIcon="🔴";
+        bannerMsg="<strong>Lợi nhuận quá thấp.</strong> Chỉ "+totPctLN.toFixed(1)+"% — cần xem lại chi phí quảng cáo + chiến lược nhóm sản phẩm yếu nhất.";
+      } else {
+        bannerBg="#fee2e2"; bannerBorder="#dc2626"; bannerIcon="❗";
+        bannerMsg="<strong>ĐANG LỖ!</strong> Lỗ "+Math.abs(totPctLN).toFixed(1)+"% doanh thu = "+fmtVND(Math.abs(totProfit))+"đ. Cần dừng các chiến dịch lỗ ngay.";
+      }
+      h+='<div style="margin-top:10px;padding:10px 14px;background:'+bannerBg+';border-left:4px solid '+bannerBorder+';border-radius:4px;font-size:12.5px">';
+      h+=bannerIcon+' '+bannerMsg;
+      h+='</div>';
+    }
   }
 
   // ── Bảng "Thống kê sản phẩm trong kỳ" (mỗi row = 1 SP: đơn · SL · doanh thu · VAT · giá vốn · ads TB · lợi nhuận) ──
@@ -783,18 +861,26 @@ function renderTimeFilterSection(r){
       var catLblMap = {};
       for(var ci2=0; ci2<CAT_ORDER.length; ci2++){ catLblMap[CAT_ORDER[ci2].key] = CAT_ORDER[ci2].label; }
 
-      h+='<h3 style="margin-top:20px;margin-bottom:8px;font-size:13px">Thống kê sản phẩm trong kỳ <span class="text-xs text-gray">('+prodRows.length+' SP · Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Ads TB)</span></h3>';
+      h+='<h3 style="margin-top:20px;margin-bottom:8px;font-size:13px">Thống kê sản phẩm trong kỳ <span class="text-xs text-gray">('+prodRows.length+' SP · Lợi nhuận = Doanh thu − VAT 10% − Giá vốn − Ads TB · Mục tiêu ≥30% Doanh thu)</span></h3>';
       h+='<div class="tbl-wrap" style="max-height:520px;overflow-y:auto"><table class="compact-tbl"><thead style="position:sticky;top:0;background:#f9fafb;z-index:1"><tr>';
       h+='<th>#</th><th>Sản phẩm</th><th>Nhóm</th>';
       h+='<th class="t-right">Đơn</th><th class="t-right">SL</th>';
       h+='<th class="t-right">Doanh thu</th><th class="t-right">VAT 10%</th>';
       h+='<th class="t-right">Giá vốn</th><th class="t-right">Ads TB</th>';
-      h+='<th class="t-right">Lợi nhuận</th>';
+      h+='<th class="t-right">Lợi nhuận</th><th class="t-right">% LN</th>';
       h+='</tr></thead><tbody>';
       var sTotRev=0, sTotVat=0, sTotCost=0, sTotAds=0, sTotProfit=0, sTotOrders=0, sTotUnits=0;
       for(var pi3=0; pi3<prodRows.length; pi3++){
         var r2 = prodRows[pi3];
         var profCls = r2.profit>0 ? "text-green" : (r2.profit<0 ? "text-red" : "text-gray");
+        // Tỷ lệ LN/DT theo mục tiêu 30%
+        var pLN = r2.revenue > 0 ? (r2.profit / r2.revenue * 100) : 0;
+        var pCls, pIcon;
+        if (r2.revenue === 0) { pCls = "text-gray"; pIcon = ""; }
+        else if (pLN >= TARGET_PROFIT_PCT) { pCls = "text-green font-bold"; pIcon = "🟢 "; }
+        else if (pLN >= 15) { pCls = "text-orange font-bold"; pIcon = "🟡 "; }
+        else if (pLN >= 0) { pCls = "text-red"; pIcon = "🔴 "; }
+        else { pCls = "text-red font-bold"; pIcon = "🔴 "; }
         h+='<tr>';
         h+='<td class="text-gray text-xs">'+(pi3+1)+'</td>';
         h+='<td class="text-xs"><span style="display:inline-block;max-width:320px" title="'+esc(r2.name)+'">'+esc(r2.name)+'</span></td>';
@@ -806,11 +892,19 @@ function renderTimeFilterSection(r){
         h+='<td class="t-right text-xs text-gray">'+(r2.cost>0 ? fmtVND(r2.cost)+'đ' : '-')+'</td>';
         h+='<td class="t-right text-xs text-gray">'+fmtVND(Math.round(r2.ads))+'đ</td>';
         h+='<td class="t-right text-xs font-bold '+profCls+'">'+fmtVND(Math.round(r2.profit))+'đ</td>';
+        h+='<td class="t-right text-xs '+pCls+'">'+pIcon+(r2.revenue>0 ? pLN.toFixed(1)+'%' : '-')+'</td>';
         h+='</tr>';
         sTotRev+=r2.revenue; sTotVat+=r2.vat; sTotCost+=r2.cost; sTotAds+=r2.ads;
         sTotProfit+=r2.profit; sTotOrders+=r2.orders; sTotUnits+=r2.units;
       }
       var sProfCls = sTotProfit>0 ? "text-green font-bold" : (sTotProfit<0 ? "text-red font-bold" : "");
+      var sPctLN = sTotRev > 0 ? (sTotProfit / sTotRev * 100) : 0;
+      var sPctCls, sPctIcon;
+      if (sTotRev === 0) { sPctCls = "text-gray"; sPctIcon = ""; }
+      else if (sPctLN >= TARGET_PROFIT_PCT) { sPctCls = "text-green font-bold"; sPctIcon = "🟢 "; }
+      else if (sPctLN >= 15) { sPctCls = "text-orange font-bold"; sPctIcon = "🟡 "; }
+      else if (sPctLN >= 0) { sPctCls = "text-red"; sPctIcon = "🔴 "; }
+      else { sPctCls = "text-red font-bold"; sPctIcon = "🔴 "; }
       h+='<tr style="background:#f9fafb;font-weight:700;position:sticky;bottom:0">';
       h+='<td colspan="2">TỔNG</td><td></td>';
       h+='<td class="t-right">'+fmtInt(sTotOrders)+'</td>';
@@ -820,6 +914,7 @@ function renderTimeFilterSection(r){
       h+='<td class="t-right">'+fmtVND(sTotCost)+'đ</td>';
       h+='<td class="t-right">'+fmtVND(Math.round(sTotAds))+'đ</td>';
       h+='<td class="t-right '+sProfCls+'">'+fmtVND(Math.round(sTotProfit))+'đ</td>';
+      h+='<td class="t-right '+sPctCls+'">'+sPctIcon+(sTotRev>0 ? sPctLN.toFixed(1)+'%' : '-')+'</td>';
       h+='</tr>';
       h+='</tbody></table></div>';
     }

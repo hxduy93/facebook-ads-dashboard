@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kho tổng Doscom</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f9fafb; color: #111827;
+    margin: 0; padding: 16px; font-size: 13px;
+  }
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+  }
+  h1 { font-size: 22px; margin: 0; color: #111827; }
+  .nav-back {
+    color: #2563eb; text-decoration: none; font-size: 13px;
+  }
+  .nav-back:hover { text-decoration: underline; }
+  .toolbar {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    background: white; padding: 12px; border-radius: 8px;
+    border: 1px solid #e5e7eb; margin-bottom: 12px;
+  }
+  .toolbar input, .toolbar select {
+    padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px;
+    font-size: 13px; background: white;
+  }
+  .toolbar input[type="text"] { min-width: 240px; }
+  .btn {
+    padding: 7px 14px; border-radius: 6px; font-size: 13px;
+    cursor: pointer; border: none; font-weight: 500;
+    transition: background 0.15s;
+  }
+  .btn-primary { background: #2563eb; color: white; }
+  .btn-primary:hover { background: #1d4ed8; }
+  .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
+  .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+  .btn-secondary:hover { background: #e5e7eb; }
+  .btn-warn { background: #f59e0b; color: white; }
+  .btn-warn:hover { background: #d97706; }
+  .badge {
+    padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500;
+  }
+  .badge-active { background: #d1fae5; color: #065f46; }
+  .badge-stop { background: #fee2e2; color: #991b1b; }
+  .badge-test { background: #fef3c7; color: #92400e; }
+  .badge-edited { background: #dbeafe; color: #1e40af; }
+  .info-bar {
+    padding: 10px 14px; border-radius: 6px; margin-bottom: 12px;
+    font-size: 12.5px; line-height: 1.5;
+  }
+  .info-bar.viewonly {
+    background: #fef3c7; border-left: 4px solid #f59e0b; color: #78350f;
+  }
+  .info-bar.admin {
+    background: #d1fae5; border-left: 4px solid #10b981; color: #064e3b;
+  }
+  .table-wrap {
+    background: white; border: 1px solid #e5e7eb; border-radius: 8px;
+    overflow-x: auto; max-height: calc(100vh - 220px); overflow-y: auto;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead {
+    position: sticky; top: 0; background: #f9fafb; z-index: 10;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  th {
+    padding: 10px 8px; text-align: left; font-weight: 600;
+    color: #374151; border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+  }
+  td {
+    padding: 6px 8px; border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+  }
+  tr:hover td { background: #f9fafb; }
+  td.code { font-family: "JetBrains Mono", "Consolas", monospace; font-weight: 600; color: #2563eb; }
+  td.name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.t-right { text-align: right; }
+  td.muted { color: #9ca3af; }
+  input.inline-edit {
+    width: 100%; padding: 4px 6px; border: 1px solid transparent;
+    background: transparent; font: inherit; text-align: right;
+    border-radius: 3px;
+  }
+  input.inline-edit:hover:not(:disabled) { border-color: #d1d5db; background: white; }
+  input.inline-edit:focus { border-color: #2563eb; background: white; outline: none; }
+  input.inline-edit:disabled { color: #6b7280; cursor: default; }
+  input.inline-edit.changed { background: #fef3c7; border-color: #f59e0b; }
+  select.inline-edit { width: 100%; padding: 3px; border: 1px solid #d1d5db; border-radius: 3px; font-size: 12px; }
+  select.inline-edit:disabled { background: #f3f4f6; color: #6b7280; }
+  .stats {
+    display: flex; gap: 16px; padding: 10px 14px; background: white;
+    border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 12px;
+    flex-wrap: wrap; font-size: 12px;
+  }
+  .stat-item { color: #6b7280; }
+  .stat-item strong { color: #111827; font-size: 14px; }
+  .save-bar {
+    position: sticky; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px; background: #1e3a8a; color: white;
+    display: none; justify-content: space-between; align-items: center;
+    margin: 12px -16px -16px -16px; box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+  }
+  .save-bar.visible { display: flex; }
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    padding: 12px 18px; border-radius: 8px; color: white;
+    font-size: 13px; z-index: 100; max-width: 360px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(100px); opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: #10b981; }
+  .toast.error { background: #ef4444; }
+  .toast.info { background: #2563eb; }
+  .loading {
+    text-align: center; padding: 60px 20px; color: #6b7280;
+  }
+  .empty {
+    text-align: center; padding: 80px 20px; color: #9ca3af;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <a href="/agent-google-doscom.html" class="nav-back">← Quay lại Agent Google</a>
+    <h1>📦 Kho tổng Doscom</h1>
+  </div>
+  <div id="user-info" style="font-size: 12px; color: #6b7280;"></div>
+</div>
+
+<div id="info-bar"></div>
+
+<div id="stats" class="stats" style="display: none;">
+  <div class="stat-item">Tổng SP: <strong id="stat-total">-</strong></div>
+  <div class="stat-item">Đang KD: <strong id="stat-active">-</strong></div>
+  <div class="stat-item">Ngừng: <strong id="stat-stop">-</strong></div>
+  <div class="stat-item">Tổng giá trị tồn (giá vốn): <strong id="stat-stock-value">-</strong></div>
+  <div class="stat-item">Đã sửa thủ công: <strong id="stat-edited">-</strong></div>
+</div>
+
+<div class="toolbar">
+  <input type="text" id="search-input" placeholder="🔍 Tìm theo mã hoặc tên...">
+  <select id="filter-status">
+    <option value="all">Tất cả trạng thái</option>
+    <option value="active" selected>Đang kinh doanh</option>
+    <option value="stop">Ngừng kinh doanh</option>
+    <option value="test">Hàng test</option>
+  </select>
+  <select id="filter-group">
+    <option value="all">Tất cả nhóm</option>
+    <option value="MAY_DO">Máy dò</option>
+    <option value="CAMERA_WIFI">Camera wifi</option>
+    <option value="CAMERA_4G">Camera 4G</option>
+    <option value="CAMERA_VIDEO_CALL">Camera gọi video 2 chiều</option>
+    <option value="GHI_AM">Máy ghi âm</option>
+    <option value="CHONG_GHI_AM">Chống ghi âm</option>
+    <option value="DINH_VI">Định vị</option>
+    <option value="NOMA">NOMA</option>
+    <option value="OTHER">Khác</option>
+  </select>
+  <div style="flex: 1;"></div>
+  <button class="btn btn-warn" id="btn-import" title="Đọc lại file Misa, chỉ thêm SP mới">
+    📥 Import từ Misa
+  </button>
+  <button class="btn btn-secondary" id="btn-add" title="Thêm SP mới thủ công">
+    ➕ Thêm SP mới
+  </button>
+</div>
+
+<div class="table-wrap" id="table-wrap">
+  <div class="loading">Đang tải...</div>
+</div>
+
+<div class="save-bar" id="save-bar">
+  <div>Có <span id="save-count">0</span> thay đổi chưa lưu</div>
+  <div style="display: flex; gap: 8px;">
+    <button class="btn btn-secondary" id="btn-reset">Hoàn tác</button>
+    <button class="btn btn-primary" id="btn-save">💾 Lưu thay đổi</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="inventory.js?v=1"></script>
+</body>
+</html>
