@@ -1,7 +1,7 @@
 // Inventory dashboard — quản lý kho Doscom với edit trực tiếp
 // Lưu trữ: Cloudflare KV qua /api/inventory
 // Quyền sửa: chỉ admin email (server-side check)
-console.log("[Inventory] v1.1 loaded — sync POS support");
+console.log("[Inventory] v1.2 loaded — sync POS support, fix admin gate");
 
 // 2026-04-25: bỏ giới hạn admin — mọi user login đều sửa được
 var ADMIN_EMAIL = "all-logged-in-users";
@@ -90,8 +90,9 @@ async function loadInventory() {
     var data = await resp.json();
     INVENTORY = data.items || [];
     CURRENT_USER = getCurrentUserFromCookie();
-    // 2026-04-25: mọi user đã login đều có quyền edit
-    IS_ADMIN = !!CURRENT_USER;
+    // 2026-04-25: lấy quyền edit từ server (cookie HTTPOnly nên JS không đọc được session,
+    // dùng cờ edit_open trả về từ /api/inventory làm nguồn sự thật)
+    IS_ADMIN = data.edit_open === true || !!CURRENT_USER;
     renderInfoBar();
     renderTable();
     updateStats();
