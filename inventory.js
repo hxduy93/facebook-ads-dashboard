@@ -3,10 +3,11 @@
 // Quyền sửa: chỉ admin email (server-side check)
 console.log("[Inventory] v1.0 loaded");
 
-var ADMIN_EMAIL = "hxduy93@gmail.com";  // sẽ được override bởi response server
+// 2026-04-25: bỏ giới hạn admin — mọi user login đều sửa được
+var ADMIN_EMAIL = "all-logged-in-users";
 var INVENTORY = [];        // toàn bộ data từ KV
 var EDITED = {};           // {code: {field: newValue}} — pending changes
-var IS_ADMIN = false;
+var IS_ADMIN = true;       // ai login cũng được edit
 var CURRENT_USER = "";
 
 // ── Utilities ───────────────────────────────────────────
@@ -88,9 +89,9 @@ async function loadInventory() {
     }
     var data = await resp.json();
     INVENTORY = data.items || [];
-    if (data.admin_email) ADMIN_EMAIL = data.admin_email.toLowerCase();
     CURRENT_USER = getCurrentUserFromCookie();
-    IS_ADMIN = CURRENT_USER === ADMIN_EMAIL;
+    // 2026-04-25: mọi user đã login đều có quyền edit
+    IS_ADMIN = !!CURRENT_USER;
     renderInfoBar();
     renderTable();
     updateStats();
@@ -107,13 +108,9 @@ function renderInfoBar() {
   var bar = document.getElementById("info-bar");
   var userInfo = document.getElementById("user-info");
   userInfo.textContent = CURRENT_USER ? "Đăng nhập: " + CURRENT_USER : "";
-  if (IS_ADMIN) {
-    bar.className = "info-bar admin";
-    bar.innerHTML = "✓ <strong>Bạn có quyền sửa giá.</strong> Click vào ô số để sửa, bấm Lưu để cập nhật.";
-  } else {
-    bar.className = "info-bar viewonly";
-    bar.innerHTML = "⚠ <strong>Bạn chỉ có quyền XEM.</strong> Quyền sửa giá thuộc về " + esc(ADMIN_EMAIL) + ".";
-  }
+  // 2026-04-25: mọi user login đều edit được
+  bar.className = "info-bar admin";
+  bar.innerHTML = "✓ <strong>Bạn có quyền sửa giá.</strong> Click vào ô số để sửa, bấm Lưu để cập nhật. Mọi thay đổi sẽ được ghi nhận kèm email người sửa.";
 }
 
 // ── Filter logic ────────────────────────────────────────

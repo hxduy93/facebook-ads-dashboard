@@ -1,16 +1,18 @@
 // API Inventory — đọc/ghi danh sách SP từ Cloudflare KV
 // Endpoints:
 //   GET  /api/inventory          → trả danh sách tất cả SP (mọi user login đều xem được)
-//   POST /api/inventory          → cập nhật giá/tồn (CHỈ admin email)
-//   POST /api/inventory/import   → import từ product-costs.json, chỉ thêm SP MỚI (CHỈ admin)
+//   POST /api/inventory          → cập nhật giá/tồn (mọi user login đều sửa được — 2026-04-25)
+//   POST /api/inventory/import   → import từ product-costs.json, chỉ thêm SP MỚI
 //
 // KV binding: env.INVENTORY (đã bind DOSCOM_INVENTORY)
-// Auth: dùng verifySession từ ../_middleware.js
-// Admin email: hxduy93@gmail.com
+// Auth: dùng verifySession từ ../_middleware.js (yêu cầu đã login)
 
 import { verifySession } from "../_middleware.js";
 
-const ADMIN_EMAIL = "hxduy93@gmail.com";
+// 2026-04-25: Bỏ giới hạn admin theo yêu cầu của Duy.
+// Tất cả user đã login (qua Google OAuth + ALLOWED_EMAILS) đều có quyền sửa.
+// Vẫn ghi updated_by = email user thực để truy vết lịch sử thay đổi.
+const ADMIN_EMAIL = "all-logged-in-users";
 
 const SESSION_COOKIE = "doscom_session";
 
@@ -34,7 +36,8 @@ async function getUserEmail(request, env) {
 }
 
 function isAdmin(email) {
-  return email === ADMIN_EMAIL.toLowerCase();
+  // 2026-04-25: Mọi user đã login đều được sửa
+  return !!email;
 }
 
 // Parse a "Đang kinh doanh" / "Ngừng kinh doanh" từ Misa data sang chuẩn
@@ -79,21 +82,18 @@ export async function onRequest(context) {
         count: items.length,
         items,
         admin_email: ADMIN_EMAIL,
+        edit_open: true,  // 2026-04-25: mọi user login đều edit được
       });
     } catch (e) {
       return jsonResponse({ error: "Lỗi khi đọc KV: " + e.message }, 500);
     }
   }
 
-  // ── POST — admin only ──
+  // ── POST — mọi user đã login đều được sửa (2026-04-25) ──
   if (method === "POST") {
     const email = await getUserEmail(request, env);
     if (!email) return jsonResponse({ error: "Chưa đăng nhập" }, 401);
-    if (!isAdmin(email)) {
-      return jsonResponse({
-        error: `Email ${email} không có quyền sửa giá. Chỉ ${ADMIN_EMAIL} được phép.`,
-      }, 403);
-    }
+    // Tất cả user đã đăng nhập qua whitelist ALLOWED_EMAILS đều có quyền sửa
 
     let body;
     try {
