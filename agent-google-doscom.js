@@ -3,7 +3,7 @@
 // Chi phí:   JS compute từ GSPEND.campaigns_raw cho bất kỳ date range
 // Không phụ thuộc period key có sẵn trong backend → hỗ trợ custom
 console.log("[AgentPage] JS v4.1 loaded");
-var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, PCOSTS=null, INVENTORY_KV=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
+var REPORT=null, REVDATA=null, GACTX=null, GSPEND=null, INVENTORY_KV=null, currentCat=null, selectedPeriod="last_30d", sortStates={};
 var customStart=null, customEnd=null;
 
 // 9 nhóm chuẩn Doscom (thứ tự hiển thị)
@@ -62,16 +62,14 @@ function load(){
   var p2 = fetch("data/product-revenue.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p3 = fetch("data/google-ads-context.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   var p4 = fetch("data/google-ads-spend.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  var p5 = fetch("data/product-costs.json?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
   // Inventory KV (giá user đã sửa thủ công, ưu tiên hơn Misa)
   var p6 = fetch("/api/inventory?v="+v).then(function(r){if(!r.ok)return null; return r.json();}).catch(function(){return null;});
-  Promise.all([p1,p2,p3,p4,p5,p6]).then(function(results){
+  Promise.all([p1,p2,p3,p4,p6]).then(function(results){
     REPORT=results[0];
     REVDATA=results[1];
     GACTX=results[2];
     GSPEND=results[3];
-    PCOSTS=results[4];
-    INVENTORY_KV=results[5];  // {items: [{code, gia_nhap_vnd, gia_ban_vnd, ton_kho, trang_thai}]}
+    INVENTORY_KV=results[4];  // {items: [{code, gia_nhap_vnd, gia_ban_vnd, ton_kho, trang_thai}]}
     // Build map nhanh code → item từ KV
     if(INVENTORY_KV && INVENTORY_KV.items){
       window.__INV_MAP = {};
@@ -149,87 +147,39 @@ function computeTopFromFlat(items, start, end, topN){
   return {total_revenue:Math.round(totRev), total_orders:Object.keys(totOrders).length, top_products:arr.slice(0, topN||50), all_products:arr};
 }
 
-// ── Lookup giá vốn từ Inventory KV (ưu tiên) → fallback product-costs.json ──
+// ── Lookup giá vốn từ Inventory KV (kho tổng dashboard) — KHÔNG còn fallback Misa ──
 function lookupCost(productName){
   var n = (productName||"").toLowerCase().trim();
   if(!n) return 0;
+  if(!window.__INV_MAP) return 0;
 
-  // 1a) Ưu tiên Inventory KV (giá user đã sửa)
-  if(window.__INV_MAP){
-    if(window.__INV_MAP[n] && window.__INV_MAP[n].gia_nhap_vnd) {
-      return Number(window.__INV_MAP[n].gia_nhap_vnd)||0;
-    }
-    // Thử match SKU prefix trong KV (vd "DR8" trong tên dài)
-    var patterns = [/\bda\s*8\.1\s*pro\b/, /\bda\s*8\.1\b/, /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
-      /\bdr\d+(?:\s*plus|\s*pro)?\b/, /\bdv\d+(?:\s*pro|\s*mini|\.\d+)?\b/, /\bdt\d+\b/,
-      /\bdi\d+(?:\s*pro|\s*plus)?\b/, /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/, /\bnoma\s*\d+/];
-    for(var pi=0;pi<patterns.length;pi++){
-      var m = n.match(patterns[pi]);
-      if(m){
-        var k = m[0].replace(/\s+/g," ").trim();
-        if(window.__INV_MAP[k] && window.__INV_MAP[k].gia_nhap_vnd){
-          return Number(window.__INV_MAP[k].gia_nhap_vnd)||0;
-        }
+  // 1) Direct match (toàn tên SP)
+  if(window.__INV_MAP[n] && window.__INV_MAP[n].gia_nhap_vnd) {
+    return Number(window.__INV_MAP[n].gia_nhap_vnd)||0;
+  }
+
+  // 2) Match qua SKU prefix trong KV (vd "DR8" trong tên dài)
+  var prefixPatterns = [/\bda\s*8\.1\s*pro\b/, /\bda\s*8\.1\b/, /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
+    /\bdr\d+(?:\s*plus|\s*pro)?\b/, /\bdv\d+(?:\s*pro|\s*mini|\.\d+)?\b/, /\bdt\d+\b/,
+    /\bdi\d+(?:\s*pro|\s*plus)?\b/, /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/, /\bnoma\s*\d+/];
+  for(var pi=0;pi<prefixPatterns.length;pi++){
+    var pm = n.match(prefixPatterns[pi]);
+    if(pm){
+      var pk = pm[0].replace(/\s+/g," ").trim();
+      if(window.__INV_MAP[pk] && window.__INV_MAP[pk].gia_nhap_vnd){
+        return Number(window.__INV_MAP[pk].gia_nhap_vnd)||0;
       }
     }
   }
 
-  // 1b) Fallback Misa product-costs.json (giá gốc)
-  if(!PCOSTS || !PCOSTS.products) return 0;
-  var P = PCOSTS.products;
-  // Direct match
-  if(P[n] && P[n].gia_nhap_vnd) return Number(P[n].gia_nhap_vnd)||0;
-
-  // 2) A002 có dung tích (key trong file: "a002 -500ml" / "a002 -300ml")
-  var aM = n.match(/a002[^0-9]*(500|300)?\s*ml/);
-  if(aM){
-    var vol = aM[1] || "500";  // default 500ml
-    var k = "a002 -" + vol + "ml";
-    if(P[k] && P[k].gia_nhap_vnd) return Number(P[k].gia_nhap_vnd)||0;
-  }
-  if(n.indexOf("a002") >= 0){
-    // fallback a002 generic
-    var fallbacks = ["a002 -500ml","a002 -300ml","a002"];
-    for(var i=0;i<fallbacks.length;i++){
-      if(P[fallbacks[i]] && P[fallbacks[i]].gia_nhap_vnd) return Number(P[fallbacks[i]].gia_nhap_vnd)||0;
+  // 3) Substring match: tìm KV code nào là substring của n (dài nhất thắng)
+  var bestKey=null, bestLen=0;
+  for(var ck in window.__INV_MAP){
+    if(ck.length>2 && n.indexOf(ck)>=0 && window.__INV_MAP[ck].gia_nhap_vnd){
+      if(ck.length>bestLen){bestKey=ck; bestLen=ck.length;}
     }
   }
-
-  // 3) Khăn lau / khăn microfiber
-  if(n.indexOf("khăn") >= 0 || n.indexOf("microfiber") >= 0){
-    if(P["khăn lau"] && P["khăn lau"].gia_nhap_vnd) return Number(P["khăn lau"].gia_nhap_vnd)||0;
-  }
-
-  // 4) Các pattern chuẩn cho mã SP
-  var patterns = [
-    /\bda\s*8\.1\s*pro\b/,  // DA8.1 Pro (ưu tiên pro trước base)
-    /\bda\s*8\.1\b/,
-    /\bda\d+(?:\.\d+)?(?:\s*pro)?\b/,
-    /\bdr\d+(?:\s*plus|\s*pro)?\b/,
-    /\bdv\d+(?:\s*pro|\s*mini|\.\d+)?\b/,
-    /\bdt\d+\b/,
-    /\bdi\d+(?:\s*pro|\s*plus)?\b/,
-    /\bd\d+(?:\.\d+)?(?:\s*pro)?\b/,  // D1-D9 Pro (máy dò)
-    /\bnoma\s*\d+/,
-  ];
-  for(var i=0;i<patterns.length;i++){
-    var m = n.match(patterns[i]);
-    if(m){
-      var k = m[0].replace(/\s+/g," ").trim();
-      if(P[k] && P[k].gia_nhap_vnd) return Number(P[k].gia_nhap_vnd)||0;
-      var k2 = m[0].replace(/\s+/g,"");
-      if(P[k2] && P[k2].gia_nhap_vnd) return Number(P[k2].gia_nhap_vnd)||0;
-    }
-  }
-
-  // 5) Fallback cuối: substring search — tìm key dài nhất là substring của n
-  var bestKey = null, bestLen = 0;
-  for(var k in P){
-    if(k.length > 2 && n.indexOf(k) >= 0 && P[k].gia_nhap_vnd){
-      if(k.length > bestLen){ bestKey = k; bestLen = k.length; }
-    }
-  }
-  if(bestKey) return Number(P[bestKey].gia_nhap_vnd)||0;
+  if(bestKey) return Number(window.__INV_MAP[bestKey].gia_nhap_vnd)||0;
 
   return 0;
 }
