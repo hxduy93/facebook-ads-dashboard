@@ -102,34 +102,33 @@ export async function onRequest(context) {
     .filter(([k, c]) => c > 0)
     .sort((a, b) => b[0].length - a[0].length);
 
-  // 3. Iterate KV
+  // 3. Iterate KV — parallel batched (Cloudflare Workers cho phép 50 concurrent subrequests)
   let updated = 0, kept_user = 0, no_match = 0, with_card = 0;
   const samples_updated = [];
   const samples_no_match = [];
 
   const list = await env.INVENTORY.list({ limit: 1000 });
-  for (const k of list.keys) {
-    const code = k.name;
+
+  async function processOne(code) {
     let existing;
     try {
       existing = await env.INVENTORY.get(code, { type: "json" });
-    } catch (e) { continue; }
-    if (!existing) continue;
+    } catch (e) { return; }
+    if (!existing) return;
 
-    // Skip user-edited if option set
     if (writeKeepUserEdit && existing.updated_by &&
         !existing.updated_by.startsWith("import:") &&
         !existing.updated_by.startsWith("sync:") &&
         !existing.updated_by.startsWith("cost-import:")) {
       kept_user++;
-      continue;
+      return;
     }
 
     const matched = findBaseCost(code, codeList);
     if (!matched) {
       no_match++;
       if (samples_no_match.length < 20) samples_no_match.push(code);
-      continue;
+      return;
     }
 
     let finalCost = matched.cost;
@@ -139,7 +138,7 @@ export async function onRequest(context) {
       with_card++;
     }
 
-    if (existing.gia_nhap_vnd === finalCost) continue;  // không đổi
+    if (existing.gia_nhap_vnd === finalCost) return;
 
     const newValue = {
       ...existing,
@@ -151,14 +150,16 @@ export async function onRequest(context) {
       await env.INVENTORY.put(code, JSON.stringify(newValue));
       updated++;
       if (samples_updated.length < 20) {
-        samples_updated.push({
-          code,
-          match: matched.match,
-          cost: finalCost,
-          card: cardKey,
-        });
+        samples_updated.push({ code, match: matched.match, cost: finalCost, card: cardKey });
       }
     } catch (e) { /* skip */ }
+  }
+
+  // Process in batches of 25 (Cloudflare safe limit, leaves room for read+write subrequests)
+  const BATCH = 25;
+  for (let i = 0; i < list.keys.length; i += BATCH) {
+    const slice = list.keys.slice(i, i + BATCH);
+    await Promise.all(slice.map(k => processOne(k.name)));
   }
 
   return jsonResponse({
