@@ -1,7 +1,7 @@
 // Inventory dashboard — quản lý kho Doscom với edit trực tiếp
 // Lưu trữ: Cloudflare KV qua /api/inventory
 // Quyền sửa: chỉ admin email (server-side check)
-console.log("[Inventory] v1.0 loaded");
+console.log("[Inventory] v1.1 loaded — sync POS support");
 
 // 2026-04-25: bỏ giới hạn admin — mọi user login đều sửa được
 var ADMIN_EMAIL = "all-logged-in-users";
@@ -371,11 +371,79 @@ async function addProduct() {
   }
 }
 
+// ── Sync từ POS Pancake ────────────────────────────────
+// Lấy POS access_token từ user (cookie POS không gửi cross-domain được nên phải nhập tay)
+// HDSD: mở pos.pancake.vn → DevTools → Console → JSON.parse(localStorage.user).accessToken
+async function syncFromPos() {
+  if (!IS_ADMIN) { toast("Bạn không có quyền đồng bộ", "error"); return; }
+
+  // Cố lấy token đã lưu trong localStorage trước (key dùng riêng cho dashboard)
+  var savedToken = "";
+  try { savedToken = localStorage.getItem("doscom_pos_token") || ""; } catch (e) {}
+
+  var msg = "📥 ĐỒNG BỘ TỪ POS PANCAKE\n\n" +
+            "Server sẽ fetch toàn bộ SP đang KD + giá bán + tồn kho từ POS Pancake.\n" +
+            "Giá vốn sẽ lấy từ file Misa (nếu có), KHÔNG đè lên giá vốn bạn đã sửa thủ công.\n\n" +
+            "Cần POS access_token. Cách lấy:\n" +
+            "  1. Mở pos.pancake.vn (đăng nhập)\n" +
+            "  2. Bấm F12 → Console\n" +
+            "  3. Gõ:  JSON.parse(localStorage.user).accessToken\n" +
+            "  4. Copy chuỗi token (không có dấu ngoặc kép) dán vào ô bên dưới\n\n" +
+            "Token sẽ được lưu vào trình duyệt này để lần sau khỏi nhập lại.";
+  var token = prompt(msg, savedToken);
+  if (!token) return;
+  token = token.trim();
+  if (!token) { toast("Token rỗng", "error"); return; }
+
+  // Lưu token cho lần sau
+  try { localStorage.setItem("doscom_pos_token", token); } catch (e) {}
+
+  var btn = document.getElementById("btn-sync-pos");
+  btn.disabled = true;
+  var originalText = btn.textContent;
+  btn.textContent = "⏳ Đang đồng bộ...";
+  toast("Đang fetch từ POS Pancake (có thể mất 30-60s)...", "info");
+
+  try {
+    var resp = await fetch("/api/inventory/sync-pos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ access_token: token, keep_user_edits: true }),
+    });
+    var data = await resp.json();
+    if (!resp.ok) {
+      // Nếu lỗi 401 hoặc token hỏng → xoá token đã lưu
+      if (resp.status === 401 || (data.error && data.error.toLowerCase().indexOf("token") >= 0)) {
+        try { localStorage.removeItem("doscom_pos_token"); } catch (e) {}
+      }
+      throw new Error(data.error || "HTTP " + resp.status);
+    }
+
+    var summary = "✓ Sync xong từ POS:\n" +
+                  "  • SP fetch về: " + data.total_products_fetched + "\n" +
+                  "  • Thêm mới:    " + data.added + "\n" +
+                  "  • Cập nhật:    " + data.updated + "\n" +
+                  "  • Bỏ qua:      " + data.skipped + "\n" +
+                  "  • Giữ giá user sửa: " + data.kept_user_edits + "\n" +
+                  "  • Misa cost loaded: " + data.misa_costs_loaded;
+    toast("Đồng bộ POS thành công ✓ (+" + data.added + " mới, " + data.updated + " update)", "success");
+    console.log("[Sync POS]", summary);
+    await loadInventory();
+  } catch (e) {
+    toast("Lỗi sync POS: " + e.message, "error");
+    console.error("[Sync POS]", e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
 // ── Init ────────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("btn-save").addEventListener("click", saveChanges);
   document.getElementById("btn-reset").addEventListener("click", resetEdits);
   document.getElementById("btn-import").addEventListener("click", importFromMisa);
+  document.getElementById("btn-sync-pos").addEventListener("click", syncFromPos);
   document.getElementById("btn-add").addEventListener("click", addProduct);
   document.getElementById("search-input").addEventListener("input", function() { renderTable(); });
   document.getElementById("filter-status").addEventListener("change", function() { renderTable(); });
