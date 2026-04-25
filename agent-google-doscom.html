@@ -69,6 +69,22 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     </div>
   </div>
 
+  <div class="section" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <label for="group-filter" style="font-weight:600">🎯 Lọc nhóm sản phẩm:</label>
+    <select id="group-filter" style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;min-width:240px">
+      <option value="ALL" selected>Tất cả 8 nhóm SP</option>
+      <option value="CAMERA_VIDEO_CALL">📞 Camera video call (DA8.1)</option>
+      <option value="CAMERA_4G">📡 Camera 4G</option>
+      <option value="CAMERA_WIFI">📶 Camera WiFi</option>
+      <option value="MAY_DO">🔍 Máy dò</option>
+      <option value="GHI_AM">🎙️ Máy ghi âm</option>
+      <option value="DINH_VI">📍 Định vị</option>
+      <option value="CHONG_GHI_AM">🛡️ Chống ghi âm</option>
+      <option value="NOMA">🚗 NOMA (chăm sóc xe)</option>
+    </select>
+    <span style="font-size:12px;color:#6b7280">→ AI sẽ chỉ phân tích nhóm bạn chọn (Audit/Suggest/Hỏi)</span>
+  </div>
+
   <div class="section">
     <h2>🎯 Audit chuyên sâu — chấm điểm 4 mảng</h2>
     <div class="btn-grid">
@@ -153,7 +169,8 @@ async function runAI(mode, question = null) {
   setLoading(true, mode);
   const t0 = Date.now();
   try {
-    const body = { mode };
+    const group = (document.getElementById('group-filter') || {}).value || 'ALL';
+    const body = { mode, context: { product_group: group } };
     if (question) body.question = question;
     const r = await fetch('/api/agent-google-ai', {
       method: 'POST',
@@ -167,7 +184,7 @@ async function runAI(mode, question = null) {
       document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
     } else {
       document.getElementById('output').innerHTML = md2html(j.response||"(empty)");
-      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Skill: ${(j.skills_used||[]).join(', ')} · Mode: <code>${j.mode}</code>`;
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Mode: <code>${j.mode}</code>`;
     }
   } catch (e) {
     document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
