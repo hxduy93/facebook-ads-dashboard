@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Insight — Doscom Google Ads</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f3f4f6;color:#111827;margin:0;font-size:14px}
+.container{max-width:1100px;margin:0 auto;padding:16px}
+.header{background:#1e3a8a;color:white;padding:14px 18px;border-radius:8px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.header h1{margin:0;font-size:18px}
+.nav-back{color:#bfdbfe;text-decoration:none;font-size:13px}
+.nav-back:hover{text-decoration:underline}
+.section{background:white;padding:16px 18px;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:16px}
+.section h2{margin:0 0 12px;font-size:15px;color:#1f2937;border-bottom:1px solid #e5e7eb;padding-bottom:8px}
+.btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.btn-action{padding:14px;border-radius:8px;border:1px solid #d1d5db;background:#f9fafb;cursor:pointer;text-align:left;font-size:13px;transition:all 0.15s}
+.btn-action:hover:not(:disabled){background:#dbeafe;border-color:#2563eb}
+.btn-action:disabled{opacity:0.5;cursor:wait}
+.btn-action .ico{font-size:18px;margin-right:6px}
+.btn-action .title{font-weight:600;color:#111827;margin-bottom:4px}
+.btn-action .desc{color:#6b7280;font-size:11.5px;line-height:1.4}
+.btn-audit{background:#eff6ff;border-color:#bfdbfe}
+.btn-audit:hover:not(:disabled){background:#bfdbfe}
+.btn-suggest{background:#f0fdf4;border-color:#bbf7d0}
+.btn-suggest:hover:not(:disabled){background:#bbf7d0}
+.btn-ask{background:#fef3c7;border-color:#fcd34d}
+.btn-ask:hover:not(:disabled){background:#fcd34d}
+.ask-box{display:flex;gap:8px;margin-top:8px}
+.ask-box input{flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px}
+.ask-box button{padding:10px 18px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer;font-weight:500}
+.ask-box button:hover:not(:disabled){background:#1d4ed8}
+.ask-box button:disabled{background:#9ca3af;cursor:wait}
+.output{min-height:300px;background:white;padding:18px;border-radius:8px;border:1px solid #e5e7eb;line-height:1.6;font-size:13.5px}
+.output h1,.output h2,.output h3{margin:14px 0 8px;color:#111827}
+.output h1{font-size:18px;border-bottom:2px solid #2563eb;padding-bottom:6px}
+.output h2{font-size:16px}
+.output h3{font-size:14px}
+.output table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+.output th,.output td{padding:6px 10px;border:1px solid #e5e7eb;text-align:left}
+.output th{background:#f3f4f6;font-weight:600}
+.output code{background:#f3f4f6;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace}
+.output pre{background:#1f2937;color:#f9fafb;padding:12px;border-radius:6px;overflow-x:auto;font-size:12px}
+.output ul,.output ol{margin:8px 0;padding-left:22px}
+.output li{margin:3px 0}
+.output blockquote{border-left:4px solid #2563eb;padding:6px 14px;margin:10px 0;background:#eff6ff;color:#1e3a8a}
+.output strong{color:#1f2937}
+.loading{text-align:center;padding:40px 20px;color:#6b7280}
+.loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.meta{font-size:11px;color:#9ca3af;margin-top:10px;padding-top:10px;border-top:1px solid #f3f4f6}
+.copy-btn{float:right;font-size:11px;padding:4px 10px;border:1px solid #d1d5db;background:white;border-radius:4px;cursor:pointer;color:#374151}
+.copy-btn:hover{background:#f3f4f6}
+.error{color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;padding:10px 14px;border-radius:4px;font-size:13px}
+.note{background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:12.5px;color:#78350f;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>🤖 AI Insight — Doscom Google Ads</h1>
+      <div style="font-size:11.5px;color:#bfdbfe;margin-top:3px">Cloudflare Workers AI · Llama 3.3 70B / 3.1 8B · Free</div>
+    </div>
+    <div>
+      <a href="/agent-google-doscom.html" class="nav-back">← Agent Google Doscom</a> &nbsp;|&nbsp;
+      <a href="/" class="nav-back">Dashboard chính</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Audit chuyên sâu (4 mảng)</h2>
+    <div class="btn-grid">
+      <button class="btn-action btn-audit" onclick="runAI('audit_account')"><div class="title"><span class="ico">📊</span>Audit Tổng quan</div><div class="desc">Chấm điểm 8 nhóm, top Quick Win, cảnh báo</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_keyword')"><div class="title"><span class="ico">🔍</span>Audit Từ khoá</div><div class="desc">Tier 1/2/3, từ khoá lỗ, search term ngon</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_gdn')"><div class="title"><span class="ico">🖼️</span>Audit GDN/PMax</div><div class="desc">Banner disapproved, placement lãng phí</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_headline')"><div class="title"><span class="ico">📝</span>Audit Tiêu đề</div><div class="desc">Headline cliché, USP chưa cover, công thức thiếu</div></button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>💡 Đề xuất sáng tạo (3 mảng)</h2>
+    <div class="btn-grid">
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_keyword')"><div class="title"><span class="ico">🌱</span>Đề xuất Từ khoá mới</div><div class="desc">Harvest, Replace, Long-tail, Seasonal</div></button>
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_headline')"><div class="title"><span class="ico">✍️</span>Sinh Headline mới</div><div class="desc">5 cơ chế, công thức AIDA/FAB/PAS</div></button>
+      <button class="btn-action btn-suggest" onclick="runAI('suggest_banner')"><div class="title"><span class="ico">🎨</span>Brief Banner mới</div><div class="desc">Size, layout, color hex, hypothesis</div></button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>💬 Hỏi tự do</h2>
+    <div class="ask-box">
+      <input type="text" id="ask-input" placeholder="Ví dụ: Tại sao DA8.1 lỗ? Hoặc: Tôi nên tăng bid keyword nào?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <button onclick="askQuestion()" id="ask-btn">Hỏi AI</button>
+    </div>
+    <div style="margin-top:8px;font-size:11.5px;color:#6b7280">Gợi ý: "Đề xuất 12 headline mới cho DA8.1" / "Phân tích lý do conversion thấp ở Camera 4G"</div>
+  </div>
+
+  <div class="section">
+    <h2>📋 Kết quả AI <span class="copy-btn" onclick="copyOutput()">📋 Copy</span></h2>
+    <div class="note" id="status-note">⚠ Mỗi audit mất ~20-60 giây vì AI cần đọc skill rule + 90 ngày data. Đợi không tab.</div>
+    <div id="output" class="output"><div style="color:#9ca3af;text-align:center;padding:40px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu</div></div>
+    <div class="meta" id="meta"></div>
+  </div>
+</div>
+
+<script>
+const MODE_LABELS = {
+  audit_account: "📊 Audit Tổng quan",
+  audit_keyword: "🔍 Audit Từ khoá",
+  audit_gdn: "🖼️ Audit GDN/PMax",
+  audit_headline: "📝 Audit Tiêu đề",
+  suggest_keyword: "🌱 Đề xuất Từ khoá",
+  suggest_headline: "✍️ Sinh Headline",
+  suggest_banner: "🎨 Brief Banner",
+  ask: "💬 Hỏi tự do",
+};
+
+// Markdown → HTML đơn giản (đủ cho audit output)
+function md2html(s) {
+  if (!s) return "";
+  s = String(s);
+  // Escape HTML
+  s = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  // Code blocks
+  s = s.replace(/```([^`]+)```/gs, (m, c) => `<pre>${c.trim()}</pre>`);
+  // Inline code
+  s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+  // Headers
+  s = s.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+  s = s.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+  s = s.replace(/^# (.+)$/gm, "<h1>$1</h1>");
+  // Bold
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  // Italic
+  s = s.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, "<em>$1</em>");
+  // Tables
+  s = s.replace(/^(\|.+\|)\n\|[-:| ]+\|\n((?:\|.+\|\n?)+)/gm, function(_, header, body) {
+    const hrow = header.split("|").slice(1, -1).map(c => `<th>${c.trim()}</th>`).join("");
+    const brows = body.trim().split("\n").map(r => "<tr>" + r.split("|").slice(1, -1).map(c => `<td>${c.trim()}</td>`).join("") + "</tr>").join("");
+    return `<table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table>`;
+  });
+  // Blockquotes
+  s = s.replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>");
+  // Lists
+  s = s.replace(/^- (.+)$/gm, "<li>$1</li>").replace(/(<li>.+<\/li>\n?)+/g, m => "<ul>" + m + "</ul>");
+  s = s.replace(/^(\d+)\. (.+)$/gm, "<li>$2</li>");
+  // Paragraphs (lines that aren't already tagged)
+  s = s.replace(/^([^<\n].+)$/gm, "<p>$1</p>");
+  // Cleanup
+  s = s.replace(/<p>(<[^p].+)<\/p>/g, "$1").replace(/\n\n+/g, "\n");
+  return s;
+}
+
+function setLoading(on, mode) {
+  document.querySelectorAll('.btn-action').forEach(b => b.disabled = on);
+  document.getElementById('ask-btn').disabled = on;
+  if (on) {
+    document.getElementById('output').innerHTML = `<div class="loading"><div class="spinner"></div><div style="margin-top:14px">${MODE_LABELS[mode] || mode} — đang chạy...</div><div style="font-size:11.5px;color:#9ca3af;margin-top:6px">~20-60 giây · không tab đi nhé</div></div>`;
+    document.getElementById('meta').textContent = "";
+  }
+}
+
+async function runAI(mode, question = null) {
+  setLoading(true, mode);
+  const t0 = Date.now();
+  try {
+    const body = { mode };
+    if (question) body.question = question;
+    const r = await fetch('/api/agent-google-ai', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    const took = Math.round((Date.now() - t0) / 1000);
+    const j = await r.json();
+    if (!r.ok || j.error) {
+      document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi:</strong> ${(j.error || 'HTTP ' + r.status).replace(/</g, "&lt;")}</div>`;
+      document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
+    } else {
+      document.getElementById('output').innerHTML = md2html(j.response || "(empty)");
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Skill: ${(j.skills_used || []).join(', ')} · Mode: <code>${j.mode}</code>`;
+    }
+  } catch (e) {
+    document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
+  } finally {
+    setLoading(false);
+  }
+}
+
+function askQuestion() {
+  const q = document.getElementById('ask-input').value.trim();
+  if (!q) { alert('Nhập câu hỏi đã'); return; }
+  runAI('ask', q);
+}
+
+function copyOutput() {
+  const txt = document.getElementById('output').innerText;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = "✓ Đã copy";
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
+</body>
+</html>
