@@ -114,20 +114,6 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     <input type="month" id="profit-month" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;background:white">
     <span id="profit-range-label" style="font-size:11.5px;color:#92400e;font-weight:500">—</span>
     <span style="color:#fbbf24;font-size:18px">|</span>
-    <label style="font-weight:600;color:#92400e">📊 Nguồn:</label>
-    <select id="source-filter" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;background:white">
-      <option value="WEBSITE" selected>🌐 Website only</option>
-      <option value="ONLINE">🌐+💬+📞 Online (Web+Zalo+Hotline)</option>
-      <option value="ALL">🔄 Tất cả nguồn</option>
-    </select>
-    <label style="font-weight:600;color:#92400e">📦 Trạng thái:</label>
-    <select id="status-filter" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;background:white">
-      <option value="ALL" selected>✅ Tất cả</option>
-      <option value="DELIVERED">📬 Đã giao</option>
-      <option value="DELIVERED_RETURNING">📬+🚚 Đã giao + Đang giao</option>
-      <option value="EXCLUDE_RETURNED">✅ Trừ hoàn (Đã/Đang/Khác)</option>
-    </select>
-    <span style="color:#fbbf24;font-size:18px">|</span>
     <label for="group-filter" style="font-weight:600;color:#92400e">🎯 Nhóm SP:</label>
     <select id="group-filter" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;min-width:220px;background:white">
       <option value="ALL" selected>Tất cả 8 nhóm SP</option>
@@ -259,14 +245,9 @@ const STATUS_OPTIONS = {
   DELIVERED_RETURNING: ["delivered", "returning"],
   EXCLUDE_RETURNED: ["delivered", "returning", "other"],
 };
-function getSourceFilter() {
-  const el = document.getElementById('source-filter');
-  return el ? el.value : 'WEBSITE';
-}
-function getStatusFilter() {
-  const el = document.getElementById('status-filter');
-  return el ? el.value : 'ALL';
-}
+// Default cứng theo yêu cầu user: Online (Website + ZaloOA + Hotline), tất cả status
+function getSourceFilter() { return 'ONLINE'; }
+function getStatusFilter() { return 'ALL'; }
 // Gộp products từ multiple sources × statuses → unified {code: {by_date, orders_by_date, units_by_date}}
 function buildRevenueProductSet(rev, srcKey, statusKey) {
   if (!rev) return {};
@@ -677,7 +658,7 @@ function renderProfitTable() {
   </table>
   <p style="font-size:11.5px;color:#6b7280;margin-top:8px">
     ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng + chi phí khác.<br>
-    ⚠ <strong>Doanh thu</strong>: lọc theo Nguồn = <strong>${srcFilter}</strong> · Trạng thái = <strong>${statusFilter}</strong>. Đổi 2 dropdown ở đầu trang để xem khác.<br>
+    ⚠ <strong>Doanh thu</strong>: gồm 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> · Tất cả trạng thái đơn (đã giao + đang giao + đang/đã hoàn + đã hủy).<br>
     ⚠ Mapping nhóm: Pancake SP → group dựa prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G).
   </p>`;
   root.innerHTML = html;

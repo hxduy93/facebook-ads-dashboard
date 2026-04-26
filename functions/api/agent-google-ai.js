@@ -392,8 +392,21 @@ function compactPlacement(j, topN, group, perCampaignByName) {
   };
 }
 
-function buildSystemPrompt(skills, group) {
+function buildSystemPrompt(skills, group, jsonMode) {
   const groupNote = group !== "ALL" ? `\n\n⚠ FOCUS: Chỉ phân tích nhóm SP "${GROUP_LABELS[group]}". Bỏ qua các SP khác.` : "";
+  if (jsonMode) {
+    return [
+      "Bạn là chuyên gia phân tích Google Ads cho Doscom Holdings.",
+      "🚨 BẮT BUỘC: Output PHẢI là JSON object hợp lệ. KHÔNG markdown, KHÔNG **bold**, KHÔNG ## heading, KHÔNG text giải thích trước/sau JSON.",
+      "🚨 Bắt đầu output bằng dấu { và kết thúc bằng }. Không có ký tự nào khác.",
+      "Mọi giá trị string trong JSON dùng tiếng Việt có dấu.",
+      "Mọi số liệu DỰA TRÊN DATA trong context — KHÔNG bịa. Thiếu data thì điểm thấp + note 'Thiếu data'.",
+      groupNote,
+      "",
+      "═══ RULE & SKILL ═══",
+      skills.join("\n\n"),
+    ].join("\n");
+  }
   return [
     "Bạn là chuyên gia phân tích Google Ads cho Doscom Holdings.",
     "Trả lời 100% TIẾNG VIỆT có dấu, dùng dấu phẩy ngàn cho số tiền (vd 1,250,000đ).",
@@ -427,30 +440,16 @@ function buildUserPrompt(mode, question, dataContext, group, timeRange) {
       parts.push(`# Audit Tổng quan${groupSuffix}\n## Tổng điểm /100 — Loại A-F\n## Tóm tắt 1 dòng\n## Top 5 Quick Win (cụ thể, đ tiết kiệm)\n## Cảnh báo nguy hiểm\n## Phân tích 8 nhóm chấm điểm`);
       break;
     case "audit_account_json":
-      parts.push(`PHẢI trả về DUY NHẤT 1 JSON object (không markdown, không text trước/sau, không code fence).
-Schema BẮT BUỘC:
-{
-  "total_score": <0-100>,
-  "grade": "A"|"B"|"C"|"D"|"F",
-  "summary": "<1 câu tóm tắt tình hình>",
-  "breakdown": {
-    "tracking":     { "score": <0-100>, "weight": 25, "note": "<lý do điểm này>" },
-    "profit":       { "score": <0-100>, "weight": 22, "note": "..." },
-    "waste":        { "score": <0-100>, "weight": 13, "note": "..." },
-    "rsa":          { "score": <0-100>, "weight": 12, "note": "..." },
-    "kw_structure": { "score": <0-100>, "weight": 10, "note": "..." },
-    "landing":      { "score": <0-100>, "weight": 8,  "note": "..." },
-    "budget":       { "score": <0-100>, "weight": 5,  "note": "..." },
-    "compliance":   { "score": <0-100>, "weight": 5,  "note": "..." }
-  },
-  "top_findings": [
-    "<finding nóng 1 — bắt buộc có số tiền/% cụ thể>",
-    "<finding nóng 2>",
-    "<finding nóng 3>"
-  ]
-}
-Quy tắc grade: 85+=A, 70-84=B, 55-69=C, 40-54=D, <40=F.
-total_score = sum(score * weight) / 100 — làm tròn nguyên.`);
+      parts.push(`🚨 OUTPUT BẮT BUỘC: 1 JSON object hợp lệ duy nhất. Bắt đầu bằng { kết thúc bằng }. Không markdown, không heading, không text bao quanh.
+
+Schema cố định (PHẢI có đủ 8 key trong breakdown):
+{"total_score":<0-100 int>,"grade":"A"|"B"|"C"|"D"|"F","summary":"<1 câu>","breakdown":{"tracking":{"score":<0-100>,"weight":25,"note":"<vì sao>"},"profit":{"score":<0-100>,"weight":22,"note":""},"waste":{"score":<0-100>,"weight":13,"note":""},"rsa":{"score":<0-100>,"weight":12,"note":""},"kw_structure":{"score":<0-100>,"weight":10,"note":""},"landing":{"score":<0-100>,"weight":8,"note":""},"budget":{"score":<0-100>,"weight":5,"note":""},"compliance":{"score":<0-100>,"weight":5,"note":""}},"top_findings":["<finding 1 + số tiền/%>","<finding 2>","<finding 3>"]}
+
+Grade: 85+=A, 70-84=B, 55-69=C, 40-54=D, <40=F.
+total_score = round(sum(score×weight)/100).
+Nếu thiếu data nhóm nào → score = 30 + note: "Thiếu data".
+
+NHẮC LẠI: Output PHẢI là JSON parse được. KHÔNG \\`\\`\\`json. KHÔNG **. KHÔNG ##. CHỈ {...}.`);
       break;
     case "audit_keyword":
       parts.push(`# Audit Từ khoá${groupSuffix}\n## Phân bậc Tier 1/2/3 (số kw, % chi)\n## Top 10 từ khoá lỗ\n## Top 10 search term ngon (HARVEST candidates)\n## Top 5 Quick Win`);
@@ -527,19 +526,24 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("inventory") && env.INVENTORY) tasks.push(fetchInventoryCompact(env, group).then(items => dataContext.inventory = items));
 
   await Promise.all(tasks);
-  const systemPrompt = buildSystemPrompt(skills, group);
+  const systemPrompt = buildSystemPrompt(skills, group, !!cfg.json_output);
   const userPrompt = buildUserPrompt(mode, question, dataContext, group, timeRange);
 
   let aiResult;
   try {
-    aiResult = await env.AI.run(cfg.model, {
+    const aiParams = {
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
       temperature: cfg.json_output ? 0.1 : 0.3,
       max_tokens: cfg.json_output ? 1500 : 2500,
-    });
+    };
+    if (cfg.json_output) {
+      // Cloudflare Workers AI hỗ trợ response_format cho Llama 3.1+
+      aiParams.response_format = { type: "json_object" };
+    }
+    aiResult = await env.AI.run(cfg.model, aiParams);
   } catch (e) {
     return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
   }
@@ -547,20 +551,47 @@ export async function onRequestPost(context) {
   let rawResp = aiResult.response || aiResult.result || "";
   let parsedJson = null;
   if (cfg.json_output && rawResp) {
-    // Extract JSON từ output AI (đôi khi bọc trong ```json...```)
-    let cleaned = rawResp.trim();
+    // Strategy: thử nhiều cách parse JSON từ AI output
+    let cleaned = String(rawResp).trim();
+
+    // Bước 1: Bỏ code fence nếu có
     const fenced = cleaned.match(/```(?:json)?\s*([\s\S]+?)```/);
     if (fenced) cleaned = fenced[1].trim();
-    // Tìm khối {...} đầu tiên
-    const firstBrace = cleaned.indexOf("{");
-    const lastBrace = cleaned.lastIndexOf("}");
-    if (firstBrace !== -1 && lastBrace > firstBrace) {
-      cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+
+    // Bước 2: Tìm JSON object {...} balanced đầu tiên
+    function extractJsonObject(s) {
+      const start = s.indexOf("{");
+      if (start === -1) return null;
+      let depth = 0, inStr = false, esc = false;
+      for (let i = start; i < s.length; i++) {
+        const ch = s[i];
+        if (esc) { esc = false; continue; }
+        if (ch === "\\") { esc = true; continue; }
+        if (ch === '"') { inStr = !inStr; continue; }
+        if (inStr) continue;
+        if (ch === "{") depth++;
+        else if (ch === "}") {
+          depth--;
+          if (depth === 0) return s.slice(start, i + 1);
+        }
+      }
+      return null;
     }
+    const jsonStr = extractJsonObject(cleaned) || cleaned;
+
     try {
-      parsedJson = JSON.parse(cleaned);
+      parsedJson = JSON.parse(jsonStr);
     } catch (e) {
-      parsedJson = { _parse_error: e.message, _raw_excerpt: cleaned.slice(0, 300) };
+      // Fallback: thử parse cleaned trực tiếp
+      try {
+        parsedJson = JSON.parse(cleaned);
+      } catch (e2) {
+        parsedJson = {
+          _parse_error: e.message,
+          _raw_excerpt: rawResp.slice(0, 500),
+          _attempted: jsonStr.slice(0, 300),
+        };
+      }
     }
   }
 
