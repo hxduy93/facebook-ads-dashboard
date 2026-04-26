@@ -383,7 +383,7 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("revenue")) tasks.push(fetchJson(origin, "/data/product-revenue.json", cookieHeader).then(j => dataContext.revenue = compactRevenue(j, group)));
   if (cfg.data.includes("search_terms")) tasks.push(fetchJson(origin, "/data/google-ads-search-terms.json", cookieHeader).then(j => dataContext.search_terms = compactSearchTerms(j, 30, group)));
   if (cfg.data.includes("ads")) tasks.push(fetchJson(origin, "/data/google-ads-ads.json", cookieHeader).then(j => dataContext.ads = compactAds(j, 15, group)));
-  if (cfg.data.includes("placement")) let _perCampaignFromCtx = null;
+  let _perCampaignFromCtx = null;
   if (cfg.data.includes("placement")) {
     // Placement filter cần per_campaign từ context — fetch trước
     const ctxJson = await fetchJson(origin, "/data/google-ads-context.json", cookieHeader);
@@ -399,22 +399,4 @@ export async function onRequestPost(context) {
   let aiResult;
   try {
     aiResult = await env.AI.run(cfg.model, {
-      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt }],
-      temperature: 0.3,
-      max_tokens: 3072,
-    });
-  } catch (e) {
-    return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
-  }
-
-  return jsonResponse({
-    ok: true,
-    mode,
-    group,
-    group_label: GROUP_LABELS[group],
-    model: cfg.model,
-    response: aiResult.response || aiResult.result || "",
-    skills_used: cfg.skills,
-    data_used: cfg.data,
-  });
-}
+      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt 
