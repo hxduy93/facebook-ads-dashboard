@@ -184,36 +184,113 @@ function compactRevenue(j, group) {
 
 function compactSpend(j, group) {
   if (!j) return null;
-  if (group === "ALL") return { date_range: j.date_range, total_spend: j.total_spend, by_category: j.by_category };
-  const grpSpend = (j.by_category || {})[group] || { spend: 0, conversions: 0 };
-  return { date_range: j.date_range, group_filter: group, group_spend: grpSpend, total_spend_all: j.total_spend };
+  if (group === "ALL") return { date_range: j.date_range, total_spend: j.total_spend, by_category: j.by_category, by_campaign_top: j.campaigns_raw?.slice(0, 10) };
+  const grpSpend = (j.by_category || {})[group] || null;
+  // Tìm top campaign trong nhóm
+  const topCamps = (j.campaigns_raw || []).filter(c => c.category === group).slice(0, 10);
+  return {
+    date_range: j.date_range,
+    group_filter: group,
+    group_spend: grpSpend || { spend: 0, conversions: 0, note: "Không có data spend cho nhóm này — có thể không chạy QC" },
+    top_campaigns_in_group: topCamps,
+    total_spend_all: j.total_spend,
+  };
+}
+
+// Map category Windsor.ai (vd "GHIAM") → Doscom mode (vd "GHI_AM")
+const WINDSOR_CAT_MAP = {
+  "GHIAM": "GHI_AM",
+  "MAYDO": "MAY_DO",
+  "DINHVI": "DINH_VI",
+  "CAMCALL": "CAMERA_VIDEO_CALL",
+  "OTHER_DI": "CHONG_GHI_AM",
+  "OTHER_CAM": null,  // sẽ dùng heuristic phụ
+};
+function mapWindsorCategory(cat, campaign) {
+  if (!cat) return "OTHER";
+  if (WINDSOR_CAT_MAP[cat]) return WINDSOR_CAT_MAP[cat];
+  // OTHER_CAM split theo campaign name
+  if (cat === "OTHER_CAM") {
+    const c = (campaign || "").toLowerCase();
+    if (/4g|sim|nlmt|năng lượng/.test(c)) return "CAMERA_4G";
+    return "CAMERA_WIFI";
+  }
+  return cat;  // CAMERA_4G, CAMERA_WIFI, CHONG_GHI_AM... đã đúng
 }
 
 function compactAds(j, topN, group) {
   if (!j) return null;
-  const allAds = j.ads || [];
-  let ads = allAds;
+  const dict = j.ad_aggregates || {};
+  const fmtAgg = j.format_aggregates || {};
+  const all = Object.entries(dict).map(([id, v]) => ({
+    id,
+    ad_name: (v.ad_name || "").slice(0, 40),
+    campaign: v.campaign,
+    ad_group: v.ad_group_name,
+    format: v.ad_format,
+    cat: mapWindsorCategory(v.category, v.campaign),
+    spend: v.spend_30d || 0,
+    clicks: v.clicks_30d || 0,
+    impr: v.impressions_30d || 0,
+    ctr: v.ctr_30d || 0,
+    cpc: v.cpc_30d || 0,
+    days: v.active_days_30d || 0,
+  }));
+  let ads = all;
   let filteredCount = null;
   if (group !== "ALL") {
-    ads = allAds.filter(a => {
-      const headlines = (a.headlines || []).map(h => (typeof h === "string" ? h : h.text || "")).join(" ");
-      const descs = (a.descriptions || []).map(d => (typeof d === "string" ? d : d.text || "")).join(" ");
-      const camp = a.campaign_name || a.ad_group_name || "";
-      const txt = (headlines + " " + descs + " " + camp).toLowerCase();
-      return classifyByName(txt) === group || classifySearchTerm(txt) === group;
-    });
+    ads = all.filter(a => a.cat === group);
     filteredCount = ads.length;
-    // Fallback: nếu 0 ads sau filter, lấy top 5 ads chung để AI có data tham chiếu
-    if (ads.length === 0) ads = allAds.slice(0, 5);
+    if (ads.length === 0) ads = all.slice(0, 5);  // fallback
   }
-  return { date_range: j.date_range, group_filter: group, total_in_group: filteredCount, total_all: allAds.length, sample: ads.slice(0, topN) };
+  ads.sort((a, b) => b.spend - a.spend);
+  return {
+    date_range: j.date_range,
+    group_filter: group,
+    total_all: all.length,
+    total_in_group: filteredCount,
+    format_breakdown: { DISPLAY_BANNER: fmtAgg.DISPLAY_BANNER?.count || 0, RSA: fmtAgg.RSA?.count || 0, OTHER: fmtAgg.OTHER?.count || 0 },
+    sample: ads.slice(0, topN),
+  };
 }
 
-function compactPlacement(j, topN, group) {
+function compactPlacement(j, topN, group, perCampaignByName) {
   if (!j) return null;
-  // Placement là cross-product (trừ khi campaign tách theo nhóm). Lấy top spend chung.
-  const list = (j.placements || []).sort((a, b) => (b.cost || 0) - (a.cost || 0)).slice(0, topN);
-  return { date_range: j.date_range, group_filter: group, note: "Placement la cross-product, khong filter theo nhom SP", top_spend: list };
+  const dict = j.placement_aggregates || {};
+  const nw = j.network_aggregates || {};
+  const all = Object.entries(dict).map(([url, v]) => ({
+    url: url.slice(0, 80),
+    spend: v.spend_30d || 0,
+    clicks: v.clicks_30d || 0,
+    impr: v.impressions_30d || 0,
+    ctr: v.ctr_30d || 0,
+    type: v.placement_type,
+    network: v.ad_network_type,
+    campaigns: v.campaigns || [],
+  }));
+  let list = all;
+  let filteredCount = null;
+  if (group !== "ALL" && perCampaignByName) {
+    // Tìm campaigns thuộc nhóm SP từ context.per_campaign
+    const groupCampaigns = new Set();
+    for (const [name, info] of Object.entries(perCampaignByName)) {
+      if (info && info.category === group) groupCampaigns.add(name);
+    }
+    if (groupCampaigns.size > 0) {
+      list = all.filter(p => p.campaigns.some(c => groupCampaigns.has(c)));
+      filteredCount = list.length;
+      if (list.length === 0) list = all.slice(0, 5);
+    }
+  }
+  list.sort((a, b) => b.spend - a.spend);
+  return {
+    date_range: j.date_range,
+    group_filter: group,
+    total_all: all.length,
+    total_in_group: filteredCount,
+    network_split: { CONTENT: nw.CONTENT?.spend_30d || 0, SEARCH: nw.SEARCH?.spend_30d || 0 },
+    top_spend: list.slice(0, topN),
+  };
 }
 
 function buildSystemPrompt(skills, group) {
@@ -306,7 +383,13 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("revenue")) tasks.push(fetchJson(origin, "/data/product-revenue.json", cookieHeader).then(j => dataContext.revenue = compactRevenue(j, group)));
   if (cfg.data.includes("search_terms")) tasks.push(fetchJson(origin, "/data/google-ads-search-terms.json", cookieHeader).then(j => dataContext.search_terms = compactSearchTerms(j, 30, group)));
   if (cfg.data.includes("ads")) tasks.push(fetchJson(origin, "/data/google-ads-ads.json", cookieHeader).then(j => dataContext.ads = compactAds(j, 15, group)));
-  if (cfg.data.includes("placement")) tasks.push(fetchJson(origin, "/data/google-ads-placement.json", cookieHeader).then(j => dataContext.placement = compactPlacement(j, 15, group)));
+  if (cfg.data.includes("placement")) let _perCampaignFromCtx = null;
+  if (cfg.data.includes("placement")) {
+    // Placement filter cần per_campaign từ context — fetch trước
+    const ctxJson = await fetchJson(origin, "/data/google-ads-context.json", cookieHeader);
+    if (ctxJson) _perCampaignFromCtx = ctxJson.per_campaign || null;
+    tasks.push(fetchJson(origin, "/data/google-ads-placement.json", cookieHeader).then(j => dataContext.placement = compactPlacement(j, 15, group, _perCampaignFromCtx)));
+  }
   if (cfg.data.includes("inventory") && env.INVENTORY) tasks.push(fetchInventoryCompact(env, group).then(items => dataContext.inventory = items));
 
   await Promise.all(tasks);
