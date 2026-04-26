@@ -449,7 +449,7 @@ Grade: 85+=A, 70-84=B, 55-69=C, 40-54=D, <40=F.
 total_score = round(sum(score×weight)/100).
 Nếu thiếu data nhóm nào → score = 30 + note: "Thiếu data".
 
-NHẮC LẠI: Output PHẢI là JSON parse được. KHÔNG \\`\\`\\`json. KHÔNG **. KHÔNG ##. CHỈ {...}.`);
+NHẮC LẠI: Output PHẢI là JSON parse được. KHÔNG code fence (3 dấu backtick). KHÔNG **. KHÔNG ##. CHỈ {...}.`);
       break;
     case "audit_keyword":
       parts.push(`# Audit Từ khoá${groupSuffix}\n## Phân bậc Tier 1/2/3 (số kw, % chi)\n## Top 10 từ khoá lỗ\n## Top 10 search term ngon (HARVEST candidates)\n## Top 5 Quick Win`);
@@ -604,6 +604,4 @@ export async function onRequestPost(context) {
     response: rawResp,
     parsed_json: parsedJson,
     skills_used: cfg.skills,
-    data_used: cfg.data,
-  });
-}
+    data_used: c
