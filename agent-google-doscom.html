@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Google Doscom — AI Insight v3</title>
+<title>Agent Google Doscom — AI Insight v3.1</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}
@@ -74,16 +74,12 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .score-action-btn{padding:8px 14px;border:1px solid #2563eb;border-radius:6px;background:#2563eb;color:white;cursor:pointer;font-size:12.5px;white-space:nowrap}
 .score-action-btn:hover:not(:disabled){background:#1d4ed8}
 .score-action-btn:disabled{background:#9ca3af;border-color:#9ca3af;cursor:wait}
-.score-action-btn.ghost{background:white;color:#2563eb}
 .score-cache-info{font-size:10.5px;color:#9ca3af}
 .findings{margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;font-size:12.5px}
 .findings h4{margin:0 0 6px;font-size:12.5px;color:#dc2626}
 .findings ol{margin:0;padding-left:22px}
 .findings li{margin:3px 0;color:#374151}
 .scorecard-empty{text-align:center;padding:24px 16px;color:#9ca3af;font-size:13px}
-.toolbar-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f3f4f6}
-.toolbar-row label{font-size:12.5px;color:#374151;font-weight:500}
-.toolbar-row select{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px}
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .chart-card{padding:12px;border:1px solid #e5e7eb;border-radius:6px;background:#fafafa}
 .chart-card h3{margin:0 0 8px;font-size:13px;color:#374151;font-weight:600}
@@ -103,8 +99,8 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 <div class="container">
   <div class="header">
     <div>
-      <h1>🤖 Agent Google Doscom <span class="tag">AI v3</span></h1>
-      <div class="sub">Cloudflare Workers AI · Llama 3.3 70B + 3.1 8B · Card chấm điểm + Chart trend + Bảng lợi nhuận</div>
+      <h1>🤖 Agent Google Doscom <span class="tag">AI v3.1</span></h1>
+      <div class="sub">Cloudflare Workers AI · Llama 3.3 70B + 3.1 8B · Card chấm điểm + Chart trend + Bảng lợi nhuận theo tháng</div>
     </div>
     <div>
       <a href="/" class="nav-back">← Dashboard chính</a> &nbsp;|&nbsp;
@@ -112,9 +108,14 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     </div>
   </div>
 
-  <div class="section" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-    <label for="group-filter" style="font-weight:600">🎯 Lọc nhóm sản phẩm:</label>
-    <select id="group-filter" style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;min-width:240px">
+  <!-- BỘ LỌC CHUNG: Tháng + Nhóm SP — áp dụng cho Card chấm điểm + Chart + Bảng lợi nhuận -->
+  <div class="section" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fffbeb;border-color:#fde68a">
+    <label style="font-weight:600;color:#92400e">🕐 Tháng:</label>
+    <input type="month" id="profit-month" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;background:white">
+    <span id="profit-range-label" style="font-size:11.5px;color:#92400e;font-weight:500">—</span>
+    <span style="color:#fbbf24;font-size:18px">|</span>
+    <label for="group-filter" style="font-weight:600;color:#92400e">🎯 Nhóm SP:</label>
+    <select id="group-filter" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;min-width:220px;background:white">
       <option value="ALL" selected>Tất cả 8 nhóm SP</option>
       <option value="CAMERA_VIDEO_CALL">📞 Camera video call (DA8.1)</option>
       <option value="CAMERA_4G">📡 Camera 4G</option>
@@ -125,50 +126,31 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
       <option value="CHONG_GHI_AM">🛡️ Chống ghi âm</option>
       <option value="NOMA">🚗 NOMA (chăm sóc xe)</option>
     </select>
-    <span style="font-size:12px;color:#6b7280">→ AI/Chart/Bảng đều lọc theo nhóm bạn chọn</span>
+    <span style="font-size:11.5px;color:#92400e;margin-left:auto;font-style:italic">→ Card chấm điểm · Chart trend · Bảng lợi nhuận đều lọc theo bộ lọc này</span>
   </div>
 
   <div class="section">
     <h2>🎯 Đánh giá & Chấm điểm Tổng quan
-      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— AI chấm dựa trên 8 nhóm tiêu chí · Cache 24h · Bấm "🔄 Chấm lại" để force</span>
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— AI chấm 8 nhóm tiêu chí · Cache 24h theo (tháng × nhóm SP)</span>
     </h2>
     <div id="scorecard-body">
-      <div class="scorecard-empty">Chưa có điểm. Bấm <strong>"🔄 Chấm lại"</strong> để AI chấm lần đầu (mất ~30-60 giây).
-        <br><br>
-        <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm lại bằng AI</button>
-      </div>
+      <div class="scorecard-empty">Đang tải...</div>
     </div>
   </div>
 
   <div class="section">
-    <h2>📈 Chart Trend — Spend / Clicks / CPC qua thời gian</h2>
-    <div class="toolbar-row">
-      <label>Khung thời gian:</label>
-      <select id="trend-window" onchange="renderTrendCharts()">
-        <option value="7">7 ngày gần nhất</option>
-        <option value="14">14 ngày gần nhất</option>
-        <option value="30" selected>30 ngày gần nhất</option>
-        <option value="90">90 ngày gần nhất</option>
-      </select>
-      <span style="font-size:11.5px;color:#6b7280;margin-left:auto">Data: Windsor.ai · cập nhật mỗi 3 giờ</span>
-    </div>
+    <h2>📈 Chart Trend — Spend / Clicks / CPC theo ngày trong tháng
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— Data: Windsor.ai · cập nhật mỗi 3 giờ</span>
+    </h2>
     <div id="trend-charts" class="charts-grid">
       <div class="chart-card"><h3>Đang tải data...</h3></div>
     </div>
   </div>
 
   <div class="section">
-    <h2>💰 Bảng lợi nhuận tháng — Google Ads × Pancake</h2>
-    <div class="toolbar-row">
-      <label>Khung thời gian:</label>
-      <select id="profit-window" onchange="renderProfitTable()">
-        <option value="7">7 ngày</option>
-        <option value="14">14 ngày</option>
-        <option value="30" selected>30 ngày</option>
-        <option value="90">90 ngày</option>
-      </select>
-      <span style="font-size:11.5px;color:#6b7280;margin-left:auto">VAT 10% · Profit = Doanh thu − VAT − Vốn − Chi phí QC</span>
-    </div>
+    <h2>💰 Bảng lợi nhuận theo tháng — Google Ads × Pancake
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— VAT 10% · LN trước vốn = Doanh thu − VAT − Spend GG Ads</span>
+    </h2>
     <div id="profit-table-wrap" style="overflow-x:auto">
       <div style="text-align:center;padding:30px;color:#9ca3af">Đang tải data...</div>
     </div>
@@ -178,9 +160,9 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     <h2>🎯 Audit chuyên sâu — chấm điểm 4 mảng</h2>
     <div class="btn-grid">
       <button class="btn-action btn-audit" onclick="runAI('audit_account')"><div class="title"><span class="ico">📊</span>Audit Tổng quan</div><div class="desc">Chấm điểm 8 nhóm, top Quick Win, cảnh báo nguy hiểm</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_keyword')"><div class="title"><span class="ico">🔍</span>Audit Từ khoá</div><div class="desc">Tier 1/2/3, từ khoá lỗ, search term ngon (harvest candidates)</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_gdn')"><div class="title"><span class="ico">🖼️</span>Audit GDN/PMax</div><div class="desc">Banner disapproved, placement lãng phí, brand safety</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_headline')"><div class="title"><span class="ico">📝</span>Audit Tiêu đề</div><div class="desc">Headline cliché, USP chưa cover, công thức copywriting thiếu</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_keyword')"><div class="title"><span class="ico">🔍</span>Audit Từ khoá</div><div class="desc">Tier 1/2/3, từ khoá lỗ, search term ngon</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_gdn')"><div class="title"><span class="ico">🖼️</span>Audit GDN/PMax</div><div class="desc">Banner disapproved, placement lãng phí</div></button>
+      <button class="btn-action btn-audit" onclick="runAI('audit_headline')"><div class="title"><span class="ico">📝</span>Audit Tiêu đề</div><div class="desc">Headline cliché, USP chưa cover</div></button>
     </div>
   </div>
 
@@ -196,16 +178,15 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
   <div class="section">
     <h2>💬 Hỏi tự do với AI</h2>
     <div class="ask-box">
-      <input type="text" id="ask-input" placeholder="Vd: Tại sao DA8.1 lỗ? · Tăng bid keyword nào? · Thiếu USP gì?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <input type="text" id="ask-input" placeholder="Vd: Tại sao DA8.1 lỗ? · Tăng bid keyword nào?" onkeydown="if(event.key==='Enter')askQuestion()">
       <button onclick="askQuestion()" id="ask-btn">Hỏi AI</button>
     </div>
-    <div style="margin-top:8px;font-size:11.5px;color:#6b7280">AI có quyền truy cập: 4 skill audit + giá vốn KV + doanh thu Pancake 90 ngày + Google Ads 90 ngày</div>
   </div>
 
   <div class="section">
     <h2>📋 Kết quả AI <span class="copy-btn" onclick="copyOutput()">📋 Copy</span></h2>
-    <div class="note" id="status-note">⚠ Audit mất ~20-60 giây vì AI cần đọc skill rule + 90 ngày data. Đợi không tab.</div>
-    <div id="output" class="output"><div style="color:#9ca3af;text-align:center;padding:40px 20px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.<br><br>💡 Gợi ý chạy lần đầu: <strong>📊 Audit Tổng quan</strong> để có cái nhìn toàn diện.</div></div>
+    <div class="note">⚠ Audit mất ~20-60 giây vì AI cần đọc skill rule + 90 ngày data.</div>
+    <div id="output" class="output"><div style="color:#9ca3af;text-align:center;padding:40px 20px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.</div></div>
     <div class="meta" id="meta"></div>
   </div>
 </div>
@@ -250,11 +231,33 @@ function classifySpCode(code) {
 }
 
 const VAT_RATE = 0.10;
-const CACHE_KEY_SCORECARD = "doscom_scorecard_v1";
+const CACHE_KEY_SCORECARD = "doscom_scorecard_v2";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-let DATA_SPEND = null;
-let DATA_REVENUE = null;
+let DATA_SPEND = null, DATA_REVENUE = null;
 let TREND_CHARTS = {};
+
+const SCORE_LABELS = {
+  tracking: "Tracking",
+  profit: "Profit/SP",
+  waste: "Lãng phí",
+  rsa: "RSA quality",
+  kw_structure: "Cấu trúc KW",
+  landing: "Trang đích",
+  budget: "Budget",
+  compliance: "Compliance",
+};
+const GROUP_DISPLAY_ORDER = ["CAMERA_VIDEO_CALL", "CAMERA_4G", "CAMERA_WIFI", "MAY_DO", "GHI_AM", "DINH_VI", "CHONG_GHI_AM", "NOMA"];
+const GROUP_NAMES_VN = {
+  CAMERA_VIDEO_CALL: "📞 Camera video call",
+  CAMERA_4G: "📡 Camera 4G",
+  CAMERA_WIFI: "📶 Camera WiFi",
+  MAY_DO: "🔍 Máy dò",
+  GHI_AM: "🎙️ Máy ghi âm",
+  DINH_VI: "📍 Định vị",
+  CHONG_GHI_AM: "🛡️ Chống ghi âm",
+  NOMA: "🚗 NOMA",
+  OTHER: "Khác",
+};
 
 function fmtMoney(v) {
   if (v == null || isNaN(v)) return "—";
@@ -270,10 +273,26 @@ function fmtPct(v) {
 function getGroup() {
   return (document.getElementById('group-filter') || {}).value || 'ALL';
 }
-function getDateNDaysAgo(n) {
-  const d = new Date();
-  d.setDate(d.getDate() - n);
+function formatDateISO(d) {
   return d.toISOString().slice(0, 10);
+}
+
+// Lấy {startDate, endDate, label, title} từ "YYYY-MM"
+function getMonthRange(monthStr) {
+  if (!monthStr) {
+    const now = new Date();
+    monthStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  }
+  const [yyyyStr, mmStr] = monthStr.split('-');
+  const yyyy = parseInt(yyyyStr, 10);
+  const mm = parseInt(mmStr, 10);
+  const startDate = `${yyyy}-${String(mm).padStart(2,'0')}-01`;
+  const lastDay = new Date(yyyy, mm, 0).getDate();
+  let endDate = `${yyyy}-${String(mm).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+  const today = new Date();
+  const todayStr = formatDateISO(today);
+  if (endDate > todayStr) endDate = todayStr;
+  return { startDate, endDate, label: `${startDate} → ${endDate}`, title: `Tháng ${mm}/${yyyy}`, monthStr };
 }
 
 async function loadAllData() {
@@ -288,22 +307,12 @@ async function loadAllData() {
   } catch (e) { console.error('Load data fail:', e); }
 }
 
-const SCORE_LABELS = {
-  tracking: "Tracking",
-  profit: "Profit/SP",
-  waste: "Lãng phí",
-  rsa: "RSA quality",
-  kw_structure: "Cấu trúc KW",
-  landing: "Trang đích",
-  budget: "Budget",
-  compliance: "Compliance",
-};
+// ── SCORECARD ──
+function getScorecardCacheKey(group, monthStr) { return `${CACHE_KEY_SCORECARD}_${group}_${monthStr || 'now'}`; }
 
-function getScorecardCacheKey(group) { return `${CACHE_KEY_SCORECARD}_${group}`; }
-
-function loadScorecardCache(group) {
+function loadScorecardCache(group, monthStr) {
   try {
-    const raw = localStorage.getItem(getScorecardCacheKey(group));
+    const raw = localStorage.getItem(getScorecardCacheKey(group, monthStr));
     if (!raw) return null;
     const obj = JSON.parse(raw);
     if (!obj.ts || (Date.now() - obj.ts) > CACHE_TTL_MS) return null;
@@ -311,23 +320,24 @@ function loadScorecardCache(group) {
   } catch { return null; }
 }
 
-function saveScorecardCache(group, payload) {
+function saveScorecardCache(group, monthStr, payload) {
   try {
-    localStorage.setItem(getScorecardCacheKey(group), JSON.stringify({
-      ts: Date.now(), group, data: payload,
+    localStorage.setItem(getScorecardCacheKey(group, monthStr), JSON.stringify({
+      ts: Date.now(), group, month: monthStr, data: payload,
     }));
   } catch {}
 }
 
-function renderScorecard(payload, cacheTs) {
+function renderScorecard(payload, cacheTs, range) {
   const root = document.getElementById('scorecard-body');
+  const rangeLabel = range ? `<div style="font-size:11.5px;color:#6b7280;margin-bottom:8px">📅 Đang chấm cho: <strong>${range.title}</strong> (${range.label})</div>` : '';
   if (!payload) {
-    root.innerHTML = `<div class="scorecard-empty">Chưa có điểm. Bấm <strong>"🔄 Chấm lại"</strong> để AI chấm lần đầu.<br><br>
-      <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm lại bằng AI</button></div>`;
+    root.innerHTML = `${rangeLabel}<div class="scorecard-empty">Chưa có điểm cho tháng này. Bấm <strong>"🔄 Chấm bằng AI"</strong> (mất ~30-60 giây).<br><br>
+      <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm bằng AI</button></div>`;
     return;
   }
   if (payload._parse_error) {
-    root.innerHTML = `<div class="scorecard-empty"><strong style="color:#dc2626">Lỗi parse JSON từ AI:</strong> ${payload._parse_error}<br>
+    root.innerHTML = `${rangeLabel}<div class="scorecard-empty"><strong style="color:#dc2626">Lỗi parse JSON:</strong> ${payload._parse_error}<br>
       <details style="margin-top:8px"><summary>Raw output</summary><pre style="font-size:11px;white-space:pre-wrap">${(payload._raw_excerpt||'').replace(/</g,'&lt;')}</pre></details>
       <br><button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
     return;
@@ -350,10 +360,10 @@ function renderScorecard(payload, cacheTs) {
   }).join("");
 
   const findingsHtml = findings.length ? `<div class="findings"><h4>🔥 Top 3 finding nóng:</h4><ol>${findings.map(f => `<li>${String(f).replace(/</g,'&lt;')}</li>`).join("")}</ol></div>` : "";
-
   const cacheLabel = cacheTs ? `Chấm lúc: ${new Date(cacheTs).toLocaleString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}` : '';
 
   root.innerHTML = `
+    ${rangeLabel}
     <div class="scorecard">
       <div class="score-big">
         <div class="num">${total}</div>
@@ -362,7 +372,7 @@ function renderScorecard(payload, cacheTs) {
       </div>
       <div class="score-bars">${barsHtml}</div>
       <div class="score-actions">
-        <button class="score-action-btn" onclick="refreshScorecard(true)" id="btn-rescore">🔄 Chấm lại</button>
+        <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm lại</button>
         <div class="score-cache-info">${cacheLabel}</div>
       </div>
     </div>
@@ -373,17 +383,26 @@ function renderScorecard(payload, cacheTs) {
 
 async function refreshScorecard(force) {
   const group = getGroup();
+  const monthInput = document.getElementById('profit-month');
+  const monthStr = monthInput ? monthInput.value : '';
+  const range = getMonthRange(monthStr);
   if (!force) {
-    const cached = loadScorecardCache(group);
-    if (cached) { renderScorecard(cached.data, cached.ts); return; }
+    const cached = loadScorecardCache(group, monthStr);
+    if (cached) { renderScorecard(cached.data, cached.ts, range); return; }
   }
   const root = document.getElementById('scorecard-body');
-  root.innerHTML = `<div class="scorecard-empty"><div class="loading"><div class="spinner"></div><div style="margin-top:10px">AI đang chấm điểm... ~30-60 giây</div></div></div>`;
+  root.innerHTML = `<div class="scorecard-empty"><div class="loading"><div class="spinner"></div><div style="margin-top:10px">AI đang chấm điểm ${range.title}... ~30-60 giây</div></div></div>`;
   try {
     const r = await fetch('/api/agent-google-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode: 'audit_account_json', context: { product_group: group } }),
+      body: JSON.stringify({
+        mode: 'audit_account_json',
+        context: {
+          product_group: group,
+          time_range: { start: range.startDate, end: range.endDate, label: range.title },
+        },
+      }),
     });
     const j = await r.json();
     if (!r.ok || j.error) {
@@ -392,17 +411,18 @@ async function refreshScorecard(force) {
       return;
     }
     const payload = j.parsed_json || { _parse_error: "Không có parsed_json", _raw_excerpt: (j.response||'').slice(0,300) };
-    saveScorecardCache(group, payload);
-    renderScorecard(payload, Date.now());
+    saveScorecardCache(group, monthStr, payload);
+    renderScorecard(payload, Date.now(), range);
   } catch (e) {
     root.innerHTML = `<div class="error">Lỗi mạng: ${e.message}<br><br>
       <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
   }
 }
 
-function aggregateSpendByDate(spendData, group, windowDays) {
+// ── CHART TREND ──
+function aggregateSpendByDate(spendData, group, startDate, endDate) {
   if (!spendData || !spendData.by_category) return { dates: [], spend: [], clicks: [], impressions: [] };
-  const cutoff = getDateNDaysAgo(windowDays - 1);
+  const inRange = (d) => d >= startDate && d <= endDate;
   const wantCats = [];
   if (group === "ALL") {
     wantCats.push(...Object.keys(spendData.by_category));
@@ -415,13 +435,13 @@ function aggregateSpendByDate(spendData, group, windowDays) {
   for (const cat of wantCats) {
     const bd = spendData.by_category[cat]?.by_date || {};
     for (const [d, v] of Object.entries(bd)) {
-      if (d >= cutoff) spendByDate[d] = (spendByDate[d] || 0) + Number(v || 0);
+      if (inRange(d)) spendByDate[d] = (spendByDate[d] || 0) + Number(v || 0);
     }
   }
   const clicksByDate = {};
   const imprByDate = {};
   for (const r of (spendData.campaigns_raw || [])) {
-    if (r.date < cutoff) continue;
+    if (!inRange(r.date)) continue;
     if (!wantCats.includes(r.category)) continue;
     clicksByDate[r.date] = (clicksByDate[r.date] || 0) + Number(r.clicks || 0);
     imprByDate[r.date] = (imprByDate[r.date] || 0) + Number(r.impressions || 0);
@@ -438,15 +458,14 @@ function aggregateSpendByDate(spendData, group, windowDays) {
 function renderTrendCharts() {
   if (!DATA_SPEND) return;
   const group = getGroup();
-  const win = parseInt(document.getElementById('trend-window').value, 10) || 30;
-  const agg = aggregateSpendByDate(DATA_SPEND, group, win);
+  const monthInput = document.getElementById('profit-month');
+  const range = getMonthRange(monthInput ? monthInput.value : null);
+  const agg = aggregateSpendByDate(DATA_SPEND, group, range.startDate, range.endDate);
   const root = document.getElementById('trend-charts');
-
   if (!agg.dates.length) {
-    root.innerHTML = `<div class="chart-card"><h3>Không có data</h3><p style="font-size:12px;color:#9ca3af">Nhóm "${group}" không có chi tiêu Google Ads trong ${win} ngày qua.</p></div>`;
+    root.innerHTML = `<div class="chart-card"><h3>Không có data</h3><p style="font-size:12px;color:#9ca3af">Nhóm "${group}" không có chi tiêu Google Ads trong ${range.title} (${range.label}).</p></div>`;
     return;
   }
-
   const cpc = agg.spend.map((s, i) => agg.clicks[i] > 0 ? s / agg.clicks[i] : 0);
   const ctr = agg.clicks.map((c, i) => agg.impressions[i] > 0 ? c / agg.impressions[i] : 0);
   const labels = agg.dates.map(d => d.slice(5).replace('-', '/'));
@@ -457,17 +476,14 @@ function renderTrendCharts() {
     <div class="chart-card"><h3>💸 CPC trung bình (đ/click)</h3><canvas id="chart-cpc"></canvas></div>
     <div class="chart-card"><h3>👁 CTR (%)</h3><canvas id="chart-ctr"></canvas></div>
   `;
-
   for (const k of Object.keys(TREND_CHARTS)) { try { TREND_CHARTS[k].destroy(); } catch {} }
   TREND_CHARTS = {};
-
   const commonOpts = {
     responsive: true, maintainAspectRatio: false,
     plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
     scales: { x: { ticks: { font: { size: 10 }, maxRotation: 0 } }, y: { beginAtZero: true } },
     elements: { point: { radius: 2, hoverRadius: 5 }, line: { tension: 0.3 } },
   };
-
   TREND_CHARTS.spend = new Chart(document.getElementById('chart-spend'), {
     type: 'line',
     data: { labels, datasets: [{ data: agg.spend, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true }] },
@@ -490,24 +506,9 @@ function renderTrendCharts() {
   });
 }
 
-const GROUP_DISPLAY_ORDER = [
-  "CAMERA_VIDEO_CALL", "CAMERA_4G", "CAMERA_WIFI", "MAY_DO",
-  "GHI_AM", "DINH_VI", "CHONG_GHI_AM", "NOMA",
-];
-const GROUP_NAMES_VN = {
-  CAMERA_VIDEO_CALL: "📞 Camera video call",
-  CAMERA_4G: "📡 Camera 4G",
-  CAMERA_WIFI: "📶 Camera WiFi",
-  MAY_DO: "🔍 Máy dò",
-  GHI_AM: "🎙️ Máy ghi âm",
-  DINH_VI: "📍 Định vị",
-  CHONG_GHI_AM: "🛡️ Chống ghi âm",
-  NOMA: "🚗 NOMA",
-  OTHER: "Khác",
-};
-
-function aggregateProfitByGroup(spendData, revenueData, groupFilter, windowDays) {
-  const cutoff = getDateNDaysAgo(windowDays - 1);
+// ── BẢNG LỢI NHUẬN ──
+function aggregateProfitByGroup(spendData, revenueData, groupFilter, startDate, endDate) {
+  const inRange = (d) => d >= startDate && d <= endDate;
   const buckets = {};
   for (const g of GROUP_DISPLAY_ORDER) {
     buckets[g] = { spend: 0, revenue: 0, orders: 0, units: 0 };
@@ -518,7 +519,7 @@ function aggregateProfitByGroup(spendData, revenueData, groupFilter, windowDays)
       if (!(grp in buckets)) continue;
       const bd = payload.by_date || {};
       for (const [d, v] of Object.entries(bd)) {
-        if (d >= cutoff) buckets[grp].spend += Number(v || 0);
+        if (inRange(d)) buckets[grp].spend += Number(v || 0);
       }
     }
   }
@@ -526,18 +527,10 @@ function aggregateProfitByGroup(spendData, revenueData, groupFilter, windowDays)
     for (const [code, p] of Object.entries(revenueData.products)) {
       const grp = classifySpCode(code);
       if (!(grp in buckets)) continue;
-      const bd = p.by_date || {};
-      const obd = p.orders_by_date || {};
-      const ubd = p.units_by_date || {};
-      for (const [d, v] of Object.entries(bd)) {
-        if (d >= cutoff) buckets[grp].revenue += Number(v || 0);
-      }
-      for (const [d, v] of Object.entries(obd)) {
-        if (d >= cutoff) buckets[grp].orders += Number(v || 0);
-      }
-      for (const [d, v] of Object.entries(ubd)) {
-        if (d >= cutoff) buckets[grp].units += Number(v || 0);
-      }
+      const bd = p.by_date || {}, obd = p.orders_by_date || {}, ubd = p.units_by_date || {};
+      for (const [d, v] of Object.entries(bd))  if (inRange(d)) buckets[grp].revenue += Number(v || 0);
+      for (const [d, v] of Object.entries(obd)) if (inRange(d)) buckets[grp].orders += Number(v || 0);
+      for (const [d, v] of Object.entries(ubd)) if (inRange(d)) buckets[grp].units += Number(v || 0);
     }
   }
   if (groupFilter && groupFilter !== "ALL") {
@@ -549,8 +542,11 @@ function aggregateProfitByGroup(spendData, revenueData, groupFilter, windowDays)
 function renderProfitTable() {
   if (!DATA_SPEND || !DATA_REVENUE) return;
   const group = getGroup();
-  const win = parseInt(document.getElementById('profit-window').value, 10) || 30;
-  const buckets = aggregateProfitByGroup(DATA_SPEND, DATA_REVENUE, group, win);
+  const monthInput = document.getElementById('profit-month');
+  const range = getMonthRange(monthInput ? monthInput.value : null);
+  const labelEl = document.getElementById('profit-range-label');
+  if (labelEl) labelEl.textContent = `(${range.title} · ${range.label})`;
+  const buckets = aggregateProfitByGroup(DATA_SPEND, DATA_REVENUE, group, range.startDate, range.endDate);
   const root = document.getElementById('profit-table-wrap');
   let totSpend = 0, totRev = 0, totOrders = 0, totUnits = 0;
 
@@ -565,7 +561,7 @@ function renderProfitTable() {
   }).filter(r => r.spend > 0 || r.revenue > 0);
 
   if (!rows.length) {
-    root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${win} ngày qua cho nhóm "${group}".</div>`;
+    root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} (${range.label}) cho nhóm "${group}".</div>`;
     return;
   }
   rows.sort((a, b) => b.revenue - a.revenue);
@@ -608,6 +604,7 @@ function renderProfitTable() {
   root.innerHTML = html;
 }
 
+// ── AI AUDIT/SUGGEST/ASK (phần cũ) ──
 function md2html(s) {
   if (!s) return "";
   s = String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -646,21 +643,28 @@ function setLoading(on, mode) {
   document.querySelectorAll('.btn-action').forEach(b => b.disabled = on);
   document.getElementById('ask-btn').disabled = on;
   if (on) {
-    document.getElementById('output').innerHTML = `<div class="loading"><div class="spinner"></div><div style="margin-top:14px">${MODE_LABELS[mode] || mode} — đang chạy...</div><div style="font-size:11.5px;color:#9ca3af;margin-top:6px">~20-60 giây · không tab đi nhé</div></div>`;
+    document.getElementById('output').innerHTML = `<div class="loading"><div class="spinner"></div><div style="margin-top:14px">${MODE_LABELS[mode] || mode} — đang chạy...</div><div style="font-size:11.5px;color:#9ca3af;margin-top:6px">~20-60 giây</div></div>`;
     document.getElementById('meta').textContent = "";
   }
 }
 
-async function runAI(mode, question = null) {
+async function runAI(mode, question) {
   setLoading(true, mode);
   const t0 = Date.now();
   try {
     const group = getGroup();
-    const body = { mode, context: { product_group: group } };
+    const monthInput = document.getElementById('profit-month');
+    const range = getMonthRange(monthInput ? monthInput.value : null);
+    const body = {
+      mode,
+      context: {
+        product_group: group,
+        time_range: { start: range.startDate, end: range.endDate, label: range.title },
+      }
+    };
     if (question) body.question = question;
     const r = await fetch('/api/agent-google-ai', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body)
     });
     const took = Math.round((Date.now() - t0) / 1000);
@@ -670,7 +674,7 @@ async function runAI(mode, question = null) {
       document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
     } else {
       document.getElementById('output').innerHTML = md2html(j.response||"(empty)");
-      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Mode: <code>${j.mode}</code>`;
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Tháng: <strong>${range.title}</strong>`;
     }
   } catch (e) {
     document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
@@ -695,17 +699,27 @@ function copyOutput() {
   });
 }
 
+// ── INIT ──
 async function refreshAll() {
   await loadAllData();
+  const monthInput = document.getElementById('profit-month');
+  if (monthInput && !monthInput.value) {
+    const now = new Date();
+    monthInput.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  }
   const group = getGroup();
-  const cached = loadScorecardCache(group);
-  if (cached) renderScorecard(cached.data, cached.ts);
-  else renderScorecard(null);
+  const monthStr = monthInput ? monthInput.value : '';
+  const range = getMonthRange(monthStr);
+  const labelEl = document.getElementById('profit-range-label');
+  if (labelEl) labelEl.textContent = `(${range.title} · ${range.label})`;
+  const cached = loadScorecardCache(group, monthStr);
+  if (cached) renderScorecard(cached.data, cached.ts, range);
+  else renderScorecard(null, null, range);
   renderTrendCharts();
   renderProfitTable();
 }
 
-document.getElementById('group-filter').addEventListener('change', refreshAll);
+function onFilterChange() { refreshAll(); }
 window.addEventListener('DOMContentLoaded', refreshAll);
 </script>
 </body>

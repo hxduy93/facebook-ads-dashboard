@@ -310,8 +310,13 @@ function buildSystemPrompt(skills, group) {
   ].join("\n");
 }
 
-function buildUserPrompt(mode, question, dataContext, group) {
+function buildUserPrompt(mode, question, dataContext, group, timeRange) {
   const parts = [`MODE: ${mode}`, `GROUP FILTER: ${GROUP_LABELS[group]}`];
+  if (timeRange && timeRange.start && timeRange.end) {
+    parts.push(`⚠ TIME RANGE FOCUS: ${timeRange.label || (timeRange.start + ' → ' + timeRange.end)}`);
+    parts.push(`  → CHỈ phân tích spend/revenue/đơn trong khoảng từ ${timeRange.start} đến ${timeRange.end}.`);
+    parts.push(`  → Nếu trong context có data ngoài khoảng này, BỎ QUA.`);
+  }
   if (question) parts.push(`USER QUESTION: ${question}`);
   parts.push("");
   parts.push("═══ DATA CONTEXT ═══");
@@ -391,6 +396,9 @@ export async function onRequestPost(context) {
   const question = (body.question || "").trim();
   const userContext = body.context || {};
   const group = (userContext.product_group || "ALL").toUpperCase();
+  // Time range optional: { start: "YYYY-MM-DD", end: "YYYY-MM-DD", label: "Tháng 4/2026" }
+  const timeRange = userContext.time_range && userContext.time_range.start && userContext.time_range.end
+    ? userContext.time_range : null;
 
   if (!GROUP_LABELS[group]) return jsonResponse({ error: `Nhóm SP không hợp lệ: ${group}` }, 400);
 
@@ -404,6 +412,7 @@ export async function onRequestPost(context) {
   const skills = cfg.skills.map(k => SKILL_SUMMARY[k]).filter(Boolean);
 
   const dataContext = { mode, group_filter: group, group_label: GROUP_LABELS[group] };
+  if (timeRange) dataContext.time_range = timeRange;
   const tasks = [];
   if (cfg.data.includes("context")) tasks.push(fetchJson(origin, "/data/google-ads-context.json", cookieHeader).then(j => { if (j) dataContext.context = { date_range: j.date_range, total_campaigns: (j.campaigns_raw || []).length }; }));
   if (cfg.data.includes("spend")) tasks.push(fetchJson(origin, "/data/google-ads-spend.json", cookieHeader).then(j => dataContext.spend = compactSpend(j, group)));
@@ -421,7 +430,7 @@ export async function onRequestPost(context) {
 
   await Promise.all(tasks);
   const systemPrompt = buildSystemPrompt(skills, group);
-  const userPrompt = buildUserPrompt(mode, question, dataContext, group);
+  const userPrompt = buildUserPrompt(mode, question, dataContext, group, timeRange);
 
   let aiResult;
   try {
