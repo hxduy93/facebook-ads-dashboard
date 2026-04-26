@@ -776,4 +776,21 @@ async function refreshAll() {
     const now = new Date();
     monthInput.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   }
+  const group = getGroup();
+  const monthStr = monthInput ? monthInput.value : '';
+  const range = getMonthRange(monthStr);
+  const labelEl = document.getElementById('profit-range-label');
+  if (labelEl) labelEl.textContent = `(${range.title} · ${range.label})`;
+  const cached = loadScorecardCache(group, monthStr);
+  if (cached) renderScorecard(cached.data, cached.ts, range);
+  else renderScorecard(null, null, range);
+  renderTrendCharts();
+  renderProfitTable();
+}
+
+function onFilterChange() { refreshAll(); }
+window.addEventListener('DOMContentLoaded', refreshAll);
+</script>
+</body>
+</html>
  
