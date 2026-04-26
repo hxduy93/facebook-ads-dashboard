@@ -612,10 +612,9 @@ export async function onRequestPost(context) {
       temperature: cfg.json_output ? 0.1 : 0.3,
       max_tokens: cfg.json_output ? 1500 : 2500,
     };
-    if (cfg.json_output) {
-      // Cloudflare Workers AI hỗ trợ response_format cho Llama 3.1+
-      aiParams.response_format = { type: "json_object" };
-    }
+    // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
+    // có thể không support hoặc throw exception. Prompt đã đủ chặt + parser robust.
+    // if (cfg.json_output) aiParams.response_format = { type: "json_object" };
     aiResult = await env.AI.run(cfg.model, aiParams);
   } catch (e) {
     return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
@@ -723,9 +722,4 @@ export async function onRequestPost(context) {
     group,
     group_label: GROUP_LABELS[group],
     model: cfg.model,
-    response: rawResp,
-    parsed_json: parsedJson,
-    skills_used: cfg.skills,
-    data_used: cfg.data,
-  });
-}
+    response: r
