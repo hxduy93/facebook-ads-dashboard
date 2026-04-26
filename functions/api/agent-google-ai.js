@@ -604,4 +604,6 @@ export async function onRequestPost(context) {
     response: rawResp,
     parsed_json: parsedJson,
     skills_used: cfg.skills,
-    data_used: c
+    data_used: cfg.data,
+  });
+}
