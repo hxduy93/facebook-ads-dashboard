@@ -722,4 +722,9 @@ export async function onRequestPost(context) {
     group,
     group_label: GROUP_LABELS[group],
     model: cfg.model,
-    response: r
+    response: rawResp,
+    parsed_json: parsedJson,
+    skills_used: cfg.skills,
+    data_used: cfg.data,
+  });
+}
