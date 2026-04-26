@@ -1,4 +1,4 @@
-// API Agent Google Ads AI v3 — Cloudflare Workers AI + Filter theo nhóm SP
+// API Agent Google Ads AI v3.1 — Cloudflare Workers AI + Filter theo nhóm SP
 // Endpoint: POST /api/agent-google-ai
 // Body: {
 //   mode,
@@ -399,4 +399,25 @@ export async function onRequestPost(context) {
   let aiResult;
   try {
     aiResult = await env.AI.run(cfg.model, {
-      messages: [{ role: "system", content: systemPrompt }, { role: "user", content: userPrompt 
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.3,
+      max_tokens: 3072,
+    });
+  } catch (e) {
+    return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
+  }
+
+  return jsonResponse({
+    ok: true,
+    mode,
+    group,
+    group_label: GROUP_LABELS[group],
+    model: cfg.model,
+    response: aiResult.response || aiResult.result || "",
+    skills_used: cfg.skills,
+    data_used: cfg.data,
+  });
+}
