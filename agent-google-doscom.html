@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Google Doscom — AI Insight</title>
+<title>Agent Google Doscom — AI Insight v3</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f3f4f6;color:#111827;margin:0;font-size:14px}
-.container{max-width:1100px;margin:0 auto;padding:16px}
+.container{max-width:1200px;margin:0 auto;padding:16px}
 .header{background:#1e3a8a;color:white;padding:14px 18px;border-radius:8px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .header h1{margin:0;font-size:18px}
 .header .sub{font-size:11.5px;color:#bfdbfe;margin-top:3px}
@@ -54,14 +55,56 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .error{color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;padding:10px 14px;border-radius:4px;font-size:13px}
 .note{background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:12.5px;color:#78350f;margin-bottom:12px}
 .tag{display:inline-block;padding:2px 8px;background:#dbeafe;color:#1e40af;border-radius:9999px;font-size:10.5px;margin-left:4px}
+.scorecard{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.score-big{text-align:center;min-width:140px;padding:14px;border-radius:10px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe}
+.score-big .num{font-size:42px;font-weight:700;color:#1e3a8a;line-height:1}
+.score-big .grade{font-size:22px;font-weight:600;margin-top:4px}
+.score-big .label{font-size:10.5px;color:#6b7280;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px}
+.grade-A{color:#15803d}.grade-B{color:#2563eb}.grade-C{color:#ca8a04}.grade-D{color:#ea580c}.grade-F{color:#dc2626}
+.score-bars{flex:1;display:flex;flex-direction:column;gap:6px}
+.score-bar{display:grid;grid-template-columns:130px 1fr 70px;gap:10px;align-items:center;font-size:12px}
+.score-bar .name{color:#374151;font-weight:500}
+.score-bar .track{height:14px;background:#f3f4f6;border-radius:7px;overflow:hidden;position:relative}
+.score-bar .fill{height:100%;background:linear-gradient(90deg,#2563eb,#3b82f6);border-radius:7px;transition:width 0.4s}
+.score-bar.bad .fill{background:linear-gradient(90deg,#dc2626,#f87171)}
+.score-bar.warn .fill{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.score-bar.good .fill{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.score-bar .val{text-align:right;color:#6b7280;font-family:Consolas,monospace}
+.score-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.score-action-btn{padding:8px 14px;border:1px solid #2563eb;border-radius:6px;background:#2563eb;color:white;cursor:pointer;font-size:12.5px;white-space:nowrap}
+.score-action-btn:hover:not(:disabled){background:#1d4ed8}
+.score-action-btn:disabled{background:#9ca3af;border-color:#9ca3af;cursor:wait}
+.score-action-btn.ghost{background:white;color:#2563eb}
+.score-cache-info{font-size:10.5px;color:#9ca3af}
+.findings{margin-top:14px;padding-top:12px;border-top:1px solid #f3f4f6;font-size:12.5px}
+.findings h4{margin:0 0 6px;font-size:12.5px;color:#dc2626}
+.findings ol{margin:0;padding-left:22px}
+.findings li{margin:3px 0;color:#374151}
+.scorecard-empty{text-align:center;padding:24px 16px;color:#9ca3af;font-size:13px}
+.toolbar-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f3f4f6}
+.toolbar-row label{font-size:12.5px;color:#374151;font-weight:500}
+.toolbar-row select{padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:13px}
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.chart-card{padding:12px;border:1px solid #e5e7eb;border-radius:6px;background:#fafafa}
+.chart-card h3{margin:0 0 8px;font-size:13px;color:#374151;font-weight:600}
+.chart-card canvas{max-height:220px}
+.profit-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.profit-table th,.profit-table td{padding:8px 10px;border:1px solid #e5e7eb;text-align:right}
+.profit-table th{background:#f3f4f6;font-weight:600;white-space:nowrap}
+.profit-table th:first-child,.profit-table td:first-child{text-align:left;font-weight:500}
+.profit-table tr.total td{background:#fef3c7;font-weight:600;border-top:2px solid #f59e0b}
+.profit-table .pos{color:#15803d;font-weight:500}
+.profit-table .neg{color:#dc2626;font-weight:500}
+.profit-table tr:hover td{background:#f9fafb}
+.profit-table tr.total:hover td{background:#fde68a}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div>
-      <h1>🤖 Agent Google Doscom <span class="tag">AI v2</span></h1>
-      <div class="sub">Cloudflare Workers AI · Llama 3.3 70B + 3.1 8B · 4 skill audit + suggest · Free</div>
+      <h1>🤖 Agent Google Doscom <span class="tag">AI v3</span></h1>
+      <div class="sub">Cloudflare Workers AI · Llama 3.3 70B + 3.1 8B · Card chấm điểm + Chart trend + Bảng lợi nhuận</div>
     </div>
     <div>
       <a href="/" class="nav-back">← Dashboard chính</a> &nbsp;|&nbsp;
@@ -82,7 +125,53 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
       <option value="CHONG_GHI_AM">🛡️ Chống ghi âm</option>
       <option value="NOMA">🚗 NOMA (chăm sóc xe)</option>
     </select>
-    <span style="font-size:12px;color:#6b7280">→ AI sẽ chỉ phân tích nhóm bạn chọn (Audit/Suggest/Hỏi)</span>
+    <span style="font-size:12px;color:#6b7280">→ AI/Chart/Bảng đều lọc theo nhóm bạn chọn</span>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Đánh giá & Chấm điểm Tổng quan
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— AI chấm dựa trên 8 nhóm tiêu chí · Cache 24h · Bấm "🔄 Chấm lại" để force</span>
+    </h2>
+    <div id="scorecard-body">
+      <div class="scorecard-empty">Chưa có điểm. Bấm <strong>"🔄 Chấm lại"</strong> để AI chấm lần đầu (mất ~30-60 giây).
+        <br><br>
+        <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm lại bằng AI</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📈 Chart Trend — Spend / Clicks / CPC qua thời gian</h2>
+    <div class="toolbar-row">
+      <label>Khung thời gian:</label>
+      <select id="trend-window" onchange="renderTrendCharts()">
+        <option value="7">7 ngày gần nhất</option>
+        <option value="14">14 ngày gần nhất</option>
+        <option value="30" selected>30 ngày gần nhất</option>
+        <option value="90">90 ngày gần nhất</option>
+      </select>
+      <span style="font-size:11.5px;color:#6b7280;margin-left:auto">Data: Windsor.ai · cập nhật mỗi 3 giờ</span>
+    </div>
+    <div id="trend-charts" class="charts-grid">
+      <div class="chart-card"><h3>Đang tải data...</h3></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>💰 Bảng lợi nhuận tháng — Google Ads × Pancake</h2>
+    <div class="toolbar-row">
+      <label>Khung thời gian:</label>
+      <select id="profit-window" onchange="renderProfitTable()">
+        <option value="7">7 ngày</option>
+        <option value="14">14 ngày</option>
+        <option value="30" selected>30 ngày</option>
+        <option value="90">90 ngày</option>
+      </select>
+      <span style="font-size:11.5px;color:#6b7280;margin-left:auto">VAT 10% · Profit = Doanh thu − VAT − Vốn − Chi phí QC</span>
+    </div>
+    <div id="profit-table-wrap" style="overflow-x:auto">
+      <div style="text-align:center;padding:30px;color:#9ca3af">Đang tải data...</div>
+    </div>
   </div>
 
   <div class="section">
@@ -110,7 +199,7 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
       <input type="text" id="ask-input" placeholder="Vd: Tại sao DA8.1 lỗ? · Tăng bid keyword nào? · Thiếu USP gì?" onkeydown="if(event.key==='Enter')askQuestion()">
       <button onclick="askQuestion()" id="ask-btn">Hỏi AI</button>
     </div>
-    <div style="margin-top:8px;font-size:11.5px;color:#6b7280">AI có quyền truy cập: 4 skill audit + giá vốn KV + doanh thu Pancake 90 ngày + Google Ads 30 ngày</div>
+    <div style="margin-top:8px;font-size:11.5px;color:#6b7280">AI có quyền truy cập: 4 skill audit + giá vốn KV + doanh thu Pancake 90 ngày + Google Ads 90 ngày</div>
   </div>
 
   <div class="section">
@@ -124,6 +213,7 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 <script>
 const MODE_LABELS = {
   audit_account: "📊 Audit Tổng quan",
+  audit_account_json: "🎯 Card chấm điểm",
   audit_keyword: "🔍 Audit Từ khoá",
   audit_gdn: "🖼️ Audit GDN/PMax",
   audit_headline: "📝 Audit Tiêu đề",
@@ -132,6 +222,391 @@ const MODE_LABELS = {
   suggest_banner: "🎨 Brief Banner",
   ask: "💬 Hỏi tự do",
 };
+
+const WINDSOR_TO_GROUP = {
+  MAYDO: "MAY_DO",
+  GHIAM: "GHI_AM",
+  DINHVI: "DINH_VI",
+  CAMCALL: "CAMERA_VIDEO_CALL",
+  OTHER_DI: "CHONG_GHI_AM",
+  OTHER_SIM: "CAMERA_4G",
+  OTHER_CAM: "CAMERA_WIFI",
+  OTHER_RAZOR: "OTHER",
+  OTHER: "OTHER",
+};
+
+function classifySpCode(code) {
+  const c = String(code || "").toUpperCase().trim();
+  if (!c) return "OTHER";
+  if (/^DA8\.1/.test(c)) return "CAMERA_VIDEO_CALL";
+  if (/^DR\d/.test(c)) return "GHI_AM";
+  if (/^DI\d/.test(c)) return "CHONG_GHI_AM";
+  if (/^DV\d|^DT\d/.test(c)) return "DINH_VI";
+  if (/^DA(1 PRO 4G|1 ZOOMX6|2|3 PRO 4G|5\.1|6|6\.1|6\.2)/.test(c)) return "CAMERA_4G";
+  if (/^DA\d/.test(c)) return "CAMERA_WIFI";
+  if (/^D\d/.test(c)) return "MAY_DO";
+  if (/NOMA|A002/.test(c)) return "NOMA";
+  return "OTHER";
+}
+
+const VAT_RATE = 0.10;
+const CACHE_KEY_SCORECARD = "doscom_scorecard_v1";
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+let DATA_SPEND = null;
+let DATA_REVENUE = null;
+let TREND_CHARTS = {};
+
+function fmtMoney(v) {
+  if (v == null || isNaN(v)) return "—";
+  if (Math.abs(v) >= 1e9) return (v/1e9).toFixed(2) + "B";
+  if (Math.abs(v) >= 1e6) return (v/1e6).toFixed(1) + "M";
+  if (Math.abs(v) >= 1e3) return Math.round(v/1e3) + "K";
+  return Math.round(v).toLocaleString("vi-VN");
+}
+function fmtPct(v) {
+  if (v == null || isNaN(v)) return "—";
+  return (v * 100).toFixed(1) + "%";
+}
+function getGroup() {
+  return (document.getElementById('group-filter') || {}).value || 'ALL';
+}
+function getDateNDaysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+async function loadAllData() {
+  if (DATA_SPEND && DATA_REVENUE) return;
+  try {
+    const [spendResp, revResp] = await Promise.all([
+      fetch('/data/google-ads-spend.json'),
+      fetch('/data/product-revenue.json'),
+    ]);
+    if (spendResp.ok) DATA_SPEND = await spendResp.json();
+    if (revResp.ok) DATA_REVENUE = await revResp.json();
+  } catch (e) { console.error('Load data fail:', e); }
+}
+
+const SCORE_LABELS = {
+  tracking: "Tracking",
+  profit: "Profit/SP",
+  waste: "Lãng phí",
+  rsa: "RSA quality",
+  kw_structure: "Cấu trúc KW",
+  landing: "Trang đích",
+  budget: "Budget",
+  compliance: "Compliance",
+};
+
+function getScorecardCacheKey(group) { return `${CACHE_KEY_SCORECARD}_${group}`; }
+
+function loadScorecardCache(group) {
+  try {
+    const raw = localStorage.getItem(getScorecardCacheKey(group));
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj.ts || (Date.now() - obj.ts) > CACHE_TTL_MS) return null;
+    return obj;
+  } catch { return null; }
+}
+
+function saveScorecardCache(group, payload) {
+  try {
+    localStorage.setItem(getScorecardCacheKey(group), JSON.stringify({
+      ts: Date.now(), group, data: payload,
+    }));
+  } catch {}
+}
+
+function renderScorecard(payload, cacheTs) {
+  const root = document.getElementById('scorecard-body');
+  if (!payload) {
+    root.innerHTML = `<div class="scorecard-empty">Chưa có điểm. Bấm <strong>"🔄 Chấm lại"</strong> để AI chấm lần đầu.<br><br>
+      <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm lại bằng AI</button></div>`;
+    return;
+  }
+  if (payload._parse_error) {
+    root.innerHTML = `<div class="scorecard-empty"><strong style="color:#dc2626">Lỗi parse JSON từ AI:</strong> ${payload._parse_error}<br>
+      <details style="margin-top:8px"><summary>Raw output</summary><pre style="font-size:11px;white-space:pre-wrap">${(payload._raw_excerpt||'').replace(/</g,'&lt;')}</pre></details>
+      <br><button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
+    return;
+  }
+  const total = payload.total_score ?? 0;
+  const grade = payload.grade || "?";
+  const summary = payload.summary || "";
+  const breakdown = payload.breakdown || {};
+  const findings = payload.top_findings || [];
+
+  const barsHtml = Object.entries(SCORE_LABELS).map(([key, label]) => {
+    const item = breakdown[key] || { score: 0, weight: 0, note: "" };
+    const score = Number(item.score) || 0;
+    const cls = score >= 70 ? "good" : (score >= 50 ? "warn" : "bad");
+    return `<div class="score-bar ${cls}" title="${(item.note||'').replace(/"/g,'&quot;')}">
+      <div class="name">${label} <span style="color:#9ca3af;font-weight:400">${item.weight||0}%</span></div>
+      <div class="track"><div class="fill" style="width:${score}%"></div></div>
+      <div class="val">${score}/100</div>
+    </div>`;
+  }).join("");
+
+  const findingsHtml = findings.length ? `<div class="findings"><h4>🔥 Top 3 finding nóng:</h4><ol>${findings.map(f => `<li>${String(f).replace(/</g,'&lt;')}</li>`).join("")}</ol></div>` : "";
+
+  const cacheLabel = cacheTs ? `Chấm lúc: ${new Date(cacheTs).toLocaleString('vi-VN', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}` : '';
+
+  root.innerHTML = `
+    <div class="scorecard">
+      <div class="score-big">
+        <div class="num">${total}</div>
+        <div class="grade grade-${grade}">${grade}</div>
+        <div class="label">Điểm tổng /100</div>
+      </div>
+      <div class="score-bars">${barsHtml}</div>
+      <div class="score-actions">
+        <button class="score-action-btn" onclick="refreshScorecard(true)" id="btn-rescore">🔄 Chấm lại</button>
+        <div class="score-cache-info">${cacheLabel}</div>
+      </div>
+    </div>
+    ${summary ? `<div style="margin-top:12px;padding:10px 14px;background:#eff6ff;border-radius:6px;font-size:13px;color:#1e3a8a;border-left:3px solid #2563eb"><strong>Tóm tắt:</strong> ${summary.replace(/</g,'&lt;')}</div>` : ''}
+    ${findingsHtml}
+  `;
+}
+
+async function refreshScorecard(force) {
+  const group = getGroup();
+  if (!force) {
+    const cached = loadScorecardCache(group);
+    if (cached) { renderScorecard(cached.data, cached.ts); return; }
+  }
+  const root = document.getElementById('scorecard-body');
+  root.innerHTML = `<div class="scorecard-empty"><div class="loading"><div class="spinner"></div><div style="margin-top:10px">AI đang chấm điểm... ~30-60 giây</div></div></div>`;
+  try {
+    const r = await fetch('/api/agent-google-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'audit_account_json', context: { product_group: group } }),
+    });
+    const j = await r.json();
+    if (!r.ok || j.error) {
+      root.innerHTML = `<div class="error">Lỗi: ${(j.error||'HTTP '+r.status).replace(/</g,'&lt;')}<br><br>
+        <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
+      return;
+    }
+    const payload = j.parsed_json || { _parse_error: "Không có parsed_json", _raw_excerpt: (j.response||'').slice(0,300) };
+    saveScorecardCache(group, payload);
+    renderScorecard(payload, Date.now());
+  } catch (e) {
+    root.innerHTML = `<div class="error">Lỗi mạng: ${e.message}<br><br>
+      <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
+  }
+}
+
+function aggregateSpendByDate(spendData, group, windowDays) {
+  if (!spendData || !spendData.by_category) return { dates: [], spend: [], clicks: [], impressions: [] };
+  const cutoff = getDateNDaysAgo(windowDays - 1);
+  const wantCats = [];
+  if (group === "ALL") {
+    wantCats.push(...Object.keys(spendData.by_category));
+  } else {
+    for (const [winCat, doscomGrp] of Object.entries(WINDSOR_TO_GROUP)) {
+      if (doscomGrp === group && spendData.by_category[winCat]) wantCats.push(winCat);
+    }
+  }
+  const spendByDate = {};
+  for (const cat of wantCats) {
+    const bd = spendData.by_category[cat]?.by_date || {};
+    for (const [d, v] of Object.entries(bd)) {
+      if (d >= cutoff) spendByDate[d] = (spendByDate[d] || 0) + Number(v || 0);
+    }
+  }
+  const clicksByDate = {};
+  const imprByDate = {};
+  for (const r of (spendData.campaigns_raw || [])) {
+    if (r.date < cutoff) continue;
+    if (!wantCats.includes(r.category)) continue;
+    clicksByDate[r.date] = (clicksByDate[r.date] || 0) + Number(r.clicks || 0);
+    imprByDate[r.date] = (imprByDate[r.date] || 0) + Number(r.impressions || 0);
+  }
+  const allDates = Array.from(new Set([...Object.keys(spendByDate), ...Object.keys(clicksByDate)])).sort();
+  return {
+    dates: allDates,
+    spend: allDates.map(d => spendByDate[d] || 0),
+    clicks: allDates.map(d => clicksByDate[d] || 0),
+    impressions: allDates.map(d => imprByDate[d] || 0),
+  };
+}
+
+function renderTrendCharts() {
+  if (!DATA_SPEND) return;
+  const group = getGroup();
+  const win = parseInt(document.getElementById('trend-window').value, 10) || 30;
+  const agg = aggregateSpendByDate(DATA_SPEND, group, win);
+  const root = document.getElementById('trend-charts');
+
+  if (!agg.dates.length) {
+    root.innerHTML = `<div class="chart-card"><h3>Không có data</h3><p style="font-size:12px;color:#9ca3af">Nhóm "${group}" không có chi tiêu Google Ads trong ${win} ngày qua.</p></div>`;
+    return;
+  }
+
+  const cpc = agg.spend.map((s, i) => agg.clicks[i] > 0 ? s / agg.clicks[i] : 0);
+  const ctr = agg.clicks.map((c, i) => agg.impressions[i] > 0 ? c / agg.impressions[i] : 0);
+  const labels = agg.dates.map(d => d.slice(5).replace('-', '/'));
+
+  root.innerHTML = `
+    <div class="chart-card"><h3>💰 Spend (đ) — tổng ${fmtMoney(agg.spend.reduce((a,b)=>a+b,0))}đ</h3><canvas id="chart-spend"></canvas></div>
+    <div class="chart-card"><h3>🖱 Clicks — tổng ${agg.clicks.reduce((a,b)=>a+b,0).toLocaleString('vi-VN')} clicks</h3><canvas id="chart-clicks"></canvas></div>
+    <div class="chart-card"><h3>💸 CPC trung bình (đ/click)</h3><canvas id="chart-cpc"></canvas></div>
+    <div class="chart-card"><h3>👁 CTR (%)</h3><canvas id="chart-ctr"></canvas></div>
+  `;
+
+  for (const k of Object.keys(TREND_CHARTS)) { try { TREND_CHARTS[k].destroy(); } catch {} }
+  TREND_CHARTS = {};
+
+  const commonOpts = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+    scales: { x: { ticks: { font: { size: 10 }, maxRotation: 0 } }, y: { beginAtZero: true } },
+    elements: { point: { radius: 2, hoverRadius: 5 }, line: { tension: 0.3 } },
+  };
+
+  TREND_CHARTS.spend = new Chart(document.getElementById('chart-spend'), {
+    type: 'line',
+    data: { labels, datasets: [{ data: agg.spend, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', fill: true }] },
+    options: { ...commonOpts, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, ticks: { callback: v => fmtMoney(v) } } } },
+  });
+  TREND_CHARTS.clicks = new Chart(document.getElementById('chart-clicks'), {
+    type: 'line',
+    data: { labels, datasets: [{ data: agg.clicks, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.1)', fill: true }] },
+    options: commonOpts,
+  });
+  TREND_CHARTS.cpc = new Chart(document.getElementById('chart-cpc'), {
+    type: 'line',
+    data: { labels, datasets: [{ data: cpc, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: true }] },
+    options: { ...commonOpts, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, ticks: { callback: v => fmtMoney(v) + 'đ' } } } },
+  });
+  TREND_CHARTS.ctr = new Chart(document.getElementById('chart-ctr'), {
+    type: 'line',
+    data: { labels, datasets: [{ data: ctr.map(v => v * 100), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', fill: true }] },
+    options: { ...commonOpts, scales: { ...commonOpts.scales, y: { ...commonOpts.scales.y, ticks: { callback: v => v.toFixed(2) + '%' } } } },
+  });
+}
+
+const GROUP_DISPLAY_ORDER = [
+  "CAMERA_VIDEO_CALL", "CAMERA_4G", "CAMERA_WIFI", "MAY_DO",
+  "GHI_AM", "DINH_VI", "CHONG_GHI_AM", "NOMA",
+];
+const GROUP_NAMES_VN = {
+  CAMERA_VIDEO_CALL: "📞 Camera video call",
+  CAMERA_4G: "📡 Camera 4G",
+  CAMERA_WIFI: "📶 Camera WiFi",
+  MAY_DO: "🔍 Máy dò",
+  GHI_AM: "🎙️ Máy ghi âm",
+  DINH_VI: "📍 Định vị",
+  CHONG_GHI_AM: "🛡️ Chống ghi âm",
+  NOMA: "🚗 NOMA",
+  OTHER: "Khác",
+};
+
+function aggregateProfitByGroup(spendData, revenueData, groupFilter, windowDays) {
+  const cutoff = getDateNDaysAgo(windowDays - 1);
+  const buckets = {};
+  for (const g of GROUP_DISPLAY_ORDER) {
+    buckets[g] = { spend: 0, revenue: 0, orders: 0, units: 0 };
+  }
+  if (spendData && spendData.by_category) {
+    for (const [winCat, payload] of Object.entries(spendData.by_category)) {
+      const grp = WINDSOR_TO_GROUP[winCat] || "OTHER";
+      if (!(grp in buckets)) continue;
+      const bd = payload.by_date || {};
+      for (const [d, v] of Object.entries(bd)) {
+        if (d >= cutoff) buckets[grp].spend += Number(v || 0);
+      }
+    }
+  }
+  if (revenueData && revenueData.products) {
+    for (const [code, p] of Object.entries(revenueData.products)) {
+      const grp = classifySpCode(code);
+      if (!(grp in buckets)) continue;
+      const bd = p.by_date || {};
+      const obd = p.orders_by_date || {};
+      const ubd = p.units_by_date || {};
+      for (const [d, v] of Object.entries(bd)) {
+        if (d >= cutoff) buckets[grp].revenue += Number(v || 0);
+      }
+      for (const [d, v] of Object.entries(obd)) {
+        if (d >= cutoff) buckets[grp].orders += Number(v || 0);
+      }
+      for (const [d, v] of Object.entries(ubd)) {
+        if (d >= cutoff) buckets[grp].units += Number(v || 0);
+      }
+    }
+  }
+  if (groupFilter && groupFilter !== "ALL") {
+    return { [groupFilter]: buckets[groupFilter] || { spend: 0, revenue: 0, orders: 0, units: 0 } };
+  }
+  return buckets;
+}
+
+function renderProfitTable() {
+  if (!DATA_SPEND || !DATA_REVENUE) return;
+  const group = getGroup();
+  const win = parseInt(document.getElementById('profit-window').value, 10) || 30;
+  const buckets = aggregateProfitByGroup(DATA_SPEND, DATA_REVENUE, group, win);
+  const root = document.getElementById('profit-table-wrap');
+  let totSpend = 0, totRev = 0, totOrders = 0, totUnits = 0;
+
+  const rows = Object.entries(buckets).map(([grp, b]) => {
+    const spend = b.spend || 0, revenue = b.revenue || 0;
+    const orders = b.orders || 0, units = b.units || 0;
+    const vat = revenue * VAT_RATE;
+    const profitBeforeCost = revenue - vat - spend;
+    const margin = revenue > 0 ? profitBeforeCost / revenue : 0;
+    totSpend += spend; totRev += revenue; totOrders += orders; totUnits += units;
+    return { grp, spend, revenue, orders, units, vat, profitBeforeCost, margin };
+  }).filter(r => r.spend > 0 || r.revenue > 0);
+
+  if (!rows.length) {
+    root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${win} ngày qua cho nhóm "${group}".</div>`;
+    return;
+  }
+  rows.sort((a, b) => b.revenue - a.revenue);
+  const totVat = totRev * VAT_RATE;
+  const totProfit = totRev - totVat - totSpend;
+  const totMargin = totRev > 0 ? totProfit / totRev : 0;
+
+  const html = `<table class="profit-table">
+    <thead><tr>
+      <th>Nhóm SP</th><th>Spend GG Ads</th><th>Doanh thu</th><th>VAT 10%</th>
+      <th>Đơn</th><th>SL bán</th><th>LN trước vốn</th><th>% Margin</th>
+    </tr></thead>
+    <tbody>
+      ${rows.map(r => `<tr>
+        <td>${GROUP_NAMES_VN[r.grp] || r.grp}</td>
+        <td>${fmtMoney(r.spend)}đ</td>
+        <td>${fmtMoney(r.revenue)}đ</td>
+        <td>${fmtMoney(r.vat)}đ</td>
+        <td>${r.orders}</td>
+        <td>${r.units}</td>
+        <td class="${r.profitBeforeCost >= 0 ? 'pos' : 'neg'}">${fmtMoney(r.profitBeforeCost)}đ</td>
+        <td class="${r.margin >= 0.3 ? 'pos' : (r.margin >= 0 ? 'warn' : 'neg')}">${fmtPct(r.margin)}</td>
+      </tr>`).join("")}
+      <tr class="total">
+        <td>TỔNG</td>
+        <td>${fmtMoney(totSpend)}đ</td>
+        <td>${fmtMoney(totRev)}đ</td>
+        <td>${fmtMoney(totVat)}đ</td>
+        <td>${totOrders}</td>
+        <td>${totUnits}</td>
+        <td class="${totProfit >= 0 ? 'pos' : 'neg'}">${fmtMoney(totProfit)}đ</td>
+        <td class="${totMargin >= 0.3 ? 'pos' : (totMargin >= 0 ? 'warn' : 'neg')}">${fmtPct(totMargin)}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11.5px;color:#6b7280;margin-top:8px">
+    ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng + chi phí khác.<br>
+    ⚠ Mapping nhóm: Pancake SP → group dựa prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G).
+  </p>`;
+  root.innerHTML = html;
+}
 
 function md2html(s) {
   if (!s) return "";
@@ -143,11 +618,9 @@ function md2html(s) {
   s = s.replace(/^# (.+)$/gm,"<h1>$1</h1>");
   s = s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
   s = s.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g,"<em>$1</em>");
-  // Table — cho phep dong trong giua header/separator/rows (linh hoat hon)
   s = s.replace(/(?:^|\n)((?:\|.+\|\n?)+)/g, function(block){
     const lines = block.split("\n").map(l => l.trim()).filter(l => l && l.startsWith("|") && l.endsWith("|"));
-    if (lines.length < 2) return block;  // Khong phai bang
-    // Tim separator |---|---|
+    if (lines.length < 2) return block;
     let sepIdx = -1;
     for (let i = 1; i < lines.length; i++) {
       if (/^\|[\s\-:|]+\|$/.test(lines[i])) { sepIdx = i; break; }
@@ -182,7 +655,7 @@ async function runAI(mode, question = null) {
   setLoading(true, mode);
   const t0 = Date.now();
   try {
-    const group = (document.getElementById('group-filter') || {}).value || 'ALL';
+    const group = getGroup();
     const body = { mode, context: { product_group: group } };
     if (question) body.question = question;
     const r = await fetch('/api/agent-google-ai', {
@@ -221,6 +694,19 @@ function copyOutput() {
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
+
+async function refreshAll() {
+  await loadAllData();
+  const group = getGroup();
+  const cached = loadScorecardCache(group);
+  if (cached) renderScorecard(cached.data, cached.ts);
+  else renderScorecard(null);
+  renderTrendCharts();
+  renderProfitTable();
+}
+
+document.getElementById('group-filter').addEventListener('change', refreshAll);
+window.addEventListener('DOMContentLoaded', refreshAll);
 </script>
 </body>
 </html>

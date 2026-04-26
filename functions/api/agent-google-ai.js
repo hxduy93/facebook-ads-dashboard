@@ -112,14 +112,15 @@ Cliché TUYỆT ĐỐI tránh: "tốt nhất", "rẻ nhất", "số 1", "uy tín
 };
 
 const MODE_CONFIG = {
-  audit_account:    { skills: ["parent"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_BIG },
-  audit_keyword:    { skills: ["keyword"], data: ["context", "search_terms", "spend", "inventory"], model: MODEL_BIG },
-  audit_gdn:        { skills: ["gdn"], data: ["context", "ads", "placement", "spend", "inventory"], model: MODEL_BIG },
-  audit_headline:   { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_BIG },
-  suggest_keyword:  { skills: ["keyword"], data: ["search_terms", "context", "inventory"], model: MODEL_BIG },
-  suggest_headline: { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_BIG },
-  suggest_banner:   { skills: ["gdn"], data: ["ads", "placement", "inventory"], model: MODEL_BIG },
-  ask:              { skills: ["parent", "keyword", "gdn", "headline"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST },
+  audit_account:      { skills: ["parent"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_BIG },
+  audit_account_json: { skills: ["parent"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_BIG, json_output: true },
+  audit_keyword:      { skills: ["keyword"], data: ["context", "search_terms", "spend", "inventory"], model: MODEL_BIG },
+  audit_gdn:          { skills: ["gdn"], data: ["context", "ads", "placement", "spend", "inventory"], model: MODEL_BIG },
+  audit_headline:     { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_BIG },
+  suggest_keyword:    { skills: ["keyword"], data: ["search_terms", "context", "inventory"], model: MODEL_BIG },
+  suggest_headline:   { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_BIG },
+  suggest_banner:     { skills: ["gdn"], data: ["ads", "placement", "inventory"], model: MODEL_BIG },
+  ask:                { skills: ["parent", "keyword", "gdn", "headline"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST },
 };
 
 function getCookie(request, name) {
@@ -322,6 +323,32 @@ function buildUserPrompt(mode, question, dataContext, group) {
     case "audit_account":
       parts.push(`# Audit Tổng quan${groupSuffix}\n## Tổng điểm /100 — Loại A-F\n## Tóm tắt 1 dòng\n## Top 5 Quick Win (cụ thể, đ tiết kiệm)\n## Cảnh báo nguy hiểm\n## Phân tích 8 nhóm chấm điểm`);
       break;
+    case "audit_account_json":
+      parts.push(`PHẢI trả về DUY NHẤT 1 JSON object (không markdown, không text trước/sau, không code fence).
+Schema BẮT BUỘC:
+{
+  "total_score": <0-100>,
+  "grade": "A"|"B"|"C"|"D"|"F",
+  "summary": "<1 câu tóm tắt tình hình>",
+  "breakdown": {
+    "tracking":     { "score": <0-100>, "weight": 25, "note": "<lý do điểm này>" },
+    "profit":       { "score": <0-100>, "weight": 22, "note": "..." },
+    "waste":        { "score": <0-100>, "weight": 13, "note": "..." },
+    "rsa":          { "score": <0-100>, "weight": 12, "note": "..." },
+    "kw_structure": { "score": <0-100>, "weight": 10, "note": "..." },
+    "landing":      { "score": <0-100>, "weight": 8,  "note": "..." },
+    "budget":       { "score": <0-100>, "weight": 5,  "note": "..." },
+    "compliance":   { "score": <0-100>, "weight": 5,  "note": "..." }
+  },
+  "top_findings": [
+    "<finding nóng 1 — bắt buộc có số tiền/% cụ thể>",
+    "<finding nóng 2>",
+    "<finding nóng 3>"
+  ]
+}
+Quy tắc grade: 85+=A, 70-84=B, 55-69=C, 40-54=D, <40=F.
+total_score = sum(score * weight) / 100 — làm tròn nguyên.`);
+      break;
     case "audit_keyword":
       parts.push(`# Audit Từ khoá${groupSuffix}\n## Phân bậc Tier 1/2/3 (số kw, % chi)\n## Top 10 từ khoá lỗ\n## Top 10 search term ngon (HARVEST candidates)\n## Top 5 Quick Win`);
       break;
@@ -403,11 +430,31 @@ export async function onRequestPost(context) {
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.3,
+      temperature: cfg.json_output ? 0.1 : 0.3,
       max_tokens: 3072,
     });
   } catch (e) {
     return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
+  }
+
+  let rawResp = aiResult.response || aiResult.result || "";
+  let parsedJson = null;
+  if (cfg.json_output && rawResp) {
+    // Extract JSON từ output AI (đôi khi bọc trong ```json...```)
+    let cleaned = rawResp.trim();
+    const fenced = cleaned.match(/```(?:json)?\s*([\s\S]+?)```/);
+    if (fenced) cleaned = fenced[1].trim();
+    // Tìm khối {...} đầu tiên
+    const firstBrace = cleaned.indexOf("{");
+    const lastBrace = cleaned.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+      cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+    }
+    try {
+      parsedJson = JSON.parse(cleaned);
+    } catch (e) {
+      parsedJson = { _parse_error: e.message, _raw_excerpt: cleaned.slice(0, 300) };
+    }
   }
 
   return jsonResponse({
@@ -416,8 +463,9 @@ export async function onRequestPost(context) {
     group,
     group_label: GROUP_LABELS[group],
     model: cfg.model,
-    response: aiResult.response || aiResult.result || "",
+    response: rawResp,
+    parsed_json: parsedJson,
     skills_used: cfg.skills,
     data_used: cfg.data,
   });
-}
+}
