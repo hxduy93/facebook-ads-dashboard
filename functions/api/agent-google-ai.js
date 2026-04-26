@@ -440,30 +440,37 @@ function buildUserPrompt(mode, question, dataContext, group, timeRange) {
       parts.push(`# Audit Tổng quan${groupSuffix}\n## Tổng điểm /100 — Loại A-F\n## Tóm tắt 1 dòng\n## Top 5 Quick Win (cụ thể, đ tiết kiệm)\n## Cảnh báo nguy hiểm\n## Phân tích 8 nhóm chấm điểm`);
       break;
     case "audit_account_json":
-      parts.push(`🚨 OUTPUT BẮT BUỘC: 1 JSON object hợp lệ duy nhất. Bắt đầu bằng { kết thúc bằng }. Không markdown, không heading, không text bao quanh.
+      parts.push(`🎯 BẠN LÀ Sarah — Senior Google Ads Auditor 10 năm kinh nghiệm tại agency US, chuyên audit account Việt Nam. Bạn nổi tiếng vì PHÂN TÍCH TỪNG NHÓM RIÊNG, không bao giờ để score=0 hay copy-paste.
 
-🚨 BẮT BUỘC chấm điểm CẢ 8/8 nhóm trong breakdown. CẤM bỏ qua, CẤM để score=0.
+🚨 OUTPUT BẮT BUỘC: 1 JSON object hợp lệ. Bắt đầu bằng { kết thúc bằng }. KHÔNG markdown, KHÔNG heading, KHÔNG text bao quanh.
 
-Schema cố định (PHẢI đủ 8 key, tất cả score 1-100):
-{"total_score":<0-100 int>,"grade":"A"|"B"|"C"|"D"|"F","summary":"<1 câu nêu phát hiện chính>","breakdown":{"tracking":{"score":<1-100>,"weight":25,"note":"<lý do ngắn>"},"profit":{"score":<1-100>,"weight":22,"note":""},"waste":{"score":<1-100>,"weight":13,"note":""},"rsa":{"score":<1-100>,"weight":12,"note":""},"kw_structure":{"score":<1-100>,"weight":10,"note":""},"landing":{"score":<1-100>,"weight":8,"note":""},"budget":{"score":<1-100>,"weight":5,"note":""},"compliance":{"score":<1-100>,"weight":5,"note":""}},"top_findings":["<finding 1 + số liệu cụ thể>","<finding 2>","<finding 3>"]}
+🚨 BẮT BUỘC chấm 8/8 nhóm với score 1-100. CẤM 0. CẤM > 3 nhóm cùng score.
 
-QUY TẮC chấm điểm theo nhóm:
-- tracking: 80 nếu có conversion tracking đủ; 50 nếu có chi phí mà không thấy doanh thu Pancake match; 30 nếu thiếu hoàn toàn.
-- profit: từ data spend vs revenue. Lãi >30% → 80+; lãi 0-30% → 50; lỗ → 20-40.
-- waste: spend vs ROI. CTR thấp (<1%) hoặc CPC quá cao → 30-50; bình thường → 60-70.
-- rsa: nếu có ad data → đánh giá theo ad count + headline diversity. Nếu không có → 50 + note "không có ad data context".
-- kw_structure: nếu có search_terms → đánh giá phân tier; không có → 50 + note "không có search terms data".
-- landing: 50 mặc định + note "cần thêm GA/heatmap data".
-- budget: spend phân bổ giữa các nhóm SP. Cân bằng → 70+; tập trung 1 nhóm → 50; quá tập trung → 30.
-- compliance: 70 mặc định nếu không có flag rõ ràng.
+═══ CHAIN-OF-THOUGHT ═══
+Trước khi sinh JSON, mentally trả lời:
+1. Tracking: Tổng spend = ? Tổng revenue Pancake = ? Match rate ~ ?% → score
+2. Profit: Margin = (Revenue - Cost - VAT - Spend) / Revenue. >30%=80, 0-30%=50, lỗ=20-40
+3. Waste: CTR top campaigns? CPC tối đa? Có campaign CPC > 3x trung bình → 30
+4. RSA: bao nhiêu ad? mỗi ad bao nhiêu headline? Diversity → score
+5. KW Structure: search terms phân tier 1/2/3 ratio? Tier 3 nhiều = lãng phí → 30-50
+6. Landing: 50 mặc định + note "cần GA"
+7. Budget: spend nhóm cao nhất / tổng. >70% = quá tập trung → 30. <40% mỗi nhóm = cân = 70+
+8. Compliance: 70 mặc định nếu không có flag
 
-QUY TẮC khác:
+═══ FEW-SHOT EXAMPLE ═══
+INPUT giả định: spend=20M, revenue=50M, group="MAY_DO", CTR avg=2.3%, CPC avg=8K
+OUTPUT mẫu (JSON, không markdown):
+{"total_score":58,"grade":"C","summary":"Lãi gross 30M (60%) tốt nhưng CTR 2.3% trung bình, có 2 campaign Tier 3 ngốn 25% spend lãng phí","breakdown":{"tracking":{"score":75,"weight":25,"note":"Có conv tracking, match Pancake 85%"},"profit":{"score":80,"weight":22,"note":"Margin 60% tốt, vượt mục tiêu 30%"},"waste":{"score":40,"weight":13,"note":"2 campaign Tier 3 ngốn 25% spend mà 0 đơn"},"rsa":{"score":55,"weight":12,"note":"Có 8 ad, đa số 5 headline, cần thêm USP"},"kw_structure":{"score":50,"weight":10,"note":"Tier 1 chỉ 40% spend, Tier 3 30% — cần tái phân bổ"},"landing":{"score":50,"weight":8,"note":"Cần data GA/heatmap"},"budget":{"score":65,"weight":5,"note":"Phân bổ tạm OK, máy dò 60% spend"},"compliance":{"score":70,"weight":5,"note":"Không có policy flag"}},"top_findings":["Pause 2 campaign Tier 3 lỗ 5M/tháng (CPC 12K, 0 đơn 30d)","Tăng bid Tier 1 từ 8K → 10K (max), dự kiến +10 đơn","Add 5 headline USP cho RSA Camera giấu — boost CTR ước +30%"]}
+
+═══ QUY TẮC ═══
+- summary: PHẢI có ít nhất 2 con số cụ thể (đ, %, tên SP/campaign).
+- mỗi note ≥ 8 từ, có số liệu cụ thể nếu có data.
+- top_findings: 3 finding khác nhau, có action + số tiền + tên kw/campaign.
 - Grade: 85+=A, 70-84=B, 55-69=C, 40-54=D, <40=F.
-- total_score = round(sum(score×weight)/100).
-- summary phải có số liệu cụ thể (đ, %, tên SP).
-- Nếu thực sự thiếu data → score = 35 (KHÔNG 0) + note "Thiếu data <tên data>".
+- total_score = round(sum(score×weight)/100). KIỂM TRA lại sau khi tính.
+- Nếu thiếu data thật sự → score = 35 (KHÔNG 0) + note "Thiếu data X".
 
-NHẮC LẠI 3 điều: (1) JSON parse được. (2) 8/8 nhóm đều có score 1-100. (3) KHÔNG code fence, KHÔNG **, KHÔNG ##.`);
+NHẮC LẠI: (1) JSON hợp lệ. (2) 8 nhóm score 1-100. (3) >3 nhóm CẤM cùng score. (4) summary + note + findings có số liệu cụ thể.`);
       break;
     case "audit_keyword":
       parts.push(`# Audit Từ khoá${groupSuffix}\n## Phân bậc Tier 1/2/3 (số kw, % chi)\n## Top 10 từ khoá lỗ\n## Top 10 search term ngon (HARVEST candidates)\n## Top 5 Quick Win`);
@@ -477,33 +484,57 @@ NHẮC LẠI 3 điều: (1) JSON parse được. (2) 8/8 nhóm đều có score 
     case "suggest_keyword":
       parts.push(`# Đề xuất Từ khoá MỚI${groupSuffix}
 
-QUY TẮC BID (CỰC KỲ QUAN TRỌNG):
-- Bid = CPC tối đa (số tiền cho 1 click), KHÔNG phải CPA, đơn vị VND.
-- Range theo Tier:
-  · Tier 1 (cốt lõi: máy dò nghe lén, camera giấu, ghi âm chuyên nghiệp...): 15,000 - 50,000đ/click
-  · Tier 2 (kế cận: máy dò sóng, camera mini, máy thu âm...): 8,000 - 20,000đ/click
-  · Tier 3 (long-tail: "máy dò camera trong khách sạn"...): 3,000 - 10,000đ/click
-- CẤM bid > 100,000đ. CẤM tất cả keyword cùng 1 bid.
+🎯 BẠN LÀ Sarah — Senior Google Ads Strategist. Bạn nổi tiếng vì đề xuất KHÔNG đồng đều — mỗi keyword có bid + cơ chế + match RIÊNG dựa trên data.
 
-QUY TẮC CƠ CHẾ (đa dạng, KHÔNG chỉ COMPETITOR FLAG):
-1. HARVEST — search term đã chuyển đổi nhưng chưa có trong kw list (cần ưu tiên cao)
-2. REPLACE DYING — kw cũ CTR thấp, đề xuất kw mới thay thế
+═══ QUY TẮC BID (CỰC KỲ QUAN TRỌNG) ═══
+Doscom hiện max bid = 10,000đ/click. CHỈ keyword "XUẤT SẮC" mới được phá trần lên 10-30K.
+
+⚠ KEYWORD THƯỜNG (90% đề xuất): Bid 3,000 - 10,000đ/click
+  - Tier 1 thường: 6,000 - 10,000đ
+  - Tier 2: 3,000 - 7,000đ
+  - Tier 3 long-tail: 1,000 - 4,000đ
+
+⚠ KEYWORD XUẤT SẮC (chỉ 10% đề xuất, max 3 hàng/15 hàng): Bid 10,000 - 30,000đ
+  Điều kiện PHẢI thỏa MỌI:
+  1. Có data search_term với conversion thật (>1 đơn 30 ngày qua) HOẶC
+  2. Brand keyword (chứa "doscom", "noma") HOẶC
+  3. Exact match + intent cực mạnh + LP đã optimize ("máy dò nghe lén giá rẻ chính hãng")
+  → BẮT BUỘC ghi rõ trong "Lý do" tại sao xuất sắc + đính kèm số liệu
+
+CẤM bid > 30,000đ tuyệt đối.
+CẤM bid đồng đều (mọi keyword cùng số).
+
+═══ QUY TẮC MATCH ═══
+- Broad: tỉ lệ ~30% đề xuất, kw rộng intent yếu
+- Phrase: ~40%, kw có cụm cố định
+- Exact: ~30%, intent mạnh + chuyển đổi cao
+
+═══ QUY TẮC CƠ CHẾ (đa dạng) ═══
+1. HARVEST — search term đã có conversion, ưu tiên cao
+2. REPLACE DYING — kw cũ CTR thấp, đề xuất kw mới thay
 3. LONG-TAIL — biến thể dài, ngách hẹp, CPC rẻ
 4. COMPETITOR FLAG — kw đối thủ chạy mà mình chưa có
-5. SEASONAL — kw theo mùa/sự kiện
+5. SEASONAL — kw theo mùa (Tết, hè, lễ)
 
-QUY TẮC MATCH:
-- Broad → 0.7-1.0 (kw rộng, intent yếu)
-- Phrase → 1.2-1.5 (kw có cụm cố định)
-- Exact → 1.5-2.0 (kw chuyển đổi cao, intent mạnh)
+15 hàng PHẢI mix ít nhất 4/5 cơ chế (mỗi cơ chế ≥ 2 hàng).
 
-OUTPUT (markdown table 12-15 đề xuất, ĐA DẠNG cơ chế):
+═══ FEW-SHOT EXAMPLE ═══
+| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
+| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
+| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
+| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
+
+═══ OUTPUT (markdown table 12-15 hàng) ═══
 | # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lý do | Tăng đơn dự kiến |
 |---|--------|--------|----------|-------------|-------|-----------|-------|------------------|
-| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén mini" | Phrase | 35,000đ | Search term này có 5 đơn 30d nhưng chưa add | +15-20% |
-... (tiếp 12-15 hàng, MIX nhiều cơ chế, MIX bid theo Tier)
+... (12-15 hàng, MIX cơ chế, MIX bid, MAX 3 hàng bid > 10K)
 
-CẤM: bid đồng đều · cơ chế chỉ 1 loại · keyword trùng lặp · "Tăng đơn dự kiến" đồng đều 10%.`);
+CẤM TUYỆT ĐỐI:
+- Tất cả keyword cùng bid
+- Tất cả "Tăng đơn dự kiến" cùng %
+- Cùng cơ chế cho 15 hàng
+- Bid > 30K
+- "Xuất sắc" mà không kèm số liệu trong "Lý do"`);
       break;
     case "suggest_headline":
       parts.push(`# Brief Headline${groupSuffix}\n10 brief với: ký tự count, công thức (AIDA/FAB/PAS), USP nhắc, hypothesis, test plan`);
@@ -642,20 +673,34 @@ export async function onRequestPost(context) {
       const WEIGHTS = { tracking: 25, profit: 22, waste: 13, rsa: 12, kw_structure: 10, landing: 8, budget: 5, compliance: 5 };
       if (!parsedJson.breakdown) parsedJson.breakdown = {};
       let fixed_count = 0;
+      const scoreCounts = {};
       for (const key of REQUIRED_KEYS) {
         if (!parsedJson.breakdown[key]) parsedJson.breakdown[key] = {};
         const item = parsedJson.breakdown[key];
         const score = Number(item.score) || 0;
         if (score < 1) {
-          // AI bỏ qua hoặc để 0 → fix về 35 (thấp-trung bình)
           item.score = 35;
           item.note = (item.note || "") + " [Auto-fix: AI để score=0, đặt mặc định 35]";
           fixed_count++;
         } else if (score > 100) {
           item.score = 100;
         }
-        // Đảm bảo weight đúng
         item.weight = WEIGHTS[key];
+        scoreCounts[item.score] = (scoreCounts[item.score] || 0) + 1;
+      }
+      // Detect lười: > 3 nhóm cùng score
+      const lazyScore = Object.entries(scoreCounts).find(([s, n]) => n > 3);
+      if (lazyScore) {
+        parsedJson._lazy_warning = `⚠ AI có thể lười: ${lazyScore[1]}/8 nhóm cùng score=${lazyScore[0]}. Bấm 'Chấm lại' để có kết quả chi tiết hơn.`;
+      }
+      // Detect note rỗng/quá ngắn (< 8 ký tự)
+      let emptyNotes = 0;
+      for (const key of REQUIRED_KEYS) {
+        const note = String(parsedJson.breakdown[key].note || "").trim();
+        if (note.length < 8) emptyNotes++;
+      }
+      if (emptyNotes >= 4) {
+        parsedJson._lazy_warning = (parsedJson._lazy_warning || "") + ` ${emptyNotes}/8 note rỗng — AI không phân tích sâu.`;
       }
       // Recalc total_score
       let total = 0;
