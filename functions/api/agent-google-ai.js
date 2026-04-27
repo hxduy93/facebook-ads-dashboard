@@ -135,6 +135,58 @@ function getCookie(request, name) {
   return match ? match[1] : null;
 }
 
+// Llama 3.1 8B prompt-following yếu: hay tách output thành nhiều bảng nhỏ với heading
+// "1. HARVEST - ...", "2. LONG-TAIL - ..." dù prompt yêu cầu 1 bảng. Hàm này post-process:
+//   1. Bỏ tất cả markdown heading (# ... ###)
+//   2. Gộp tất cả data row (| N | ... |) từ mọi bảng nhỏ vào 1 bảng duy nhất
+//   3. Re-number cột # liên tục 1..N (không reset theo từng bảng nhỏ)
+// Áp dụng cho mode suggest_keyword. Nếu không detect được bảng → trả raw.
+function mergeKeywordTables(text) {
+  if (!text || typeof text !== "string") return text;
+  const lines = text.split("\n");
+  let headerLine = null;
+  let separatorLine = null;
+  const dataRows = [];
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+    // Skip markdown heading dạng "## 1. HARVEST - ...", "### LONG-TAIL", v.v.
+    if (/^#{1,6}\s/.test(line)) continue;
+    // Skip plain text heading dạng "1. HARVEST - "..."" (không có | đầu dòng)
+    if (/^\d+\.\s+[A-ZÀ-Ỹ]/.test(line) && !line.startsWith("|")) continue;
+    // Table separator | --- | --- |
+    if (/^\|[\s\-|:]+\|$/.test(line)) {
+      if (!separatorLine) separatorLine = line;
+      continue;
+    }
+    // Table row
+    if (line.startsWith("|") && line.endsWith("|")) {
+      // Header row: cell #1 là "#" + có chữ "Cơ chế" hoặc "Co che"
+      const isHeader = /^\|\s*#\s*\|/.test(line) && /Cơ chế|Co che/i.test(line);
+      if (isHeader) {
+        if (!headerLine) headerLine = line;
+        continue;
+      }
+      // Data row: cell #1 là số
+      if (/^\|\s*\d+\s*\|/.test(line)) {
+        dataRows.push(line);
+      }
+    }
+  }
+
+  if (!headerLine || !separatorLine || dataRows.length === 0) {
+    return text;
+  }
+
+  let counter = 1;
+  const renumbered = dataRows.map(row =>
+    row.replace(/^\|\s*\d+\s*\|/, `| ${counter++} |`)
+  );
+
+  return [headerLine, separatorLine, ...renumbered].join("\n");
+}
+
 function jsonResponse(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json; charset=utf-8" } });
 }
@@ -705,6 +757,10 @@ export async function onRequestPost(context) {
   }
 
   let rawResp = aiResult.response || aiResult.result || "";
+  // Post-process: gộp nhiều bảng nhỏ thành 1 bảng + remove heading (chỉ áp dụng suggest_keyword)
+  if (mode === "suggest_keyword" && rawResp) {
+    rawResp = mergeKeywordTables(rawResp);
+  }
   let parsedJson = null;
   if (cfg.json_output && rawResp) {
     // Strategy: thử nhiều cách parse JSON từ AI output

@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(node -c functions/api/agent-google-ai.js)",
-      "Bash(curl -sI \"https://facebookadsallinone.pages.dev/\")"
-    ]
-  }
-}
