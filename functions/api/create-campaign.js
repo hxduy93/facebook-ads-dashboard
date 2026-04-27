@@ -371,4 +371,48 @@ export async function onRequestPost(context) {
       if (ad.url_tags && typeof ad.url_tags === "string" && ad.url_tags.trim()) {
         creativeBody.url_tags = ad.url_tags.trim();
       }
-      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, cre
+      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, creativeBody, token);
+
+      const adRes = await fbPost(`/act_${accountIdRaw}/ads`, {
+        name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,
+        adset_id: partial.adset_id,
+        creative: { creative_id: creativeRes.id },
+        status: launchStatus,
+      }, token);
+
+      partial.ads.push({
+        ad_id: adRes.id,
+        creative_id: creativeRes.id,
+        video_id: media.video_id || null,
+        image_hash: media.image_hash || null,
+      });
+    }
+
+    return json({
+      success: true,
+      campaign_id: partial.campaign_id,
+      adset_id: partial.adset_id,
+      ads: partial.ads,
+      ads_manager_url: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=${accountIdRaw}&selected_campaign_ids=${partial.campaign_id}`,
+    });
+  } catch (e) {
+    // Figure out which step failed based on what's been populated in `partial`
+    let step;
+    if (!partial.uploaded) {
+      step = "upload_media";
+    } else if (!partial.campaign_id) {
+      step = "create_campaign";
+    } else if (!partial.adset_id) {
+      step = "create_adset";
+    } else {
+      // campaign + adset exist → failing inside creative/ad loop or thumbnail wait
+      step = "create_ads";
+    }
+    return json({
+      success: false,
+      step,
+      error: String(e.message || e),
+      partial,
+    }, 502);
+  }
+}
