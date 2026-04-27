@@ -151,27 +151,28 @@ function mergeKeywordTables(text) {
   for (const raw of lines) {
     const line = raw.trim();
     if (!line) continue;
-    // Skip markdown heading dạng "## 1. HARVEST - ...", "### LONG-TAIL", v.v.
-    if (/^#{1,6}\s/.test(line)) continue;
-    // Skip plain text heading dạng "1. HARVEST - "..."" (không có | đầu dòng)
-    if (/^\d+\.\s+[A-ZÀ-Ỹ]/.test(line) && !line.startsWith("|")) continue;
-    // Table separator | --- | --- |
+
+    // BULLETPROOF: chỉ giữ những dòng bắt đầu và kết thúc bằng "|" (table-related).
+    // Mọi thứ khác (heading H1-H6, **bold**, plain text, list, paragraph, code fence, ...)
+    // đều bị skip — bất kể format AI sinh ra.
+    if (!line.startsWith("|") || !line.endsWith("|")) continue;
+
+    // Table separator: | --- | --- |
     if (/^\|[\s\-|:]+\|$/.test(line)) {
       if (!separatorLine) separatorLine = line;
       continue;
     }
-    // Table row
-    if (line.startsWith("|") && line.endsWith("|")) {
-      // Header row: cell #1 là "#" + có chữ "Cơ chế" hoặc "Co che"
-      const isHeader = /^\|\s*#\s*\|/.test(line) && /Cơ chế|Co che/i.test(line);
-      if (isHeader) {
-        if (!headerLine) headerLine = line;
-        continue;
-      }
-      // Data row: cell #1 là số
-      if (/^\|\s*\d+\s*\|/.test(line)) {
-        dataRows.push(line);
-      }
+
+    // Header row: cell #1 là "#" + có chữ "Cơ chế" hoặc "Co che"
+    const isHeader = /^\|\s*#\s*\|/.test(line) && /Cơ chế|Co che/i.test(line);
+    if (isHeader) {
+      if (!headerLine) headerLine = line;
+      continue;
+    }
+
+    // Data row: cell #1 là số
+    if (/^\|\s*\d+\s*\|/.test(line)) {
+      dataRows.push(line);
     }
   }
 
