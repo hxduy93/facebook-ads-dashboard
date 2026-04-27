@@ -111,10 +111,10 @@ async function uploadVideo(accountId, file, token) {
 }
 
 // Poll video processing status — FB cần video.status.video_status = "ready"
-// trước khi dùng trong ad creative, nếu không sẽ trả error
-// "Hệ thống vẫn đang xử lý video này".
-// Video 18MB thường ready trong 15-45s. Poll mỗi 3s, max 90s.
-async function waitForVideoReady(videoId, token, maxWaitMs = 90000, pollIntervalMs = 3000) {
+// trước khi dùng trong ad creative.
+// LƯU Ý: Cloudflare Pages Function có limit request duration ~30s tổng,
+// nên mình giảm max wait xuống 20s. Video > 15MB có thể fail → user nén lại.
+async function waitForVideoReady(videoId, token, maxWaitMs = 20000, pollIntervalMs = 2500) {
   const start = Date.now();
   let lastStatus = "unknown";
   while (Date.now() - start < maxWaitMs) {
@@ -134,12 +134,12 @@ async function waitForVideoReady(videoId, token, maxWaitMs = 90000, pollInterval
     }
     await new Promise((r) => setTimeout(r, pollIntervalMs));
   }
-  throw new Error(`Video chưa ready sau ${maxWaitMs/1000}s (status cuối: ${lastStatus}). Thử lại sau 1-2 phút hoặc nén video xuống < 10MB.`);
+  throw new Error(`Video chưa ready sau ${maxWaitMs/1000}s (status: ${lastStatus}). 👉 GIẢI PHÁP: đợi 1-2 phút rồi bấm "Thử lại" — video sẽ ready và lần này chạy nhanh. Nếu vẫn fail → nén video xuống < 10MB.`);
 }
 
 // Wait for Meta to generate thumbnails after video upload, then return a URL.
 // Meta takes 5–30s to auto-generate thumbnails depending on video length.
-async function waitForVideoThumbnail(videoId, token, maxWaitMs = 25000, pollIntervalMs = 2500) {
+async function waitForVideoThumbnail(videoId, token, maxWaitMs = 8000, pollIntervalMs = 2000) {
   const start = Date.now();
   while (Date.now() - start < maxWaitMs) {
     try {
@@ -409,10 +409,3 @@ export async function onRequestPost(context) {
       step = "create_ads";
     }
     return json({
-      success: false,
-      step,
-      error: String(e.message || e),
-      partial,
-    }, 502);
-  }
-}
