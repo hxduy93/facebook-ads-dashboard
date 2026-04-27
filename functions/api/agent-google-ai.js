@@ -759,8 +759,19 @@ export async function onRequestPost(context) {
 
   let rawResp = aiResult.response || aiResult.result || "";
   // Post-process: gộp nhiều bảng nhỏ thành 1 bảng + remove heading (chỉ áp dụng suggest_keyword)
+  let _debugMerge = null;
   if (mode === "suggest_keyword" && rawResp) {
+    const _before = rawResp;
     rawResp = mergeKeywordTables(rawResp);
+    _debugMerge = {
+      merge_applied: true,
+      raw_chars: _before.length,
+      raw_separators: (_before.match(/^\|[\s\-|:]+\|$/gm) || []).length,
+      raw_data_rows: (_before.match(/^\|\s*\d+\s*\|/gm) || []).length,
+      final_chars: rawResp.length,
+      final_separators: (rawResp.match(/^\|[\s\-|:]+\|$/gm) || []).length,
+      final_data_rows: (rawResp.match(/^\|\s*\d+\s*\|/gm) || []).length,
+    };
   }
   let parsedJson = null;
   if (cfg.json_output && rawResp) {
@@ -880,5 +891,6 @@ export async function onRequestPost(context) {
     skills_used: cfg.skills,
     data_used: cfg.data,
     cached: false,
+    _debug_merge: _debugMerge,
   });
 }
