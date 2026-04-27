@@ -518,23 +518,34 @@ CẤM bid đồng đều (mọi keyword cùng số).
 
 15 hàng PHẢI mix ít nhất 4/5 cơ chế (mỗi cơ chế ≥ 2 hàng).
 
+═══ QUY TẮC ƯỚC LƯỢNG LƯỢT TÌM KIẾM/THÁNG ═══
+Dựa vào data impressions/clicks hiện có trong search_terms + kiến thức thị trường Việt Nam:
+- Keyword rộng phổ biến (camera, máy dò): 5,000 - 50,000 lượt/tháng
+- Keyword trung bình (camera giấu, ghi âm mini): 1,000 - 10,000 lượt/tháng
+- Keyword long-tail ngách (thiết bị dò camera ẩn trong khách sạn): 100 - 1,000 lượt/tháng
+- Brand keyword (doscom, noma 911): 500 - 5,000 lượt/tháng
+Nếu có data impressions từ search term → ước lượng dựa trên tỷ lệ impression share (~10-30% thị phần) → volume = impressions / share × 30.
+Nếu không có data → ước lượng bằng kiến thức thị trường. Ghi rõ nguồn ước tính.
+
 ═══ FEW-SHOT EXAMPLE ═══
-| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
-| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
-| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
-| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
+| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | 8,100 | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
+| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | 320 | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
+| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | 4,500 | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
+| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | 2,800 | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
 
 ═══ OUTPUT (markdown table 12-15 hàng) ═══
-| # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lý do | Tăng đơn dự kiến |
-|---|--------|--------|----------|-------------|-------|-----------|-------|------------------|
+| # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lượt tìm/tháng | Lý do | Tăng đơn dự kiến |
+|---|--------|--------|----------|-------------|-------|-----------|----------------|-------|------------------|
 ... (12-15 hàng, MIX cơ chế, MIX bid, MAX 3 hàng bid > 10K)
 
 CẤM TUYỆT ĐỐI:
 - Tất cả keyword cùng bid
 - Tất cả "Tăng đơn dự kiến" cùng %
+- Tất cả "Lượt tìm/tháng" cùng số
 - Cùng cơ chế cho 15 hàng
 - Bid > 30K
-- "Xuất sắc" mà không kèm số liệu trong "Lý do"`);
+- "Xuất sắc" mà không kèm số liệu trong "Lý do"
+- "Lượt tìm/tháng" để trống hoặc ghi "N/A" — PHẢI có số cụ thể`);
       break;
     case "suggest_headline":
       parts.push(`# Brief Headline${groupSuffix}\n10 brief với: ký tự count, công thức (AIDA/FAB/PAS), USP nhắc, hypothesis, test plan`);
