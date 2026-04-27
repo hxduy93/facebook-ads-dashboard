@@ -29,8 +29,8 @@ where wrangler >nul 2>&1
 if errorlevel 1 (
   echo [LOI] Chua cai wrangler.
   echo.
-  echo Chay lenh sau roi quay lai:
-  echo    npm install -g wrangler
+  echo Chay lenh sau roi quay lai (yeu cau Node.js >= 18):
+  echo    npm install -g wrangler@latest
   echo.
   pause
   exit /b 1
@@ -52,6 +52,8 @@ if not exist .dev.vars (
 
 REM === Print info + start ===
 echo Server URL : http://localhost:8788
+echo Mo browser : Ctrl+click vao URL tren (hoac mo tab moi roi paste)
+echo Hot reload : tu dong khi anh sua file .html / .js / functions/
 echo KV binding : INVENTORY (local, rong - khong co data inventory)
 echo AI binding : AI (call remote Workers AI - can wrangler login)
 echo Stop server: Ctrl+C
