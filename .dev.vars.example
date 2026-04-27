@@ -1,0 +1,17 @@
+# Local dev secrets — copy file nay thanh ".dev.vars" (file local, khong commit)
+#
+# Wrangler tu dong load .dev.vars khi chay "wrangler pages dev"
+# Cac bien duoi day tuong duong env vars tren Cloudflare Pages production.
+
+# Session HMAC key — local dev co the de bat ky chuoi nao
+# (Production secret nam o Cloudflare dashboard, KHAC voi value nay)
+SESSION_SECRET=dev-only-secret-not-for-prod
+
+# Google OAuth — chi can neu test login flow tren localhost
+# Phai add http://localhost:8788/auth/callback vao Authorized redirect URIs
+# o Google Cloud Console > Credentials
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Email duoc phep dang nhap (comma-separated)
+ALLOWED_EMAILS=doscom.vietnam@gmail.com
