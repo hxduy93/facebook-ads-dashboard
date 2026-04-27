@@ -54,6 +54,10 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .copy-btn:hover{background:#f3f4f6}
 .error{color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;padding:10px 14px;border-radius:4px;font-size:13px}
 .note{background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:12.5px;color:#78350f;margin-bottom:12px}
+.cache-banner{background:#ecfeff;border-left:4px solid #0891b2;color:#155e75;padding:10px 14px;border-radius:4px;font-size:12.5px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cache-banner.cache-fresh{background:#f0fdf4;border-left-color:#16a34a;color:#14532d}
+.cache-banner .btn-refresh{padding:6px 12px;border:1px solid #0891b2;background:white;color:#0891b2;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;white-space:nowrap}
+.cache-banner .btn-refresh:hover{background:#0891b2;color:white}
 .tag{display:inline-block;padding:2px 8px;background:#dbeafe;color:#1e40af;border-radius:9999px;font-size:10.5px;margin-left:4px}
 .scorecard{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
 .score-big{text-align:center;min-width:140px;padding:14px;border-radius:10px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe}
@@ -717,7 +721,10 @@ function setLoading(on, mode) {
   }
 }
 
-async function runAI(mode, question) {
+// Last suggest mode đã chạy (để nút "Làm mới" biết gọi lại mode nào)
+let lastSuggestMode = null;
+
+async function runAI(mode, question, forceRefresh) {
   setLoading(true, mode);
   const t0 = Date.now();
   try {
@@ -732,6 +739,7 @@ async function runAI(mode, question) {
       }
     };
     if (question) body.question = question;
+    if (forceRefresh) body.force_refresh = true;
     const r = await fetch('/api/agent-google-ai', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(body)
@@ -742,14 +750,31 @@ async function runAI(mode, question) {
       document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi:</strong> ${(j.error||'HTTP '+r.status).replace(/</g,"&lt;")}</div>`;
       document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
     } else {
-      document.getElementById('output').innerHTML = md2html(j.response||"(empty)");
-      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Tháng: <strong>${range.title}</strong>`;
+      // Banner cache: hiện trên đầu output khi backend trả từ cache, kèm nút "Làm mới"
+      let cacheBanner = "";
+      const isSuggest = mode === 'suggest_keyword' || mode === 'suggest_headline' || mode === 'suggest_banner';
+      if (isSuggest) {
+        lastSuggestMode = mode;
+        if (j.cached) {
+          cacheBanner = `<div class="cache-banner">📌 Kết quả đã lưu từ <strong>${j.cached_at || 'hôm nay'}</strong> — bấm cùng đề xuất trong ngày ra cùng kết quả. <button class="btn-refresh" onclick="refreshSuggest('${mode}')">🔄 Làm mới đề xuất</button></div>`;
+        } else {
+          cacheBanner = `<div class="cache-banner cache-fresh">✨ Đề xuất mới · sẽ giữ trong 24h. Bấm lại trong ngày ra cùng kết quả này.</div>`;
+        }
+      }
+      document.getElementById('output').innerHTML = cacheBanner + md2html(j.response||"(empty)");
+      const cacheTag = j.cached ? ' · <span style="color:#0891b2">📌 cached</span>' : '';
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Tháng: <strong>${range.title}</strong>${cacheTag}`;
     }
   } catch (e) {
     document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
   } finally {
     setLoading(false);
   }
+}
+
+function refreshSuggest(mode) {
+  if (!confirm('Tạo đề xuất MỚI? Đề xuất cũ trong ngày sẽ bị thay thế.')) return;
+  runAI(mode, null, true);
 }
 
 function askQuestion() {

@@ -124,6 +124,11 @@ const MODE_CONFIG = {
   ask:                { skills: ["parent", "keyword", "gdn", "headline"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST },
 };
 
+// Suggest modes dùng KV cache 24h — bấm lại trong ngày trả kết quả cũ, đảm bảo nhất quán.
+// User bấm "Làm mới" (force_refresh=true) để re-generate.
+const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
+const CACHE_TTL_SECONDS = 86400; // 24 giờ
+
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
   const match = cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
@@ -527,25 +532,51 @@ Dựa vào data impressions/clicks hiện có trong search_terms + kiến thức
 Nếu có data impressions từ search term → ước lượng dựa trên tỷ lệ impression share (~10-30% thị phần) → volume = impressions / share × 30.
 Nếu không có data → ước lượng bằng kiến thức thị trường. Ghi rõ nguồn ước tính.
 
+═══ QUY TẮC ƯỚC LƯỢNG CLICK DỰ KIẾN/THÁNG ═══
+Click dự kiến = Lượt tìm/tháng × CTR ước tính × Impression Share (IS) ước tính.
+
+CTR ước tính theo match type + bid tier:
+- Exact + bid 6-10K: CTR 5-8% (intent rõ, ad relevant cao)
+- Exact + bid 10-30K (XUẤT SẮC): CTR 8-12% (top-1 position)
+- Phrase + bid 5-10K: CTR 3-5%
+- Phrase + bid <5K: CTR 1.5-3%
+- Broad + bid 3-7K: CTR 1-2%
+- Long-tail (Phrase/Exact, low competition): CTR 5-10% (ít cạnh tranh)
+- Brand keyword: CTR 10-20% (tự nhiên cao)
+
+Impression Share (IS) ước tính theo bid:
+- Bid <50% trung bình thị trường (3-5K cho kw thường): IS 10-25%
+- Bid bằng thị trường (6-10K): IS 30-50%
+- Bid XUẤT SẮC (>10K, top position): IS 60-85%
+
+CÔNG THỨC: Click/tháng = Lượt tìm × CTR × IS (làm tròn).
+VÍ DỤ:
+- "máy dò nghe lén giá rẻ" (Phrase, 9K): 8,100 × 4% × 35% ≈ 113 click/tháng
+- "thiết bị dò camera ẩn trong ks" (Exact long-tail, 4K): 320 × 7% × 20% ≈ 4 click/tháng
+- "máy ghi âm doscom dr1" (Exact brand XUẤT SẮC, 18K): 2,800 × 15% × 75% ≈ 315 click/tháng
+
+LƯU Ý: Nếu IS × CTR × Volume < 1 → ghi "<1" (không round 0).
+
 ═══ FEW-SHOT EXAMPLE ═══
-| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | 8,100 | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
-| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | 320 | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
-| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | 4,500 | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
-| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | 2,800 | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
+| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | 8,100 | 113 | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
+| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | 320 | 4 | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
+| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | 4,500 | 54 | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
+| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | 2,800 | 315 | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
 
 ═══ OUTPUT (markdown table 12-15 hàng) ═══
-| # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lượt tìm/tháng | Lý do | Tăng đơn dự kiến |
-|---|--------|--------|----------|-------------|-------|-----------|----------------|-------|------------------|
+| # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lượt tìm/tháng | Click dự kiến/tháng | Lý do | Tăng đơn dự kiến |
+|---|--------|--------|----------|-------------|-------|-----------|----------------|---------------------|-------|------------------|
 ... (12-15 hàng, MIX cơ chế, MIX bid, MAX 3 hàng bid > 10K)
 
 CẤM TUYỆT ĐỐI:
 - Tất cả keyword cùng bid
 - Tất cả "Tăng đơn dự kiến" cùng %
 - Tất cả "Lượt tìm/tháng" cùng số
+- Tất cả "Click dự kiến/tháng" cùng số
 - Cùng cơ chế cho 15 hàng
 - Bid > 30K
 - "Xuất sắc" mà không kèm số liệu trong "Lý do"
-- "Lượt tìm/tháng" để trống hoặc ghi "N/A" — PHẢI có số cụ thể`);
+- "Lượt tìm/tháng" hoặc "Click dự kiến/tháng" để trống hoặc ghi "N/A" — PHẢI có số cụ thể (hoặc "<1" nếu nhỏ hơn 1)`);
       break;
     case "suggest_headline":
       parts.push(`# Brief Headline${groupSuffix}\n10 brief với: ký tự count, công thức (AIDA/FAB/PAS), USP nhắc, hypothesis, test plan`);
@@ -575,6 +606,7 @@ export async function onRequestPost(context) {
 
   const mode = body.mode || "ask";
   const question = (body.question || "").trim();
+  const forceRefresh = !!body.force_refresh; // Bấm "Làm mới" → bỏ qua cache, gọi AI lại
   const userContext = body.context || {};
   const group = (userContext.product_group || "ALL").toUpperCase();
   // Time range optional: { start: "YYYY-MM-DD", end: "YYYY-MM-DD", label: "Tháng 4/2026" }
@@ -613,14 +645,44 @@ export async function onRequestPost(context) {
   const systemPrompt = buildSystemPrompt(skills, group, !!cfg.json_output);
   const userPrompt = buildUserPrompt(mode, question, dataContext, group, timeRange);
 
+  // ── Cache KV cho suggest modes (24h, cùng ngày = cùng kết quả) ──
+  const isSuggest = SUGGEST_MODES.has(mode);
+  const todayVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10);
+  const cacheKey = isSuggest ? `cache:${mode}:${group}:${todayVN}` : null;
+
+  if (isSuggest && !forceRefresh && env.INVENTORY) {
+    try {
+      const cached = await env.INVENTORY.get(cacheKey, { type: "json" });
+      if (cached && cached.response) {
+        return jsonResponse({
+          ok: true,
+          mode,
+          group,
+          group_label: GROUP_LABELS[group],
+          model: cfg.model,
+          response: cached.response,
+          parsed_json: cached.parsed_json || null,
+          skills_used: cfg.skills,
+          data_used: cfg.data,
+          cached: true,
+          cached_at: cached.cached_at,
+          cache_note: `Kết quả đã lưu từ ${cached.cached_at}. Bấm "Làm mới" để tạo đề xuất mới.`,
+        });
+      }
+    } catch { /* KV read fail → tiếp tục gọi AI */ }
+  }
+
   let aiResult;
   try {
+    // Suggest modes: temperature=0 → deterministic (cùng data = cùng kết quả)
+    // Audit modes: temperature=0.1-0.3 → cho phép biến đổi nhẹ
+    const temperature = isSuggest ? 0 : (cfg.json_output ? 0.1 : 0.3);
     const aiParams = {
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: cfg.json_output ? 0.1 : 0.3,
+      temperature,
       max_tokens: cfg.json_output ? 1500 : 2500,
     };
     // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
@@ -727,6 +789,18 @@ export async function onRequestPost(context) {
     }
   }
 
+  // ── Lưu cache KV cho suggest modes ──
+  if (isSuggest && cacheKey && env.INVENTORY && rawResp) {
+    const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
+    try {
+      await env.INVENTORY.put(cacheKey, JSON.stringify({
+        response: rawResp,
+        parsed_json: parsedJson,
+        cached_at: nowVN,
+      }), { expirationTtl: CACHE_TTL_SECONDS });
+    } catch { /* KV write fail → không sao, lần sau gọi AI lại */ }
+  }
+
   return jsonResponse({
     ok: true,
     mode,
@@ -737,5 +811,6 @@ export async function onRequestPost(context) {
     parsed_json: parsedJson,
     skills_used: cfg.skills,
     data_used: cfg.data,
+    cached: false,
   });
 }
