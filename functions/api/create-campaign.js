@@ -110,6 +110,33 @@ async function uploadVideo(accountId, file, token) {
   return data.id;
 }
 
+// Poll video processing status — FB cần video.status.video_status = "ready"
+// trước khi dùng trong ad creative, nếu không sẽ trả error
+// "Hệ thống vẫn đang xử lý video này".
+// Video 18MB thường ready trong 15-45s. Poll mỗi 3s, max 90s.
+async function waitForVideoReady(videoId, token, maxWaitMs = 90000, pollIntervalMs = 3000) {
+  const start = Date.now();
+  let lastStatus = "unknown";
+  while (Date.now() - start < maxWaitMs) {
+    try {
+      const data = await fbGet(`/${videoId}`, { fields: "status" }, token);
+      const status = data.status || {};
+      const vs = status.video_status || status.processing_progress || "unknown";
+      lastStatus = vs;
+      if (vs === "ready") return true;
+      if (vs === "error") {
+        throw new Error(`FB báo video lỗi xử lý: ${JSON.stringify(status)}`);
+      }
+      // Còn "processing" → tiếp tục poll
+    } catch (e) {
+      // Lỗi tạm thời (vd 404 vì video chưa kịp index) → tiếp tục poll
+      if (String(e.message).includes("FB báo video lỗi")) throw e;
+    }
+    await new Promise((r) => setTimeout(r, pollIntervalMs));
+  }
+  throw new Error(`Video chưa ready sau ${maxWaitMs/1000}s (status cuối: ${lastStatus}). Thử lại sau 1-2 phút hoặc nén video xuống < 10MB.`);
+}
+
 // Wait for Meta to generate thumbnails after video upload, then return a URL.
 // Meta takes 5–30s to auto-generate thumbnails depending on video length.
 async function waitForVideoThumbnail(videoId, token, maxWaitMs = 25000, pollIntervalMs = 2500) {
@@ -316,9 +343,12 @@ export async function onRequestPost(context) {
       const ad = cfg.ads[i];
       const media = uploaded[i];
 
-      // Video ads need a thumbnail — poll Meta until it finishes processing
+      // Video ads need: (1) status=ready (xử lý xong) (2) thumbnail
+      // FB sẽ reject ad creation nếu video còn 'processing' với lỗi
+      // "Hệ thống vẫn đang xử lý video này" → phải đợi ready trước.
       let videoThumbnailUrl = null;
       if (media.video_id) {
+        await waitForVideoReady(media.video_id, token);
         videoThumbnailUrl = await waitForVideoThumbnail(media.video_id, token);
       }
 
@@ -341,55 +371,4 @@ export async function onRequestPost(context) {
       if (ad.url_tags && typeof ad.url_tags === "string" && ad.url_tags.trim()) {
         creativeBody.url_tags = ad.url_tags.trim();
       }
-      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, creativeBody, token);
-
-      const adRes = await fbPost(`/act_${accountIdRaw}/ads`, {
-        name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,
-        adset_id: partial.adset_id,
-        creative: { creative_id: creativeRes.id },
-        status: launchStatus,
-      }, token);
-
-      partial.ads.push({
-        ad_id: adRes.id,
-        creative_id: creativeRes.id,
-        video_id: media.video_id || null,
-        image_hash: media.image_hash || null,
-      });
-    }
-
-    return json({
-      success: true,
-      campaign_id: partial.campaign_id,
-      adset_id: partial.adset_id,
-      ads: partial.ads,
-      ads_manager_url: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=${accountIdRaw}&selected_campaign_ids=${partial.campaign_id}`,
-    });
-  } catch (e) {
-    // Figure out which step failed based on what's been populated in `partial`
-    let step;
-    if (!partial.uploaded) {
-      step = "upload_media";
-    } else if (!partial.campaign_id) {
-      step = "create_campaign";
-    } else if (!partial.adset_id) {
-      step = "create_adset";
-    } else {
-      // campaign + adset exist → failing inside creative/ad loop or thumbnail wait
-      step = "create_ads";
-    }
-    return json({
-      success: false,
-      step,
-      error: String(e.message || e),
-      partial,
-    }, 502);
-  }
-}
-
-function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json; charset=utf-8" },
-  });
-}
+      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, cre
