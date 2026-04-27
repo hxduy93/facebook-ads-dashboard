@@ -41,6 +41,14 @@ function getCookie(request, name) {
   return match ? match[1] : null;
 }
 
+// Test bypass: header "X-Test-Token" khớp env.TEST_BYPASS_TOKEN.
+// CHỈ áp dụng cho /api/agent-google-ai (testing prompt output) — các route khác vẫn yêu cầu session.
+// Nếu env.TEST_BYPASS_TOKEN không set → không bypass nào hợp lệ.
+export function hasTestBypass(request, env) {
+  const t = request.headers.get("X-Test-Token");
+  return !!(t && env.TEST_BYPASS_TOKEN && t === env.TEST_BYPASS_TOKEN);
+}
+
 export async function onRequest(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
@@ -54,7 +62,11 @@ export async function onRequest(context) {
   const session = await verifySession(sessionCookie, env.SESSION_SECRET);
 
   if (session) {
-    // Valid session → continue
+    return next();
+  }
+
+  // Test bypass — CHỈ cho path agent-google-ai (testing prompt format)
+  if (url.pathname === "/api/agent-google-ai" && hasTestBypass(request, env)) {
     return next();
   }
 

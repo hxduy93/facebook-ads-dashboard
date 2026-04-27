@@ -15,3 +15,11 @@ GOOGLE_CLIENT_SECRET=
 
 # Email duoc phep dang nhap (comma-separated)
 ALLOWED_EMAILS=doscom.vietnam@gmail.com
+
+# Test bypass token — chuoi random dai (vd "openssl rand -hex 32")
+# CHI bypass cho /api/agent-google-ai (test prompt format).
+# Cac route khac van yeu cau session.
+# QUAN TRONG: paste cung value nay vao Cloudflare Pages > Settings >
+# Variables and Secrets > "Add" type=Secret, name=TEST_BYPASS_TOKEN.
+# Neu khong set tren prod -> bypass khong hoat dong (default behavior).
+TEST_BYPASS_TOKEN=PASTE_RANDOM_LONG_TOKEN_HERE

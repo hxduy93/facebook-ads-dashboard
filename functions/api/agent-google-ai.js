@@ -6,7 +6,7 @@
 //   context?: { product_group?: "ALL"|"CAMERA_WIFI"|"CAMERA_4G"|"CAMERA_VIDEO_CALL"|"MAY_DO"|"GHI_AM"|"DINH_VI"|"CHONG_GHI_AM"|"NOMA" }
 // }
 
-import { verifySession } from "../_middleware.js";
+import { verifySession, hasTestBypass } from "../_middleware.js";
 
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
@@ -610,7 +610,7 @@ export async function onRequestPost(context) {
 
   const cookie = getCookie(request, SESSION_COOKIE);
   const session = await verifySession(cookie, env.SESSION_SECRET);
-  if (!session) return jsonResponse({ error: "Chưa đăng nhập" }, 401);
+  if (!session && !hasTestBypass(request, env)) return jsonResponse({ error: "Chưa đăng nhập" }, 401);
 
   let body;
   try { body = await request.json(); } catch { return jsonResponse({ error: "Body không hợp lệ" }, 400); }
