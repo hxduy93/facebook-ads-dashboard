@@ -1,0 +1,53 @@
+name: Fetch FB Ads Insights
+
+# Chạy mỗi 3 GIỜ (lệch 30 phút với Google Ads) — fetch Facebook Ads insights
+# từ Meta Marketing API cho 6 ad accounts Doscom, save vào data/fb-ads-data.json.
+#
+# Yêu cầu GitHub Secret:
+#   FB_ACCESS_TOKEN  — Long-lived User Access Token từ Meta (hết hạn ~60 ngày)
+#                      Lấy từ: developers.facebook.com/tools/explorer → Generate → Extend
+on:
+  schedule:
+    - cron: "30 */3 * * *"
+  workflow_dispatch:            # cho phép chạy thủ công từ tab Actions
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run FB Ads fetch script
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: python scripts/fetch_fb_ads.py
+
+      - name: Commit updated FB Ads snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/fb-ads-data.json)" ]; then
+            git add data/fb-ads-data.json
+            git commit -m "chore: auto-sync FB Ads insights snapshot (Meta API)"
+            # Retry + rebase để tránh race condition với các workflow khác
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No FB Ads changes to commit."
+          fi
