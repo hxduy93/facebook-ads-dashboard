@@ -409,3 +409,10 @@ export async function onRequestPost(context) {
       step = "create_ads";
     }
     return json({
+      success: false,
+      step,
+      error: String(e.message || e),
+      partial,
+    }, 502);
+  }
+}
