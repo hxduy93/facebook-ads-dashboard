@@ -128,6 +128,8 @@ const MODE_CONFIG = {
 // User bấm "Làm mới" (force_refresh=true) để re-generate.
 const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
+// Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
+const CACHE_VERSION = "v2";
 
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
@@ -136,17 +138,19 @@ function getCookie(request, name) {
 }
 
 // Llama 3.1 8B prompt-following yếu: hay tách output thành nhiều bảng nhỏ với heading
-// "1. HARVEST - ...", "2. LONG-TAIL - ..." dù prompt yêu cầu 1 bảng. Hàm này post-process:
-//   1. Bỏ tất cả markdown heading (# ... ###)
-//   2. Gộp tất cả data row (| N | ... |) từ mọi bảng nhỏ vào 1 bảng duy nhất
+// "### 1. HARVEST - ...", "### 2. LONG-TAIL - ..." dù prompt yêu cầu 1 bảng. Hàm này post-process:
+//   1. Bỏ tất cả markdown heading + dòng chú thích (### ..., ## ..., **N. WORD**, etc.)
+//   2. Gộp tất cả data row (| ... |) từ mọi bảng nhỏ vào 1 bảng duy nhất
 //   3. Re-number cột # liên tục 1..N (không reset theo từng bảng nhỏ)
-// Áp dụng cho mode suggest_keyword. Nếu không detect được bảng → trả raw.
+// Áp dụng cho mode suggest_keyword. Luôn strip heading kể cả khi không detect được bảng.
 function mergeKeywordTables(text) {
   if (!text || typeof text !== "string") return text;
   const lines = text.split("\n");
   let headerLine = null;
   let separatorLine = null;
   const dataRows = [];
+  // Fallback: giữ lại các dòng table-like nếu header chuẩn không detect được
+  const tableLikeRows = [];
 
   for (const raw of lines) {
     const line = raw.trim();
@@ -170,22 +174,43 @@ function mergeKeywordTables(text) {
       continue;
     }
 
-    // Data row: cell #1 là số
+    // Data row chuẩn: cell #1 là số
     if (/^\|\s*\d+\s*\|/.test(line)) {
       dataRows.push(line);
+      continue;
     }
+
+    // Fallback: header lạ hoặc data row không bắt đầu bằng số → vẫn giữ làm table-like
+    tableLikeRows.push(line);
   }
 
-  if (!headerLine || !separatorLine || dataRows.length === 0) {
-    return text;
+  // Path A: Đầy đủ header + separator + numeric data rows → gộp + renumber
+  if (headerLine && separatorLine && dataRows.length > 0) {
+    let counter = 1;
+    const renumbered = dataRows.map(row =>
+      row.replace(/^\|\s*\d+\s*\|/, `| ${counter++} |`)
+    );
+    return [headerLine, separatorLine, ...renumbered].join("\n");
   }
 
-  let counter = 1;
-  const renumbered = dataRows.map(row =>
-    row.replace(/^\|\s*\d+\s*\|/, `| ${counter++} |`)
-  );
+  // Path B: Có separator + ít nhất 1 row table-like (kể cả header lạ) → return chỉ phần bảng
+  // → strip heading H1-H6, bold, paragraph chú thích bên ngoài
+  if (separatorLine && (dataRows.length > 0 || tableLikeRows.length > 0)) {
+    const allRows = [...tableLikeRows, ...dataRows];
+    if (headerLine) return [headerLine, separatorLine, ...allRows].join("\n");
+    if (allRows.length >= 2) return [allRows[0], separatorLine, ...allRows.slice(1)].join("\n");
+  }
 
-  return [headerLine, separatorLine, ...renumbered].join("\n");
+  // Path C: Không detect được bảng — chỉ strip heading/bold/list mà giữ phần còn lại
+  const stripped = lines.filter(raw => {
+    const line = raw.trim();
+    if (!line) return false;
+    if (/^#{1,6}\s/.test(line)) return false;          // ### heading
+    if (/^\*\*\d+\.\s/.test(line)) return false;        // **1. WORD - ...**
+    if (/^\d+\.\s+\*\*/.test(line)) return false;       // 1. **WORD** - ...
+    return true;
+  });
+  return stripped.join("\n");
 }
 
 function jsonResponse(obj, status = 200) {
@@ -712,7 +737,7 @@ export async function onRequestPost(context) {
   // ── Cache KV cho suggest modes (24h, cùng ngày = cùng kết quả) ──
   const isSuggest = SUGGEST_MODES.has(mode);
   const todayVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10);
-  const cacheKey = isSuggest ? `cache:${mode}:${group}:${todayVN}` : null;
+  const cacheKey = isSuggest ? `cache:${CACHE_VERSION}:${mode}:${group}:${todayVN}` : null;
 
   if (isSuggest && !forceRefresh && env.INVENTORY) {
     try {
