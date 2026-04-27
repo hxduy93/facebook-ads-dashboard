@@ -557,18 +557,29 @@ VÍ DỤ:
 
 LƯU Ý: Nếu IS × CTR × Volume < 1 → ghi "<1" (không round 0).
 
-═══ FEW-SHOT EXAMPLE ═══
+═══ FEW-SHOT EXAMPLE (chỉ 4 dòng minh họa — output thực phải 12-15 dòng trong CÙNG 1 bảng) ═══
 | 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | 8,100 | 113 | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
 | 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | 320 | 4 | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
 | 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | 4,500 | 54 | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
 | 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | 2,800 | 315 | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
 
-═══ OUTPUT (markdown table 12-15 hàng) ═══
+═══ FORMAT OUTPUT (BẮT BUỘC) ═══
+Trả về CHÍNH XÁC 1 (MỘT) bảng markdown duy nhất với 12-15 hàng.
+KHÔNG tách thành nhiều bảng nhỏ. KHÔNG thêm heading/tiêu đề trước hoặc giữa bảng.
+KHÔNG viết câu giới thiệu trước bảng. Bảng phải bắt đầu NGAY ở hàng đầu tiên của output.
+Cột # đánh số liên tục 1, 2, 3, ..., 15 (không reset).
+
+Cấu trúc bảng (header + separator + 12-15 data rows):
 | # | Cơ chế | Action | Ad Group | Keyword mới | Match | Bid (CPC) | Lượt tìm/tháng | Click dự kiến/tháng | Lý do | Tăng đơn dự kiến |
 |---|--------|--------|----------|-------------|-------|-----------|----------------|---------------------|-------|------------------|
-... (12-15 hàng, MIX cơ chế, MIX bid, MAX 3 hàng bid > 10K)
+| 1 | HARVEST | Add | ... | ... | Phrase | 9,000đ | 8,100 | 113 | ... | ... |
+| 2 | LONG-TAIL | Add | ... | ... | Exact | 4,000đ | 320 | 4 | ... | ... |
+... (tiếp tục đến hàng 12-15, MIX cơ chế, MIX bid, MAX 3 hàng bid > 10K)
 
 CẤM TUYỆT ĐỐI:
+- Tách thành nhiều bảng (mỗi cơ chế 1 bảng riêng) — PHẢI gộp tất cả 12-15 keyword vào 1 bảng duy nhất
+- Thêm heading "1. HARVEST - ..." hoặc "## HARVEST" hoặc bất kỳ tiêu đề con nào trước/giữa các hàng
+- Mỗi keyword 1 section — TẤT CẢ phải nằm thành rows liên tiếp trong CÙNG 1 bảng
 - Tất cả keyword cùng bid
 - Tất cả "Tăng đơn dự kiến" cùng %
 - Tất cả "Lượt tìm/tháng" cùng số
