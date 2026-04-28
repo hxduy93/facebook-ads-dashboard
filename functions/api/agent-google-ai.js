@@ -837,6 +837,7 @@ export async function onRequestPost(context) {
           cached: true,
           cached_at: cached.cached_at,
           cache_note: `Kết quả đã lưu từ ${cached.cached_at}. Bấm "Làm mới" để tạo đề xuất mới.`,
+          _enrichment: cached.enrichment || null,
         });
       }
     } catch { /* KV read fail → tiếp tục gọi AI */ }
@@ -1018,6 +1019,14 @@ ${candidatesBlock}
         response: rawResp,
         parsed_json: parsedJson,
         cached_at: nowVN,
+        enrichment: enrichedData ? {
+          candidates_count: enrichedData.candidates.length,
+          anchor: enrichedData.anchor || null,
+          trends_attempted: enrichedData.trendsAttempted,
+          sample_top5: enrichedData.candidates.slice(0, 5).map(c => ({
+            keyword: c.keyword, volume: c.volume, source: c.source, confidence: c.confidence,
+          })),
+        } : null,
       }), { expirationTtl: CACHE_TTL_SECONDS });
     } catch { /* KV write fail → không sao, lần sau gọi AI lại */ }
   }
