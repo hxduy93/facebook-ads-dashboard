@@ -24,6 +24,74 @@ const GROUP_LABELS = {
   NOMA: "NOMA (chăm sóc xe)",
 };
 
+// Few-shot seed keywords per group: AI yếu hay copy nguyên ví dụ → mỗi nhóm
+// dùng seed riêng để keyword đề xuất luôn THUỘC nhóm đang chọn (tránh leak).
+const SEED_KEYWORDS = {
+  MAY_DO: [
+    { mech: "HARVEST", kw: "máy dò nghe lén giá rẻ", match: "Phrase", bid: "9,000đ", vol: 8100, click: 113, reason: "Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác", lift: "+10-15 đơn" },
+    { mech: "LONG-TAIL", kw: "thiết bị dò camera ẩn trong khách sạn", match: "Exact", bid: "4,000đ", vol: 320, click: 4, reason: "Long-tail intent rõ, CPC rẻ, ít cạnh tranh", lift: "+2-3 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "máy phát hiện camera quay lén wifi", match: "Phrase", bid: "7,500đ", vol: 4500, click: 54, reason: "Đối thủ chạy 30d, mình chưa có", lift: "+5 đơn" },
+    { mech: "HARVEST", kw: "máy dò sóng nghe lén doscom", match: "Exact", bid: "16,000đ", vol: 1800, click: 200, reason: "XUẤT SẮC: Brand kw + 6 đơn 30d → phá trần 10K", lift: "+15 đơn" },
+  ],
+  GHI_AM: [
+    { mech: "HARVEST", kw: "máy ghi âm chuyên nghiệp", match: "Phrase", bid: "8,000đ", vol: 6500, click: 78, reason: "Tier 1 intent công sở, CVR ổn", lift: "+8-10 đơn" },
+    { mech: "LONG-TAIL", kw: "máy ghi âm có chức năng dịch tự động", match: "Exact", bid: "5,000đ", vol: 280, click: 6, reason: "Long-tail ngách, CPC rẻ", lift: "+2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "máy ghi âm mini siêu nhỏ pin trâu", match: "Phrase", bid: "6,500đ", vol: 3200, click: 38, reason: "Đối thủ chạy nhiều, mình thiếu", lift: "+4 đơn" },
+    { mech: "HARVEST", kw: "máy ghi âm doscom dr1", match: "Exact", bid: "18,000đ", vol: 2800, click: 315, reason: "XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K", lift: "+20 đơn" },
+  ],
+  DINH_VI: [
+    { mech: "HARVEST", kw: "định vị xe máy không dây", match: "Phrase", bid: "8,000đ", vol: 7200, click: 86, reason: "Tier 1 intent thị trường", lift: "+8 đơn" },
+    { mech: "LONG-TAIL", kw: "thiết bị định vị nhỏ gọn pin trâu 30 ngày", match: "Exact", bid: "5,000đ", vol: 240, click: 5, reason: "Long-tail spec, intent mua rõ", lift: "+2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "định vị mini không dây", match: "Phrase", bid: "7,500đ", vol: 4500, click: 54, reason: "Đối thủ ABC chạy 30d, mình chưa có", lift: "+5 đơn" },
+    { mech: "HARVEST", kw: "định vị doscom chính hãng", match: "Exact", bid: "15,000đ", vol: 1500, click: 168, reason: "XUẤT SẮC: Brand kw + intent mua mạnh", lift: "+12 đơn" },
+  ],
+  CHONG_GHI_AM: [
+    { mech: "HARVEST", kw: "thiết bị chống ghi âm phòng họp", match: "Phrase", bid: "9,000đ", vol: 3800, click: 46, reason: "Tier 1 corporate B2B intent rõ", lift: "+5 đơn" },
+    { mech: "LONG-TAIL", kw: "máy làm nhiễu microphone phòng họp kín", match: "Exact", bid: "4,500đ", vol: 180, click: 3, reason: "Long-tail kỹ thuật, ngách hẹp", lift: "+1-2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "máy chống nghe lén cá nhân", match: "Phrase", bid: "6,000đ", vol: 2400, click: 29, reason: "Đối thủ flag, mình thiếu coverage", lift: "+3 đơn" },
+    { mech: "HARVEST", kw: "máy chống ghi âm doscom", match: "Exact", bid: "17,000đ", vol: 900, click: 100, reason: "XUẤT SẮC: Brand kw B2B premium", lift: "+8 đơn" },
+  ],
+  CAMERA_4G: [
+    { mech: "HARVEST", kw: "camera 4g ngoài trời không dây", match: "Phrase", bid: "8,000đ", vol: 9000, click: 108, reason: "Tier 1 broad intent rõ", lift: "+10 đơn" },
+    { mech: "LONG-TAIL", kw: "camera 4g năng lượng mặt trời chống nước", match: "Exact", bid: "5,500đ", vol: 320, click: 7, reason: "Long-tail spec, ít cạnh tranh", lift: "+2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "camera 4g pin trâu xem từ xa", match: "Phrase", bid: "6,500đ", vol: 3500, click: 42, reason: "Đối thủ chạy phổ biến", lift: "+4 đơn" },
+    { mech: "HARVEST", kw: "camera 4g doscom chính hãng", match: "Exact", bid: "14,000đ", vol: 1200, click: 135, reason: "XUẤT SẮC: Brand kw + intent rõ", lift: "+10 đơn" },
+  ],
+  CAMERA_WIFI: [
+    { mech: "HARVEST", kw: "camera wifi trong nhà 2k", match: "Phrase", bid: "8,000đ", vol: 11000, click: 132, reason: "Tier 1 broad intent gia đình", lift: "+12 đơn" },
+    { mech: "LONG-TAIL", kw: "camera wifi xoay 360 độ nhìn đêm full color", match: "Exact", bid: "5,500đ", vol: 360, click: 8, reason: "Long-tail spec rõ", lift: "+2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "camera wifi không dây pin trâu", match: "Phrase", bid: "6,500đ", vol: 4200, click: 50, reason: "Đối thủ phổ biến, mình thiếu cover", lift: "+5 đơn" },
+    { mech: "HARVEST", kw: "camera wifi doscom", match: "Exact", bid: "13,000đ", vol: 1400, click: 158, reason: "XUẤT SẮC: Brand kw + intent rõ", lift: "+11 đơn" },
+  ],
+  CAMERA_VIDEO_CALL: [
+    { mech: "HARVEST", kw: "camera gọi video 2 chiều cho bố mẹ", match: "Phrase", bid: "8,500đ", vol: 5500, click: 66, reason: "Tier 1 emotional intent rõ", lift: "+7 đơn" },
+    { mech: "LONG-TAIL", kw: "camera trò chuyện với con nhỏ ở nhà từ xa", match: "Exact", bid: "5,000đ", vol: 240, click: 5, reason: "Long-tail family intent", lift: "+2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "camera nói chuyện 2 chiều cho người già", match: "Phrase", bid: "7,000đ", vol: 3000, click: 36, reason: "Đối thủ chạy phổ biến", lift: "+4 đơn" },
+    { mech: "HARVEST", kw: "camera video call doscom da8.1", match: "Exact", bid: "15,000đ", vol: 800, click: 90, reason: "XUẤT SẮC: Brand kw + product code", lift: "+8 đơn" },
+  ],
+  NOMA: [
+    { mech: "HARVEST", kw: "thiết bị chăm sóc xe noma", match: "Phrase", bid: "7,000đ", vol: 2400, click: 29, reason: "Tier 1 brand intent", lift: "+3 đơn" },
+    { mech: "LONG-TAIL", kw: "khăn lau xe siêu sạch noma a002", match: "Exact", bid: "4,000đ", vol: 180, click: 4, reason: "Long-tail brand SKU rõ", lift: "+1-2 đơn" },
+    { mech: "COMPETITOR FLAG", kw: "tẩy ố kính ô tô không bám vân", match: "Phrase", bid: "5,500đ", vol: 1800, click: 22, reason: "Đối thủ flag, mình thiếu", lift: "+2 đơn" },
+    { mech: "HARVEST", kw: "noma 911 chính hãng", match: "Exact", bid: "12,000đ", vol: 600, click: 67, reason: "XUẤT SẮC: Brand kw + intent mua rõ", lift: "+5 đơn" },
+  ],
+};
+
+function buildFewShotKeywordRows(group) {
+  const groupLabel = GROUP_LABELS[group] || "nhóm hiện tại";
+  const seeds = SEED_KEYWORDS[group];
+  if (!seeds) {
+    // ALL hoặc nhóm lạ → để placeholder, AI tự fill
+    return `| 1 | HARVEST | Add | ${groupLabel} | "[keyword thuộc ${groupLabel}]" | Phrase | 9,000đ | 8,100 | 113 | Search term có conversion | +10 đơn |
+| 2 | LONG-TAIL | Add | ${groupLabel} | "[keyword long-tail thuộc ${groupLabel}]" | Exact | 4,000đ | 320 | 4 | Long-tail intent rõ | +2 đơn |
+| 3 | COMPETITOR FLAG | Add | ${groupLabel} | "[keyword đối thủ thuộc ${groupLabel}]" | Phrase | 7,500đ | 4,500 | 54 | Đối thủ chạy mình chưa có | +5 đơn |
+| 4 | HARVEST | Add | ${groupLabel} | "[brand keyword thuộc ${groupLabel}]" | Exact | 16,000đ | 1,800 | 200 | XUẤT SẮC: Brand kw | +12 đơn |`;
+  }
+  return seeds.map((s, i) =>
+    `| ${i + 1} | ${s.mech} | Add | ${groupLabel} | "${s.kw}" | ${s.match} | ${s.bid} | ${s.vol.toLocaleString("en-US")} | ${s.click} | ${s.reason} | ${s.lift} |`
+  ).join("\n");
+}
+
 // Classify SP code (KV inventory) → group
 function classifyByName(name) {
   const n = String(name || "").toLowerCase();
@@ -129,7 +197,7 @@ const MODE_CONFIG = {
 const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
 // Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
@@ -564,10 +632,23 @@ NHẮC LẠI: (1) JSON hợp lệ. (2) 8 nhóm score 1-100. (3) >3 nhóm CẤM c
     case "audit_headline":
       parts.push(`# Audit Headline${groupSuffix}\n## Tổng điểm 6 nhóm\n## Headline rate Thấp + cliché\n## USP chưa cover\n## Top 5 Quick Win`);
       break;
-    case "suggest_keyword":
+    case "suggest_keyword": {
+      const _groupLabel = GROUP_LABELS[group] || "nhóm hiện tại";
+      const _fewShotRows = buildFewShotKeywordRows(group);
       parts.push(`# Đề xuất Từ khoá MỚI${groupSuffix}
 
 🎯 BẠN LÀ Sarah — Senior Google Ads Strategist. Bạn nổi tiếng vì đề xuất KHÔNG đồng đều — mỗi keyword có bid + cơ chế + match RIÊNG dựa trên data.
+
+🚨 RÀNG BUỘC NHÓM SẢN PHẨM (BẮT BUỘC, ƯU TIÊN CAO NHẤT):
+- TẤT CẢ 12-15 keyword đề xuất PHẢI thuộc nhóm "${_groupLabel}" (${group}).
+- Cột "Ad Group" của TẤT CẢ rows = "${_groupLabel}". KHÔNG được khác nhóm.
+- CẤM TUYỆT ĐỐI keyword về sản phẩm khác:
+  • Đang làm "Máy dò" → CẤM keyword về máy ghi âm, định vị, camera, chống ghi âm, NOMA
+  • Đang làm "Máy ghi âm" → CẤM keyword về máy dò, định vị, camera, chống ghi âm, NOMA
+  • Đang làm "Định vị" → CẤM keyword về máy dò, ghi âm, camera, chống ghi âm, NOMA
+  • Tương tự cho 8 nhóm — keyword PHẢI liên quan trực tiếp tới SP của nhóm này
+- Nếu thấy ví dụ trong few-shot có keyword thuộc nhóm khác → BỎ QUA, chỉ học cấu trúc, KHÔNG copy keyword sai nhóm.
+- Hiện tại nhóm = "${_groupLabel}". TẤT CẢ keyword phải xoay quanh chủ đề này.
 
 ═══ QUY TẮC BID (CỰC KỲ QUAN TRỌNG) ═══
 Doscom hiện max bid = 10,000đ/click. CHỈ keyword "XUẤT SẮC" mới được phá trần lên 10-30K.
@@ -628,18 +709,15 @@ Impression Share (IS) ước tính theo bid:
 - Bid XUẤT SẮC (>10K, top position): IS 60-85%
 
 CÔNG THỨC: Click/tháng = Lượt tìm × CTR × IS (làm tròn).
-VÍ DỤ:
-- "máy dò nghe lén giá rẻ" (Phrase, 9K): 8,100 × 4% × 35% ≈ 113 click/tháng
-- "thiết bị dò camera ẩn trong ks" (Exact long-tail, 4K): 320 × 7% × 20% ≈ 4 click/tháng
-- "máy ghi âm doscom dr1" (Exact brand XUẤT SẮC, 18K): 2,800 × 15% × 75% ≈ 315 click/tháng
+VÍ DỤ CÔNG THỨC (chỉ minh họa cách tính, KHÔNG phải gợi ý keyword):
+- (Phrase, 9K): 8,100 × 4% × 35% ≈ 113 click/tháng
+- (Exact long-tail, 4K): 320 × 7% × 20% ≈ 4 click/tháng
+- (Exact brand XUẤT SẮC, 18K): 2,800 × 15% × 75% ≈ 315 click/tháng
 
 LƯU Ý: Nếu IS × CTR × Volume < 1 → ghi "<1" (không round 0).
 
-═══ FEW-SHOT EXAMPLE (chỉ 4 dòng minh họa — output thực phải 12-15 dòng trong CÙNG 1 bảng) ═══
-| 1 | HARVEST | Add | MAY_DO | "máy dò nghe lén giá rẻ" | Phrase | 9,000đ | 8,100 | 113 | Search term có 8 đơn 30d, CVR 4.2% — kw chuẩn xác | +10-15 đơn |
-| 2 | LONG-TAIL | Add | MAY_DO | "thiết bị dò camera ẩn trong ks" | Exact | 4,000đ | 320 | 4 | Long-tail intent rõ, CPC rẻ, ít cạnh tranh | +2-3 đơn |
-| 3 | COMPETITOR FLAG | Add | DINH_VI | "định vị mini không dây" | Phrase | 7,500đ | 4,500 | 54 | Đối thủ ABC chạy 30d, mình chưa có | +5 đơn |
-| 4 | HARVEST | Add | GHI_AM | "máy ghi âm doscom dr1" | Exact | 18,000đ | 2,800 | 315 | XUẤT SẮC: Brand kw + 12 đơn 30d + LP optimize → phá trần 10K | +20 đơn |
+═══ FEW-SHOT EXAMPLE — TẤT CẢ ĐỀU NHÓM "${_groupLabel}" (output thực phải 12-15 dòng cùng nhóm này, KHÔNG copy keyword mà học cấu trúc) ═══
+${_fewShotRows}
 
 ═══ FORMAT OUTPUT (BẮT BUỘC) ═══
 Trả về CHÍNH XÁC 1 (MỘT) bảng markdown duy nhất với 12-15 hàng.
@@ -665,8 +743,10 @@ CẤM TUYỆT ĐỐI:
 - Cùng cơ chế cho 15 hàng
 - Bid > 30K
 - "Xuất sắc" mà không kèm số liệu trong "Lý do"
-- "Lượt tìm/tháng" hoặc "Click dự kiến/tháng" để trống hoặc ghi "N/A" — PHẢI có số cụ thể (hoặc "<1" nếu nhỏ hơn 1)`);
+- "Lượt tìm/tháng" hoặc "Click dự kiến/tháng" để trống hoặc ghi "N/A" — PHẢI có số cụ thể (hoặc "<1" nếu nhỏ hơn 1)
+- ⚠ ĐỀ XUẤT KEYWORD KHÔNG THUỘC NHÓM "${_groupLabel}" — đây là LỖI NGHIÊM TRỌNG NHẤT, TUYỆT ĐỐI KHÔNG VI PHẠM`);
       break;
+    }
     case "suggest_headline":
       parts.push(`# Brief Headline${groupSuffix}\n10 brief với: ký tự count, công thức (AIDA/FAB/PAS), USP nhắc, hypothesis, test plan`);
       break;
