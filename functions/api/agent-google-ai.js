@@ -198,7 +198,7 @@ const MODE_CONFIG = {
 const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
 // Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
-const CACHE_VERSION = "v4";
+const CACHE_VERSION = "v5";
 
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
@@ -1053,6 +1053,8 @@ ${candidatesBlock}
         source: c.source,
         confidence: c.confidence,
       })),
+      suggest_debug: enrichedData.suggestDebug || null,
+      trends_debug: enrichedData.trendsDebug || null,
     } : null,
   });
 }

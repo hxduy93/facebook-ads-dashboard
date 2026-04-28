@@ -35,34 +35,54 @@ function parseGoogleJson(text) {
 // ── Google Suggest ──────────────────────────────────────────────────────
 // Endpoint: ?client=firefox&hl=vi&gl=vn&q=<seed>
 // Response: ["seed", ["sug1", "sug2", ...], [], {...}]
+// Trả về { keywords, status, debug } để diagnose khi fail.
 export async function fetchSuggestions(seed) {
-  if (!seed) return [];
+  if (!seed) return { keywords: [], status: "no_seed" };
   const url = `${SUGGEST_URL}?client=firefox&hl=vi&gl=vn&q=${encodeURIComponent(seed)}`;
   try {
     const r = await fetchWithTimeout(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; DoscomBot/1.0)",
-        Accept: "application/json,text/javascript,*/*",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "*/*",
+        "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.8",
       },
     });
-    if (!r.ok) return [];
-    const json = await r.json();
-    return Array.isArray(json[1]) ? json[1].slice(0, 15) : [];
-  } catch {
-    return [];
+    if (!r.ok) return { keywords: [], status: `http_${r.status}`, debug: `HTTP ${r.status}` };
+    const text = await r.text();
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch (e) {
+      return { keywords: [], status: "parse_fail", debug: `parse fail; sample=${text.slice(0, 120)}` };
+    }
+    if (!Array.isArray(json) || !Array.isArray(json[1])) {
+      return { keywords: [], status: "no_array", debug: `json shape=${JSON.stringify(json).slice(0, 120)}` };
+    }
+    return { keywords: json[1].slice(0, 15), status: "ok" };
+  } catch (e) {
+    return { keywords: [], status: `error_${e.name || "unknown"}`, debug: String(e.message || e).slice(0, 200) };
   }
 }
 
 // Mở rộng seed list → candidate set, dedupe + lower-case
+// Trả về { candidates, perSeed: [{seed, status, count, debug}] }
 export async function expandSeeds(seeds) {
-  if (!Array.isArray(seeds) || seeds.length === 0) return [];
+  if (!Array.isArray(seeds) || seeds.length === 0) return { candidates: [], perSeed: [] };
   const results = await Promise.all(seeds.map(s => fetchSuggestions(s)));
   const dedup = new Map();
-  results.flat().forEach(kw => {
-    const norm = String(kw || "").toLowerCase().trim();
-    if (norm && !dedup.has(norm)) dedup.set(norm, kw);
+  results.forEach(r => {
+    (r.keywords || []).forEach(kw => {
+      const norm = String(kw || "").toLowerCase().trim();
+      if (norm && !dedup.has(norm)) dedup.set(norm, kw);
+    });
   });
-  return Array.from(dedup.values());
+  const perSeed = seeds.map((s, i) => ({
+    seed: s,
+    status: results[i].status,
+    count: (results[i].keywords || []).length,
+    debug: results[i].debug || null,
+  }));
+  return { candidates: Array.from(dedup.values()), perSeed };
 }
 
 // ── Google Trends ───────────────────────────────────────────────────────
@@ -184,12 +204,22 @@ export function pickAnchor(searchTermsArr, trendsScores) {
 
 // ── Top-level: enrich candidate list ────────────────────────────────────
 // Input:  seeds (5-10), searchTermsArr (own data)
-// Output: [{ keyword, volume, source, confidence, trendsScore }]
-//          sorted by volume desc, capped at 50.
+// Output: { candidates, anchor, trendsAttempted, suggestDebug, trendsDebug }
 export async function buildEnrichedCandidates(seeds, searchTermsArr) {
   // Step 1: Suggest expand
-  const candidates = await expandSeeds(seeds);
-  if (candidates.length === 0) return { candidates: [], anchor: null, trendsAttempted: false };
+  const expanded = await expandSeeds(seeds);
+  const candidates = expanded.candidates;
+  const suggestDebug = expanded.perSeed;
+
+  if (candidates.length === 0) {
+    return {
+      candidates: [],
+      anchor: null,
+      trendsAttempted: false,
+      suggestDebug,
+      trendsDebug: { skipped: "no_candidates" },
+    };
+  }
 
   // Step 2: Trends — chỉ gọi cho top 5 candidate xuất hiện cũng trong own data
   // (anchor tốt nhất). Nếu không match được → gọi Trends cho 5 candidate đầu.
@@ -201,7 +231,14 @@ export async function buildEnrichedCandidates(seeds, searchTermsArr) {
     });
   });
   const trendsTargets = (ownMatched.length >= 2 ? ownMatched : candidates).slice(0, 5);
-  const trendsScores = await fetchTrendsScores(trendsTargets);
+  let trendsScores = {};
+  let trendsDebug = { targets: trendsTargets };
+  try {
+    trendsScores = await fetchTrendsScores(trendsTargets);
+    trendsDebug.scores_count = Object.keys(trendsScores).length;
+  } catch (e) {
+    trendsDebug.error = String(e.message || e).slice(0, 200);
+  }
   const anchor = pickAnchor(searchTermsArr, trendsScores);
 
   // Step 3: Score every candidate
@@ -230,5 +267,7 @@ export async function buildEnrichedCandidates(seeds, searchTermsArr) {
     candidates: enriched.slice(0, 50),
     anchor,
     trendsAttempted: Object.keys(trendsScores).length > 0,
+    suggestDebug,
+    trendsDebug,
   };
 }
