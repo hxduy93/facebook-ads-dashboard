@@ -7,6 +7,7 @@
 // }
 
 import { verifySession, hasTestBypass } from "../_middleware.js";
+import { buildEnrichedCandidates } from "../lib/googleKeywordResearch.js";
 
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
@@ -197,7 +198,7 @@ const MODE_CONFIG = {
 const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
 // Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
@@ -841,15 +842,51 @@ export async function onRequestPost(context) {
     } catch { /* KV read fail → tiếp tục gọi AI */ }
   }
 
+  // ── Stage B: Enrich candidates với Google Suggest + Trends + own data ──
+  // Chỉ apply cho suggest_keyword. Các mode khác bỏ qua.
+  let enrichedData = null;
+  if (mode === "suggest_keyword" && SEED_KEYWORDS[group]) {
+    const seeds = SEED_KEYWORDS[group].map(s => s.kw).slice(0, 5);
+    try {
+      enrichedData = await buildEnrichedCandidates(seeds, dataContext.search_terms || []);
+    } catch { enrichedData = null; }
+  }
+
   let aiResult;
   try {
     // Suggest modes: temperature=0 → deterministic (cùng data = cùng kết quả)
     // Audit modes: temperature=0.1-0.3 → cho phép biến đổi nhẹ
     const temperature = isSuggest ? 0 : (cfg.json_output ? 0.1 : 0.3);
+
+    // Augment userPrompt với enriched candidates (nếu có)
+    let finalUserPrompt = userPrompt;
+    if (enrichedData && enrichedData.candidates.length > 0) {
+      const candidatesBlock = enrichedData.candidates.map((c, i) => {
+        const vol = c.volume != null ? c.volume.toLocaleString("en-US") : "?";
+        const trend = c.trendsScore != null ? `, trends=${c.trendsScore}/100` : "";
+        return `${i + 1}. "${c.keyword}" — vol≈${vol} (${c.source}, ${c.confidence})${trend}`;
+      }).join("\n");
+      const anchorInfo = enrichedData.anchor
+        ? `Anchor: "${enrichedData.anchor.keyword}" vol=${enrichedData.anchor.volume.toLocaleString("en-US")} score=${enrichedData.anchor.score}`
+        : "Anchor: không tìm được";
+      finalUserPrompt = userPrompt + `
+
+═══ CANDIDATES TỪ GOOGLE SUGGEST + TRENDS (data thật, ưu tiên dùng) ═══
+${anchorInfo}
+Trends API: ${enrichedData.trendsAttempted ? "OK" : "fallback"}
+Số candidate: ${enrichedData.candidates.length}
+
+${candidatesBlock}
+
+🎯 BẮT BUỘC: Chọn 12-15 keyword TỪ LIST TRÊN (ưu tiên confidence=high trước, sau đó medium).
+   Cột "Lượt tìm/tháng" trong bảng PHẢI lấy số "vol" tương ứng ở list này — KHÔNG tự đoán.
+   Nếu list không đủ 12 keyword → bổ sung thêm bằng kiến thức + ghi rõ trong "Lý do" là "ước lượng".`;
+    }
+
     const aiParams = {
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
+        { role: "user", content: finalUserPrompt },
       ],
       temperature,
       max_tokens: cfg.json_output ? 1500 : 2500,
@@ -997,5 +1034,16 @@ export async function onRequestPost(context) {
     data_used: cfg.data,
     cached: false,
     _debug_merge: _debugMerge,
+    _enrichment: enrichedData ? {
+      candidates_count: enrichedData.candidates.length,
+      anchor: enrichedData.anchor || null,
+      trends_attempted: enrichedData.trendsAttempted,
+      sample_top5: enrichedData.candidates.slice(0, 5).map(c => ({
+        keyword: c.keyword,
+        volume: c.volume,
+        source: c.source,
+        confidence: c.confidence,
+      })),
+    } : null,
   });
 }
