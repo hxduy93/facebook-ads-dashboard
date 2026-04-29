@@ -199,7 +199,7 @@ const MODE_CONFIG = {
 const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
 // Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
-const CACHE_VERSION = "v5";
+const CACHE_VERSION = "v6";
 
 function getCookie(request, name) {
   const cookie = request.headers.get("Cookie") || "";
@@ -275,9 +275,12 @@ function mergeKeywordTables(text) {
   const stripped = lines.filter(raw => {
     const line = raw.trim();
     if (!line) return false;
-    if (/^#{1,6}\s/.test(line)) return false;          // ### heading
-    if (/^\*\*\d+\.\s/.test(line)) return false;        // **1. WORD - ...**
-    if (/^\d+\.\s+\*\*/.test(line)) return false;       // 1. **WORD** - ...
+    if (/^#{1,6}\s/.test(line)) return false;            // ### heading
+    if (/^\*\*\d+\.\s/.test(line)) return false;          // **1. WORD - ...**
+    if (/^\d+\.\s+\*\*/.test(line)) return false;         // 1. **WORD** - ...
+    if (/^\*\*[^*]+\*\*\s*$/.test(line)) return false;    // **Camera 4G - Pin Lâu** (bold only)
+    if (/^_[^_]+_\s*$/.test(line)) return false;          // _italic only_
+    if (/^[A-ZĂÂÊÔƠƯĐ][A-ZĂÂÊÔƠƯĐ0-9\s\-:]+$/.test(line) && line.length < 60) return false; // CAPS HEADING
     return true;
   });
   return stripped.join("\n");
@@ -912,7 +915,7 @@ ${candidatesBlock}
         { role: "user", content: finalUserPrompt },
       ],
       temperature,
-      max_tokens: cfg.json_output ? 1500 : 2500,
+      max_tokens: cfg.json_output ? 3500 : 2500,
     };
     // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
     // có thể không support hoặc throw exception. Prompt đã đủ chặt + parser robust.
