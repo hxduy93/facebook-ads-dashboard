@@ -185,6 +185,7 @@ Cliché TUYỆT ĐỐI tránh: "tốt nhất", "rẻ nhất", "số 1", "uy tín
 const MODE_CONFIG = {
   audit_account:      { skills: ["parent"], data: ["context", "spend", "revenue", "inventory", "ga"], model: MODEL_FAST },
   audit_account_json: { skills: ["parent"], data: ["context", "spend", "revenue", "inventory", "ga"], model: MODEL_FAST, json_output: true },
+  analyze_ga:         { skills: ["parent"], data: ["ga", "context", "spend"], model: MODEL_FAST },
   audit_keyword:      { skills: ["keyword"], data: ["context", "search_terms", "spend", "inventory"], model: MODEL_FAST },
   audit_gdn:          { skills: ["gdn"], data: ["context", "ads", "placement", "spend", "inventory"], model: MODEL_FAST },
   audit_headline:     { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_FAST },
@@ -642,6 +643,47 @@ NHẮC LẠI: (1) JSON hợp lệ. (2) 8 nhóm score 1-100. (3) >3 nhóm CẤM c
       break;
     case "audit_keyword":
       parts.push(`# Audit Từ khoá${groupSuffix}\n## Phân bậc Tier 1/2/3 (số kw, % chi)\n## Top 10 từ khoá lỗ\n## Top 10 search term ngon (HARVEST candidates)\n## Top 5 Quick Win`);
+      break;
+    case "analyze_ga":
+      parts.push(`# Phân tích Google Analytics${groupSuffix}
+
+🎯 BẠN LÀ chuyên gia Web Analytics 8 năm kinh nghiệm tại agency. Nhiệm vụ: đọc data GA dưới đây và đưa ra phân tích THỰC TẾ + ACTION PLAN cụ thể.
+
+═══ DATA GA ═══
+${dataContext.ga_group ? "ga_group (đã filter theo nhóm SP đang chọn): " + JSON.stringify(dataContext.ga_group, null, 1) : "(chưa có ga_group, có thể group=ALL hoặc chưa connect GA)"}
+
+${dataContext.ga_device ? "ga_device (toàn site, 30 ngày): " + JSON.stringify(dataContext.ga_device, null, 1) : ""}
+
+═══ CẤU TRÚC OUTPUT BẮT BUỘC ═══
+
+## 1. Sức khoẻ tổng quan
+1-2 câu tóm tắt, BẮT BUỘC có ít nhất 3 con số cụ thể (sessions, ER, BR, duration).
+
+## 2. Top 3 vấn đề/cảnh báo
+List 3 issues lớn nhất:
+- LP nào BR > 60% mà sessions cao? (= burn cao)
+- Mobile vs Desktop có chênh lệch ER/duration > 2x không? (= mobile UX kém)
+- Tập trung địa lý quá hẹp? (vd HCM > 70% sessions = phụ thuộc 1 thị trường)
+Mỗi vấn đề: 1 dòng + số liệu cụ thể.
+
+## 3. Action plan (5 bước)
+5 actions cụ thể, mỗi action:
+- WHAT: làm gì
+- WHY: dựa trên số liệu nào (quote số từ data)
+- IMPACT: dự kiến cải thiện gì (sessions, conv, ER, ...)
+
+## 4. Top 3 trang đáng đầu tư hơn
+3 LP có "high traffic + high engagement" → tăng spend hoặc làm nội dung tương tự.
+
+## 5. Top 3 trang cần audit gấp
+3 LP có "high traffic + low engagement" → ưu tiên A/B test, tối ưu copy/CTA.
+
+═══ QUY TẮC ═══
+- MỖI insight PHẢI có con số cụ thể từ data (không nói chung chung)
+- Action phải có HOW cụ thể (vd "Thêm CTA sticky bottom-right ở trang /thiet-bi-do-*", KHÔNG nói "tối ưu LP")
+- Nếu data nhỏ (sessions < 100/LP) → ghi rõ "data ít, kết luận tham khảo"
+- BR cao 1 mình KHÔNG có nghĩa LP xấu — combine với duration: BR cao + dur >120s = single-page-success (đủ thông tin), BR cao + dur < 30s = mismatch
+- Vietnam-specific: HCM/HN traffic thường convert tốt hơn tỉnh ~2x — quote nếu thấy pattern này`);
       break;
     case "audit_gdn":
       parts.push(`# Audit GDN/PMax${groupSuffix}\n## Tổng điểm 6 nhóm\n## Asset disapproved\n## Placement lãng phí\n## Top 5 Quick Win`);
