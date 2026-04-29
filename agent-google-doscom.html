@@ -97,6 +97,27 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .profit-table .neg{color:#dc2626;font-weight:500}
 .profit-table tr:hover td{background:#f9fafb}
 .profit-table tr.total:hover td{background:#fde68a}
+/* ── GA Overview ── */
+.ga-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.ga-card{padding:14px;border:1px solid #e5e7eb;border-radius:8px;background:linear-gradient(135deg,#fafbff 0%,#f0f4ff 100%)}
+.ga-card .label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.ga-card .value{font-size:22px;font-weight:700;color:#1e3a8a;margin-top:4px}
+.ga-card .delta{font-size:11px;color:#059669;margin-top:2px}
+.ga-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.ga-bar-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12.5px}
+.ga-bar-row .lbl{flex:0 0 110px;color:#374151;text-transform:capitalize}
+.ga-bar-row .bar{flex:1;height:18px;background:#f3f4f6;border-radius:3px;position:relative;overflow:hidden}
+.ga-bar-row .bar .fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#3b82f6,#1e40af);border-radius:3px}
+.ga-bar-row .val{flex:0 0 80px;text-align:right;font-weight:600;color:#111827}
+.ga-lp-table{width:100%;border-collapse:collapse;font-size:12px}
+.ga-lp-table th,.ga-lp-table td{padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:left}
+.ga-lp-table th{background:#f9fafb;font-weight:600;color:#374151;font-size:11px;text-transform:uppercase;letter-spacing:0.3px}
+.ga-lp-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.ga-lp-table .group-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;background:#dbeafe;color:#1e40af}
+.ga-lp-table .er-good{color:#059669;font-weight:600}
+.ga-lp-table .er-bad{color:#dc2626;font-weight:600}
+.ga-lp-table .er-mid{color:#d97706;font-weight:600}
+.ga-loading{padding:30px;text-align:center;color:#9ca3af}
 </style>
 </head>
 <body>
@@ -157,6 +178,16 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     </h2>
     <div id="profit-table-wrap" style="overflow-x:auto">
       <div style="text-align:center;padding:30px;color:#9ca3af">Đang tải data...</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Tổng quan Google Analytics
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— 30 ngày · cập nhật mỗi 30 phút</span>
+      <button onclick="loadGAOverview(true)" style="float:right;padding:5px 12px;font-size:12px;border:1px solid #3b82f6;background:white;color:#3b82f6;border-radius:5px;cursor:pointer">🔄 Làm mới</button>
+    </h2>
+    <div id="ga-overview-body">
+      <div class="ga-loading">Đang tải data Google Analytics...</div>
     </div>
   </div>
 
@@ -814,7 +845,152 @@ async function refreshAll() {
 }
 
 function onFilterChange() { refreshAll(); }
-window.addEventListener('DOMContentLoaded', refreshAll);
+
+// ── GA OVERVIEW ──
+const GA_GROUP_LABELS = {
+  CAMERA_VIDEO_CALL: "Video call",
+  CAMERA_4G: "Camera 4G",
+  CAMERA_WIFI: "Camera WiFi",
+  MAY_DO: "Máy dò",
+  GHI_AM: "Ghi âm",
+  DINH_VI: "Định vị",
+  CHONG_GHI_AM: "Chống ghi âm",
+  NOMA: "NOMA",
+  OTHER: "Khác",
+};
+
+function fmtNum(n) {
+  if (n == null || isNaN(n)) return "—";
+  return Number(n).toLocaleString("vi-VN");
+}
+function fmtPct(n) {
+  if (n == null || isNaN(n)) return "—";
+  return (Number(n) * 100).toFixed(1) + "%";
+}
+function fmtDur(s) {
+  if (!s) return "—";
+  const m = Math.floor(s / 60), sec = Math.round(s % 60);
+  return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
+}
+function erClass(er) {
+  if (er == null) return "";
+  if (er >= 0.55) return "er-good";
+  if (er >= 0.40) return "er-mid";
+  return "er-bad";
+}
+
+async function loadGAOverview(forceRefresh = false) {
+  const body = document.getElementById('ga-overview-body');
+  if (!body) return;
+  body.innerHTML = `<div class="ga-loading">Đang tải data Google Analytics...</div>`;
+  try {
+    const url = `/api/ga-overview?days=30${forceRefresh ? '&force_refresh=1' : ''}`;
+    const r = await fetch(url, { credentials: 'same-origin' });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      body.innerHTML = `<div class="ga-loading" style="color:#dc2626">⚠ Không tải được GA: ${err.error || r.status}</div>`;
+      return;
+    }
+    const j = await r.json();
+    if (!j.ok) {
+      body.innerHTML = `<div class="ga-loading" style="color:#dc2626">⚠ ${j.error || 'GA error'}</div>`;
+      return;
+    }
+    renderGAOverview(j.data, j.fetched_at, j.cached);
+  } catch (e) {
+    body.innerHTML = `<div class="ga-loading" style="color:#dc2626">⚠ Lỗi: ${e.message}</div>`;
+  }
+}
+
+function renderGAOverview(d, fetchedAt, cached) {
+  const body = document.getElementById('ga-overview-body');
+  const t = d.totals || {};
+  const lps = d.top_landing_pages || [];
+  const devs = d.device_breakdown || [];
+  const geos = d.geo_breakdown || [];
+
+  // Cards
+  const totalSessions = Number(t.sessions) || 0;
+  const totalUsers = Number(t.totalUsers) || 0;
+  const newUsers = Number(t.newUsers) || 0;
+  const er = Number(t.engagementRate) || 0;
+  const dur = Number(t.averageSessionDuration) || 0;
+  const pps = Number(t.screenPageViewsPerSession) || 0;
+  const mobileSessions = devs.find(x => x.deviceCategory === 'mobile')?.sessions || 0;
+  const mobilePct = totalSessions > 0 ? (mobileSessions / devs.reduce((s, x) => s + (x.sessions || 0), 0)) : 0;
+
+  const cardsHtml = `
+    <div class="ga-cards">
+      <div class="ga-card"><div class="label">Sessions</div><div class="value">${fmtNum(totalSessions)}</div></div>
+      <div class="ga-card"><div class="label">Users</div><div class="value">${fmtNum(totalUsers)}</div><div class="delta">New: ${fmtNum(newUsers)} (${totalUsers ? Math.round(newUsers/totalUsers*100) : 0}%)</div></div>
+      <div class="ga-card"><div class="label">Engagement</div><div class="value">${fmtPct(er)}</div></div>
+      <div class="ga-card"><div class="label">Avg duration</div><div class="value">${fmtDur(dur)}</div></div>
+      <div class="ga-card"><div class="label">Pages/Session</div><div class="value">${pps.toFixed(2)}</div></div>
+      <div class="ga-card"><div class="label">Mobile share</div><div class="value">${(mobilePct * 100).toFixed(1)}%</div></div>
+    </div>
+  `;
+
+  // Top LP table
+  const lpHtml = `
+    <div style="margin-bottom:16px">
+      <h3 style="margin:0 0 8px;font-size:14px;color:#374151;font-weight:600">📄 Top Landing Pages</h3>
+      <table class="ga-lp-table">
+        <thead>
+          <tr><th>Landing Page</th><th>Nhóm</th><th class="num">Sessions</th><th class="num">Engagement</th><th class="num">Bounce</th><th class="num">Duration</th></tr>
+        </thead>
+        <tbody>
+          ${lps.map(lp => `
+            <tr>
+              <td title="${lp.landingPage}">${lp.landingPage.length > 50 ? lp.landingPage.slice(0, 50) + '…' : lp.landingPage}</td>
+              <td><span class="group-tag">${GA_GROUP_LABELS[lp.group] || lp.group}</span></td>
+              <td class="num">${fmtNum(lp.sessions)}</td>
+              <td class="num ${erClass(lp.engagementRate)}">${fmtPct(lp.engagementRate)}</td>
+              <td class="num">${fmtPct(lp.bounceRate)}</td>
+              <td class="num">${fmtDur(lp.averageSessionDuration)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  // Device + Geo bars (2 cols)
+  const maxDev = Math.max(...devs.map(d => d.sessions || 0), 1);
+  const maxGeo = Math.max(...geos.map(g => g.sessions || 0), 1);
+  const barsHtml = `
+    <div class="ga-cols">
+      <div>
+        <h3 style="margin:0 0 8px;font-size:14px;color:#374151;font-weight:600">📱 Device</h3>
+        ${devs.map(dv => `
+          <div class="ga-bar-row">
+            <div class="lbl">${dv.deviceCategory}</div>
+            <div class="bar"><div class="fill" style="width:${(dv.sessions/maxDev)*100}%"></div></div>
+            <div class="val">${fmtNum(dv.sessions)} · ${fmtPct(dv.engagementRate)}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div>
+        <h3 style="margin:0 0 8px;font-size:14px;color:#374151;font-weight:600">🌏 Top thành phố</h3>
+        ${geos.map(g => `
+          <div class="ga-bar-row">
+            <div class="lbl">${g.city || '(unknown)'}</div>
+            <div class="bar"><div class="fill" style="width:${(g.sessions/maxGeo)*100}%"></div></div>
+            <div class="val">${fmtNum(g.sessions)} · ${fmtPct(g.engagementRate)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  const fetchedNote = `<div style="margin-top:12px;font-size:11px;color:#9ca3af;text-align:right">${cached ? '📌 Cached' : '🔄 Live'} · cập nhật ${fetchedAt || 'mới'} · ${d.period_days} ngày</div>`;
+
+  body.innerHTML = cardsHtml + lpHtml + barsHtml + fetchedNote;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  refreshAll();
+  loadGAOverview(false);
+});
 </script>
 </body>
 </html>

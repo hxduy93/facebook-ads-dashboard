@@ -212,6 +212,110 @@ export async function getDeviceBreakdown(env, days = 30) {
   return flattenRows(report);
 }
 
+// ── URL → product group classifier ───────────────────────────────────────
+// Doscom's site uses Vietnamese-slug URLs. Map LP path → product group key.
+const URL_PATTERNS = [
+  // Camera 4G (sub-folder của thiet-bi-camera)
+  { regex: /thiet-bi-camera\/(camera-nang-luong-mat-troi|camera-4g|nlmt|khong-day|khong-wifi)/i, group: "CAMERA_4G" },
+  { regex: /(camera-4g|camera-nang-luong-mat-troi|camera-sim)/i, group: "CAMERA_4G" },
+  // Camera Video Call (DA8.1)
+  { regex: /(camera-video-call|goi-2-chieu|goi-video|da8|da-8|video-call|tro-chuyen)/i, group: "CAMERA_VIDEO_CALL" },
+  // Camera WiFi (mặc định cho thiet-bi-camera ko match cái khác)
+  { regex: /(camera-wifi|cam-wifi|camera-trong-nha|camera-ip|thiet-bi-camera)/i, group: "CAMERA_WIFI" },
+  // Máy dò
+  { regex: /(thiet-bi-do|may-do|do-nghe-len|do-camera-an|phat-hien-thiet-bi)/i, group: "MAY_DO" },
+  // Máy ghi âm
+  { regex: /(thiet-bi-ghi-am|ghi-am|may-ghi-am|recorder)/i, group: "GHI_AM" },
+  // Định vị (đặt sau Máy dò để tránh "do-dinh-vi" match nhầm)
+  { regex: /(thiet-bi-dinh-vi|dinh-vi-gps|dinh-vi|tracker|gps)/i, group: "DINH_VI" },
+  // Chống ghi âm
+  { regex: /(chong-ghi-am|chong-nghe-len|nhieu-song)/i, group: "CHONG_GHI_AM" },
+  // NOMA
+  { regex: /(noma|cham-soc-xe|tay-o-kinh|cham-soc-o-to)/i, group: "NOMA" },
+];
+
+export function classifyByUrl(url) {
+  if (!url) return "OTHER";
+  const path = String(url).toLowerCase();
+  for (const { regex, group } of URL_PATTERNS) {
+    if (regex.test(path)) return group;
+  }
+  return "OTHER";
+}
+
+// ── Group-filtered engagement (cho audit per-group) ───────────────────────
+// Filter rows từ getEngagementByLandingPage theo URL pattern của group.
+// Trả về { rows, summary } - summary aggregated metrics weighted by sessions.
+export async function getEngagementByGroup(env, group, days = 7) {
+  if (!group || group === "ALL") return null;
+  const allRows = await getEngagementByLandingPage(env, days, 50); // top 50 LP
+
+  const groupRows = allRows.filter(r => classifyByUrl(r.landingPage) === group);
+  if (groupRows.length === 0) {
+    return { rows: [], summary: null, total_lp_count: 0 };
+  }
+
+  // Weighted aggregate by sessions
+  const totalSessions = groupRows.reduce((s, r) => s + (Number(r.sessions) || 0), 0);
+  if (totalSessions === 0) return { rows: groupRows, summary: null, total_lp_count: groupRows.length };
+
+  let weightedER = 0, weightedBR = 0, weightedDur = 0, totalConv = 0;
+  for (const r of groupRows) {
+    const w = (Number(r.sessions) || 0) / totalSessions;
+    weightedER += (Number(r.engagementRate) || 0) * w;
+    weightedBR += (Number(r.bounceRate) || 0) * w;
+    weightedDur += (Number(r.averageSessionDuration) || 0) * w;
+    totalConv += Number(r.conversions) || 0;
+  }
+
+  return {
+    rows: groupRows.slice(0, 5), // top 5 LP của group
+    summary: {
+      total_sessions: totalSessions,
+      total_conversions: totalConv,
+      avg_engagement_rate: Math.round(weightedER * 1000) / 1000,
+      avg_bounce_rate: Math.round(weightedBR * 1000) / 1000,
+      avg_session_duration_sec: Math.round(weightedDur * 10) / 10,
+      conversion_rate: totalSessions > 0 ? Math.round((totalConv / totalSessions) * 10000) / 10000 : 0,
+    },
+    total_lp_count: groupRows.length,
+  };
+}
+
+// ── GA Overview (cho Phase 2 dashboard tab) ───────────────────────────────
+export async function getGAOverview(env, days = 30) {
+  const [totals, topLPs, devices, geos] = await Promise.all([
+    runReport(env, {
+      dateRanges: [{ startDate: `${days}daysAgo`, endDate: "today" }],
+      metrics: [
+        { name: "sessions" },
+        { name: "totalUsers" },
+        { name: "newUsers" },
+        { name: "engagementRate" },
+        { name: "averageSessionDuration" },
+        { name: "screenPageViewsPerSession" },
+      ],
+    }).then(flattenRows).then(r => r[0] || {}),
+    getEngagementByLandingPage(env, days, 10),
+    getDeviceBreakdown(env, days),
+    getGeoBreakdown(env, days, 8),
+  ]);
+
+  // Annotate top LPs với group classification
+  const topLPsWithGroup = topLPs.map(lp => ({
+    ...lp,
+    group: classifyByUrl(lp.landingPage),
+  }));
+
+  return {
+    period_days: days,
+    totals,
+    top_landing_pages: topLPsWithGroup,
+    device_breakdown: devices,
+    geo_breakdown: geos,
+  };
+}
+
 // 4. Geo breakdown (cho skill mới Geo Performance)
 export async function getGeoBreakdown(env, days = 30, limit = 10) {
   const report = await runReport(env, {

@@ -8,6 +8,7 @@
 
 import { verifySession, hasTestBypass } from "../_middleware.js";
 import { buildEnrichedCandidates } from "../lib/googleKeywordResearch.js";
+import { getEngagementByGroup, getDeviceBreakdown } from "../lib/googleAnalytics.js";
 
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
@@ -182,8 +183,8 @@ Cliché TUYỆT ĐỐI tránh: "tốt nhất", "rẻ nhất", "số 1", "uy tín
 
 // Tat ca mode chay MODEL_FAST (Llama 3.1 8B) - nhanh, it timeout
 const MODE_CONFIG = {
-  audit_account:      { skills: ["parent"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST },
-  audit_account_json: { skills: ["parent"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST, json_output: true },
+  audit_account:      { skills: ["parent"], data: ["context", "spend", "revenue", "inventory", "ga"], model: MODEL_FAST },
+  audit_account_json: { skills: ["parent"], data: ["context", "spend", "revenue", "inventory", "ga"], model: MODEL_FAST, json_output: true },
   audit_keyword:      { skills: ["keyword"], data: ["context", "search_terms", "spend", "inventory"], model: MODEL_FAST },
   audit_gdn:          { skills: ["gdn"], data: ["context", "ads", "placement", "spend", "inventory"], model: MODEL_FAST },
   audit_headline:     { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_FAST },
@@ -600,14 +601,26 @@ function buildUserPrompt(mode, question, dataContext, group, timeRange) {
 
 ═══ CHAIN-OF-THOUGHT ═══
 Trước khi sinh JSON, mentally trả lời:
-1. Tracking: Tổng spend = ? Tổng revenue Pancake = ? Match rate ~ ?% → score
+1. Tracking: Tổng spend = ? Tổng revenue Pancake = ? Match rate ~ ?% → score.
+   ⭐ Nếu có ga_group.summary.total_sessions → triangulate Ads / GA / Pancake → match 3 chiều, lệch >20% giữa Ads & GA = giảm tracking score 15-20đ
 2. Profit: Margin = (Revenue - Cost - VAT - Spend) / Revenue. >30%=80, 0-30%=50, lỗ=20-40
 3. Waste: CTR top campaigns? CPC tối đa? Có campaign CPC > 3x trung bình → 30
 4. RSA: bao nhiêu ad? mỗi ad bao nhiêu headline? Diversity → score
 5. KW Structure: search terms phân tier 1/2/3 ratio? Tier 3 nhiều = lãng phí → 30-50
-6. Landing: 50 mặc định + note "cần GA"
+6. Landing: ⭐ ƯU TIÊN data GA THẬT từ ga_group.summary.
+   - avg_engagement_rate >55% = Landing 75-85đ ✅
+   - 40-55% = 50-65đ
+   - 30-40% = 35-45đ ⚠
+   - <30% = 20-30đ 🔴
+   - avg_session_duration_sec <60s + bounce >65% = burn LP → score ≤ 35
+   - Nếu KHÔNG có ga_group → 50 mặc định + note "ga not connected"
 7. Budget: spend nhóm cao nhất / tổng. >70% = quá tập trung → 30. <40% mỗi nhóm = cân = 70+
 8. Compliance: 70 mặc định nếu không có flag
+
+═══ DATA GA (nếu có ga_group) — DÙNG TRỰC TIẾP TRONG NOTE ═══
+- Trong note "landing" PHẢI quote số GA cụ thể: "GA: ER 38.6%, BR 61.4%, dur 98s — LP yếu giữ chân"
+- Trong note "tracking" có ga_group.summary.total_sessions thì PHẢI so sánh Ads conv / GA sessions / Pancake order
+- Nếu ga_device cho thấy mobile dominant (>70%) + ER mobile thấp → trong top_findings thêm action "Audit mobile UX/landing"
 
 ═══ FEW-SHOT EXAMPLE ═══
 INPUT giả định: spend=20M, revenue=50M, group="MAY_DO", CTR avg=2.3%, CPC avg=8K
@@ -810,6 +823,15 @@ export async function onRequestPost(context) {
     tasks.push(fetchJson(origin, "/data/google-ads-placement.json", cookieHeader).then(j => dataContext.placement = compactPlacement(j, 15, group, _perCampaignFromCtx)));
   }
   if (cfg.data.includes("inventory") && env.INVENTORY) tasks.push(fetchInventoryCompact(env, group).then(items => dataContext.inventory = items));
+  // GA data — chỉ fetch khi credential available + group != ALL
+  if (cfg.data.includes("ga") && env.GA_SERVICE_ACCOUNT_JSON && env.GA_PROPERTY_ID && group !== "ALL") {
+    tasks.push(
+      getEngagementByGroup(env, group, 30).then(g => { if (g) dataContext.ga_group = g; }).catch(() => {})
+    );
+    tasks.push(
+      getDeviceBreakdown(env, 30).then(d => { dataContext.ga_device = d; }).catch(() => {})
+    );
+  }
 
   await Promise.all(tasks);
   const systemPrompt = buildSystemPrompt(skills, group, !!cfg.json_output);
