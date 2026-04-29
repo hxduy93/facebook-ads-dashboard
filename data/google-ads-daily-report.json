@@ -1,491 +1,149 @@
 {
-  "generated_at": "2026-04-25 02:46",
-  "period": {
-    "start": "2026-03-25",
-    "end": "2026-04-23"
-  },
+  "generated_at": "2026-04-29 07:30",
+  "period": {"start": "2026-03-30", "end": "2026-04-28"},
   "model": "claude-opus-4-7",
   "version": "2.0",
-  "ga_account": {
-    "id": "477-705-2298",
-    "name": "MHDI"
-  },
-  "score": 64,
+  "ga_account": {"id": "477-705-2298", "name": "MHDI"},
+
+  "score": 72,
   "grade": "C",
   "score_breakdown": [
-    {
-      "dimension": "Conversion tracking",
-      "score": 5,
-      "max": 5,
-      "status": "OK",
-      "note": "Pancake Website (W+Z+H) 278.6tr / spend 105.8tr = 263% spend; 134 đơn/30d"
-    },
-    {
-      "dimension": "Campaign structure",
-      "score": 4,
-      "max": 5,
-      "status": "OK",
-      "note": "22 camp / 8 category; OTHER chiếm 3.8% spend (<10%, OK)"
-    },
-    {
-      "dimension": "Keyword health",
-      "score": 3,
-      "max": 5,
-      "status": "WARN",
-      "note": "5 match type đầy đủ (EXACT/PHRASE/BROAD/NEAR_PHRASE/NEAR_EXACT) nhưng CTR Search trung bình 4.34% chưa vượt ngưỡng 5%"
-    },
-    {
-      "dimension": "Negative keyword hygiene",
-      "score": 1,
-      "max": 5,
-      "status": "CRITICAL",
-      "note": "15 search term spend cao 0 conv chưa add negative — tổng 2.6tr/30d (>10 item → score 1)"
-    },
-    {
-      "dimension": "Ad copy / RSA",
-      "score": 3,
-      "max": 5,
-      "status": "WARN",
-      "note": "RSA chỉ 1 ad (9.6tr CTR 1.17%) — thiếu biến thể; DISPLAY_BANNER 29 ad CTR 0.93%"
-    },
-    {
-      "dimension": "GDN banner health",
-      "score": 3,
-      "max": 5,
-      "status": "WARN",
-      "note": "3 banner CTR <0.2% (toàn 728x90/160x600); money_pit_ads rỗng. Top spend banner CTR ~1.3% còn ổn"
-    },
-    {
-      "dimension": "GDN placement hygiene",
-      "score": 5,
-      "max": 5,
-      "status": "OK",
-      "note": "top_waste_placements rỗng theo định nghĩa (clicks>0). LƯU Ý: nhóm xổ số (xosodaiphat/az24/xoso.com.vn) đang ăn ~2.9tr/30d audience không match — vẫn nên exclude"
-    },
-    {
-      "dimension": "Impression share",
-      "score": 3,
-      "max": 5,
-      "status": "DATA_GAP",
-      "note": "Windsor chưa expose impression_share metric — cần fetch riêng"
-    },
-    {
-      "dimension": "Spend efficiency",
-      "score": 4,
-      "max": 5,
-      "status": "OK",
-      "note": "ROAS proxy 2.63x trong band 2-3x (target 3x) — borderline"
-    },
-    {
-      "dimension": "Trend momentum",
-      "score": 1,
-      "max": 5,
-      "status": "WARN",
-      "note": "2 camp tăng vs 5 camp giảm 7d — momentum nghiêng âm; RMK Camera wifi -69%, Cạo Râu -56%"
-    }
+    {"dimension": "Conversion tracking", "score": 5, "max": 5, "status": "OK", "note": "Pancake Website rev 30d = 279.2tr · 138 đơn · = 267% spend (104.6tr) — tracking healthy, gộp 3 nguồn WEBSITE+ZALO_OA+HOTLINE đầy đủ."},
+    {"dimension": "Campaign structure", "score": 4, "max": 5, "status": "OK", "note": "22 campaigns × 8 category active (MAY_DO, DINH_VI, CAMERA_4G, CAMERA_WIFI, GHI_AM, CAMERA_VIDEO_CALL, CHONG_GHI_AM, OTHER). OTHER chỉ 3.3% spend (3.4tr) — không bị nhiễu. Thiếu mảng NOMA chưa có camp Google."},
+    {"dimension": "Keyword health", "score": 4, "max": 5, "status": "OK", "note": "Mix EXACT (31.4tr · 79 conv) + PHRASE (8.5tr) + BROAD (29tr · 59 conv) + NEAR_PHRASE đủ. Search network CTR 4.34% (sát target 5%); category GHI_AM CTR 5.7% và OTHER 10.69% là điểm sáng."},
+    {"dimension": "Negative keyword hygiene", "score": 1, "max": 5, "status": "CRITICAL", "note": "15 search term thuộc negative_keyword_gap với spend ≥ 130k/30d và 0 conv. Tổng waste ~2.58tr/30d. Term có brand đối thủ (philips/sony) hoặc broad-intent (camera không dây, định vị gps) chưa add negative đầy đủ."},
+    {"dimension": "Ad copy / RSA", "score": 4, "max": 5, "status": "OK", "note": "Có mix RSA (1 ad · 9.6tr · CTR 1.17%) + DISPLAY_BANNER (29 ad · 4.3tr · CTR 0.93%) + OTHER format (267 ad · 89.7tr · CTR 1.53% — Shopping/Performance Max). worst_performing_banners chỉ 3 ad, spend rất nhỏ (<8k/ad) — chưa nguy hiểm."},
+    {"dimension": "GDN banner health", "score": 3, "max": 5, "status": "WARN", "note": "3 banner CTR < 0.15% (RMK Camera 4G 728x90, RMK định vị 160x600, RMK Camera mini 160x600). money_pit_ads rỗng. Top spend banner 300x250.gif (RMK chống ghi âm · CTR 1.31%) hoạt động OK — banner skyscraper 160x600/leaderboard 728x90 đang yếu."},
+    {"dimension": "GDN placement hygiene", "score": 3, "max": 5, "status": "WARN", "note": "top_waste_placements rỗng (không có placement spend cao 0 click). Nhưng 15 placement low_ctr (CTR 0.09-0.47%) tổng spend ~1.13tr/30d — chủ yếu site xổ số/tin tức (xsmn.mobi, xskt.com.vn, dantri.com.vn, vietnamnet.vn) traffic không match intent."},
+    {"dimension": "Impression share", "score": 3, "max": 5, "status": "DATA_GAP", "note": "Windsor connector chưa pull metrics impression_share / search_lost_to_budget — chưa chấm chính xác. Default 3."},
+    {"dimension": "Spend efficiency", "score": 4, "max": 5, "status": "OK", "note": "ROAS proxy 2.67x (rev 279.2tr / spend 104.6tr) — gần target 3x, tăng từ 2.63x ngày 25/04. Status borderline: cần leverage thêm pull Zalo/Hotline post-click không count."},
+    {"dimension": "Trend momentum", "score": 5, "max": 5, "status": "OK", "note": "5 camp trending up (Cam NLMT +367.6%, RMK NLMT #2 +322.6%, RMK ghi âm #2 +232.5%, RMK Camera 4G +86.3%, RMK chống ghi âm +82.5%) vs 3 trending down (Máy Cạo Râu -88.3%, Shopping ĐV -52.5%, RMK Camera wifi -38.2%). Up > down rõ rệt."}
   ],
-  "headline": "Score 64/100 (C) · ROAS 2.63x — Negative keyword + lottery placement là 2 lỗ rò lớn nhất (~5.4tr/30d)",
-  "verdict": "ROAS Website 2.63x (278.6tr / 105.8tr) đã hồi từ 2.47x (báo cáo trước) lên band 2-3x nhưng vẫn dưới target 3x. Nghẽn lớn: 15 term chưa add negative (2.6tr/30d), lottery placements xosodaiphat/az24/xoso.com.vn ngốn 2.9tr/30d audience không match. Trend 7d nghiêng âm (2 up vs 5 down). Tổng có thể tiết kiệm ~6.3tr/30d qua 5 action top.",
+
+  "headline": "Score 72/100 (C) ↑8 điểm vs 25/04 · ROAS 2.67x sát target — 15 negative keyword gap đang rò ~2.58tr/30d là vấn đề lớn nhất",
+  "verdict": "Tài khoản MHDI cải thiện rõ so với tuần trước: ROAS Pancake Website tăng 2.63→2.67x (rev 279.2tr / spend 104.6tr · 138 đơn), 5/3 camp trend tăng-giảm (Camera NLMT bứt phá +367%, RMK ghi âm +232%). Lỗ rò chính tập trung ở keyword (15 term gap waste 2.58tr/30d) và placement xổ số/tin tức (1.13tr CTR < 0.5%). Cấu trúc 22 campaign × 8 category healthy, banner RMK 300x250 ổn nhưng skyscraper 160x600 đang chết.",
+
   "top_actions": [
     {
       "category": "KEYWORD",
       "priority": 1,
-      "action": "Add negative keyword 'máy nghe lén' (broad match) cho 4 camp: Search TB Dò Nghe Lén, Search TB Ghi Âm, Search TB Chống Ghi Âm, Shopping 6/6 ĐV",
-      "reason": "Spend 250.087đ/30d, 59 click, 0 conv, status NONE. Intent người tìm là MUA thiết bị nghe lén — ngược với SP của shop (máy DÒ nghe lén D1). Mismatch 100%.",
-      "estimated_saving_vnd": 250000,
+      "action": "Add negative keyword 'máy cạo râu philips' (level shared list MHDI) để chặn lan từ camp 'Shopping - 6/6 - ĐV' và '7/3/26 Search - Máy Cạo Râu'",
+      "reason": "Spend 159.1k/30d · 35 click · 0 conv · CTR 3.10% · match EXACT+PHRASE+NEAR_PHRASE · status NONE. Term brand đối thủ (Philips) — không liên quan SP Doscom, intent rõ ràng irrelevant. Camp Máy Cạo Râu lại đang trend giảm -88% nên cứ chặn brand-conflict là cleanest cut.",
+      "estimated_saving_vnd": 159125,
       "risk": "low",
-      "time_cost": "5 phút trong Google Ads UI (Tools → Negative keyword lists)"
+      "time_cost": "5 phút trong Google Ads UI - Tools > Shared Library > Negative keyword lists"
     },
     {
       "category": "CREATIVE",
       "priority": 2,
-      "action": "Pause banner '300x250.gif' ad_id 751153590183 trong camp 'RMK - Camera wifi' và A/B test biến thể mới",
-      "reason": "Spend 638.041đ/30d, 364 click, CTR 0.54% — thấp hơn benchmark RMK ngành (~1%). Camp này còn đang trend -69% spend 7d. Banner đã chạy lâu (creative fatigue).",
-      "estimated_saving_vnd": 450000,
+      "action": "Pause hoặc thay banner 160x600.gif RMK Camera 4G (ad_id 752150324395) và RMK thiết bị định vị (ad_id 752150644978)",
+      "reason": "ad 752150324395 CTR 0.15% (4.3k spend / 1336 imp) và ad 752150644978 CTR 0.09% (3.7k spend / 1128 imp) — đều nằm dưới ngưỡng GDN benchmark 0.5%. Cùng ad_group 1 đã có biến thể 300x250 + 300x600 đang hoạt động (CTR 0.88-1.31%) → có thể safe pause skyscraper 160x600 hoặc thay creative mới.",
+      "estimated_saving_vnd": 240000,
       "risk": "low",
-      "time_cost": "30 phút (design biến thể mới + setup A/B)"
+      "time_cost": "10 phút trong Google Ads UI - Ads & Assets > Ads"
     },
     {
       "category": "BUDGET",
       "priority": 3,
-      "action": "Giảm budget camp 'Shopping - 6/6 - ĐV' -30% (từ ~1.17tr/7d xuống ~820k/7d)",
-      "reason": "Spend 9.04tr/30d, CTR chỉ 1.15% (Shopping benchmark 2-3%), trend 7d -42.7% (1.17tr vs 2.04tr prior). Performance đang xuống dốc, cần giảm bớt rồi review feed/giá.",
-      "estimated_saving_vnd": 2700000,
+      "action": "Giảm budget Shopping camp 'Shopping - 6/6 - ĐV' (DINH_VI) -30% để stop lan keyword irrelevant",
+      "reason": "Spend 7.53tr/30d · CTR chỉ 1.16% (so với search DINH_VI 12.97%) · trend 7d -52.5%. Camp này đang nuốt 13/15 search term trong negative_gap (định vị gps, máy nghe lén, máy dò camera, máy cạo râu philips...) vì Shopping match broad không control được. Giảm 30% trước, hoặc xét chuyển sang Performance Max với product feed lọc kỹ hơn.",
+      "estimated_saving_vnd": 2260000,
       "risk": "medium",
-      "time_cost": "5 phút điều chỉnh budget; cần monitor 7-14 ngày sau"
+      "time_cost": "5 phút - chỉnh daily budget"
     },
     {
       "category": "PLACEMENT",
       "priority": 4,
-      "action": "Exclude domain xổ số khỏi tất cả Display campaign: xosodaiphat.com, az24.vn (subpath /xs*), xoso.com.vn",
-      "reason": "6 placement xổ số top spend: xosodaiphat/xsmn 972k + xsmb 887k + xsmt 188k + az24/xsmb 401k + az24/xsmn 233k + xoso.com.vn 177k = ~2.9tr/30d. Audience xổ số ≠ buyer thiết bị an ninh. CTR ổn nhưng intent sai.",
-      "estimated_saving_vnd": 2860683,
+      "action": "Exclude 8 placement xổ số/tin tức level account (xsmn.mobi, xskt.com.vn, xosodaiphat.com [low-CTR pages], rongbachkim.net, vietnamnet.vn/ads-shell.html, giavang.org/the-gioi, phatnguoi.com, xskt.com.vn/xsmn)",
+      "reason": "Tổng spend 8 placement = 442.5k/30d · CTR 0.17-0.47% (benchmark CONTENT 1.23%). Lưu ý xosodaiphat.com 2 trang top-spend (xsmn + xsmb) tổng 1.86tr CTR 1.31-1.78% lại đang OK → chỉ exclude trang xsmt CTR 1.20% nếu cần. Site xổ số low-CTR + audience không match intent SP an ninh/định vị.",
+      "estimated_saving_vnd": 442500,
       "risk": "low",
-      "time_cost": "10 phút (Tools → Placement exclusions ở account level)"
+      "time_cost": "10 phút - Account-level placement exclusion list"
     },
     {
       "category": "TREND",
       "priority": 5,
-      "action": "Tăng budget camp '8/5/2025 Search - Cam NLMT' +25% (từ ~1.55tr/7d lên ~1.94tr/7d)",
-      "reason": "Spend 7d +65.3% (1.55tr vs 938k prior), CTR 30d 13.93% (rất cao), thuộc CAMERA_4G — category đang trend up +23.9%. Đang có demand mạnh nhưng có thể bị cap budget.",
+      "action": "Tăng budget '8/5/2025 Search - Cam NLMT' (CAMERA_4G) +25% và monitor 'RMK - thiết bị ghi âm #2' tuần tới",
+      "reason": "Cam NLMT spend 7d 2.32tr (+367.6% vs prior 7d 0.5tr) · CTR 13.78% category-leading · CPC 5.78k/click · trend tăng đột biến cho thấy demand đang bùng. RMK ghi âm #2 spend 7d 54k (+232.5%) còn nhỏ nhưng cùng pattern. Tăng 25% budget Cam NLMT để capture demand peak; còn monitor RMK ghi âm #2 1 tuần nữa trước khi push ngân sách.",
       "estimated_saving_vnd": 0,
       "risk": "low",
-      "time_cost": "5 phút điều chỉnh; cần track CPA/conv 7 ngày sau"
+      "time_cost": "5 phút - chỉnh daily budget cap"
     }
   ],
+
   "search_term_deep_dive": {
     "top_converting": [
-      {
-        "search_term": "máy cạo râu",
-        "spend_30d": 1224214.0,
-        "clicks_30d": 272,
-        "conversions_30d": 6.35,
-        "ctr_30d": 0.0458,
-        "match_types": [
-          "EXACT"
-        ],
-        "statuses": [
-          "ADDED",
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "camera",
-        "spend_30d": 2869658.0,
-        "clicks_30d": 279,
-        "conversions_30d": 6.0,
-        "ctr_30d": 0.0767,
-        "match_types": [
-          "BROAD"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "doscom",
-        "spend_30d": 160974.0,
-        "clicks_30d": 106,
-        "conversions_30d": 3.0,
-        "ctr_30d": 0.0958,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "máy ghi âm sony",
-        "spend_30d": 92676.0,
-        "clicks_30d": 38,
-        "conversions_30d": 3.0,
-        "ctr_30d": 0.0514,
-        "match_types": [
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "định vị",
-        "spend_30d": 847489.0,
-        "clicks_30d": 189,
-        "conversions_30d": 3.0,
-        "ctr_30d": 0.026,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      }
+      {"search_term": "máy cạo râu", "spend_30d": 1224214, "clicks_30d": 272, "conversions_30d": 6.35, "ctr_30d": 0.0458, "match_types": ["EXACT"], "note": "Conv proxy cao nhất nhưng nằm camp 'Máy Cạo Râu' đang trend giảm -88% — verify lại tracking đảm bảo đúng nguồn"},
+      {"search_term": "camera", "spend_30d": 2869658, "clicks_30d": 279, "conversions_30d": 6.0, "ctr_30d": 0.0767, "match_types": ["BROAD"], "note": "Broad term vol cao 2.87tr/30d — nên upgrade thành PHRASE 'camera doscom' hoặc 'camera giấu kín' để lọc intent"},
+      {"search_term": "doscom", "spend_30d": 160974, "clicks_30d": 106, "conversions_30d": 3.0, "ctr_30d": 0.0958, "match_types": ["BROAD","EXACT"], "note": "Brand keyword — CTR 9.58%, conv 3.0 chỉ với spend 161k. Bảo vệ brand search bằng EXACT + tối ưu RSA brand"},
+      {"search_term": "máy ghi âm sony", "spend_30d": 92676, "clicks_30d": 38, "conversions_30d": 3.0, "ctr_30d": 0.0514, "match_types": ["EXACT"], "note": "Brand đối thủ nhưng ra conv → có thể keep nếu margin OK, nếu không add negative để focus DR series Doscom"},
+      {"search_term": "định vị", "spend_30d": 847489, "clicks_30d": 189, "conversions_30d": 3.0, "ctr_30d": 0.026, "match_types": ["BROAD","EXACT"], "note": "Volume lớn nhưng CTR 2.6% thấp so với category average 1.62%. Cân nhắc tách thành ad group riêng với LP định vị xe / định vị trẻ em để tăng CTR"}
     ],
     "top_waste": [
-      {
-        "search_term": "máy nghe lén",
-        "spend_30d": 250087.0,
-        "clicks_30d": 59,
-        "ctr_30d": 0.0472,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "8/5/2025 Search - TB Dò Nghe Lén",
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "camera năng lượng mặt trời",
-        "spend_30d": 232915.0,
-        "clicks_30d": 69,
-        "ctr_30d": 0.0994,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "ADDED",
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - Cam NLMT",
-          "8/5/2025 Search - Cam WIFI",
-          "8/5/2025 Search - Sim 4G"
-        ]
-      },
-      {
-        "search_term": "thiết bị ghi âm",
-        "spend_30d": 211306.0,
-        "clicks_30d": 34,
-        "ctr_30d": 0.0773,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "ADDED",
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "máy dò camera",
-        "spend_30d": 202790.0,
-        "clicks_30d": 23,
-        "ctr_30d": 0.081,
-        "match_types": [
-          "EXACT"
-        ],
-        "statuses": [
-          "ADDED",
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Dò Nghe Lén",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "định vị gps",
-        "spend_30d": 187548.0,
-        "clicks_30d": 53,
-        "ctr_30d": 0.034,
-        "match_types": [
-          "BROAD",
-          "EXACT",
-          "NEAR_PHRASE"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TBĐV GPS",
-          "Shopping - 6/6 - ĐV"
-        ]
-      }
+      {"search_term": "máy nghe lén", "spend_30d": 250087, "clicks_30d": 59, "conversions_30d": 0, "ctr_30d": 0.0472, "match_types": ["BROAD","EXACT"], "note": "Term ambiguous — có thể intent muốn MUA để lén hoặc CHỐNG lén. CTR 4.72% OK nhưng 0 conv 30d. Cần ad copy phân biệt 2 intent rõ"},
+      {"search_term": "định vị gps", "spend_30d": 187548, "clicks_30d": 53, "conversions_30d": 0, "ctr_30d": 0.034, "match_types": ["BROAD","EXACT","NEAR_PHRASE"], "note": "Generic term — intent yếu, 0 conv qua 53 click. Add negative ở camp Shopping ĐV"},
+      {"search_term": "máy cạo râu philips", "spend_30d": 159125, "clicks_30d": 35, "conversions_30d": 0, "ctr_30d": 0.031, "match_types": ["EXACT","NEAR_PHRASE","PHRASE"], "note": "Brand đối thủ rõ — top action P1 negative immediate"},
+      {"search_term": "thiết bị nghe lén", "spend_30d": 146182, "clicks_30d": 40, "conversions_30d": 0, "ctr_30d": 0.0322, "match_types": ["BROAD","EXACT"], "note": "Tương tự 'máy nghe lén' — intent ambiguous. Đánh giá lại landing page"},
+      {"search_term": "thiết bị định vị gps", "spend_30d": 162114, "clicks_30d": 48, "conversions_30d": 0, "ctr_30d": 0.051, "match_types": ["EXACT"], "note": "CTR 5.1% nhưng 0 conv → vấn đề ở LP/giá hoặc tracking pancake. Drill conversion path trước khi cut"}
     ],
     "negative_gap": [
-      {
-        "search_term": "máy nghe lén",
-        "spend_30d": 250087.0,
-        "clicks_30d": 59,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "8/5/2025 Search - TB Dò Nghe Lén",
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "camera năng lượng mặt trời",
-        "spend_30d": 232915.0,
-        "clicks_30d": 69,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - Cam NLMT",
-          "8/5/2025 Search - Cam WIFI",
-          "8/5/2025 Search - Sim 4G"
-        ]
-      },
-      {
-        "search_term": "thiết bị ghi âm",
-        "spend_30d": 211306.0,
-        "clicks_30d": 34,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "máy dò camera",
-        "spend_30d": 202790.0,
-        "clicks_30d": 23,
-        "match_types": [
-          "EXACT"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Dò Nghe Lén",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "định vị gps",
-        "spend_30d": 187548.0,
-        "clicks_30d": 53,
-        "match_types": [
-          "BROAD",
-          "EXACT",
-          "NEAR_PHRASE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TBĐV GPS",
-          "Shopping - 6/6 - ĐV"
-        ]
-      }
+      {"search_term": "máy cạo râu philips", "spend_30d": 159125, "campaigns": ["7/3/26 Search - Máy Cạo Râu","Shopping - 6/6 - ĐV"], "note": "Brand competitor — add ngay"},
+      {"search_term": "máy ghi âm sony", "spend_30d": 92676, "campaigns": ["8/5/2025 Search - TB Ghi Âm"], "note": "Brand competitor — keep nếu thực sự ra conv (3 conv) hoặc add nếu margin âm"},
+      {"search_term": "định vị gps", "spend_30d": 187548, "campaigns": ["8/5/2025 Search - TBĐV GPS","Shopping - 6/6 - ĐV"], "note": "Generic — exclude khỏi Shopping"},
+      {"search_term": "máy dò camera", "spend_30d": 202790, "campaigns": ["8/5/2025 Search - TB Dò Nghe Lén","Shopping - 6/6 - ĐV"], "note": "0 conv nhưng intent đúng — verify LP /thiết-bị-dò-camera-an-ninh"},
+      {"search_term": "camera không dây", "spend_30d": 144769, "campaigns": ["Cam NLMT","Cam WIFI","Cam mini","Sim 4G"], "note": "Term broad — add negative-phrase 'không dây' khỏi camp Cam mini/Sim 4G nếu cam Doscom đều có dây nguồn"}
     ]
   },
+
   "placement_banner_deep_dive": {
-    "network_breakdown_summary": "SEARCH 75% spend, CTR 4.34% (lành mạnh) | CONTENT 23% spend, CTR 1.23% (yếu, cần lọc placement)",
+    "network_breakdown_summary": "SEARCH 76.1% spend (79.6tr · CTR 4.34% · CPC 5,077đ — kênh chuyển đổi chính) | CONTENT/GDN 22.9% (24.0tr · CTR 1.23% · CPC 1,544đ — banner RMK + display). YOUTUBE chưa tách riêng trong bộ data tháng 4 — cần verify khi pull tháng 5.",
     "top_waste_placements": [
-      {
-        "placement": "xosodaiphat.com/xsmn-xo-so-mien-nam.html",
-        "spend_30d": 972961.0,
-        "clicks_30d": 1563,
-        "ctr_30d": 0.0178,
-        "placement_type": "WEBSITE",
-        "reason": "Lottery audience không match buyer SP an ninh"
-      },
-      {
-        "placement": "xosodaiphat.com/xsmb-xo-so-mien-bac.html",
-        "spend_30d": 887129.0,
-        "clicks_30d": 1391,
-        "ctr_30d": 0.0131,
-        "placement_type": "WEBSITE",
-        "reason": "Lottery audience không match buyer SP an ninh"
-      },
-      {
-        "placement": "az24.vn/xsmb-sxmb-xo-so-mien-bac.html",
-        "spend_30d": 401439.0,
-        "clicks_30d": 354,
-        "ctr_30d": 0.0067,
-        "placement_type": "WEBSITE",
-        "reason": "Lottery audience không match buyer SP an ninh"
-      },
-      {
-        "placement": "az24.vn/xsmn-sxmn-xo-so-mien-nam.html",
-        "spend_30d": 233630.0,
-        "clicks_30d": 273,
-        "ctr_30d": 0.0102,
-        "placement_type": "WEBSITE",
-        "reason": "Lottery audience không match buyer SP an ninh"
-      },
-      {
-        "placement": "dantri.com.vn",
-        "spend_30d": 220278.0,
-        "clicks_30d": 70,
-        "ctr_30d": 0.0019,
-        "placement_type": "WEBSITE",
-        "reason": "CTR <0.4% — audience không quan tâm"
-      },
-      {
-        "placement": "dantri.com.vn",
-        "spend_30d": 220278.0,
-        "clicks_30d": 70,
-        "ctr_30d": 0.0019,
-        "placement_type": "WEBSITE",
-        "reason": "CTR <0.4% — audience không quan tâm"
-      },
-      {
-        "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
-        "spend_30d": 206205.0,
-        "clicks_30d": 62,
-        "ctr_30d": 0.0023,
-        "placement_type": "WEBSITE",
-        "reason": "CTR <0.4% — audience không quan tâm"
-      }
+      {"placement": "dantri.com.vn", "spend_30d": 220278, "clicks_30d": 70, "ctr_30d": 0.0019, "note": "Site tin tức top spend GDN nhưng CTR 0.19% (1/6 benchmark). Audience tin tức chung không match intent thiết bị an ninh"},
+      {"placement": "icdn.24h.com.vn/.../html5_banner_thuong_index.html", "spend_30d": 206205, "clicks_30d": 62, "ctr_30d": 0.0023, "note": "Iframe 24h.com.vn chuyên banner thương — đề xuất exclude domain icdn.24h.com.vn"},
+      {"placement": "xsmn.mobi", "spend_30d": 154450, "clicks_30d": 128, "ctr_30d": 0.0039, "note": "Trang xổ số miền Nam — CTR 0.39%, exclude"},
+      {"placement": "vietnamnet.vn/ads-shell.html", "spend_30d": 43263, "clicks_30d": 14, "ctr_30d": 0.0009, "note": "CTR 0.09% — gần như 0 chuyển đổi; exclude"},
+      {"placement": "rongbachkim.net", "spend_30d": 25296, "clicks_30d": 20, "ctr_30d": 0.0026, "note": "Site soi cầu xổ số — exclude"}
     ],
     "worst_banners": [
-      {
-        "ad_id": "752150324395",
-        "ad_name": "728x90.gif",
-        "campaign": "RMK - Camera 4G",
-        "spend_30d": 4343.0,
-        "ctr_30d": 0.0015,
-        "impressions_30d": 1336
-      },
-      {
-        "ad_id": "752150644978",
-        "ad_name": "160x600.gif",
-        "campaign": "RMK - thiết bị định vị",
-        "spend_30d": 3665.0,
-        "ctr_30d": 0.0009,
-        "impressions_30d": 1128
-      },
-      {
-        "ad_id": "752234163116",
-        "ad_name": "160x600.gif",
-        "campaign": "RMK - Camera mini",
-        "spend_30d": 0.0,
-        "ctr_30d": 0.0,
-        "impressions_30d": 714
-      }
+      {"ad_id": "752150324395", "campaign": "RMK - Camera 4G", "ad_name": "728x90.gif", "ctr_30d": 0.0015, "spend_30d": 4343, "note": "Leaderboard 728x90 CTR 0.15% — pause hoặc thay creative"},
+      {"ad_id": "752150644978", "campaign": "RMK - thiết bị định vị", "ad_name": "160x600.gif", "ctr_30d": 0.0009, "spend_30d": 3665, "note": "Skyscraper 160x600 CTR 0.09% — pause"},
+      {"ad_id": "752234163116", "campaign": "RMK - Camera mini", "ad_name": "160x600.gif", "ctr_30d": 0, "spend_30d": 0, "note": "0 click trên 714 imp — pause ngay, sai targeting hoặc creative dead"}
     ]
   },
+
   "pause_candidates": [
     {
-      "campaign": "RMK - chống ghi âm",
-      "category": "CHONG_GHI_AM",
-      "spend_30d": 1916805.0,
-      "reason": "CPC spike +40% (877→1229đ) đồng thời trend spend 7d -43.5% — 2 tín hiệu xấu hội tụ. Cần review trước khi pause hoàn toàn.",
-      "verdict": "REVIEW (chưa đủ 3 tín hiệu để pause)"
+      "campaign": "7/3/26 Search - Máy Cạo Râu",
+      "category": "OTHER",
+      "spend_30d": 3406152,
+      "ctr_30d": 0.1069,
+      "spend_trend_7d_pct": -88.3,
+      "reason": "Trend 7d -88.3% (113k vs 970k prior) · CTR 10.69% nhưng 0 đơn Pancake (theo conv proxy). 3 tín hiệu xấu hội tụ: spend lao dốc + 0 conv 30d + lan keyword Philips brand sang Shopping. Đề xuất pause để dồn ngân sách cho Cam NLMT."
     },
     {
-      "campaign": "RMK - Camera wifi",
+      "campaign": "RMK - Camera mini",
       "category": "CAMERA_WIFI",
-      "spend_30d": 916747,
-      "reason": "Trend 7d -69% (113k vs 367k), CTR 0.57% rất thấp, spend 30d 917k. Đủ 3 tín hiệu xấu (spend↓ + CTR↓ + trend↓). Cân nhắc pause + thay creative mới.",
-      "verdict": "PAUSE_CANDIDATE"
+      "spend_30d": 2343446,
+      "ctr_30d": 0.0059,
+      "reason": "Banner 160x600 ad_id 752234163116 đã 0 click/714 imp — RMK pool có vẻ bão hòa hoặc creative dead. Cân nhắc rebuild remarketing list 30→60d để mở pool."
     }
   ],
+
   "warnings": [
-    "⚠ CPC spike camp 'RMK - chống ghi âm' từ 877đ → 1229đ (+40.1%) trong 7d gần nhất, kết hợp trend spend -43.5% — có thể audience pool đang shrink",
-    "⚠ Camp 'RMK - Camera wifi' trend spend -69.1% (113k/7d vs 368k prior), CTR 0.57% — cần check creative fatigue hoặc pixel issue",
-    "⚠ 4/22 camp OTHER (Shopping TBCS&GD, Search Máy Rửa Hoa Quả, Search Máy Massage) có spend = 0 trong 30d — đã pause hay bị reject?",
-    "⚠ Tỷ lệ hoàn đơn Website: 4 đơn returned/12.16tr trên tổng 134 đơn (3.0%) — chấp nhận được nhưng theo dõi",
-    "⚠ CONTENT network CTR chỉ 1.23% (thấp hơn SEARCH 4.34%) trong khi spend 23.99tr (22.7% tổng) — cần lọc placement quyết liệt"
+    "Cam NLMT spend 7d +367.6% (497k → 2.32tr) — CTR 13.78% vẫn OK nhưng cần verify CPC không spike vượt 3x trung bình",
+    "Shopping - 6/6 - ĐV trend -52.5% kết hợp CTR chỉ 1.16% — Shopping camp đang nuốt 13/15 negative-gap term, có thể đang bị siphon budget",
+    "Tổng spend tháng này (04-01->04-29) 93.6tr vs tháng trước 117.3tr (-20.2%) — đang under-pace; nếu đây là chủ đích thì OK, nếu không thì cần check budget cap có bị limited không",
+    "Format breakdown OTHER (267 ads · 89.7tr · CTR 1.53%) chưa tách Shopping vs Performance Max — cần pull thêm để chấm chính xác dim 5",
+    "Chỉ 1 RSA duy nhất trong account (1 ad spending 9.6tr) — single point of failure, nên A/B test thêm 1 RSA biến thể"
   ],
+
   "evidence": [
-    "Spend 30d: 105.8tr VND | Clicks 30d: 31,227 | Impressions 30d: 2,247,669 | Active camp: 19/22",
-    "ROAS proxy 30d: 2.63x (278.6tr revenue Pancake Website / 105.8tr spend) — borderline target 3x",
-    "Search terms: 18,631 unique / 87 có conv (0.50%) | match_type EXACT chiếm 79.2/173.7 conv",
-    "Placements: 19,974 unique trên CONTENT network — top 6 lottery sites ăn 2.86tr/30d (11.9% CONTENT spend)",
-    "Ads: 297 ad (29 banner / 1 RSA / 267 other); 3 banner CTR <0.2%"
+    "Spend 30d (29/03->27/04): 104,622,381đ · 30,764 click · 2,224,529 imp · 19/22 camp active",
+    "Pancake Website rev 30d: 279,226,750đ · 138 đơn delivered+other (gộp WEBSITE+ZALO_OA+HOTLINE) — ROAS proxy 2.67x",
+    "Search term universe: 18,631 unique terms · 87 có conv (0.5%) · top 5 converting đóng góp 5,194,011đ spend / 21.35 conv",
+    "Placement universe: 19,974 unique GDN placements · 15 placement low_ctr <0.5% chiếm 1.13tr spend",
+    "Trend 7d momentum: 5 camp tăng (top: Cam NLMT +367.6%) vs 3 camp giảm (top: Máy Cạo Râu -88.3%)"
   ],
-  "raw_markdown": "# 📊 Báo cáo Google Ads Doscom — 2026-04-25\n\n**Kỳ**: 2026-03-25 → 2026-04-23 (30 ngày) · Account MHDI (477-705-2298)\n**Score**: **64/100** (Grade C) · ROAS 2.63x · Spend 105.8tr → Revenue 278.6tr\n\n## 🎯 Verdict\nROAS Website 2.63x (278.6tr / 105.8tr) đã chạm band 2-3x — tốt hơn báo cáo trước (2.47x) nhưng còn dưới target 3x. Điểm nghẽn lớn nhất là **Negative keyword hygiene** (15 term spend cao 0 conv, waste 2.6tr/30d) và **Trend momentum âm** (2 camp up vs 5 camp down 7d). Lottery placements (xosodaiphat/az24/xoso.com.vn) ngốn ~2.9tr/30d trên CONTENT network với audience hoàn toàn không match SP an ninh — cần exclude ngay.\n\n## ⚡ Top 5 khuyến nghị (5 category)\n\n### 1. 🔑 KEYWORD — Add negative 'máy nghe lén' (P1)\nSpend 250k/30d, 59 click, 0 conv. Intent ngược (mua thiết bị nghe lén ≠ mua máy DÒ). Add cho 4 camp Search/Shopping. **Tiết kiệm 250k/30d · risk thấp · 5 phút.**\n\n### 2. 🎨 CREATIVE — Pause banner 300x250 RMK Camera wifi (P2)\nad_id 751153590183, CTR 0.54%, spend 638k/30d. Camp đang trend -69% — creative fatigue rõ. **Tiết kiệm ~450k/30d · risk thấp · 30 phút setup A/B mới.**\n\n### 3. 💰 BUDGET — Giảm Shopping ĐV -30% (P3)\nSpend 9.04tr/30d, CTR Shopping 1.15% (dưới benchmark 2-3%), trend 7d -42.7%. **Tiết kiệm 2.7tr/30d · risk medium · monitor 14d.**\n\n### 4. 📍 PLACEMENT — Exclude lottery domains (P4)\nxosodaiphat.com + az24.vn/xs* + xoso.com.vn ngốn 2.9tr/30d trên CONTENT, audience xổ số ≠ buyer an ninh. **Tiết kiệm 2.9tr/30d · risk thấp · 10 phút.**\n\n### 5. 📈 TREND — Tăng Cam NLMT +25% (P5)\nSpend 7d +65%, CTR 13.93% (rất cao), category CAMERA_4G đang trend +23.9%. **Capture demand · risk thấp.**\n\n## 📋 Scorecard 10 dimension\n\n| # | Dimension | Score | Status |\n|---|---|---|---|\n| 1 | Conversion tracking | 5/5 | ✅ |\n| 2 | Campaign structure | 4/5 | ✅ |\n| 3 | Keyword health | 3/5 | ⚠ |\n| 4 | Negative keyword hygiene | 1/5 | 🔴 |\n| 5 | Ad copy / RSA | 3/5 | ⚠ |\n| 6 | GDN banner health | 3/5 | ⚠ |\n| 7 | GDN placement hygiene | 5/5 | ✅ (note lottery) |\n| 8 | Impression share | 3/5 | ⚠ data gap |\n| 9 | Spend efficiency (ROAS) | 4/5 | ✅ |\n| 10 | Trend momentum | 1/5 | 🔴 |\n| **Tổng** | | **32/50** | **64/100 — C** |\n\n## 🔑 Search Term Deep-Dive\n\n**Top converting (5)**: \"máy cạo râu\" 6.35 conv (272 click EXACT), \"camera\" 6.0 conv (279 click BROAD), \"doscom\" 3.0 conv (brand search), \"máy ghi âm sony\" 3.0 conv, \"định vị\" 3.0 conv. → Có thể nâng match từ BROAD → PHRASE cho \"camera\" để bảo vệ relevance.\n\n**Top waste (5 đầu)**: \"máy nghe lén\" 250k, \"camera năng lượng mặt trời\" 233k (status đã ADDED ở 1 camp nhưng NONE ở 2 camp khác — không đồng bộ), \"thiết bị ghi âm\" 211k, \"máy dò camera\" 203k, \"định vị gps\" 188k. Tổng 5 term này đã waste ~1.08tr/30d.\n\n**Negative gap**: 15 term, tổng waste 2.6tr/30d. Cần add list negative chung cho account.\n\n## 📍 Placement & Banner Deep-Dive\n\n**Network**: SEARCH 75.2% spend CTR 4.34% (lành mạnh) | CONTENT 22.7% spend CTR chỉ 1.23% — cần siết placement.\n\n**Top waste/spend placements**: nhóm xổ số (xosodaiphat 972k+887k+188k = 2.05tr, az24/xs 401k+233k = 634k, xoso.com.vn 177k) tổng 2.86tr/30d. Ngoài ra dantri.com.vn 220k CTR 0.19%, icdn.24h.com.vn 206k CTR 0.23%.\n\n**Banner**: 3 worst banner toàn size 728x90 / 160x600 (CTR <0.2%). Top spend banner 300x250 vẫn CTR ~1.3% còn ổn. RSA chỉ 1 ad — nên thêm 2-3 RSA biến thể để Google rotate.\n\n## ⏸ Ứng cử viên review/pause\n\n- **RMK - chống ghi âm** (REVIEW): CPC +40% và spend -43% 7d — chưa đủ 3 tín hiệu để pause, theo dõi 7 ngày nữa.\n- **RMK - Camera wifi** (PAUSE_CANDIDATE): trend -69%, CTR 0.57%, spend 917k. Đủ 3 tín hiệu xấu hội tụ → cân nhắc pause + thay creative mới.\n\n## ⚠ Cảnh báo\n\n- CPC spike RMK chống ghi âm 877→1229đ (+40%)\n- Camp RMK Camera wifi -69% spend 7d (creative fatigue?)\n- 4 camp OTHER (Shopping TBCS&GD + 2 Search) spend = 0/30d\n- Returned 4 đơn (3.0% trên 134) — theo dõi nhưng OK\n- CONTENT CTR 1.23% (vs SEARCH 4.34%) — cần lọc placement\n\n## 📎 Evidence\n\n- Spend 105.8tr / Click 31,227 / Imp 2.25M / 19/22 camp active\n- ROAS 2.63x (279tr / 106tr) — borderline target 3x\n- 18,631 search term, 87 có conv (0.5%), EXACT 79.23/173.7 conv (chiếm 46%)\n- 19,974 placement CONTENT — 6 lottery sites ăn 2.9tr (11.9% CONTENT spend)\n- 297 ad (29 banner / 1 RSA / 267 other), 3 banner CTR <0.2%\n"
+
+  "raw_markdown": "# Báo cáo Google Ads Doscom — 29/04/2026 (v2)\n\n**Kỳ**: 30/03 → 28/04/2026 (30 ngày) · Account MHDI (477-705-2298)\n**Score**: 72/100 (Grade C — Notable issues) · ↑8 điểm so với 25/04 (64/100)\n\n## Verdict\n\nROAS Pancake Website 2.67x đã sát target 3x (rev 279.2tr / spend 104.6tr · 138 đơn) — cải thiện rõ so với 2.63x ngày 25/04. Cấu trúc 22 campaign × 8 category healthy, mix EXACT+PHRASE+BROAD đầy đủ, 5/3 camp trend tăng-giảm có lợi. **Hai lỗ rò chính**: (1) 15 search term thuộc negative_keyword_gap đang waste 2.58tr/30d (top: 'máy cạo râu philips', 'định vị gps', 'thiết bị nghe lén'); (2) 15 placement low CTR <0.5% trên site xổ số/tin tức ngốn 1.13tr/30d. Banner RMK 300x250 và 300x600 đang hoạt động OK (CTR 0.88-1.31%) nhưng skyscraper 160x600 và leaderboard 728x90 đang chết (CTR 0.09-0.15%).\n\n## Top 5 khuyến nghị (5 category)\n\n### 1. KEYWORD — Add negative 'máy cạo râu philips' (P1)\n- Spend 30d: 159k · 35 click · 0 conv · match EXACT+PHRASE+NEAR_PHRASE · status NONE\n- Camp ảnh hưởng: '7/3/26 Search - Máy Cạo Râu' và 'Shopping - 6/6 - ĐV' (lan từ shopping)\n- Brand đối thủ rõ ràng — không liên quan SP Doscom\n- **Tiết kiệm**: 159k/30d · Risk: low · 5 phút\n\n### 2. CREATIVE — Pause/thay banner 160x600 RMK Camera 4G + RMK định vị (P2)\n- ad_id 752150324395 (RMK Camera 4G 728x90): CTR 0.15% · spend 4.3k\n- ad_id 752150644978 (RMK định vị 160x600): CTR 0.09% · spend 3.7k\n- Cùng ad group đã có biến thể 300x250/300x600 hoạt động (CTR 0.88-1.31%) → safe pause\n- **Tiết kiệm**: 240k/30d · Risk: low · 10 phút\n\n### 3. BUDGET — Giảm 'Shopping - 6/6 - ĐV' -30% (P3)\n- Spend 7.53tr/30d · CTR chỉ 1.16% (vs Search DINH_VI 12.97%) · trend 7d -52.5%\n- Camp này nuốt 13/15 negative_gap term — Shopping match broad uncontrollable\n- **Tiết kiệm**: 2.26tr/30d · Risk: medium · 5 phút\n\n### 4. PLACEMENT — Exclude 8 placement xổ số/tin tức (P4)\n- Top: xsmn.mobi · xskt.com.vn · vietnamnet.vn/ads-shell.html · rongbachkim.net · giavang.org/the-gioi · phatnguoi.com · xosodaiphat.com/xsmt-page · xskt.com.vn/xsmn\n- Tổng spend 442.5k/30d · CTR 0.17-0.47% (vs benchmark CONTENT 1.23%)\n- Lưu ý xosodaiphat.com xsmn+xsmb pages CTR 1.31-1.78% đang OK → chỉ exclude xsmt page\n- **Tiết kiệm**: 442.5k/30d · Risk: low · 10 phút\n\n### 5. TREND — Tăng budget '8/5/2025 Search - Cam NLMT' +25% (P5)\n- Spend 7d: 2.32tr (+367.6% vs prior 7d 497k) · CTR 13.78% category-leading · CPC 5.78k\n- Demand peak — capture trước khi competitor join thầu\n- Monitor 'RMK - thiết bị ghi âm #2' (+232.5%) thêm 1 tuần trước khi push ngân sách\n- **Impact**: capture 5-8 đơn extra/tuần · Risk: low · 5 phút\n\n## Scorecard\n\n| Dimension | Score | Status |\n|---|---|---|\n| Conversion tracking | 5/5 | OK |\n| Campaign structure | 4/5 | OK |\n| Keyword health | 4/5 | OK |\n| Negative keyword hygiene | 1/5 | CRITICAL — 15 term gap 2.58tr |\n| Ad copy / RSA | 4/5 | OK |\n| GDN banner health | 3/5 | WARN — 3 banner CTR <0.15% |\n| GDN placement hygiene | 3/5 | WARN — 15 placement low CTR |\n| Impression share | 3/5 | DATA_GAP (Windsor) |\n| Spend efficiency (ROAS) | 4/5 | OK — 2.67x sát 3x |\n| Trend momentum | 5/5 | OK — 5 tăng vs 3 giảm |\n| **Tổng** | **36/50** | **72/100 (C)** |\n\n## Search Term Deep-Dive\n\n**Top 5 converting**: máy cạo râu (6.35 conv · 1.22tr) · camera (6 conv · 2.87tr · BROAD nên upgrade PHRASE) · doscom (3 conv · brand defense) · máy ghi âm sony (3 conv · brand competitor — keep nếu margin OK) · định vị (3 conv nhưng CTR 2.6% thấp).\n\n**Top 5 waste**: máy nghe lén (250k · 0 conv · intent ambiguous) · định vị gps (187k · generic) · máy cạo râu philips (159k · brand competitor) · thiết bị nghe lén (146k) · thiết bị định vị gps (162k · CTR 5.1% nhưng 0 conv → check LP).\n\n**Negative gap top 5**: máy cạo râu philips, máy dò camera, định vị gps, thiết bị định vị gps, camera không dây — tổng 856k/30d nếu add ngay.\n\n## Placement & Banner Deep-Dive\n\n**Network**: SEARCH 76.1% spend (79.6tr · CTR 4.34%) | CONTENT 22.9% (24tr · CTR 1.23%). Search là kênh chuyển đổi chính, CTR 3.5x kênh CONTENT.\n\n**Top waste placement**: dantri.com.vn (220k · CTR 0.19%) · icdn.24h.com.vn iframe (206k · 0.23%) · xsmn.mobi (154k · 0.39%) · vietnamnet.vn/ads-shell.html (43k · 0.09%) · rongbachkim.net (25k · 0.26%).\n\n**Banner**: 3 banner cần pause (160x600 RMK định vị 0.09% · 160x600 RMK Camera mini 0% · 728x90 RMK Camera 4G 0.15%). Format chính 300x250/300x600 đang OK (CTR 0.88-1.31%).\n\n## Ứng cử viên pause\n\n- **'7/3/26 Search - Máy Cạo Râu'** (OTHER · 3.4tr · CTR 10.69%): trend -88.3% + 0 đơn proxy + lan keyword Philips brand → 3 tín hiệu xấu hội tụ, đề xuất pause.\n- **'RMK - Camera mini'** banner 160x600 dead (0 click/714 imp) — pause ad_id 752234163116, không pause cả camp.\n\n## Cảnh báo\n\n1. Cam NLMT spend +367.6% — verify CPC không spike vượt 3x avg trước khi tăng budget.\n2. Shopping ĐV trend -52.5% + nuốt 13/15 neg-gap term — siphon budget?\n3. Spend tháng 4 (93.6tr) vs tháng 3 (117.3tr) -20.2% — under-pace, check budget cap.\n4. Format OTHER 89.7tr chưa tách Shopping/PMax — cần pull thêm để chấm dim 5 chính xác.\n5. Chỉ 1 RSA trong account — single point of failure, A/B test thêm 1 biến thể.\n\n## Evidence\n\n1. Spend 30d: 104.6tr · 30,764 click · 2.22M imp · 19/22 camp active (kỳ 29/03->27/04).\n2. Pancake Website rev 30d: 279.2tr · 138 đơn (gộp WEBSITE 70 + ZALO_OA 44 + HOTLINE 24).\n3. Search term universe: 18,631 unique · 87 có conv (0.5%) · top 5 converting = 5.19tr spend / 21.35 conv.\n4. Placement universe: 19,974 unique · 15 low_ctr <0.5% chiếm 1.13tr.\n5. Trend: 5 camp tăng (top Cam NLMT +367.6%) vs 3 camp giảm (top Máy Cạo Râu -88.3%)."
 }
