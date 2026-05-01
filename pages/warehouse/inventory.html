@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phòng Kho · Doscom ERP</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f5f7fb; color: #111827; margin: 0; padding: 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 16px; }
+
+/* Header */
+.header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); color: white; border-radius: 10px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+.header h1 { margin: 0; font-size: 20px; font-weight: 700; }
+.header .sub { font-size: 12.5px; opacity: 0.9; margin-top: 2px; }
+.header a { color: white; text-decoration: none; font-size: 13px; padding: 4px 8px; }
+
+/* Stats cards */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: white; padding: 14px; border-radius: 10px; border: 1px solid #e5e7eb; }
+.stat-card .label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.stat-card .value { font-size: 22px; font-weight: 700; color: #0891b2; margin-top: 4px; }
+.stat-card.danger .value { color: #dc2626; }
+.stat-card.warning .value { color: #d97706; }
+.stat-card.success .value { color: #059669; }
+
+/* Section */
+.section { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+.section h2 { margin: 0 0 12px; font-size: 16px; color: #1f2937; display: flex; justify-content: space-between; align-items: center; }
+.section h2 .badge { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+
+/* Filter bar */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.filter-bar input, .filter-bar select { padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 13px; background: white; }
+.filter-bar input[type="text"] { flex: 1; min-width: 200px; }
+.filter-bar button { padding: 6px 14px; border: none; background: #0891b2; color: white; border-radius: 5px; font-weight: 500; cursor: pointer; }
+.filter-bar button:hover { background: #0e7490; }
+.filter-bar button.secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: 8px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; text-align: left; }
+th { background: #f9fafb; font-weight: 600; color: #4b5563; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.badge-stock-ok { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.badge-stock-low { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.badge-stock-out { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.group-tag { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 10.5px; }
+
+tr:hover { background: #fafbff; cursor: pointer; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+.modal-overlay.active { display: flex; }
+.modal { background: white; border-radius: 12px; padding: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal h3 { margin: 0 0 14px; font-size: 18px; }
+.modal .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+.modal .row strong { color: #4b5563; }
+.modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+.modal-actions button { flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: 500; cursor: pointer; }
+.btn-mvt-in { background: #059669; color: white; }
+.btn-mvt-out { background: #dc2626; color: white; }
+.btn-mvt-adj { background: #d97706; color: white; }
+.btn-cancel { background: #f3f4f6; color: #374151; }
+.qty-input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px; margin-top: 8px; }
+
+.alert-banner { background: #fef2f2; border-left: 4px solid #dc2626; padding: 10px 14px; border-radius: 4px; margin-bottom: 12px; }
+.alert-banner strong { color: #991b1b; }
+
+@media (max-width: 640px) {
+  .container { padding: 12px 8px; }
+  .stat-card .value { font-size: 18px; }
+  .header h1 { font-size: 17px; }
+  th, td { padding: 6px 6px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div>
+      <h1>📦 Phòng Kho · Doscom ERP</h1>
+      <div class="sub">Quản lý tồn kho · nhập xuất · cảnh báo low stock</div>
+    </div>
+    <div>
+      <a href="/">← Trang chủ</a>
+    </div>
+  </header>
+
+  <!-- Active alerts -->
+  <div id="alert-section"></div>
+
+  <!-- Stats cards -->
+  <div class="stats-grid" id="stats-cards">
+    <div class="stat-card"><div class="label">Đang tải...</div></div>
+  </div>
+
+  <!-- Per-group breakdown -->
+  <div class="section">
+    <h2>📊 Tồn kho theo nhóm SP</h2>
+    <div class="table-wrap">
+      <table id="group-table">
+        <thead>
+          <tr><th>Nhóm SP</th><th class="num">Số SKU</th><th class="num">Tổng SL tồn</th><th class="num">Tổng giá trị (VND)</th></tr>
+        </thead>
+        <tbody><tr><td colspan="4" style="text-align:center;color:#9ca3af">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reorder list -->
+  <div class="section">
+    <h2>⚠ Top 10 SP cần đặt thêm</h2>
+    <div class="table-wrap">
+      <table id="reorder-table">
+        <thead>
+          <tr><th>SKU</th><th>Tên</th><th>Nhóm</th><th class="num">Tồn</th><th class="num">Ngưỡng</th><th class="num">Giá trị nhập</th></tr>
+        </thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:#9ca3af">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- All products -->
+  <div class="section">
+    <h2>📋 Toàn bộ sản phẩm</h2>
+    <div class="filter-bar">
+      <input type="text" id="search-input" placeholder="🔍 Tìm theo tên / SKU..." oninput="debounceLoad()">
+      <select id="group-filter" onchange="loadProducts()">
+        <option value="ALL">Tất cả nhóm</option>
+        <option value="MAY_DO">Máy dò</option>
+        <option value="CAMERA_VIDEO_CALL">Camera VC (DA8.1)</option>
+        <option value="CAMERA_4G">Camera 4G</option>
+        <option value="CAMERA_WIFI">Camera WiFi</option>
+        <option value="GHI_AM">Máy ghi âm</option>
+        <option value="DINH_VI">Định vị</option>
+        <option value="CHONG_GHI_AM">Chống ghi âm</option>
+        <option value="NOMA">NOMA</option>
+        <option value="OTHER">Khác</option>
+      </select>
+      <select id="status-filter" onchange="loadProducts()">
+        <option value="active">Active</option>
+        <option value="discontinued">Ngừng KD</option>
+        <option value="all">Tất cả</option>
+      </select>
+      <label style="font-size:12px"><input type="checkbox" id="lowstock-filter" onchange="loadProducts()"> Chỉ low stock</label>
+      <button onclick="loadProducts()">🔄 Tải lại</button>
+    </div>
+    <div class="table-wrap">
+      <table id="products-table">
+        <thead>
+          <tr>
+            <th>SKU</th><th>Tên</th><th>Nhóm</th>
+            <th class="num">Tồn</th><th class="num">Ngưỡng</th>
+            <th class="num">Giá nhập</th><th class="num">Giá bán</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="products-tbody"><tr><td colspan="8" style="text-align:center;color:#9ca3af">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent movements -->
+  <div class="section">
+    <h2>📜 Lịch sử nhập xuất gần đây</h2>
+    <div class="table-wrap">
+      <table id="movements-table">
+        <thead>
+          <tr><th>Thời gian</th><th>SP</th><th>Loại</th><th class="num">SL</th><th>Tham chiếu</th><th>Người làm</th></tr>
+        </thead>
+        <tbody><tr><td colspan="6" style="text-align:center;color:#9ca3af">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal: Quick movement (in/out/adjust) -->
+<div class="modal-overlay" id="mvt-modal">
+  <div class="modal">
+    <h3 id="mvt-title">Cập nhật tồn kho</h3>
+    <div class="row"><strong>SP:</strong> <span id="mvt-product-name"></span></div>
+    <div class="row"><strong>Tồn hiện tại:</strong> <span id="mvt-current-stock"></span></div>
+    <div class="row"><strong>Ngưỡng đặt thêm:</strong> <span id="mvt-threshold"></span></div>
+
+    <label style="font-size:12.5px;color:#6b7280;margin-top:14px;display:block">Số lượng:</label>
+    <input type="number" class="qty-input" id="mvt-qty" placeholder="Nhập SL...">
+
+    <label style="font-size:12.5px;color:#6b7280;margin-top:10px;display:block">Ghi chú (tùy chọn):</label>
+    <input type="text" class="qty-input" id="mvt-notes" placeholder="Vd: nhập từ NCC ABC, lô 123">
+
+    <div class="modal-actions">
+      <button class="btn-mvt-in" onclick="submitMovement('IN')">📥 Nhập kho</button>
+      <button class="btn-mvt-out" onclick="submitMovement('OUT')">📤 Xuất kho</button>
+      <button class="btn-mvt-adj" onclick="submitMovement('ADJUSTMENT')">⚖ Điều chỉnh</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Hủy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentEmployee = null;
+let selectedProduct = null;
+let searchTimer = null;
+
+const GROUP_LABELS = {
+  ALL: "Tất cả",
+  MAY_DO: "Máy dò",
+  CAMERA_VIDEO_CALL: "Camera VC",
+  CAMERA_4G: "Camera 4G",
+  CAMERA_WIFI: "Camera WiFi",
+  GHI_AM: "Máy ghi âm",
+  DINH_VI: "Định vị",
+  CHONG_GHI_AM: "Chống ghi âm",
+  NOMA: "NOMA",
+  OTHER: "Khác",
+};
+
+function fmt(n) { return (n == null) ? "—" : Number(n).toLocaleString("vi-VN"); }
+
+async function loadAll() {
+  try {
+    const me = await fetch('/api/me').then(r => r.json());
+    if (!me.logged_in) { window.location.href = '/auth/login'; return; }
+    currentEmployee = me.employee;
+  } catch {}
+  await Promise.all([loadDashboard(), loadProducts()]);
+}
+
+async function loadDashboard() {
+  try {
+    const r = await fetch('/api/warehouse/dashboard');
+    const j = await r.json();
+    if (!j.ok) {
+      document.getElementById('stats-cards').innerHTML = `<div class="stat-card danger"><div class="label">Lỗi</div><div class="value">${j.error}</div></div><div class="stat-card"><div class="label">Hint</div><div class="value" style="font-size:13px">${j.hint || ''}</div></div>`;
+      return;
+    }
+    // Stats cards
+    const s = j.stats;
+    document.getElementById('stats-cards').innerHTML = `
+      <div class="stat-card"><div class="label">Tổng SKU active</div><div class="value">${fmt(s.total_active)}</div></div>
+      <div class="stat-card warning"><div class="label">Low stock</div><div class="value">${fmt(s.low_stock)}</div></div>
+      <div class="stat-card danger"><div class="label">Hết hàng</div><div class="value">${fmt(s.out_of_stock)}</div></div>
+      <div class="stat-card success"><div class="label">Giá trị tồn kho</div><div class="value">${fmt(s.total_inventory_value_vnd)} đ</div></div>
+    `;
+
+    // Active alerts
+    const alerts = j.active_alerts || [];
+    if (alerts.length > 0) {
+      const txt = alerts.slice(0, 5).map(a => `${a.product_name} (${a.level}: ${a.current_stock}/${a.threshold})`).join(", ");
+      document.getElementById('alert-section').innerHTML = `<div class="alert-banner"><strong>⚠ ${alerts.length} cảnh báo:</strong> ${txt}</div>`;
+    }
+
+    // Per-group table
+    const gtBody = document.querySelector('#group-table tbody');
+    gtBody.innerHTML = j.by_group.map(g => `
+      <tr>
+        <td><span class="group-tag">${GROUP_LABELS[g.group_code] || g.group_code}</span></td>
+        <td class="num">${fmt(g.sku_count)}</td>
+        <td class="num">${fmt(g.total_qty)}</td>
+        <td class="num">${fmt(g.total_value)}đ</td>
+      </tr>
+    `).join('') || '<tr><td colspan="4" style="text-align:center;color:#9ca3af">Không có data</td></tr>';
+
+    // Reorder table
+    const rtBody = document.querySelector('#reorder-table tbody');
+    rtBody.innerHTML = j.reorder_top10.map(p => `
+      <tr onclick="openMovementModal('${p.id}')">
+        <td>${p.sku || p.id}</td>
+        <td>${escapeHtml(p.name)}</td>
+        <td><span class="group-tag">${GROUP_LABELS[p.group_code] || p.group_code}</span></td>
+        <td class="num"><span class="${p.current_stock === 0 ? 'badge-stock-out' : 'badge-stock-low'}">${p.current_stock}</span></td>
+        <td class="num">${p.reorder_threshold}</td>
+        <td class="num">${fmt(p.cost_vnd * p.reorder_threshold * 2)}đ</td>
+      </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center;color:#9ca3af">Tất cả SKU đủ hàng ✅</td></tr>';
+
+    // Recent movements
+    const mtBody = document.querySelector('#movements-table tbody');
+    mtBody.innerHTML = j.recent_movements.map(m => {
+      const cls = m.qty > 0 ? 'badge-stock-ok' : 'badge-stock-out';
+      const sign = m.qty > 0 ? '+' : '';
+      return `<tr>
+        <td>${m.created_at?.slice(0, 16) || ''}</td>
+        <td>${escapeHtml(m.product_name || m.product_id)}</td>
+        <td><span class="${cls}">${m.type}</span></td>
+        <td class="num">${sign}${m.qty}</td>
+        <td>${m.reference_type || '—'} ${m.reference_id ? `#${m.reference_id.slice(0,8)}` : ''}</td>
+        <td>${m.by_name || '—'}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="6" style="text-align:center;color:#9ca3af">Chưa có lịch sử</td></tr>';
+  } catch (e) {
+    document.getElementById('stats-cards').innerHTML = `<div class="stat-card danger"><div class="label">Lỗi</div><div class="value">${e.message}</div></div>`;
+  }
+}
+
+async function loadProducts() {
+  const search = document.getElementById('search-input').value.trim();
+  const group = document.getElementById('group-filter').value;
+  const status = document.getElementById('status-filter').value;
+  const lowStock = document.getElementById('lowstock-filter').checked;
+
+  const params = new URLSearchParams();
+  if (search) params.set('search', search);
+  if (group !== 'ALL') params.set('group', group);
+  params.set('status', status);
+  if (lowStock) params.set('low_stock', '1');
+
+  const tbody = document.getElementById('products-tbody');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#9ca3af">Đang tải...</td></tr>';
+  try {
+    const r = await fetch('/api/warehouse/products?' + params);
+    const j = await r.json();
+    if (!j.ok) { tbody.innerHTML = `<tr><td colspan="8" style="color:#dc2626">Lỗi: ${j.error}</td></tr>`; return; }
+    if (j.products.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#9ca3af">Không có SP nào khớp filter</td></tr>'; return; }
+    tbody.innerHTML = j.products.map(p => {
+      const stockCls = p.current_stock === 0 ? 'badge-stock-out' : (p.current_stock <= p.reorder_threshold ? 'badge-stock-low' : 'badge-stock-ok');
+      return `<tr onclick="openMovementModal('${p.id}')">
+        <td>${p.sku || p.id}</td>
+        <td>${escapeHtml(p.name)}</td>
+        <td><span class="group-tag">${GROUP_LABELS[p.group_code] || p.group_code}</span></td>
+        <td class="num"><span class="${stockCls}">${p.current_stock}</span></td>
+        <td class="num">${p.reorder_threshold}</td>
+        <td class="num">${fmt(p.cost_vnd)}</td>
+        <td class="num">${fmt(p.sell_vnd)}</td>
+        <td>📝</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="8" style="color:#dc2626">Lỗi: ${e.message}</td></tr>`;
+  }
+}
+
+function debounceLoad() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(loadProducts, 400);
+}
+
+async function openMovementModal(productId) {
+  try {
+    const r = await fetch('/api/warehouse/product-detail?id=' + encodeURIComponent(productId));
+    const j = await r.json();
+    if (!j.ok) { alert('Lỗi: ' + j.error); return; }
+    selectedProduct = j.product;
+    document.getElementById('mvt-product-name').textContent = j.product.name;
+    document.getElementById('mvt-current-stock').textContent = j.product.current_stock;
+    document.getElementById('mvt-threshold').textContent = j.product.reorder_threshold;
+    document.getElementById('mvt-qty').value = '';
+    document.getElementById('mvt-notes').value = '';
+    document.getElementById('mvt-modal').classList.add('active');
+  } catch (e) { alert('Lỗi: ' + e.message); }
+}
+
+function closeModal() {
+  document.getElementById('mvt-modal').classList.remove('active');
+  selectedProduct = null;
+}
+
+async function submitMovement(type) {
+  if (!selectedProduct) return;
+  const qty = parseInt(document.getElementById('mvt-qty').value, 10);
+  const notes = document.getElementById('mvt-notes').value.trim();
+  if (!qty || qty === 0) { alert('Nhập SL khác 0'); return; }
+
+  const body = {
+    product_id: selectedProduct.id,
+    qty: Math.abs(qty),
+    type,
+    reference_type: 'MANUAL',
+    notes,
+  };
+
+  try {
+    const r = await fetch('/api/warehouse/movement', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const j = await r.json();
+    if (!j.ok) { alert('Lỗi: ' + j.error); return; }
+    closeModal();
+    await Promise.all([loadDashboard(), loadProducts()]);
+    if (j.alert) alert(`⚠ Stock alert: ${j.alert.level} cho SP "${j.product.name}"`);
+  } catch (e) { alert('Lỗi: ' + e.message); }
+}
+
+function escapeHtml(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+window.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
