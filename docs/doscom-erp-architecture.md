@@ -1,8 +1,30 @@
 # Doscom ERP — Kiến trúc tổng thể
 
 > **Mục tiêu**: chuyển dashboard hiện tại thành ERP module-based cho 4 phòng ban Doscom.
-> **Tech stack**: Cloudflare Pages + Functions + D1 (SQLite) + KV + R2 + Workers AI. Free tier ~$5/tháng.
-> **Trạng thái**: Draft v1 — đợi user review trước khi code.
+> **Tech stack**: Cloudflare Pages + Functions + D1 (SQLite) + KV + R2 + Workers AI.
+> **Trạng thái**: Draft v2 — confirmed user requirements.
+
+## ✅ User confirmations (locked)
+
+| Tham số | Giá trị | Note |
+|---|---|---|
+| **Số user** | 27 (Tech 4 + Marketing 10 + KD/CSKH 10 + Kho 3) | Plus 2-3 management trên 27 |
+| **Permission hierarchy** | 6 levels: CEO > COO > TP Marketing > Leader > Phó Leader > Nhân viên | Hierarchical inheritance |
+| **Pancake integration** | Read-only (chỉ pull) | KHÔNG push back order |
+| **Mobile** | ALL departments cần | PWA mobile-first, responsive design |
+| **Data migration** | Migrate 1 lần JSON/Pancake → D1 | Giữ historical từ đầu |
+| **Retention** | Lưu data tổng kết cả năm | Cần aggregation table + snapshot strategy |
+
+## 📊 Cost estimate (revised cho 27 user)
+
+| Service | Free tier | Doscom usage | Cost |
+|---|---|---|---|
+| Cloudflare Pages | 100K req/day | 27 user × ~50 req/day = 1.4K req | Free |
+| Cloudflare D1 | 5M writes/mo, 25M reads/mo (paid) | ~100K orders/year + queries | $5/mo (Workers Paid plan, recommended) |
+| Cloudflare KV | 100K reads/day | Used for cache | Free |
+| Cloudflare R2 | 10GB | Content assets ~5GB | Free |
+| Workers AI | 10K neurons/day free | Need 50K+/day | $5/mo (with Paid plan) |
+| **TỔNG** | | | **$5-10/tháng** |
 
 ---
 
@@ -322,6 +344,108 @@ Dashboard cá nhân từng sales rep:
 
 ---
 
+## 3.4 Permission hierarchy (6 levels)
+
+```
+Level 60 — CEO                                  ⚪ Toàn quyền, xem + sửa mọi thứ
+   │
+Level 50 — Giám đốc vận hành (COO)              🟢 Toàn quyền trừ user/billing
+   │
+Level 40 — Trưởng phòng (TP Marketing, etc.)    🟡 Quyền full trong phòng + read all
+   │
+Level 30 — Leader team                          🟠 Manage team + read other teams
+   │
+Level 20 — Phó Leader                           🔵 Hỗ trợ leader, edit team data
+   │
+Level 10 — Nhân viên                            ⚫ Edit own assigned items only
+```
+
+### Permission matrix (key actions)
+
+| Action | Staff | Phó Lead | Leader | TP | COO | CEO |
+|---|---|---|---|---|---|---|
+| Xem data phòng mình | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Xem data phòng khác | 👁 (readonly) | 👁 | ✅ | ✅ | ✅ | ✅ |
+| Edit lead/order assigned cho mình | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Edit lead/order của staff khác | ❌ | ✅ team mình | ✅ team mình | ✅ phòng mình | ✅ all | ✅ |
+| Pause FB/GG campaign | ❌ | ❌ | ✅ team Ads | ✅ marketing | ✅ | ✅ |
+| Update inventory stock | ❌ | ❌ | ✅ kho | ❌ | ✅ | ✅ |
+| Tạo employee mới (HR) | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Sửa permission người khác | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Xem cost API + billing | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Export báo cáo cả năm | ❌ | ❌ | ✅ team mình | ✅ phòng | ✅ | ✅ |
+
+### RBAC implementation
+
+```javascript
+// functions/lib/rbac.js
+export const ROLE_LEVELS = {
+  CEO: 60,
+  COO: 50,
+  DEPT_HEAD: 40,    // TP Marketing, TP Kinh doanh, etc.
+  TEAM_LEADER: 30,  // Leader Content, Leader FB Ads, etc.
+  DEP_LEADER: 20,   // Phó leader
+  STAFF: 10,
+};
+
+// Tất cả route đều check qua:
+export function canAccess(user, resource, action) {
+  // 1. CEO/COO bypass mọi thứ
+  if (user.level >= 50) return true;
+  
+  // 2. TP Marketing có quyền trên 5 team Marketing + readonly khác
+  if (user.role === 'DEPT_HEAD') {
+    if (resource.department === user.department) return true;
+    if (action === 'read') return true;
+    return false;
+  }
+  
+  // 3. Leader có quyền trên team mình
+  if (user.role === 'TEAM_LEADER') {
+    if (resource.team === user.team) return true;
+    if (action === 'read' && resource.department === user.department) return true;
+    return false;
+  }
+  
+  // 4. Phó leader giống leader, giảm 1 vài action sensitive
+  // 5. Staff: chỉ edit assigned to mình
+  if (user.role === 'STAFF') {
+    if (resource.assigned_to === user.id) return true;
+    if (action === 'read' && resource.team === user.team) return true;
+    return false;
+  }
+  
+  return false;
+}
+```
+
+---
+
+## 3.5 Mobile-first design (TẤT CẢ phòng ban cần)
+
+### Approach: PWA + Responsive
+- 1 codebase HTML/CSS responsive cho desktop + mobile
+- Service worker để work offline 1 phần (xem cache)
+- Add to home screen → app icon
+- Push notification (sau Phase 0)
+
+### Mobile-specific UX per dept
+
+| Phòng | Mobile use case ưu tiên |
+|---|---|
+| **Sales/CSKH** | Click-to-call lead, mark đơn từ điện thoại khi đi gặp KH |
+| **Kho** | Camera scan barcode để check tồn kho, log xuất nhập |
+| **Marketing** | Approve FB/GG ad pause/scale on-the-go, xem alert trên di động |
+| **Tech** | System health alert, deploy status check |
+| **CEO/COO** | Executive dashboard, KPI realtime |
+
+### CSS approach
+- **Tailwind utility-first** — dễ responsive (`sm:`, `md:`, `lg:` breakpoints)
+- Hoặc CSS variables + media queries (cách hiện tại)
+- Layout mobile: bottom navigation (4-5 icon), sidebar collapsible
+
+---
+
 ## 4. Database schema (Cloudflare D1)
 
 ```sql
@@ -560,6 +684,128 @@ github-repo/
 | Analytics | Cloudflare Web Analytics | Free | Free |
 
 **Tổng cost ước tính**: ~$5-15/tháng cho ERP đầy đủ 30-50 user.
+
+---
+
+## 5.3 Migration plan (chuyển data cũ vào D1)
+
+Khi bắt đầu setup D1, chạy script migration 1 lần để import data lịch sử:
+
+### Script migration (function tạm dùng 1 lần)
+
+```javascript
+// functions/api/admin/migrate.js (chỉ CEO/COO chạy được)
+export async function onRequestPost(context) {
+  const { env } = context;
+  const summary = { products: 0, customers: 0, orders: 0, leads: 0 };
+  
+  // 1. Migrate products từ product-costs.json + Pancake
+  const costs = await fetchJson("/data/product-costs.json");
+  const revenue = await fetchJson("/data/product-revenue.json");
+  for (const [key, p] of Object.entries(costs.products)) {
+    if (!p.gia_nhap_vnd) continue;
+    await env.DB.prepare(`
+      INSERT OR REPLACE INTO products 
+      (id, sku, name, group_code, cost_vnd, sell_vnd, current_stock)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).bind(key, p.sku || key, p.dinh_danh, classifyGroup(p.dinh_danh),
+      p.gia_nhap_vnd, p.gia_ban_vnd, parseInt(p.ton_kho) || 0).run();
+    summary.products++;
+  }
+  
+  // 2. Migrate customers + orders từ Pancake source_groups (DUY + PHƯƠNG NAM)
+  for (const sg of ["DUY", "PHUONG_NAM"]) {
+    const products = revenue.source_groups[sg]?.products || {};
+    for (const [name, p] of Object.entries(products)) {
+      // Tạo order placeholder cho mỗi by_date entry
+      // (Chi tiết order_id sẽ pull thực từ Pancake API riêng)
+    }
+  }
+  
+  // 3. Migrate fb-ads-data.json
+  // 4. Migrate google-ads-spend.json
+  // 5. Migrate competitor data
+  
+  return jsonResponse({ ok: true, migrated: summary });
+}
+```
+
+### Pancake live sync (sau migration)
+
+Sau khi migrate xong, **GitHub Actions cron 1h/lần** pull Pancake order mới:
+```
+.github/workflows/sync-pancake.yml
+  - cron: hourly
+  - call Pancake API → get orders since last_sync timestamp
+  - INSERT INTO orders + customers
+  - Update last_sync state
+```
+
+→ ERP luôn có data Pancake fresh trong 1h.
+
+---
+
+## 5.4 Yearly retention strategy (lưu data tổng kết cả năm)
+
+Đây là yêu cầu rất quan trọng. Plan:
+
+### Lớp 1: Raw data (D1 main tables)
+Giữ NGUYÊN tất cả transactions:
+- `orders` — không xoá, index by `created_at`
+- `leads` — không xoá
+- `inventory_movements` — không xoá
+
+→ Với 27 user × 100 orders/ngày = 36K orders/năm = vài MB → D1 nuốt thoải mái.
+
+### Lớp 2: Daily snapshots (cho dashboard nhanh)
+Mỗi ngày 23:55 cron job tạo snapshot:
+
+```sql
+CREATE TABLE daily_snapshots (
+  date TEXT PRIMARY KEY,           -- '2026-04-30'
+  total_revenue_vnd INTEGER,
+  total_orders INTEGER,
+  total_leads INTEGER,
+  fb_spend_estimated INTEGER,
+  gg_spend INTEGER,
+  by_group_json TEXT,               -- {"MAY_DO": {revenue:..., orders:...}, ...}
+  by_channel_json TEXT,             -- {"FB":..., "GG":..., "TIKTOK":..., "SHOPEE":...}
+  by_sales_rep_json TEXT,           -- {"DUY":..., "PHUONG_NAM":...}
+  notes TEXT
+);
+```
+
+→ Dashboard query "doanh thu 365 ngày qua" = 365 row, nhanh 50ms.
+
+### Lớp 3: Monthly aggregates (cho báo cáo CEO)
+
+```sql
+CREATE TABLE monthly_summary (
+  month TEXT PRIMARY KEY,           -- '2026-04'
+  total_revenue_vnd INTEGER,
+  total_profit_vnd INTEGER,
+  total_orders INTEGER,
+  margin_pct REAL,
+  top_5_products_json TEXT,
+  cost_breakdown_json TEXT,         -- {fb_ads: 60M, gg_ads: 80M, vat: 30M, cogs: 200M}
+  notes TEXT
+);
+```
+
+→ CEO dashboard "tổng kết 12 tháng" = 12 row, nhanh.
+
+### Lớp 4: Yearly archive (export PDF/Excel)
+Cuối năm 31/12 cron job:
+- Generate PDF báo cáo năm (revenue, profit, top SP, top sales rep, ...)
+- Save vào R2: `reports/2026/yearly_summary.pdf`
+- Email cho CEO/COO + tax accountant
+
+### Backup strategy
+- D1 export hàng tuần → R2 (auto via Cloudflare cron)
+- Backup retain 12 tháng (hoặc lâu hơn, R2 cheap $0.015/GB/tháng)
+- Nếu D1 lỗi → restore từ R2 backup
+
+→ Data của bạn an toàn cả năm + dễ truy xuất + phục hồi được.
 
 ---
 
