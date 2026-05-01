@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Doscom ERP — Trang chủ</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); color: #f1f5f9; min-height: 100vh; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+
+/* Header */
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+.brand { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+.brand .accent { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.brand-sub { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+.user-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 8px 14px; display: flex; align-items: center; gap: 10px; }
+.user-box .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #38bdf8, #818cf8); display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.user-box .info { font-size: 13px; line-height: 1.3; }
+.user-box .name { font-weight: 600; }
+.user-box .role { opacity: 0.65; font-size: 11.5px; }
+.logout { color: #f87171; font-size: 12px; margin-left: 8px; cursor: pointer; text-decoration: none; }
+
+/* Welcome */
+.welcome { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px 24px; margin-bottom: 28px; }
+.welcome h1 { font-size: 22px; margin-bottom: 4px; }
+.welcome p { opacity: 0.7; font-size: 14px; }
+
+/* Department grid */
+.depts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 32px; }
+.dept-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 22px 20px; transition: all 0.2s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+.dept-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+.dept-card .icon { font-size: 36px; margin-bottom: 10px; }
+.dept-card .title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.dept-card .desc { font-size: 12.5px; opacity: 0.65; line-height: 1.5; margin-bottom: 12px; }
+.dept-card .modules { display: flex; flex-wrap: wrap; gap: 4px; }
+.dept-card .module-tag { font-size: 10.5px; padding: 2px 6px; background: rgba(255,255,255,0.08); border-radius: 3px; opacity: 0.85; }
+.dept-card.locked { opacity: 0.4; cursor: not-allowed; }
+.dept-card.locked:hover { transform: none; box-shadow: none; }
+
+/* Tools quick access */
+.tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tool-link { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px 16px; border-radius: 10px; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px; transition: all 0.15s; }
+.tool-link:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+.tool-link .icon { font-size: 22px; }
+.tool-link .label { font-weight: 500; font-size: 14px; }
+
+/* System status footer */
+.system-status { margin-top: 40px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11.5px; opacity: 0.5; text-align: center; }
+.status-ok { color: #4ade80; }
+.status-warn { color: #facc15; }
+.status-fail { color: #f87171; }
+
+.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.5; margin-bottom: 12px; }
+
+@media (max-width: 640px) {
+  .container { padding: 16px 12px; }
+  .brand { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .dept-card { padding: 18px 16px; }
+  .dept-card .icon { font-size: 28px; }
+  .dept-card .title { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div>
+      <div class="brand"><span class="accent">Doscom</span> ERP</div>
+      <div class="brand-sub">Hệ thống quản lý 4 phòng ban</div>
+    </div>
+    <div class="user-box" id="user-box">
+      <div class="avatar" id="avatar">?</div>
+      <div class="info">
+        <div class="name" id="user-name">Đang tải...</div>
+        <div class="role" id="user-role"></div>
+      </div>
+      <a href="/auth/login?logout=1" class="logout" title="Đăng xuất">↪</a>
+    </div>
+  </header>
+
+  <div class="welcome">
+    <h1 id="welcome-title">👋 Chào mừng</h1>
+    <p id="welcome-msg">Chọn phòng ban bên dưới để bắt đầu làm việc.</p>
+  </div>
+
+  <div class="section-label">📂 Phòng ban</div>
+  <div class="depts">
+
+    <a class="dept-card" href="/agent-google-doscom.html" data-dept="MARKETING" id="card-marketing">
+      <div class="icon">📈</div>
+      <div class="title">Phòng Marketing</div>
+      <div class="desc">5 team: Content · Facebook · Google · TikTok · Shopee</div>
+      <div class="modules">
+        <span class="module-tag">Agent FB Ads</span>
+        <span class="module-tag">Agent Google Ads</span>
+        <span class="module-tag">GA Overview</span>
+        <span class="module-tag">+12 modules</span>
+      </div>
+    </a>
+
+    <a class="dept-card" href="/inventory.html" data-dept="WAREHOUSE" id="card-warehouse">
+      <div class="icon">📦</div>
+      <div class="title">Phòng Kho</div>
+      <div class="desc">Tồn kho, master SP, nhập xuất, NCC, kiểm kê</div>
+      <div class="modules">
+        <span class="module-tag">Inventory</span>
+        <span class="module-tag">Product Master</span>
+        <span class="module-tag">+7 modules</span>
+      </div>
+    </a>
+
+    <a class="dept-card locked" href="#" data-dept="SALES" id="card-sales">
+      <div class="icon">💼</div>
+      <div class="title">Phòng KD & CSKH</div>
+      <div class="desc">CRM, đơn hàng, KPI sales rep, after-sales</div>
+      <div class="modules">
+        <span class="module-tag">⏳ Đang phát triển</span>
+      </div>
+    </a>
+
+    <a class="dept-card locked" href="#" data-dept="TECH" id="card-tech">
+      <div class="icon">🔧</div>
+      <div class="title">Phòng Công nghệ</div>
+      <div class="desc">System health, integrations, RBAC, deploy log</div>
+      <div class="modules">
+        <span class="module-tag">⏳ Đang phát triển</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">🛠 Tools nhanh</div>
+  <div class="tools">
+    <a class="tool-link" href="/agent-facebook-doscom.html"><span class="icon">📘</span><span class="label">FB Ads Agent</span></a>
+    <a class="tool-link" href="/agent-google-doscom.html"><span class="icon">📊</span><span class="label">Google Ads Agent</span></a>
+    <a class="tool-link" href="/inventory.html"><span class="icon">📦</span><span class="label">Tồn kho</span></a>
+    <a class="tool-link" href="/template.html"><span class="icon">📈</span><span class="label">FB Ads Dashboard</span></a>
+  </div>
+
+  <div class="system-status" id="sys-status">Đang kiểm tra hệ thống...</div>
+
+</div>
+
+<script>
+async function loadUser() {
+  try {
+    const r = await fetch('/api/me', { credentials: 'same-origin' });
+    if (!r.ok) {
+      if (r.status === 401) {
+        window.location.href = '/auth/login?redirect=' + encodeURIComponent(window.location.pathname);
+        return;
+      }
+      throw new Error('HTTP ' + r.status);
+    }
+    const j = await r.json();
+
+    if (!j.logged_in) {
+      window.location.href = '/auth/login';
+      return;
+    }
+
+    if (!j.employee) {
+      // Logged in but not in employees table
+      document.getElementById('user-name').textContent = j.email.split('@')[0];
+      document.getElementById('user-role').textContent = 'Chưa đăng ký';
+      document.getElementById('avatar').textContent = j.email[0].toUpperCase();
+      document.getElementById('welcome-title').textContent = '⚠ Email chưa đăng ký ERP';
+      document.getElementById('welcome-msg').textContent = j.hint || 'Liên hệ CEO/COO add bạn vào hệ thống.';
+      const sys = document.getElementById('sys-status');
+      sys.innerHTML = '<span class="status-warn">⚠ DB: ' + (j.db_status?.error || 'employee not found') + '</span>';
+      return;
+    }
+
+    const e = j.employee;
+    document.getElementById('user-name').textContent = e.name;
+    document.getElementById('user-role').textContent = `${e.role_label} · ${e.department_id}`;
+    document.getElementById('avatar').textContent = e.name[0].toUpperCase();
+    document.getElementById('welcome-title').textContent = `👋 Chào ${e.name.split(' ').pop()}`;
+    document.getElementById('welcome-msg').textContent = `${e.role_label} · ${e.department_id}${e.team_id ? ' / ' + e.team_id : ''}`;
+
+    // Lock cards based on role/department
+    const accessible = getAccessibleDepts(e);
+    ['MARKETING', 'WAREHOUSE', 'SALES', 'TECH'].forEach(d => {
+      const card = document.getElementById('card-' + d.toLowerCase());
+      if (!card) return;
+      if (!accessible.includes(d)) {
+        card.classList.add('locked');
+        card.style.opacity = 0.3;
+      }
+    });
+
+    document.getElementById('sys-status').innerHTML = '<span class="status-ok">✓ Hệ thống hoạt động · ' + new Date().toLocaleString('vi-VN') + '</span>';
+  } catch (e) {
+    document.getElementById('user-name').textContent = 'Lỗi';
+    document.getElementById('sys-status').innerHTML = '<span class="status-fail">✗ Lỗi load user: ' + e.message + '</span>';
+  }
+}
+
+function getAccessibleDepts(employee) {
+  if (!employee) return [];
+  if (employee.role_level >= 50) return ['MARKETING', 'WAREHOUSE', 'SALES', 'TECH'];
+  if (employee.role_level >= 30) {
+    // Leader+ thấy phòng mình + readonly các phòng khác (vẫn show card, click mở)
+    return ['MARKETING', 'WAREHOUSE', 'SALES', 'TECH'];
+  }
+  // Staff chỉ thấy phòng mình
+  return [employee.department_id];
+}
+
+window.addEventListener('DOMContentLoaded', loadUser);
+</script>
+</body>
+</html>
