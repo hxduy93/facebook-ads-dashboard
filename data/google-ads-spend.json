@@ -1,19 +1,18 @@
 {
-  "generated_at": "2026-05-02 05:37",
+  "generated_at": "2026-05-02 13:24",
   "source": "Windsor.ai JSON API (auto every 30min)",
   "account_id": "477-705-2298",
   "account_name": "MHDI",
   "date_range": {
-    "start": "2026-01-31",
-    "end": "2026-04-30"
+    "start": "2026-02-01",
+    "end": "2026-05-01"
   },
   "currency": "VND",
-  "rows_raw": 1489,
+  "rows_raw": 1473,
   "by_category": {
     "OTHER_DI": {
-      "_total": 5928110.2699,
+      "_total": 5828084.525,
       "by_date": {
-        "2026-01-31": 100025.7449,
         "2026-02-01": 34454.0105,
         "2026-02-02": 48536.5926,
         "2026-02-03": 20371.5512,
@@ -93,13 +92,13 @@
         "2026-04-27": 179232.8195,
         "2026-04-28": 195516.5099,
         "2026-04-29": 205010.5888,
-        "2026-04-30": 3025.6691
+        "2026-04-30": 3025.6691,
+        "2026-05-01": 0.0
       }
     },
     "DINHVI": {
-      "_total": 70044907.9726,
+      "_total": 69429831.8531,
       "by_date": {
-        "2026-01-31": 615076.1195,
         "2026-02-01": 819166.4012,
         "2026-02-02": 364248.8498,
         "2026-02-03": 1041145.3465,
@@ -184,9 +183,8 @@
       }
     },
     "OTHER_CAM": {
-      "_total": 64533454.2439,
+      "_total": 63913722.3833,
       "by_date": {
-        "2026-01-31": 619731.8606,
         "2026-02-01": 1115581.2657,
         "2026-02-02": 597174.864,
         "2026-02-03": 1382565.1615,
@@ -268,13 +266,13 @@
         "2026-04-27": 930921.1505,
         "2026-04-28": 1035163.3288,
         "2026-04-29": 588960.3737,
-        "2026-04-30": 14219.0428
+        "2026-04-30": 14219.0428,
+        "2026-05-01": 0.0
       }
     },
     "MAYDO": {
-      "_total": 54991163.4997,
+      "_total": 54398175.2114,
       "by_date": {
-        "2026-01-31": 592988.2883,
         "2026-02-01": 629677.2454,
         "2026-02-02": 336097.4102,
         "2026-02-03": 799073.5509,
@@ -360,9 +358,8 @@
       }
     },
     "GHIAM": {
-      "_total": 39295602.6764,
+      "_total": 39010855.6452,
       "by_date": {
-        "2026-01-31": 284747.0312,
         "2026-02-01": 384201.4138,
         "2026-02-02": 238724.4111,
         "2026-02-03": 583708.8524,
@@ -447,9 +444,8 @@
       }
     },
     "OTHER_SIM": {
-      "_total": 17922921.2046,
+      "_total": 17708041.7013,
       "by_date": {
-        "2026-01-31": 214879.5033,
         "2026-02-01": 388415.8633,
         "2026-02-02": 205235.5766,
         "2026-02-03": 585207.7901,
@@ -531,9 +527,8 @@
       }
     },
     "CAMCALL": {
-      "_total": 4026139.5447,
+      "_total": 3980549.3127,
       "by_date": {
-        "2026-01-31": 45590.232,
         "2026-02-01": 54321.7627,
         "2026-02-02": 29651.8395,
         "2026-02-03": 21450.9952,
@@ -680,150 +675,6 @@
     }
   },
   "campaigns_raw": [
-    {
-      "campaign": "RMK - chống ghi âm",
-      "category": "OTHER_DI",
-      "date": "2026-01-31",
-      "spend": 26323.7449,
-      "clicks": 14,
-      "impressions": 2550
-    },
-    {
-      "campaign": "RMK - thiết bị định vị",
-      "category": "DINHVI",
-      "date": "2026-01-31",
-      "spend": 89903.0198,
-      "clicks": 109,
-      "impressions": 8612
-    },
-    {
-      "campaign": "RMK - Camera 4G",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 17529.6299,
-      "clicks": 11,
-      "impressions": 4467
-    },
-    {
-      "campaign": "RMK - Máy dò - 2024 - nmt",
-      "category": "MAYDO",
-      "date": "2026-01-31",
-      "spend": 291735.9303,
-      "clicks": 228,
-      "impressions": 26442
-    },
-    {
-      "campaign": "RMK - Camera mini",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 72467.8978,
-      "clicks": 38,
-      "impressions": 8457
-    },
-    {
-      "campaign": "RMK - Camera wifi",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 16773.973,
-      "clicks": 11,
-      "impressions": 1744
-    },
-    {
-      "campaign": "8/5/2025 Search - TB Dò Nghe Lén",
-      "category": "MAYDO",
-      "date": "2026-01-31",
-      "spend": 301252.358,
-      "clicks": 48,
-      "impressions": 170
-    },
-    {
-      "campaign": "8/5/2025 Search - TBĐV GPS",
-      "category": "DINHVI",
-      "date": "2026-01-31",
-      "spend": 295178.0997,
-      "clicks": 111,
-      "impressions": 670
-    },
-    {
-      "campaign": "8/5/2025 Search - TB Ghi Âm",
-      "category": "GHIAM",
-      "date": "2026-01-31",
-      "spend": 284747.0312,
-      "clicks": 30,
-      "impressions": 286
-    },
-    {
-      "campaign": "8/5/2025 Search - Cam mini",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 108064.4932,
-      "clicks": 14,
-      "impressions": 170
-    },
-    {
-      "campaign": "8/5/2025 Search - Cam NLMT",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 247204.7604,
-      "clicks": 46,
-      "impressions": 331
-    },
-    {
-      "campaign": "8/5/2025 Search - Cam WIFI",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 138292.865,
-      "clicks": 26,
-      "impressions": 228
-    },
-    {
-      "campaign": "8/5/2025 Search - Sim 4G",
-      "category": "OTHER_SIM",
-      "date": "2026-01-31",
-      "spend": 214879.5033,
-      "clicks": 42,
-      "impressions": 252
-    },
-    {
-      "campaign": "8/5/2025 Search - TB Chống Ghi Âm",
-      "category": "OTHER_DI",
-      "date": "2026-01-31",
-      "spend": 73702.0,
-      "clicks": 20,
-      "impressions": 119
-    },
-    {
-      "campaign": "RMK - thiết bị ghi âm #2",
-      "category": "GHIAM",
-      "date": "2026-01-31",
-      "spend": 0.0,
-      "clicks": 0,
-      "impressions": 247
-    },
-    {
-      "campaign": "RMK - NLMT #2",
-      "category": "OTHER_CAM",
-      "date": "2026-01-31",
-      "spend": 19398.2413,
-      "clicks": 25,
-      "impressions": 1985
-    },
-    {
-      "campaign": "Shopping - 6/6 - ĐV",
-      "category": "DINHVI",
-      "date": "2026-01-31",
-      "spend": 229995.0,
-      "clicks": 74,
-      "impressions": 6019
-    },
-    {
-      "campaign": "RMK - Camera Gọi 2 chiều",
-      "category": "CAMCALL",
-      "date": "2026-01-31",
-      "spend": 45590.232,
-      "clicks": 26,
-      "impressions": 3101
-    },
     {
       "campaign": "RMK - chống ghi âm",
       "category": "OTHER_DI",
@@ -12591,6 +12442,22 @@
       "spend": 1337.5249,
       "clicks": 2,
       "impressions": 146
+    },
+    {
+      "campaign": "RMK - chống ghi âm",
+      "category": "OTHER_DI",
+      "date": "2026-05-01",
+      "spend": 0.0,
+      "clicks": 0,
+      "impressions": 1
+    },
+    {
+      "campaign": "8/5/2025 Search - Cam WIFI",
+      "category": "OTHER_CAM",
+      "date": "2026-05-01",
+      "spend": 0.0,
+      "clicks": 0,
+      "impressions": 1
     }
   ]
 }
