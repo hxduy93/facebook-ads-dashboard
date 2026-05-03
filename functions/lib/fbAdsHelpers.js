@@ -242,6 +242,50 @@ export function resolveTimeRange(preset, customStart = null, customEnd = null) {
   }
 }
 
+// Trả về khoảng thời gian dùng để so sánh với timeRange hiện tại.
+// Quy tắc: hôm nay/hôm qua → 3 ngày trước đó (làm baseline trung bình).
+// Tuần này/tuần trước → tuần liền kề trước.
+// Tháng này/tháng trước → khoảng cùng độ dài tháng trước.
+// last_Nd/custom → N ngày liền kề trước.
+export function getComparisonRange(timeRange, preset) {
+  if (!timeRange) return null;
+  function fmt(d) { return d.toISOString().slice(0, 10); }
+  function addDays(date, n) { return new Date(date.getTime() + n * 86400000); }
+  const start = new Date(timeRange.start + "T00:00:00Z");
+  const end = new Date(timeRange.end + "T00:00:00Z");
+  const days = Math.round((end - start) / 86400000) + 1;
+
+  switch (preset) {
+    case "today":
+    case "yesterday": {
+      const compEnd = addDays(start, -1);
+      const compStart = addDays(start, -3);
+      return { start: fmt(compStart), end: fmt(compEnd), label: "3 ngày trước đó (baseline)", days: 3 };
+    }
+    case "this_week":
+    case "last_week": {
+      const compEnd = addDays(start, -1);
+      const compStart = addDays(start, -7);
+      return { start: fmt(compStart), end: fmt(compEnd), label: "Tuần liền kề trước", days: 7 };
+    }
+    case "this_month":
+    case "last_month": {
+      const compEnd = addDays(start, -1);
+      const compStart = addDays(start, -days);
+      return { start: fmt(compStart), end: fmt(compEnd), label: `Tháng trước (${days} ngày liền kề)`, days };
+    }
+    case "last_7d":
+    case "last_30d":
+    case "last_90d":
+    case "custom":
+    default: {
+      const compEnd = addDays(start, -1);
+      const compStart = addDays(start, -days);
+      return { start: fmt(compStart), end: fmt(compEnd), label: `${days} ngày trước đó`, days };
+    }
+  }
+}
+
 // Filter orders/revenue by date range — works with Pancake source_groups.products[*].orders_by_date
 export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
   if (!productRevenueJson?.source_groups || !timeRange) return { has_data: false };
@@ -415,7 +459,7 @@ export function compactFbAccounts(fbAdsJson, timeRange) {
 // Aggregate từ by_date (filter date in range). Filter chỉ active campaigns by default.
 // "Lượt chuyển đổi" = complete_registrations (theo Doscom track event).
 export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
-  const { activeOnly = true } = opts;
+  const { activeOnly = true, comparisonRange = null } = opts;
   if (!fbAdsJson?.accounts) return { has_data: false, campaigns: [] };
   const account = fbAdsJson.accounts.find(a => a.account_id === accountId);
   if (!account) return { has_data: false, campaigns: [], error: "Account not found" };
@@ -423,27 +467,59 @@ export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
   const tStart = timeRange?.start;
   const tEnd = timeRange?.end;
 
-  const allCampaigns = (account.campaigns || []).map(c => {
-    // Re-aggregate from by_date for the time range (chính xác filter theo time)
-    const byDate = c.by_date || {};
+  function aggregateRange(byDate, rStart, rEnd) {
     let spend = 0, impressions = 0, clicks = 0, leads = 0, completeReg = 0, linkClicks = 0;
-    let daysInRange = 0;
-    for (const [date, m] of Object.entries(byDate)) {
-      if (tStart && date < tStart) continue;
-      if (tEnd && date > tEnd) continue;
+    let days = 0;
+    for (const [date, m] of Object.entries(byDate || {})) {
+      if (rStart && date < rStart) continue;
+      if (rEnd && date > rEnd) continue;
       spend += Number(m.spend) || 0;
       impressions += Number(m.impressions) || 0;
       clicks += Number(m.clicks) || 0;
       leads += Number(m.leads) || 0;
       completeReg += Number(m.complete_registrations) || 0;
       linkClicks += Number(m.link_clicks) || 0;
-      daysInRange++;
+      days++;
     }
-    // Conversion = complete_registrations (Doscom track lead form thông qua complete_registration event)
     const conversions = completeReg;
     const ctr = impressions > 0 ? clicks / impressions : 0;
     const cpc = clicks > 0 ? spend / clicks : 0;
     const cpa = conversions > 0 ? Math.round(spend / conversions) : null;
+    return {
+      spend: Math.round(spend),
+      impressions, clicks, link_clicks: linkClicks, leads, conversions,
+      ctr: Math.round(ctr * 10000) / 10000,
+      cpc: Math.round(cpc),
+      cpa,
+      days_with_data: days,
+    };
+  }
+
+  function pctDelta(now, prev) {
+    if (prev === null || prev === undefined) return null;
+    if (prev === 0) return now > 0 ? 100 : 0;
+    return Math.round(((now - prev) / prev) * 1000) / 10;
+  }
+
+  const allCampaigns = (account.campaigns || []).map(c => {
+    const byDate = c.by_date || {};
+    const cur = aggregateRange(byDate, tStart, tEnd);
+
+    let comparison = null, deltas = null;
+    if (comparisonRange) {
+      const comp = aggregateRange(byDate, comparisonRange.start, comparisonRange.end);
+      comparison = { ...comp, range: comparisonRange };
+      const curDailySpend = cur.days_with_data > 0 ? cur.spend / cur.days_with_data : 0;
+      const compDailySpend = comp.days_with_data > 0 ? comp.spend / comp.days_with_data : 0;
+      const curDailyConv = cur.days_with_data > 0 ? cur.conversions / cur.days_with_data : 0;
+      const compDailyConv = comp.days_with_data > 0 ? comp.conversions / comp.days_with_data : 0;
+      deltas = {
+        spend_per_day_pct: pctDelta(curDailySpend, compDailySpend),
+        conv_per_day_pct: pctDelta(curDailyConv, compDailyConv),
+        cpa_pct: (cur.cpa !== null && comp.cpa !== null) ? pctDelta(cur.cpa, comp.cpa) : null,
+        ctr_pct: pctDelta(cur.ctr, comp.ctr),
+      };
+    }
 
     return {
       id: c.campaign_id,
@@ -451,17 +527,9 @@ export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
       status: c.status || "UNKNOWN",
       effective_status: c.effective_status || "UNKNOWN",
       objective: c.objective || "UNKNOWN",
-      // Time-range aggregated metrics
-      spend: Math.round(spend),
-      impressions,
-      clicks,
-      link_clicks: linkClicks,
-      leads,
-      conversions,           // = complete_registrations (cột Kết quả trong Ads Manager)
-      ctr: Math.round(ctr * 10000) / 10000,
-      cpc: Math.round(cpc),
-      cpa,                   // chi phí mỗi conversion (= chi phí mỗi kết quả)
-      days_with_data: daysInRange,
+      ...cur,
+      comparison,
+      deltas,
     };
   });
 

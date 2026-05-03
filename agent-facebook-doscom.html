@@ -109,6 +109,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .opt-warnings { padding: 10px; background: #fef2f2; border-left: 3px solid #dc2626; border-radius: 4px; font-size: 12.5px; color: #991b1b; margin-top: 8px; }
 .opt-warnings ul { margin: 6px 0 0 16px; padding: 0; }
 
+/* So sánh kỳ trước */
+.opt-compare { padding: 10px 12px; background: #f0f9ff; border-left: 3px solid #0284c7; border-radius: 4px; font-size: 12.5px; color: #075985; margin-bottom: 10px; }
+.opt-compare strong { color: #0c4a6e; }
+.delta-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10.5px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+.delta-badge.up-good { background: #d1fae5; color: #065f46; }
+.delta-badge.up-bad { background: #fee2e2; color: #991b1b; }
+.delta-badge.down-good { background: #d1fae5; color: #065f46; }
+.delta-badge.down-bad { background: #fee2e2; color: #991b1b; }
+.delta-badge.flat { background: #f3f4f6; color: #6b7280; }
+
+/* Eval note dài hơn */
+.opt-eval-card .note { color: #4b5563; font-size: 12px; line-height: 1.5; margin-top: 4px; }
+
+/* Scale plan */
+.opt-scale-plan { margin-top: 10px; padding: 14px; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #86efac; border-radius: 8px; }
+.opt-scale-plan h3 { margin: 0 0 8px; font-size: 14px; color: #166534; }
+.opt-scale-plan .method { padding: 10px; background: white; border-radius: 6px; margin-bottom: 8px; font-size: 12.5px; line-height: 1.5; border-left: 3px solid #d1d5db; }
+.opt-scale-plan .method.recommended { border-left-color: #16a34a; background: #f0fdf4; }
+.opt-scale-plan .method strong { color: #14532d; display: block; margin-bottom: 3px; }
+.opt-scale-plan .reco-tag { display: inline-block; padding: 2px 8px; background: #16a34a; color: white; border-radius: 3px; font-size: 10.5px; font-weight: 600; margin-left: 6px; }
+.opt-scale-plan .target { padding: 8px 10px; background: #fef3c7; border-radius: 4px; font-size: 12.5px; color: #78350f; margin-top: 6px; }
+
 .model-pref-bar { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; font-size: 12px; }
 .model-pref-bar select { padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; }
 
@@ -458,6 +480,9 @@ async function autoAnalyzeAll(campaigns) {
         if (j.parsed_json && !j.parsed_json._parse_error) dataObj = j.parsed_json;
         else if (j.response && typeof j.response === 'object' && j.response.verdict) dataObj = j.response;
         if (dataObj) {
+          // Inject deltas + comparison range từ server vào dataObj để render hiển thị badge
+          if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
+          if (j.comparison_range) dataObj._comparison_range = j.comparison_range;
           targetEl.innerHTML = renderOptimizeResult(dataObj, c.name);
         } else {
           const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
@@ -557,6 +582,8 @@ async function optimizeCampaign(campaignId, campaignName) {
     }
 
     if (dataObj) {
+      if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
+      if (j.comparison_range) dataObj._comparison_range = j.comparison_range;
       html += renderOptimizeResult(dataObj, campaignName);
     } else {
       const respText = (typeof j.response === 'string')
@@ -575,37 +602,64 @@ async function optimizeCampaign(campaignId, campaignName) {
   }
 }
 
+// Format delta % thành badge có màu theo metric semantic
+// metricType: 'spend' | 'conv' | 'cpa' | 'ctr' — quyết định tăng là tốt hay xấu
+function deltaBadge(pct, metricType) {
+  if (pct === null || pct === undefined || isNaN(pct)) return '';
+  const v = Number(pct);
+  if (Math.abs(v) < 1) return `<span class="delta-badge flat">±0%</span>`;
+  // CPA tăng = xấu, CTR/conv tăng = tốt, spend trung tính (tăng có thể tốt hoặc xấu)
+  let cls;
+  if (metricType === 'cpa') {
+    cls = v > 0 ? 'up-bad' : 'down-good';
+  } else if (metricType === 'spend') {
+    cls = 'flat'; // neutral
+  } else {
+    cls = v > 0 ? 'up-good' : 'down-bad';
+  }
+  const sign = v > 0 ? '+' : '';
+  return `<span class="delta-badge ${cls}">${sign}${v.toFixed(1)}%</span>`;
+}
+
 function renderOptimizeResult(json, campaignName) {
   const verdictMap = {
-    SCALE: { icon: '🟢', label: 'SCALE — Tăng budget', color: 'green' },
+    SCALE: { icon: '🟢', label: 'SCALE — Tăng quy mô', color: 'green' },
     KEEP: { icon: '✅', label: 'KEEP — Giữ nguyên', color: 'green' },
-    REFRESH: { icon: '🔄', label: 'REFRESH — Đổi creative', color: 'yellow' },
+    REFRESH: { icon: '🔄', label: 'REFRESH — Làm mới creative', color: 'yellow' },
     AUDIENCE: { icon: '🎯', label: 'AUDIENCE — Sửa targeting', color: 'yellow' },
     PAUSE: { icon: '🔴', label: 'PAUSE — Tạm dừng', color: 'red' },
   };
   const v = verdictMap[json.verdict] || { icon: '❓', label: json.verdict || 'Unknown', color: 'yellow' };
   const color = json.verdict_color || v.color;
 
-  // Performance cards
+  // So sánh kỳ trước (1 dòng tóm tắt)
+  let compareBox = '';
+  if (json.comparison_summary) {
+    compareBox = `<div class="opt-compare">📊 <strong>So sánh kỳ trước:</strong> ${escapeHtml(json.comparison_summary)}</div>`;
+  }
+
+  // Performance cards (có delta badge nếu có comparison data)
   const p = json.performance || {};
+  // Try đọc deltas từ raw campaign data nếu truyền vào (sẽ có ở wrapper)
+  const d = json._deltas || {};
   const ratingClass = (p.rating_overall >= 7) ? 'high' : (p.rating_overall >= 5 ? 'mid' : 'low');
   const perfCards = `
     <div class="opt-perf-cards">
-      <div class="opt-perf-card"><div class="label">Spend</div><div class="value">${fmtVnd(p.spend_vnd || 0)}</div></div>
-      <div class="opt-perf-card"><div class="label">Kết quả</div><div class="value">${fmt(p.conversions || 0)}</div></div>
-      <div class="opt-perf-card"><div class="label">CPA</div><div class="value">${p.cpa_vnd ? fmtVnd(p.cpa_vnd) : '—'}</div></div>
-      <div class="opt-perf-card"><div class="label">CTR</div><div class="value">${(p.ctr_pct || 0).toFixed(2)}%</div></div>
-      <div class="opt-perf-card"><div class="label">Đánh giá</div><div class="value">${p.rating_overall || '—'}/10</div><span class="rating ${ratingClass}">${ratingClass.toUpperCase()}</span></div>
+      <div class="opt-perf-card"><div class="label">Chi phí</div><div class="value">${fmtVnd(p.spend_vnd || 0)}</div>${d.spend_per_day_pct !== undefined ? deltaBadge(d.spend_per_day_pct, 'spend') : ''}</div>
+      <div class="opt-perf-card"><div class="label">Kết quả</div><div class="value">${fmt(p.conversions || 0)}</div>${d.conv_per_day_pct !== undefined ? deltaBadge(d.conv_per_day_pct, 'conv') : ''}</div>
+      <div class="opt-perf-card"><div class="label">CPA</div><div class="value">${p.cpa_vnd ? fmtVnd(p.cpa_vnd) : '—'}</div>${d.cpa_pct !== undefined && d.cpa_pct !== null ? deltaBadge(d.cpa_pct, 'cpa') : ''}</div>
+      <div class="opt-perf-card"><div class="label">CTR</div><div class="value">${(p.ctr_pct || 0).toFixed(2)}%</div>${d.ctr_pct !== undefined ? deltaBadge(d.ctr_pct, 'ctr') : ''}</div>
+      <div class="opt-perf-card"><div class="label">Đánh giá</div><div class="value">${p.rating_overall || '—'}/10</div><span class="rating ${ratingClass}">${ratingClass === 'high' ? 'TỐT' : ratingClass === 'mid' ? 'TRUNG BÌNH' : 'YẾU'}</span></div>
     </div>
   `;
 
-  // Evaluation grid
+  // Evaluation grid (note giờ dài, hiển thị full)
   const evalDimensions = ['spend_efficiency', 'volume', 'ctr_quality', 'trend'];
   const evalLabels = {
     spend_efficiency: '💰 Hiệu suất chi phí',
-    volume: '📊 Volume',
-    ctr_quality: '🎯 CTR Quality',
-    trend: '📈 Trend',
+    volume: '📊 Khối lượng đơn',
+    ctr_quality: '🎯 Chất lượng CTR',
+    trend: '📈 Xu hướng so kỳ trước',
   };
   let evalCards = '';
   for (const k of evalDimensions) {
@@ -619,24 +673,52 @@ function renderOptimizeResult(json, campaignName) {
     </div>`;
   }
 
-  // Action box
+  // Action box (label tiếng Việt)
   const a = json.action || {};
+  const riskLabel = { low: 'THẤP', medium: 'TRUNG BÌNH', high: 'CAO' };
   const actionBox = `
     <div class="opt-action-box">
       <h3>💡 ${v.icon} ${v.label}</h3>
-      <div class="field"><strong>WHAT:</strong> ${escapeHtml(a.what || '—')}</div>
-      <div class="field"><strong>WHY:</strong> ${escapeHtml(a.why || '—')}</div>
-      <div class="field"><strong>EXPECTED:</strong> ${escapeHtml(a.impact_expected || '—')}</div>
-      <div class="field"><strong>RISK:</strong> <span class="risk ${a.risk || 'medium'}">${(a.risk || 'medium').toUpperCase()}</span> — ${escapeHtml(a.risk_note || '')}</div>
+      <div class="field"><strong>HÀNH ĐỘNG:</strong> ${escapeHtml(a.what || '—')}</div>
+      <div class="field"><strong>LÝ DO:</strong> ${escapeHtml(a.why || '—')}</div>
+      <div class="field"><strong>KỲ VỌNG:</strong> ${escapeHtml(a.impact_expected || '—')}</div>
+      <div class="field"><strong>RỦI RO:</strong> <span class="risk ${a.risk || 'medium'}">${riskLabel[a.risk] || 'TRUNG BÌNH'}</span> — ${escapeHtml(a.risk_note || '')}</div>
     </div>
   `;
+
+  // Scale plan (chỉ render nếu verdict=SCALE và có scale_plan)
+  let scalePlanBox = '';
+  if (json.scale_plan && typeof json.scale_plan === 'object') {
+    const sp = json.scale_plan;
+    const reco = String(sp.recommended || '').match(/[123]/)?.[0] || '';
+    const isReco = (n) => String(reco) === String(n);
+    const target = sp.budget_target_vnd ? `🎯 <strong>Mục tiêu:</strong> ${fmtVnd(sp.budget_target_vnd)}/ngày (+${sp.increase_pct || '?'}%)` : '';
+    scalePlanBox = `
+      <div class="opt-scale-plan">
+        <h3>🚀 Kế hoạch tăng quy mô (3 cách — chọn 1)</h3>
+        <div class="method ${isReco(1) ? 'recommended' : ''}">
+          <strong>Cách 1 — Tăng ngân sách dần ${isReco(1) ? '<span class="reco-tag">KHUYẾN NGHỊ</span>' : ''}</strong>
+          ${escapeHtml(sp.method_1_budget || '—')}
+        </div>
+        <div class="method ${isReco(2) ? 'recommended' : ''}">
+          <strong>Cách 2 — Nhân nhóm quảng cáo ${isReco(2) ? '<span class="reco-tag">KHUYẾN NGHỊ</span>' : ''}</strong>
+          ${escapeHtml(sp.method_2_duplicate || '—')}
+        </div>
+        <div class="method ${isReco(3) ? 'recommended' : ''}">
+          <strong>Cách 3 — Bổ sung creative ${isReco(3) ? '<span class="reco-tag">KHUYẾN NGHỊ</span>' : ''}</strong>
+          ${escapeHtml(sp.method_3_creative || '—')}
+        </div>
+        ${target ? `<div class="target">${target}</div>` : ''}
+      </div>
+    `;
+  }
 
   // Next check
   const nc = json.next_check || {};
   const nextCheck = `
     <div class="opt-next">
-      ⏰ <strong>Check lại sau ${nc.after_days || '?'} ngày:</strong> ${escapeHtml(nc.metric_to_watch || '—')}.<br>
-      ${nc.threshold_revert ? `🚨 Revert nếu: ${escapeHtml(nc.threshold_revert)}` : ''}
+      ⏰ <strong>Kiểm tra lại sau ${nc.after_days || '?'} ngày:</strong> ${escapeHtml(nc.metric_to_watch || '—')}.<br>
+      ${nc.threshold_revert ? `🚨 <strong>Hoàn tác nếu:</strong> ${escapeHtml(nc.threshold_revert)}` : ''}
     </div>
   `;
 
@@ -654,9 +736,11 @@ function renderOptimizeResult(json, campaignName) {
         <div class="summary">${escapeHtml(json.summary || '')}</div>
       </div>
     </div>
+    ${compareBox}
     ${perfCards}
     <div class="opt-eval-grid">${evalCards}</div>
     ${actionBox}
+    ${scalePlanBox}
     ${nextCheck}
     ${warningsHtml}
   `;

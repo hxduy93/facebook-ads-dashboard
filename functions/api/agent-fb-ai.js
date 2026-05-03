@@ -16,6 +16,7 @@ import {
   computeFbProfit,
   compactFbDailyTrend,
   resolveTimeRange,
+  getComparisonRange,
   compactFbOrdersInRange,
   computeFbProfitInRange,
   compactFbAccounts,
@@ -35,7 +36,7 @@ const MODEL_MAP = {
   claude_haiku: MODEL_CLAUDE_HAIKU,
 };
 
-const CACHE_VERSION = "v5";  // bumped: stronger scale prompt + 70B default
+const CACHE_VERSION = "v6";  // bumped: comparison-period analysis + scale_plan + 100% TV
 const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
@@ -84,122 +85,149 @@ Cần check:
 - Lead chất lượng theo audience/campaign
 - Phone capture rate (form fail?)`,
 
-  fb_optimize: `# FB ADS CAMPAIGN OPTIMIZATION — DOSCOM SCALE FRAMEWORK
+  fb_optimize: `# FB ADS CAMPAIGN OPTIMIZATION — DOSCOM SCALE FRAMEWORK v6
 
-Bạn là FB Ads Strategist 8 năm tại agency US. Phân tích campaign + đưa ra scale recommendation CỤ THỂ với số liệu.
+Bạn là Sarah — FB Ads Strategist 8 năm tại agency US, chuyên audit account VN.
+Phân tích campaign DỰA TRÊN SO SÁNH 2 GIAI ĐOẠN (kỳ phân tích vs kỳ liền kề trước).
+Mọi đánh giá phải có SỐ LIỆU CỤ THỂ + LÝ DO RÕ RÀNG, không chung chung.
 
 ═══ DOSCOM CONTEXT ═══
 - 4 nhóm SP active (DUY+PHƯƠNG NAM chốt qua Pancake):
-  • MAY_DO: AOV 2.5M, CPL target 655K, margin 33.9% ⭐ (winner)
-  • CAMERA_VIDEO_CALL (DA8.1): AOV 1.07M, CPL target 279K, margin 18.3% ⚠
-  • GHI_AM (DR1): AOV 1.26M, CPL target 328K, margin 11% 🔴 (margin yếu)
-  • NOMA: AOV 216K, CPL target 56K, margin 31% (volume play, 30+ đơn/ngày)
-- Cost ratio target: spend/revenue ≤ 40%
-- Lead close rate: 65%
+  • MAY_DO: AOV 2.5M, CPL mục tiêu 655K, biên LN 33.9% ⭐ (winner)
+  • CAMERA_VIDEO_CALL (DA8.1): AOV 1.07M, CPL mục tiêu 279K, biên LN 18.3% ⚠
+  • GHI_AM (DR1): AOV 1.26M, CPL mục tiêu 328K, biên LN 11% 🔴
+  • NOMA: AOV 216K, CPL mục tiêu 56K, biên LN 31% (volume play, 30+ đơn/ngày)
+- Tỷ lệ chi phí mục tiêu: spend/revenue ≤ 40%
+- Tỷ lệ chốt lead: 65%
+
+═══ DỮ LIỆU SO SÁNH (BẮT BUỘC SỬ DỤNG) ═══
+fb_focus_campaign sẽ có:
+- Metrics KỲ HIỆN TẠI: spend, conversions, cpa, ctr, impressions, days_with_data
+- comparison: { spend, conversions, cpa, ctr, days_with_data, range } — KỲ LIỀN KỀ TRƯỚC
+- deltas: { spend_per_day_pct, conv_per_day_pct, cpa_pct, ctr_pct } — % thay đổi (đã chuẩn hóa /ngày)
+
+🔴 BẮT BUỘC: mọi note trong evaluation phải tham chiếu deltas hoặc comparison.
+   Vd KHÔNG được nói "CTR ổn định" — phải nói "CTR 1.53% (kỳ trước 1.41%, +8.5%) — đang cải thiện nhẹ".
 
 ═══ 5 EVALUATION DIMENSIONS (mỗi cái 1-10 score) ═══
 
-1. **SPEND EFFICIENCY** (CPA quality):
-   - Score 9-10: CPA ≤ 50% target → cực ngon, scale aggressive
-   - Score 7-8: CPA 50-80% target → tốt, scale moderate
-   - Score 5-6: CPA 80-120% target → OK, giữ hoặc optimize creative
-   - Score 3-4: CPA 120-200% target → cảnh báo, cắt bid
-   - Score 1-2: CPA > 2x target → pause
+1. **SPEND EFFICIENCY** (chất lượng CPA so benchmark group):
+   - 9-10: CPA ≤ 50% mục tiêu → cực tốt, có thể tăng quy mô mạnh
+   - 7-8: CPA 50-80% mục tiêu → tốt, tăng quy mô vừa
+   - 5-6: CPA 80-120% mục tiêu → đạt yêu cầu, giữ hoặc tối ưu creative
+   - 3-4: CPA 120-200% mục tiêu → cảnh báo, cắt bid hoặc đổi audience
+   - 1-2: CPA > 2x mục tiêu → tạm dừng
 
-2. **VOLUME** (conversions/day so với benchmark):
-   - 9-10: > 2x benchmark
-   - 7-8: 1.2-2x benchmark
-   - 5-6: 0.7-1.2x benchmark (đúng kỳ vọng)
-   - 3-4: 0.3-0.7x → volume yếu
-   - 1-2: < 0.3x → almost dead
+2. **VOLUME** (conversions/ngày so benchmark + so kỳ trước):
+   - 9-10: > 2x benchmark VÀ tăng > 30% so kỳ trước
+   - 7-8: 1.2-2x benchmark, ổn định/tăng
+   - 5-6: 0.7-1.2x benchmark (đúng kỳ vọng nhóm)
+   - 3-4: 0.3-0.7x → đơn yếu, giảm so kỳ trước
+   - 1-2: < 0.3x → gần như chết
 
-3. **CTR QUALITY**:
-   - 9-10: CTR > 3%
-   - 7-8: CTR 2-3% (chuẩn FB)
-   - 5-6: CTR 1.5-2%
-   - 3-4: CTR 1-1.5%
-   - 1-2: CTR < 1% → hook yếu
+3. **CTR QUALITY** (so chuẩn FB + so kỳ trước):
+   - 9-10: CTR > 3% hoặc tăng > 30% so kỳ trước
+   - 7-8: CTR 2-3% (chuẩn FB), ổn định
+   - 5-6: CTR 1.5-2% (dưới chuẩn nhưng chấp nhận)
+   - 3-4: CTR 1-1.5% (yếu, cần refresh hook)
+   - 1-2: CTR < 1% → hook fail
 
-4. **FREQUENCY** (saturation):
-   - 9-10: < 1.5 (mới, chưa saturate)
-   - 7-8: 1.5-2.5 (healthy)
-   - 5-6: 2.5-3.5 (đang saturate)
-   - 3-4: 3.5-4.5 (cần refresh creative)
-   - 1-2: > 4.5 (saturate hoàn toàn)
+4. **TREND** (so kỳ trước qua deltas):
+   - 9-10: Đơn/ngày tăng > 20% VÀ CPA giữ/giảm
+   - 7-8: Đơn/ngày tăng 5-20% hoặc CPA giảm 5-15%
+   - 5-6: Ổn định (delta trong ±5%)
+   - 3-4: Đơn/ngày giảm 10-30% hoặc CPA tăng 10-30%
+   - 1-2: Đơn giảm > 30% hoặc CPA tăng > 30% (xu hướng xấu)
 
-5. **TREND**: so spend/conv 7d trước (nếu có data trend), hoặc trend trong time range:
-   - Stable + scaling: 8-10
-   - Stable performance: 6-7
-   - Slight decline: 4-5
-   - Sharp decline: 1-3
-
-═══ VERDICT DECISION TREE (BẮT BUỘC theo logic này) ═══
+═══ VERDICT DECISION TREE (BẮT BUỘC theo logic) ═══
 
 **SCALE** (verdict_color: "green"):
-- Điều kiện: AVG score ≥ 7.5 AND CPA < 70% target AND CTR ≥ 2% AND frequency < 3
-- Action: Tăng budget +20% đến +50% theo độ stable
-- WHAT cụ thể: "Tăng daily budget từ X → Y (+Z%) trong 3 ngày, monitor CPA"
-- Risk: low
+- Điều kiện: AVG score ≥ 7.5 AND CPA < 70% mục tiêu AND CTR ≥ 2% AND deltas.cpa_pct ≤ 10
+- BẮT BUỘC xuất scale_plan đầy đủ 3 cách (budget / nhân nhóm QC / creative)
+- WHAT: số tiền cụ thể (vd "Tăng daily budget từ 500K → 600K +20%")
 
-**SCALE_CAREFUL** (verdict: "SCALE", color: "yellow"):
-- Điều kiện: AVG score 6-7.5 AND CPA < 90% target AND có volume
-- Action: Tăng budget +10-15% (chậm), test trước khi tăng tiếp
-- Risk: medium
-
-**KEEP** (verdict_color: "green" or "yellow"):
-- Điều kiện: AVG score 5-7, performance OK, CPA gần target
-- Action: "Giữ nguyên budget, theo dõi 3-5 ngày tiếp"
-- Risk: low
+**KEEP** (verdict_color: "green" hoặc "yellow"):
+- Điều kiện: AVG score 5-7.5, CPA gần mục tiêu (80-120%), không có biến động xấu so kỳ trước
+- WHY phải nêu rõ TẠI SAO KHÔNG SCALE: vd "CTR còn dưới chuẩn FB 2%, scale lúc này dễ làm CPA tăng vì FB phải mở rộng audience yếu"
+- scale_plan = null
 
 **REFRESH** (verdict_color: "yellow"):
-- Điều kiện: Frequency > 3.5 OR CTR giảm > 25% so trend
-- Action: "Đổi 2-3 creative mới (hook khác, hình mới), giữ targeting"
-- Risk: medium
+- Điều kiện: CTR giảm > 25% so kỳ trước HOẶC CTR < 1.5% kéo dài
+- Action: đổi 2-3 creative, hook mới
+- scale_plan = null
 
-**AUDIENCE_FIX** (verdict: "AUDIENCE", color: "yellow"):
-- Điều kiện: CTR < 1% AND frequency < 2 AND volume thấp
-- Action: "Audience sai target. Test LAL từ buyer 30d gần nhất, hoặc thêm interest cụ thể"
-- Risk: medium
+**AUDIENCE** (verdict_color: "yellow"):
+- Điều kiện: CTR < 1% AND volume thấp (< 50% benchmark)
+- Action: đổi audience (LAL buyer 30d hoặc interest mới)
+- scale_plan = null
 
 **PAUSE** (verdict_color: "red"):
-- Điều kiện: CPA > 2x target AND spend > 200K AND conversions = 0
-  HOẶC trend giảm sâu + CPA tăng 50%+
-- Action: "Pause ngay, audit creative + audience trước khi reactivate"
-- Risk: low (lose audience nhỏ vs bleeding tiền)
+- Điều kiện: CPA > 2x mục tiêu AND spend > 200K AND conversions ≤ 1
+  HOẶC deltas.cpa_pct > 50 VÀ delta.conv_per_day_pct < -30
+- scale_plan = null
 
 ═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
 
 {
   "verdict": "SCALE" | "KEEP" | "REFRESH" | "AUDIENCE" | "PAUSE",
   "verdict_color": "green" | "yellow" | "red",
-  "summary": "2-3 câu có 4 con số: spend, conversions, CPA, CTR — và verdict reason ngắn gọn",
+  "summary": "2-3 câu tiếng Việt 100%, có 4 con số (spend, đơn, CPA, CTR) + 1 con số so sánh kỳ trước (vd '+12% so 7 ngày trước').",
+  "comparison_summary": "1-2 câu so kỳ này vs kỳ trước. Vd 'So với 3 ngày trước đó: spend/ngày tăng 18%, đơn/ngày tăng 25%, CPA giảm 6% — hiệu suất đang cải thiện'.",
   "performance": {
     "spend_vnd": <int>,
     "conversions": <int>,
     "cpa_vnd": <int_or_null>,
     "ctr_pct": <float>,
-    "rating_overall": <1-10 - average của 4 evaluation scores>
+    "rating_overall": <1-10 = trung bình 4 evaluation scores, làm tròn>
   },
   "evaluation": {
-    "spend_efficiency": {"score": 1-10, "note": "CPA X = Y% target Z (group)"},
-    "volume":           {"score": 1-10, "note": "conversions/day = N, benchmark cho group là M"},
-    "ctr_quality":      {"score": 1-10, "note": "CTR X% — chuẩn FB là 2-3%"},
-    "trend":            {"score": 1-10, "note": "trend stable/up/down theo time range"}
+    "spend_efficiency": {
+      "score": 1-10,
+      "note": "[≥30 từ tiếng Việt, BẮT BUỘC có số] CPA hiện tại X VND, bằng Y% mục tiêu Z VND của nhóm [tên nhóm]. So kỳ trước CPA W VND → tăng/giảm K%. Đánh giá: [tốt/đạt/yếu] vì [lý do dựa số]."
+    },
+    "volume": {
+      "score": 1-10,
+      "note": "[≥30 từ] Đơn/ngày = N (kỳ trước M, +/-X%). Benchmark nhóm [...]. Lý do điểm này: [giải thích vì sao volume đạt/yếu, có phải do scale, audience, hay seasonal]."
+    },
+    "ctr_quality": {
+      "score": 1-10,
+      "note": "[≥30 từ] CTR X% (kỳ trước Y%, +/-Z%). Chuẩn FB là 2-3%. Đánh giá hook: [mạnh/trung bình/yếu]. Nguyên nhân CTR cao/thấp: [đoán dựa data, vd frequency cao gây mệt audience, hoặc creative mới hấp dẫn]."
+    },
+    "trend": {
+      "score": 1-10,
+      "note": "[≥30 từ] Spend/ngày X% so kỳ trước, đơn/ngày Y%, CPA Z%. Xu hướng [tăng đều/ổn định/giảm dần/biến động]. Ý nghĩa: [giải thích campaign đang ở giai đoạn nào — học máy, ổn định, bão hòa, hay suy thoái]."
+    }
   },
   "action": {
-    "what": "1 dòng hướng dẫn CỤ THỂ với SỐ TIỀN/% (vd 'Tăng daily budget từ 500K → 600K (+20%)')",
-    "why": "Lý do dựa trên SCORES + thresholds (vd 'AVG score 8.5, CPA chỉ 45% target → có dư cap budget')",
-    "impact_expected": "Số liệu dự kiến (vd '+5-8 conversions/ngày, +250K profit/ngày')",
+    "what": "1-2 câu hành động CỰC CỤ THỂ với SỐ TIỀN (vd 'Tăng daily budget từ 500K → 600K (+20%) trong 3 ngày. Nếu CPA giữ < 100K thì tăng tiếp lên 720K vào ngày thứ 4.')",
+    "why": "[≥40 từ tiếng Việt] Giải thích RÕ TẠI SAO chọn action này. PHẢI nêu: (a) số liệu hỗ trợ từ evaluation scores, (b) so kỳ trước thì campaign đang [tốt hơn/kém hơn] vì sao, (c) tại sao KHÔNG chọn các action khác (vd 'không scale vì CTR còn dưới 2%, scale lúc này FB phải mở rộng audience yếu sẽ làm CPA tăng'). Đặc biệt với KEEP: phải nêu rõ tại sao chưa nên tăng budget VÀ tại sao chưa cần giảm/pause.",
+    "impact_expected": "Số liệu dự kiến chi tiết (vd 'Sau 3 ngày: +5-8 đơn/ngày, +250K LN/ngày. Sau 1 tuần nếu giữ ổn định: tổng +1.7M LN.')",
     "risk": "low" | "medium" | "high",
-    "risk_note": "Risk cụ thể (vd 'CPA có thể tăng nhẹ 10-20%, monitor trong 3 ngày')"
+    "risk_note": "[≥20 từ] Risk cụ thể + cách phòng ngừa (vd 'CPA có thể tăng 10-20% trong 24-48h đầu do FB relearning. Nếu kéo dài > 3 ngày hoặc tăng > 30% thì revert budget cũ.')"
+  },
+  "scale_plan": null | {  // CHỈ XUẤT khi verdict = SCALE; KHÁC THÌ null
+    "method_1_budget": "Cách 1 — Tăng budget dần. Vd 'Tăng dần budget 20%/24h: 500K → 600K → 720K → 850K. KHÔNG tăng > 30%/24h vì FB sẽ vào lại giai đoạn học máy (relearning), CPA tạm thời tăng. Áp dụng khi: campaign đã chạy ổn định ≥ 7 ngày, CTR ≥ 2%.'",
+    "method_2_duplicate": "Cách 2 — Nhân nhóm QC (ad set). Vd 'Copy ad set hiện tại thành 2-3 ad set mới, mỗi ad set đổi 1 yếu tố audience (vd thêm interest A, hoặc đổi sang LAL 1% từ buyer 30d). Budget mỗi ad set mới = 60-80% của ad set gốc (~400K). Chạy 5-7 ngày để ra learning, sau đó pause ad set có CPA cao nhất.'",
+    "method_3_creative": "Cách 3 — Bổ sung creative. Vd 'Thêm 2-3 creative mới với hook khác (test video vs ảnh tĩnh, hoặc đổi câu mở đầu). Giữ targeting + budget hiện tại. Sau 5-7 ngày, ad nào CTR cao hơn 20% so creative cũ thì pause creative cũ.'",
+    "recommended": "1 | 2 | 3 — chọn 1 method an toàn nhất + giải thích vì sao chọn (vd 'Khuyến nghị method 1 vì CTR đã 2.5% đủ ổn để tăng budget, không cần test audience mới. Method 2 dùng khi muốn scale > 50% mà budget hiện tại đã ở ngưỡng learning cap.')",
+    "budget_target_vnd": <int — số tiền budget/ngày khuyến nghị sau khi scale, vd 600000>,
+    "increase_pct": <int — % tăng so hiện tại, vd 20>
   },
   "next_check": {
     "after_days": <SCALE: 3, KEEP: 7, REFRESH/AUDIENCE: 5, PAUSE: 1>,
-    "metric_to_watch": "metric chính cần check (vd 'CPA + conversions/day')",
-    "threshold_revert": "Khi nào revert (vd 'Nếu CPA > 350K trong 3 ngày → revert budget cũ')"
+    "metric_to_watch": "Vd 'CPA + đơn/ngày + frequency (tránh > 3.5)'",
+    "threshold_revert": "Vd 'Nếu CPA > 350K trong 3 ngày liên tiếp HOẶC đơn/ngày giảm > 30% → revert budget cũ'"
   },
-  "warnings": []
-}`,
+  "warnings": []  // có thể empty []
+}
+
+═══ NGÔN NGỮ ═══
+🚨 100% TIẾNG VIỆT trong note/why/risk_note/summary.
+KHÔNG dùng từ tiếng Anh: stable, positive, scale (trừ verdict enum), refresh, growth, decline, mid, high, low (trừ trong field "risk").
+Thay bằng: "ổn định", "tích cực", "tăng quy mô", "làm mới creative", "đà tăng", "đang giảm dần".
+
+═══ DETERMINISM ═══
+Output PHẢI giống nhau khi gọi lại với cùng input. KHÔNG thêm random text/emoji ngẫu nhiên.`,
 };
 
 const GROUPS = ["ALL", ...FB_ACTIVE_GROUPS];
@@ -335,55 +363,26 @@ Quy tắc: số liệu cụ thể, action rõ ràng, không vague.`);
       break;
 
     case "optimize_campaign":
-      parts.push(`🚨 OUTPUT 1 JSON object hợp lệ. Bắt đầu bằng { kết thúc bằng }. KHÔNG markdown.
+      parts.push(`🚨 OUTPUT 1 JSON object hợp lệ. Bắt đầu { kết thúc }. KHÔNG markdown, KHÔNG text bao quanh.
 
-Phân tích campaign trong fb_focus_campaign + so sánh với context (fb_profit margin per group, time range).
+Tham chiếu DATA:
+- fb_focus_campaign = campaign cần phân tích (có spend/cpa/ctr/conversions kỳ hiện tại + comparison + deltas)
+- comparison_range = kỳ liền kề trước (để so sánh)
+- fb_profit = margin per group (nếu match group này)
 
-Verdict choice (chọn 1):
-- "SCALE": CPA tốt (< 60% benchmark) + spend stable + conversions ổn → tăng budget
-- "KEEP": Performance OK, không cần thay đổi
-- "REFRESH": Frequency cao (>4) hoặc CTR giảm → cần creative mới
-- "AUDIENCE": CTR thấp (<1%) + frequency thấp → audience sai
-- "PAUSE": CPA cao (>2x benchmark) + spend > 200K + 0 conversions
+Schema BẮT BUỘC tuân thủ ĐÚNG (skill prompt đã định nghĩa chi tiết):
+- verdict, verdict_color, summary, comparison_summary
+- performance { spend_vnd, conversions, cpa_vnd, ctr_pct, rating_overall }
+- evaluation { spend_efficiency, volume, ctr_quality, trend } — mỗi note ≥ 30 từ tiếng Việt + có số
+- action { what, why ≥ 40 từ, impact_expected, risk, risk_note ≥ 20 từ }
+- scale_plan = null KHÁC SCALE; nếu SCALE phải có method_1_budget, method_2_duplicate, method_3_creative, recommended, budget_target_vnd, increase_pct
+- next_check { after_days, metric_to_watch, threshold_revert }
+- warnings []
 
-Schema bắt buộc:
-{
-  "verdict": "SCALE" | "KEEP" | "REFRESH" | "AUDIENCE" | "PAUSE",
-  "verdict_color": "green" | "yellow" | "red",
-  "summary": "2-3 câu tóm tắt có 3 con số cụ thể (spend, conversions, CPA)",
-  "performance": {
-    "spend_vnd": <number>,
-    "conversions": <number>,
-    "cpa_vnd": <number_or_null>,
-    "ctr_pct": <number>,
-    "rating_overall": 1-10
-  },
-  "evaluation": {
-    "spend_efficiency": {"score": 1-10, "note": "vd 'CPA 270K vs benchmark 655K = 41%'"},
-    "volume":          {"score": 1-10, "note": "vd 'leads/day = 5, benchmark 2-3'"},
-    "ctr_quality":     {"score": 1-10, "note": "vd 'CTR 1.39%, dưới benchmark 2%'"},
-    "trend":           {"score": 1-10, "note": "vd 'Spend tăng 20% tuần trước, conv stable'"}
-  },
-  "action": {
-    "what": "Vd 'Tăng daily budget từ 500K → 600K (+20%)'",
-    "why": "Vd 'CPA chỉ 41% target, ROAS positive, có dư cap budget'",
-    "impact_expected": "Vd '+10 conversions/ngày, total +250K profit/ngày'",
-    "risk": "low" | "medium" | "high",
-    "risk_note": "Vd 'Scale chậm, theo dõi CPA, nếu tăng > 50% thì revert'"
-  },
-  "next_check": {
-    "after_days": <1-14>,
-    "metric_to_watch": "Vd 'CPA + conversions/day'",
-    "threshold_revert": "Vd 'Nếu CPA > 350K thì revert budget cũ'"
-  },
-  "warnings": ["string"]  // có thể empty []
-}
-
-Quy tắc:
-- spend_efficiency lấy từ profit data nếu có, hoặc CPA campaign
-- "next_check.after_days": SCALE 3d, REFRESH 7d, PAUSE 1d, KEEP 7d
-- Tiếng Việt cho mọi text
-- KHÔNG để score=0 hay tất cả score giống nhau`);
+🔴 Mọi note PHẢI tham chiếu deltas + comparison (vd "CPA 60K kỳ trước 65K -7.7%").
+🔴 100% TIẾNG VIỆT (trừ verdict enum + risk enum low/medium/high).
+🔴 KHÔNG để score=0, KHÔNG để 4 scores giống nhau.
+🔴 next_check.after_days: SCALE=3, KEEP=7, REFRESH=5, AUDIENCE=5, PAUSE=1.`);
       break;
 
     case "ask":
@@ -419,11 +418,12 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: "Mode 'ask' cần question" }, 400);
   }
 
-  // Resolve time range
+  // Resolve time range + comparison range (kỳ liền kề trước để so sánh)
   const timeRange = resolveTimeRange(time_preset || "last_30d", custom_start, custom_end);
   if (!timeRange) {
     return jsonResponse({ error: "Invalid time_preset hoặc thiếu custom_start/end" }, 400);
   }
+  const comparisonRange = getComparisonRange(timeRange, time_preset || "last_30d");
 
   const cfg = MODE_CONFIG[mode];
   const cookieHeader = request.headers.get("Cookie") || "";
@@ -443,6 +443,9 @@ export async function onRequestPost(context) {
           response: cached.response, parsed_json: cached.parsed_json || null,
           cached: true, cached_at: cached.cached_at,
           cache_note: `Cache từ ${cached.cached_at}. Bấm Làm mới để regenerate.`,
+          focus_deltas: cached.focus_deltas || null,
+          focus_comparison: cached.focus_comparison || null,
+          comparison_range: cached.comparison_range || comparisonRange,
         });
       }
     } catch { /* ignore */ }
@@ -453,6 +456,7 @@ export async function onRequestPost(context) {
     mode, group,
     group_label: FB_GROUP_LABELS[group],
     time_range: timeRange,
+    comparison_range: comparisonRange,
     account_id: account_id || null,
     campaign_id: campaign_id || null,
   };
@@ -461,9 +465,9 @@ export async function onRequestPost(context) {
     tasks.push(fetchJson(origin, "/data/fb-ads-data.json", cookieHeader)
       .then(j => {
         dataContext.fb_insights = compactFbInsights(j, group);
-        // Account/campaign context
+        // Account/campaign context — pass comparisonRange để mỗi campaign có deltas
         if (account_id && j) {
-          dataContext.fb_campaigns = compactFbCampaigns(j, account_id, timeRange);
+          dataContext.fb_campaigns = compactFbCampaigns(j, account_id, timeRange, { comparisonRange });
           if (campaign_id && dataContext.fb_campaigns?.campaigns) {
             dataContext.fb_focus_campaign = dataContext.fb_campaigns.campaigns.find(c => c.id === campaign_id);
           }
@@ -495,13 +499,14 @@ export async function onRequestPost(context) {
   let aiResult;
   let actualModel = selectedModel;
   let fallbackUsed = false;
+  // temperature 0 cho json_output → output deterministic, F5 ra cùng kết quả
   const aiParams = {
     messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },
     ],
-    temperature: cfg.json_output ? 0.1 : 0.3,
-    max_tokens: cfg.json_output ? 3000 : 2500,
+    temperature: cfg.json_output ? 0 : 0.3,
+    max_tokens: cfg.json_output ? 3500 : 2500,
   };
 
   try {
@@ -595,15 +600,25 @@ export async function onRequestPost(context) {
     }
   }
 
-  // Save cache
+  // Save cache (lưu cả deltas/comparison để cache hit có đủ data hiển thị)
   if (cacheKey && env.INVENTORY && rawResp) {
     const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
     try {
       await env.INVENTORY.put(cacheKey, JSON.stringify({
-        response: rawResp, parsed_json: parsedJson, cached_at: nowVN, model: actualModel,
+        response: rawResp,
+        parsed_json: parsedJson,
+        cached_at: nowVN,
+        model: actualModel,
+        focus_deltas: dataContext.fb_focus_campaign?.deltas || null,
+        focus_comparison: dataContext.fb_focus_campaign?.comparison || null,
+        comparison_range: comparisonRange,
       }), { expirationTtl: CACHE_TTL_SECONDS });
     } catch { /* ignore */ }
   }
+
+  // Trả deltas + comparison của focus campaign cho frontend hiển thị badge
+  const focusDeltas = dataContext.fb_focus_campaign?.deltas || null;
+  const focusComparison = dataContext.fb_focus_campaign?.comparison || null;
 
   return jsonResponse({
     ok: true, mode, group, group_label: FB_GROUP_LABELS[group], model: actualModel,
@@ -613,6 +628,9 @@ export async function onRequestPost(context) {
     response: rawResp, parsed_json: parsedJson,
     skills_used: cfg.skills, data_used: cfg.data,
     cached: false,
+    focus_deltas: focusDeltas,
+    focus_comparison: focusComparison,
+    comparison_range: comparisonRange,
     _data_summary: {
       has_fb_insights: dataContext.fb_insights?.has_data || false,
       has_fb_orders: dataContext.fb_orders?.has_data || false,
