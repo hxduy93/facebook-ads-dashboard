@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-03 13:27",
+  "generated_at": "2026-05-03 13:43",
   "source": "FB Marketing API v21.0 (auto every 3h)",
   "date_range": {
     "start": "2026-02-02",
@@ -8,8 +8,8 @@
   "currency": "VND",
   "total_accounts": 6,
   "total_summary": {
-    "spend": 246164917.0,
-    "impressions": 2674045,
+    "spend": 246166410.0,
+    "impressions": 2674048,
     "clicks": 51805,
     "leads": 98
   },
@@ -27,8 +27,11 @@
         "clicks": 3747,
         "reach": 222214,
         "leads": 2,
+        "complete_registrations": 93,
         "ctr": 1.522,
-        "cpc": 7244.86
+        "cpc": 7244.86,
+        "campaigns_total": 4,
+        "campaigns_active": 2
       },
       "campaigns": [
         {
@@ -54,7 +57,10 @@
               "clicks": 29,
               "reach": 1024,
               "leads": 0,
-              "link_clicks": 15
+              "complete_registrations": 1,
+              "link_clicks": 15,
+              "landing_page_views": 14,
+              "messages": 0
             },
             "2026-04-03": {
               "spend": 316924.0,
@@ -62,7 +68,10 @@
               "clicks": 19,
               "reach": 1085,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 1,
+              "link_clicks": 10,
+              "landing_page_views": 10,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 323605.0,
@@ -70,7 +79,10 @@
               "clicks": 53,
               "reach": 1615,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 0,
+              "link_clicks": 32,
+              "landing_page_views": 23,
+              "messages": 1
             },
             "2026-04-05": {
               "spend": 525140.0,
@@ -78,7 +90,10 @@
               "clicks": 63,
               "reach": 3051,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 0,
+              "link_clicks": 32,
+              "landing_page_views": 28,
+              "messages": 0
             },
             "2026-04-06": {
               "spend": 484174.0,
@@ -86,7 +101,10 @@
               "clicks": 65,
               "reach": 3440,
               "leads": 0,
-              "link_clicks": 37
+              "complete_registrations": 3,
+              "link_clicks": 37,
+              "landing_page_views": 37,
+              "messages": 0
             },
             "2026-04-07": {
               "spend": 397446.0,
@@ -94,7 +112,10 @@
               "clicks": 61,
               "reach": 4111,
               "leads": 0,
-              "link_clicks": 42
+              "complete_registrations": 3,
+              "link_clicks": 42,
+              "landing_page_views": 39,
+              "messages": 0
             },
             "2026-04-08": {
               "spend": 475939.0,
@@ -102,7 +123,10 @@
               "clicks": 65,
               "reach": 5102,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 1,
+              "link_clicks": 41,
+              "landing_page_views": 38,
+              "messages": 0
             },
             "2026-04-09": {
               "spend": 419853.0,
@@ -110,7 +134,10 @@
               "clicks": 66,
               "reach": 5129,
               "leads": 0,
-              "link_clicks": 44
+              "complete_registrations": 1,
+              "link_clicks": 44,
+              "landing_page_views": 40,
+              "messages": 0
             },
             "2026-04-10": {
               "spend": 440276.0,
@@ -118,7 +145,10 @@
               "clicks": 51,
               "reach": 4564,
               "leads": 0,
-              "link_clicks": 31
+              "complete_registrations": 0,
+              "link_clicks": 31,
+              "landing_page_views": 31,
+              "messages": 0
             },
             "2026-04-11": {
               "spend": 406605.0,
@@ -126,7 +156,10 @@
               "clicks": 52,
               "reach": 3833,
               "leads": 0,
-              "link_clicks": 31
+              "complete_registrations": 1,
+              "link_clicks": 31,
+              "landing_page_views": 27,
+              "messages": 0
             },
             "2026-04-12": {
               "spend": 535753.0,
@@ -134,7 +167,10 @@
               "clicks": 62,
               "reach": 3593,
               "leads": 0,
-              "link_clicks": 40
+              "complete_registrations": 6,
+              "link_clicks": 40,
+              "landing_page_views": 38,
+              "messages": 0
             },
             "2026-04-13": {
               "spend": 625236.0,
@@ -142,7 +178,10 @@
               "clicks": 74,
               "reach": 5219,
               "leads": 0,
-              "link_clicks": 48
+              "complete_registrations": 2,
+              "link_clicks": 48,
+              "landing_page_views": 48,
+              "messages": 0
             },
             "2026-04-14": {
               "spend": 634280.0,
@@ -150,7 +189,10 @@
               "clicks": 102,
               "reach": 6912,
               "leads": 0,
-              "link_clicks": 66
+              "complete_registrations": 3,
+              "link_clicks": 66,
+              "landing_page_views": 58,
+              "messages": 1
             },
             "2026-04-15": {
               "spend": 563384.0,
@@ -158,7 +200,10 @@
               "clicks": 79,
               "reach": 5663,
               "leads": 0,
-              "link_clicks": 55
+              "complete_registrations": 1,
+              "link_clicks": 55,
+              "landing_page_views": 45,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 1200184.0,
@@ -166,7 +211,10 @@
               "clicks": 174,
               "reach": 11953,
               "leads": 0,
-              "link_clicks": 94
+              "complete_registrations": 0,
+              "link_clicks": 94,
+              "landing_page_views": 81,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 377498.0,
@@ -174,7 +222,10 @@
               "clicks": 51,
               "reach": 4138,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 2,
+              "link_clicks": 32,
+              "landing_page_views": 25,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 431438.0,
@@ -182,7 +233,10 @@
               "clicks": 78,
               "reach": 5035,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 2,
+              "link_clicks": 43,
+              "landing_page_views": 44,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 459332.0,
@@ -190,7 +244,10 @@
               "clicks": 71,
               "reach": 5005,
               "leads": 0,
-              "link_clicks": 48
+              "complete_registrations": 1,
+              "link_clicks": 48,
+              "landing_page_views": 44,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 437254.0,
@@ -198,7 +255,10 @@
               "clicks": 67,
               "reach": 4926,
               "leads": 0,
-              "link_clicks": 39
+              "complete_registrations": 2,
+              "link_clicks": 39,
+              "landing_page_views": 36,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 420222.0,
@@ -206,7 +266,10 @@
               "clicks": 62,
               "reach": 4437,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 0,
+              "link_clicks": 41,
+              "landing_page_views": 35,
+              "messages": 1
             },
             "2026-04-22": {
               "spend": 379644.0,
@@ -214,7 +277,10 @@
               "clicks": 65,
               "reach": 4590,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 0,
+              "link_clicks": 41,
+              "landing_page_views": 36,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 239666.0,
@@ -222,7 +288,10 @@
               "clicks": 39,
               "reach": 1825,
               "leads": 0,
-              "link_clicks": 24
+              "complete_registrations": 1,
+              "link_clicks": 24,
+              "landing_page_views": 23,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 495973.0,
@@ -230,7 +299,10 @@
               "clicks": 97,
               "reach": 6730,
               "leads": 0,
-              "link_clicks": 60
+              "complete_registrations": 2,
+              "link_clicks": 60,
+              "landing_page_views": 56,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 364673.0,
@@ -238,7 +310,10 @@
               "clicks": 77,
               "reach": 5364,
               "leads": 0,
-              "link_clicks": 49
+              "complete_registrations": 1,
+              "link_clicks": 49,
+              "landing_page_views": 39,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 471550.0,
@@ -246,7 +321,10 @@
               "clicks": 92,
               "reach": 7224,
               "leads": 0,
-              "link_clicks": 59
+              "complete_registrations": 3,
+              "link_clicks": 59,
+              "landing_page_views": 58,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 409791.0,
@@ -254,7 +332,10 @@
               "clicks": 83,
               "reach": 5926,
               "leads": 0,
-              "link_clicks": 44
+              "complete_registrations": 3,
+              "link_clicks": 44,
+              "landing_page_views": 39,
+              "messages": 1
             },
             "2026-04-28": {
               "spend": 393619.0,
@@ -262,7 +343,10 @@
               "clicks": 91,
               "reach": 5199,
               "leads": 0,
-              "link_clicks": 61
+              "complete_registrations": 3,
+              "link_clicks": 61,
+              "landing_page_views": 53,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 342227.0,
@@ -270,7 +354,10 @@
               "clicks": 61,
               "reach": 6000,
               "leads": 0,
-              "link_clicks": 39
+              "complete_registrations": 2,
+              "link_clicks": 39,
+              "landing_page_views": 30,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 391470.0,
@@ -278,7 +365,10 @@
               "clicks": 98,
               "reach": 5844,
               "leads": 0,
-              "link_clicks": 61
+              "complete_registrations": 3,
+              "link_clicks": 61,
+              "landing_page_views": 49,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 449672.0,
@@ -286,7 +376,10 @@
               "clicks": 117,
               "reach": 7536,
               "leads": 0,
-              "link_clicks": 68
+              "complete_registrations": 2,
+              "link_clicks": 68,
+              "landing_page_views": 57,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 336928.0,
@@ -294,9 +387,15 @@
               "clicks": 82,
               "reach": 5459,
               "leads": 0,
-              "link_clicks": 54
+              "complete_registrations": 2,
+              "link_clicks": 54,
+              "landing_page_views": 49,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "6/4 - D1 - 5 video",
@@ -321,7 +420,10 @@
               "clicks": 40,
               "reach": 1808,
               "leads": 0,
-              "link_clicks": 24
+              "complete_registrations": 4,
+              "link_clicks": 24,
+              "landing_page_views": 18,
+              "messages": 0
             },
             "2026-04-08": {
               "spend": 601918.0,
@@ -329,7 +431,10 @@
               "clicks": 78,
               "reach": 4292,
               "leads": 0,
-              "link_clicks": 53
+              "complete_registrations": 2,
+              "link_clicks": 53,
+              "landing_page_views": 49,
+              "messages": 0
             },
             "2026-04-09": {
               "spend": 440350.0,
@@ -337,7 +442,10 @@
               "clicks": 61,
               "reach": 3233,
               "leads": 0,
-              "link_clicks": 33
+              "complete_registrations": 0,
+              "link_clicks": 33,
+              "landing_page_views": 30,
+              "messages": 0
             },
             "2026-04-10": {
               "spend": 549228.0,
@@ -345,7 +453,10 @@
               "clicks": 65,
               "reach": 2932,
               "leads": 0,
-              "link_clicks": 45
+              "complete_registrations": 3,
+              "link_clicks": 45,
+              "landing_page_views": 35,
+              "messages": 0
             },
             "2026-04-11": {
               "spend": 428550.0,
@@ -353,7 +464,10 @@
               "clicks": 67,
               "reach": 2745,
               "leads": 0,
-              "link_clicks": 47
+              "complete_registrations": 2,
+              "link_clicks": 47,
+              "landing_page_views": 42,
+              "messages": 0
             },
             "2026-04-12": {
               "spend": 573764.0,
@@ -361,7 +475,10 @@
               "clicks": 77,
               "reach": 3371,
               "leads": 0,
-              "link_clicks": 53
+              "complete_registrations": 2,
+              "link_clicks": 53,
+              "landing_page_views": 55,
+              "messages": 1
             },
             "2026-04-13": {
               "spend": 440068.0,
@@ -369,7 +486,10 @@
               "clicks": 65,
               "reach": 2220,
               "leads": 0,
-              "link_clicks": 44
+              "complete_registrations": 2,
+              "link_clicks": 44,
+              "landing_page_views": 42,
+              "messages": 0
             },
             "2026-04-14": {
               "spend": 467239.0,
@@ -377,7 +497,10 @@
               "clicks": 48,
               "reach": 2429,
               "leads": 1,
-              "link_clicks": 30
+              "complete_registrations": 1,
+              "link_clicks": 30,
+              "landing_page_views": 27,
+              "messages": 1
             },
             "2026-04-15": {
               "spend": 492589.0,
@@ -385,7 +508,10 @@
               "clicks": 67,
               "reach": 3279,
               "leads": 0,
-              "link_clicks": 40
+              "complete_registrations": 0,
+              "link_clicks": 40,
+              "landing_page_views": 34,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 874571.0,
@@ -393,7 +519,10 @@
               "clicks": 90,
               "reach": 4009,
               "leads": 0,
-              "link_clicks": 58
+              "complete_registrations": 2,
+              "link_clicks": 58,
+              "landing_page_views": 55,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 608841.0,
@@ -401,7 +530,10 @@
               "clicks": 74,
               "reach": 3782,
               "leads": 0,
-              "link_clicks": 47
+              "complete_registrations": 1,
+              "link_clicks": 47,
+              "landing_page_views": 43,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 530345.0,
@@ -409,7 +541,10 @@
               "clicks": 59,
               "reach": 2369,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 0,
+              "link_clicks": 32,
+              "landing_page_views": 26,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 0.0,
@@ -417,7 +552,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 0.0,
@@ -425,9 +563,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "16/4 - D1 - Vid 35",
@@ -452,7 +596,10 @@
               "clicks": 22,
               "reach": 958,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 1,
+              "link_clicks": 12,
+              "landing_page_views": 10,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 288860.0,
@@ -460,7 +607,10 @@
               "clicks": 36,
               "reach": 1514,
               "leads": 0,
-              "link_clicks": 23
+              "complete_registrations": 1,
+              "link_clicks": 23,
+              "landing_page_views": 23,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 262820.0,
@@ -468,7 +618,10 @@
               "clicks": 30,
               "reach": 1634,
               "leads": 0,
-              "link_clicks": 22
+              "complete_registrations": 2,
+              "link_clicks": 22,
+              "landing_page_views": 20,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 443190.0,
@@ -476,7 +629,10 @@
               "clicks": 37,
               "reach": 2195,
               "leads": 0,
-              "link_clicks": 28
+              "complete_registrations": 3,
+              "link_clicks": 28,
+              "landing_page_views": 22,
+              "messages": 1
             },
             "2026-04-20": {
               "spend": 367456.0,
@@ -484,7 +640,10 @@
               "clicks": 39,
               "reach": 2196,
               "leads": 0,
-              "link_clicks": 22
+              "complete_registrations": 1,
+              "link_clicks": 22,
+              "landing_page_views": 17,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 419186.0,
@@ -492,7 +651,10 @@
               "clicks": 30,
               "reach": 1358,
               "leads": 0,
-              "link_clicks": 21
+              "complete_registrations": 2,
+              "link_clicks": 21,
+              "landing_page_views": 17,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 290005.0,
@@ -500,7 +662,10 @@
               "clicks": 33,
               "reach": 1562,
               "leads": 0,
-              "link_clicks": 20
+              "complete_registrations": 1,
+              "link_clicks": 20,
+              "landing_page_views": 20,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 254550.0,
@@ -508,7 +673,10 @@
               "clicks": 19,
               "reach": 716,
               "leads": 0,
-              "link_clicks": 9
+              "complete_registrations": 0,
+              "link_clicks": 9,
+              "landing_page_views": 8,
+              "messages": 1
             },
             "2026-04-24": {
               "spend": 409428.0,
@@ -516,7 +684,10 @@
               "clicks": 37,
               "reach": 2103,
               "leads": 0,
-              "link_clicks": 21
+              "complete_registrations": 2,
+              "link_clicks": 21,
+              "landing_page_views": 21,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 258706.0,
@@ -524,7 +695,10 @@
               "clicks": 32,
               "reach": 1693,
               "leads": 0,
-              "link_clicks": 18
+              "complete_registrations": 0,
+              "link_clicks": 18,
+              "landing_page_views": 15,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 450936.0,
@@ -532,7 +706,10 @@
               "clicks": 67,
               "reach": 2512,
               "leads": 1,
-              "link_clicks": 42
+              "complete_registrations": 2,
+              "link_clicks": 42,
+              "landing_page_views": 40,
+              "messages": 1
             },
             "2026-04-27": {
               "spend": 450346.0,
@@ -540,7 +717,10 @@
               "clicks": 59,
               "reach": 2757,
               "leads": 0,
-              "link_clicks": 40
+              "complete_registrations": 4,
+              "link_clicks": 40,
+              "landing_page_views": 33,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 325318.0,
@@ -548,7 +728,10 @@
               "clicks": 58,
               "reach": 2367,
               "leads": 0,
-              "link_clicks": 35
+              "complete_registrations": 1,
+              "link_clicks": 35,
+              "landing_page_views": 31,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 271225.0,
@@ -556,7 +739,10 @@
               "clicks": 21,
               "reach": 1424,
               "leads": 0,
-              "link_clicks": 16
+              "complete_registrations": 0,
+              "link_clicks": 16,
+              "landing_page_views": 14,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 330878.0,
@@ -564,7 +750,10 @@
               "clicks": 32,
               "reach": 1575,
               "leads": 0,
-              "link_clicks": 19
+              "complete_registrations": 0,
+              "link_clicks": 19,
+              "landing_page_views": 19,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 331654.0,
@@ -572,7 +761,10 @@
               "clicks": 45,
               "reach": 1992,
               "leads": 0,
-              "link_clicks": 27
+              "complete_registrations": 0,
+              "link_clicks": 27,
+              "landing_page_views": 22,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 289397.0,
@@ -580,9 +772,15 @@
               "clicks": 51,
               "reach": 1875,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 2,
+              "link_clicks": 32,
+              "landing_page_views": 28,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "31/3 - D1 - 2 Video",
@@ -607,7 +805,10 @@
               "clicks": 21,
               "reach": 1414,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 6,
+              "messages": 0
             },
             "2026-04-01": {
               "spend": 460338.0,
@@ -615,7 +816,10 @@
               "clicks": 33,
               "reach": 1948,
               "leads": 0,
-              "link_clicks": 25
+              "complete_registrations": 0,
+              "link_clicks": 25,
+              "landing_page_views": 23,
+              "messages": 0
             },
             "2026-04-02": {
               "spend": 86323.0,
@@ -623,9 +827,15 @@
               "clicks": 8,
               "reach": 420,
               "leads": 0,
-              "link_clicks": 5
+              "complete_registrations": 0,
+              "link_clicks": 5,
+              "landing_page_views": 5,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         }
       ],
       "rows_raw": 65
@@ -638,13 +848,16 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 80394047.0,
-        "impressions": 950470,
+        "spend": 80394092.0,
+        "impressions": 950471,
         "clicks": 16360,
         "reach": 833798,
         "leads": 31,
+        "complete_registrations": 661,
         "ctr": 1.7213,
-        "cpc": 4914.06
+        "cpc": 4914.06,
+        "campaigns_total": 28,
+        "campaigns_active": 6
       },
       "campaigns": [
         {
@@ -670,7 +883,10 @@
               "clicks": 24,
               "reach": 763,
               "leads": 0,
-              "link_clicks": 14
+              "complete_registrations": 2,
+              "link_clicks": 14,
+              "landing_page_views": 14,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 466493.0,
@@ -678,7 +894,10 @@
               "clicks": 104,
               "reach": 3896,
               "leads": 1,
-              "link_clicks": 71
+              "complete_registrations": 3,
+              "link_clicks": 71,
+              "landing_page_views": 68,
+              "messages": 1
             },
             "2026-04-05": {
               "spend": 762256.0,
@@ -686,7 +905,10 @@
               "clicks": 166,
               "reach": 6442,
               "leads": 1,
-              "link_clicks": 107
+              "complete_registrations": 5,
+              "link_clicks": 107,
+              "landing_page_views": 103,
+              "messages": 1
             },
             "2026-04-06": {
               "spend": 929860.0,
@@ -694,7 +916,10 @@
               "clicks": 232,
               "reach": 8357,
               "leads": 0,
-              "link_clicks": 139
+              "complete_registrations": 11,
+              "link_clicks": 139,
+              "landing_page_views": 132,
+              "messages": 2
             },
             "2026-04-07": {
               "spend": 419451.0,
@@ -702,7 +927,10 @@
               "clicks": 79,
               "reach": 4234,
               "leads": 1,
-              "link_clicks": 48
+              "complete_registrations": 1,
+              "link_clicks": 48,
+              "landing_page_views": 50,
+              "messages": 1
             },
             "2026-04-08": {
               "spend": 1748689.0,
@@ -710,7 +938,10 @@
               "clicks": 332,
               "reach": 15275,
               "leads": 0,
-              "link_clicks": 214
+              "complete_registrations": 15,
+              "link_clicks": 214,
+              "landing_page_views": 197,
+              "messages": 1
             },
             "2026-04-09": {
               "spend": 1592212.0,
@@ -718,7 +949,10 @@
               "clicks": 289,
               "reach": 13832,
               "leads": 0,
-              "link_clicks": 165
+              "complete_registrations": 7,
+              "link_clicks": 165,
+              "landing_page_views": 155,
+              "messages": 2
             },
             "2026-04-10": {
               "spend": 1587967.0,
@@ -726,7 +960,10 @@
               "clicks": 298,
               "reach": 14604,
               "leads": 0,
-              "link_clicks": 194
+              "complete_registrations": 9,
+              "link_clicks": 194,
+              "landing_page_views": 184,
+              "messages": 0
             },
             "2026-04-11": {
               "spend": 1498571.0,
@@ -734,7 +971,10 @@
               "clicks": 234,
               "reach": 13413,
               "leads": 0,
-              "link_clicks": 145
+              "complete_registrations": 3,
+              "link_clicks": 145,
+              "landing_page_views": 135,
+              "messages": 1
             },
             "2026-04-12": {
               "spend": 1564056.0,
@@ -742,7 +982,10 @@
               "clicks": 206,
               "reach": 13032,
               "leads": 1,
-              "link_clicks": 137
+              "complete_registrations": 8,
+              "link_clicks": 137,
+              "landing_page_views": 129,
+              "messages": 0
             },
             "2026-04-13": {
               "spend": 1379040.0,
@@ -750,7 +993,10 @@
               "clicks": 219,
               "reach": 9432,
               "leads": 0,
-              "link_clicks": 127
+              "complete_registrations": 8,
+              "link_clicks": 127,
+              "landing_page_views": 115,
+              "messages": 2
             },
             "2026-04-14": {
               "spend": 1047068.0,
@@ -758,7 +1004,10 @@
               "clicks": 158,
               "reach": 10719,
               "leads": 1,
-              "link_clicks": 89
+              "complete_registrations": 2,
+              "link_clicks": 89,
+              "landing_page_views": 80,
+              "messages": 0
             },
             "2026-04-15": {
               "spend": 458287.0,
@@ -766,7 +1015,10 @@
               "clicks": 57,
               "reach": 5284,
               "leads": 0,
-              "link_clicks": 27
+              "complete_registrations": 2,
+              "link_clicks": 27,
+              "landing_page_views": 37,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 0.0,
@@ -774,9 +1026,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "18/4 - NOMA911 - Phương Nam - designer - v2",
@@ -801,7 +1059,10 @@
               "clicks": 74,
               "reach": 3076,
               "leads": 0,
-              "link_clicks": 55
+              "complete_registrations": 5,
+              "link_clicks": 55,
+              "landing_page_views": 48,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 633990.0,
@@ -809,7 +1070,10 @@
               "clicks": 114,
               "reach": 6098,
               "leads": 0,
-              "link_clicks": 79
+              "complete_registrations": 8,
+              "link_clicks": 79,
+              "landing_page_views": 76,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 426515.0,
@@ -817,7 +1081,10 @@
               "clicks": 40,
               "reach": 4077,
               "leads": 0,
-              "link_clicks": 28
+              "complete_registrations": 3,
+              "link_clicks": 28,
+              "landing_page_views": 64,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 396422.0,
@@ -825,7 +1092,10 @@
               "clicks": 35,
               "reach": 3467,
               "leads": 0,
-              "link_clicks": 21
+              "complete_registrations": 1,
+              "link_clicks": 21,
+              "landing_page_views": 21,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 478964.0,
@@ -833,7 +1103,10 @@
               "clicks": 71,
               "reach": 4125,
               "leads": 0,
-              "link_clicks": 46
+              "complete_registrations": 3,
+              "link_clicks": 46,
+              "landing_page_views": 38,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 619516.0,
@@ -841,7 +1114,10 @@
               "clicks": 86,
               "reach": 5117,
               "leads": 0,
-              "link_clicks": 53
+              "complete_registrations": 0,
+              "link_clicks": 53,
+              "landing_page_views": 42,
+              "messages": 1
             },
             "2026-04-24": {
               "spend": 968071.0,
@@ -849,7 +1125,10 @@
               "clicks": 135,
               "reach": 8754,
               "leads": 1,
-              "link_clicks": 90
+              "complete_registrations": 10,
+              "link_clicks": 90,
+              "landing_page_views": 89,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 780651.0,
@@ -857,7 +1136,10 @@
               "clicks": 103,
               "reach": 7311,
               "leads": 0,
-              "link_clicks": 70
+              "complete_registrations": 7,
+              "link_clicks": 70,
+              "landing_page_views": 71,
+              "messages": 1
             },
             "2026-04-26": {
               "spend": 710976.0,
@@ -865,7 +1147,10 @@
               "clicks": 112,
               "reach": 7000,
               "leads": 0,
-              "link_clicks": 81
+              "complete_registrations": 5,
+              "link_clicks": 81,
+              "landing_page_views": 77,
+              "messages": 2
             },
             "2026-04-27": {
               "spend": 991501.0,
@@ -873,7 +1158,10 @@
               "clicks": 157,
               "reach": 10666,
               "leads": 0,
-              "link_clicks": 111
+              "complete_registrations": 7,
+              "link_clicks": 111,
+              "landing_page_views": 103,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 800557.0,
@@ -881,7 +1169,10 @@
               "clicks": 150,
               "reach": 8744,
               "leads": 0,
-              "link_clicks": 106
+              "complete_registrations": 10,
+              "link_clicks": 106,
+              "landing_page_views": 119,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 660689.0,
@@ -889,7 +1180,10 @@
               "clicks": 142,
               "reach": 8443,
               "leads": 0,
-              "link_clicks": 104
+              "complete_registrations": 7,
+              "link_clicks": 104,
+              "landing_page_views": 108,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 876698.0,
@@ -897,7 +1191,10 @@
               "clicks": 225,
               "reach": 10903,
               "leads": 0,
-              "link_clicks": 155
+              "complete_registrations": 4,
+              "link_clicks": 155,
+              "landing_page_views": 148,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 873679.0,
@@ -905,7 +1202,10 @@
               "clicks": 182,
               "reach": 11132,
               "leads": 0,
-              "link_clicks": 113
+              "complete_registrations": 8,
+              "link_clicks": 113,
+              "landing_page_views": 110,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 754085.0,
@@ -913,9 +1213,15 @@
               "clicks": 165,
               "reach": 9468,
               "leads": 0,
-              "link_clicks": 105
+              "complete_registrations": 9,
+              "link_clicks": 105,
+              "landing_page_views": 99,
+              "messages": 0
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "4/4 - Noma911 - Tổng hợp vid kalodata 2",
@@ -940,7 +1246,10 @@
               "clicks": 32,
               "reach": 1659,
               "leads": 0,
-              "link_clicks": 23
+              "complete_registrations": 2,
+              "link_clicks": 23,
+              "landing_page_views": 21,
+              "messages": 0
             },
             "2026-04-05": {
               "spend": 814960.0,
@@ -948,7 +1257,10 @@
               "clicks": 120,
               "reach": 5328,
               "leads": 1,
-              "link_clicks": 85
+              "complete_registrations": 7,
+              "link_clicks": 85,
+              "landing_page_views": 82,
+              "messages": 1
             },
             "2026-04-06": {
               "spend": 1114625.0,
@@ -956,7 +1268,10 @@
               "clicks": 194,
               "reach": 6960,
               "leads": 0,
-              "link_clicks": 140
+              "complete_registrations": 8,
+              "link_clicks": 140,
+              "landing_page_views": 138,
+              "messages": 0
             },
             "2026-04-07": {
               "spend": 1256328.0,
@@ -964,7 +1279,10 @@
               "clicks": 240,
               "reach": 9934,
               "leads": 0,
-              "link_clicks": 153
+              "complete_registrations": 5,
+              "link_clicks": 153,
+              "landing_page_views": 157,
+              "messages": 0
             },
             "2026-04-08": {
               "spend": 921897.0,
@@ -972,7 +1290,10 @@
               "clicks": 238,
               "reach": 8707,
               "leads": 0,
-              "link_clicks": 151
+              "complete_registrations": 6,
+              "link_clicks": 151,
+              "landing_page_views": 142,
+              "messages": 1
             },
             "2026-04-09": {
               "spend": 933908.0,
@@ -980,7 +1301,10 @@
               "clicks": 198,
               "reach": 8464,
               "leads": 0,
-              "link_clicks": 128
+              "complete_registrations": 6,
+              "link_clicks": 128,
+              "landing_page_views": 121,
+              "messages": 1
             },
             "2026-04-10": {
               "spend": 955074.0,
@@ -988,7 +1312,10 @@
               "clicks": 207,
               "reach": 8814,
               "leads": 0,
-              "link_clicks": 129
+              "complete_registrations": 3,
+              "link_clicks": 129,
+              "landing_page_views": 122,
+              "messages": 1
             },
             "2026-04-11": {
               "spend": 919146.0,
@@ -996,7 +1323,10 @@
               "clicks": 176,
               "reach": 7662,
               "leads": 0,
-              "link_clicks": 116
+              "complete_registrations": 8,
+              "link_clicks": 116,
+              "landing_page_views": 117,
+              "messages": 1
             },
             "2026-04-12": {
               "spend": 1013139.0,
@@ -1004,7 +1334,10 @@
               "clicks": 188,
               "reach": 8131,
               "leads": 0,
-              "link_clicks": 112
+              "complete_registrations": 9,
+              "link_clicks": 112,
+              "landing_page_views": 115,
+              "messages": 2
             },
             "2026-04-13": {
               "spend": 1001801.0,
@@ -1012,7 +1345,10 @@
               "clicks": 166,
               "reach": 7439,
               "leads": 1,
-              "link_clicks": 107
+              "complete_registrations": 4,
+              "link_clicks": 107,
+              "landing_page_views": 102,
+              "messages": 1
             },
             "2026-04-14": {
               "spend": 277785.0,
@@ -1020,7 +1356,10 @@
               "clicks": 44,
               "reach": 2299,
               "leads": 0,
-              "link_clicks": 26
+              "complete_registrations": 1,
+              "link_clicks": 26,
+              "landing_page_views": 27,
+              "messages": 0
             },
             "2026-04-15": {
               "spend": 0.0,
@@ -1028,7 +1367,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 1,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 0.0,
@@ -1036,9 +1378,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "20/4 - NOMA911 - Phương Nam - cụ đoành",
@@ -1063,7 +1411,10 @@
               "clicks": 32,
               "reach": 2527,
               "leads": 0,
-              "link_clicks": 21
+              "complete_registrations": 4,
+              "link_clicks": 21,
+              "landing_page_views": 21,
+              "messages": 1
             },
             "2026-04-21": {
               "spend": 355615.0,
@@ -1071,7 +1422,10 @@
               "clicks": 58,
               "reach": 3039,
               "leads": 0,
-              "link_clicks": 39
+              "complete_registrations": 3,
+              "link_clicks": 39,
+              "landing_page_views": 42,
+              "messages": 2
             },
             "2026-04-22": {
               "spend": 345944.0,
@@ -1079,7 +1433,10 @@
               "clicks": 46,
               "reach": 3105,
               "leads": 0,
-              "link_clicks": 35
+              "complete_registrations": 3,
+              "link_clicks": 35,
+              "landing_page_views": 35,
+              "messages": 1
             },
             "2026-04-23": {
               "spend": 650847.0,
@@ -1087,7 +1444,10 @@
               "clicks": 89,
               "reach": 5534,
               "leads": 0,
-              "link_clicks": 45
+              "complete_registrations": 0,
+              "link_clicks": 45,
+              "landing_page_views": 39,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 795926.0,
@@ -1095,7 +1455,10 @@
               "clicks": 121,
               "reach": 9488,
               "leads": 0,
-              "link_clicks": 82
+              "complete_registrations": 11,
+              "link_clicks": 82,
+              "landing_page_views": 78,
+              "messages": 1
             },
             "2026-04-25": {
               "spend": 676787.0,
@@ -1103,7 +1466,10 @@
               "clicks": 111,
               "reach": 9742,
               "leads": 0,
-              "link_clicks": 70
+              "complete_registrations": 3,
+              "link_clicks": 70,
+              "landing_page_views": 67,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 814884.0,
@@ -1111,7 +1477,10 @@
               "clicks": 145,
               "reach": 11826,
               "leads": 0,
-              "link_clicks": 82
+              "complete_registrations": 7,
+              "link_clicks": 82,
+              "landing_page_views": 83,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 700795.0,
@@ -1119,7 +1488,10 @@
               "clicks": 140,
               "reach": 10418,
               "leads": 0,
-              "link_clicks": 79
+              "complete_registrations": 3,
+              "link_clicks": 79,
+              "landing_page_views": 76,
+              "messages": 2
             },
             "2026-04-28": {
               "spend": 735280.0,
@@ -1127,7 +1499,10 @@
               "clicks": 164,
               "reach": 10729,
               "leads": 0,
-              "link_clicks": 106
+              "complete_registrations": 9,
+              "link_clicks": 106,
+              "landing_page_views": 98,
+              "messages": 2
             },
             "2026-04-29": {
               "spend": 699603.0,
@@ -1135,7 +1510,10 @@
               "clicks": 149,
               "reach": 10869,
               "leads": 0,
-              "link_clicks": 95
+              "complete_registrations": 5,
+              "link_clicks": 95,
+              "landing_page_views": 93,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 653589.0,
@@ -1143,7 +1521,10 @@
               "clicks": 152,
               "reach": 8487,
               "leads": 1,
-              "link_clicks": 95
+              "complete_registrations": 3,
+              "link_clicks": 95,
+              "landing_page_views": 92,
+              "messages": 1
             },
             "2026-05-01": {
               "spend": 722347.0,
@@ -1151,7 +1532,10 @@
               "clicks": 162,
               "reach": 8714,
               "leads": 1,
-              "link_clicks": 112
+              "complete_registrations": 6,
+              "link_clicks": 112,
+              "landing_page_views": 123,
+              "messages": 2
             },
             "2026-05-02": {
               "spend": 654879.0,
@@ -1159,9 +1543,15 @@
               "clicks": 118,
               "reach": 7963,
               "leads": 0,
-              "link_clicks": 81
+              "complete_registrations": 8,
+              "link_clicks": 81,
+              "landing_page_views": 77,
+              "messages": 0
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/3 - Noma911 - Quang tèo 3",
@@ -1186,7 +1576,10 @@
               "clicks": 2,
               "reach": 185,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-03-28": {
               "spend": 186830.0,
@@ -1194,7 +1587,10 @@
               "clicks": 48,
               "reach": 2072,
               "leads": 1,
-              "link_clicks": 30
+              "complete_registrations": 0,
+              "link_clicks": 30,
+              "landing_page_views": 0,
+              "messages": 1
             },
             "2026-03-29": {
               "spend": 517713.0,
@@ -1202,7 +1598,10 @@
               "clicks": 104,
               "reach": 3852,
               "leads": 1,
-              "link_clicks": 63
+              "complete_registrations": 4,
+              "link_clicks": 63,
+              "landing_page_views": 41,
+              "messages": 2
             },
             "2026-03-30": {
               "spend": 1066028.0,
@@ -1210,7 +1609,10 @@
               "clicks": 421,
               "reach": 10352,
               "leads": 1,
-              "link_clicks": 308
+              "complete_registrations": 10,
+              "link_clicks": 308,
+              "landing_page_views": 267,
+              "messages": 0
             },
             "2026-03-31": {
               "spend": 1648809.0,
@@ -1218,7 +1620,10 @@
               "clicks": 285,
               "reach": 12779,
               "leads": 0,
-              "link_clicks": 170
+              "complete_registrations": 7,
+              "link_clicks": 170,
+              "landing_page_views": 159,
+              "messages": 2
             },
             "2026-04-01": {
               "spend": 1216738.0,
@@ -1226,7 +1631,10 @@
               "clicks": 295,
               "reach": 8094,
               "leads": 1,
-              "link_clicks": 159
+              "complete_registrations": 4,
+              "link_clicks": 159,
+              "landing_page_views": 146,
+              "messages": 1
             },
             "2026-04-02": {
               "spend": 1039304.0,
@@ -1234,7 +1642,10 @@
               "clicks": 201,
               "reach": 8343,
               "leads": 1,
-              "link_clicks": 114
+              "complete_registrations": 6,
+              "link_clicks": 114,
+              "landing_page_views": 101,
+              "messages": 1
             },
             "2026-04-03": {
               "spend": 1076710.0,
@@ -1242,7 +1653,10 @@
               "clicks": 289,
               "reach": 11324,
               "leads": 0,
-              "link_clicks": 155
+              "complete_registrations": 5,
+              "link_clicks": 155,
+              "landing_page_views": 146,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 412079.0,
@@ -1250,7 +1664,10 @@
               "clicks": 139,
               "reach": 4078,
               "leads": 0,
-              "link_clicks": 76
+              "complete_registrations": 2,
+              "link_clicks": 76,
+              "landing_page_views": 75,
+              "messages": 1
             },
             "2026-04-05": {
               "spend": 0.0,
@@ -1258,9 +1675,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao",
@@ -1285,7 +1708,10 @@
               "clicks": 54,
               "reach": 2551,
               "leads": 0,
-              "link_clicks": 37
+              "complete_registrations": 4,
+              "link_clicks": 37,
+              "landing_page_views": 33,
+              "messages": 2
             },
             "2026-04-28": {
               "spend": 1076564.0,
@@ -1293,7 +1719,10 @@
               "clicks": 294,
               "reach": 14946,
               "leads": 0,
-              "link_clicks": 185
+              "complete_registrations": 22,
+              "link_clicks": 185,
+              "landing_page_views": 191,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 965231.0,
@@ -1301,7 +1730,10 @@
               "clicks": 280,
               "reach": 15708,
               "leads": 0,
-              "link_clicks": 190
+              "complete_registrations": 14,
+              "link_clicks": 190,
+              "landing_page_views": 199,
+              "messages": 3
             },
             "2026-04-30": {
               "spend": 1121010.0,
@@ -1309,7 +1741,10 @@
               "clicks": 381,
               "reach": 19266,
               "leads": 0,
-              "link_clicks": 252
+              "complete_registrations": 15,
+              "link_clicks": 252,
+              "landing_page_views": 253,
+              "messages": 1
             },
             "2026-05-01": {
               "spend": 1021683.0,
@@ -1317,7 +1752,10 @@
               "clicks": 353,
               "reach": 17482,
               "leads": 1,
-              "link_clicks": 208
+              "complete_registrations": 14,
+              "link_clicks": 208,
+              "landing_page_views": 207,
+              "messages": 1
             },
             "2026-05-02": {
               "spend": 807483.0,
@@ -1325,9 +1763,15 @@
               "clicks": 288,
               "reach": 12210,
               "leads": 0,
-              "link_clicks": 164
+              "complete_registrations": 12,
+              "link_clicks": 164,
+              "landing_page_views": 157,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao 2",
@@ -1352,7 +1796,10 @@
               "clicks": 98,
               "reach": 5117,
               "leads": 0,
-              "link_clicks": 60
+              "complete_registrations": 6,
+              "link_clicks": 60,
+              "landing_page_views": 54,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 508300.0,
@@ -1360,7 +1807,10 @@
               "clicks": 145,
               "reach": 7403,
               "leads": 2,
-              "link_clicks": 100
+              "complete_registrations": 12,
+              "link_clicks": 100,
+              "landing_page_views": 93,
+              "messages": 4
             },
             "2026-04-30": {
               "spend": 802932.0,
@@ -1368,7 +1818,10 @@
               "clicks": 235,
               "reach": 12629,
               "leads": 1,
-              "link_clicks": 134
+              "complete_registrations": 10,
+              "link_clicks": 134,
+              "landing_page_views": 130,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 923797.0,
@@ -1376,7 +1829,10 @@
               "clicks": 263,
               "reach": 13656,
               "leads": 0,
-              "link_clicks": 174
+              "complete_registrations": 20,
+              "link_clicks": 174,
+              "landing_page_views": 167,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 958287.0,
@@ -1384,20 +1840,26 @@
               "clicks": 243,
               "reach": 11913,
               "leads": 1,
-              "link_clicks": 140
+              "complete_registrations": 21,
+              "link_clicks": 140,
+              "landing_page_views": 167,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo",
           "campaign_id": "120246730619280058",
-          "spend": 3465186.0,
-          "impressions": 53656,
+          "spend": 3465231.0,
+          "impressions": 53657,
           "clicks": 980,
           "reach": 52214,
           "ctr": 1.8264,
-          "cpc": 3535.9,
-          "cpm": 64581.52,
+          "cpc": 3535.95,
+          "cpm": 64581.15,
           "leads": 1,
           "link_clicks": 608,
           "landing_page_views": 591,
@@ -1411,7 +1873,10 @@
               "clicks": 79,
               "reach": 3538,
               "leads": 0,
-              "link_clicks": 64
+              "complete_registrations": 12,
+              "link_clicks": 64,
+              "landing_page_views": 62,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 774070.0,
@@ -1419,7 +1884,10 @@
               "clicks": 207,
               "reach": 11908,
               "leads": 0,
-              "link_clicks": 129
+              "complete_registrations": 19,
+              "link_clicks": 129,
+              "landing_page_views": 124,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 493845.0,
@@ -1427,7 +1895,10 @@
               "clicks": 139,
               "reach": 8321,
               "leads": 0,
-              "link_clicks": 92
+              "complete_registrations": 6,
+              "link_clicks": 92,
+              "landing_page_views": 94,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 494272.0,
@@ -1435,7 +1906,10 @@
               "clicks": 174,
               "reach": 8157,
               "leads": 0,
-              "link_clicks": 99
+              "complete_registrations": 6,
+              "link_clicks": 99,
+              "landing_page_views": 91,
+              "messages": 1
             },
             "2026-05-01": {
               "spend": 608122.0,
@@ -1443,17 +1917,26 @@
               "clicks": 179,
               "reach": 9318,
               "leads": 1,
-              "link_clicks": 107
+              "complete_registrations": 10,
+              "link_clicks": 107,
+              "landing_page_views": 98,
+              "messages": 3
             },
             "2026-05-02": {
-              "spend": 784734.0,
-              "impressions": 11031,
+              "spend": 784779.0,
+              "impressions": 11032,
               "clicks": 202,
               "reach": 10972,
               "leads": 0,
-              "link_clicks": 117
+              "complete_registrations": 19,
+              "link_clicks": 117,
+              "landing_page_views": 122,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao y hệt",
@@ -1478,7 +1961,10 @@
               "clicks": 5,
               "reach": 94,
               "leads": 0,
-              "link_clicks": 3
+              "complete_registrations": 1,
+              "link_clicks": 3,
+              "landing_page_views": 3,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 378564.0,
@@ -1486,7 +1972,10 @@
               "clicks": 89,
               "reach": 4688,
               "leads": 0,
-              "link_clicks": 51
+              "complete_registrations": 9,
+              "link_clicks": 51,
+              "landing_page_views": 50,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 718081.0,
@@ -1494,7 +1983,10 @@
               "clicks": 213,
               "reach": 10321,
               "leads": 0,
-              "link_clicks": 125
+              "complete_registrations": 9,
+              "link_clicks": 125,
+              "landing_page_views": 119,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 790720.0,
@@ -1502,7 +1994,10 @@
               "clicks": 218,
               "reach": 10973,
               "leads": 0,
-              "link_clicks": 126
+              "complete_registrations": 8,
+              "link_clicks": 126,
+              "landing_page_views": 116,
+              "messages": 2
             },
             "2026-05-02": {
               "spend": 734091.0,
@@ -1510,9 +2005,15 @@
               "clicks": 197,
               "reach": 9101,
               "leads": 0,
-              "link_clicks": 109
+              "complete_registrations": 7,
+              "link_clicks": 109,
+              "landing_page_views": 105,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "31/3 - Noma911 - Ông chú review",
@@ -1537,7 +2038,10 @@
               "clicks": 26,
               "reach": 1442,
               "leads": 0,
-              "link_clicks": 18
+              "complete_registrations": 0,
+              "link_clicks": 18,
+              "landing_page_views": 15,
+              "messages": 1
             },
             "2026-04-01": {
               "spend": 310728.0,
@@ -1545,7 +2049,10 @@
               "clicks": 39,
               "reach": 2241,
               "leads": 0,
-              "link_clicks": 29
+              "complete_registrations": 2,
+              "link_clicks": 29,
+              "landing_page_views": 28,
+              "messages": 0
             },
             "2026-04-02": {
               "spend": 484280.0,
@@ -1553,7 +2060,10 @@
               "clicks": 71,
               "reach": 4541,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 2,
+              "link_clicks": 41,
+              "landing_page_views": 35,
+              "messages": 0
             },
             "2026-04-03": {
               "spend": 1232484.0,
@@ -1561,7 +2071,10 @@
               "clicks": 153,
               "reach": 9518,
               "leads": 0,
-              "link_clicks": 97
+              "complete_registrations": 4,
+              "link_clicks": 97,
+              "landing_page_views": 97,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 109248.0,
@@ -1569,7 +2082,10 @@
               "clicks": 22,
               "reach": 921,
               "leads": 0,
-              "link_clicks": 16
+              "complete_registrations": 1,
+              "link_clicks": 16,
+              "landing_page_views": 12,
+              "messages": 0
             },
             "2026-04-07": {
               "spend": 0.0,
@@ -1577,9 +2093,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "17/4 - NOMA911 - Phương Nam - V2",
@@ -1604,7 +2126,10 @@
               "clicks": 37,
               "reach": 1693,
               "leads": 1,
-              "link_clicks": 26
+              "complete_registrations": 0,
+              "link_clicks": 26,
+              "landing_page_views": 29,
+              "messages": 1
             },
             "2026-04-18": {
               "spend": 313824.0,
@@ -1612,7 +2137,10 @@
               "clicks": 47,
               "reach": 2344,
               "leads": 0,
-              "link_clicks": 29
+              "complete_registrations": 3,
+              "link_clicks": 29,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 405870.0,
@@ -1620,7 +2148,10 @@
               "clicks": 79,
               "reach": 2616,
               "leads": 0,
-              "link_clicks": 49
+              "complete_registrations": 4,
+              "link_clicks": 49,
+              "landing_page_views": 54,
+              "messages": 1
             },
             "2026-04-20": {
               "spend": 480321.0,
@@ -1628,7 +2159,10 @@
               "clicks": 83,
               "reach": 3723,
               "leads": 1,
-              "link_clicks": 50
+              "complete_registrations": 6,
+              "link_clicks": 50,
+              "landing_page_views": 45,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 375397.0,
@@ -1636,7 +2170,10 @@
               "clicks": 67,
               "reach": 3109,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 0,
+              "link_clicks": 43,
+              "landing_page_views": 40,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 197039.0,
@@ -1644,9 +2181,15 @@
               "clicks": 25,
               "reach": 1628,
               "leads": 0,
-              "link_clicks": 14
+              "complete_registrations": 0,
+              "link_clicks": 14,
+              "landing_page_views": 14,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "19/4 - NOMA911 - Phương Nam - designer",
@@ -1671,7 +2214,10 @@
               "clicks": 76,
               "reach": 3453,
               "leads": 0,
-              "link_clicks": 56
+              "complete_registrations": 4,
+              "link_clicks": 56,
+              "landing_page_views": 52,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 382350.0,
@@ -1679,7 +2225,10 @@
               "clicks": 66,
               "reach": 2836,
               "leads": 1,
-              "link_clicks": 52
+              "complete_registrations": 4,
+              "link_clicks": 52,
+              "landing_page_views": 63,
+              "messages": 1
             },
             "2026-04-21": {
               "spend": 287185.0,
@@ -1687,7 +2236,10 @@
               "clicks": 40,
               "reach": 2188,
               "leads": 1,
-              "link_clicks": 22
+              "complete_registrations": 0,
+              "link_clicks": 22,
+              "landing_page_views": 17,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 143338.0,
@@ -1695,7 +2247,10 @@
               "clicks": 16,
               "reach": 1468,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 10,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 283778.0,
@@ -1703,7 +2258,10 @@
               "clicks": 31,
               "reach": 1796,
               "leads": 0,
-              "link_clicks": 23
+              "complete_registrations": 3,
+              "link_clicks": 23,
+              "landing_page_views": 28,
+              "messages": 1
             },
             "2026-04-25": {
               "spend": 260581.0,
@@ -1711,9 +2269,15 @@
               "clicks": 24,
               "reach": 1677,
               "leads": 1,
-              "link_clicks": 16
+              "complete_registrations": 0,
+              "link_clicks": 16,
+              "landing_page_views": 15,
+              "messages": 2
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - Noma911 - Phương Nam - cụ đoành",
@@ -1738,7 +2302,10 @@
               "clicks": 37,
               "reach": 2319,
               "leads": 0,
-              "link_clicks": 24
+              "complete_registrations": 1,
+              "link_clicks": 24,
+              "landing_page_views": 23,
+              "messages": 1
             },
             "2026-04-22": {
               "spend": 440329.0,
@@ -1746,7 +2313,10 @@
               "clicks": 93,
               "reach": 3688,
               "leads": 1,
-              "link_clicks": 59
+              "complete_registrations": 4,
+              "link_clicks": 59,
+              "landing_page_views": 58,
+              "messages": 2
             },
             "2026-04-23": {
               "spend": 523534.0,
@@ -1754,7 +2324,10 @@
               "clicks": 70,
               "reach": 5188,
               "leads": 0,
-              "link_clicks": 54
+              "complete_registrations": 1,
+              "link_clicks": 54,
+              "landing_page_views": 48,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 230229.0,
@@ -1762,7 +2335,10 @@
               "clicks": 37,
               "reach": 2485,
               "leads": 1,
-              "link_clicks": 16
+              "complete_registrations": 2,
+              "link_clicks": 16,
+              "landing_page_views": 15,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 196065.0,
@@ -1770,7 +2346,10 @@
               "clicks": 26,
               "reach": 2204,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 1,
+              "link_clicks": 17,
+              "landing_page_views": 15,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 0.0,
@@ -1778,7 +2357,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 0.0,
@@ -1786,9 +2368,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "14/4 - Noma911 - Vid 3",
@@ -1813,7 +2401,10 @@
               "clicks": 50,
               "reach": 4168,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 2,
+              "link_clicks": 32,
+              "landing_page_views": 31,
+              "messages": 0
             },
             "2026-04-15": {
               "spend": 1136268.0,
@@ -1821,7 +2412,10 @@
               "clicks": 154,
               "reach": 10269,
               "leads": 0,
-              "link_clicks": 101
+              "complete_registrations": 5,
+              "link_clicks": 101,
+              "landing_page_views": 88,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 0.0,
@@ -1829,9 +2423,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "3/4 - Noma911 - Vid5 - Bản sao",
@@ -1856,7 +2456,10 @@
               "clicks": 62,
               "reach": 2606,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 3,
+              "link_clicks": 41,
+              "landing_page_views": 40,
+              "messages": 1
             },
             "2026-04-15": {
               "spend": 796350.0,
@@ -1864,7 +2467,10 @@
               "clicks": 117,
               "reach": 6696,
               "leads": 0,
-              "link_clicks": 61
+              "complete_registrations": 2,
+              "link_clicks": 61,
+              "landing_page_views": 54,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 224719.0,
@@ -1872,7 +2478,10 @@
               "clicks": 20,
               "reach": 1351,
               "leads": 0,
-              "link_clicks": 14
+              "complete_registrations": 0,
+              "link_clicks": 14,
+              "landing_page_views": 13,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 0.0,
@@ -1880,9 +2489,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "22/4 - Noma911 - Phương Nam",
@@ -1907,7 +2522,10 @@
               "clicks": 38,
               "reach": 1855,
               "leads": 0,
-              "link_clicks": 22
+              "complete_registrations": 3,
+              "link_clicks": 22,
+              "landing_page_views": 19,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 220301.0,
@@ -1915,7 +2533,10 @@
               "clicks": 31,
               "reach": 2261,
               "leads": 0,
-              "link_clicks": 24
+              "complete_registrations": 1,
+              "link_clicks": 24,
+              "landing_page_views": 21,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 328379.0,
@@ -1923,7 +2544,10 @@
               "clicks": 60,
               "reach": 3163,
               "leads": 0,
-              "link_clicks": 40
+              "complete_registrations": 1,
+              "link_clicks": 40,
+              "landing_page_views": 37,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 0.0,
@@ -1931,7 +2555,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 177931.0,
@@ -1939,7 +2566,10 @@
               "clicks": 34,
               "reach": 2007,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 1,
+              "link_clicks": 17,
+              "landing_page_views": 15,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 245552.0,
@@ -1947,7 +2577,10 @@
               "clicks": 28,
               "reach": 2447,
               "leads": 0,
-              "link_clicks": 14
+              "complete_registrations": 0,
+              "link_clicks": 14,
+              "landing_page_views": 18,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 0.0,
@@ -1955,7 +2588,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 0.0,
@@ -1963,9 +2599,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "19/4 - NOMA911 - Phương Nam..",
@@ -1990,7 +2632,10 @@
               "clicks": 107,
               "reach": 3063,
               "leads": 0,
-              "link_clicks": 67
+              "complete_registrations": 3,
+              "link_clicks": 67,
+              "landing_page_views": 59,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 398280.0,
@@ -1998,7 +2643,10 @@
               "clicks": 122,
               "reach": 3851,
               "leads": 0,
-              "link_clicks": 73
+              "complete_registrations": 8,
+              "link_clicks": 73,
+              "landing_page_views": 67,
+              "messages": 2
             },
             "2026-04-21": {
               "spend": 15263.0,
@@ -2006,9 +2654,15 @@
               "clicks": 4,
               "reach": 153,
               "leads": 0,
-              "link_clicks": 1
+              "complete_registrations": 0,
+              "link_clicks": 1,
+              "landing_page_views": 1,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "23/4 - Noma911 - Phương Nam",
@@ -2033,7 +2687,10 @@
               "clicks": 42,
               "reach": 2482,
               "leads": 0,
-              "link_clicks": 32
+              "complete_registrations": 2,
+              "link_clicks": 32,
+              "landing_page_views": 28,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 162475.0,
@@ -2041,7 +2698,10 @@
               "clicks": 11,
               "reach": 823,
               "leads": 0,
-              "link_clicks": 6
+              "complete_registrations": 0,
+              "link_clicks": 6,
+              "landing_page_views": 7,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 121470.0,
@@ -2049,7 +2709,10 @@
               "clicks": 14,
               "reach": 1284,
               "leads": 0,
-              "link_clicks": 11
+              "complete_registrations": 0,
+              "link_clicks": 11,
+              "landing_page_views": 10,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 109919.0,
@@ -2057,7 +2720,10 @@
               "clicks": 15,
               "reach": 887,
               "leads": 0,
-              "link_clicks": 8
+              "complete_registrations": 0,
+              "link_clicks": 8,
+              "landing_page_views": 7,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 0.0,
@@ -2065,9 +2731,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 2,
+              "link_clicks": 0,
+              "landing_page_views": 3,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "31/3 - Noma911 - Quang tèo 6 - Bản sao",
@@ -2092,7 +2764,10 @@
               "clicks": 18,
               "reach": 1138,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 8,
+              "messages": 0
             },
             "2026-04-01": {
               "spend": 310732.0,
@@ -2100,7 +2775,10 @@
               "clicks": 47,
               "reach": 2504,
               "leads": 1,
-              "link_clicks": 27
+              "complete_registrations": 2,
+              "link_clicks": 27,
+              "landing_page_views": 26,
+              "messages": 1
             },
             "2026-04-02": {
               "spend": 231693.0,
@@ -2108,7 +2786,10 @@
               "clicks": 32,
               "reach": 2235,
               "leads": 0,
-              "link_clicks": 13
+              "complete_registrations": 0,
+              "link_clicks": 13,
+              "landing_page_views": 13,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 0.0,
@@ -2116,9 +2797,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/3 - Noma911 -  Dương Minh Hải",
@@ -2143,7 +2830,10 @@
               "clicks": 27,
               "reach": 895,
               "leads": 1,
-              "link_clicks": 11
+              "complete_registrations": 0,
+              "link_clicks": 11,
+              "landing_page_views": 0,
+              "messages": 1
             },
             "2026-03-29": {
               "spend": 390503.0,
@@ -2151,9 +2841,15 @@
               "clicks": 47,
               "reach": 1959,
               "leads": 0,
-              "link_clicks": 27
+              "complete_registrations": 0,
+              "link_clicks": 27,
+              "landing_page_views": 10,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/3 - Noma911 - anhtu8817",
@@ -2178,7 +2874,10 @@
               "clicks": 14,
               "reach": 1330,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-03-29": {
               "spend": 370206.0,
@@ -2186,9 +2885,15 @@
               "clicks": 51,
               "reach": 2921,
               "leads": 0,
-              "link_clicks": 34
+              "complete_registrations": 0,
+              "link_clicks": 34,
+              "landing_page_views": 15,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "17/4 - Noma911 - PNam - V1",
@@ -2213,7 +2918,10 @@
               "clicks": 69,
               "reach": 2505,
               "leads": 0,
-              "link_clicks": 52
+              "complete_registrations": 0,
+              "link_clicks": 52,
+              "landing_page_views": 23,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 24823.0,
@@ -2221,7 +2929,10 @@
               "clicks": 5,
               "reach": 272,
               "leads": 0,
-              "link_clicks": 3
+              "complete_registrations": 0,
+              "link_clicks": 3,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 119323.0,
@@ -2229,9 +2940,15 @@
               "clicks": 23,
               "reach": 825,
               "leads": 0,
-              "link_clicks": 15
+              "complete_registrations": 0,
+              "link_clicks": 15,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "18/4 - NOMA911 - Phương Nam - V1",
@@ -2256,7 +2973,10 @@
               "clicks": 56,
               "reach": 2988,
               "leads": 0,
-              "link_clicks": 34
+              "complete_registrations": 1,
+              "link_clicks": 34,
+              "landing_page_views": 32,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 0.0,
@@ -2264,9 +2984,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "16/4 - Noma911 - Phương Nam",
@@ -2291,9 +3017,15 @@
               "clicks": 202,
               "reach": 8492,
               "leads": 0,
-              "link_clicks": 109
+              "complete_registrations": 0,
+              "link_clicks": 109,
+              "landing_page_views": 82,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "24/4 - Noma911 - Phương Nam",
@@ -2318,7 +3050,10 @@
               "clicks": 19,
               "reach": 1392,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 0,
+              "link_clicks": 12,
+              "landing_page_views": 9,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 0.0,
@@ -2326,9 +3061,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 2,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - Noma911 - PNam",
@@ -2353,9 +3094,15 @@
               "clicks": 17,
               "reach": 1396,
               "leads": 0,
-              "link_clicks": 13
+              "complete_registrations": 0,
+              "link_clicks": 13,
+              "landing_page_views": 13,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - Noma911 - PNam - v3",
@@ -2380,9 +3127,15 @@
               "clicks": 13,
               "reach": 1221,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 9,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "16/4 - NOMA 911 - PHƯƠNG NAM",
@@ -2407,7 +3160,10 @@
               "clicks": 3,
               "reach": 114,
               "leads": 0,
-              "link_clicks": 2
+              "complete_registrations": 0,
+              "link_clicks": 2,
+              "landing_page_views": 2,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 784.0,
@@ -2415,9 +3171,15 @@
               "clicks": 1,
               "reach": 7,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         }
       ],
       "rows_raw": 156
@@ -2430,13 +3192,16 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 91307954.0,
-        "impressions": 1160172,
+        "spend": 91309075.0,
+        "impressions": 1160173,
         "clicks": 22895,
         "reach": 986820,
         "leads": 57,
+        "complete_registrations": 796,
         "ctr": 1.9734,
-        "cpc": 3988.12
+        "cpc": 3988.17,
+        "campaigns_total": 8,
+        "campaigns_active": 5
       },
       "campaigns": [
         {
@@ -2462,7 +3227,10 @@
               "clicks": 19,
               "reach": 1082,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-03-29": {
               "spend": 437350.0,
@@ -2470,7 +3238,10 @@
               "clicks": 42,
               "reach": 2358,
               "leads": 0,
-              "link_clicks": 31
+              "complete_registrations": 2,
+              "link_clicks": 31,
+              "landing_page_views": 16,
+              "messages": 0
             },
             "2026-03-30": {
               "spend": 764673.0,
@@ -2478,7 +3249,10 @@
               "clicks": 158,
               "reach": 5436,
               "leads": 0,
-              "link_clicks": 109
+              "complete_registrations": 7,
+              "link_clicks": 109,
+              "landing_page_views": 95,
+              "messages": 1
             },
             "2026-03-31": {
               "spend": 1489654.0,
@@ -2486,7 +3260,10 @@
               "clicks": 214,
               "reach": 9961,
               "leads": 0,
-              "link_clicks": 132
+              "complete_registrations": 9,
+              "link_clicks": 132,
+              "landing_page_views": 130,
+              "messages": 1
             },
             "2026-04-01": {
               "spend": 937857.0,
@@ -2494,7 +3271,10 @@
               "clicks": 182,
               "reach": 8510,
               "leads": 0,
-              "link_clicks": 126
+              "complete_registrations": 6,
+              "link_clicks": 126,
+              "landing_page_views": 125,
+              "messages": 0
             },
             "2026-04-02": {
               "spend": 865612.0,
@@ -2502,7 +3282,10 @@
               "clicks": 205,
               "reach": 10009,
               "leads": 0,
-              "link_clicks": 126
+              "complete_registrations": 7,
+              "link_clicks": 126,
+              "landing_page_views": 135,
+              "messages": 2
             },
             "2026-04-03": {
               "spend": 837020.0,
@@ -2510,7 +3293,10 @@
               "clicks": 238,
               "reach": 10587,
               "leads": 0,
-              "link_clicks": 151
+              "complete_registrations": 4,
+              "link_clicks": 151,
+              "landing_page_views": 139,
+              "messages": 2
             },
             "2026-04-04": {
               "spend": 824473.0,
@@ -2518,7 +3304,10 @@
               "clicks": 233,
               "reach": 9446,
               "leads": 0,
-              "link_clicks": 144
+              "complete_registrations": 10,
+              "link_clicks": 144,
+              "landing_page_views": 143,
+              "messages": 1
             },
             "2026-04-05": {
               "spend": 1441856.0,
@@ -2526,7 +3315,10 @@
               "clicks": 317,
               "reach": 12027,
               "leads": 1,
-              "link_clicks": 212
+              "complete_registrations": 14,
+              "link_clicks": 212,
+              "landing_page_views": 200,
+              "messages": 3
             },
             "2026-04-06": {
               "spend": 1286851.0,
@@ -2534,7 +3326,10 @@
               "clicks": 413,
               "reach": 14205,
               "leads": 3,
-              "link_clicks": 240
+              "complete_registrations": 14,
+              "link_clicks": 240,
+              "landing_page_views": 255,
+              "messages": 4
             },
             "2026-04-07": {
               "spend": 1952731.0,
@@ -2542,7 +3337,10 @@
               "clicks": 409,
               "reach": 19120,
               "leads": 2,
-              "link_clicks": 229
+              "complete_registrations": 9,
+              "link_clicks": 229,
+              "landing_page_views": 226,
+              "messages": 8
             },
             "2026-04-08": {
               "spend": 1460081.0,
@@ -2550,7 +3348,10 @@
               "clicks": 349,
               "reach": 13152,
               "leads": 0,
-              "link_clicks": 208
+              "complete_registrations": 20,
+              "link_clicks": 208,
+              "landing_page_views": 196,
+              "messages": 3
             },
             "2026-04-09": {
               "spend": 1428798.0,
@@ -2558,7 +3359,10 @@
               "clicks": 413,
               "reach": 13480,
               "leads": 0,
-              "link_clicks": 229
+              "complete_registrations": 13,
+              "link_clicks": 229,
+              "landing_page_views": 202,
+              "messages": 2
             },
             "2026-04-10": {
               "spend": 1932455.0,
@@ -2566,7 +3370,10 @@
               "clicks": 431,
               "reach": 17733,
               "leads": 1,
-              "link_clicks": 264
+              "complete_registrations": 13,
+              "link_clicks": 264,
+              "landing_page_views": 249,
+              "messages": 1
             },
             "2026-04-11": {
               "spend": 1546715.0,
@@ -2574,7 +3381,10 @@
               "clicks": 335,
               "reach": 13362,
               "leads": 2,
-              "link_clicks": 206
+              "complete_registrations": 14,
+              "link_clicks": 206,
+              "landing_page_views": 191,
+              "messages": 4
             },
             "2026-04-12": {
               "spend": 2032841.0,
@@ -2582,7 +3392,10 @@
               "clicks": 418,
               "reach": 17811,
               "leads": 1,
-              "link_clicks": 272
+              "complete_registrations": 19,
+              "link_clicks": 272,
+              "landing_page_views": 273,
+              "messages": 2
             },
             "2026-04-13": {
               "spend": 1796945.0,
@@ -2590,7 +3403,10 @@
               "clicks": 333,
               "reach": 17882,
               "leads": 2,
-              "link_clicks": 213
+              "complete_registrations": 16,
+              "link_clicks": 213,
+              "landing_page_views": 206,
+              "messages": 4
             },
             "2026-04-14": {
               "spend": 1592985.0,
@@ -2598,7 +3414,10 @@
               "clicks": 337,
               "reach": 19430,
               "leads": 0,
-              "link_clicks": 182
+              "complete_registrations": 8,
+              "link_clicks": 182,
+              "landing_page_views": 161,
+              "messages": 2
             },
             "2026-04-15": {
               "spend": 1972450.0,
@@ -2606,7 +3425,10 @@
               "clicks": 397,
               "reach": 23188,
               "leads": 1,
-              "link_clicks": 221
+              "complete_registrations": 15,
+              "link_clicks": 221,
+              "landing_page_views": 207,
+              "messages": 4
             },
             "2026-04-16": {
               "spend": 1966702.0,
@@ -2614,7 +3436,10 @@
               "clicks": 336,
               "reach": 18538,
               "leads": 1,
-              "link_clicks": 186
+              "complete_registrations": 11,
+              "link_clicks": 186,
+              "landing_page_views": 169,
+              "messages": 3
             },
             "2026-04-17": {
               "spend": 571095.0,
@@ -2622,7 +3447,10 @@
               "clicks": 93,
               "reach": 5276,
               "leads": 1,
-              "link_clicks": 53
+              "complete_registrations": 0,
+              "link_clicks": 53,
+              "landing_page_views": 48,
+              "messages": 1
             },
             "2026-04-18": {
               "spend": 0.0,
@@ -2630,7 +3458,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 791682.0,
@@ -2638,7 +3469,10 @@
               "clicks": 201,
               "reach": 7484,
               "leads": 1,
-              "link_clicks": 100
+              "complete_registrations": 6,
+              "link_clicks": 100,
+              "landing_page_views": 85,
+              "messages": 2
             },
             "2026-04-20": {
               "spend": 708180.0,
@@ -2646,7 +3480,10 @@
               "clicks": 176,
               "reach": 8637,
               "leads": 0,
-              "link_clicks": 86
+              "complete_registrations": 6,
+              "link_clicks": 86,
+              "landing_page_views": 80,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 783165.0,
@@ -2654,7 +3491,10 @@
               "clicks": 179,
               "reach": 9151,
               "leads": 0,
-              "link_clicks": 104
+              "complete_registrations": 8,
+              "link_clicks": 104,
+              "landing_page_views": 95,
+              "messages": 1
             },
             "2026-04-22": {
               "spend": 717864.0,
@@ -2662,7 +3502,10 @@
               "clicks": 171,
               "reach": 8970,
               "leads": 0,
-              "link_clicks": 99
+              "complete_registrations": 7,
+              "link_clicks": 99,
+              "landing_page_views": 87,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 411060.0,
@@ -2670,7 +3513,10 @@
               "clicks": 121,
               "reach": 5217,
               "leads": 0,
-              "link_clicks": 81
+              "complete_registrations": 2,
+              "link_clicks": 81,
+              "landing_page_views": 76,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 849667.0,
@@ -2678,7 +3524,10 @@
               "clicks": 284,
               "reach": 12950,
               "leads": 0,
-              "link_clicks": 162
+              "complete_registrations": 8,
+              "link_clicks": 162,
+              "landing_page_views": 151,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 893860.0,
@@ -2686,7 +3535,10 @@
               "clicks": 245,
               "reach": 12844,
               "leads": 0,
-              "link_clicks": 163
+              "complete_registrations": 9,
+              "link_clicks": 163,
+              "landing_page_views": 154,
+              "messages": 2
             },
             "2026-04-26": {
               "spend": 1053157.0,
@@ -2694,7 +3546,10 @@
               "clicks": 366,
               "reach": 19749,
               "leads": 0,
-              "link_clicks": 226
+              "complete_registrations": 12,
+              "link_clicks": 226,
+              "landing_page_views": 203,
+              "messages": 2
             },
             "2026-04-27": {
               "spend": 1019935.0,
@@ -2702,7 +3557,10 @@
               "clicks": 364,
               "reach": 18199,
               "leads": 3,
-              "link_clicks": 224
+              "complete_registrations": 15,
+              "link_clicks": 224,
+              "landing_page_views": 210,
+              "messages": 5
             },
             "2026-04-28": {
               "spend": 876516.0,
@@ -2710,7 +3568,10 @@
               "clicks": 309,
               "reach": 16021,
               "leads": 1,
-              "link_clicks": 193
+              "complete_registrations": 4,
+              "link_clicks": 193,
+              "landing_page_views": 172,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 446608.0,
@@ -2718,7 +3579,10 @@
               "clicks": 153,
               "reach": 8158,
               "leads": 0,
-              "link_clicks": 97
+              "complete_registrations": 2,
+              "link_clicks": 97,
+              "landing_page_views": 91,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 228723.0,
@@ -2726,7 +3590,10 @@
               "clicks": 67,
               "reach": 3477,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 2,
+              "link_clicks": 43,
+              "landing_page_views": 41,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 323154.0,
@@ -2734,7 +3601,10 @@
               "clicks": 90,
               "reach": 4332,
               "leads": 0,
-              "link_clicks": 63
+              "complete_registrations": 4,
+              "link_clicks": 63,
+              "landing_page_views": 63,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 501136.0,
@@ -2742,20 +3612,26 @@
               "clicks": 94,
               "reach": 6473,
               "leads": 0,
-              "link_clicks": 59
+              "complete_registrations": 6,
+              "link_clicks": 59,
+              "landing_page_views": 58,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "15/4 - Noma911 - Dương Minh Hải",
           "campaign_id": "120244203627430388",
-          "spend": 13050512.0,
-          "impressions": 144171,
+          "spend": 13051633.0,
+          "impressions": 144172,
           "clicks": 3150,
           "reach": 120555,
           "ctr": 2.1849,
-          "cpc": 4143.02,
-          "cpm": 90521.06,
+          "cpc": 4143.38,
+          "cpm": 90528.21,
           "leads": 8,
           "link_clicks": 1902,
           "landing_page_views": 1743,
@@ -2769,7 +3645,10 @@
               "clicks": 118,
               "reach": 3572,
               "leads": 0,
-              "link_clicks": 45
+              "complete_registrations": 2,
+              "link_clicks": 45,
+              "landing_page_views": 41,
+              "messages": 1
             },
             "2026-04-17": {
               "spend": 583490.0,
@@ -2777,7 +3656,10 @@
               "clicks": 124,
               "reach": 4981,
               "leads": 1,
-              "link_clicks": 68
+              "complete_registrations": 9,
+              "link_clicks": 68,
+              "landing_page_views": 61,
+              "messages": 1
             },
             "2026-04-18": {
               "spend": 443729.0,
@@ -2785,7 +3667,10 @@
               "clicks": 106,
               "reach": 3799,
               "leads": 0,
-              "link_clicks": 64
+              "complete_registrations": 2,
+              "link_clicks": 64,
+              "landing_page_views": 62,
+              "messages": 1
             },
             "2026-04-19": {
               "spend": 815317.0,
@@ -2793,7 +3678,10 @@
               "clicks": 167,
               "reach": 5577,
               "leads": 0,
-              "link_clicks": 105
+              "complete_registrations": 5,
+              "link_clicks": 105,
+              "landing_page_views": 88,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 697077.0,
@@ -2801,7 +3689,10 @@
               "clicks": 169,
               "reach": 5742,
               "leads": 1,
-              "link_clicks": 86
+              "complete_registrations": 5,
+              "link_clicks": 86,
+              "landing_page_views": 73,
+              "messages": 3
             },
             "2026-04-21": {
               "spend": 685334.0,
@@ -2809,7 +3700,10 @@
               "clicks": 182,
               "reach": 5717,
               "leads": 0,
-              "link_clicks": 94
+              "complete_registrations": 7,
+              "link_clicks": 94,
+              "landing_page_views": 91,
+              "messages": 3
             },
             "2026-04-22": {
               "spend": 746005.0,
@@ -2817,7 +3711,10 @@
               "clicks": 178,
               "reach": 5253,
               "leads": 2,
-              "link_clicks": 104
+              "complete_registrations": 8,
+              "link_clicks": 104,
+              "landing_page_views": 91,
+              "messages": 2
             },
             "2026-04-23": {
               "spend": 521813.0,
@@ -2825,7 +3722,10 @@
               "clicks": 110,
               "reach": 4074,
               "leads": 0,
-              "link_clicks": 54
+              "complete_registrations": 3,
+              "link_clicks": 54,
+              "landing_page_views": 46,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 914899.0,
@@ -2833,7 +3733,10 @@
               "clicks": 226,
               "reach": 8905,
               "leads": 1,
-              "link_clicks": 135
+              "complete_registrations": 9,
+              "link_clicks": 135,
+              "landing_page_views": 116,
+              "messages": 1
             },
             "2026-04-25": {
               "spend": 879437.0,
@@ -2841,7 +3744,10 @@
               "clicks": 177,
               "reach": 9276,
               "leads": 1,
-              "link_clicks": 115
+              "complete_registrations": 5,
+              "link_clicks": 115,
+              "landing_page_views": 105,
+              "messages": 1
             },
             "2026-04-26": {
               "spend": 1452115.0,
@@ -2849,7 +3755,10 @@
               "clicks": 301,
               "reach": 13057,
               "leads": 1,
-              "link_clicks": 203
+              "complete_registrations": 14,
+              "link_clicks": 203,
+              "landing_page_views": 187,
+              "messages": 1
             },
             "2026-04-27": {
               "spend": 1005638.0,
@@ -2857,7 +3766,10 @@
               "clicks": 275,
               "reach": 11089,
               "leads": 0,
-              "link_clicks": 178
+              "complete_registrations": 4,
+              "link_clicks": 178,
+              "landing_page_views": 170,
+              "messages": 1
             },
             "2026-04-28": {
               "spend": 566653.0,
@@ -2865,7 +3777,10 @@
               "clicks": 199,
               "reach": 6430,
               "leads": 1,
-              "link_clicks": 117
+              "complete_registrations": 8,
+              "link_clicks": 117,
+              "landing_page_views": 107,
+              "messages": 2
             },
             "2026-04-29": {
               "spend": 690978.0,
@@ -2873,7 +3788,10 @@
               "clicks": 197,
               "reach": 7738,
               "leads": 0,
-              "link_clicks": 132
+              "complete_registrations": 4,
+              "link_clicks": 132,
+              "landing_page_views": 127,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 899221.0,
@@ -2881,7 +3799,10 @@
               "clicks": 226,
               "reach": 8175,
               "leads": 0,
-              "link_clicks": 158
+              "complete_registrations": 9,
+              "link_clicks": 158,
+              "landing_page_views": 149,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 920764.0,
@@ -2889,17 +3810,26 @@
               "clicks": 226,
               "reach": 9209,
               "leads": 0,
-              "link_clicks": 150
+              "complete_registrations": 6,
+              "link_clicks": 150,
+              "landing_page_views": 141,
+              "messages": 2
             },
             "2026-05-02": {
-              "spend": 761702.0,
-              "impressions": 8549,
+              "spend": 762823.0,
+              "impressions": 8550,
               "clicks": 169,
               "reach": 7961,
               "leads": 0,
-              "link_clicks": 94
+              "complete_registrations": 3,
+              "link_clicks": 94,
+              "landing_page_views": 88,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "15/4 - Noma911 - Quang Tèo 3",
@@ -2914,7 +3844,7 @@
           "leads": 15,
           "link_clicks": 2300,
           "landing_page_views": 2068,
-          "video_views": 66000,
+          "video_views": 66001,
           "complete_registrations": 103,
           "messages": 22,
           "by_date": {
@@ -2924,7 +3854,10 @@
               "clicks": 233,
               "reach": 5722,
               "leads": 0,
-              "link_clicks": 126
+              "complete_registrations": 13,
+              "link_clicks": 126,
+              "landing_page_views": 112,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 1184203.0,
@@ -2932,7 +3865,10 @@
               "clicks": 331,
               "reach": 14578,
               "leads": 0,
-              "link_clicks": 163
+              "complete_registrations": 6,
+              "link_clicks": 163,
+              "landing_page_views": 147,
+              "messages": 1
             },
             "2026-04-18": {
               "spend": 958477.0,
@@ -2940,7 +3876,10 @@
               "clicks": 411,
               "reach": 14133,
               "leads": 0,
-              "link_clicks": 189
+              "complete_registrations": 3,
+              "link_clicks": 189,
+              "landing_page_views": 161,
+              "messages": 3
             },
             "2026-04-19": {
               "spend": 772239.0,
@@ -2948,7 +3887,10 @@
               "clicks": 246,
               "reach": 7777,
               "leads": 0,
-              "link_clicks": 128
+              "complete_registrations": 3,
+              "link_clicks": 128,
+              "landing_page_views": 111,
+              "messages": 2
             },
             "2026-04-20": {
               "spend": 619257.0,
@@ -2956,7 +3898,10 @@
               "clicks": 177,
               "reach": 6123,
               "leads": 1,
-              "link_clicks": 95
+              "complete_registrations": 3,
+              "link_clicks": 95,
+              "landing_page_views": 90,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 532409.0,
@@ -2964,7 +3909,10 @@
               "clicks": 118,
               "reach": 4355,
               "leads": 1,
-              "link_clicks": 65
+              "complete_registrations": 1,
+              "link_clicks": 65,
+              "landing_page_views": 61,
+              "messages": 4
             },
             "2026-04-22": {
               "spend": 574385.0,
@@ -2972,7 +3920,10 @@
               "clicks": 161,
               "reach": 4699,
               "leads": 1,
-              "link_clicks": 96
+              "complete_registrations": 5,
+              "link_clicks": 96,
+              "landing_page_views": 88,
+              "messages": 1
             },
             "2026-04-23": {
               "spend": 398944.0,
@@ -2980,7 +3931,10 @@
               "clicks": 104,
               "reach": 4148,
               "leads": 1,
-              "link_clicks": 70
+              "complete_registrations": 4,
+              "link_clicks": 70,
+              "landing_page_views": 64,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 724737.0,
@@ -2988,7 +3942,10 @@
               "clicks": 232,
               "reach": 7496,
               "leads": 1,
-              "link_clicks": 123
+              "complete_registrations": 8,
+              "link_clicks": 123,
+              "landing_page_views": 110,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 739298.0,
@@ -2996,7 +3953,10 @@
               "clicks": 228,
               "reach": 9055,
               "leads": 0,
-              "link_clicks": 152
+              "complete_registrations": 9,
+              "link_clicks": 152,
+              "landing_page_views": 140,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 868802.0,
@@ -3004,7 +3964,10 @@
               "clicks": 302,
               "reach": 13220,
               "leads": 2,
-              "link_clicks": 173
+              "complete_registrations": 8,
+              "link_clicks": 173,
+              "landing_page_views": 162,
+              "messages": 2
             },
             "2026-04-27": {
               "spend": 785717.0,
@@ -3012,7 +3975,10 @@
               "clicks": 282,
               "reach": 10587,
               "leads": 2,
-              "link_clicks": 163
+              "complete_registrations": 7,
+              "link_clicks": 163,
+              "landing_page_views": 148,
+              "messages": 2
             },
             "2026-04-28": {
               "spend": 738345.0,
@@ -3020,7 +3986,10 @@
               "clicks": 239,
               "reach": 9367,
               "leads": 2,
-              "link_clicks": 149
+              "complete_registrations": 7,
+              "link_clicks": 149,
+              "landing_page_views": 137,
+              "messages": 2
             },
             "2026-04-29": {
               "spend": 577626.0,
@@ -3028,7 +3997,10 @@
               "clicks": 238,
               "reach": 8172,
               "leads": 0,
-              "link_clicks": 141
+              "complete_registrations": 6,
+              "link_clicks": 141,
+              "landing_page_views": 126,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 776561.0,
@@ -3036,7 +4008,10 @@
               "clicks": 282,
               "reach": 10180,
               "leads": 1,
-              "link_clicks": 172
+              "complete_registrations": 9,
+              "link_clicks": 172,
+              "landing_page_views": 142,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 861984.0,
@@ -3044,7 +4019,10 @@
               "clicks": 254,
               "reach": 11373,
               "leads": 1,
-              "link_clicks": 132
+              "complete_registrations": 7,
+              "link_clicks": 132,
+              "landing_page_views": 115,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 940572.0,
@@ -3052,9 +4030,15 @@
               "clicks": 279,
               "reach": 11927,
               "leads": 1,
-              "link_clicks": 163
+              "complete_registrations": 4,
+              "link_clicks": 163,
+              "landing_page_views": 154,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành Xe Trắng",
@@ -3079,7 +4063,10 @@
               "clicks": 133,
               "reach": 3778,
               "leads": 1,
-              "link_clicks": 91
+              "complete_registrations": 4,
+              "link_clicks": 91,
+              "landing_page_views": 85,
+              "messages": 1
             },
             "2026-04-24": {
               "spend": 1049441.0,
@@ -3087,7 +4074,10 @@
               "clicks": 371,
               "reach": 12589,
               "leads": 1,
-              "link_clicks": 231
+              "complete_registrations": 17,
+              "link_clicks": 231,
+              "landing_page_views": 226,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 1158434.0,
@@ -3095,7 +4085,10 @@
               "clicks": 209,
               "reach": 10932,
               "leads": 0,
-              "link_clicks": 135
+              "complete_registrations": 13,
+              "link_clicks": 135,
+              "landing_page_views": 121,
+              "messages": 2
             },
             "2026-04-26": {
               "spend": 1611692.0,
@@ -3103,7 +4096,10 @@
               "clicks": 385,
               "reach": 17537,
               "leads": 0,
-              "link_clicks": 272
+              "complete_registrations": 23,
+              "link_clicks": 272,
+              "landing_page_views": 258,
+              "messages": 3
             },
             "2026-04-27": {
               "spend": 1104059.0,
@@ -3111,7 +4107,10 @@
               "clicks": 320,
               "reach": 12041,
               "leads": 1,
-              "link_clicks": 242
+              "complete_registrations": 17,
+              "link_clicks": 242,
+              "landing_page_views": 236,
+              "messages": 2
             },
             "2026-04-28": {
               "spend": 903984.0,
@@ -3119,7 +4118,10 @@
               "clicks": 232,
               "reach": 8635,
               "leads": 1,
-              "link_clicks": 155
+              "complete_registrations": 17,
+              "link_clicks": 155,
+              "landing_page_views": 170,
+              "messages": 5
             },
             "2026-04-29": {
               "spend": 788768.0,
@@ -3127,7 +4129,10 @@
               "clicks": 244,
               "reach": 6965,
               "leads": 2,
-              "link_clicks": 174
+              "complete_registrations": 10,
+              "link_clicks": 174,
+              "landing_page_views": 167,
+              "messages": 5
             },
             "2026-04-30": {
               "spend": 1096839.0,
@@ -3135,7 +4140,10 @@
               "clicks": 279,
               "reach": 8946,
               "leads": 1,
-              "link_clicks": 182
+              "complete_registrations": 10,
+              "link_clicks": 182,
+              "landing_page_views": 171,
+              "messages": 1
             },
             "2026-05-01": {
               "spend": 1278044.0,
@@ -3143,7 +4151,10 @@
               "clicks": 307,
               "reach": 11733,
               "leads": 0,
-              "link_clicks": 211
+              "complete_registrations": 16,
+              "link_clicks": 211,
+              "landing_page_views": 189,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 1505054.0,
@@ -3151,9 +4162,15 @@
               "clicks": 364,
               "reach": 13790,
               "leads": 1,
-              "link_clicks": 234
+              "complete_registrations": 25,
+              "link_clicks": 234,
+              "landing_page_views": 223,
+              "messages": 2
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/3 - Noma911 - Nghĩa Ô Tô",
@@ -3178,7 +4195,10 @@
               "clicks": 19,
               "reach": 1267,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-03-29": {
               "spend": 441135.0,
@@ -3186,7 +4206,10 @@
               "clicks": 63,
               "reach": 3163,
               "leads": 0,
-              "link_clicks": 39
+              "complete_registrations": 3,
+              "link_clicks": 39,
+              "landing_page_views": 21,
+              "messages": 0
             },
             "2026-03-30": {
               "spend": 781625.0,
@@ -3194,7 +4217,10 @@
               "clicks": 267,
               "reach": 11770,
               "leads": 0,
-              "link_clicks": 211
+              "complete_registrations": 2,
+              "link_clicks": 211,
+              "landing_page_views": 191,
+              "messages": 0
             },
             "2026-03-31": {
               "spend": 518694.0,
@@ -3202,7 +4228,10 @@
               "clicks": 103,
               "reach": 4252,
               "leads": 0,
-              "link_clicks": 64
+              "complete_registrations": 3,
+              "link_clicks": 64,
+              "landing_page_views": 63,
+              "messages": 0
             },
             "2026-04-01": {
               "spend": 439163.0,
@@ -3210,7 +4239,10 @@
               "clicks": 137,
               "reach": 4414,
               "leads": 1,
-              "link_clicks": 86
+              "complete_registrations": 3,
+              "link_clicks": 86,
+              "landing_page_views": 82,
+              "messages": 1
             },
             "2026-04-02": {
               "spend": 403102.0,
@@ -3218,7 +4250,10 @@
               "clicks": 176,
               "reach": 5330,
               "leads": 0,
-              "link_clicks": 129
+              "complete_registrations": 3,
+              "link_clicks": 129,
+              "landing_page_views": 116,
+              "messages": 0
             },
             "2026-04-03": {
               "spend": 421212.0,
@@ -3226,7 +4261,10 @@
               "clicks": 142,
               "reach": 5306,
               "leads": 0,
-              "link_clicks": 94
+              "complete_registrations": 4,
+              "link_clicks": 94,
+              "landing_page_views": 81,
+              "messages": 1
             },
             "2026-04-04": {
               "spend": 411658.0,
@@ -3234,7 +4272,10 @@
               "clicks": 95,
               "reach": 4453,
               "leads": 0,
-              "link_clicks": 60
+              "complete_registrations": 1,
+              "link_clicks": 60,
+              "landing_page_views": 57,
+              "messages": 0
             },
             "2026-04-05": {
               "spend": 599215.0,
@@ -3242,7 +4283,10 @@
               "clicks": 150,
               "reach": 5663,
               "leads": 0,
-              "link_clicks": 79
+              "complete_registrations": 5,
+              "link_clicks": 79,
+              "landing_page_views": 69,
+              "messages": 0
             },
             "2026-04-06": {
               "spend": 870082.0,
@@ -3250,7 +4294,10 @@
               "clicks": 213,
               "reach": 10150,
               "leads": 1,
-              "link_clicks": 121
+              "complete_registrations": 8,
+              "link_clicks": 121,
+              "landing_page_views": 109,
+              "messages": 2
             },
             "2026-04-07": {
               "spend": 1551856.0,
@@ -3258,7 +4305,10 @@
               "clicks": 245,
               "reach": 18415,
               "leads": 1,
-              "link_clicks": 148
+              "complete_registrations": 8,
+              "link_clicks": 148,
+              "landing_page_views": 135,
+              "messages": 1
             },
             "2026-04-08": {
               "spend": 1737715.0,
@@ -3266,7 +4316,10 @@
               "clicks": 337,
               "reach": 19449,
               "leads": 0,
-              "link_clicks": 214
+              "complete_registrations": 5,
+              "link_clicks": 214,
+              "landing_page_views": 194,
+              "messages": 2
             },
             "2026-04-09": {
               "spend": 264571.0,
@@ -3274,9 +4327,15 @@
               "clicks": 43,
               "reach": 2729,
               "leads": 0,
-              "link_clicks": 30
+              "complete_registrations": 1,
+              "link_clicks": 30,
+              "landing_page_views": 28,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành - 2 video",
@@ -3301,7 +4360,10 @@
               "clicks": 62,
               "reach": 2177,
               "leads": 0,
-              "link_clicks": 33
+              "complete_registrations": 1,
+              "link_clicks": 33,
+              "landing_page_views": 30,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 648920.0,
@@ -3309,7 +4371,10 @@
               "clicks": 165,
               "reach": 5892,
               "leads": 0,
-              "link_clicks": 108
+              "complete_registrations": 9,
+              "link_clicks": 108,
+              "landing_page_views": 105,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 689718.0,
@@ -3317,7 +4382,10 @@
               "clicks": 143,
               "reach": 9354,
               "leads": 0,
-              "link_clicks": 78
+              "complete_registrations": 6,
+              "link_clicks": 78,
+              "landing_page_views": 74,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 777038.0,
@@ -3325,7 +4393,10 @@
               "clicks": 202,
               "reach": 11173,
               "leads": 0,
-              "link_clicks": 128
+              "complete_registrations": 11,
+              "link_clicks": 128,
+              "landing_page_views": 118,
+              "messages": 1
             },
             "2026-04-27": {
               "spend": 829435.0,
@@ -3333,7 +4404,10 @@
               "clicks": 220,
               "reach": 10610,
               "leads": 1,
-              "link_clicks": 137
+              "complete_registrations": 8,
+              "link_clicks": 137,
+              "landing_page_views": 126,
+              "messages": 3
             },
             "2026-04-28": {
               "spend": 657859.0,
@@ -3341,7 +4415,10 @@
               "clicks": 169,
               "reach": 7965,
               "leads": 0,
-              "link_clicks": 101
+              "complete_registrations": 7,
+              "link_clicks": 101,
+              "landing_page_views": 98,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 503287.0,
@@ -3349,7 +4426,10 @@
               "clicks": 139,
               "reach": 6854,
               "leads": 1,
-              "link_clicks": 90
+              "complete_registrations": 9,
+              "link_clicks": 90,
+              "landing_page_views": 81,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 700906.0,
@@ -3357,7 +4437,10 @@
               "clicks": 172,
               "reach": 7956,
               "leads": 0,
-              "link_clicks": 112
+              "complete_registrations": 6,
+              "link_clicks": 112,
+              "landing_page_views": 101,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 857101.0,
@@ -3365,7 +4448,10 @@
               "clicks": 214,
               "reach": 10029,
               "leads": 0,
-              "link_clicks": 121
+              "complete_registrations": 15,
+              "link_clicks": 121,
+              "landing_page_views": 109,
+              "messages": 1
             },
             "2026-05-02": {
               "spend": 1001034.0,
@@ -3373,9 +4459,15 @@
               "clicks": 213,
               "reach": 12534,
               "leads": 0,
-              "link_clicks": 126
+              "complete_registrations": 12,
+              "link_clicks": 126,
+              "landing_page_views": 121,
+              "messages": 2
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/3 - Noma911 - Minh Biker shop",
@@ -3400,7 +4492,10 @@
               "clicks": 68,
               "reach": 3790,
               "leads": 0,
-              "link_clicks": 42
+              "complete_registrations": 1,
+              "link_clicks": 42,
+              "landing_page_views": 40,
+              "messages": 2
             },
             "2026-04-15": {
               "spend": 719033.0,
@@ -3408,7 +4503,10 @@
               "clicks": 171,
               "reach": 8339,
               "leads": 0,
-              "link_clicks": 104
+              "complete_registrations": 2,
+              "link_clicks": 104,
+              "landing_page_views": 89,
+              "messages": 1
             },
             "2026-04-16": {
               "spend": 0.0,
@@ -3416,7 +4514,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 1,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 0.0,
@@ -3424,9 +4525,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/3 - Noma911 - Nghĩa Ô Tô 2",
@@ -3451,7 +4558,10 @@
               "clicks": 10,
               "reach": 1196,
               "leads": 0,
-              "link_clicks": 7
+              "complete_registrations": 0,
+              "link_clicks": 7,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-03-29": {
               "spend": 424791.0,
@@ -3459,7 +4569,10 @@
               "clicks": 59,
               "reach": 3231,
               "leads": 0,
-              "link_clicks": 31
+              "complete_registrations": 2,
+              "link_clicks": 31,
+              "landing_page_views": 15,
+              "messages": 0
             },
             "2026-03-30": {
               "spend": 321373.0,
@@ -3467,7 +4580,10 @@
               "clicks": 51,
               "reach": 2577,
               "leads": 0,
-              "link_clicks": 36
+              "complete_registrations": 0,
+              "link_clicks": 36,
+              "landing_page_views": 33,
+              "messages": 0
             },
             "2026-03-31": {
               "spend": 9462.0,
@@ -3475,7 +4591,10 @@
               "clicks": 0,
               "reach": 107,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-01": {
               "spend": 0.0,
@@ -3483,9 +4602,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         }
       ],
       "rows_raw": 118
@@ -3503,8 +4628,11 @@
         "clicks": 7187,
         "reach": 209191,
         "leads": 5,
+        "complete_registrations": 148,
         "ctr": 2.8491,
-        "cpc": 4972.26
+        "cpc": 4972.26,
+        "campaigns_total": 5,
+        "campaigns_active": 3
       },
       "campaigns": [
         {
@@ -3530,7 +4658,10 @@
               "clicks": 58,
               "reach": 1358,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 2,
+              "link_clicks": 43,
+              "landing_page_views": 40,
+              "messages": 1
             },
             "2026-04-15": {
               "spend": 536274.0,
@@ -3538,7 +4669,10 @@
               "clicks": 166,
               "reach": 3746,
               "leads": 0,
-              "link_clicks": 110
+              "complete_registrations": 2,
+              "link_clicks": 110,
+              "landing_page_views": 112,
+              "messages": 1
             },
             "2026-04-16": {
               "spend": 843474.0,
@@ -3546,7 +4680,10 @@
               "clicks": 189,
               "reach": 4885,
               "leads": 0,
-              "link_clicks": 108
+              "complete_registrations": 3,
+              "link_clicks": 108,
+              "landing_page_views": 97,
+              "messages": 5
             },
             "2026-04-17": {
               "spend": 688242.0,
@@ -3554,7 +4691,10 @@
               "clicks": 107,
               "reach": 2988,
               "leads": 1,
-              "link_clicks": 64
+              "complete_registrations": 3,
+              "link_clicks": 64,
+              "landing_page_views": 55,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 651013.0,
@@ -3562,7 +4702,10 @@
               "clicks": 152,
               "reach": 5645,
               "leads": 0,
-              "link_clicks": 85
+              "complete_registrations": 0,
+              "link_clicks": 85,
+              "landing_page_views": 78,
+              "messages": 3
             },
             "2026-04-19": {
               "spend": 477483.0,
@@ -3570,7 +4713,10 @@
               "clicks": 98,
               "reach": 2857,
               "leads": 0,
-              "link_clicks": 59
+              "complete_registrations": 1,
+              "link_clicks": 59,
+              "landing_page_views": 47,
+              "messages": 2
             },
             "2026-04-20": {
               "spend": 322246.0,
@@ -3578,7 +4724,10 @@
               "clicks": 49,
               "reach": 1487,
               "leads": 0,
-              "link_clicks": 27
+              "complete_registrations": 4,
+              "link_clicks": 27,
+              "landing_page_views": 25,
+              "messages": 1
             },
             "2026-04-21": {
               "spend": 355026.0,
@@ -3586,7 +4735,10 @@
               "clicks": 57,
               "reach": 1746,
               "leads": 0,
-              "link_clicks": 36
+              "complete_registrations": 3,
+              "link_clicks": 36,
+              "landing_page_views": 33,
+              "messages": 1
             },
             "2026-04-22": {
               "spend": 478045.0,
@@ -3594,7 +4746,10 @@
               "clicks": 56,
               "reach": 2573,
               "leads": 1,
-              "link_clicks": 32
+              "complete_registrations": 1,
+              "link_clicks": 32,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 1121180.0,
@@ -3602,7 +4757,10 @@
               "clicks": 167,
               "reach": 8401,
               "leads": 0,
-              "link_clicks": 85
+              "complete_registrations": 5,
+              "link_clicks": 85,
+              "landing_page_views": 76,
+              "messages": 2
             },
             "2026-04-24": {
               "spend": 903633.0,
@@ -3610,7 +4768,10 @@
               "clicks": 153,
               "reach": 5802,
               "leads": 1,
-              "link_clicks": 83
+              "complete_registrations": 8,
+              "link_clicks": 83,
+              "landing_page_views": 89,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 651876.0,
@@ -3618,7 +4779,10 @@
               "clicks": 125,
               "reach": 5093,
               "leads": 0,
-              "link_clicks": 68
+              "complete_registrations": 3,
+              "link_clicks": 68,
+              "landing_page_views": 68,
+              "messages": 1
             },
             "2026-04-26": {
               "spend": 953717.0,
@@ -3626,7 +4790,10 @@
               "clicks": 157,
               "reach": 5905,
               "leads": 0,
-              "link_clicks": 97
+              "complete_registrations": 3,
+              "link_clicks": 97,
+              "landing_page_views": 87,
+              "messages": 2
             },
             "2026-04-27": {
               "spend": 1195729.0,
@@ -3634,7 +4801,10 @@
               "clicks": 234,
               "reach": 7956,
               "leads": 0,
-              "link_clicks": 129
+              "complete_registrations": 9,
+              "link_clicks": 129,
+              "landing_page_views": 127,
+              "messages": 3
             },
             "2026-04-28": {
               "spend": 700816.0,
@@ -3642,7 +4812,10 @@
               "clicks": 110,
               "reach": 5539,
               "leads": 0,
-              "link_clicks": 72
+              "complete_registrations": 3,
+              "link_clicks": 72,
+              "landing_page_views": 66,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 859117.0,
@@ -3650,7 +4823,10 @@
               "clicks": 191,
               "reach": 7943,
               "leads": 0,
-              "link_clicks": 103
+              "complete_registrations": 7,
+              "link_clicks": 103,
+              "landing_page_views": 92,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 1041984.0,
@@ -3658,7 +4834,10 @@
               "clicks": 268,
               "reach": 10089,
               "leads": 0,
-              "link_clicks": 155
+              "complete_registrations": 5,
+              "link_clicks": 155,
+              "landing_page_views": 141,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 776593.0,
@@ -3666,7 +4845,10 @@
               "clicks": 192,
               "reach": 6941,
               "leads": 0,
-              "link_clicks": 109
+              "complete_registrations": 4,
+              "link_clicks": 109,
+              "landing_page_views": 95,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 765980.0,
@@ -3674,9 +4856,15 @@
               "clicks": 112,
               "reach": 4933,
               "leads": 0,
-              "link_clicks": 71
+              "complete_registrations": 3,
+              "link_clicks": 71,
+              "landing_page_views": 70,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "2/4 - DR1 - Việt Mỹ Nguyễn",
@@ -3701,7 +4889,10 @@
               "clicks": 30,
               "reach": 1339,
               "leads": 0,
-              "link_clicks": 19
+              "complete_registrations": 1,
+              "link_clicks": 19,
+              "landing_page_views": 16,
+              "messages": 0
             },
             "2026-04-03": {
               "spend": 182238.0,
@@ -3709,7 +4900,10 @@
               "clicks": 49,
               "reach": 858,
               "leads": 0,
-              "link_clicks": 33
+              "complete_registrations": 0,
+              "link_clicks": 33,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-04": {
               "spend": 215919.0,
@@ -3717,7 +4911,10 @@
               "clicks": 48,
               "reach": 1049,
               "leads": 0,
-              "link_clicks": 34
+              "complete_registrations": 2,
+              "link_clicks": 34,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-05": {
               "spend": 728759.0,
@@ -3725,7 +4922,10 @@
               "clicks": 153,
               "reach": 3463,
               "leads": 0,
-              "link_clicks": 93
+              "complete_registrations": 0,
+              "link_clicks": 93,
+              "landing_page_views": 59,
+              "messages": 1
             },
             "2026-04-06": {
               "spend": 480156.0,
@@ -3733,7 +4933,10 @@
               "clicks": 122,
               "reach": 2198,
               "leads": 0,
-              "link_clicks": 82
+              "complete_registrations": 1,
+              "link_clicks": 82,
+              "landing_page_views": 55,
+              "messages": 1
             },
             "2026-04-07": {
               "spend": 119816.0,
@@ -3741,7 +4944,10 @@
               "clicks": 22,
               "reach": 466,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 0,
+              "link_clicks": 12,
+              "landing_page_views": 13,
+              "messages": 0
             },
             "2026-04-08": {
               "spend": 534749.0,
@@ -3749,7 +4955,10 @@
               "clicks": 134,
               "reach": 2352,
               "leads": 1,
-              "link_clicks": 82
+              "complete_registrations": 3,
+              "link_clicks": 82,
+              "landing_page_views": 63,
+              "messages": 2
             },
             "2026-04-09": {
               "spend": 570953.0,
@@ -3757,7 +4966,10 @@
               "clicks": 159,
               "reach": 3334,
               "leads": 0,
-              "link_clicks": 102
+              "complete_registrations": 2,
+              "link_clicks": 102,
+              "landing_page_views": 89,
+              "messages": 1
             },
             "2026-04-10": {
               "spend": 554742.0,
@@ -3765,7 +4977,10 @@
               "clicks": 111,
               "reach": 2854,
               "leads": 0,
-              "link_clicks": 81
+              "complete_registrations": 1,
+              "link_clicks": 81,
+              "landing_page_views": 66,
+              "messages": 1
             },
             "2026-04-11": {
               "spend": 486431.0,
@@ -3773,7 +4988,10 @@
               "clicks": 72,
               "reach": 1989,
               "leads": 0,
-              "link_clicks": 42
+              "complete_registrations": 0,
+              "link_clicks": 42,
+              "landing_page_views": 37,
+              "messages": 0
             },
             "2026-04-12": {
               "spend": 529352.0,
@@ -3781,7 +4999,10 @@
               "clicks": 113,
               "reach": 2442,
               "leads": 0,
-              "link_clicks": 78
+              "complete_registrations": 2,
+              "link_clicks": 78,
+              "landing_page_views": 64,
+              "messages": 1
             },
             "2026-04-13": {
               "spend": 524365.0,
@@ -3789,7 +5010,10 @@
               "clicks": 111,
               "reach": 2938,
               "leads": 0,
-              "link_clicks": 75
+              "complete_registrations": 1,
+              "link_clicks": 75,
+              "landing_page_views": 60,
+              "messages": 0
             },
             "2026-04-14": {
               "spend": 550758.0,
@@ -3797,7 +5021,10 @@
               "clicks": 144,
               "reach": 3165,
               "leads": 0,
-              "link_clicks": 87
+              "complete_registrations": 2,
+              "link_clicks": 87,
+              "landing_page_views": 70,
+              "messages": 2
             },
             "2026-04-15": {
               "spend": 471049.0,
@@ -3805,7 +5032,10 @@
               "clicks": 116,
               "reach": 3076,
               "leads": 0,
-              "link_clicks": 69
+              "complete_registrations": 3,
+              "link_clicks": 69,
+              "landing_page_views": 65,
+              "messages": 1
             },
             "2026-04-16": {
               "spend": 545620.0,
@@ -3813,7 +5043,10 @@
               "clicks": 125,
               "reach": 3698,
               "leads": 0,
-              "link_clicks": 70
+              "complete_registrations": 5,
+              "link_clicks": 70,
+              "landing_page_views": 56,
+              "messages": 1
             },
             "2026-04-17": {
               "spend": 268788.0,
@@ -3821,7 +5054,10 @@
               "clicks": 60,
               "reach": 1597,
               "leads": 0,
-              "link_clicks": 36
+              "complete_registrations": 0,
+              "link_clicks": 36,
+              "landing_page_views": 32,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 412361.0,
@@ -3829,7 +5065,10 @@
               "clicks": 92,
               "reach": 2121,
               "leads": 0,
-              "link_clicks": 45
+              "complete_registrations": 2,
+              "link_clicks": 45,
+              "landing_page_views": 40,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 510058.0,
@@ -3837,7 +5076,10 @@
               "clicks": 110,
               "reach": 2528,
               "leads": 0,
-              "link_clicks": 65
+              "complete_registrations": 3,
+              "link_clicks": 65,
+              "landing_page_views": 53,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 265643.0,
@@ -3845,7 +5087,10 @@
               "clicks": 69,
               "reach": 1643,
               "leads": 0,
-              "link_clicks": 52
+              "complete_registrations": 1,
+              "link_clicks": 52,
+              "landing_page_views": 37,
+              "messages": 1
             },
             "2026-04-26": {
               "spend": 453910.0,
@@ -3853,7 +5098,10 @@
               "clicks": 122,
               "reach": 2435,
               "leads": 0,
-              "link_clicks": 85
+              "complete_registrations": 0,
+              "link_clicks": 85,
+              "landing_page_views": 74,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 389779.0,
@@ -3861,7 +5109,10 @@
               "clicks": 84,
               "reach": 2025,
               "leads": 0,
-              "link_clicks": 58
+              "complete_registrations": 6,
+              "link_clicks": 58,
+              "landing_page_views": 51,
+              "messages": 1
             },
             "2026-04-28": {
               "spend": 421852.0,
@@ -3869,7 +5120,10 @@
               "clicks": 125,
               "reach": 2391,
               "leads": 0,
-              "link_clicks": 83
+              "complete_registrations": 2,
+              "link_clicks": 83,
+              "landing_page_views": 73,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 384046.0,
@@ -3877,7 +5131,10 @@
               "clicks": 93,
               "reach": 2178,
               "leads": 0,
-              "link_clicks": 69
+              "complete_registrations": 3,
+              "link_clicks": 69,
+              "landing_page_views": 61,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 373499.0,
@@ -3885,7 +5142,10 @@
               "clicks": 102,
               "reach": 2607,
               "leads": 0,
-              "link_clicks": 78
+              "complete_registrations": 3,
+              "link_clicks": 78,
+              "landing_page_views": 62,
+              "messages": 0
             },
             "2026-05-01": {
               "spend": 394343.0,
@@ -3893,7 +5153,10 @@
               "clicks": 123,
               "reach": 2851,
               "leads": 0,
-              "link_clicks": 77
+              "complete_registrations": 2,
+              "link_clicks": 77,
+              "landing_page_views": 62,
+              "messages": 1
             },
             "2026-05-02": {
               "spend": 379917.0,
@@ -3901,9 +5164,15 @@
               "clicks": 123,
               "reach": 2586,
               "leads": 0,
-              "link_clicks": 84
+              "complete_registrations": 6,
+              "link_clicks": 84,
+              "landing_page_views": 68,
+              "messages": 0
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "14/4 - Da8.1 - Lưu Tiến Dựng",
@@ -3928,7 +5197,10 @@
               "clicks": 57,
               "reach": 1140,
               "leads": 0,
-              "link_clicks": 35
+              "complete_registrations": 0,
+              "link_clicks": 35,
+              "landing_page_views": 30,
+              "messages": 0
             },
             "2026-04-15": {
               "spend": 370998.0,
@@ -3936,7 +5208,10 @@
               "clicks": 112,
               "reach": 2267,
               "leads": 0,
-              "link_clicks": 56
+              "complete_registrations": 1,
+              "link_clicks": 56,
+              "landing_page_views": 48,
+              "messages": 3
             },
             "2026-04-16": {
               "spend": 0.0,
@@ -3944,7 +5219,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 1,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 593576.0,
@@ -3952,7 +5230,10 @@
               "clicks": 81,
               "reach": 4064,
               "leads": 0,
-              "link_clicks": 57
+              "complete_registrations": 3,
+              "link_clicks": 57,
+              "landing_page_views": 58,
+              "messages": 0
             },
             "2026-04-19": {
               "spend": 465438.0,
@@ -3960,7 +5241,10 @@
               "clicks": 41,
               "reach": 2171,
               "leads": 0,
-              "link_clicks": 34
+              "complete_registrations": 2,
+              "link_clicks": 34,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-20": {
               "spend": 336333.0,
@@ -3968,7 +5252,10 @@
               "clicks": 56,
               "reach": 1756,
               "leads": 0,
-              "link_clicks": 33
+              "complete_registrations": 0,
+              "link_clicks": 33,
+              "landing_page_views": 29,
+              "messages": 0
             },
             "2026-04-21": {
               "spend": 379851.0,
@@ -3976,7 +5263,10 @@
               "clicks": 50,
               "reach": 1700,
               "leads": 0,
-              "link_clicks": 31
+              "complete_registrations": 0,
+              "link_clicks": 31,
+              "landing_page_views": 27,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 518624.0,
@@ -3984,7 +5274,10 @@
               "clicks": 63,
               "reach": 1950,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 4,
+              "link_clicks": 43,
+              "landing_page_views": 37,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 357621.0,
@@ -3992,7 +5285,10 @@
               "clicks": 36,
               "reach": 1134,
               "leads": 0,
-              "link_clicks": 19
+              "complete_registrations": 1,
+              "link_clicks": 19,
+              "landing_page_views": 16,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 523078.0,
@@ -4000,7 +5296,10 @@
               "clicks": 47,
               "reach": 1499,
               "leads": 0,
-              "link_clicks": 27
+              "complete_registrations": 3,
+              "link_clicks": 27,
+              "landing_page_views": 28,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 394691.0,
@@ -4008,7 +5307,10 @@
               "clicks": 62,
               "reach": 1567,
               "leads": 0,
-              "link_clicks": 42
+              "complete_registrations": 1,
+              "link_clicks": 42,
+              "landing_page_views": 41,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 530524.0,
@@ -4016,7 +5318,10 @@
               "clicks": 92,
               "reach": 3111,
               "leads": 0,
-              "link_clicks": 60
+              "complete_registrations": 0,
+              "link_clicks": 60,
+              "landing_page_views": 59,
+              "messages": 1
             },
             "2026-04-27": {
               "spend": 514317.0,
@@ -4024,7 +5329,10 @@
               "clicks": 106,
               "reach": 2899,
               "leads": 0,
-              "link_clicks": 71
+              "complete_registrations": 2,
+              "link_clicks": 71,
+              "landing_page_views": 60,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 532247.0,
@@ -4032,7 +5340,10 @@
               "clicks": 121,
               "reach": 2525,
               "leads": 0,
-              "link_clicks": 82
+              "complete_registrations": 2,
+              "link_clicks": 82,
+              "landing_page_views": 76,
+              "messages": 2
             },
             "2026-04-29": {
               "spend": 407243.0,
@@ -4040,7 +5351,10 @@
               "clicks": 92,
               "reach": 2267,
               "leads": 0,
-              "link_clicks": 69
+              "complete_registrations": 1,
+              "link_clicks": 69,
+              "landing_page_views": 62,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 416807.0,
@@ -4048,7 +5362,10 @@
               "clicks": 198,
               "reach": 3528,
               "leads": 0,
-              "link_clicks": 123
+              "complete_registrations": 2,
+              "link_clicks": 123,
+              "landing_page_views": 108,
+              "messages": 1
             },
             "2026-05-01": {
               "spend": 426466.0,
@@ -4056,7 +5373,10 @@
               "clicks": 114,
               "reach": 2507,
               "leads": 0,
-              "link_clicks": 73
+              "complete_registrations": 2,
+              "link_clicks": 73,
+              "landing_page_views": 63,
+              "messages": 0
             },
             "2026-05-02": {
               "spend": 315492.0,
@@ -4064,9 +5384,15 @@
               "clicks": 65,
               "reach": 1545,
               "leads": 0,
-              "link_clicks": 40
+              "complete_registrations": 0,
+              "link_clicks": 40,
+              "landing_page_views": 37,
+              "messages": 0
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/3 - DR1 - 2 video",
@@ -4091,7 +5417,10 @@
               "clicks": 74,
               "reach": 2206,
               "leads": 0,
-              "link_clicks": 29
+              "complete_registrations": 0,
+              "link_clicks": 29,
+              "landing_page_views": 24,
+              "messages": 1
             },
             "2026-04-01": {
               "spend": 408840.0,
@@ -4099,7 +5428,10 @@
               "clicks": 43,
               "reach": 1301,
               "leads": 0,
-              "link_clicks": 14
+              "complete_registrations": 0,
+              "link_clicks": 14,
+              "landing_page_views": 8,
+              "messages": 0
             },
             "2026-04-02": {
               "spend": 189909.0,
@@ -4107,7 +5439,10 @@
               "clicks": 33,
               "reach": 901,
               "leads": 0,
-              "link_clicks": 11
+              "complete_registrations": 1,
+              "link_clicks": 11,
+              "landing_page_views": 8,
+              "messages": 0
             },
             "2026-04-03": {
               "spend": 325297.0,
@@ -4115,7 +5450,10 @@
               "clicks": 63,
               "reach": 1560,
               "leads": 0,
-              "link_clicks": 21
+              "complete_registrations": 1,
+              "link_clicks": 21,
+              "landing_page_views": 16,
+              "messages": 1
             },
             "2026-04-04": {
               "spend": 247666.0,
@@ -4123,7 +5461,10 @@
               "clicks": 59,
               "reach": 1619,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 0,
+              "link_clicks": 12,
+              "landing_page_views": 8,
+              "messages": 0
             },
             "2026-04-05": {
               "spend": 374036.0,
@@ -4131,7 +5472,10 @@
               "clicks": 50,
               "reach": 1565,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 0,
+              "link_clicks": 17,
+              "landing_page_views": 13,
+              "messages": 0
             },
             "2026-04-06": {
               "spend": 279266.0,
@@ -4139,7 +5483,10 @@
               "clicks": 49,
               "reach": 1225,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 0,
+              "link_clicks": 12,
+              "landing_page_views": 9,
+              "messages": 0
             },
             "2026-04-07": {
               "spend": 615.0,
@@ -4147,9 +5494,15 @@
               "clicks": 0,
               "reach": 8,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "27/3 - DR1 - 2 video - Bản sao",
@@ -4174,7 +5527,10 @@
               "clicks": 19,
               "reach": 855,
               "leads": 0,
-              "link_clicks": 8
+              "complete_registrations": 0,
+              "link_clicks": 8,
+              "landing_page_views": 6,
+              "messages": 0
             },
             "2026-03-29": {
               "spend": 637643.0,
@@ -4182,7 +5538,10 @@
               "clicks": 74,
               "reach": 2218,
               "leads": 0,
-              "link_clicks": 28
+              "complete_registrations": 1,
+              "link_clicks": 28,
+              "landing_page_views": 18,
+              "messages": 0
             },
             "2026-03-30": {
               "spend": 379835.0,
@@ -4190,7 +5549,10 @@
               "clicks": 63,
               "reach": 1655,
               "leads": 0,
-              "link_clicks": 18
+              "complete_registrations": 1,
+              "link_clicks": 18,
+              "landing_page_views": 12,
+              "messages": 0
             },
             "2026-03-31": {
               "spend": 10795.0,
@@ -4198,7 +5560,10 @@
               "clicks": 2,
               "reach": 42,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 1,
+              "messages": 0
             },
             "2026-04-01": {
               "spend": 0.0,
@@ -4206,9 +5571,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         }
       ],
       "rows_raw": 77
@@ -4221,29 +5592,32 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 11580818.0,
-        "impressions": 64966,
+        "spend": 11581145.0,
+        "impressions": 64967,
         "clicks": 1616,
         "reach": 52592,
         "leads": 3,
-        "ctr": 2.4875,
-        "cpc": 7166.35
+        "complete_registrations": 34,
+        "ctr": 2.4874,
+        "cpc": 7166.55,
+        "campaigns_total": 11,
+        "campaigns_active": 1
       },
       "campaigns": [
         {
           "campaign_name": "27/4 - DA8.1 - Phương Nam - Mommydaudo",
           "campaign_id": "120244426309330303",
-          "spend": 3160343.0,
-          "impressions": 23940,
+          "spend": 3160670.0,
+          "impressions": 23941,
           "clicks": 537,
           "reach": 19429,
-          "ctr": 2.2431,
-          "cpc": 5885.18,
-          "cpm": 132010.99,
+          "ctr": 2.243,
+          "cpc": 5885.79,
+          "cpm": 132019.13,
           "leads": 0,
           "link_clicks": 405,
           "landing_page_views": 348,
-          "video_views": 5324,
+          "video_views": 5325,
           "complete_registrations": 10,
           "messages": 5,
           "by_date": {
@@ -4253,7 +5627,10 @@
               "clicks": 17,
               "reach": 789,
               "leads": 0,
-              "link_clicks": 15
+              "complete_registrations": 0,
+              "link_clicks": 15,
+              "landing_page_views": 9,
+              "messages": 0
             },
             "2026-04-28": {
               "spend": 697388.0,
@@ -4261,7 +5638,10 @@
               "clicks": 92,
               "reach": 2599,
               "leads": 0,
-              "link_clicks": 60
+              "complete_registrations": 6,
+              "link_clicks": 60,
+              "landing_page_views": 48,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 668790.0,
@@ -4269,7 +5649,10 @@
               "clicks": 133,
               "reach": 4555,
               "leads": 0,
-              "link_clicks": 102
+              "complete_registrations": 1,
+              "link_clicks": 102,
+              "landing_page_views": 91,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 598349.0,
@@ -4277,7 +5660,10 @@
               "clicks": 141,
               "reach": 4361,
               "leads": 0,
-              "link_clicks": 111
+              "complete_registrations": 1,
+              "link_clicks": 111,
+              "landing_page_views": 102,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 582316.0,
@@ -4285,17 +5671,26 @@
               "clicks": 89,
               "reach": 4100,
               "leads": 0,
-              "link_clicks": 67
+              "complete_registrations": 2,
+              "link_clicks": 67,
+              "landing_page_views": 57,
+              "messages": 1
             },
             "2026-05-02": {
-              "spend": 411249.0,
-              "impressions": 3636,
+              "spend": 411576.0,
+              "impressions": 3637,
               "clicks": 65,
               "reach": 3025,
               "leads": 0,
-              "link_clicks": 50
+              "complete_registrations": 0,
+              "link_clicks": 50,
+              "landing_page_views": 41,
+              "messages": 1
             }
-          }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - DA8.1 - Phương Nam",
@@ -4320,7 +5715,10 @@
               "clicks": 25,
               "reach": 1189,
               "leads": 0,
-              "link_clicks": 15
+              "complete_registrations": 1,
+              "link_clicks": 15,
+              "landing_page_views": 11,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 441567.0,
@@ -4328,7 +5726,10 @@
               "clicks": 44,
               "reach": 1639,
               "leads": 0,
-              "link_clicks": 28
+              "complete_registrations": 7,
+              "link_clicks": 28,
+              "landing_page_views": 24,
+              "messages": 1
             },
             "2026-04-23": {
               "spend": 215943.0,
@@ -4336,7 +5737,10 @@
               "clicks": 17,
               "reach": 617,
               "leads": 1,
-              "link_clicks": 16
+              "complete_registrations": 0,
+              "link_clicks": 16,
+              "landing_page_views": 16,
+              "messages": 1
             },
             "2026-04-24": {
               "spend": 446578.0,
@@ -4344,7 +5748,10 @@
               "clicks": 19,
               "reach": 569,
               "leads": 1,
-              "link_clicks": 20
+              "complete_registrations": 1,
+              "link_clicks": 20,
+              "landing_page_views": 18,
+              "messages": 2
             },
             "2026-04-25": {
               "spend": 0.0,
@@ -4352,7 +5759,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 0.0,
@@ -4360,7 +5770,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-27": {
               "spend": 440680.0,
@@ -4368,7 +5781,10 @@
               "clicks": 22,
               "reach": 1193,
               "leads": 0,
-              "link_clicks": 16
+              "complete_registrations": 0,
+              "link_clicks": 16,
+              "landing_page_views": 12,
+              "messages": 1
             },
             "2026-04-28": {
               "spend": 419118.0,
@@ -4376,7 +5792,10 @@
               "clicks": 25,
               "reach": 931,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 1,
+              "link_clicks": 17,
+              "landing_page_views": 11,
+              "messages": 0
             },
             "2026-04-29": {
               "spend": 0.0,
@@ -4384,9 +5803,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 1,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "20/4 - DA8.1 - Phương Nam",
@@ -4411,7 +5836,10 @@
               "clicks": 49,
               "reach": 955,
               "leads": 0,
-              "link_clicks": 34
+              "complete_registrations": 1,
+              "link_clicks": 34,
+              "landing_page_views": 28,
+              "messages": 1
             },
             "2026-04-21": {
               "spend": 419481.0,
@@ -4419,7 +5847,10 @@
               "clicks": 84,
               "reach": 1784,
               "leads": 0,
-              "link_clicks": 69
+              "complete_registrations": 2,
+              "link_clicks": 69,
+              "landing_page_views": 59,
+              "messages": 2
             },
             "2026-04-22": {
               "spend": 355003.0,
@@ -4427,7 +5858,10 @@
               "clicks": 84,
               "reach": 1730,
               "leads": 0,
-              "link_clicks": 63
+              "complete_registrations": 3,
+              "link_clicks": 63,
+              "landing_page_views": 56,
+              "messages": 3
             },
             "2026-04-23": {
               "spend": 261443.0,
@@ -4435,7 +5869,10 @@
               "clicks": 33,
               "reach": 1034,
               "leads": 0,
-              "link_clicks": 24
+              "complete_registrations": 1,
+              "link_clicks": 24,
+              "landing_page_views": 22,
+              "messages": 0
             },
             "2026-04-24": {
               "spend": 0.0,
@@ -4443,7 +5880,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 519485.0,
@@ -4451,7 +5891,10 @@
               "clicks": 68,
               "reach": 2236,
               "leads": 0,
-              "link_clicks": 44
+              "complete_registrations": 0,
+              "link_clicks": 44,
+              "landing_page_views": 44,
+              "messages": 1
             },
             "2026-04-29": {
               "spend": 0.0,
@@ -4459,9 +5902,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "24/4 - DA8.1 - Phương Nam",
@@ -4486,7 +5935,10 @@
               "clicks": 46,
               "reach": 867,
               "leads": 0,
-              "link_clicks": 26
+              "complete_registrations": 0,
+              "link_clicks": 26,
+              "landing_page_views": 16,
+              "messages": 0
             },
             "2026-04-25": {
               "spend": 266795.0,
@@ -4494,7 +5946,10 @@
               "clicks": 28,
               "reach": 807,
               "leads": 0,
-              "link_clicks": 19
+              "complete_registrations": 4,
+              "link_clicks": 19,
+              "landing_page_views": 22,
+              "messages": 0
             },
             "2026-04-26": {
               "spend": 406243.0,
@@ -4502,7 +5957,10 @@
               "clicks": 66,
               "reach": 1164,
               "leads": 0,
-              "link_clicks": 43
+              "complete_registrations": 0,
+              "link_clicks": 43,
+              "landing_page_views": 34,
+              "messages": 1
             },
             "2026-04-27": {
               "spend": 361796.0,
@@ -4510,7 +5968,10 @@
               "clicks": 55,
               "reach": 1074,
               "leads": 0,
-              "link_clicks": 37
+              "complete_registrations": 1,
+              "link_clicks": 37,
+              "landing_page_views": 33,
+              "messages": 1
             },
             "2026-04-28": {
               "spend": 0.0,
@@ -4518,7 +5979,10 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-30": {
               "spend": 0.0,
@@ -4526,9 +5990,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "28/4 - DA8.1 - Phương Nam",
@@ -4553,7 +6023,10 @@
               "clicks": 14,
               "reach": 404,
               "leads": 0,
-              "link_clicks": 12
+              "complete_registrations": 1,
+              "link_clicks": 12,
+              "landing_page_views": 12,
+              "messages": 2
             },
             "2026-04-29": {
               "spend": 371909.0,
@@ -4561,7 +6034,10 @@
               "clicks": 60,
               "reach": 1503,
               "leads": 0,
-              "link_clicks": 42
+              "complete_registrations": 1,
+              "link_clicks": 42,
+              "landing_page_views": 35,
+              "messages": 1
             },
             "2026-04-30": {
               "spend": 230386.0,
@@ -4569,7 +6045,10 @@
               "clicks": 29,
               "reach": 844,
               "leads": 0,
-              "link_clicks": 25
+              "complete_registrations": 0,
+              "link_clicks": 25,
+              "landing_page_views": 23,
+              "messages": 2
             },
             "2026-05-01": {
               "spend": 0.0,
@@ -4577,9 +6056,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "17/4 - DA8.1 - Phương Nam",
@@ -4604,7 +6089,10 @@
               "clicks": 12,
               "reach": 849,
               "leads": 0,
-              "link_clicks": 9
+              "complete_registrations": 0,
+              "link_clicks": 9,
+              "landing_page_views": 6,
+              "messages": 0
             },
             "2026-04-18": {
               "spend": 212845.0,
@@ -4612,7 +6100,10 @@
               "clicks": 19,
               "reach": 628,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 0,
+              "link_clicks": 17,
+              "landing_page_views": 11,
+              "messages": 1
             },
             "2026-04-19": {
               "spend": 148343.0,
@@ -4620,9 +6111,15 @@
               "clicks": 11,
               "reach": 248,
               "leads": 0,
-              "link_clicks": 4
+              "complete_registrations": 0,
+              "link_clicks": 4,
+              "landing_page_views": 1,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - D1 - Phương Nam",
@@ -4647,7 +6144,10 @@
               "clicks": 38,
               "reach": 1093,
               "leads": 0,
-              "link_clicks": 23
+              "complete_registrations": 0,
+              "link_clicks": 23,
+              "landing_page_views": 22,
+              "messages": 0
             },
             "2026-04-23": {
               "spend": 165934.0,
@@ -4655,9 +6155,15 @@
               "clicks": 27,
               "reach": 561,
               "leads": 0,
-              "link_clicks": 10
+              "complete_registrations": 0,
+              "link_clicks": 10,
+              "landing_page_views": 9,
+              "messages": 1
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "15/4 - B86 - Phương Nam",
@@ -4682,7 +6188,10 @@
               "clicks": 38,
               "reach": 2045,
               "leads": 0,
-              "link_clicks": 22
+              "complete_registrations": 0,
+              "link_clicks": 22,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 248867.0,
@@ -4690,7 +6199,10 @@
               "clicks": 31,
               "reach": 1608,
               "leads": 0,
-              "link_clicks": 17
+              "complete_registrations": 0,
+              "link_clicks": 17,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-22": {
               "spend": 0.0,
@@ -4698,9 +6210,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "15/4 - A100 - Phương Nam",
@@ -4725,7 +6243,10 @@
               "clicks": 65,
               "reach": 3113,
               "leads": 0,
-              "link_clicks": 41
+              "complete_registrations": 0,
+              "link_clicks": 41,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-16": {
               "spend": 175918.0,
@@ -4733,7 +6254,10 @@
               "clicks": 49,
               "reach": 1808,
               "leads": 0,
-              "link_clicks": 25
+              "complete_registrations": 0,
+              "link_clicks": 25,
+              "landing_page_views": 0,
+              "messages": 0
             },
             "2026-04-17": {
               "spend": 0.0,
@@ -4741,9 +6265,15 @@
               "clicks": 0,
               "reach": 0,
               "leads": 0,
-              "link_clicks": 0
+              "complete_registrations": 0,
+              "link_clicks": 0,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "21/4 - D1 - Phương Nam - V2",
@@ -4768,9 +6298,15 @@
               "clicks": 20,
               "reach": 651,
               "leads": 0,
-              "link_clicks": 9
+              "complete_registrations": 0,
+              "link_clicks": 9,
+              "landing_page_views": 7,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "17/4 - D1 - PNam",
@@ -4795,9 +6331,15 @@
               "clicks": 1,
               "reach": 19,
               "leads": 0,
-              "link_clicks": 1
+              "complete_registrations": 0,
+              "link_clicks": 1,
+              "landing_page_views": 0,
+              "messages": 0
             }
-          }
+          },
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
         }
       ],
       "rows_raw": 45
