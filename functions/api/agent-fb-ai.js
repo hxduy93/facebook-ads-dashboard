@@ -433,8 +433,19 @@ export async function onRequestPost(context) {
     }
   }
 
-  let rawResp = aiResult.response || aiResult.result || "";
+  // Workers AI có thể trả response = string HOẶC object đã parse (khi json_output mode)
+  let rawResp = "";
   let parsedJson = null;
+  const respField = aiResult.response ?? aiResult.result ?? aiResult;
+  if (typeof respField === "string") {
+    rawResp = respField;
+  } else if (respField && typeof respField === "object") {
+    // Llama 70B với JSON mode có thể trả parsed object trực tiếp
+    parsedJson = respField;
+    rawResp = JSON.stringify(respField, null, 2);
+  } else {
+    rawResp = String(respField || "");
+  }
 
   // Parse JSON nếu là JSON mode
   if (cfg.json_output && rawResp) {

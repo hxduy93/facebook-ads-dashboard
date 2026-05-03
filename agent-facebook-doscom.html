@@ -230,11 +230,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     <div class="model-pref-bar">
       <label>🤖 Model:</label>
       <select id="model-pref">
-        <option value="big" selected>Llama 3.3 70B (recommended — chất lượng tốt)</option>
-        <option value="fast">Llama 3.1 8B (siêu nhanh, chất lượng yếu)</option>
-        <option value="claude_haiku">Claude Haiku 4.5 (best quality, cần Workers Paid)</option>
+        <option value="fast" selected>Llama 3.1 8B (rẻ, default)</option>
+        <option value="big">Llama 3.3 70B (chất lượng tốt — tốn nhiều neurons hơn)</option>
+        <option value="claude_haiku">Claude Haiku 4.5 (best, cần Workers Paid + binding)</option>
       </select>
-      <span style="color:#9ca3af">áp dụng cho cả Hỏi AI + Tối ưu campaign</span>
+      <span style="color:#9ca3af">⚠ "Tối ưu campaign" tự dùng 70B (override). Audit/Ask theo dropdown.</span>
     </div>
     <div class="ask-box">
       <input type="text" id="ask-input" placeholder="Vd: Campaign nào CPA cao nhất? Trend 7 ngày qua?" onkeydown="if(event.key==='Enter')askQuestion()">
@@ -500,7 +500,11 @@ async function optimizeCampaign(campaignId, campaignName) {
     if (j.parsed_json && !j.parsed_json._parse_error) {
       html += renderOptimizeResult(j.parsed_json, campaignName);
     } else {
-      html += `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div>` + md2html(j.response);
+      // Fallback: response có thể là object hoặc string
+      const respText = (typeof j.response === 'string')
+        ? j.response
+        : JSON.stringify(j.response, null, 2);
+      html += `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div><pre style="background:#f9fafb;padding:12px;border-radius:6px;font-size:11px;overflow:auto;max-height:400px">${escapeHtml(respText)}</pre>`;
     }
     result.innerHTML = html;
   } catch (e) {
