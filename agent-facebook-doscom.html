@@ -472,16 +472,37 @@ async function optimizeCampaign(campaignId, campaignName) {
     const j = await r.json();
     const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
     if (!r.ok || !j.ok) {
-      result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`;
+      let errorHtml = `<div class="alert-empty"><strong>❌ Lỗi:</strong> ${escapeHtml(j.error || ('HTTP ' + r.status))}</div>`;
+      if (j.hint) {
+        errorHtml += `<div class="warning-banner">💡 ${escapeHtml(j.hint)}</div>`;
+      }
+      // Quota exhausted hint
+      if ((j.error || '').match(/4006|neurons|quota|allocation/i)) {
+        errorHtml += `<div class="opt-action-box" style="margin-top:8px"><h3>🩹 3 cách fix nhanh</h3>
+          <div class="field"><strong>1.</strong> Đổi Model dropdown → <strong>Llama 3.1 8B Fast</strong> (rẻ hơn 10x) → click Tối ưu lại</div>
+          <div class="field"><strong>2.</strong> Đợi <strong>7h sáng mai (giờ VN)</strong> quota free reset</div>
+          <div class="field"><strong>3.</strong> <a href="https://dash.cloudflare.com/?to=/:account/workers/plans" target="_blank" style="color:#1e40af;font-weight:600">Upgrade Workers Paid $5/tháng</a> → 10M neurons (1000x), không lo hết</div>
+        </div>`;
+      }
+      result.innerHTML = errorHtml;
       return;
     }
-    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · model: ${(j.model || '').split('/').pop()} · time: ${state.timeRange?.label || '?'}`;
-    if (j.parsed_json && !j.parsed_json._parse_error) {
-      result.innerHTML = renderOptimizeResult(j.parsed_json, campaignName);
-    } else {
-      // Fallback: hiển thị raw markdown
-      result.innerHTML = `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div>` + md2html(j.response);
+    let modelInfo = (j.model || '').split('/').pop();
+    if (j.fallback_used) {
+      modelInfo = `${(j.requested_model || '').split('/').pop()} → fallback ${modelInfo}`;
     }
+    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · ${modelInfo} · time: ${state.timeRange?.label || '?'}`;
+
+    let html = '';
+    if (j.fallback_used) {
+      html += `<div class="warning-banner">⚠ Model lớn fail (có thể hết quota hoặc timeout) → đã tự động fallback xuống Llama 8B. Chất lượng phân tích có thể kém hơn.</div>`;
+    }
+    if (j.parsed_json && !j.parsed_json._parse_error) {
+      html += renderOptimizeResult(j.parsed_json, campaignName);
+    } else {
+      html += `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div>` + md2html(j.response);
+    }
+    result.innerHTML = html;
   } catch (e) {
     result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
   }

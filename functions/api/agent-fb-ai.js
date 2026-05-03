@@ -337,7 +337,7 @@ export async function onRequestPost(context) {
       const cached = await env.INVENTORY.get(cacheKey, { type: "json" });
       if (cached?.response) {
         return jsonResponse({
-          ok: true, mode, group, group_label: FB_GROUP_LABELS[group], model: MODEL_FAST,
+          ok: true, mode, group, group_label: FB_GROUP_LABELS[group], model: cached.model || MODEL_FAST,
           response: cached.response, parsed_json: cached.parsed_json || null,
           cached: true, cached_at: cached.cached_at,
           cache_note: `Cache từ ${cached.cached_at}. Bấm Làm mới để regenerate.`,
@@ -389,19 +389,48 @@ export async function onRequestPost(context) {
   const modelPref = body.model || cfg.model_pref || "fast";
   const selectedModel = MODEL_MAP[modelPref] || MODEL_FAST;
 
-  // Call AI
+  // Call AI với auto-fallback: nếu model lớn fail (quota / timeout) → retry với Llama 8B
   let aiResult;
+  let actualModel = selectedModel;
+  let fallbackUsed = false;
+  const aiParams = {
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
+    ],
+    temperature: cfg.json_output ? 0.1 : 0.3,
+    max_tokens: cfg.json_output ? 3000 : 2500,
+  };
+
   try {
-    aiResult = await env.AI.run(selectedModel, {
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: cfg.json_output ? 0.1 : 0.3,
-      max_tokens: cfg.json_output ? 3000 : 2500,
-    });
+    aiResult = await env.AI.run(selectedModel, aiParams);
   } catch (e) {
-    return jsonResponse({ error: `Workers AI fail (${selectedModel}): ${e.message}`, hint: modelPref === "claude_haiku" ? "Claude Haiku cần Workers Paid + AI Models marketplace access" : null }, 502);
+    const errMsg = String(e.message || e);
+    const isQuotaErr = /4006|neurons|quota|allocation|paid plan/i.test(errMsg);
+
+    // Nếu đang dùng model lớn (big/claude) + lỗi quota → fallback xuống 8B Fast
+    if ((modelPref === "big" || modelPref === "claude_haiku") && (isQuotaErr || /timeout|503|502/i.test(errMsg))) {
+      console.log(`[FALLBACK] ${selectedModel} fail (${errMsg.slice(0,80)}), retry với 8B Fast`);
+      try {
+        aiResult = await env.AI.run(MODEL_FAST, aiParams);
+        actualModel = MODEL_FAST;
+        fallbackUsed = true;
+      } catch (e2) {
+        return jsonResponse({
+          error: `Cả 2 models đều fail. Quota có thể hết hoặc Workers AI down.`,
+          original_error: errMsg.slice(0, 200),
+          fallback_error: String(e2.message || e2).slice(0, 200),
+          hint: "Đợi 7h sáng mai VN reset quota free, hoặc upgrade Workers Paid $5/tháng (10M neurons).",
+        }, 502);
+      }
+    } else {
+      return jsonResponse({
+        error: `Workers AI fail (${selectedModel}): ${errMsg.slice(0, 200)}`,
+        hint: isQuotaErr
+          ? "Hết 10K neurons free hôm nay. Reset 7h sáng mai VN. Hoặc upgrade Workers Paid $5/tháng."
+          : (modelPref === "claude_haiku" ? "Claude Haiku cần Workers Paid + AI Models marketplace access" : null),
+      }, 502);
+    }
   }
 
   let rawResp = aiResult.response || aiResult.result || "";
@@ -457,13 +486,16 @@ export async function onRequestPost(context) {
     const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
     try {
       await env.INVENTORY.put(cacheKey, JSON.stringify({
-        response: rawResp, parsed_json: parsedJson, cached_at: nowVN,
+        response: rawResp, parsed_json: parsedJson, cached_at: nowVN, model: actualModel,
       }), { expirationTtl: CACHE_TTL_SECONDS });
     } catch { /* ignore */ }
   }
 
   return jsonResponse({
-    ok: true, mode, group, group_label: FB_GROUP_LABELS[group], model: MODEL_FAST,
+    ok: true, mode, group, group_label: FB_GROUP_LABELS[group], model: actualModel,
+    requested_model: selectedModel,
+    fallback_used: fallbackUsed,
+    fallback_note: fallbackUsed ? `${selectedModel} fail → fallback ${actualModel}` : null,
     response: rawResp, parsed_json: parsedJson,
     skills_used: cfg.skills, data_used: cfg.data,
     cached: false,
