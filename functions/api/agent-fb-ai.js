@@ -447,8 +447,9 @@ export async function onRequestPost(context) {
     rawResp = String(respField || "");
   }
 
-  // Parse JSON nếu là JSON mode
-  if (cfg.json_output && rawResp) {
+  // Parse JSON nếu là JSON mode VÀ chưa có parsedJson từ object response
+  // (skip re-parse nếu Workers AI đã trả parsed object trực tiếp)
+  if (cfg.json_output && rawResp && !parsedJson) {
     let cleaned = String(rawResp).trim();
     const fenced = cleaned.match(/```(?:json)?\s*([\s\S]+?)```/);
     if (fenced) cleaned = fenced[1].trim();

@@ -454,6 +454,9 @@ async function optimizeCampaign(campaignId, campaignName) {
   section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const startTs = Date.now();
+  // Add 60s timeout để tránh infinite loading khi 70B treo
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), 60000);
   try {
     const body = {
       mode: 'optimize_campaign',
@@ -468,7 +471,9 @@ async function optimizeCampaign(campaignId, campaignName) {
       method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      signal: ctrl.signal,
     });
+    clearTimeout(timeoutId);
     const j = await r.json();
     const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
     if (!r.ok || !j.ok) {
@@ -508,7 +513,12 @@ async function optimizeCampaign(campaignId, campaignName) {
     }
     result.innerHTML = html;
   } catch (e) {
-    result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
+    clearTimeout(timeoutId);
+    if (e.name === 'AbortError') {
+      result.innerHTML = `<div class="alert-empty"><strong>⏱ Timeout 60s</strong> — Llama 70B có thể đang quá tải. Thử đổi Model dropdown sang <strong>Llama 8B</strong> rồi click Tối ưu lại (8B nhanh hơn nhiều).</div>`;
+    } else {
+      result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
+    }
   }
 }
 
