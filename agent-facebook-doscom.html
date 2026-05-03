@@ -502,10 +502,19 @@ async function optimizeCampaign(campaignId, campaignName) {
     if (j.fallback_used) {
       html += `<div class="warning-banner">⚠ Model lớn fail (có thể hết quota hoặc timeout) → đã tự động fallback xuống Llama 8B. Chất lượng phân tích có thể kém hơn.</div>`;
     }
+
+    // Robust extraction: parsed_json hoặc response (nếu là object) đều OK
+    let dataObj = null;
     if (j.parsed_json && !j.parsed_json._parse_error) {
-      html += renderOptimizeResult(j.parsed_json, campaignName);
+      dataObj = j.parsed_json;
+    } else if (j.response && typeof j.response === 'object' && j.response.verdict) {
+      // Cache cũ hoặc backend trả response = object trực tiếp
+      dataObj = j.response;
+    }
+
+    if (dataObj) {
+      html += renderOptimizeResult(dataObj, campaignName);
     } else {
-      // Fallback: response có thể là object hoặc string
       const respText = (typeof j.response === 'string')
         ? j.response
         : JSON.stringify(j.response, null, 2);

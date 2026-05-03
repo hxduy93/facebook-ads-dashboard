@@ -34,7 +34,7 @@ const MODEL_MAP = {
   claude_haiku: MODEL_CLAUDE_HAIKU,
 };
 
-const CACHE_VERSION = "v3";  // bumped: structured optimize output + model selector
+const CACHE_VERSION = "v4";  // bumped: object response → parsed_json fix
 const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
