@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-03 13:10",
+  "generated_at": "2026-05-03 13:27",
   "source": "FB Marketing API v21.0 (auto every 3h)",
   "date_range": {
     "start": "2026-02-02",
@@ -8,10 +8,10 @@
   "currency": "VND",
   "total_accounts": 6,
   "total_summary": {
-    "spend": 0,
-    "impressions": 0,
-    "clicks": 0,
-    "leads": 0
+    "spend": 246164917.0,
+    "impressions": 2674045,
+    "clicks": 51805,
+    "leads": 98
   },
   "accounts": [
     {
@@ -22,13 +22,613 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 0,
-        "impressions": 0,
-        "clicks": 0,
-        "leads": 0
+        "spend": 27146477.0,
+        "impressions": 246186,
+        "clicks": 3747,
+        "reach": 222214,
+        "leads": 2,
+        "ctr": 1.522,
+        "cpc": 7244.86
       },
-      "campaigns": [],
-      "rows_raw": 0
+      "campaigns": [
+        {
+          "campaign_name": "4/2 - D1 2 video",
+          "campaign_id": "120245707118880067",
+          "spend": 14060959.0,
+          "impressions": 161316,
+          "clicks": 2246,
+          "reach": 151532,
+          "ctr": 1.3923,
+          "cpc": 6260.44,
+          "cpm": 87164.07,
+          "leads": 0,
+          "link_clicks": 1381,
+          "landing_page_views": 1230,
+          "video_views": 63164,
+          "complete_registrations": 52,
+          "messages": 6,
+          "by_date": {
+            "2026-04-02": {
+              "spend": 311203.0,
+              "impressions": 1189,
+              "clicks": 29,
+              "reach": 1024,
+              "leads": 0,
+              "link_clicks": 15
+            },
+            "2026-04-03": {
+              "spend": 316924.0,
+              "impressions": 1319,
+              "clicks": 19,
+              "reach": 1085,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-04-04": {
+              "spend": 323605.0,
+              "impressions": 1948,
+              "clicks": 53,
+              "reach": 1615,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-05": {
+              "spend": 525140.0,
+              "impressions": 3760,
+              "clicks": 63,
+              "reach": 3051,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-06": {
+              "spend": 484174.0,
+              "impressions": 3845,
+              "clicks": 65,
+              "reach": 3440,
+              "leads": 0,
+              "link_clicks": 37
+            },
+            "2026-04-07": {
+              "spend": 397446.0,
+              "impressions": 4289,
+              "clicks": 61,
+              "reach": 4111,
+              "leads": 0,
+              "link_clicks": 42
+            },
+            "2026-04-08": {
+              "spend": 475939.0,
+              "impressions": 5271,
+              "clicks": 65,
+              "reach": 5102,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-09": {
+              "spend": 419853.0,
+              "impressions": 5542,
+              "clicks": 66,
+              "reach": 5129,
+              "leads": 0,
+              "link_clicks": 44
+            },
+            "2026-04-10": {
+              "spend": 440276.0,
+              "impressions": 4918,
+              "clicks": 51,
+              "reach": 4564,
+              "leads": 0,
+              "link_clicks": 31
+            },
+            "2026-04-11": {
+              "spend": 406605.0,
+              "impressions": 4056,
+              "clicks": 52,
+              "reach": 3833,
+              "leads": 0,
+              "link_clicks": 31
+            },
+            "2026-04-12": {
+              "spend": 535753.0,
+              "impressions": 3953,
+              "clicks": 62,
+              "reach": 3593,
+              "leads": 0,
+              "link_clicks": 40
+            },
+            "2026-04-13": {
+              "spend": 625236.0,
+              "impressions": 5491,
+              "clicks": 74,
+              "reach": 5219,
+              "leads": 0,
+              "link_clicks": 48
+            },
+            "2026-04-14": {
+              "spend": 634280.0,
+              "impressions": 7430,
+              "clicks": 102,
+              "reach": 6912,
+              "leads": 0,
+              "link_clicks": 66
+            },
+            "2026-04-15": {
+              "spend": 563384.0,
+              "impressions": 6033,
+              "clicks": 79,
+              "reach": 5663,
+              "leads": 0,
+              "link_clicks": 55
+            },
+            "2026-04-16": {
+              "spend": 1200184.0,
+              "impressions": 12592,
+              "clicks": 174,
+              "reach": 11953,
+              "leads": 0,
+              "link_clicks": 94
+            },
+            "2026-04-17": {
+              "spend": 377498.0,
+              "impressions": 4399,
+              "clicks": 51,
+              "reach": 4138,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-18": {
+              "spend": 431438.0,
+              "impressions": 5280,
+              "clicks": 78,
+              "reach": 5035,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-04-19": {
+              "spend": 459332.0,
+              "impressions": 5328,
+              "clicks": 71,
+              "reach": 5005,
+              "leads": 0,
+              "link_clicks": 48
+            },
+            "2026-04-20": {
+              "spend": 437254.0,
+              "impressions": 5223,
+              "clicks": 67,
+              "reach": 4926,
+              "leads": 0,
+              "link_clicks": 39
+            },
+            "2026-04-21": {
+              "spend": 420222.0,
+              "impressions": 4735,
+              "clicks": 62,
+              "reach": 4437,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-22": {
+              "spend": 379644.0,
+              "impressions": 4819,
+              "clicks": 65,
+              "reach": 4590,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-23": {
+              "spend": 239666.0,
+              "impressions": 1950,
+              "clicks": 39,
+              "reach": 1825,
+              "leads": 0,
+              "link_clicks": 24
+            },
+            "2026-04-24": {
+              "spend": 495973.0,
+              "impressions": 7109,
+              "clicks": 97,
+              "reach": 6730,
+              "leads": 0,
+              "link_clicks": 60
+            },
+            "2026-04-25": {
+              "spend": 364673.0,
+              "impressions": 5688,
+              "clicks": 77,
+              "reach": 5364,
+              "leads": 0,
+              "link_clicks": 49
+            },
+            "2026-04-26": {
+              "spend": 471550.0,
+              "impressions": 7651,
+              "clicks": 92,
+              "reach": 7224,
+              "leads": 0,
+              "link_clicks": 59
+            },
+            "2026-04-27": {
+              "spend": 409791.0,
+              "impressions": 6217,
+              "clicks": 83,
+              "reach": 5926,
+              "leads": 0,
+              "link_clicks": 44
+            },
+            "2026-04-28": {
+              "spend": 393619.0,
+              "impressions": 5462,
+              "clicks": 91,
+              "reach": 5199,
+              "leads": 0,
+              "link_clicks": 61
+            },
+            "2026-04-29": {
+              "spend": 342227.0,
+              "impressions": 6047,
+              "clicks": 61,
+              "reach": 6000,
+              "leads": 0,
+              "link_clicks": 39
+            },
+            "2026-04-30": {
+              "spend": 391470.0,
+              "impressions": 6254,
+              "clicks": 98,
+              "reach": 5844,
+              "leads": 0,
+              "link_clicks": 61
+            },
+            "2026-05-01": {
+              "spend": 449672.0,
+              "impressions": 7766,
+              "clicks": 117,
+              "reach": 7536,
+              "leads": 0,
+              "link_clicks": 68
+            },
+            "2026-05-02": {
+              "spend": 336928.0,
+              "impressions": 5752,
+              "clicks": 82,
+              "reach": 5459,
+              "leads": 0,
+              "link_clicks": 54
+            }
+          }
+        },
+        {
+          "campaign_name": "6/4 - D1 - 5 video",
+          "campaign_id": "120245884578100067",
+          "spend": 6452610.0,
+          "impressions": 43859,
+          "clicks": 791,
+          "reach": 36469,
+          "ctr": 1.8035,
+          "cpc": 8157.53,
+          "cpm": 147121.69,
+          "leads": 1,
+          "link_clicks": 506,
+          "landing_page_views": 456,
+          "video_views": 11731,
+          "complete_registrations": 19,
+          "messages": 2,
+          "by_date": {
+            "2026-04-07": {
+              "spend": 445147.0,
+              "impressions": 2184,
+              "clicks": 40,
+              "reach": 1808,
+              "leads": 0,
+              "link_clicks": 24
+            },
+            "2026-04-08": {
+              "spend": 601918.0,
+              "impressions": 5336,
+              "clicks": 78,
+              "reach": 4292,
+              "leads": 0,
+              "link_clicks": 53
+            },
+            "2026-04-09": {
+              "spend": 440350.0,
+              "impressions": 4008,
+              "clicks": 61,
+              "reach": 3233,
+              "leads": 0,
+              "link_clicks": 33
+            },
+            "2026-04-10": {
+              "spend": 549228.0,
+              "impressions": 3775,
+              "clicks": 65,
+              "reach": 2932,
+              "leads": 0,
+              "link_clicks": 45
+            },
+            "2026-04-11": {
+              "spend": 428550.0,
+              "impressions": 3243,
+              "clicks": 67,
+              "reach": 2745,
+              "leads": 0,
+              "link_clicks": 47
+            },
+            "2026-04-12": {
+              "spend": 573764.0,
+              "impressions": 3885,
+              "clicks": 77,
+              "reach": 3371,
+              "leads": 0,
+              "link_clicks": 53
+            },
+            "2026-04-13": {
+              "spend": 440068.0,
+              "impressions": 2795,
+              "clicks": 65,
+              "reach": 2220,
+              "leads": 0,
+              "link_clicks": 44
+            },
+            "2026-04-14": {
+              "spend": 467239.0,
+              "impressions": 3004,
+              "clicks": 48,
+              "reach": 2429,
+              "leads": 1,
+              "link_clicks": 30
+            },
+            "2026-04-15": {
+              "spend": 492589.0,
+              "impressions": 3990,
+              "clicks": 67,
+              "reach": 3279,
+              "leads": 0,
+              "link_clicks": 40
+            },
+            "2026-04-16": {
+              "spend": 874571.0,
+              "impressions": 4479,
+              "clicks": 90,
+              "reach": 4009,
+              "leads": 0,
+              "link_clicks": 58
+            },
+            "2026-04-17": {
+              "spend": 608841.0,
+              "impressions": 4433,
+              "clicks": 74,
+              "reach": 3782,
+              "leads": 0,
+              "link_clicks": 47
+            },
+            "2026-04-18": {
+              "spend": 530345.0,
+              "impressions": 2727,
+              "clicks": 59,
+              "reach": 2369,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-19": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-20": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "16/4 - D1 - Vid 35",
+          "campaign_id": "120246259231840067",
+          "spend": 5807340.0,
+          "impressions": 36772,
+          "clicks": 648,
+          "reach": 30431,
+          "ctr": 1.7622,
+          "cpc": 8961.94,
+          "cpm": 157928.32,
+          "leads": 1,
+          "link_clicks": 407,
+          "landing_page_views": 360,
+          "video_views": 10732,
+          "complete_registrations": 22,
+          "messages": 5,
+          "by_date": {
+            "2026-04-16": {
+              "spend": 363385.0,
+              "impressions": 1190,
+              "clicks": 22,
+              "reach": 958,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-17": {
+              "spend": 288860.0,
+              "impressions": 1886,
+              "clicks": 36,
+              "reach": 1514,
+              "leads": 0,
+              "link_clicks": 23
+            },
+            "2026-04-18": {
+              "spend": 262820.0,
+              "impressions": 1854,
+              "clicks": 30,
+              "reach": 1634,
+              "leads": 0,
+              "link_clicks": 22
+            },
+            "2026-04-19": {
+              "spend": 443190.0,
+              "impressions": 2711,
+              "clicks": 37,
+              "reach": 2195,
+              "leads": 0,
+              "link_clicks": 28
+            },
+            "2026-04-20": {
+              "spend": 367456.0,
+              "impressions": 2645,
+              "clicks": 39,
+              "reach": 2196,
+              "leads": 0,
+              "link_clicks": 22
+            },
+            "2026-04-21": {
+              "spend": 419186.0,
+              "impressions": 1763,
+              "clicks": 30,
+              "reach": 1358,
+              "leads": 0,
+              "link_clicks": 21
+            },
+            "2026-04-22": {
+              "spend": 290005.0,
+              "impressions": 2046,
+              "clicks": 33,
+              "reach": 1562,
+              "leads": 0,
+              "link_clicks": 20
+            },
+            "2026-04-23": {
+              "spend": 254550.0,
+              "impressions": 876,
+              "clicks": 19,
+              "reach": 716,
+              "leads": 0,
+              "link_clicks": 9
+            },
+            "2026-04-24": {
+              "spend": 409428.0,
+              "impressions": 2567,
+              "clicks": 37,
+              "reach": 2103,
+              "leads": 0,
+              "link_clicks": 21
+            },
+            "2026-04-25": {
+              "spend": 258706.0,
+              "impressions": 1989,
+              "clicks": 32,
+              "reach": 1693,
+              "leads": 0,
+              "link_clicks": 18
+            },
+            "2026-04-26": {
+              "spend": 450936.0,
+              "impressions": 3088,
+              "clicks": 67,
+              "reach": 2512,
+              "leads": 1,
+              "link_clicks": 42
+            },
+            "2026-04-27": {
+              "spend": 450346.0,
+              "impressions": 3232,
+              "clicks": 59,
+              "reach": 2757,
+              "leads": 0,
+              "link_clicks": 40
+            },
+            "2026-04-28": {
+              "spend": 325318.0,
+              "impressions": 2750,
+              "clicks": 58,
+              "reach": 2367,
+              "leads": 0,
+              "link_clicks": 35
+            },
+            "2026-04-29": {
+              "spend": 271225.0,
+              "impressions": 1627,
+              "clicks": 21,
+              "reach": 1424,
+              "leads": 0,
+              "link_clicks": 16
+            },
+            "2026-04-30": {
+              "spend": 330878.0,
+              "impressions": 1944,
+              "clicks": 32,
+              "reach": 1575,
+              "leads": 0,
+              "link_clicks": 19
+            },
+            "2026-05-01": {
+              "spend": 331654.0,
+              "impressions": 2367,
+              "clicks": 45,
+              "reach": 1992,
+              "leads": 0,
+              "link_clicks": 27
+            },
+            "2026-05-02": {
+              "spend": 289397.0,
+              "impressions": 2237,
+              "clicks": 51,
+              "reach": 1875,
+              "leads": 0,
+              "link_clicks": 32
+            }
+          }
+        },
+        {
+          "campaign_name": "31/3 - D1 - 2 Video",
+          "campaign_id": "120245590788530067",
+          "spend": 825568.0,
+          "impressions": 4239,
+          "clicks": 62,
+          "reach": 3782,
+          "ctr": 1.4626,
+          "cpc": 13315.61,
+          "cpm": 194755.37,
+          "leads": 0,
+          "link_clicks": 40,
+          "landing_page_views": 34,
+          "video_views": 1099,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-03-31": {
+              "spend": 278907.0,
+              "impressions": 1563,
+              "clicks": 21,
+              "reach": 1414,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-04-01": {
+              "spend": 460338.0,
+              "impressions": 2217,
+              "clicks": 33,
+              "reach": 1948,
+              "leads": 0,
+              "link_clicks": 25
+            },
+            "2026-04-02": {
+              "spend": 86323.0,
+              "impressions": 459,
+              "clicks": 8,
+              "reach": 420,
+              "leads": 0,
+              "link_clicks": 5
+            }
+          }
+        }
+      ],
+      "rows_raw": 65
     },
     {
       "account_id": "764394829882083",
@@ -38,13 +638,1789 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 0,
-        "impressions": 0,
-        "clicks": 0,
-        "leads": 0
+        "spend": 80394047.0,
+        "impressions": 950470,
+        "clicks": 16360,
+        "reach": 833798,
+        "leads": 31,
+        "ctr": 1.7213,
+        "cpc": 4914.06
       },
-      "campaigns": [],
-      "rows_raw": 0
+      "campaigns": [
+        {
+          "campaign_name": "3/4 - Noma911 - Tổng hợp vid kalodata",
+          "campaign_id": "120245175175070058",
+          "spend": 13539353.0,
+          "impressions": 145499,
+          "clicks": 2398,
+          "reach": 119283,
+          "ctr": 1.6481,
+          "cpc": 5646.1,
+          "cpm": 93054.61,
+          "leads": 5,
+          "link_clicks": 1477,
+          "landing_page_views": 1399,
+          "video_views": 59336,
+          "complete_registrations": 76,
+          "messages": 11,
+          "by_date": {
+            "2026-04-03": {
+              "spend": 85403.0,
+              "impressions": 882,
+              "clicks": 24,
+              "reach": 763,
+              "leads": 0,
+              "link_clicks": 14
+            },
+            "2026-04-04": {
+              "spend": 466493.0,
+              "impressions": 5194,
+              "clicks": 104,
+              "reach": 3896,
+              "leads": 1,
+              "link_clicks": 71
+            },
+            "2026-04-05": {
+              "spend": 762256.0,
+              "impressions": 8037,
+              "clicks": 166,
+              "reach": 6442,
+              "leads": 1,
+              "link_clicks": 107
+            },
+            "2026-04-06": {
+              "spend": 929860.0,
+              "impressions": 10493,
+              "clicks": 232,
+              "reach": 8357,
+              "leads": 0,
+              "link_clicks": 139
+            },
+            "2026-04-07": {
+              "spend": 419451.0,
+              "impressions": 4613,
+              "clicks": 79,
+              "reach": 4234,
+              "leads": 1,
+              "link_clicks": 48
+            },
+            "2026-04-08": {
+              "spend": 1748689.0,
+              "impressions": 18309,
+              "clicks": 332,
+              "reach": 15275,
+              "leads": 0,
+              "link_clicks": 214
+            },
+            "2026-04-09": {
+              "spend": 1592212.0,
+              "impressions": 15748,
+              "clicks": 289,
+              "reach": 13832,
+              "leads": 0,
+              "link_clicks": 165
+            },
+            "2026-04-10": {
+              "spend": 1587967.0,
+              "impressions": 16633,
+              "clicks": 298,
+              "reach": 14604,
+              "leads": 0,
+              "link_clicks": 194
+            },
+            "2026-04-11": {
+              "spend": 1498571.0,
+              "impressions": 15474,
+              "clicks": 234,
+              "reach": 13413,
+              "leads": 0,
+              "link_clicks": 145
+            },
+            "2026-04-12": {
+              "spend": 1564056.0,
+              "impressions": 15026,
+              "clicks": 206,
+              "reach": 13032,
+              "leads": 1,
+              "link_clicks": 137
+            },
+            "2026-04-13": {
+              "spend": 1379040.0,
+              "impressions": 14962,
+              "clicks": 219,
+              "reach": 9432,
+              "leads": 0,
+              "link_clicks": 127
+            },
+            "2026-04-14": {
+              "spend": 1047068.0,
+              "impressions": 14054,
+              "clicks": 158,
+              "reach": 10719,
+              "leads": 1,
+              "link_clicks": 89
+            },
+            "2026-04-15": {
+              "spend": 458287.0,
+              "impressions": 6074,
+              "clicks": 57,
+              "reach": 5284,
+              "leads": 0,
+              "link_clicks": 27
+            },
+            "2026-04-16": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "18/4 - NOMA911 - Phương Nam - designer - v2",
+          "campaign_id": "120246123574430058",
+          "spend": 10315719.0,
+          "impressions": 124813,
+          "clicks": 1791,
+          "reach": 108381,
+          "ctr": 1.4349,
+          "cpc": 5759.75,
+          "cpm": 82649.4,
+          "leads": 1,
+          "link_clicks": 1217,
+          "landing_page_views": 1213,
+          "video_views": 28269,
+          "complete_registrations": 87,
+          "messages": 6,
+          "by_date": {
+            "2026-04-18": {
+              "spend": 343405.0,
+              "impressions": 3984,
+              "clicks": 74,
+              "reach": 3076,
+              "leads": 0,
+              "link_clicks": 55
+            },
+            "2026-04-19": {
+              "spend": 633990.0,
+              "impressions": 7388,
+              "clicks": 114,
+              "reach": 6098,
+              "leads": 0,
+              "link_clicks": 79
+            },
+            "2026-04-20": {
+              "spend": 426515.0,
+              "impressions": 4519,
+              "clicks": 40,
+              "reach": 4077,
+              "leads": 0,
+              "link_clicks": 28
+            },
+            "2026-04-21": {
+              "spend": 396422.0,
+              "impressions": 4672,
+              "clicks": 35,
+              "reach": 3467,
+              "leads": 0,
+              "link_clicks": 21
+            },
+            "2026-04-22": {
+              "spend": 478964.0,
+              "impressions": 6237,
+              "clicks": 71,
+              "reach": 4125,
+              "leads": 0,
+              "link_clicks": 46
+            },
+            "2026-04-23": {
+              "spend": 619516.0,
+              "impressions": 6361,
+              "clicks": 86,
+              "reach": 5117,
+              "leads": 0,
+              "link_clicks": 53
+            },
+            "2026-04-24": {
+              "spend": 968071.0,
+              "impressions": 10000,
+              "clicks": 135,
+              "reach": 8754,
+              "leads": 1,
+              "link_clicks": 90
+            },
+            "2026-04-25": {
+              "spend": 780651.0,
+              "impressions": 8230,
+              "clicks": 103,
+              "reach": 7311,
+              "leads": 0,
+              "link_clicks": 70
+            },
+            "2026-04-26": {
+              "spend": 710976.0,
+              "impressions": 7618,
+              "clicks": 112,
+              "reach": 7000,
+              "leads": 0,
+              "link_clicks": 81
+            },
+            "2026-04-27": {
+              "spend": 991501.0,
+              "impressions": 12034,
+              "clicks": 157,
+              "reach": 10666,
+              "leads": 0,
+              "link_clicks": 111
+            },
+            "2026-04-28": {
+              "spend": 800557.0,
+              "impressions": 9739,
+              "clicks": 150,
+              "reach": 8744,
+              "leads": 0,
+              "link_clicks": 106
+            },
+            "2026-04-29": {
+              "spend": 660689.0,
+              "impressions": 9211,
+              "clicks": 142,
+              "reach": 8443,
+              "leads": 0,
+              "link_clicks": 104
+            },
+            "2026-04-30": {
+              "spend": 876698.0,
+              "impressions": 12439,
+              "clicks": 225,
+              "reach": 10903,
+              "leads": 0,
+              "link_clicks": 155
+            },
+            "2026-05-01": {
+              "spend": 873679.0,
+              "impressions": 12185,
+              "clicks": 182,
+              "reach": 11132,
+              "leads": 0,
+              "link_clicks": 113
+            },
+            "2026-05-02": {
+              "spend": 754085.0,
+              "impressions": 10196,
+              "clicks": 165,
+              "reach": 9468,
+              "leads": 0,
+              "link_clicks": 105
+            }
+          }
+        },
+        {
+          "campaign_name": "4/4 - Noma911 - Tổng hợp vid kalodata 2",
+          "campaign_id": "120245237207460058",
+          "spend": 9423111.0,
+          "impressions": 87768,
+          "clicks": 1803,
+          "reach": 75397,
+          "ctr": 2.0543,
+          "cpc": 5226.35,
+          "cpm": 107363.86,
+          "leads": 3,
+          "link_clicks": 1170,
+          "landing_page_views": 1144,
+          "video_views": 21297,
+          "complete_registrations": 59,
+          "messages": 8,
+          "by_date": {
+            "2026-04-04": {
+              "spend": 214448.0,
+              "impressions": 1905,
+              "clicks": 32,
+              "reach": 1659,
+              "leads": 0,
+              "link_clicks": 23
+            },
+            "2026-04-05": {
+              "spend": 814960.0,
+              "impressions": 7537,
+              "clicks": 120,
+              "reach": 5328,
+              "leads": 1,
+              "link_clicks": 85
+            },
+            "2026-04-06": {
+              "spend": 1114625.0,
+              "impressions": 9924,
+              "clicks": 194,
+              "reach": 6960,
+              "leads": 0,
+              "link_clicks": 140
+            },
+            "2026-04-07": {
+              "spend": 1256328.0,
+              "impressions": 11707,
+              "clicks": 240,
+              "reach": 9934,
+              "leads": 0,
+              "link_clicks": 153
+            },
+            "2026-04-08": {
+              "spend": 921897.0,
+              "impressions": 9781,
+              "clicks": 238,
+              "reach": 8707,
+              "leads": 0,
+              "link_clicks": 151
+            },
+            "2026-04-09": {
+              "spend": 933908.0,
+              "impressions": 9324,
+              "clicks": 198,
+              "reach": 8464,
+              "leads": 0,
+              "link_clicks": 128
+            },
+            "2026-04-10": {
+              "spend": 955074.0,
+              "impressions": 9590,
+              "clicks": 207,
+              "reach": 8814,
+              "leads": 0,
+              "link_clicks": 129
+            },
+            "2026-04-11": {
+              "spend": 919146.0,
+              "impressions": 8409,
+              "clicks": 176,
+              "reach": 7662,
+              "leads": 0,
+              "link_clicks": 116
+            },
+            "2026-04-12": {
+              "spend": 1013139.0,
+              "impressions": 8966,
+              "clicks": 188,
+              "reach": 8131,
+              "leads": 0,
+              "link_clicks": 112
+            },
+            "2026-04-13": {
+              "spend": 1001801.0,
+              "impressions": 8273,
+              "clicks": 166,
+              "reach": 7439,
+              "leads": 1,
+              "link_clicks": 107
+            },
+            "2026-04-14": {
+              "spend": 277785.0,
+              "impressions": 2352,
+              "clicks": 44,
+              "reach": 2299,
+              "leads": 0,
+              "link_clicks": 26
+            },
+            "2026-04-15": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 1,
+              "link_clicks": 0
+            },
+            "2026-04-17": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "20/4 - NOMA911 - Phương Nam - cụ đoành",
+          "campaign_id": "120246259818140058",
+          "spend": 8059617.0,
+          "impressions": 111475,
+          "clicks": 1487,
+          "reach": 102441,
+          "ctr": 1.3339,
+          "cpc": 5420.05,
+          "cpm": 72299.77,
+          "leads": 2,
+          "link_clicks": 942,
+          "landing_page_views": 924,
+          "video_views": 28063,
+          "complete_registrations": 65,
+          "messages": 12,
+          "by_date": {
+            "2026-04-20": {
+              "spend": 253121.0,
+              "impressions": 2874,
+              "clicks": 32,
+              "reach": 2527,
+              "leads": 0,
+              "link_clicks": 21
+            },
+            "2026-04-21": {
+              "spend": 355615.0,
+              "impressions": 3814,
+              "clicks": 58,
+              "reach": 3039,
+              "leads": 0,
+              "link_clicks": 39
+            },
+            "2026-04-22": {
+              "spend": 345944.0,
+              "impressions": 3815,
+              "clicks": 46,
+              "reach": 3105,
+              "leads": 0,
+              "link_clicks": 35
+            },
+            "2026-04-23": {
+              "spend": 650847.0,
+              "impressions": 6977,
+              "clicks": 89,
+              "reach": 5534,
+              "leads": 0,
+              "link_clicks": 45
+            },
+            "2026-04-24": {
+              "spend": 795926.0,
+              "impressions": 10035,
+              "clicks": 121,
+              "reach": 9488,
+              "leads": 0,
+              "link_clicks": 82
+            },
+            "2026-04-25": {
+              "spend": 676787.0,
+              "impressions": 10029,
+              "clicks": 111,
+              "reach": 9742,
+              "leads": 0,
+              "link_clicks": 70
+            },
+            "2026-04-26": {
+              "spend": 814884.0,
+              "impressions": 12614,
+              "clicks": 145,
+              "reach": 11826,
+              "leads": 0,
+              "link_clicks": 82
+            },
+            "2026-04-27": {
+              "spend": 700795.0,
+              "impressions": 10973,
+              "clicks": 140,
+              "reach": 10418,
+              "leads": 0,
+              "link_clicks": 79
+            },
+            "2026-04-28": {
+              "spend": 735280.0,
+              "impressions": 11789,
+              "clicks": 164,
+              "reach": 10729,
+              "leads": 0,
+              "link_clicks": 106
+            },
+            "2026-04-29": {
+              "spend": 699603.0,
+              "impressions": 11384,
+              "clicks": 149,
+              "reach": 10869,
+              "leads": 0,
+              "link_clicks": 95
+            },
+            "2026-04-30": {
+              "spend": 653589.0,
+              "impressions": 8967,
+              "clicks": 152,
+              "reach": 8487,
+              "leads": 1,
+              "link_clicks": 95
+            },
+            "2026-05-01": {
+              "spend": 722347.0,
+              "impressions": 9453,
+              "clicks": 162,
+              "reach": 8714,
+              "leads": 1,
+              "link_clicks": 112
+            },
+            "2026-05-02": {
+              "spend": 654879.0,
+              "impressions": 8751,
+              "clicks": 118,
+              "reach": 7963,
+              "leads": 0,
+              "link_clicks": 81
+            }
+          }
+        },
+        {
+          "campaign_name": "27/3 - Noma911 - Quang tèo 3",
+          "campaign_id": "120244791343710058",
+          "spend": 7449545.0,
+          "impressions": 69849,
+          "clicks": 1827,
+          "reach": 63386,
+          "ctr": 2.6156,
+          "cpc": 4077.47,
+          "cpm": 106652.14,
+          "leads": 5,
+          "link_clicks": 1098,
+          "landing_page_views": 954,
+          "video_views": 24726,
+          "complete_registrations": 40,
+          "messages": 8,
+          "by_date": {
+            "2026-03-27": {
+              "spend": 26039.0,
+              "impressions": 187,
+              "clicks": 2,
+              "reach": 185,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-03-28": {
+              "spend": 186830.0,
+              "impressions": 2171,
+              "clicks": 48,
+              "reach": 2072,
+              "leads": 1,
+              "link_clicks": 30
+            },
+            "2026-03-29": {
+              "spend": 517713.0,
+              "impressions": 4199,
+              "clicks": 104,
+              "reach": 3852,
+              "leads": 1,
+              "link_clicks": 63
+            },
+            "2026-03-30": {
+              "spend": 1066028.0,
+              "impressions": 11275,
+              "clicks": 421,
+              "reach": 10352,
+              "leads": 1,
+              "link_clicks": 308
+            },
+            "2026-03-31": {
+              "spend": 1648809.0,
+              "impressions": 14466,
+              "clicks": 285,
+              "reach": 12779,
+              "leads": 0,
+              "link_clicks": 170
+            },
+            "2026-04-01": {
+              "spend": 1216738.0,
+              "impressions": 9053,
+              "clicks": 295,
+              "reach": 8094,
+              "leads": 1,
+              "link_clicks": 159
+            },
+            "2026-04-02": {
+              "spend": 1039304.0,
+              "impressions": 9450,
+              "clicks": 201,
+              "reach": 8343,
+              "leads": 1,
+              "link_clicks": 114
+            },
+            "2026-04-03": {
+              "spend": 1076710.0,
+              "impressions": 12341,
+              "clicks": 289,
+              "reach": 11324,
+              "leads": 0,
+              "link_clicks": 155
+            },
+            "2026-04-04": {
+              "spend": 412079.0,
+              "impressions": 4279,
+              "clicks": 139,
+              "reach": 4078,
+              "leads": 0,
+              "link_clicks": 76
+            },
+            "2026-04-05": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao",
+          "campaign_id": "120246745047610058",
+          "spend": 5264232.0,
+          "impressions": 86524,
+          "clicks": 1650,
+          "reach": 82163,
+          "ctr": 1.907,
+          "cpc": 3190.44,
+          "cpm": 60841.29,
+          "leads": 1,
+          "link_clicks": 1036,
+          "landing_page_views": 1040,
+          "video_views": 32099,
+          "complete_registrations": 81,
+          "messages": 9,
+          "by_date": {
+            "2026-04-27": {
+              "spend": 272261.0,
+              "impressions": 2926,
+              "clicks": 54,
+              "reach": 2551,
+              "leads": 0,
+              "link_clicks": 37
+            },
+            "2026-04-28": {
+              "spend": 1076564.0,
+              "impressions": 16631,
+              "clicks": 294,
+              "reach": 14946,
+              "leads": 0,
+              "link_clicks": 185
+            },
+            "2026-04-29": {
+              "spend": 965231.0,
+              "impressions": 16253,
+              "clicks": 280,
+              "reach": 15708,
+              "leads": 0,
+              "link_clicks": 190
+            },
+            "2026-04-30": {
+              "spend": 1121010.0,
+              "impressions": 19835,
+              "clicks": 381,
+              "reach": 19266,
+              "leads": 0,
+              "link_clicks": 252
+            },
+            "2026-05-01": {
+              "spend": 1021683.0,
+              "impressions": 18094,
+              "clicks": 353,
+              "reach": 17482,
+              "leads": 1,
+              "link_clicks": 208
+            },
+            "2026-05-02": {
+              "spend": 807483.0,
+              "impressions": 12785,
+              "clicks": 288,
+              "reach": 12210,
+              "leads": 0,
+              "link_clicks": 164
+            }
+          }
+        },
+        {
+          "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao 2",
+          "campaign_id": "120246812956660058",
+          "spend": 3596839.0,
+          "impressions": 53084,
+          "clicks": 984,
+          "reach": 50718,
+          "ctr": 1.8537,
+          "cpc": 3655.32,
+          "cpm": 67757.5,
+          "leads": 4,
+          "link_clicks": 608,
+          "landing_page_views": 611,
+          "video_views": 20184,
+          "complete_registrations": 69,
+          "messages": 7,
+          "by_date": {
+            "2026-04-28": {
+              "spend": 403523.0,
+              "impressions": 5263,
+              "clicks": 98,
+              "reach": 5117,
+              "leads": 0,
+              "link_clicks": 60
+            },
+            "2026-04-29": {
+              "spend": 508300.0,
+              "impressions": 7807,
+              "clicks": 145,
+              "reach": 7403,
+              "leads": 2,
+              "link_clicks": 100
+            },
+            "2026-04-30": {
+              "spend": 802932.0,
+              "impressions": 13178,
+              "clicks": 235,
+              "reach": 12629,
+              "leads": 1,
+              "link_clicks": 134
+            },
+            "2026-05-01": {
+              "spend": 923797.0,
+              "impressions": 14291,
+              "clicks": 263,
+              "reach": 13656,
+              "leads": 0,
+              "link_clicks": 174
+            },
+            "2026-05-02": {
+              "spend": 958287.0,
+              "impressions": 12545,
+              "clicks": 243,
+              "reach": 11913,
+              "leads": 1,
+              "link_clicks": 140
+            }
+          }
+        },
+        {
+          "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo",
+          "campaign_id": "120246730619280058",
+          "spend": 3465186.0,
+          "impressions": 53656,
+          "clicks": 980,
+          "reach": 52214,
+          "ctr": 1.8264,
+          "cpc": 3535.9,
+          "cpm": 64581.52,
+          "leads": 1,
+          "link_clicks": 608,
+          "landing_page_views": 591,
+          "video_views": 19595,
+          "complete_registrations": 72,
+          "messages": 6,
+          "by_date": {
+            "2026-04-27": {
+              "spend": 310143.0,
+              "impressions": 4146,
+              "clicks": 79,
+              "reach": 3538,
+              "leads": 0,
+              "link_clicks": 64
+            },
+            "2026-04-28": {
+              "spend": 774070.0,
+              "impressions": 12165,
+              "clicks": 207,
+              "reach": 11908,
+              "leads": 0,
+              "link_clicks": 129
+            },
+            "2026-04-29": {
+              "spend": 493845.0,
+              "impressions": 8458,
+              "clicks": 139,
+              "reach": 8321,
+              "leads": 0,
+              "link_clicks": 92
+            },
+            "2026-04-30": {
+              "spend": 494272.0,
+              "impressions": 8222,
+              "clicks": 174,
+              "reach": 8157,
+              "leads": 0,
+              "link_clicks": 99
+            },
+            "2026-05-01": {
+              "spend": 608122.0,
+              "impressions": 9634,
+              "clicks": 179,
+              "reach": 9318,
+              "leads": 1,
+              "link_clicks": 107
+            },
+            "2026-05-02": {
+              "spend": 784734.0,
+              "impressions": 11031,
+              "clicks": 202,
+              "reach": 10972,
+              "leads": 0,
+              "link_clicks": 117
+            }
+          }
+        },
+        {
+          "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao y hệt",
+          "campaign_id": "120246838738910058",
+          "spend": 2631613.0,
+          "impressions": 35706,
+          "clicks": 722,
+          "reach": 35177,
+          "ctr": 2.0221,
+          "cpc": 3644.89,
+          "cpm": 73702.26,
+          "leads": 0,
+          "link_clicks": 414,
+          "landing_page_views": 393,
+          "video_views": 13486,
+          "complete_registrations": 34,
+          "messages": 3,
+          "by_date": {
+            "2026-04-28": {
+              "spend": 10157.0,
+              "impressions": 96,
+              "clicks": 5,
+              "reach": 94,
+              "leads": 0,
+              "link_clicks": 3
+            },
+            "2026-04-29": {
+              "spend": 378564.0,
+              "impressions": 4850,
+              "clicks": 89,
+              "reach": 4688,
+              "leads": 0,
+              "link_clicks": 51
+            },
+            "2026-04-30": {
+              "spend": 718081.0,
+              "impressions": 10321,
+              "clicks": 213,
+              "reach": 10321,
+              "leads": 0,
+              "link_clicks": 125
+            },
+            "2026-05-01": {
+              "spend": 790720.0,
+              "impressions": 11121,
+              "clicks": 218,
+              "reach": 10973,
+              "leads": 0,
+              "link_clicks": 126
+            },
+            "2026-05-02": {
+              "spend": 734091.0,
+              "impressions": 9318,
+              "clicks": 197,
+              "reach": 9101,
+              "leads": 0,
+              "link_clicks": 109
+            }
+          }
+        },
+        {
+          "campaign_name": "31/3 - Noma911 - Ông chú review",
+          "campaign_id": "120244955000880058",
+          "spend": 2344370.0,
+          "impressions": 26369,
+          "clicks": 311,
+          "reach": 18663,
+          "ctr": 1.1794,
+          "cpc": 7538.17,
+          "cpm": 88906.29,
+          "leads": 0,
+          "link_clicks": 201,
+          "landing_page_views": 187,
+          "video_views": 2481,
+          "complete_registrations": 9,
+          "messages": 1,
+          "by_date": {
+            "2026-03-31": {
+              "spend": 207630.0,
+              "impressions": 1878,
+              "clicks": 26,
+              "reach": 1442,
+              "leads": 0,
+              "link_clicks": 18
+            },
+            "2026-04-01": {
+              "spend": 310728.0,
+              "impressions": 3420,
+              "clicks": 39,
+              "reach": 2241,
+              "leads": 0,
+              "link_clicks": 29
+            },
+            "2026-04-02": {
+              "spend": 484280.0,
+              "impressions": 6542,
+              "clicks": 71,
+              "reach": 4541,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-03": {
+              "spend": 1232484.0,
+              "impressions": 13382,
+              "clicks": 153,
+              "reach": 9518,
+              "leads": 0,
+              "link_clicks": 97
+            },
+            "2026-04-04": {
+              "spend": 109248.0,
+              "impressions": 1147,
+              "clicks": 22,
+              "reach": 921,
+              "leads": 0,
+              "link_clicks": 16
+            },
+            "2026-04-07": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "17/4 - NOMA911 - Phương Nam - V2",
+          "campaign_id": "120246080125020058",
+          "spend": 2017829.0,
+          "impressions": 24389,
+          "clicks": 338,
+          "reach": 15113,
+          "ctr": 1.3859,
+          "cpc": 5969.91,
+          "cpm": 82735.21,
+          "leads": 2,
+          "link_clicks": 211,
+          "landing_page_views": 211,
+          "video_views": 1114,
+          "complete_registrations": 13,
+          "messages": 2,
+          "by_date": {
+            "2026-04-17": {
+              "spend": 245378.0,
+              "impressions": 2528,
+              "clicks": 37,
+              "reach": 1693,
+              "leads": 1,
+              "link_clicks": 26
+            },
+            "2026-04-18": {
+              "spend": 313824.0,
+              "impressions": 3714,
+              "clicks": 47,
+              "reach": 2344,
+              "leads": 0,
+              "link_clicks": 29
+            },
+            "2026-04-19": {
+              "spend": 405870.0,
+              "impressions": 4489,
+              "clicks": 79,
+              "reach": 2616,
+              "leads": 0,
+              "link_clicks": 49
+            },
+            "2026-04-20": {
+              "spend": 480321.0,
+              "impressions": 6654,
+              "clicks": 83,
+              "reach": 3723,
+              "leads": 1,
+              "link_clicks": 50
+            },
+            "2026-04-21": {
+              "spend": 375397.0,
+              "impressions": 4964,
+              "clicks": 67,
+              "reach": 3109,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-04-22": {
+              "spend": 197039.0,
+              "impressions": 2040,
+              "clicks": 25,
+              "reach": 1628,
+              "leads": 0,
+              "link_clicks": 14
+            }
+          }
+        },
+        {
+          "campaign_name": "19/4 - NOMA911 - Phương Nam - designer",
+          "campaign_id": "120246206324200058",
+          "spend": 1792559.0,
+          "impressions": 16775,
+          "clicks": 253,
+          "reach": 13418,
+          "ctr": 1.5082,
+          "cpc": 7085.21,
+          "cpm": 106858.96,
+          "leads": 3,
+          "link_clicks": 179,
+          "landing_page_views": 185,
+          "video_views": 3463,
+          "complete_registrations": 11,
+          "messages": 4,
+          "by_date": {
+            "2026-04-19": {
+              "spend": 435327.0,
+              "impressions": 4103,
+              "clicks": 76,
+              "reach": 3453,
+              "leads": 0,
+              "link_clicks": 56
+            },
+            "2026-04-20": {
+              "spend": 382350.0,
+              "impressions": 3470,
+              "clicks": 66,
+              "reach": 2836,
+              "leads": 1,
+              "link_clicks": 52
+            },
+            "2026-04-21": {
+              "spend": 287185.0,
+              "impressions": 3341,
+              "clicks": 40,
+              "reach": 2188,
+              "leads": 1,
+              "link_clicks": 22
+            },
+            "2026-04-22": {
+              "spend": 143338.0,
+              "impressions": 1992,
+              "clicks": 16,
+              "reach": 1468,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-04-24": {
+              "spend": 283778.0,
+              "impressions": 1972,
+              "clicks": 31,
+              "reach": 1796,
+              "leads": 0,
+              "link_clicks": 23
+            },
+            "2026-04-25": {
+              "spend": 260581.0,
+              "impressions": 1897,
+              "clicks": 24,
+              "reach": 1677,
+              "leads": 1,
+              "link_clicks": 16
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - Noma911 - Phương Nam - cụ đoành",
+          "campaign_id": "120246318749190058",
+          "spend": 1648028.0,
+          "impressions": 18192,
+          "clicks": 263,
+          "reach": 15884,
+          "ctr": 1.4457,
+          "cpc": 6266.27,
+          "cpm": 90590.81,
+          "leads": 2,
+          "link_clicks": 170,
+          "landing_page_views": 160,
+          "video_views": 4196,
+          "complete_registrations": 9,
+          "messages": 5,
+          "by_date": {
+            "2026-04-21": {
+              "spend": 257871.0,
+              "impressions": 2942,
+              "clicks": 37,
+              "reach": 2319,
+              "leads": 0,
+              "link_clicks": 24
+            },
+            "2026-04-22": {
+              "spend": 440329.0,
+              "impressions": 5147,
+              "clicks": 93,
+              "reach": 3688,
+              "leads": 1,
+              "link_clicks": 59
+            },
+            "2026-04-23": {
+              "spend": 523534.0,
+              "impressions": 5259,
+              "clicks": 70,
+              "reach": 5188,
+              "leads": 0,
+              "link_clicks": 54
+            },
+            "2026-04-24": {
+              "spend": 230229.0,
+              "impressions": 2640,
+              "clicks": 37,
+              "reach": 2485,
+              "leads": 1,
+              "link_clicks": 16
+            },
+            "2026-04-25": {
+              "spend": 196065.0,
+              "impressions": 2204,
+              "clicks": 26,
+              "reach": 2204,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-26": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-27": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "14/4 - Noma911 - Vid 3",
+          "campaign_id": "120245886722280058",
+          "spend": 1532262.0,
+          "impressions": 18195,
+          "clicks": 204,
+          "reach": 14437,
+          "ctr": 1.1212,
+          "cpc": 7511.09,
+          "cpm": 84213.36,
+          "leads": 0,
+          "link_clicks": 133,
+          "landing_page_views": 120,
+          "video_views": 3573,
+          "complete_registrations": 7,
+          "messages": 0,
+          "by_date": {
+            "2026-04-14": {
+              "spend": 395994.0,
+              "impressions": 4756,
+              "clicks": 50,
+              "reach": 4168,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-15": {
+              "spend": 1136268.0,
+              "impressions": 13439,
+              "clicks": 154,
+              "reach": 10269,
+              "leads": 0,
+              "link_clicks": 101
+            },
+            "2026-04-16": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "3/4 - Noma911 - Vid5 - Bản sao",
+          "campaign_id": "120245874928690058",
+          "spend": 1379863.0,
+          "impressions": 11995,
+          "clicks": 199,
+          "reach": 10653,
+          "ctr": 1.659,
+          "cpc": 6933.98,
+          "cpm": 115036.52,
+          "leads": 0,
+          "link_clicks": 116,
+          "landing_page_views": 107,
+          "video_views": 4916,
+          "complete_registrations": 5,
+          "messages": 1,
+          "by_date": {
+            "2026-04-14": {
+              "spend": 358794.0,
+              "impressions": 3046,
+              "clicks": 62,
+              "reach": 2606,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-15": {
+              "spend": 796350.0,
+              "impressions": 7440,
+              "clicks": 117,
+              "reach": 6696,
+              "leads": 0,
+              "link_clicks": 61
+            },
+            "2026-04-16": {
+              "spend": 224719.0,
+              "impressions": 1509,
+              "clicks": 20,
+              "reach": 1351,
+              "leads": 0,
+              "link_clicks": 14
+            },
+            "2026-04-17": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "22/4 - Noma911 - Phương Nam",
+          "campaign_id": "120246381659430058",
+          "spend": 1197540.0,
+          "impressions": 14575,
+          "clicks": 191,
+          "reach": 11733,
+          "ctr": 1.3105,
+          "cpc": 6269.84,
+          "cpm": 82163.98,
+          "leads": 0,
+          "link_clicks": 117,
+          "landing_page_views": 110,
+          "video_views": 1827,
+          "complete_registrations": 6,
+          "messages": 0,
+          "by_date": {
+            "2026-04-22": {
+              "spend": 225377.0,
+              "impressions": 2333,
+              "clicks": 38,
+              "reach": 1855,
+              "leads": 0,
+              "link_clicks": 22
+            },
+            "2026-04-23": {
+              "spend": 220301.0,
+              "impressions": 2610,
+              "clicks": 31,
+              "reach": 2261,
+              "leads": 0,
+              "link_clicks": 24
+            },
+            "2026-04-24": {
+              "spend": 328379.0,
+              "impressions": 4211,
+              "clicks": 60,
+              "reach": 3163,
+              "leads": 0,
+              "link_clicks": 40
+            },
+            "2026-04-25": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-26": {
+              "spend": 177931.0,
+              "impressions": 2620,
+              "clicks": 34,
+              "reach": 2007,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-27": {
+              "spend": 245552.0,
+              "impressions": 2801,
+              "clicks": 28,
+              "reach": 2447,
+              "leads": 0,
+              "link_clicks": 14
+            },
+            "2026-04-28": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-29": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "19/4 - NOMA911 - Phương Nam..",
+          "campaign_id": "120246206580450058",
+          "spend": 847722.0,
+          "impressions": 8948,
+          "clicks": 233,
+          "reach": 7067,
+          "ctr": 2.6039,
+          "cpc": 3638.29,
+          "cpm": 94738.71,
+          "leads": 0,
+          "link_clicks": 141,
+          "landing_page_views": 127,
+          "video_views": 2823,
+          "complete_registrations": 11,
+          "messages": 2,
+          "by_date": {
+            "2026-04-19": {
+              "spend": 434179.0,
+              "impressions": 4152,
+              "clicks": 107,
+              "reach": 3063,
+              "leads": 0,
+              "link_clicks": 67
+            },
+            "2026-04-20": {
+              "spend": 398280.0,
+              "impressions": 4641,
+              "clicks": 122,
+              "reach": 3851,
+              "leads": 0,
+              "link_clicks": 73
+            },
+            "2026-04-21": {
+              "spend": 15263.0,
+              "impressions": 155,
+              "clicks": 4,
+              "reach": 153,
+              "leads": 0,
+              "link_clicks": 1
+            }
+          }
+        },
+        {
+          "campaign_name": "23/4 - Noma911 - Phương Nam",
+          "campaign_id": "120246453310430058",
+          "spend": 718729.0,
+          "impressions": 6057,
+          "clicks": 82,
+          "reach": 5476,
+          "ctr": 1.3538,
+          "cpc": 8764.99,
+          "cpm": 118660.89,
+          "leads": 0,
+          "link_clicks": 57,
+          "landing_page_views": 55,
+          "video_views": 1258,
+          "complete_registrations": 4,
+          "messages": 0,
+          "by_date": {
+            "2026-04-23": {
+              "spend": 324865.0,
+              "impressions": 2600,
+              "clicks": 42,
+              "reach": 2482,
+              "leads": 0,
+              "link_clicks": 32
+            },
+            "2026-04-24": {
+              "spend": 162475.0,
+              "impressions": 882,
+              "clicks": 11,
+              "reach": 823,
+              "leads": 0,
+              "link_clicks": 6
+            },
+            "2026-04-26": {
+              "spend": 121470.0,
+              "impressions": 1558,
+              "clicks": 14,
+              "reach": 1284,
+              "leads": 0,
+              "link_clicks": 11
+            },
+            "2026-04-27": {
+              "spend": 109919.0,
+              "impressions": 1017,
+              "clicks": 15,
+              "reach": 887,
+              "leads": 0,
+              "link_clicks": 8
+            },
+            "2026-04-28": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "31/3 - Noma911 - Quang tèo 6 - Bản sao",
+          "campaign_id": "120244967493630058",
+          "spend": 694952.0,
+          "impressions": 6793,
+          "clicks": 97,
+          "reach": 5877,
+          "ctr": 1.4279,
+          "cpc": 7164.45,
+          "cpm": 102304.14,
+          "leads": 1,
+          "link_clicks": 50,
+          "landing_page_views": 47,
+          "video_views": 1837,
+          "complete_registrations": 2,
+          "messages": 1,
+          "by_date": {
+            "2026-03-31": {
+              "spend": 152527.0,
+              "impressions": 1223,
+              "clicks": 18,
+              "reach": 1138,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-04-01": {
+              "spend": 310732.0,
+              "impressions": 3086,
+              "clicks": 47,
+              "reach": 2504,
+              "leads": 1,
+              "link_clicks": 27
+            },
+            "2026-04-02": {
+              "spend": 231693.0,
+              "impressions": 2484,
+              "clicks": 32,
+              "reach": 2235,
+              "leads": 0,
+              "link_clicks": 13
+            },
+            "2026-04-04": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "28/3 - Noma911 -  Dương Minh Hải",
+          "campaign_id": "120244791857920058",
+          "spend": 523937.0,
+          "impressions": 3164,
+          "clicks": 74,
+          "reach": 2854,
+          "ctr": 2.3388,
+          "cpc": 7080.23,
+          "cpm": 165593.24,
+          "leads": 1,
+          "link_clicks": 38,
+          "landing_page_views": 10,
+          "video_views": 808,
+          "complete_registrations": 0,
+          "messages": 1,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 133434.0,
+              "impressions": 949,
+              "clicks": 27,
+              "reach": 895,
+              "leads": 1,
+              "link_clicks": 11
+            },
+            "2026-03-29": {
+              "spend": 390503.0,
+              "impressions": 2215,
+              "clicks": 47,
+              "reach": 1959,
+              "leads": 0,
+              "link_clicks": 27
+            }
+          }
+        },
+        {
+          "campaign_name": "28/3 - Noma911 - anhtu8817",
+          "campaign_id": "120244791770890058",
+          "spend": 504912.0,
+          "impressions": 4868,
+          "clicks": 65,
+          "reach": 4251,
+          "ctr": 1.3353,
+          "cpc": 7767.88,
+          "cpm": 103720.62,
+          "leads": 0,
+          "link_clicks": 44,
+          "landing_page_views": 15,
+          "video_views": 1276,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 134706.0,
+              "impressions": 1432,
+              "clicks": 14,
+              "reach": 1330,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-03-29": {
+              "spend": 370206.0,
+              "impressions": 3436,
+              "clicks": 51,
+              "reach": 2921,
+              "leads": 0,
+              "link_clicks": 34
+            }
+          }
+        },
+        {
+          "campaign_name": "17/4 - Noma911 - PNam - V1",
+          "campaign_id": "120246080540880058",
+          "spend": 400454.0,
+          "impressions": 4554,
+          "clicks": 97,
+          "reach": 3602,
+          "ctr": 2.13,
+          "cpc": 4128.39,
+          "cpm": 87934.56,
+          "leads": 0,
+          "link_clicks": 70,
+          "landing_page_views": 23,
+          "video_views": 1065,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-17": {
+              "spend": 256308.0,
+              "impressions": 3386,
+              "clicks": 69,
+              "reach": 2505,
+              "leads": 0,
+              "link_clicks": 52
+            },
+            "2026-04-18": {
+              "spend": 24823.0,
+              "impressions": 292,
+              "clicks": 5,
+              "reach": 272,
+              "leads": 0,
+              "link_clicks": 3
+            },
+            "2026-04-19": {
+              "spend": 119323.0,
+              "impressions": 876,
+              "clicks": 23,
+              "reach": 825,
+              "leads": 0,
+              "link_clicks": 15
+            }
+          }
+        },
+        {
+          "campaign_name": "18/4 - NOMA911 - Phương Nam - V1",
+          "campaign_id": "120246123876400058",
+          "spend": 326064.0,
+          "impressions": 3734,
+          "clicks": 56,
+          "reach": 2988,
+          "ctr": 1.4997,
+          "cpc": 5822.57,
+          "cpm": 87322.98,
+          "leads": 0,
+          "link_clicks": 34,
+          "landing_page_views": 33,
+          "video_views": 838,
+          "complete_registrations": 1,
+          "messages": 0,
+          "by_date": {
+            "2026-04-18": {
+              "spend": 326064.0,
+              "impressions": 3734,
+              "clicks": 56,
+              "reach": 2988,
+              "leads": 0,
+              "link_clicks": 34
+            },
+            "2026-04-19": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "16/4 - Noma911 - Phương Nam",
+          "campaign_id": "120246010684780058",
+          "spend": 208801.0,
+          "impressions": 8741,
+          "clicks": 202,
+          "reach": 8492,
+          "ctr": 2.3109,
+          "cpc": 1033.67,
+          "cpm": 23887.54,
+          "leads": 0,
+          "link_clicks": 109,
+          "landing_page_views": 82,
+          "video_views": 2005,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-16": {
+              "spend": 208801.0,
+              "impressions": 8741,
+              "clicks": 202,
+              "reach": 8492,
+              "leads": 0,
+              "link_clicks": 109
+            }
+          }
+        },
+        {
+          "campaign_name": "24/4 - Noma911 - Phương Nam",
+          "campaign_id": "120246516239180058",
+          "spend": 189238.0,
+          "impressions": 1652,
+          "clicks": 19,
+          "reach": 1392,
+          "ctr": 1.1501,
+          "cpc": 9959.89,
+          "cpm": 114550.85,
+          "leads": 0,
+          "link_clicks": 12,
+          "landing_page_views": 11,
+          "video_views": 356,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-24": {
+              "spend": 189238.0,
+              "impressions": 1652,
+              "clicks": 19,
+              "reach": 1392,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-25": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - Noma911 - PNam",
+          "campaign_id": "120246318279070058",
+          "spend": 153482.0,
+          "impressions": 1572,
+          "clicks": 17,
+          "reach": 1396,
+          "ctr": 1.0814,
+          "cpc": 9028.35,
+          "cpm": 97634.86,
+          "leads": 0,
+          "link_clicks": 13,
+          "landing_page_views": 13,
+          "video_views": 322,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-21": {
+              "spend": 153482.0,
+              "impressions": 1572,
+              "clicks": 17,
+              "reach": 1396,
+              "leads": 0,
+              "link_clicks": 13
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - Noma911 - PNam - v3",
+          "campaign_id": "120246318940270058",
+          "spend": 153114.0,
+          "impressions": 1385,
+          "clicks": 13,
+          "reach": 1221,
+          "ctr": 0.9386,
+          "cpc": 11778.0,
+          "cpm": 110551.62,
+          "leads": 0,
+          "link_clicks": 10,
+          "landing_page_views": 9,
+          "video_views": 358,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-21": {
+              "spend": 153114.0,
+              "impressions": 1385,
+              "clicks": 13,
+              "reach": 1221,
+              "leads": 0,
+              "link_clicks": 10
+            }
+          }
+        },
+        {
+          "campaign_name": "16/4 - NOMA 911 - PHƯƠNG NAM",
+          "campaign_id": "120246035278860058",
+          "spend": 14976.0,
+          "impressions": 138,
+          "clicks": 4,
+          "reach": 121,
+          "ctr": 2.8986,
+          "cpc": 3744.0,
+          "cpm": 108521.74,
+          "leads": 0,
+          "link_clicks": 2,
+          "landing_page_views": 2,
+          "video_views": 33,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-16": {
+              "spend": 14192.0,
+              "impressions": 131,
+              "clicks": 3,
+              "reach": 114,
+              "leads": 0,
+              "link_clicks": 2
+            },
+            "2026-04-17": {
+              "spend": 784.0,
+              "impressions": 7,
+              "clicks": 1,
+              "reach": 7,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        }
+      ],
+      "rows_raw": 156
     },
     {
       "account_id": "1655506672244826",
@@ -54,13 +2430,1065 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 0,
-        "impressions": 0,
-        "clicks": 0,
-        "leads": 0
+        "spend": 91307954.0,
+        "impressions": 1160172,
+        "clicks": 22895,
+        "reach": 986820,
+        "leads": 57,
+        "ctr": 1.9734,
+        "cpc": 3988.12
       },
-      "campaigns": [],
-      "rows_raw": 0
+      "campaigns": [
+        {
+          "campaign_name": "27/3 - Noma911 - Hoàng Real + Minh biker shop",
+          "campaign_id": "120244203655820388",
+          "spend": 36874822.0,
+          "impressions": 441733,
+          "clicks": 8692,
+          "reach": 404255,
+          "ctr": 1.9677,
+          "cpc": 4242.39,
+          "cpm": 83477.63,
+          "leads": 20,
+          "link_clicks": 5244,
+          "landing_page_views": 4932,
+          "video_views": 130302,
+          "complete_registrations": 302,
+          "messages": 67,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 130971.0,
+              "impressions": 1082,
+              "clicks": 19,
+              "reach": 1082,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-03-29": {
+              "spend": 437350.0,
+              "impressions": 2540,
+              "clicks": 42,
+              "reach": 2358,
+              "leads": 0,
+              "link_clicks": 31
+            },
+            "2026-03-30": {
+              "spend": 764673.0,
+              "impressions": 5907,
+              "clicks": 158,
+              "reach": 5436,
+              "leads": 0,
+              "link_clicks": 109
+            },
+            "2026-03-31": {
+              "spend": 1489654.0,
+              "impressions": 11276,
+              "clicks": 214,
+              "reach": 9961,
+              "leads": 0,
+              "link_clicks": 132
+            },
+            "2026-04-01": {
+              "spend": 937857.0,
+              "impressions": 9505,
+              "clicks": 182,
+              "reach": 8510,
+              "leads": 0,
+              "link_clicks": 126
+            },
+            "2026-04-02": {
+              "spend": 865612.0,
+              "impressions": 10963,
+              "clicks": 205,
+              "reach": 10009,
+              "leads": 0,
+              "link_clicks": 126
+            },
+            "2026-04-03": {
+              "spend": 837020.0,
+              "impressions": 11472,
+              "clicks": 238,
+              "reach": 10587,
+              "leads": 0,
+              "link_clicks": 151
+            },
+            "2026-04-04": {
+              "spend": 824473.0,
+              "impressions": 10583,
+              "clicks": 233,
+              "reach": 9446,
+              "leads": 0,
+              "link_clicks": 144
+            },
+            "2026-04-05": {
+              "spend": 1441856.0,
+              "impressions": 14573,
+              "clicks": 317,
+              "reach": 12027,
+              "leads": 1,
+              "link_clicks": 212
+            },
+            "2026-04-06": {
+              "spend": 1286851.0,
+              "impressions": 16402,
+              "clicks": 413,
+              "reach": 14205,
+              "leads": 3,
+              "link_clicks": 240
+            },
+            "2026-04-07": {
+              "spend": 1952731.0,
+              "impressions": 20714,
+              "clicks": 409,
+              "reach": 19120,
+              "leads": 2,
+              "link_clicks": 229
+            },
+            "2026-04-08": {
+              "spend": 1460081.0,
+              "impressions": 14372,
+              "clicks": 349,
+              "reach": 13152,
+              "leads": 0,
+              "link_clicks": 208
+            },
+            "2026-04-09": {
+              "spend": 1428798.0,
+              "impressions": 15696,
+              "clicks": 413,
+              "reach": 13480,
+              "leads": 0,
+              "link_clicks": 229
+            },
+            "2026-04-10": {
+              "spend": 1932455.0,
+              "impressions": 20660,
+              "clicks": 431,
+              "reach": 17733,
+              "leads": 1,
+              "link_clicks": 264
+            },
+            "2026-04-11": {
+              "spend": 1546715.0,
+              "impressions": 14550,
+              "clicks": 335,
+              "reach": 13362,
+              "leads": 2,
+              "link_clicks": 206
+            },
+            "2026-04-12": {
+              "spend": 2032841.0,
+              "impressions": 19696,
+              "clicks": 418,
+              "reach": 17811,
+              "leads": 1,
+              "link_clicks": 272
+            },
+            "2026-04-13": {
+              "spend": 1796945.0,
+              "impressions": 19951,
+              "clicks": 333,
+              "reach": 17882,
+              "leads": 2,
+              "link_clicks": 213
+            },
+            "2026-04-14": {
+              "spend": 1592985.0,
+              "impressions": 21422,
+              "clicks": 337,
+              "reach": 19430,
+              "leads": 0,
+              "link_clicks": 182
+            },
+            "2026-04-15": {
+              "spend": 1972450.0,
+              "impressions": 24323,
+              "clicks": 397,
+              "reach": 23188,
+              "leads": 1,
+              "link_clicks": 221
+            },
+            "2026-04-16": {
+              "spend": 1966702.0,
+              "impressions": 20816,
+              "clicks": 336,
+              "reach": 18538,
+              "leads": 1,
+              "link_clicks": 186
+            },
+            "2026-04-17": {
+              "spend": 571095.0,
+              "impressions": 5664,
+              "clicks": 93,
+              "reach": 5276,
+              "leads": 1,
+              "link_clicks": 53
+            },
+            "2026-04-18": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-19": {
+              "spend": 791682.0,
+              "impressions": 8047,
+              "clicks": 201,
+              "reach": 7484,
+              "leads": 1,
+              "link_clicks": 100
+            },
+            "2026-04-20": {
+              "spend": 708180.0,
+              "impressions": 9465,
+              "clicks": 176,
+              "reach": 8637,
+              "leads": 0,
+              "link_clicks": 86
+            },
+            "2026-04-21": {
+              "spend": 783165.0,
+              "impressions": 9602,
+              "clicks": 179,
+              "reach": 9151,
+              "leads": 0,
+              "link_clicks": 104
+            },
+            "2026-04-22": {
+              "spend": 717864.0,
+              "impressions": 9675,
+              "clicks": 171,
+              "reach": 8970,
+              "leads": 0,
+              "link_clicks": 99
+            },
+            "2026-04-23": {
+              "spend": 411060.0,
+              "impressions": 5552,
+              "clicks": 121,
+              "reach": 5217,
+              "leads": 0,
+              "link_clicks": 81
+            },
+            "2026-04-24": {
+              "spend": 849667.0,
+              "impressions": 14068,
+              "clicks": 284,
+              "reach": 12950,
+              "leads": 0,
+              "link_clicks": 162
+            },
+            "2026-04-25": {
+              "spend": 893860.0,
+              "impressions": 13680,
+              "clicks": 245,
+              "reach": 12844,
+              "leads": 0,
+              "link_clicks": 163
+            },
+            "2026-04-26": {
+              "spend": 1053157.0,
+              "impressions": 19940,
+              "clicks": 366,
+              "reach": 19749,
+              "leads": 0,
+              "link_clicks": 226
+            },
+            "2026-04-27": {
+              "spend": 1019935.0,
+              "impressions": 19374,
+              "clicks": 364,
+              "reach": 18199,
+              "leads": 3,
+              "link_clicks": 224
+            },
+            "2026-04-28": {
+              "spend": 876516.0,
+              "impressions": 16781,
+              "clicks": 309,
+              "reach": 16021,
+              "leads": 1,
+              "link_clicks": 193
+            },
+            "2026-04-29": {
+              "spend": 446608.0,
+              "impressions": 8438,
+              "clicks": 153,
+              "reach": 8158,
+              "leads": 0,
+              "link_clicks": 97
+            },
+            "2026-04-30": {
+              "spend": 228723.0,
+              "impressions": 3598,
+              "clicks": 67,
+              "reach": 3477,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-05-01": {
+              "spend": 323154.0,
+              "impressions": 4504,
+              "clicks": 90,
+              "reach": 4332,
+              "leads": 0,
+              "link_clicks": 63
+            },
+            "2026-05-02": {
+              "spend": 501136.0,
+              "impressions": 6842,
+              "clicks": 94,
+              "reach": 6473,
+              "leads": 0,
+              "link_clicks": 59
+            }
+          }
+        },
+        {
+          "campaign_name": "15/4 - Noma911 - Dương Minh Hải",
+          "campaign_id": "120244203627430388",
+          "spend": 13050512.0,
+          "impressions": 144171,
+          "clicks": 3150,
+          "reach": 120555,
+          "ctr": 2.1849,
+          "cpc": 4143.02,
+          "cpm": 90521.06,
+          "leads": 8,
+          "link_clicks": 1902,
+          "landing_page_views": 1743,
+          "video_views": 29374,
+          "complete_registrations": 103,
+          "messages": 20,
+          "by_date": {
+            "2026-04-16": {
+              "spend": 466340.0,
+              "impressions": 5550,
+              "clicks": 118,
+              "reach": 3572,
+              "leads": 0,
+              "link_clicks": 45
+            },
+            "2026-04-17": {
+              "spend": 583490.0,
+              "impressions": 6851,
+              "clicks": 124,
+              "reach": 4981,
+              "leads": 1,
+              "link_clicks": 68
+            },
+            "2026-04-18": {
+              "spend": 443729.0,
+              "impressions": 4571,
+              "clicks": 106,
+              "reach": 3799,
+              "leads": 0,
+              "link_clicks": 64
+            },
+            "2026-04-19": {
+              "spend": 815317.0,
+              "impressions": 7218,
+              "clicks": 167,
+              "reach": 5577,
+              "leads": 0,
+              "link_clicks": 105
+            },
+            "2026-04-20": {
+              "spend": 697077.0,
+              "impressions": 7353,
+              "clicks": 169,
+              "reach": 5742,
+              "leads": 1,
+              "link_clicks": 86
+            },
+            "2026-04-21": {
+              "spend": 685334.0,
+              "impressions": 7464,
+              "clicks": 182,
+              "reach": 5717,
+              "leads": 0,
+              "link_clicks": 94
+            },
+            "2026-04-22": {
+              "spend": 746005.0,
+              "impressions": 6458,
+              "clicks": 178,
+              "reach": 5253,
+              "leads": 2,
+              "link_clicks": 104
+            },
+            "2026-04-23": {
+              "spend": 521813.0,
+              "impressions": 4535,
+              "clicks": 110,
+              "reach": 4074,
+              "leads": 0,
+              "link_clicks": 54
+            },
+            "2026-04-24": {
+              "spend": 914899.0,
+              "impressions": 10974,
+              "clicks": 226,
+              "reach": 8905,
+              "leads": 1,
+              "link_clicks": 135
+            },
+            "2026-04-25": {
+              "spend": 879437.0,
+              "impressions": 13273,
+              "clicks": 177,
+              "reach": 9276,
+              "leads": 1,
+              "link_clicks": 115
+            },
+            "2026-04-26": {
+              "spend": 1452115.0,
+              "impressions": 15599,
+              "clicks": 301,
+              "reach": 13057,
+              "leads": 1,
+              "link_clicks": 203
+            },
+            "2026-04-27": {
+              "spend": 1005638.0,
+              "impressions": 11904,
+              "clicks": 275,
+              "reach": 11089,
+              "leads": 0,
+              "link_clicks": 178
+            },
+            "2026-04-28": {
+              "spend": 566653.0,
+              "impressions": 6939,
+              "clicks": 199,
+              "reach": 6430,
+              "leads": 1,
+              "link_clicks": 117
+            },
+            "2026-04-29": {
+              "spend": 690978.0,
+              "impressions": 8300,
+              "clicks": 197,
+              "reach": 7738,
+              "leads": 0,
+              "link_clicks": 132
+            },
+            "2026-04-30": {
+              "spend": 899221.0,
+              "impressions": 8894,
+              "clicks": 226,
+              "reach": 8175,
+              "leads": 0,
+              "link_clicks": 158
+            },
+            "2026-05-01": {
+              "spend": 920764.0,
+              "impressions": 9739,
+              "clicks": 226,
+              "reach": 9209,
+              "leads": 0,
+              "link_clicks": 150
+            },
+            "2026-05-02": {
+              "spend": 761702.0,
+              "impressions": 8549,
+              "clicks": 169,
+              "reach": 7961,
+              "leads": 0,
+              "link_clicks": 94
+            }
+          }
+        },
+        {
+          "campaign_name": "15/4 - Noma911 - Quang Tèo 3",
+          "campaign_id": "120244203591250388",
+          "spend": 12792870.0,
+          "impressions": 176568,
+          "clicks": 4117,
+          "reach": 152912,
+          "ctr": 2.3317,
+          "cpc": 3107.33,
+          "cpm": 72452.94,
+          "leads": 15,
+          "link_clicks": 2300,
+          "landing_page_views": 2068,
+          "video_views": 66000,
+          "complete_registrations": 103,
+          "messages": 22,
+          "by_date": {
+            "2026-04-16": {
+              "spend": 739314.0,
+              "impressions": 7695,
+              "clicks": 233,
+              "reach": 5722,
+              "leads": 0,
+              "link_clicks": 126
+            },
+            "2026-04-17": {
+              "spend": 1184203.0,
+              "impressions": 16207,
+              "clicks": 331,
+              "reach": 14578,
+              "leads": 0,
+              "link_clicks": 163
+            },
+            "2026-04-18": {
+              "spend": 958477.0,
+              "impressions": 16239,
+              "clicks": 411,
+              "reach": 14133,
+              "leads": 0,
+              "link_clicks": 189
+            },
+            "2026-04-19": {
+              "spend": 772239.0,
+              "impressions": 9333,
+              "clicks": 246,
+              "reach": 7777,
+              "leads": 0,
+              "link_clicks": 128
+            },
+            "2026-04-20": {
+              "spend": 619257.0,
+              "impressions": 7412,
+              "clicks": 177,
+              "reach": 6123,
+              "leads": 1,
+              "link_clicks": 95
+            },
+            "2026-04-21": {
+              "spend": 532409.0,
+              "impressions": 5753,
+              "clicks": 118,
+              "reach": 4355,
+              "leads": 1,
+              "link_clicks": 65
+            },
+            "2026-04-22": {
+              "spend": 574385.0,
+              "impressions": 6563,
+              "clicks": 161,
+              "reach": 4699,
+              "leads": 1,
+              "link_clicks": 96
+            },
+            "2026-04-23": {
+              "spend": 398944.0,
+              "impressions": 4550,
+              "clicks": 104,
+              "reach": 4148,
+              "leads": 1,
+              "link_clicks": 70
+            },
+            "2026-04-24": {
+              "spend": 724737.0,
+              "impressions": 8346,
+              "clicks": 232,
+              "reach": 7496,
+              "leads": 1,
+              "link_clicks": 123
+            },
+            "2026-04-25": {
+              "spend": 739298.0,
+              "impressions": 10652,
+              "clicks": 228,
+              "reach": 9055,
+              "leads": 0,
+              "link_clicks": 152
+            },
+            "2026-04-26": {
+              "spend": 868802.0,
+              "impressions": 14240,
+              "clicks": 302,
+              "reach": 13220,
+              "leads": 2,
+              "link_clicks": 173
+            },
+            "2026-04-27": {
+              "spend": 785717.0,
+              "impressions": 11867,
+              "clicks": 282,
+              "reach": 10587,
+              "leads": 2,
+              "link_clicks": 163
+            },
+            "2026-04-28": {
+              "spend": 738345.0,
+              "impressions": 10794,
+              "clicks": 239,
+              "reach": 9367,
+              "leads": 2,
+              "link_clicks": 149
+            },
+            "2026-04-29": {
+              "spend": 577626.0,
+              "impressions": 9056,
+              "clicks": 238,
+              "reach": 8172,
+              "leads": 0,
+              "link_clicks": 141
+            },
+            "2026-04-30": {
+              "spend": 776561.0,
+              "impressions": 11646,
+              "clicks": 282,
+              "reach": 10180,
+              "leads": 1,
+              "link_clicks": 172
+            },
+            "2026-05-01": {
+              "spend": 861984.0,
+              "impressions": 12926,
+              "clicks": 254,
+              "reach": 11373,
+              "leads": 1,
+              "link_clicks": 132
+            },
+            "2026-05-02": {
+              "spend": 940572.0,
+              "impressions": 13289,
+              "clicks": 279,
+              "reach": 11927,
+              "leads": 1,
+              "link_clicks": 163
+            }
+          }
+        },
+        {
+          "campaign_name": "23/4 - Noma911 - Cụ Đoành Xe Trắng",
+          "campaign_id": "120244425748800388",
+          "spend": 10937762.0,
+          "impressions": 169744,
+          "clicks": 2844,
+          "reach": 106946,
+          "ctr": 1.6755,
+          "cpc": 3845.91,
+          "cpm": 64436.81,
+          "leads": 8,
+          "link_clicks": 1927,
+          "landing_page_views": 1846,
+          "video_views": 30706,
+          "complete_registrations": 152,
+          "messages": 23,
+          "by_date": {
+            "2026-04-23": {
+              "spend": 441447.0,
+              "impressions": 4944,
+              "clicks": 133,
+              "reach": 3778,
+              "leads": 1,
+              "link_clicks": 91
+            },
+            "2026-04-24": {
+              "spend": 1049441.0,
+              "impressions": 16963,
+              "clicks": 371,
+              "reach": 12589,
+              "leads": 1,
+              "link_clicks": 231
+            },
+            "2026-04-25": {
+              "spend": 1158434.0,
+              "impressions": 17638,
+              "clicks": 209,
+              "reach": 10932,
+              "leads": 0,
+              "link_clicks": 135
+            },
+            "2026-04-26": {
+              "spend": 1611692.0,
+              "impressions": 25285,
+              "clicks": 385,
+              "reach": 17537,
+              "leads": 0,
+              "link_clicks": 272
+            },
+            "2026-04-27": {
+              "spend": 1104059.0,
+              "impressions": 18763,
+              "clicks": 320,
+              "reach": 12041,
+              "leads": 1,
+              "link_clicks": 242
+            },
+            "2026-04-28": {
+              "spend": 903984.0,
+              "impressions": 14335,
+              "clicks": 232,
+              "reach": 8635,
+              "leads": 1,
+              "link_clicks": 155
+            },
+            "2026-04-29": {
+              "spend": 788768.0,
+              "impressions": 11972,
+              "clicks": 244,
+              "reach": 6965,
+              "leads": 2,
+              "link_clicks": 174
+            },
+            "2026-04-30": {
+              "spend": 1096839.0,
+              "impressions": 15543,
+              "clicks": 279,
+              "reach": 8946,
+              "leads": 1,
+              "link_clicks": 182
+            },
+            "2026-05-01": {
+              "spend": 1278044.0,
+              "impressions": 20542,
+              "clicks": 307,
+              "reach": 11733,
+              "leads": 0,
+              "link_clicks": 211
+            },
+            "2026-05-02": {
+              "spend": 1505054.0,
+              "impressions": 23759,
+              "clicks": 364,
+              "reach": 13790,
+              "leads": 1,
+              "link_clicks": 234
+            }
+          }
+        },
+        {
+          "campaign_name": "28/3 - Noma911 - Nghĩa Ô Tô",
+          "campaign_id": "120243050672710388",
+          "spend": 8567302.0,
+          "impressions": 107089,
+          "clicks": 1990,
+          "reach": 96361,
+          "ctr": 1.8583,
+          "cpc": 4305.18,
+          "cpm": 80001.7,
+          "leads": 3,
+          "link_clicks": 1285,
+          "landing_page_views": 1146,
+          "video_views": 28579,
+          "complete_registrations": 46,
+          "messages": 7,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 127274.0,
+              "impressions": 1311,
+              "clicks": 19,
+              "reach": 1267,
+              "leads": 0,
+              "link_clicks": 10
+            },
+            "2026-03-29": {
+              "spend": 441135.0,
+              "impressions": 3472,
+              "clicks": 63,
+              "reach": 3163,
+              "leads": 0,
+              "link_clicks": 39
+            },
+            "2026-03-30": {
+              "spend": 781625.0,
+              "impressions": 12643,
+              "clicks": 267,
+              "reach": 11770,
+              "leads": 0,
+              "link_clicks": 211
+            },
+            "2026-03-31": {
+              "spend": 518694.0,
+              "impressions": 4802,
+              "clicks": 103,
+              "reach": 4252,
+              "leads": 0,
+              "link_clicks": 64
+            },
+            "2026-04-01": {
+              "spend": 439163.0,
+              "impressions": 4801,
+              "clicks": 137,
+              "reach": 4414,
+              "leads": 1,
+              "link_clicks": 86
+            },
+            "2026-04-02": {
+              "spend": 403102.0,
+              "impressions": 6125,
+              "clicks": 176,
+              "reach": 5330,
+              "leads": 0,
+              "link_clicks": 129
+            },
+            "2026-04-03": {
+              "spend": 421212.0,
+              "impressions": 5998,
+              "clicks": 142,
+              "reach": 5306,
+              "leads": 0,
+              "link_clicks": 94
+            },
+            "2026-04-04": {
+              "spend": 411658.0,
+              "impressions": 4996,
+              "clicks": 95,
+              "reach": 4453,
+              "leads": 0,
+              "link_clicks": 60
+            },
+            "2026-04-05": {
+              "spend": 599215.0,
+              "impressions": 6795,
+              "clicks": 150,
+              "reach": 5663,
+              "leads": 0,
+              "link_clicks": 79
+            },
+            "2026-04-06": {
+              "spend": 870082.0,
+              "impressions": 11647,
+              "clicks": 213,
+              "reach": 10150,
+              "leads": 1,
+              "link_clicks": 121
+            },
+            "2026-04-07": {
+              "spend": 1551856.0,
+              "impressions": 19437,
+              "clicks": 245,
+              "reach": 18415,
+              "leads": 1,
+              "link_clicks": 148
+            },
+            "2026-04-08": {
+              "spend": 1737715.0,
+              "impressions": 22156,
+              "clicks": 337,
+              "reach": 19449,
+              "leads": 0,
+              "link_clicks": 214
+            },
+            "2026-04-09": {
+              "spend": 264571.0,
+              "impressions": 2906,
+              "clicks": 43,
+              "reach": 2729,
+              "leads": 0,
+              "link_clicks": 30
+            }
+          }
+        },
+        {
+          "campaign_name": "23/4 - Noma911 - Cụ Đoành - 2 video",
+          "campaign_id": "120244425582170388",
+          "spend": 6969740.0,
+          "impressions": 96343,
+          "clicks": 1699,
+          "reach": 84544,
+          "ctr": 1.7635,
+          "cpc": 4102.26,
+          "cpm": 72342.98,
+          "leads": 2,
+          "link_clicks": 1034,
+          "landing_page_views": 963,
+          "video_views": 33943,
+          "complete_registrations": 84,
+          "messages": 10,
+          "by_date": {
+            "2026-04-23": {
+              "spend": 304442.0,
+              "impressions": 2497,
+              "clicks": 62,
+              "reach": 2177,
+              "leads": 0,
+              "link_clicks": 33
+            },
+            "2026-04-24": {
+              "spend": 648920.0,
+              "impressions": 7327,
+              "clicks": 165,
+              "reach": 5892,
+              "leads": 0,
+              "link_clicks": 108
+            },
+            "2026-04-25": {
+              "spend": 689718.0,
+              "impressions": 10086,
+              "clicks": 143,
+              "reach": 9354,
+              "leads": 0,
+              "link_clicks": 78
+            },
+            "2026-04-26": {
+              "spend": 777038.0,
+              "impressions": 12262,
+              "clicks": 202,
+              "reach": 11173,
+              "leads": 0,
+              "link_clicks": 128
+            },
+            "2026-04-27": {
+              "spend": 829435.0,
+              "impressions": 12142,
+              "clicks": 220,
+              "reach": 10610,
+              "leads": 1,
+              "link_clicks": 137
+            },
+            "2026-04-28": {
+              "spend": 657859.0,
+              "impressions": 9284,
+              "clicks": 169,
+              "reach": 7965,
+              "leads": 0,
+              "link_clicks": 101
+            },
+            "2026-04-29": {
+              "spend": 503287.0,
+              "impressions": 7489,
+              "clicks": 139,
+              "reach": 6854,
+              "leads": 1,
+              "link_clicks": 90
+            },
+            "2026-04-30": {
+              "spend": 700906.0,
+              "impressions": 9511,
+              "clicks": 172,
+              "reach": 7956,
+              "leads": 0,
+              "link_clicks": 112
+            },
+            "2026-05-01": {
+              "spend": 857101.0,
+              "impressions": 11168,
+              "clicks": 214,
+              "reach": 10029,
+              "leads": 0,
+              "link_clicks": 121
+            },
+            "2026-05-02": {
+              "spend": 1001034.0,
+              "impressions": 14577,
+              "clicks": 213,
+              "reach": 12534,
+              "leads": 0,
+              "link_clicks": 126
+            }
+          }
+        },
+        {
+          "campaign_name": "27/3 - Noma911 - Minh Biker shop",
+          "campaign_id": "120243901568060388",
+          "spend": 1232850.0,
+          "impressions": 16329,
+          "clicks": 283,
+          "reach": 14136,
+          "ctr": 1.7331,
+          "cpc": 4356.36,
+          "cpm": 75500.64,
+          "leads": 1,
+          "link_clicks": 174,
+          "landing_page_views": 153,
+          "video_views": 3767,
+          "complete_registrations": 4,
+          "messages": 3,
+          "by_date": {
+            "2026-04-14": {
+              "spend": 293171.0,
+              "impressions": 4113,
+              "clicks": 68,
+              "reach": 3790,
+              "leads": 0,
+              "link_clicks": 42
+            },
+            "2026-04-15": {
+              "spend": 719033.0,
+              "impressions": 9954,
+              "clicks": 171,
+              "reach": 8339,
+              "leads": 0,
+              "link_clicks": 104
+            },
+            "2026-04-16": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 1,
+              "link_clicks": 0
+            },
+            "2026-04-17": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "28/3 - Noma911 - Nghĩa Ô Tô 2",
+          "campaign_id": "120243050747090388",
+          "spend": 882096.0,
+          "impressions": 8195,
+          "clicks": 120,
+          "reach": 7111,
+          "ctr": 1.4643,
+          "cpc": 7350.8,
+          "cpm": 107638.32,
+          "leads": 0,
+          "link_clicks": 74,
+          "landing_page_views": 48,
+          "video_views": 2433,
+          "complete_registrations": 2,
+          "messages": 0,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 126470.0,
+              "impressions": 1242,
+              "clicks": 10,
+              "reach": 1196,
+              "leads": 0,
+              "link_clicks": 7
+            },
+            "2026-03-29": {
+              "spend": 424791.0,
+              "impressions": 3878,
+              "clicks": 59,
+              "reach": 3231,
+              "leads": 0,
+              "link_clicks": 31
+            },
+            "2026-03-30": {
+              "spend": 321373.0,
+              "impressions": 2966,
+              "clicks": 51,
+              "reach": 2577,
+              "leads": 0,
+              "link_clicks": 36
+            },
+            "2026-03-31": {
+              "spend": 9462.0,
+              "impressions": 109,
+              "clicks": 0,
+              "reach": 107,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-01": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        }
+      ],
+      "rows_raw": 118
     },
     {
       "account_id": "1449385949897024",
@@ -70,13 +3498,720 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 0,
-        "impressions": 0,
-        "clicks": 0,
-        "leads": 0
+        "spend": 35735621.0,
+        "impressions": 252251,
+        "clicks": 7187,
+        "reach": 209191,
+        "leads": 5,
+        "ctr": 2.8491,
+        "cpc": 4972.26
       },
-      "campaigns": [],
-      "rows_raw": 0
+      "campaigns": [
+        {
+          "campaign_name": "14/4 - Da8.1 - Reviewcotam",
+          "campaign_id": "120248698825090196",
+          "spend": 13658915.0,
+          "impressions": 114322,
+          "clicks": 2641,
+          "reach": 95887,
+          "ctr": 2.3101,
+          "cpc": 5171.87,
+          "cpm": 119477.57,
+          "leads": 3,
+          "link_clicks": 1536,
+          "landing_page_views": 1427,
+          "video_views": 20479,
+          "complete_registrations": 69,
+          "messages": 25,
+          "by_date": {
+            "2026-04-14": {
+              "spend": 336487.0,
+              "impressions": 1592,
+              "clicks": 58,
+              "reach": 1358,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-04-15": {
+              "spend": 536274.0,
+              "impressions": 4843,
+              "clicks": 166,
+              "reach": 3746,
+              "leads": 0,
+              "link_clicks": 110
+            },
+            "2026-04-16": {
+              "spend": 843474.0,
+              "impressions": 6379,
+              "clicks": 189,
+              "reach": 4885,
+              "leads": 0,
+              "link_clicks": 108
+            },
+            "2026-04-17": {
+              "spend": 688242.0,
+              "impressions": 4044,
+              "clicks": 107,
+              "reach": 2988,
+              "leads": 1,
+              "link_clicks": 64
+            },
+            "2026-04-18": {
+              "spend": 651013.0,
+              "impressions": 6913,
+              "clicks": 152,
+              "reach": 5645,
+              "leads": 0,
+              "link_clicks": 85
+            },
+            "2026-04-19": {
+              "spend": 477483.0,
+              "impressions": 3407,
+              "clicks": 98,
+              "reach": 2857,
+              "leads": 0,
+              "link_clicks": 59
+            },
+            "2026-04-20": {
+              "spend": 322246.0,
+              "impressions": 1874,
+              "clicks": 49,
+              "reach": 1487,
+              "leads": 0,
+              "link_clicks": 27
+            },
+            "2026-04-21": {
+              "spend": 355026.0,
+              "impressions": 2139,
+              "clicks": 57,
+              "reach": 1746,
+              "leads": 0,
+              "link_clicks": 36
+            },
+            "2026-04-22": {
+              "spend": 478045.0,
+              "impressions": 3193,
+              "clicks": 56,
+              "reach": 2573,
+              "leads": 1,
+              "link_clicks": 32
+            },
+            "2026-04-23": {
+              "spend": 1121180.0,
+              "impressions": 9599,
+              "clicks": 167,
+              "reach": 8401,
+              "leads": 0,
+              "link_clicks": 85
+            },
+            "2026-04-24": {
+              "spend": 903633.0,
+              "impressions": 6838,
+              "clicks": 153,
+              "reach": 5802,
+              "leads": 1,
+              "link_clicks": 83
+            },
+            "2026-04-25": {
+              "spend": 651876.0,
+              "impressions": 5858,
+              "clicks": 125,
+              "reach": 5093,
+              "leads": 0,
+              "link_clicks": 68
+            },
+            "2026-04-26": {
+              "spend": 953717.0,
+              "impressions": 6892,
+              "clicks": 157,
+              "reach": 5905,
+              "leads": 0,
+              "link_clicks": 97
+            },
+            "2026-04-27": {
+              "spend": 1195729.0,
+              "impressions": 9619,
+              "clicks": 234,
+              "reach": 7956,
+              "leads": 0,
+              "link_clicks": 129
+            },
+            "2026-04-28": {
+              "spend": 700816.0,
+              "impressions": 6438,
+              "clicks": 110,
+              "reach": 5539,
+              "leads": 0,
+              "link_clicks": 72
+            },
+            "2026-04-29": {
+              "spend": 859117.0,
+              "impressions": 9178,
+              "clicks": 191,
+              "reach": 7943,
+              "leads": 0,
+              "link_clicks": 103
+            },
+            "2026-04-30": {
+              "spend": 1041984.0,
+              "impressions": 11572,
+              "clicks": 268,
+              "reach": 10089,
+              "leads": 0,
+              "link_clicks": 155
+            },
+            "2026-05-01": {
+              "spend": 776593.0,
+              "impressions": 8181,
+              "clicks": 192,
+              "reach": 6941,
+              "leads": 0,
+              "link_clicks": 109
+            },
+            "2026-05-02": {
+              "spend": 765980.0,
+              "impressions": 5763,
+              "clicks": 112,
+              "reach": 4933,
+              "leads": 0,
+              "link_clicks": 71
+            }
+          }
+        },
+        {
+          "campaign_name": "2/4 - DR1 - Việt Mỹ Nguyễn",
+          "campaign_id": "120248039692470196",
+          "spend": 11120444.0,
+          "impressions": 76908,
+          "clicks": 2612,
+          "reach": 60183,
+          "ctr": 3.3963,
+          "cpc": 4257.44,
+          "cpm": 144594.11,
+          "leads": 1,
+          "link_clicks": 1691,
+          "landing_page_views": 1384,
+          "video_views": 15032,
+          "complete_registrations": 51,
+          "messages": 16,
+          "by_date": {
+            "2026-04-02": {
+              "spend": 371341.0,
+              "impressions": 1426,
+              "clicks": 30,
+              "reach": 1339,
+              "leads": 0,
+              "link_clicks": 19
+            },
+            "2026-04-03": {
+              "spend": 182238.0,
+              "impressions": 1075,
+              "clicks": 49,
+              "reach": 858,
+              "leads": 0,
+              "link_clicks": 33
+            },
+            "2026-04-04": {
+              "spend": 215919.0,
+              "impressions": 1355,
+              "clicks": 48,
+              "reach": 1049,
+              "leads": 0,
+              "link_clicks": 34
+            },
+            "2026-04-05": {
+              "spend": 728759.0,
+              "impressions": 4423,
+              "clicks": 153,
+              "reach": 3463,
+              "leads": 0,
+              "link_clicks": 93
+            },
+            "2026-04-06": {
+              "spend": 480156.0,
+              "impressions": 2996,
+              "clicks": 122,
+              "reach": 2198,
+              "leads": 0,
+              "link_clicks": 82
+            },
+            "2026-04-07": {
+              "spend": 119816.0,
+              "impressions": 549,
+              "clicks": 22,
+              "reach": 466,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-08": {
+              "spend": 534749.0,
+              "impressions": 3124,
+              "clicks": 134,
+              "reach": 2352,
+              "leads": 1,
+              "link_clicks": 82
+            },
+            "2026-04-09": {
+              "spend": 570953.0,
+              "impressions": 4280,
+              "clicks": 159,
+              "reach": 3334,
+              "leads": 0,
+              "link_clicks": 102
+            },
+            "2026-04-10": {
+              "spend": 554742.0,
+              "impressions": 3578,
+              "clicks": 111,
+              "reach": 2854,
+              "leads": 0,
+              "link_clicks": 81
+            },
+            "2026-04-11": {
+              "spend": 486431.0,
+              "impressions": 2559,
+              "clicks": 72,
+              "reach": 1989,
+              "leads": 0,
+              "link_clicks": 42
+            },
+            "2026-04-12": {
+              "spend": 529352.0,
+              "impressions": 3255,
+              "clicks": 113,
+              "reach": 2442,
+              "leads": 0,
+              "link_clicks": 78
+            },
+            "2026-04-13": {
+              "spend": 524365.0,
+              "impressions": 3665,
+              "clicks": 111,
+              "reach": 2938,
+              "leads": 0,
+              "link_clicks": 75
+            },
+            "2026-04-14": {
+              "spend": 550758.0,
+              "impressions": 4113,
+              "clicks": 144,
+              "reach": 3165,
+              "leads": 0,
+              "link_clicks": 87
+            },
+            "2026-04-15": {
+              "spend": 471049.0,
+              "impressions": 3951,
+              "clicks": 116,
+              "reach": 3076,
+              "leads": 0,
+              "link_clicks": 69
+            },
+            "2026-04-16": {
+              "spend": 545620.0,
+              "impressions": 4773,
+              "clicks": 125,
+              "reach": 3698,
+              "leads": 0,
+              "link_clicks": 70
+            },
+            "2026-04-17": {
+              "spend": 268788.0,
+              "impressions": 1847,
+              "clicks": 60,
+              "reach": 1597,
+              "leads": 0,
+              "link_clicks": 36
+            },
+            "2026-04-23": {
+              "spend": 412361.0,
+              "impressions": 2589,
+              "clicks": 92,
+              "reach": 2121,
+              "leads": 0,
+              "link_clicks": 45
+            },
+            "2026-04-24": {
+              "spend": 510058.0,
+              "impressions": 3406,
+              "clicks": 110,
+              "reach": 2528,
+              "leads": 0,
+              "link_clicks": 65
+            },
+            "2026-04-25": {
+              "spend": 265643.0,
+              "impressions": 2062,
+              "clicks": 69,
+              "reach": 1643,
+              "leads": 0,
+              "link_clicks": 52
+            },
+            "2026-04-26": {
+              "spend": 453910.0,
+              "impressions": 3147,
+              "clicks": 122,
+              "reach": 2435,
+              "leads": 0,
+              "link_clicks": 85
+            },
+            "2026-04-27": {
+              "spend": 389779.0,
+              "impressions": 2658,
+              "clicks": 84,
+              "reach": 2025,
+              "leads": 0,
+              "link_clicks": 58
+            },
+            "2026-04-28": {
+              "spend": 421852.0,
+              "impressions": 3069,
+              "clicks": 125,
+              "reach": 2391,
+              "leads": 0,
+              "link_clicks": 83
+            },
+            "2026-04-29": {
+              "spend": 384046.0,
+              "impressions": 2613,
+              "clicks": 93,
+              "reach": 2178,
+              "leads": 0,
+              "link_clicks": 69
+            },
+            "2026-04-30": {
+              "spend": 373499.0,
+              "impressions": 3492,
+              "clicks": 102,
+              "reach": 2607,
+              "leads": 0,
+              "link_clicks": 78
+            },
+            "2026-05-01": {
+              "spend": 394343.0,
+              "impressions": 3658,
+              "clicks": 123,
+              "reach": 2851,
+              "leads": 0,
+              "link_clicks": 77
+            },
+            "2026-05-02": {
+              "spend": 379917.0,
+              "impressions": 3245,
+              "clicks": 123,
+              "reach": 2586,
+              "leads": 0,
+              "link_clicks": 84
+            }
+          }
+        },
+        {
+          "campaign_name": "14/4 - Da8.1 - Lưu Tiến Dựng",
+          "campaign_id": "120248698541220196",
+          "spend": 7350833.0,
+          "impressions": 44862,
+          "clicks": 1393,
+          "reach": 37630,
+          "ctr": 3.1051,
+          "cpc": 5276.98,
+          "cpm": 163854.33,
+          "leads": 1,
+          "link_clicks": 895,
+          "landing_page_views": 808,
+          "video_views": 10199,
+          "complete_registrations": 24,
+          "messages": 7,
+          "by_date": {
+            "2026-04-14": {
+              "spend": 267527.0,
+              "impressions": 1353,
+              "clicks": 57,
+              "reach": 1140,
+              "leads": 0,
+              "link_clicks": 35
+            },
+            "2026-04-15": {
+              "spend": 370998.0,
+              "impressions": 3006,
+              "clicks": 112,
+              "reach": 2267,
+              "leads": 0,
+              "link_clicks": 56
+            },
+            "2026-04-16": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 1,
+              "link_clicks": 0
+            },
+            "2026-04-18": {
+              "spend": 593576.0,
+              "impressions": 5177,
+              "clicks": 81,
+              "reach": 4064,
+              "leads": 0,
+              "link_clicks": 57
+            },
+            "2026-04-19": {
+              "spend": 465438.0,
+              "impressions": 3136,
+              "clicks": 41,
+              "reach": 2171,
+              "leads": 0,
+              "link_clicks": 34
+            },
+            "2026-04-20": {
+              "spend": 336333.0,
+              "impressions": 2441,
+              "clicks": 56,
+              "reach": 1756,
+              "leads": 0,
+              "link_clicks": 33
+            },
+            "2026-04-21": {
+              "spend": 379851.0,
+              "impressions": 2303,
+              "clicks": 50,
+              "reach": 1700,
+              "leads": 0,
+              "link_clicks": 31
+            },
+            "2026-04-22": {
+              "spend": 518624.0,
+              "impressions": 2670,
+              "clicks": 63,
+              "reach": 1950,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-04-23": {
+              "spend": 357621.0,
+              "impressions": 1202,
+              "clicks": 36,
+              "reach": 1134,
+              "leads": 0,
+              "link_clicks": 19
+            },
+            "2026-04-24": {
+              "spend": 523078.0,
+              "impressions": 1662,
+              "clicks": 47,
+              "reach": 1499,
+              "leads": 0,
+              "link_clicks": 27
+            },
+            "2026-04-25": {
+              "spend": 394691.0,
+              "impressions": 1713,
+              "clicks": 62,
+              "reach": 1567,
+              "leads": 0,
+              "link_clicks": 42
+            },
+            "2026-04-26": {
+              "spend": 530524.0,
+              "impressions": 3425,
+              "clicks": 92,
+              "reach": 3111,
+              "leads": 0,
+              "link_clicks": 60
+            },
+            "2026-04-27": {
+              "spend": 514317.0,
+              "impressions": 3098,
+              "clicks": 106,
+              "reach": 2899,
+              "leads": 0,
+              "link_clicks": 71
+            },
+            "2026-04-28": {
+              "spend": 532247.0,
+              "impressions": 2771,
+              "clicks": 121,
+              "reach": 2525,
+              "leads": 0,
+              "link_clicks": 82
+            },
+            "2026-04-29": {
+              "spend": 407243.0,
+              "impressions": 2526,
+              "clicks": 92,
+              "reach": 2267,
+              "leads": 0,
+              "link_clicks": 69
+            },
+            "2026-04-30": {
+              "spend": 416807.0,
+              "impressions": 3995,
+              "clicks": 198,
+              "reach": 3528,
+              "leads": 0,
+              "link_clicks": 123
+            },
+            "2026-05-01": {
+              "spend": 426466.0,
+              "impressions": 2695,
+              "clicks": 114,
+              "reach": 2507,
+              "leads": 0,
+              "link_clicks": 73
+            },
+            "2026-05-02": {
+              "spend": 315492.0,
+              "impressions": 1689,
+              "clicks": 65,
+              "reach": 1545,
+              "leads": 0,
+              "link_clicks": 40
+            }
+          }
+        },
+        {
+          "campaign_name": "27/3 - DR1 - 2 video",
+          "campaign_id": "120248039526070196",
+          "spend": 2414731.0,
+          "impressions": 11263,
+          "clicks": 383,
+          "reach": 10721,
+          "ctr": 3.4005,
+          "cpc": 6304.78,
+          "cpm": 214395.01,
+          "leads": 0,
+          "link_clicks": 117,
+          "landing_page_views": 87,
+          "video_views": 2414,
+          "complete_registrations": 2,
+          "messages": 3,
+          "by_date": {
+            "2026-03-31": {
+              "spend": 485280.0,
+              "impressions": 2287,
+              "clicks": 74,
+              "reach": 2206,
+              "leads": 0,
+              "link_clicks": 29
+            },
+            "2026-04-01": {
+              "spend": 408840.0,
+              "impressions": 1393,
+              "clicks": 43,
+              "reach": 1301,
+              "leads": 0,
+              "link_clicks": 14
+            },
+            "2026-04-02": {
+              "spend": 189909.0,
+              "impressions": 915,
+              "clicks": 33,
+              "reach": 901,
+              "leads": 0,
+              "link_clicks": 11
+            },
+            "2026-04-03": {
+              "spend": 325297.0,
+              "impressions": 1671,
+              "clicks": 63,
+              "reach": 1560,
+              "leads": 0,
+              "link_clicks": 21
+            },
+            "2026-04-04": {
+              "spend": 247666.0,
+              "impressions": 1718,
+              "clicks": 59,
+              "reach": 1619,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-05": {
+              "spend": 374036.0,
+              "impressions": 1619,
+              "clicks": 50,
+              "reach": 1565,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-06": {
+              "spend": 279266.0,
+              "impressions": 1303,
+              "clicks": 49,
+              "reach": 1225,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-07": {
+              "spend": 615.0,
+              "impressions": 8,
+              "clicks": 0,
+              "reach": 8,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "27/3 - DR1 - 2 video - Bản sao",
+          "campaign_id": "120247687012200196",
+          "spend": 1190698.0,
+          "impressions": 4896,
+          "clicks": 158,
+          "reach": 4770,
+          "ctr": 3.2271,
+          "cpc": 7536.06,
+          "cpm": 243198.12,
+          "leads": 0,
+          "link_clicks": 54,
+          "landing_page_views": 37,
+          "video_views": 1152,
+          "complete_registrations": 2,
+          "messages": 0,
+          "by_date": {
+            "2026-03-28": {
+              "spend": 162425.0,
+              "impressions": 855,
+              "clicks": 19,
+              "reach": 855,
+              "leads": 0,
+              "link_clicks": 8
+            },
+            "2026-03-29": {
+              "spend": 637643.0,
+              "impressions": 2274,
+              "clicks": 74,
+              "reach": 2218,
+              "leads": 0,
+              "link_clicks": 28
+            },
+            "2026-03-30": {
+              "spend": 379835.0,
+              "impressions": 1725,
+              "clicks": 63,
+              "reach": 1655,
+              "leads": 0,
+              "link_clicks": 18
+            },
+            "2026-03-31": {
+              "spend": 10795.0,
+              "impressions": 42,
+              "clicks": 2,
+              "reach": 42,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-01": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        }
+      ],
+      "rows_raw": 77
     },
     {
       "account_id": "906015559004892",
@@ -86,13 +4221,586 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 0,
-        "impressions": 0,
-        "clicks": 0,
-        "leads": 0
+        "spend": 11580818.0,
+        "impressions": 64966,
+        "clicks": 1616,
+        "reach": 52592,
+        "leads": 3,
+        "ctr": 2.4875,
+        "cpc": 7166.35
       },
-      "campaigns": [],
-      "rows_raw": 0
+      "campaigns": [
+        {
+          "campaign_name": "27/4 - DA8.1 - Phương Nam - Mommydaudo",
+          "campaign_id": "120244426309330303",
+          "spend": 3160343.0,
+          "impressions": 23940,
+          "clicks": 537,
+          "reach": 19429,
+          "ctr": 2.2431,
+          "cpc": 5885.18,
+          "cpm": 132010.99,
+          "leads": 0,
+          "link_clicks": 405,
+          "landing_page_views": 348,
+          "video_views": 5324,
+          "complete_registrations": 10,
+          "messages": 5,
+          "by_date": {
+            "2026-04-27": {
+              "spend": 202251.0,
+              "impressions": 972,
+              "clicks": 17,
+              "reach": 789,
+              "leads": 0,
+              "link_clicks": 15
+            },
+            "2026-04-28": {
+              "spend": 697388.0,
+              "impressions": 3460,
+              "clicks": 92,
+              "reach": 2599,
+              "leads": 0,
+              "link_clicks": 60
+            },
+            "2026-04-29": {
+              "spend": 668790.0,
+              "impressions": 5537,
+              "clicks": 133,
+              "reach": 4555,
+              "leads": 0,
+              "link_clicks": 102
+            },
+            "2026-04-30": {
+              "spend": 598349.0,
+              "impressions": 5431,
+              "clicks": 141,
+              "reach": 4361,
+              "leads": 0,
+              "link_clicks": 111
+            },
+            "2026-05-01": {
+              "spend": 582316.0,
+              "impressions": 4904,
+              "clicks": 89,
+              "reach": 4100,
+              "leads": 0,
+              "link_clicks": 67
+            },
+            "2026-05-02": {
+              "spend": 411249.0,
+              "impressions": 3636,
+              "clicks": 65,
+              "reach": 3025,
+              "leads": 0,
+              "link_clicks": 50
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - DA8.1 - Phương Nam",
+          "campaign_id": "120243984373270303",
+          "spend": 2303636.0,
+          "impressions": 8247,
+          "clicks": 152,
+          "reach": 6138,
+          "ctr": 1.8431,
+          "cpc": 15155.5,
+          "cpm": 279330.18,
+          "leads": 3,
+          "link_clicks": 112,
+          "landing_page_views": 92,
+          "video_views": 576,
+          "complete_registrations": 10,
+          "messages": 5,
+          "by_date": {
+            "2026-04-21": {
+              "spend": 339750.0,
+              "impressions": 1529,
+              "clicks": 25,
+              "reach": 1189,
+              "leads": 0,
+              "link_clicks": 15
+            },
+            "2026-04-22": {
+              "spend": 441567.0,
+              "impressions": 2223,
+              "clicks": 44,
+              "reach": 1639,
+              "leads": 0,
+              "link_clicks": 28
+            },
+            "2026-04-23": {
+              "spend": 215943.0,
+              "impressions": 792,
+              "clicks": 17,
+              "reach": 617,
+              "leads": 1,
+              "link_clicks": 16
+            },
+            "2026-04-24": {
+              "spend": 446578.0,
+              "impressions": 824,
+              "clicks": 19,
+              "reach": 569,
+              "leads": 1,
+              "link_clicks": 20
+            },
+            "2026-04-25": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-26": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-27": {
+              "spend": 440680.0,
+              "impressions": 1580,
+              "clicks": 22,
+              "reach": 1193,
+              "leads": 0,
+              "link_clicks": 16
+            },
+            "2026-04-28": {
+              "spend": 419118.0,
+              "impressions": 1299,
+              "clicks": 25,
+              "reach": 931,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-29": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 1,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "20/4 - DA8.1 - Phương Nam",
+          "campaign_id": "120243932929830303",
+          "spend": 1877719.0,
+          "impressions": 10143,
+          "clicks": 318,
+          "reach": 7739,
+          "ctr": 3.1352,
+          "cpc": 5904.78,
+          "cpm": 185124.62,
+          "leads": 0,
+          "link_clicks": 234,
+          "landing_page_views": 209,
+          "video_views": 1434,
+          "complete_registrations": 7,
+          "messages": 7,
+          "by_date": {
+            "2026-04-20": {
+              "spend": 322307.0,
+              "impressions": 1224,
+              "clicks": 49,
+              "reach": 955,
+              "leads": 0,
+              "link_clicks": 34
+            },
+            "2026-04-21": {
+              "spend": 419481.0,
+              "impressions": 2679,
+              "clicks": 84,
+              "reach": 1784,
+              "leads": 0,
+              "link_clicks": 69
+            },
+            "2026-04-22": {
+              "spend": 355003.0,
+              "impressions": 2437,
+              "clicks": 84,
+              "reach": 1730,
+              "leads": 0,
+              "link_clicks": 63
+            },
+            "2026-04-23": {
+              "spend": 261443.0,
+              "impressions": 1274,
+              "clicks": 33,
+              "reach": 1034,
+              "leads": 0,
+              "link_clicks": 24
+            },
+            "2026-04-24": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-25": {
+              "spend": 519485.0,
+              "impressions": 2529,
+              "clicks": 68,
+              "reach": 2236,
+              "leads": 0,
+              "link_clicks": 44
+            },
+            "2026-04-29": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "24/4 - DA8.1 - Phương Nam",
+          "campaign_id": "120244237436230303",
+          "spend": 1297073.0,
+          "impressions": 5219,
+          "clicks": 195,
+          "reach": 3912,
+          "ctr": 3.7363,
+          "cpc": 6651.66,
+          "cpm": 248529.03,
+          "leads": 0,
+          "link_clicks": 125,
+          "landing_page_views": 105,
+          "video_views": 1194,
+          "complete_registrations": 5,
+          "messages": 2,
+          "by_date": {
+            "2026-04-24": {
+              "spend": 262239.0,
+              "impressions": 1153,
+              "clicks": 46,
+              "reach": 867,
+              "leads": 0,
+              "link_clicks": 26
+            },
+            "2026-04-25": {
+              "spend": 266795.0,
+              "impressions": 1108,
+              "clicks": 28,
+              "reach": 807,
+              "leads": 0,
+              "link_clicks": 19
+            },
+            "2026-04-26": {
+              "spend": 406243.0,
+              "impressions": 1632,
+              "clicks": 66,
+              "reach": 1164,
+              "leads": 0,
+              "link_clicks": 43
+            },
+            "2026-04-27": {
+              "spend": 361796.0,
+              "impressions": 1326,
+              "clicks": 55,
+              "reach": 1074,
+              "leads": 0,
+              "link_clicks": 37
+            },
+            "2026-04-28": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            },
+            "2026-04-30": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "28/4 - DA8.1 - Phương Nam",
+          "campaign_id": "120244547626970303",
+          "spend": 805410.0,
+          "impressions": 3287,
+          "clicks": 103,
+          "reach": 2751,
+          "ctr": 3.1336,
+          "cpc": 7819.51,
+          "cpm": 245028.9,
+          "leads": 0,
+          "link_clicks": 79,
+          "landing_page_views": 70,
+          "video_views": 1298,
+          "complete_registrations": 2,
+          "messages": 5,
+          "by_date": {
+            "2026-04-28": {
+              "spend": 203115.0,
+              "impressions": 478,
+              "clicks": 14,
+              "reach": 404,
+              "leads": 0,
+              "link_clicks": 12
+            },
+            "2026-04-29": {
+              "spend": 371909.0,
+              "impressions": 1767,
+              "clicks": 60,
+              "reach": 1503,
+              "leads": 0,
+              "link_clicks": 42
+            },
+            "2026-04-30": {
+              "spend": 230386.0,
+              "impressions": 1042,
+              "clicks": 29,
+              "reach": 844,
+              "leads": 0,
+              "link_clicks": 25
+            },
+            "2026-05-01": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "17/4 - DA8.1 - Phương Nam",
+          "campaign_id": "120243792796140303",
+          "spend": 574221.0,
+          "impressions": 1989,
+          "clicks": 42,
+          "reach": 1725,
+          "ctr": 2.1116,
+          "cpc": 13671.93,
+          "cpm": 288698.34,
+          "leads": 0,
+          "link_clicks": 30,
+          "landing_page_views": 18,
+          "video_views": 526,
+          "complete_registrations": 0,
+          "messages": 1,
+          "by_date": {
+            "2026-04-17": {
+              "spend": 213033.0,
+              "impressions": 926,
+              "clicks": 12,
+              "reach": 849,
+              "leads": 0,
+              "link_clicks": 9
+            },
+            "2026-04-18": {
+              "spend": 212845.0,
+              "impressions": 788,
+              "clicks": 19,
+              "reach": 628,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-19": {
+              "spend": 148343.0,
+              "impressions": 275,
+              "clicks": 11,
+              "reach": 248,
+              "leads": 0,
+              "link_clicks": 4
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - D1 - Phương Nam",
+          "campaign_id": "120244004863500303",
+          "spend": 547541.0,
+          "impressions": 2065,
+          "clicks": 65,
+          "reach": 1654,
+          "ctr": 3.1477,
+          "cpc": 8423.71,
+          "cpm": 265153.03,
+          "leads": 0,
+          "link_clicks": 33,
+          "landing_page_views": 31,
+          "video_views": 730,
+          "complete_registrations": 0,
+          "messages": 1,
+          "by_date": {
+            "2026-04-22": {
+              "spend": 381607.0,
+              "impressions": 1412,
+              "clicks": 38,
+              "reach": 1093,
+              "leads": 0,
+              "link_clicks": 23
+            },
+            "2026-04-23": {
+              "spend": 165934.0,
+              "impressions": 653,
+              "clicks": 27,
+              "reach": 561,
+              "leads": 0,
+              "link_clicks": 10
+            }
+          }
+        },
+        {
+          "campaign_name": "15/4 - B86 - Phương Nam",
+          "campaign_id": "120243681155580303",
+          "spend": 475902.0,
+          "impressions": 3891,
+          "clicks": 69,
+          "reach": 3653,
+          "ctr": 1.7733,
+          "cpc": 6897.13,
+          "cpm": 122308.4,
+          "leads": 0,
+          "link_clicks": 39,
+          "landing_page_views": 0,
+          "video_views": 418,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-15": {
+              "spend": 227035.0,
+              "impressions": 2169,
+              "clicks": 38,
+              "reach": 2045,
+              "leads": 0,
+              "link_clicks": 22
+            },
+            "2026-04-16": {
+              "spend": 248867.0,
+              "impressions": 1722,
+              "clicks": 31,
+              "reach": 1608,
+              "leads": 0,
+              "link_clicks": 17
+            },
+            "2026-04-22": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "15/4 - A100 - Phương Nam",
+          "campaign_id": "120243669572470303",
+          "spend": 383586.0,
+          "impressions": 5375,
+          "clicks": 114,
+          "reach": 4921,
+          "ctr": 2.1209,
+          "cpc": 3364.79,
+          "cpm": 71364.84,
+          "leads": 0,
+          "link_clicks": 66,
+          "landing_page_views": 0,
+          "video_views": 245,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-15": {
+              "spend": 207668.0,
+              "impressions": 3360,
+              "clicks": 65,
+              "reach": 3113,
+              "leads": 0,
+              "link_clicks": 41
+            },
+            "2026-04-16": {
+              "spend": 175918.0,
+              "impressions": 2015,
+              "clicks": 49,
+              "reach": 1808,
+              "leads": 0,
+              "link_clicks": 25
+            },
+            "2026-04-17": {
+              "spend": 0.0,
+              "impressions": 0,
+              "clicks": 0,
+              "reach": 0,
+              "leads": 0,
+              "link_clicks": 0
+            }
+          }
+        },
+        {
+          "campaign_name": "21/4 - D1 - Phương Nam - V2",
+          "campaign_id": "120244078289290303",
+          "spend": 152382.0,
+          "impressions": 791,
+          "clicks": 20,
+          "reach": 651,
+          "ctr": 2.5284,
+          "cpc": 7619.1,
+          "cpm": 192644.75,
+          "leads": 0,
+          "link_clicks": 9,
+          "landing_page_views": 7,
+          "video_views": 134,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-23": {
+              "spend": 152382.0,
+              "impressions": 791,
+              "clicks": 20,
+              "reach": 651,
+              "leads": 0,
+              "link_clicks": 9
+            }
+          }
+        },
+        {
+          "campaign_name": "17/4 - D1 - PNam",
+          "campaign_id": "120243774818300303",
+          "spend": 3005.0,
+          "impressions": 19,
+          "clicks": 1,
+          "reach": 19,
+          "ctr": 5.2632,
+          "cpc": 3005.0,
+          "cpm": 158157.89,
+          "leads": 0,
+          "link_clicks": 1,
+          "landing_page_views": 0,
+          "video_views": 7,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-04-17": {
+              "spend": 3005.0,
+              "impressions": 19,
+              "clicks": 1,
+              "reach": 19,
+              "leads": 0,
+              "link_clicks": 1
+            }
+          }
+        }
+      ],
+      "rows_raw": 45
     },
     {
       "account_id": "1416634670476226",
