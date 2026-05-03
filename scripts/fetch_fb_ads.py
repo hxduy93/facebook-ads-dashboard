@@ -20,6 +20,7 @@ import sys
 import time
 import urllib.request
 import urllib.error
+import urllib.parse
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 
@@ -97,15 +98,21 @@ def api_request(url, max_retries=4):
 def fetch_account_insights(account_id, date_since, date_until):
     """Fetch campaign-level insights cho 1 account, tự động paginate."""
     all_data = []
-    url = (
-        f"{BASE_URL}/act_{account_id}/insights"
-        f"?fields={INSIGHT_FIELDS}"
-        f"&level=campaign"
-        f"&time_range={json.dumps({'since': date_since, 'until': date_until})}"
-        f"&time_increment=1"
-        f"&limit=500"
-        f"&access_token={ACCESS_TOKEN}"
-    )
+    # ⚠ time_range JSON PHẢI URL-encode. Trước đây để raw {} → FB silently ignore parameter
+    # → trả về empty data. Dùng urlencode để encode đúng JSON value trong URL.
+    params = {
+        "fields": INSIGHT_FIELDS,
+        "level": "campaign",
+        "time_range": json.dumps({"since": date_since, "until": date_until}, separators=(",", ":")),
+        "time_increment": "1",
+        "limit": "500",
+        "access_token": ACCESS_TOKEN,
+    }
+    url = f"{BASE_URL}/act_{account_id}/insights?{urllib.parse.urlencode(params)}"
+
+    # Log URL (redact token) để debug nếu fail
+    safe_url = url.replace(ACCESS_TOKEN, "***TOKEN***")
+    print(f"  [DEBUG] URL: {safe_url[:200]}...")
 
     page = 1
     while url:
