@@ -15,22 +15,28 @@ import {
   compactFbOrders,
   computeFbProfit,
   compactFbDailyTrend,
+  resolveTimeRange,
+  compactFbOrdersInRange,
+  computeFbProfitInRange,
+  compactFbAccounts,
+  compactFbCampaigns,
 } from "../lib/fbAdsHelpers.js";
 
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";  // bumped: schema time_range + account/campaign params
 const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
 
 // MODE config
 const MODE_CONFIG = {
-  audit_account_json: { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true },
-  audit_account:      { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"] },
-  audit_funnel:       { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"] },
-  analyze_metrics:    { skills: ["fb_overview"], data: ["insights", "trend"] },
-  ask:                { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"] },
+  audit_account_json:  { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true },
+  audit_account:       { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"] },
+  audit_funnel:        { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"] },
+  analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"] },
+  optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"] },  // mới: per-campaign
+  ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"] },
 };
 
 // Skill summary compact (Vietnamese)
@@ -66,6 +72,21 @@ Cần check:
 - Time-to-order (median ngày)
 - Lead chất lượng theo audience/campaign
 - Phone capture rate (form fail?)`,
+
+  fb_optimize: `# FB ADS CAMPAIGN OPTIMIZATION
+Khi audit 1 campaign cụ thể, đánh giá theo 5 dimension:
+1. Spend efficiency: CPL vs target (target = AOV × 0.65 × 0.40)
+2. Volume: leads/day vs benchmark (NOMA ~30, MAY_DO ~2, DA8.1 ~3)
+3. Frequency: > 4 = saturate, cần refresh creative
+4. CTR: > 2% là OK, < 1% là weak hook
+5. Trend: spend tăng nhưng leads không tăng = scale broken
+
+Action recommendations:
+- KILL: spend > 2× CPL_target và 0 lead → pause
+- SCALE: ROAS > 4 và CPL < CPL_target × 0.7 → tăng budget +20%
+- REFRESH: frequency > 4 → đổi creative
+- AUDIENCE: CTR thấp + frequency thấp → audience sai target
+- BUDGET: spend ratio > 50% revenue → cắt bid 30%`,
 };
 
 const GROUPS = ["ALL", ...FB_ACTIVE_GROUPS];
@@ -200,6 +221,34 @@ Quy tắc: số liệu cụ thể, action rõ ràng, không vague.`);
 - Mỗi action có WHAT/WHY/IMPACT`);
       break;
 
+    case "optimize_campaign":
+      parts.push(`# Tối ưu Campaign FB Ads
+
+Phân tích campaign cụ thể (xem fb_focus_campaign trong data nếu có).
+
+## 1. Health check campaign
+- Spend, leads, CPL, CTR, frequency hiện tại
+- So với target CPL của nhóm SP
+
+## 2. Đánh giá 5 dimension
+- Spend efficiency
+- Volume vs benchmark
+- Frequency saturation
+- CTR quality
+- Trend (so với 7 ngày trước)
+
+## 3. Recommend action (chỉ 1-2 action mạnh nhất)
+- KILL / SCALE / REFRESH / AUDIENCE FIX / BUDGET CUT
+- Ghi rõ WHAT (làm gì), WHY (số liệu), IMPACT (dự kiến)
+
+## 4. Risk warning
+- Nếu pause → mất gì
+- Nếu scale → rủi ro gì
+
+## 5. Next check
+- Sau X ngày check lại metric nào`);
+      break;
+
     case "ask":
       parts.push("Trả lời ngắn gọn, có dẫn chứng từ data + skill rule. Tiếng Việt.");
       break;
@@ -218,7 +267,11 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON" }, 400); }
 
-  const { mode, question, group = "ALL", force_refresh } = body;
+  const {
+    mode, question, group = "ALL", force_refresh,
+    time_preset, custom_start, custom_end,
+    account_id, campaign_id,
+  } = body;
   if (!MODE_CONFIG[mode]) {
     return jsonResponse({ error: `Mode không hợp lệ: ${mode}. Choices: ${Object.keys(MODE_CONFIG).join(",")}` }, 400);
   }
@@ -229,13 +282,21 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: "Mode 'ask' cần question" }, 400);
   }
 
+  // Resolve time range
+  const timeRange = resolveTimeRange(time_preset || "last_30d", custom_start, custom_end);
+  if (!timeRange) {
+    return jsonResponse({ error: "Invalid time_preset hoặc thiếu custom_start/end" }, 400);
+  }
+
   const cfg = MODE_CONFIG[mode];
   const cookieHeader = request.headers.get("Cookie") || "";
   const origin = new URL(request.url).origin;
 
-  // Cache check (chỉ cache audit modes)
+  // Cache check (chỉ cache audit modes) — include time + account + campaign in key
   const todayVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10);
-  const cacheKey = (mode !== "ask") ? `fb_cache:${CACHE_VERSION}:${mode}:${group}:${todayVN}` : null;
+  const tKey = `${timeRange.start}_${timeRange.end}`;
+  const ctxKey = `${tKey}|${account_id || "noacc"}|${campaign_id || "nocamp"}`;
+  const cacheKey = (mode !== "ask") ? `fb_cache:${CACHE_VERSION}:${mode}:${group}:${ctxKey}:${todayVN}` : null;
   if (cacheKey && !force_refresh && env.INVENTORY) {
     try {
       const cached = await env.INVENTORY.get(cacheKey, { type: "json" });
@@ -251,20 +312,35 @@ export async function onRequestPost(context) {
   }
 
   // Fetch data
-  const dataContext = { mode, group, group_label: FB_GROUP_LABELS[group] };
+  const dataContext = {
+    mode, group,
+    group_label: FB_GROUP_LABELS[group],
+    time_range: timeRange,
+    account_id: account_id || null,
+    campaign_id: campaign_id || null,
+  };
   const tasks = [];
   if (cfg.data.includes("insights")) {
     tasks.push(fetchJson(origin, "/data/fb-ads-data.json", cookieHeader)
-      .then(j => { dataContext.fb_insights = compactFbInsights(j, group); }));
+      .then(j => {
+        dataContext.fb_insights = compactFbInsights(j, group);
+        // Account/campaign context
+        if (account_id && j) {
+          dataContext.fb_campaigns = compactFbCampaigns(j, account_id, timeRange);
+          if (campaign_id && dataContext.fb_campaigns?.campaigns) {
+            dataContext.fb_focus_campaign = dataContext.fb_campaigns.campaigns.find(c => c.id === campaign_id);
+          }
+        }
+      }));
   }
   if (cfg.data.includes("orders") || cfg.data.includes("profit") || cfg.data.includes("trend")) {
     tasks.push(fetchJson(origin, "/data/product-revenue.json", cookieHeader)
       .then(async (revJson) => {
-        if (cfg.data.includes("orders")) dataContext.fb_orders = compactFbOrders(revJson, group);
+        if (cfg.data.includes("orders")) dataContext.fb_orders = compactFbOrdersInRange(revJson, group, timeRange);
         if (cfg.data.includes("trend")) dataContext.fb_trend = compactFbDailyTrend(revJson, 30);
         if (cfg.data.includes("profit")) {
           const costsJson = await fetchJson(origin, "/data/product-costs.json", cookieHeader);
-          dataContext.fb_profit = computeFbProfit(revJson, costsJson, group);
+          dataContext.fb_profit = computeFbProfitInRange(revJson, costsJson, group, timeRange);
         }
       }));
   }

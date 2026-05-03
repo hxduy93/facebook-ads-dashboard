@@ -7,167 +7,225 @@
 <style>
 * { box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fb; margin: 0; padding: 0; color: #111827; }
-.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
-.header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: linear-gradient(135deg, #1877f2 0%, #0866ff 100%); color: white; border-radius: 8px; margin-bottom: 16px; }
-.header h1 { margin: 0; font-size: 22px; }
-.header .sub { font-size: 12.5px; opacity: 0.9; margin-top: 4px; }
-.header .tag { background: white; color: #1877f2; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-left: 8px; }
-.header a { color: white; text-decoration: none; font-size: 13px; padding: 4px 8px; }
-.section { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-.section h2 { margin: 0 0 12px; font-size: 16px; color: #1f2937; }
-.filter-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: #fff7ed; border-color: #fed7aa; }
-.filter-bar label { font-weight: 600; color: #9a3412; }
-.filter-bar select { padding: 6px 10px; border: 1px solid #fb923c; border-radius: 5px; font-size: 14px; min-width: 220px; background: white; }
+.container { max-width: 1280px; margin: 0 auto; padding: 14px; }
 
-/* Profit cards */
-.profit-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.profit-card { padding: 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: linear-gradient(135deg, #fafbff 0%, #eff6ff 100%); }
-.profit-card .label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.profit-card .value { font-size: 22px; font-weight: 700; color: #1e3a8a; margin-top: 4px; }
-.profit-card .delta { font-size: 11px; color: #059669; margin-top: 2px; }
-.profit-card.danger .value { color: #dc2626; }
-.profit-card.warning .value { color: #d97706; }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: linear-gradient(135deg, #1877f2 0%, #0866ff 100%); color: white; border-radius: 8px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.header h1 { margin: 0; font-size: 18px; }
+.header .sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+.header .tag { background: white; color: #1877f2; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+.header a { color: white; text-decoration: none; font-size: 12.5px; padding: 4px 8px; }
 
-.group-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.group-table th, .group-table td { padding: 8px 10px; border: 1px solid #e5e7eb; text-align: right; }
-.group-table th:first-child, .group-table td:first-child { text-align: left; font-weight: 500; }
-.group-table th { background: #f3f4f6; font-weight: 600; }
-.group-table .pos { color: #15803d; font-weight: 500; }
-.group-table .neg { color: #dc2626; font-weight: 500; }
+.section { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+.section h2 { margin: 0 0 10px; font-size: 14px; color: #1f2937; display: flex; justify-content: space-between; align-items: center; }
+.section h2 .right { font-size: 11px; color: #6b7280; font-weight: 400; }
 
-/* Action buttons */
-.btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-.btn-action { padding: 14px; border: 1.5px solid #1877f2; background: white; cursor: pointer; text-align: left; border-radius: 6px; transition: all 0.15s; }
-.btn-action:hover { background: #eff6ff; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(24,119,242,0.15); }
-.btn-action .title { font-weight: 600; color: #1e3a8a; font-size: 14px; }
-.btn-action .ico { font-size: 18px; margin-right: 6px; }
-.btn-action .desc { font-size: 12px; color: #6b7280; margin-top: 4px; }
+/* ── Time filter ── */
+.time-filter { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.time-btn { padding: 6px 12px; border: 1px solid #d1d5db; background: white; border-radius: 5px; cursor: pointer; font-size: 12.5px; font-weight: 500; color: #374151; transition: all 0.15s; }
+.time-btn:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+.time-btn.active { background: #1877f2; color: white; border-color: #1877f2; }
+.custom-range { display: none; gap: 6px; align-items: center; margin-left: 8px; }
+.custom-range.show { display: flex; }
+.custom-range input { padding: 5px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12.5px; }
+.custom-range button { padding: 5px 12px; background: #059669; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12.5px; }
+
+/* ── Stats cards ── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.stat-card { padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 7px; background: linear-gradient(135deg, #fafbff, #eff6ff); }
+.stat-card .label { font-size: 10.5px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.stat-card .value { font-size: 20px; font-weight: 700; color: #1e3a8a; margin-top: 3px; }
+.stat-card.danger .value { color: #dc2626; }
+.stat-card.warning .value { color: #d97706; }
+.stat-card.success .value { color: #059669; }
+.stat-card .sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+/* ── Group chips ── */
+.group-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.group-chip { padding: 5px 12px; border: 1px solid #d1d5db; background: white; border-radius: 5px; cursor: pointer; font-size: 12px; transition: all 0.15s; }
+.group-chip:hover { background: #f3f4f6; }
+.group-chip.active { background: #1877f2; color: white; border-color: #1877f2; }
+
+/* ── Account list ── */
+.account-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.account-card { padding: 12px; border: 1.5px solid #e5e7eb; border-radius: 7px; background: white; cursor: pointer; transition: all 0.15s; }
+.account-card:hover { border-color: #1877f2; box-shadow: 0 4px 8px rgba(24, 119, 242, 0.1); }
+.account-card.active { border-color: #1877f2; background: #eff6ff; }
+.account-card .name { font-weight: 600; font-size: 12.5px; color: #111827; line-height: 1.3; min-height: 32px; }
+.account-card .stats { display: flex; gap: 12px; margin-top: 8px; font-size: 11.5px; color: #6b7280; }
+.account-card .stats span { display: flex; flex-direction: column; }
+.account-card .stats strong { color: #111827; font-weight: 600; font-size: 13px; }
+.account-card.empty { opacity: 0.5; }
+
+/* ── Campaign list ── */
+.campaign-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.campaign-table th, .campaign-table td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; text-align: left; }
+.campaign-table th { background: #f9fafb; font-weight: 600; color: #4b5563; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+.campaign-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.campaign-table tr:hover { background: #fafbff; }
+.campaign-table .btn-optimize { padding: 4px 10px; background: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 500; }
+.campaign-table .btn-optimize:hover { background: #6d28d9; }
+
+.empty-state { text-align: center; padding: 30px; color: #9ca3af; font-size: 13px; }
+.warning-banner { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 12.5px; color: #78350f; }
+
+/* ── Action buttons ── */
+.btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.btn-action { padding: 10px 12px; border: 1.5px solid #1877f2; background: white; cursor: pointer; text-align: left; border-radius: 6px; transition: all 0.15s; }
+.btn-action:hover { background: #eff6ff; transform: translateY(-1px); }
+.btn-action .title { font-weight: 600; color: #1e3a8a; font-size: 12.5px; }
+.btn-action .ico { font-size: 16px; margin-right: 6px; }
+.btn-action .desc { font-size: 11px; color: #6b7280; margin-top: 3px; }
 .btn-action.btn-funnel { border-color: #f59e0b; }
 .btn-action.btn-funnel .title { color: #92400e; }
-.btn-action.btn-funnel:hover { background: #fffbeb; }
 
-/* Ask box */
-.ask-box { display: flex; gap: 8px; }
-.ask-box input { flex: 1; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 14px; }
-.ask-box button { padding: 10px 20px; background: #1877f2; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; }
-.ask-box button:hover { background: #0866ff; }
-.ask-box button:disabled { background: #9ca3af; cursor: not-allowed; }
+/* ── Ask + output ── */
+.ask-box { display: flex; gap: 6px; }
+.ask-box input { flex: 1; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 5px; font-size: 13px; }
+.ask-box button { padding: 8px 16px; background: #1877f2; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; }
 
-/* Output */
-.output { padding: 16px; background: #fafafa; border-radius: 6px; min-height: 100px; font-size: 14px; }
-.output table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12.5px; }
-.output th, .output td { padding: 6px 10px; border: 1px solid #e5e7eb; text-align: left; }
+.output { padding: 14px; background: #fafafa; border-radius: 6px; min-height: 80px; font-size: 13px; }
+.output table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px; }
+.output th, .output td { padding: 5px 8px; border: 1px solid #e5e7eb; text-align: left; }
 .output th { background: #f3f4f6; }
-.output h1, .output h2, .output h3 { margin-top: 16px; margin-bottom: 8px; }
-.output ul, .output ol { padding-left: 24px; }
-.note { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 12.5px; color: #78350f; }
-.alert-empty { background: #fef2f2; border-left: 3px solid #dc2626; padding: 10px 14px; border-radius: 4px; margin: 8px 0; color: #991b1b; }
-.meta { font-size: 11.5px; color: #9ca3af; margin-top: 4px; padding-left: 4px; }
-.copy-btn { float: right; padding: 4px 10px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.output h1, .output h2, .output h3 { margin-top: 12px; margin-bottom: 6px; }
+.output ul, .output ol { padding-left: 22px; margin: 6px 0; }
+.note { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 6px 10px; border-radius: 4px; font-size: 12px; }
+.alert-empty { background: #fef2f2; border-left: 3px solid #dc2626; padding: 8px 12px; border-radius: 4px; color: #991b1b; font-size: 12.5px; }
+.meta { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+.copy-btn { float: right; padding: 3px 8px; background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; font-size: 11px; }
 
-/* Scorecard */
-.scorecard { padding: 16px; }
-.scorecard-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-.score-circle { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; }
-.score-circle.A { background: #059669; }
-.score-circle.B { background: #16a34a; }
-.score-circle.C { background: #d97706; }
-.score-circle.D { background: #dc2626; }
-.score-circle.F { background: #7f1d1d; }
-.score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
-.score-item { padding: 10px; border: 1px solid #e5e7eb; border-radius: 5px; background: white; font-size: 13px; }
-.score-item .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-.score-item .row strong { font-size: 13px; }
-.score-item .bar { height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin-top: 4px; }
-.score-item .fill { height: 100%; background: #1877f2; }
-.score-item .note { font-size: 11.5px; color: #6b7280; margin-top: 4px; padding-left: 0; background: none; border-left: none; }
-.findings { margin-top: 12px; padding: 10px 14px; background: #f0fdf4; border-left: 3px solid #16a34a; border-radius: 4px; }
-.findings strong { color: #14532d; }
-.findings ul { margin: 6px 0; }
+@media (max-width: 640px) {
+  .container { padding: 8px; }
+  .stat-card .value { font-size: 17px; }
+  .header h1 { font-size: 15px; }
+  .time-filter { font-size: 11px; }
+  .time-btn { padding: 5px 8px; font-size: 11px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="header">
+  <header class="header">
     <div>
-      <h1>📘 Agent FB Ads — Doscom <span class="tag">v1</span></h1>
-      <div class="sub">Phân tích chỉ số FB Ads + lợi nhuận qua DUY/PHƯƠNG NAM · Cloudflare Workers AI</div>
+      <h1>📘 Agent FB Ads <span class="tag">v2</span></h1>
+      <div class="sub">Filter time + account + campaign · Phân tích lợi nhuận DUY/PHƯƠNG NAM</div>
     </div>
     <div>
       <a href="/agent-google-doscom.html">📊 Google Ads</a> |
-      <a href="/">← Dashboard chính</a>
+      <a href="/">← Trang chủ</a>
+    </div>
+  </header>
+
+  <!-- TIME FILTER -->
+  <div class="section">
+    <h2>🕒 Bộ lọc thời gian
+      <span class="right" id="time-info">—</span>
+    </h2>
+    <div class="time-filter" id="time-filter">
+      <button class="time-btn" data-time="today">Hôm nay</button>
+      <button class="time-btn" data-time="yesterday">Hôm qua</button>
+      <button class="time-btn" data-time="this_week">Tuần này</button>
+      <button class="time-btn" data-time="last_week">Tuần trước</button>
+      <button class="time-btn" data-time="this_month">Tháng này</button>
+      <button class="time-btn" data-time="last_month">Tháng trước</button>
+      <button class="time-btn" data-time="last_7d">7 ngày</button>
+      <button class="time-btn active" data-time="last_30d">30 ngày</button>
+      <button class="time-btn" data-time="last_90d">90 ngày</button>
+      <button class="time-btn" data-time="custom">⚙ Tùy chỉnh</button>
+      <div class="custom-range" id="custom-range">
+        <input type="date" id="custom-start" />
+        <span>→</span>
+        <input type="date" id="custom-end" />
+        <button onclick="applyCustomRange()">Áp dụng</button>
+      </div>
     </div>
   </div>
 
-  <!-- Filter -->
-  <div class="section filter-bar">
-    <label for="group-filter">🎯 Nhóm SP:</label>
-    <select id="group-filter" onchange="onGroupChange()">
-      <option value="ALL">Tất cả 4 nhóm FB</option>
-      <option value="MAY_DO">Máy dò (D-series)</option>
-      <option value="CAMERA_VIDEO_CALL">Camera video call (DA8.1)</option>
-      <option value="GHI_AM">Máy ghi âm (DR1)</option>
-      <option value="NOMA">NOMA (chăm sóc xe)</option>
-    </select>
-    <span style="font-size:12px;color:#9a3412;font-weight:500">Period: 90 ngày</span>
+  <!-- GROUP FILTER -->
+  <div class="section">
+    <h2>🎯 Nhóm sản phẩm
+      <span class="right">Doscom có 4 nhóm bán qua FB Ads</span>
+    </h2>
+    <div class="group-chips" id="group-chips">
+      <button class="group-chip active" data-group="ALL">Tất cả</button>
+      <button class="group-chip" data-group="MAY_DO">Máy dò (D-series)</button>
+      <button class="group-chip" data-group="CAMERA_VIDEO_CALL">Camera VC (DA8.1)</button>
+      <button class="group-chip" data-group="GHI_AM">Máy ghi âm (DR1)</button>
+      <button class="group-chip" data-group="NOMA">NOMA</button>
+    </div>
   </div>
 
-  <!-- Profit summary cards (auto load) -->
+  <!-- PROFIT SUMMARY -->
   <div class="section">
-    <h2>💰 Lợi nhuận FB Ads (90 ngày)
-      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">
-        — Filter: DUY + PHƯƠNG NAM · Spend ước = 40% revenue · VAT 10%
-      </span>
+    <h2>💰 Tổng quan lợi nhuận
+      <span class="right">Filter: DUY + PHƯƠNG NAM</span>
     </h2>
     <div id="profit-summary">
-      <div style="text-align:center;padding:30px;color:#9ca3af">Đang tải...</div>
+      <div class="empty-state">Đang tải...</div>
     </div>
   </div>
 
-  <!-- Scorecard -->
+  <!-- ACCOUNT LIST -->
   <div class="section">
-    <h2>🎯 Card chấm điểm 8 nhóm
-      <button class="copy-btn" onclick="runAI('audit_account_json')">🔄 Chấm điểm</button>
+    <h2>📊 Tài khoản FB Ads (6 accounts)
+      <span class="right" id="account-info">Click 1 tài khoản để xem campaigns</span>
     </h2>
-    <div id="scorecard-body">
-      <div style="color:#9ca3af;text-align:center;padding:30px">Bấm "Chấm điểm" để AI phân tích.</div>
+    <div id="account-list" class="account-grid">
+      <div class="empty-state">Đang tải...</div>
     </div>
   </div>
 
-  <!-- Action buttons -->
+  <!-- CAMPAIGN LIST -->
+  <div class="section" id="campaign-section" style="display:none">
+    <h2>📋 Campaigns trong tài khoản
+      <span class="right" id="campaign-account-name"></span>
+    </h2>
+    <div id="campaign-list">
+      <div class="empty-state">Chọn tài khoản phía trên</div>
+    </div>
+  </div>
+
+  <!-- AGENT BUTTONS -->
   <div class="section">
-    <h2>🛠 Phân tích chuyên sâu</h2>
+    <h2>🤖 Agent phân tích
+      <span class="right">Llama 3.1 8B Fast · cache 6h</span>
+    </h2>
     <div class="btn-grid">
+      <button class="btn-action" onclick="runAI('audit_account_json')">
+        <div class="title"><span class="ico">🎯</span>Card chấm điểm</div>
+        <div class="desc">8 nhóm: Tracking, Creative, Audience, ...</div>
+      </button>
       <button class="btn-action" onclick="runAI('audit_account')">
         <div class="title"><span class="ico">📊</span>Audit Tổng quan</div>
-        <div class="desc">Markdown report: top quick win, alert, trend WoW</div>
+        <div class="desc">Top quick win, alert, trend WoW</div>
       </button>
       <button class="btn-action btn-funnel" onclick="runAI('audit_funnel')">
         <div class="title"><span class="ico">🔄</span>Audit Funnel</div>
-        <div class="desc">Lead → Pancake order: bottleneck, close rate, time-to-order</div>
+        <div class="desc">Lead → Pancake order, bottleneck</div>
       </button>
       <button class="btn-action" onclick="runAI('analyze_metrics')">
         <div class="title"><span class="ico">📈</span>Phân tích chỉ số</div>
-        <div class="desc">Trend tuần, action items, cảnh báo</div>
+        <div class="desc">Trend, action items</div>
       </button>
     </div>
   </div>
 
-  <!-- Ask -->
+  <!-- ASK -->
   <div class="section">
     <h2>💬 Hỏi tự do với AI</h2>
     <div class="ask-box">
-      <input type="text" id="ask-input" placeholder="Vd: Tại sao margin DR1 chỉ 11%? Nên làm gì với DA8.1?" onkeydown="if(event.key==='Enter')askQuestion()">
-      <button onclick="askQuestion()" id="ask-btn">Hỏi AI</button>
+      <input type="text" id="ask-input" placeholder="Vd: Tại sao margin DR1 chỉ 11%? Pause campaign nào?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <button onclick="askQuestion()">Hỏi AI</button>
     </div>
   </div>
 
-  <!-- Output -->
+  <!-- OUTPUT -->
   <div class="section">
-    <h2>📋 Kết quả AI <span class="copy-btn" onclick="copyOutput()">📋 Copy</span></h2>
-    <div class="note">⚠ Audit mất ~10-30 giây. Kết quả cache 6h cho cùng nhóm SP.</div>
-    <div id="output" class="output"><div style="color:#9ca3af;text-align:center;padding:40px 20px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.</div></div>
+    <h2>📋 Kết quả AI
+      <span class="copy-btn" onclick="copyOutput()">📋 Copy</span>
+    </h2>
+    <div id="output" class="output"><div class="empty-state">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.</div></div>
     <div class="meta" id="meta"></div>
   </div>
 
@@ -175,145 +233,249 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 
 <script>
 const GROUP_LABELS = {
-  ALL: "Tất cả 4 nhóm FB",
+  ALL: "Tất cả 4 nhóm",
   MAY_DO: "Máy dò",
-  CAMERA_VIDEO_CALL: "Camera video call (DA8.1)",
-  GHI_AM: "Máy ghi âm (DR1)",
-  NOMA: "NOMA"
+  CAMERA_VIDEO_CALL: "Camera VC",
+  GHI_AM: "Ghi âm",
+  NOMA: "NOMA",
 };
 
-function getGroup() { return document.getElementById('group-filter').value; }
-function fmtNum(n) { return (n == null) ? "—" : Number(n).toLocaleString("vi-VN"); }
-function fmtPct(n) { return (n == null) ? "—" : n + "%"; }
+let state = {
+  timePreset: "last_30d",
+  customStart: null,
+  customEnd: null,
+  group: "ALL",
+  accountId: null,
+  campaignId: null,
+  timeRange: null,
+};
 
-// ── PROFIT SUMMARY (auto load) ──
-async function loadProfitSummary() {
-  const group = getGroup();
-  const wrap = document.getElementById('profit-summary');
-  wrap.innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af">Đang tải data lợi nhuận...</div>';
+function fmt(n) { return (n == null) ? "—" : Number(n).toLocaleString("vi-VN"); }
+function fmtPct(n) { return (n == null) ? "—" : n + "%"; }
+function fmtVnd(n) { return fmt(Math.round(n)) + "đ"; }
+
+// ── Init listeners ──
+document.querySelectorAll('[data-time]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-time]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.timePreset = btn.dataset.time;
+    if (state.timePreset === 'custom') {
+      document.getElementById('custom-range').classList.add('show');
+      return;
+    }
+    document.getElementById('custom-range').classList.remove('show');
+    refresh();
+  });
+});
+
+document.querySelectorAll('[data-group]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-group]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    state.group = chip.dataset.group;
+    refresh();
+  });
+});
+
+function applyCustomRange() {
+  const s = document.getElementById('custom-start').value;
+  const e = document.getElementById('custom-end').value;
+  if (!s || !e) { alert('Chọn cả ngày bắt đầu + kết thúc'); return; }
+  if (s > e) { alert('Ngày bắt đầu phải <= ngày kết thúc'); return; }
+  state.customStart = s;
+  state.customEnd = e;
+  state.timePreset = 'custom';
+  refresh();
+}
+
+// ── REFRESH (gọi snapshot endpoint) ──
+async function refresh() {
+  state.accountId = null;
+  state.campaignId = null;
+  document.getElementById('campaign-section').style.display = 'none';
+
+  const params = new URLSearchParams();
+  params.set('time', state.timePreset);
+  if (state.timePreset === 'custom' && state.customStart && state.customEnd) {
+    params.set('start', state.customStart);
+    params.set('end', state.customEnd);
+  }
+  params.set('group', state.group);
+
+  document.getElementById('profit-summary').innerHTML = '<div class="empty-state">Đang tải...</div>';
+  document.getElementById('account-list').innerHTML = '<div class="empty-state">Đang tải...</div>';
+
   try {
-    const r = await fetch('/data/product-revenue.json', { credentials: 'same-origin' });
-    if (!r.ok) throw new Error('Cannot fetch product-revenue');
-    const rev = await r.json();
-    const c = await fetch('/data/product-costs.json', { credentials: 'same-origin' });
-    const costs = c.ok ? await c.json() : { products: {} };
-    renderProfitSummary(rev, costs, group);
+    const r = await fetch('/api/fb/snapshot?' + params, { credentials: 'same-origin' });
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      document.getElementById('profit-summary').innerHTML = `<div class="alert-empty">⚠ ${e.error || r.status}</div>`;
+      return;
+    }
+    const j = await r.json();
+    state.timeRange = j.time_range;
+    document.getElementById('time-info').textContent = `${j.time_range.label} · ${j.time_range.start} → ${j.time_range.end}`;
+    renderProfitSummary(j.profit);
+    renderAccounts(j.accounts);
   } catch (e) {
-    wrap.innerHTML = `<div class="alert-empty">⚠ Không tải được data: ${e.message}</div>`;
+    document.getElementById('profit-summary').innerHTML = `<div class="alert-empty">⚠ ${e.message}</div>`;
   }
 }
 
-function renderProfitSummary(revJson, costsJson, group) {
-  // Inline classifier mirror functions/lib/fbAdsHelpers.js
-  function classify(name) {
-    const n = (name || '').toLowerCase().trim();
-    if (!n) return 'OTHER';
-    if (/noma|a002|tẩy|chà kính|kính xe|chăm sóc xe/i.test(n)) return 'NOMA';
-    if (/^da\s*8\.1|da8\.1|gọi.*2.*chiều|video.*call/i.test(n)) return 'CAMERA_VIDEO_CALL';
-    if (/^dr\s*\d|máy\s*ghi\s*âm|ghi âm/i.test(n)) return 'GHI_AM';
-    if (/^d\s*\d|máy\s*dò|may do/i.test(n)) return 'MAY_DO';
-    return 'OTHER';
+// ── Render profit ──
+function renderProfitSummary(profit) {
+  const wrap = document.getElementById('profit-summary');
+  if (!profit?.has_data) {
+    wrap.innerHTML = '<div class="empty-state">Không có đơn nào trong khoảng thời gian này (DUY + PHƯƠNG NAM).</div>';
+    return;
   }
-  const ACTIVE = ['MAY_DO','CAMERA_VIDEO_CALL','GHI_AM','NOMA'];
-  const SOURCES = ['DUY','PHUONG_NAM'];
-  const totals = {};
-  ACTIVE.forEach(g => totals[g] = { revenue:0, orders:0, cogs:0 });
-  const costs = costsJson?.products || {};
-  for (const sg of SOURCES) {
-    const prods = revJson?.source_groups?.[sg]?.products;
-    if (!prods) continue;
-    for (const [name, p] of Object.entries(prods)) {
-      const orders = Number(p.orders) || 0;
-      if (orders <= 0) continue;
-      const total = Number(p.total) || 0;
-      const grp = classify(name);
-      if (!ACTIVE.includes(grp)) continue;
-      const c = costs[name.toLowerCase()];
-      const unitCost = c?.gia_nhap_vnd ? Number(c.gia_nhap_vnd) : null;
-      totals[grp].revenue += total;
-      totals[grp].orders += orders;
-      if (unitCost !== null) totals[grp].cogs += unitCost * orders;
-    }
-  }
-  const filterGroups = group === 'ALL' ? ACTIVE : [group];
-  let agg = { revenue:0, orders:0, cogs:0, profit:0 };
+  const t = profit.total;
+  const cardCls = (m) => m >= 25 ? '' : m >= 15 ? 'warning' : 'danger';
   let groupRows = '';
-  for (const g of filterGroups) {
-    const t = totals[g];
-    if (!t || t.orders === 0) continue;
-    const fbSpend = t.revenue * 0.40;
-    const vat = t.revenue * 0.10;
-    const profit = t.revenue - t.cogs - fbSpend - vat;
-    const margin = t.revenue > 0 ? (profit / t.revenue * 100) : 0;
-    const aov = Math.round(t.revenue / t.orders);
-    const ppOrder = Math.round(profit / t.orders);
-    agg.revenue += t.revenue;
-    agg.orders += t.orders;
-    agg.cogs += t.cogs;
-    agg.profit += profit;
-    const marginClass = margin >= 25 ? 'pos' : margin >= 15 ? '' : 'neg';
+  for (const [g, gt] of Object.entries(profit.groups || {})) {
+    const cls = gt.margin_pct >= 25 ? '' : gt.margin_pct >= 15 ? 'warning' : 'danger';
     groupRows += `<tr>
-      <td>${GROUP_LABELS[g]}</td>
-      <td>${fmtNum(t.orders)}</td>
-      <td>${fmtNum(Math.round(t.revenue))}</td>
-      <td>${fmtNum(aov)}</td>
-      <td>${fmtNum(ppOrder)}</td>
-      <td class="${marginClass}">${margin.toFixed(1)}%</td>
+      <td>${GROUP_LABELS[g] || g}</td>
+      <td class="num">${fmt(gt.orders)}</td>
+      <td class="num">${fmt(gt.revenue)}đ</td>
+      <td class="num">${fmt(gt.aov)}đ</td>
+      <td class="num">${fmt(gt.profit_per_order)}đ</td>
+      <td class="num"><strong style="color:${gt.margin_pct >= 25 ? '#15803d' : gt.margin_pct >= 15 ? '#d97706' : '#dc2626'}">${gt.margin_pct}%</strong></td>
     </tr>`;
   }
-  const aggMargin = agg.revenue > 0 ? (agg.profit / agg.revenue * 100) : 0;
-  const aggPp = agg.orders > 0 ? Math.round(agg.profit / agg.orders) : 0;
-  const cardCls = (m) => m >= 25 ? '' : m >= 15 ? 'warning' : 'danger';
-  const html = `
-    <div class="profit-cards">
-      <div class="profit-card"><div class="label">Doanh thu</div><div class="value">${fmtNum(Math.round(agg.revenue))}đ</div></div>
-      <div class="profit-card"><div class="label">Đơn hàng</div><div class="value">${fmtNum(agg.orders)}</div></div>
-      <div class="profit-card ${cardCls(aggMargin)}"><div class="label">Lợi nhuận</div><div class="value">${fmtNum(Math.round(agg.profit))}đ</div></div>
-      <div class="profit-card ${cardCls(aggMargin)}"><div class="label">Margin</div><div class="value">${aggMargin.toFixed(1)}%</div></div>
-      <div class="profit-card"><div class="label">Profit/đơn</div><div class="value">${fmtNum(aggPp)}đ</div></div>
+  wrap.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="label">Doanh thu</div><div class="value">${fmt(t.revenue)}đ</div></div>
+      <div class="stat-card"><div class="label">Đơn</div><div class="value">${fmt(t.orders)}</div></div>
+      <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Lợi nhuận</div><div class="value">${fmt(t.profit)}đ</div></div>
+      <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Margin</div><div class="value">${t.margin_pct}%</div></div>
+      <div class="stat-card"><div class="label">FB Spend (40%)</div><div class="value">${fmt(t.fb_spend_estimated)}đ</div><div class="sub">ước lượng</div></div>
     </div>
-    <div style="margin-top:14px;overflow-x:auto">
-      <table class="group-table">
-        <thead><tr><th>Nhóm SP</th><th>Đơn</th><th>Doanh thu</th><th>AOV</th><th>Profit/đơn</th><th>Margin</th></tr></thead>
-        <tbody>${groupRows || '<tr><td colspan="6" style="text-align:center;color:#9ca3af">Không có data</td></tr>'}</tbody>
-      </table>
-    </div>
-    <div class="note">Spend FB Ads ước lượng = 40% × revenue. Khi có data thật từ Marketing API → thay bằng số chính xác.</div>
+    <table class="campaign-table" style="margin-top:8px">
+      <thead><tr><th>Nhóm</th><th class="num">Đơn</th><th class="num">Doanh thu</th><th class="num">AOV</th><th class="num">Profit/đơn</th><th class="num">Margin</th></tr></thead>
+      <tbody>${groupRows || '<tr><td colspan="6" style="text-align:center;color:#9ca3af">—</td></tr>'}</tbody>
+    </table>
   `;
-  document.getElementById('profit-summary').innerHTML = html;
 }
 
-// ── AI CALLS ──
-async function runAI(mode, question) {
-  const group = getGroup();
+// ── Render accounts ──
+function renderAccounts(accounts) {
+  const wrap = document.getElementById('account-list');
+  if (!accounts?.accounts?.length) {
+    wrap.innerHTML = '<div class="empty-state">Không có tài khoản.</div>';
+    return;
+  }
+  if (accounts.data_warning) {
+    document.getElementById('account-info').innerHTML = `<span style="color:#d97706">⚠ ${accounts.data_warning}</span>`;
+  }
+  wrap.innerHTML = accounts.accounts.map(a => {
+    const isEmpty = a.spend === 0 && a.leads === 0;
+    return `<div class="account-card ${isEmpty ? 'empty' : ''}" data-acc="${a.id}" onclick="selectAccount('${a.id}', this)">
+      <div class="name">${escapeHtml(a.name)}</div>
+      <div class="stats">
+        <span><strong>${fmtVnd(a.spend)}</strong>spend</span>
+        <span><strong>${fmt(a.leads)}</strong>leads</span>
+        <span><strong>${a.campaigns_count}</strong>campaigns</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function selectAccount(accId, cardEl) {
+  document.querySelectorAll('.account-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+  state.accountId = accId;
+  state.campaignId = null;
+
+  const params = new URLSearchParams();
+  params.set('time', state.timePreset);
+  if (state.timePreset === 'custom') {
+    params.set('start', state.customStart);
+    params.set('end', state.customEnd);
+  }
+  params.set('account_id', accId);
+  params.set('group', state.group);
+
+  document.getElementById('campaign-section').style.display = 'block';
+  document.getElementById('campaign-list').innerHTML = '<div class="empty-state">Đang tải campaigns...</div>';
+  try {
+    const r = await fetch('/api/fb/snapshot?' + params, { credentials: 'same-origin' });
+    const j = await r.json();
+    if (!j.ok) { document.getElementById('campaign-list').innerHTML = `<div class="alert-empty">${j.error}</div>`; return; }
+    renderCampaigns(j.campaigns);
+  } catch (e) {
+    document.getElementById('campaign-list').innerHTML = `<div class="alert-empty">${e.message}</div>`;
+  }
+}
+
+function renderCampaigns(campaigns) {
+  const wrap = document.getElementById('campaign-list');
+  if (!campaigns?.has_data) {
+    wrap.innerHTML = `<div class="warning-banner">Tài khoản này KHÔNG có campaign data trong khoảng thời gian. Có thể: (1) chưa chạy campaign, (2) FB token expired (workflow fetch fail), (3) data chưa sync.</div>`;
+    document.getElementById('campaign-account-name').textContent = campaigns?.account?.name || '';
+    return;
+  }
+  document.getElementById('campaign-account-name').textContent = campaigns.account.name;
+  wrap.innerHTML = `
+    <table class="campaign-table">
+      <thead>
+        <tr>
+          <th>Campaign</th><th class="num">Spend</th><th class="num">Impr</th><th class="num">Clicks</th>
+          <th class="num">CTR</th><th class="num">Leads</th><th class="num">CPL</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${campaigns.campaigns.map(c => `
+          <tr>
+            <td>${escapeHtml(c.name)}</td>
+            <td class="num">${fmtVnd(c.spend)}</td>
+            <td class="num">${fmt(c.impressions)}</td>
+            <td class="num">${fmt(c.clicks)}</td>
+            <td class="num">${(c.ctr * 100).toFixed(2)}%</td>
+            <td class="num">${fmt(c.leads)}</td>
+            <td class="num">${c.cpl ? fmtVnd(c.cpl) : '—'}</td>
+            <td>${c.status}</td>
+            <td><button class="btn-optimize" onclick="optimizeCampaign('${c.id}', '${escapeHtml(c.name)}')">🛡 Tối ưu</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function optimizeCampaign(campaignId, campaignName) {
+  state.campaignId = campaignId;
+  runAI('optimize_campaign', null, `Phân tích + tối ưu campaign "${campaignName}"`);
+}
+
+// ── AI calls ──
+async function runAI(mode, question, context_hint) {
   const out = document.getElementById('output');
   const meta = document.getElementById('meta');
   const startTs = Date.now();
-  out.innerHTML = '<div style="text-align:center;padding:30px;color:#1877f2">⏳ AI đang phân tích...</div>';
+  out.innerHTML = '<div class="empty-state" style="color:#1877f2">⏳ AI đang phân tích...</div>';
   meta.textContent = '';
   try {
+    const body = {
+      mode, question, group: state.group,
+      time_preset: state.timePreset,
+      custom_start: state.customStart,
+      custom_end: state.customEnd,
+      account_id: state.accountId,
+      campaign_id: state.campaignId,
+    };
     const r = await fetch('/api/agent-fb-ai', {
-      method: 'POST',
-      credentials: 'same-origin',
+      method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode, group, question }),
+      body: JSON.stringify(body),
     });
     const j = await r.json();
-    if (!r.ok || !j.ok) {
-      out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`;
-      return;
-    }
+    if (!r.ok || !j.ok) { out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`; return; }
     const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
-    meta.textContent = `${elapsed}s · model: ${j.model} · ${j.cached ? '📌 cached' : '🔄 live'} · group: ${j.group_label}`;
-    if (mode === 'audit_account_json' && j.parsed_json) {
-      renderScorecard(j.parsed_json);
-      out.innerHTML = `<div class="note">✅ Card chấm điểm đã render bên trên.</div><pre style="font-size:11px;color:#6b7280">${escapeHtml(j.response).slice(0,500)}...</pre>`;
-    } else {
-      out.innerHTML = md2html(j.response);
-    }
-    if (j.cache_note) {
-      out.innerHTML = `<div class="note">${j.cache_note}</div>` + out.innerHTML;
-    }
+    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · group: ${j.group_label} · time: ${state.timeRange?.label || '?'}`;
+    out.innerHTML = (mode === 'audit_account_json' && j.parsed_json) ? renderJSON(j.parsed_json) : md2html(j.response);
+    if (j.cache_note) out.innerHTML = `<div class="note">${j.cache_note}</div>` + out.innerHTML;
   } catch (e) {
     out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
   }
@@ -325,98 +487,24 @@ function askQuestion() {
   runAI('ask', q);
 }
 
-function onGroupChange() {
-  loadProfitSummary();
-  // Reset scorecard và output (group đổi → kết quả cũ ko còn relevant)
-  document.getElementById('scorecard-body').innerHTML = '<div style="color:#9ca3af;text-align:center;padding:30px">Bấm "Chấm điểm" để AI phân tích.</div>';
-  document.getElementById('output').innerHTML = '<div style="color:#9ca3af;text-align:center;padding:40px 20px">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.</div>';
-  document.getElementById('meta').textContent = '';
-}
-
-// ── SCORECARD ──
-function renderScorecard(json) {
-  const body = document.getElementById('scorecard-body');
-  if (!json) { body.innerHTML = '<div class="alert-empty">Không parse được JSON</div>'; return; }
-  if (json._parse_error) { body.innerHTML = `<div class="alert-empty">Parse fail: ${json._parse_error}<br><pre>${(json._raw_excerpt || '').slice(0,500)}</pre></div>`; return; }
-  const t = json.total_score || 0;
-  const grade = json.grade || 'F';
-  const breakdown = json.breakdown || {};
-  const order = ['tracking','creative','audience','cost_ratio','profit','funnel','frequency','compliance'];
-  const labels = {
-    tracking:'Tracking', creative:'Creative', audience:'Audience',
-    cost_ratio:'Cost ratio', profit:'Profit', funnel:'Funnel',
-    frequency:'Frequency', compliance:'Compliance'
-  };
-  let scoreItems = '';
-  for (const k of order) {
-    const it = breakdown[k] || {};
-    const sc = Number(it.score) || 0;
-    const w = Number(it.weight) || 0;
-    scoreItems += `<div class="score-item">
-      <div class="row"><strong>${labels[k]} (${w}%)</strong> <span style="color:${sc>=70?'#059669':sc>=50?'#d97706':'#dc2626'};font-weight:600">${sc}/100</span></div>
-      <div class="bar"><div class="fill" style="width:${sc}%;background:${sc>=70?'#059669':sc>=50?'#d97706':'#dc2626'}"></div></div>
-      <div class="note">${escapeHtml(it.note || '—')}</div>
-    </div>`;
+function renderJSON(json) {
+  if (!json) return '<div class="alert-empty">No JSON</div>';
+  if (json._parse_error) return `<div class="alert-empty">Parse fail: ${json._parse_error}</div>`;
+  const t = json.total_score || 0, grade = json.grade || 'F';
+  let breakdown = '';
+  for (const [k, v] of Object.entries(json.breakdown || {})) {
+    breakdown += `<tr><td><strong>${k}</strong> (${v.weight}%)</td><td class="num"><strong>${v.score}/100</strong></td><td>${escapeHtml(v.note)}</td></tr>`;
   }
   let findings = '';
-  if (Array.isArray(json.top_findings) && json.top_findings.length) {
-    findings = `<div class="findings"><strong>🎯 Top Findings:</strong><ul>${
-      json.top_findings.map(f => `<li>${escapeHtml(f)}</li>`).join('')
-    }</ul></div>`;
+  if (Array.isArray(json.top_findings)) {
+    findings = '<ul>' + json.top_findings.map(f => `<li>${escapeHtml(f)}</li>`).join('') + '</ul>';
   }
-  body.innerHTML = `
-    <div class="scorecard-header">
-      <div class="score-circle ${grade}">${t}</div>
-      <div>
-        <div style="font-size:18px;font-weight:600">Grade ${grade} · ${t}/100</div>
-        <div style="color:#6b7280;font-size:13px;margin-top:2px">${escapeHtml(json.summary || '')}</div>
-      </div>
-    </div>
-    <div class="score-grid">${scoreItems}</div>
-    ${findings}
-    ${json._validation_note ? `<div class="note">${json._validation_note}</div>` : ''}
+  return `
+    <h3>Grade ${grade} · ${t}/100</h3>
+    <p>${escapeHtml(json.summary || '')}</p>
+    <table><thead><tr><th>Nhóm</th><th>Score</th><th>Note</th></tr></thead><tbody>${breakdown}</tbody></table>
+    ${findings ? `<h3>Top Findings</h3>${findings}` : ''}
   `;
-}
-
-// ── UTILS ──
-function escapeHtml(s) {
-  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function md2html(s) {
-  if (!s) return '<div style="color:#9ca3af">No output</div>';
-  // Simple markdown → html
-  let h = escapeHtml(s);
-  // Tables
-  const lines = h.split('\n');
-  let out = ''; let inTable = false; let tHead = '';
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (line.match(/^\|.*\|$/)) {
-      if (!inTable) { out += '<table>'; inTable = true; }
-      const cells = line.split('|').slice(1, -1).map(c => c.trim());
-      if (line.match(/^\|[\s\-:|]+\|$/)) continue;
-      const isHead = !tHead;
-      if (isHead) { out += '<tr>' + cells.map(c => `<th>${c}</th>`).join('') + '</tr>'; tHead = '1'; }
-      else { out += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>'; }
-    } else {
-      if (inTable) { out += '</table>'; inTable = false; tHead = ''; }
-      out += line + '\n';
-    }
-  }
-  if (inTable) out += '</table>';
-  // Headings
-  out = out.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  out = out.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  out = out.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-  // Bold
-  out = out.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  // Lists
-  out = out.replace(/^\- (.+)$/gm, '<li>$1</li>');
-  out = out.replace(/(<li>.*?<\/li>\s*)+/gs, m => '<ul>' + m + '</ul>');
-  // Paragraphs
-  out = out.replace(/\n\n+/g, '</p><p>');
-  return '<p>' + out + '</p>';
 }
 
 function copyOutput() {
@@ -429,8 +517,38 @@ function copyOutput() {
   });
 }
 
+function escapeHtml(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function md2html(s) {
+  if (!s) return '<div class="empty-state">No output</div>';
+  let h = escapeHtml(s);
+  const lines = h.split('\n');
+  let out = '', inTable = false, hadHead = false;
+  for (const line of lines) {
+    if (line.match(/^\|.*\|$/)) {
+      if (!inTable) { out += '<table>'; inTable = true; }
+      const cells = line.split('|').slice(1, -1).map(c => c.trim());
+      if (line.match(/^\|[\s\-:|]+\|$/)) continue;
+      if (!hadHead) { out += '<tr>' + cells.map(c => `<th>${c}</th>`).join('') + '</tr>'; hadHead = true; }
+      else out += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    } else {
+      if (inTable) { out += '</table>'; inTable = false; hadHead = false; }
+      out += line + '\n';
+    }
+  }
+  if (inTable) out += '</table>';
+  out = out.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  out = out.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  out = out.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  out = out.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/^- (.+)$/gm, '<li>$1</li>');
+  out = out.replace(/(<li>.*?<\/li>\s*)+/gs, m => '<ul>' + m + '</ul>');
+  out = out.replace(/\n\n+/g, '</p><p>');
+  return '<p>' + out + '</p>';
+}
+
 // Init
-window.addEventListener('DOMContentLoaded', loadProfitSummary);
+window.addEventListener('DOMContentLoaded', refresh);
 </script>
 </body>
 </html>
