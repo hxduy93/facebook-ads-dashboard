@@ -211,3 +211,8 @@ def main():
     for term, m in top:
         conv = m["conversions_30d"]
         status = "🟢" if conv > 0 else "🔴"
+        print(f"         {status} [{m['spend_30d']:>10,.0f}đ · {m['clicks_30d']:>4} clicks · {conv} conv] {term[:60]}")
+
+
+if __name__ == "__main__":
+    main()
