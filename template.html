@@ -902,12 +902,26 @@ function FacebookAdsDashboard() {
             >
               <Megaphone /> Tạo quảng cáo
             </button>
-            <a
-              href="/agent-google-doscom.html"
-              className="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 transition flex items-center gap-2"
+            <button
+              onClick={() => setCurrentView("fb-agent")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "fb-agent"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
             >
-              <BarChart3 /> Agent Google Doscom ↗
-            </a>
+              <Megaphone /> Agent FB Ads
+            </button>
+            <button
+              onClick={() => setCurrentView("gg-agent")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "gg-agent"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              <BarChart3 /> Agent Google Ads
+            </button>
             <a
               href="/inventory.html"
               className="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 transition flex items-center gap-2"
@@ -925,6 +939,27 @@ function FacebookAdsDashboard() {
           <AdsCreatorPanel />
         )}
 
+        {currentView === "fb-agent" && (
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden" style={{ height: "calc(100vh - 200px)" }}>
+            <iframe
+              src="/agent-facebook-doscom.html"
+              title="Agent Facebook Ads"
+              style={{ width: "100%", height: "100%", border: "none" }}
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        {currentView === "gg-agent" && (
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden" style={{ height: "calc(100vh - 200px)" }}>
+            <iframe
+              src="/agent-google-doscom.html"
+              title="Agent Google Ads"
+              style={{ width: "100%", height: "100%", border: "none" }}
+              loading="lazy"
+            />
+          </div>
+        )}
 
         {currentView === "main" && (<>
 
