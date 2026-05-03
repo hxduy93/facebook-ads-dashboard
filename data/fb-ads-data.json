@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-03 18:59",
+  "generated_at": "2026-05-03 22:08",
   "source": "FB Marketing API v21.0 (auto every 3h)",
   "date_range": {
     "start": "2026-02-02",
@@ -8,9 +8,9 @@
   "currency": "VND",
   "total_accounts": 6,
   "total_summary": {
-    "spend": 246167784.0,
-    "impressions": 2674071,
-    "clicks": 51805,
+    "spend": 246168302.0,
+    "impressions": 2674074,
+    "clicks": 51807,
     "leads": 98
   },
   "accounts": [
@@ -31,7 +31,7 @@
         "ctr": 1.522,
         "cpc": 7244.89,
         "campaigns_total": 4,
-        "campaigns_active": 2
+        "campaigns_active": 0
       },
       "campaigns": [
         {
@@ -393,8 +393,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -778,8 +778,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -857,7 +857,7 @@
         "ctr": 1.7212,
         "cpc": 4914.11,
         "campaigns_total": 28,
-        "campaigns_active": 6
+        "campaigns_active": 0
       },
       "campaigns": [
         {
@@ -1219,8 +1219,8 @@
               "messages": 0
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -1549,8 +1549,8 @@
               "messages": 0
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -1769,8 +1769,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -1786,7 +1786,7 @@
           "leads": 4,
           "link_clicks": 608,
           "landing_page_views": 611,
-          "video_views": 20185,
+          "video_views": 20186,
           "complete_registrations": 69,
           "messages": 7,
           "by_date": {
@@ -1846,8 +1846,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -1934,8 +1934,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -2011,8 +2011,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -3192,16 +3192,16 @@
         "end": "2026-05-02"
       },
       "summary": {
-        "spend": 91309374.0,
-        "impressions": 1160181,
-        "clicks": 22895,
+        "spend": 91309892.0,
+        "impressions": 1160184,
+        "clicks": 22897,
         "reach": 986820,
         "leads": 57,
         "complete_registrations": 796,
-        "ctr": 1.9734,
-        "cpc": 3988.18,
+        "ctr": 1.9736,
+        "cpc": 3987.85,
         "campaigns_total": 8,
-        "campaigns_active": 5
+        "campaigns_active": 0
       },
       "campaigns": [
         {
@@ -3618,8 +3618,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -3627,15 +3627,15 @@
           "campaign_id": "120244203627430388",
           "spend": 13051633.0,
           "impressions": 144174,
-          "clicks": 3150,
+          "clicks": 3152,
           "reach": 120555,
-          "ctr": 2.1849,
-          "cpc": 4143.38,
+          "ctr": 2.1862,
+          "cpc": 4140.75,
           "cpm": 90526.95,
           "leads": 8,
-          "link_clicks": 1902,
+          "link_clicks": 1903,
           "landing_page_views": 1743,
-          "video_views": 29374,
+          "video_views": 29375,
           "complete_registrations": 103,
           "messages": 20,
           "by_date": {
@@ -3818,17 +3818,17 @@
             "2026-05-02": {
               "spend": 762823.0,
               "impressions": 8552,
-              "clicks": 169,
+              "clicks": 171,
               "reach": 7961,
               "leads": 0,
               "complete_registrations": 3,
-              "link_clicks": 94,
+              "link_clicks": 95,
               "landing_page_views": 88,
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -3844,7 +3844,7 @@
           "leads": 15,
           "link_clicks": 2300,
           "landing_page_views": 2068,
-          "video_views": 66002,
+          "video_views": 66003,
           "complete_registrations": 103,
           "messages": 22,
           "by_date": {
@@ -4036,20 +4036,20 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành Xe Trắng",
           "campaign_id": "120244425748800388",
-          "spend": 10937950.0,
-          "impressions": 169746,
+          "spend": 10938000.0,
+          "impressions": 169747,
           "clicks": 2844,
           "reach": 106946,
           "ctr": 1.6754,
-          "cpc": 3845.97,
-          "cpm": 64437.16,
+          "cpc": 3845.99,
+          "cpm": 64437.07,
           "leads": 8,
           "link_clicks": 1927,
           "landing_page_views": 1846,
@@ -4157,8 +4157,8 @@
               "messages": 0
             },
             "2026-05-02": {
-              "spend": 1505242.0,
-              "impressions": 23761,
+              "spend": 1505292.0,
+              "impressions": 23762,
               "clicks": 364,
               "reach": 13790,
               "leads": 1,
@@ -4168,8 +4168,8 @@
               "messages": 2
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -4340,13 +4340,13 @@
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành - 2 video",
           "campaign_id": "120244425582170388",
-          "spend": 6969771.0,
-          "impressions": 96344,
+          "spend": 6970239.0,
+          "impressions": 96346,
           "clicks": 1699,
           "reach": 84544,
-          "ctr": 1.7635,
-          "cpc": 4102.28,
-          "cpm": 72342.55,
+          "ctr": 1.7634,
+          "cpc": 4102.55,
+          "cpm": 72345.91,
           "leads": 2,
           "link_clicks": 1034,
           "landing_page_views": 963,
@@ -4454,8 +4454,8 @@
               "messages": 1
             },
             "2026-05-02": {
-              "spend": 1001065.0,
-              "impressions": 14578,
+              "spend": 1001533.0,
+              "impressions": 14580,
               "clicks": 213,
               "reach": 12534,
               "leads": 0,
@@ -4465,8 +4465,8 @@
               "messages": 2
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -4632,7 +4632,7 @@
         "ctr": 2.8491,
         "cpc": 4972.29,
         "campaigns_total": 5,
-        "campaigns_active": 3
+        "campaigns_active": 0
       },
       "campaigns": [
         {
@@ -4862,8 +4862,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -5170,8 +5170,8 @@
               "messages": 0
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -5390,8 +5390,8 @@
               "messages": 0
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -5601,7 +5601,7 @@
         "ctr": 2.4873,
         "cpc": 7166.55,
         "campaigns_total": 11,
-        "campaigns_active": 1
+        "campaigns_active": 0
       },
       "campaigns": [
         {
@@ -5688,8 +5688,8 @@
               "messages": 1
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
