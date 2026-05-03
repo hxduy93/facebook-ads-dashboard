@@ -24,10 +24,13 @@ API_KEY = os.environ.get("WINDSOR_API_KEY", "").strip()
 ACCOUNT_NAME = os.environ.get("WINDSOR_GOOGLE_ADS_ACCOUNT_NAME", "MHDI").strip()
 
 DATE_PRESET = "last_30d"  # Search terms chỉ cần 30 ngày là đủ
+# NOTE: search_top_impression_share + search_absolute_top_impression_share
+# bị Windsor reject khi query CÙNG search_term_match_type/view_status (Google Ads
+# không cho phép combo này). → Đã remove. Output vẫn giữ field với value=0 cho
+# downstream compatibility. Cần impression share thì query riêng sau.
 FIELDS = (
     "account_name,campaign,date,spend,clicks,impressions,datasource,"
-    "search_term,conversions,search_term_match_type,search_term_view_status,"
-    "search_top_impression_share,search_absolute_top_impression_share"
+    "search_term,conversions,search_term_match_type,search_term_view_status"
 )
 BASE_URL = "https://connectors.windsor.ai/all"
 
@@ -131,8 +134,7 @@ def main():
             "clicks": int(r.get("clicks", 0) or 0),
             "impressions": int(r.get("impressions", 0) or 0),
             "conversions": float(r.get("conversions", 0) or 0),
-            "top_impression_share": float(r.get("search_top_impression_share", 0) or 0),
-            "absolute_top_impression_share": float(r.get("search_absolute_top_impression_share", 0) or 0),
+            # impression_share fields removed (Windsor incompatible with match_type/view_status)
         })
 
     dates_sorted = sorted(set(dates))
@@ -157,13 +159,7 @@ def main():
         e["clicks"] += t["clicks"]
         e["impressions"] += t["impressions"]
         e["conversions"] += t["conversions"]
-        # Preserve max impression share seen (ranking SEO)
-        top_is = t.get("top_impression_share", 0) or 0
-        abs_top_is = t.get("absolute_top_impression_share", 0) or 0
-        if "top_is" not in e: e["top_is"] = 0
-        if "abs_top_is" not in e: e["abs_top_is"] = 0
-        e["top_is"] = max(e["top_is"], top_is)
-        e["abs_top_is"] = max(e["abs_top_is"], abs_top_is)
+        # impression_share aggregation removed
 
     term_aggregates = {
         term: {
@@ -176,8 +172,8 @@ def main():
             "campaigns": sorted(list(e["campaigns"])),
             "match_types": sorted(list(e["match_types"])),
             "statuses": sorted(list(e["statuses"])),
-            "top_impression_share": round(e.get("top_is", 0), 4),
-            "abs_top_impression_share": round(e.get("abs_top_is", 0), 4),
+            "top_impression_share": 0,        # field removed from Windsor query - placeholder
+            "abs_top_impression_share": 0,    # field removed from Windsor query - placeholder
         }
         for term, e in agg.items()
     }
