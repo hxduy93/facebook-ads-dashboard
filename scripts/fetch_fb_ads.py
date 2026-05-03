@@ -95,6 +95,35 @@ def api_request(url, max_retries=4):
     return None
 
 
+def fetch_campaign_statuses(account_id):
+    """Fetch campaign status (active/paused/etc) — separate endpoint, không trả từ insights.
+    Trả về dict: {campaign_id: {status, effective_status, objective}}."""
+    params = {
+        "fields": "id,name,status,effective_status,objective",
+        "limit": "200",
+        "access_token": ACCESS_TOKEN,
+    }
+    url = f"{BASE_URL}/act_{account_id}/campaigns?{urllib.parse.urlencode(params)}"
+    statuses = {}
+    page = 1
+    while url:
+        data = api_request(url)
+        if data is None:
+            break
+        for c in data.get("data", []):
+            statuses[c.get("id")] = {
+                "status": c.get("status", "UNKNOWN"),
+                "effective_status": c.get("effective_status", "UNKNOWN"),
+                "objective": c.get("objective", "UNKNOWN"),
+            }
+        paging = data.get("paging", {})
+        url = paging.get("next")
+        page += 1
+        time.sleep(0.3)
+    print(f"  [INFO] Fetched status cho {len(statuses)} campaigns")
+    return statuses
+
+
 def fetch_account_insights(account_id, date_since, date_until):
     """Fetch campaign-level insights cho 1 account, tự động paginate."""
     all_data = []
@@ -192,7 +221,10 @@ def aggregate_campaigns(rows):
                 "clicks": clicks,
                 "reach": reach,
                 "leads": extract_action_value(actions, "lead"),
+                "complete_registrations": extract_action_value(actions, "complete_registration"),
                 "link_clicks": extract_action_value(actions, "link_click"),
+                "landing_page_views": extract_action_value(actions, "landing_page_view"),
+                "messages": extract_action_value(actions, "onsite_conversion.messaging_conversation_started_7d"),
             }
 
     # Convert to list + compute CTR/CPC
@@ -244,6 +276,9 @@ def main():
         print(f"\n{'='*60}")
         print(f"[INFO] Account: {acc_name} ({acc_id})")
 
+        # Fetch campaign statuses (separate endpoint)
+        statuses = fetch_campaign_statuses(acc_id)
+
         rows = fetch_account_insights(acc_id, date_since, date_until)
 
         if not rows:
@@ -259,11 +294,22 @@ def main():
             continue
 
         campaigns = aggregate_campaigns(rows)
+
+        # Merge campaign status info từ separate /campaigns endpoint
+        for c in campaigns:
+            cid = c.get("campaign_id")
+            s = statuses.get(cid, {})
+            c["status"] = s.get("status", "UNKNOWN")
+            c["effective_status"] = s.get("effective_status", "UNKNOWN")
+            c["objective"] = s.get("objective", "UNKNOWN")
+
         total_spend = sum(c["spend"] for c in campaigns)
         total_clicks = sum(c["clicks"] for c in campaigns)
         total_impressions = sum(c["impressions"] for c in campaigns)
         total_leads = sum(c["leads"] for c in campaigns)
+        total_complete_reg = sum(c.get("complete_registrations", 0) for c in campaigns)
         total_reach = sum(c["reach"] for c in campaigns)
+        active_count = sum(1 for c in campaigns if c.get("effective_status") == "ACTIVE")
 
         accounts_data.append({
             "account_id": acc_id,
@@ -275,8 +321,11 @@ def main():
                 "clicks": total_clicks,
                 "reach": total_reach,
                 "leads": total_leads,
+                "complete_registrations": total_complete_reg,
                 "ctr": round((total_clicks / total_impressions * 100) if total_impressions > 0 else 0, 4),
                 "cpc": round((total_spend / total_clicks) if total_clicks > 0 else 0, 2),
+                "campaigns_total": len(campaigns),
+                "campaigns_active": active_count,
             },
             "campaigns": campaigns,
             "rows_raw": len(rows),

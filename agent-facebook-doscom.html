@@ -142,24 +142,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     </div>
   </div>
 
-  <!-- GROUP FILTER -->
-  <div class="section">
-    <h2>🎯 Nhóm sản phẩm
-      <span class="right">Doscom có 4 nhóm bán qua FB Ads</span>
-    </h2>
-    <div class="group-chips" id="group-chips">
-      <button class="group-chip active" data-group="ALL">Tất cả</button>
-      <button class="group-chip" data-group="MAY_DO">Máy dò (D-series)</button>
-      <button class="group-chip" data-group="CAMERA_VIDEO_CALL">Camera VC (DA8.1)</button>
-      <button class="group-chip" data-group="GHI_AM">Máy ghi âm (DR1)</button>
-      <button class="group-chip" data-group="NOMA">NOMA</button>
-    </div>
-  </div>
-
   <!-- PROFIT SUMMARY -->
   <div class="section">
     <h2>💰 Tổng quan lợi nhuận
-      <span class="right">Filter: DUY + PHƯƠNG NAM</span>
+      <span class="right">Theo time filter · Pancake DUY + PHƯƠNG NAM</span>
     </h2>
     <div id="profit-summary">
       <div class="empty-state">Đang tải...</div>
@@ -232,19 +218,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 </div>
 
 <script>
-const GROUP_LABELS = {
-  ALL: "Tất cả 4 nhóm",
-  MAY_DO: "Máy dò",
-  CAMERA_VIDEO_CALL: "Camera VC",
-  GHI_AM: "Ghi âm",
-  NOMA: "NOMA",
-};
-
 let state = {
   timePreset: "last_30d",
   customStart: null,
   customEnd: null,
-  group: "ALL",
   accountId: null,
   campaignId: null,
   timeRange: null,
@@ -265,15 +242,6 @@ document.querySelectorAll('[data-time]').forEach(btn => {
       return;
     }
     document.getElementById('custom-range').classList.remove('show');
-    refresh();
-  });
-});
-
-document.querySelectorAll('[data-group]').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('[data-group]').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    state.group = chip.dataset.group;
     refresh();
   });
 });
@@ -301,7 +269,6 @@ async function refresh() {
     params.set('start', state.customStart);
     params.set('end', state.customEnd);
   }
-  params.set('group', state.group);
 
   document.getElementById('profit-summary').innerHTML = '<div class="empty-state">Đang tải...</div>';
   document.getElementById('account-list').innerHTML = '<div class="empty-state">Đang tải...</div>';
@@ -332,30 +299,15 @@ function renderProfitSummary(profit) {
   }
   const t = profit.total;
   const cardCls = (m) => m >= 25 ? '' : m >= 15 ? 'warning' : 'danger';
-  let groupRows = '';
-  for (const [g, gt] of Object.entries(profit.groups || {})) {
-    const cls = gt.margin_pct >= 25 ? '' : gt.margin_pct >= 15 ? 'warning' : 'danger';
-    groupRows += `<tr>
-      <td>${GROUP_LABELS[g] || g}</td>
-      <td class="num">${fmt(gt.orders)}</td>
-      <td class="num">${fmt(gt.revenue)}đ</td>
-      <td class="num">${fmt(gt.aov)}đ</td>
-      <td class="num">${fmt(gt.profit_per_order)}đ</td>
-      <td class="num"><strong style="color:${gt.margin_pct >= 25 ? '#15803d' : gt.margin_pct >= 15 ? '#d97706' : '#dc2626'}">${gt.margin_pct}%</strong></td>
-    </tr>`;
-  }
   wrap.innerHTML = `
     <div class="stats-grid">
       <div class="stat-card"><div class="label">Doanh thu</div><div class="value">${fmt(t.revenue)}đ</div></div>
       <div class="stat-card"><div class="label">Đơn</div><div class="value">${fmt(t.orders)}</div></div>
       <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Lợi nhuận</div><div class="value">${fmt(t.profit)}đ</div></div>
       <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Margin</div><div class="value">${t.margin_pct}%</div></div>
-      <div class="stat-card"><div class="label">FB Spend (40%)</div><div class="value">${fmt(t.fb_spend_estimated)}đ</div><div class="sub">ước lượng</div></div>
+      <div class="stat-card"><div class="label">FB Spend (ước)</div><div class="value">${fmt(t.fb_spend_estimated)}đ</div><div class="sub">40% revenue</div></div>
+      <div class="stat-card"><div class="label">Profit/đơn</div><div class="value">${fmt(t.profit_per_order)}đ</div></div>
     </div>
-    <table class="campaign-table" style="margin-top:8px">
-      <thead><tr><th>Nhóm</th><th class="num">Đơn</th><th class="num">Doanh thu</th><th class="num">AOV</th><th class="num">Profit/đơn</th><th class="num">Margin</th></tr></thead>
-      <tbody>${groupRows || '<tr><td colspan="6" style="text-align:center;color:#9ca3af">—</td></tr>'}</tbody>
-    </table>
   `;
 }
 
@@ -370,13 +322,15 @@ function renderAccounts(accounts) {
     document.getElementById('account-info').innerHTML = `<span style="color:#d97706">⚠ ${accounts.data_warning}</span>`;
   }
   wrap.innerHTML = accounts.accounts.map(a => {
-    const isEmpty = a.spend === 0 && a.leads === 0;
+    const isEmpty = a.spend === 0 && a.conversions === 0;
+    const cpa = a.conversions > 0 ? Math.round(a.spend / a.conversions) : null;
     return `<div class="account-card ${isEmpty ? 'empty' : ''}" data-acc="${a.id}" onclick="selectAccount('${a.id}', this)">
       <div class="name">${escapeHtml(a.name)}</div>
       <div class="stats">
         <span><strong>${fmtVnd(a.spend)}</strong>spend</span>
-        <span><strong>${fmt(a.leads)}</strong>leads</span>
-        <span><strong>${a.campaigns_count}</strong>campaigns</span>
+        <span><strong>${fmt(a.conversions)}</strong>kết quả</span>
+        <span><strong>${cpa ? fmtVnd(cpa) : '—'}</strong>CPA</span>
+        <span><strong>${a.active_campaigns}/${a.campaigns_count}</strong>active</span>
       </div>
     </div>`;
   }).join('');
@@ -395,7 +349,6 @@ async function selectAccount(accId, cardEl) {
     params.set('end', state.customEnd);
   }
   params.set('account_id', accId);
-  params.set('group', state.group);
 
   document.getElementById('campaign-section').style.display = 'block';
   document.getElementById('campaign-list').innerHTML = '<div class="empty-state">Đang tải campaigns...</div>';
@@ -412,35 +365,42 @@ async function selectAccount(accId, cardEl) {
 function renderCampaigns(campaigns) {
   const wrap = document.getElementById('campaign-list');
   if (!campaigns?.has_data) {
-    wrap.innerHTML = `<div class="warning-banner">Tài khoản này KHÔNG có campaign data trong khoảng thời gian. Có thể: (1) chưa chạy campaign, (2) FB token expired (workflow fetch fail), (3) data chưa sync.</div>`;
+    wrap.innerHTML = `<div class="warning-banner">Tài khoản này KHÔNG có campaign nào active hoặc spend trong khoảng thời gian này.</div>`;
     document.getElementById('campaign-account-name').textContent = campaigns?.account?.name || '';
     return;
   }
-  document.getElementById('campaign-account-name').textContent = campaigns.account.name;
+  const accInfo = campaigns.account.name +
+    ` · ${campaigns.campaigns.length}/${campaigns.total_campaigns_in_account} campaigns shown` +
+    ` (${campaigns.active_campaigns_count} ACTIVE)`;
+  document.getElementById('campaign-account-name').textContent = accInfo;
   wrap.innerHTML = `
     <table class="campaign-table">
       <thead>
         <tr>
-          <th>Campaign</th><th class="num">Spend</th><th class="num">Impr</th><th class="num">Clicks</th>
-          <th class="num">CTR</th><th class="num">Leads</th><th class="num">CPL</th><th>Status</th><th></th>
+          <th>Campaign</th><th>Status</th><th class="num">Chi phí</th><th class="num">Lượt hiển thị</th>
+          <th class="num">Lượt click</th><th class="num">CTR</th><th class="num">Kết quả</th><th class="num">CP/KQ</th><th></th>
         </tr>
       </thead>
       <tbody>
-        ${campaigns.campaigns.map(c => `
-          <tr>
-            <td>${escapeHtml(c.name)}</td>
+        ${campaigns.campaigns.map(c => {
+          const statusBadge = c.effective_status === 'ACTIVE'
+            ? '<span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-size:10.5px">ACTIVE</span>'
+            : `<span style="background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-size:10.5px">${c.effective_status}</span>`;
+          return `<tr>
+            <td title="${escapeHtml(c.name)}">${escapeHtml(c.name.length > 50 ? c.name.slice(0, 50) + '…' : c.name)}</td>
+            <td>${statusBadge}</td>
             <td class="num">${fmtVnd(c.spend)}</td>
             <td class="num">${fmt(c.impressions)}</td>
             <td class="num">${fmt(c.clicks)}</td>
             <td class="num">${(c.ctr * 100).toFixed(2)}%</td>
-            <td class="num">${fmt(c.leads)}</td>
-            <td class="num">${c.cpl ? fmtVnd(c.cpl) : '—'}</td>
-            <td>${c.status}</td>
-            <td><button class="btn-optimize" onclick="optimizeCampaign('${c.id}', '${escapeHtml(c.name)}')">🛡 Tối ưu</button></td>
-          </tr>
-        `).join('')}
+            <td class="num"><strong>${fmt(c.conversions)}</strong></td>
+            <td class="num">${c.cpa ? fmtVnd(c.cpa) : '—'}</td>
+            <td><button class="btn-optimize" onclick="optimizeCampaign('${c.id}', '${escapeHtml(c.name).replace(/'/g, '&#39;')}')">🛡 Tối ưu</button></td>
+          </tr>`;
+        }).join('')}
       </tbody>
     </table>
+    <div style="margin-top:6px;font-size:11px;color:#9ca3af">"Kết quả" = complete_registrations (lead form). "CP/KQ" = chi phí mỗi kết quả.</div>
   `;
 }
 
@@ -458,7 +418,7 @@ async function runAI(mode, question, context_hint) {
   meta.textContent = '';
   try {
     const body = {
-      mode, question, group: state.group,
+      mode, question,
       time_preset: state.timePreset,
       custom_start: state.customStart,
       custom_end: state.customEnd,
@@ -473,7 +433,7 @@ async function runAI(mode, question, context_hint) {
     const j = await r.json();
     if (!r.ok || !j.ok) { out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`; return; }
     const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
-    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · group: ${j.group_label} · time: ${state.timeRange?.label || '?'}`;
+    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · time: ${state.timeRange?.label || '?'}`;
     out.innerHTML = (mode === 'audit_account_json' && j.parsed_json) ? renderJSON(j.parsed_json) : md2html(j.response);
     if (j.cache_note) out.innerHTML = `<div class="note">${j.cache_note}</div>` + out.innerHTML;
   } catch (e) {

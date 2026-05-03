@@ -361,54 +361,122 @@ export function computeFbProfitInRange(productRevenueJson, productCostsJson, gro
   };
 }
 
-// ── ACCOUNT + CAMPAIGN aggregation từ fb-ads-data.json ──────────────────
-// Trả về list account với spend, leads, campaigns count cho timeRange
+// ── ACCOUNT aggregation từ fb-ads-data.json (theo time range) ──────────
+// Aggregate campaign by_date → account summary cho time range cụ thể.
 export function compactFbAccounts(fbAdsJson, timeRange) {
   if (!fbAdsJson?.accounts) return { has_data: false, accounts: [] };
-  // fb-ads-data.json hiện chứa aggregated 90d cho mỗi account.
-  // Khi schema có per-day data → filter theo timeRange.
-  // Hiện tại: trả về toàn bộ với note.
-  const accounts = fbAdsJson.accounts.map(acc => ({
-    id: acc.account_id,
-    name: acc.account_name,
-    spend: Number(acc.summary?.spend) || 0,
-    impressions: Number(acc.summary?.impressions) || 0,
-    clicks: Number(acc.summary?.clicks) || 0,
-    leads: Number(acc.summary?.leads) || 0,
-    campaigns_count: (acc.campaigns || []).length,
-  }));
+  const tStart = timeRange?.start;
+  const tEnd = timeRange?.end;
+
+  const accounts = fbAdsJson.accounts.map(acc => {
+    let spend = 0, impressions = 0, clicks = 0, leads = 0, conv = 0;
+    let activeCount = 0;
+    for (const c of (acc.campaigns || [])) {
+      const isActive = c.effective_status === "ACTIVE";
+      const byDate = c.by_date || {};
+      let cSpend = 0, cConv = 0;
+      for (const [date, m] of Object.entries(byDate)) {
+        if (tStart && date < tStart) continue;
+        if (tEnd && date > tEnd) continue;
+        cSpend += Number(m.spend) || 0;
+        spend += Number(m.spend) || 0;
+        impressions += Number(m.impressions) || 0;
+        clicks += Number(m.clicks) || 0;
+        leads += Number(m.leads) || 0;
+        cConv += Number(m.complete_registrations) || 0;
+        conv += Number(m.complete_registrations) || 0;
+      }
+      if (isActive || cSpend > 0) activeCount++;
+    }
+    return {
+      id: acc.account_id,
+      name: acc.account_name,
+      spend: Math.round(spend),
+      impressions,
+      clicks,
+      leads,
+      conversions: conv,           // complete_registrations
+      campaigns_count: (acc.campaigns || []).length,
+      active_campaigns: activeCount,
+    };
+  });
+
   return {
-    has_data: accounts.some(a => a.spend > 0 || a.leads > 0),
+    has_data: accounts.some(a => a.spend > 0 || a.conversions > 0),
     accounts,
     time_range_note: timeRange ? `${timeRange.label} (${timeRange.start} → ${timeRange.end})` : null,
     data_warning: !accounts.some(a => a.spend > 0)
-      ? "fb-ads-data.json đang rỗng — kiểm tra workflow fetch-fb-ads (FB token có thể expired)"
+      ? "Không có data trong khoảng thời gian này. Có thể: (1) accounts không chạy ads, (2) fetch script chưa có per-day data mới — chạy lại workflow fetch-fb-ads"
       : null,
   };
 }
 
-// Trả về list campaigns của 1 account với spend/leads/CPL trong timeRange
-export function compactFbCampaigns(fbAdsJson, accountId, timeRange) {
+// Trả về list campaigns của 1 account với spend/conversions/CPL trong timeRange.
+// Aggregate từ by_date (filter date in range). Filter chỉ active campaigns by default.
+// "Lượt chuyển đổi" = complete_registrations (theo Doscom track event).
+export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
+  const { activeOnly = true } = opts;
   if (!fbAdsJson?.accounts) return { has_data: false, campaigns: [] };
   const account = fbAdsJson.accounts.find(a => a.account_id === accountId);
   if (!account) return { has_data: false, campaigns: [], error: "Account not found" };
-  const campaigns = (account.campaigns || []).map(c => ({
-    id: c.campaign_id,
-    name: c.campaign_name,
-    spend: Number(c.spend) || 0,
-    impressions: Number(c.impressions) || 0,
-    clicks: Number(c.clicks) || 0,
-    leads: Number(c.leads) || 0,
-    ctr: Number(c.ctr) || 0,
-    cpc: Number(c.cpc) || 0,
-    cpl: c.leads > 0 ? Math.round(c.spend / c.leads) : null,
-    status: c.status || "unknown",
-  }));
-  campaigns.sort((a, b) => b.spend - a.spend);
+
+  const tStart = timeRange?.start;
+  const tEnd = timeRange?.end;
+
+  const allCampaigns = (account.campaigns || []).map(c => {
+    // Re-aggregate from by_date for the time range (chính xác filter theo time)
+    const byDate = c.by_date || {};
+    let spend = 0, impressions = 0, clicks = 0, leads = 0, completeReg = 0, linkClicks = 0;
+    let daysInRange = 0;
+    for (const [date, m] of Object.entries(byDate)) {
+      if (tStart && date < tStart) continue;
+      if (tEnd && date > tEnd) continue;
+      spend += Number(m.spend) || 0;
+      impressions += Number(m.impressions) || 0;
+      clicks += Number(m.clicks) || 0;
+      leads += Number(m.leads) || 0;
+      completeReg += Number(m.complete_registrations) || 0;
+      linkClicks += Number(m.link_clicks) || 0;
+      daysInRange++;
+    }
+    // Conversion = complete_registrations (Doscom track lead form thông qua complete_registration event)
+    const conversions = completeReg;
+    const ctr = impressions > 0 ? clicks / impressions : 0;
+    const cpc = clicks > 0 ? spend / clicks : 0;
+    const cpa = conversions > 0 ? Math.round(spend / conversions) : null;
+
+    return {
+      id: c.campaign_id,
+      name: c.campaign_name,
+      status: c.status || "UNKNOWN",
+      effective_status: c.effective_status || "UNKNOWN",
+      objective: c.objective || "UNKNOWN",
+      // Time-range aggregated metrics
+      spend: Math.round(spend),
+      impressions,
+      clicks,
+      link_clicks: linkClicks,
+      leads,
+      conversions,           // = complete_registrations (cột Kết quả trong Ads Manager)
+      ctr: Math.round(ctr * 10000) / 10000,
+      cpc: Math.round(cpc),
+      cpa,                   // chi phí mỗi conversion (= chi phí mỗi kết quả)
+      days_with_data: daysInRange,
+    };
+  });
+
+  // Filter by status — chỉ ACTIVE campaigns (effective_status = "ACTIVE")
+  const filtered = activeOnly
+    ? allCampaigns.filter(c => c.effective_status === "ACTIVE" || c.spend > 0)
+    : allCampaigns;
+
+  filtered.sort((a, b) => b.spend - a.spend);
   return {
-    has_data: campaigns.length > 0,
+    has_data: filtered.length > 0,
     account: { id: account.account_id, name: account.account_name },
-    campaigns,
+    campaigns: filtered,
+    total_campaigns_in_account: allCampaigns.length,
+    active_campaigns_count: allCampaigns.filter(c => c.effective_status === "ACTIVE").length,
     time_range: timeRange,
   };
 }
