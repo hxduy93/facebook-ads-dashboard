@@ -403,7 +403,7 @@ export async function onRequestPost(context) {
   };
 
   try {
-    aiResult = await env.AI.run(selectedModel, aiParams);
+    aiResult = await env.AI.run(selectedModel, aiParams, { gateway: { id: "doscom-erp" } });
   } catch (e) {
     const errMsg = String(e.message || e);
     const isQuotaErr = /4006|neurons|quota|allocation|paid plan/i.test(errMsg);
@@ -412,7 +412,7 @@ export async function onRequestPost(context) {
     if ((modelPref === "big" || modelPref === "claude_haiku") && (isQuotaErr || /timeout|503|502/i.test(errMsg))) {
       console.log(`[FALLBACK] ${selectedModel} fail (${errMsg.slice(0,80)}), retry với 8B Fast`);
       try {
-        aiResult = await env.AI.run(MODEL_FAST, aiParams);
+        aiResult = await env.AI.run(MODEL_FAST, aiParams, { gateway: { id: "doscom-erp" } });
         actualModel = MODEL_FAST;
         fallbackUsed = true;
       } catch (e2) {

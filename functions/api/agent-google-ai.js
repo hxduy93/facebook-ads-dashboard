@@ -962,7 +962,7 @@ ${candidatesBlock}
     // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
     // có thể không support hoặc throw exception. Prompt đã đủ chặt + parser robust.
     // if (cfg.json_output) aiParams.response_format = { type: "json_object" };
-    aiResult = await env.AI.run(cfg.model, aiParams);
+    aiResult = await env.AI.run(cfg.model, aiParams, { gateway: { id: "doscom-erp" } });
   } catch (e) {
     return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
   }

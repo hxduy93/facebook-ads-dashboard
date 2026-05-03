@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
       top_p: 0.95,
       max_tokens: 4096,
       response_format: { type: "json_object" },
-    });
+    }, { gateway: { id: "doscom-erp" } });
   } catch (err) {
     return jsonResponse({
       error: "Workers AI lỗi: " + (err?.message || String(err)),
