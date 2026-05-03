@@ -23,20 +23,31 @@ import {
 } from "../lib/fbAdsHelpers.js";
 
 const SESSION_COOKIE = "doscom_session";
-const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
-const CACHE_VERSION = "v2";  // bumped: schema time_range + account/campaign params
+const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";       // light, weak, ~30-100 neurons
+const MODEL_BIG  = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";   // structured output reliable, ~500-1500 neurons
+const MODEL_CLAUDE_HAIKU = "anthropic/claude-haiku-4-5";        // best quality, billed per token (cần Workers Paid + AI Models marketplace)
+
+// Map model_pref string → actual model id
+const MODEL_MAP = {
+  fast: MODEL_FAST,
+  big: MODEL_BIG,
+  claude_haiku: MODEL_CLAUDE_HAIKU,
+};
+
+const CACHE_VERSION = "v3";  // bumped: structured optimize output + model selector
 const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
 
 // MODE config
+// model_pref: "fast" (Llama 8B, default light) | "big" (Llama 70B, recommend) | "claude_haiku"
 const MODE_CONFIG = {
-  audit_account_json:  { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true },
-  audit_account:       { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"] },
-  audit_funnel:        { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"] },
-  analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"] },
-  optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"] },  // mới: per-campaign
-  ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"] },
+  audit_account_json:  { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "fast" },
+  audit_account:       { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"], model_pref: "fast" },
+  audit_funnel:        { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"], model_pref: "fast" },
+  analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"], model_pref: "fast" },
+  optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },  // mode quan trọng → 70B
+  ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"], model_pref: "fast" },
 };
 
 // Skill summary compact (Vietnamese)
@@ -222,31 +233,55 @@ Quy tắc: số liệu cụ thể, action rõ ràng, không vague.`);
       break;
 
     case "optimize_campaign":
-      parts.push(`# Tối ưu Campaign FB Ads
+      parts.push(`🚨 OUTPUT 1 JSON object hợp lệ. Bắt đầu bằng { kết thúc bằng }. KHÔNG markdown.
 
-Phân tích campaign cụ thể (xem fb_focus_campaign trong data nếu có).
+Phân tích campaign trong fb_focus_campaign + so sánh với context (fb_profit margin per group, time range).
 
-## 1. Health check campaign
-- Spend, leads, CPL, CTR, frequency hiện tại
-- So với target CPL của nhóm SP
+Verdict choice (chọn 1):
+- "SCALE": CPA tốt (< 60% benchmark) + spend stable + conversions ổn → tăng budget
+- "KEEP": Performance OK, không cần thay đổi
+- "REFRESH": Frequency cao (>4) hoặc CTR giảm → cần creative mới
+- "AUDIENCE": CTR thấp (<1%) + frequency thấp → audience sai
+- "PAUSE": CPA cao (>2x benchmark) + spend > 200K + 0 conversions
 
-## 2. Đánh giá 5 dimension
-- Spend efficiency
-- Volume vs benchmark
-- Frequency saturation
-- CTR quality
-- Trend (so với 7 ngày trước)
+Schema bắt buộc:
+{
+  "verdict": "SCALE" | "KEEP" | "REFRESH" | "AUDIENCE" | "PAUSE",
+  "verdict_color": "green" | "yellow" | "red",
+  "summary": "2-3 câu tóm tắt có 3 con số cụ thể (spend, conversions, CPA)",
+  "performance": {
+    "spend_vnd": <number>,
+    "conversions": <number>,
+    "cpa_vnd": <number_or_null>,
+    "ctr_pct": <number>,
+    "rating_overall": 1-10
+  },
+  "evaluation": {
+    "spend_efficiency": {"score": 1-10, "note": "vd 'CPA 270K vs benchmark 655K = 41%'"},
+    "volume":          {"score": 1-10, "note": "vd 'leads/day = 5, benchmark 2-3'"},
+    "ctr_quality":     {"score": 1-10, "note": "vd 'CTR 1.39%, dưới benchmark 2%'"},
+    "trend":           {"score": 1-10, "note": "vd 'Spend tăng 20% tuần trước, conv stable'"}
+  },
+  "action": {
+    "what": "Vd 'Tăng daily budget từ 500K → 600K (+20%)'",
+    "why": "Vd 'CPA chỉ 41% target, ROAS positive, có dư cap budget'",
+    "impact_expected": "Vd '+10 conversions/ngày, total +250K profit/ngày'",
+    "risk": "low" | "medium" | "high",
+    "risk_note": "Vd 'Scale chậm, theo dõi CPA, nếu tăng > 50% thì revert'"
+  },
+  "next_check": {
+    "after_days": <1-14>,
+    "metric_to_watch": "Vd 'CPA + conversions/day'",
+    "threshold_revert": "Vd 'Nếu CPA > 350K thì revert budget cũ'"
+  },
+  "warnings": ["string"]  // có thể empty []
+}
 
-## 3. Recommend action (chỉ 1-2 action mạnh nhất)
-- KILL / SCALE / REFRESH / AUDIENCE FIX / BUDGET CUT
-- Ghi rõ WHAT (làm gì), WHY (số liệu), IMPACT (dự kiến)
-
-## 4. Risk warning
-- Nếu pause → mất gì
-- Nếu scale → rủi ro gì
-
-## 5. Next check
-- Sau X ngày check lại metric nào`);
+Quy tắc:
+- spend_efficiency lấy từ profit data nếu có, hoặc CPA campaign
+- "next_check.after_days": SCALE 3d, REFRESH 7d, PAUSE 1d, KEEP 7d
+- Tiếng Việt cho mọi text
+- KHÔNG để score=0 hay tất cả score giống nhau`);
       break;
 
     case "ask":
@@ -350,10 +385,14 @@ export async function onRequestPost(context) {
   const systemPrompt = buildSystemPrompt(skills, group, !!cfg.json_output);
   const userPrompt = buildUserPrompt(mode, question, dataContext, group);
 
+  // Resolve model — body.model override config default
+  const modelPref = body.model || cfg.model_pref || "fast";
+  const selectedModel = MODEL_MAP[modelPref] || MODEL_FAST;
+
   // Call AI
   let aiResult;
   try {
-    aiResult = await env.AI.run(MODEL_FAST, {
+    aiResult = await env.AI.run(selectedModel, {
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -362,7 +401,7 @@ export async function onRequestPost(context) {
       max_tokens: cfg.json_output ? 3000 : 2500,
     });
   } catch (e) {
-    return jsonResponse({ error: "Workers AI fail: " + e.message }, 502);
+    return jsonResponse({ error: `Workers AI fail (${selectedModel}): ${e.message}`, hint: modelPref === "claude_haiku" ? "Claude Haiku cần Workers Paid + AI Models marketplace access" : null }, 502);
   }
 
   let rawResp = aiResult.response || aiResult.result || "";

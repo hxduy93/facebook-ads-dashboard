@@ -68,6 +68,50 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .empty-state { text-align: center; padding: 30px; color: #9ca3af; font-size: 13px; }
 .warning-banner { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 8px 12px; border-radius: 4px; margin: 8px 0; font-size: 12.5px; color: #78350f; }
 
+/* ── Optimize result ── */
+.opt-verdict { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; margin-bottom: 12px; }
+.opt-verdict.green { background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 5px solid #059669; }
+.opt-verdict.yellow { background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #d97706; }
+.opt-verdict.red { background: linear-gradient(135deg, #fee2e2, #fecaca); border-left: 5px solid #dc2626; }
+.opt-verdict .icon { font-size: 32px; }
+.opt-verdict .text { flex: 1; }
+.opt-verdict .verdict-label { font-size: 18px; font-weight: 700; color: #111827; }
+.opt-verdict .summary { font-size: 13px; color: #374151; margin-top: 3px; }
+
+.opt-perf-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.opt-perf-card { padding: 10px; background: #f9fafb; border-radius: 6px; text-align: center; }
+.opt-perf-card .label { font-size: 10.5px; color: #6b7280; text-transform: uppercase; }
+.opt-perf-card .value { font-size: 18px; font-weight: 700; color: #1f2937; margin-top: 3px; }
+.opt-perf-card .rating { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; margin-top: 3px; }
+.opt-perf-card .rating.high { background: #d1fae5; color: #065f46; }
+.opt-perf-card .rating.mid { background: #fef3c7; color: #92400e; }
+.opt-perf-card .rating.low { background: #fee2e2; color: #991b1b; }
+
+.opt-eval-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.opt-eval-card { padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; font-size: 12.5px; }
+.opt-eval-card .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+.opt-eval-card .row strong { font-size: 13px; }
+.opt-eval-card .bar { height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin: 4px 0; }
+.opt-eval-card .fill { height: 100%; }
+.opt-eval-card .note { color: #6b7280; font-size: 11.5px; }
+
+.opt-action-box { padding: 14px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; border-radius: 8px; margin-bottom: 8px; }
+.opt-action-box h3 { margin: 0 0 8px; font-size: 14px; color: #1e40af; }
+.opt-action-box .field { margin-bottom: 6px; font-size: 13px; }
+.opt-action-box .field strong { color: #1e3a8a; }
+.opt-action-box .risk { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+.opt-action-box .risk.low { background: #d1fae5; color: #065f46; }
+.opt-action-box .risk.medium { background: #fef3c7; color: #92400e; }
+.opt-action-box .risk.high { background: #fee2e2; color: #991b1b; }
+
+.opt-next { padding: 10px; background: #f9fafb; border-left: 3px solid #6366f1; border-radius: 4px; font-size: 12.5px; }
+
+.opt-warnings { padding: 10px; background: #fef2f2; border-left: 3px solid #dc2626; border-radius: 4px; font-size: 12.5px; color: #991b1b; margin-top: 8px; }
+.opt-warnings ul { margin: 6px 0 0 16px; padding: 0; }
+
+.model-pref-bar { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; font-size: 12px; }
+.model-pref-bar select { padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; }
+
 /* ── Action buttons ── */
 .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
 .btn-action { padding: 10px 12px; border: 1.5px solid #1877f2; background: white; cursor: pointer; text-align: left; border-radius: 6px; transition: all 0.15s; }
@@ -172,36 +216,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     </div>
   </div>
 
-  <!-- AGENT BUTTONS -->
-  <div class="section">
-    <h2>🤖 Agent phân tích
-      <span class="right">Llama 3.1 8B Fast · cache 6h</span>
+  <!-- CAMPAIGN ANALYSIS RESULT (xuất hiện sau khi click 'Tối ưu' 1 campaign) -->
+  <div class="section" id="optimize-section" style="display:none">
+    <h2 id="optimize-title">🛡 Phân tích campaign
+      <span class="right" id="optimize-meta"></span>
     </h2>
-    <div class="btn-grid">
-      <button class="btn-action" onclick="runAI('audit_account_json')">
-        <div class="title"><span class="ico">🎯</span>Card chấm điểm</div>
-        <div class="desc">8 nhóm: Tracking, Creative, Audience, ...</div>
-      </button>
-      <button class="btn-action" onclick="runAI('audit_account')">
-        <div class="title"><span class="ico">📊</span>Audit Tổng quan</div>
-        <div class="desc">Top quick win, alert, trend WoW</div>
-      </button>
-      <button class="btn-action btn-funnel" onclick="runAI('audit_funnel')">
-        <div class="title"><span class="ico">🔄</span>Audit Funnel</div>
-        <div class="desc">Lead → Pancake order, bottleneck</div>
-      </button>
-      <button class="btn-action" onclick="runAI('analyze_metrics')">
-        <div class="title"><span class="ico">📈</span>Phân tích chỉ số</div>
-        <div class="desc">Trend, action items</div>
-      </button>
-    </div>
+    <div id="optimize-result"></div>
   </div>
 
-  <!-- ASK -->
+  <!-- ASK + Model selector -->
   <div class="section">
     <h2>💬 Hỏi tự do với AI</h2>
+    <div class="model-pref-bar">
+      <label>🤖 Model:</label>
+      <select id="model-pref">
+        <option value="big" selected>Llama 3.3 70B (recommended — chất lượng tốt)</option>
+        <option value="fast">Llama 3.1 8B (siêu nhanh, chất lượng yếu)</option>
+        <option value="claude_haiku">Claude Haiku 4.5 (best quality, cần Workers Paid)</option>
+      </select>
+      <span style="color:#9ca3af">áp dụng cho cả Hỏi AI + Tối ưu campaign</span>
+    </div>
     <div class="ask-box">
-      <input type="text" id="ask-input" placeholder="Vd: Tại sao margin DR1 chỉ 11%? Pause campaign nào?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <input type="text" id="ask-input" placeholder="Vd: Campaign nào CPA cao nhất? Trend 7 ngày qua?" onkeydown="if(event.key==='Enter')askQuestion()">
       <button onclick="askQuestion()">Hỏi AI</button>
     </div>
   </div>
@@ -404,9 +440,138 @@ function renderCampaigns(campaigns) {
   `;
 }
 
-function optimizeCampaign(campaignId, campaignName) {
+async function optimizeCampaign(campaignId, campaignName) {
   state.campaignId = campaignId;
-  runAI('optimize_campaign', null, `Phân tích + tối ưu campaign "${campaignName}"`);
+  const section = document.getElementById('optimize-section');
+  const result = document.getElementById('optimize-result');
+  const title = document.getElementById('optimize-title');
+  const meta = document.getElementById('optimize-meta');
+  section.style.display = 'block';
+  title.innerHTML = `🛡 Phân tích campaign: <span style="color:#1877f2">${escapeHtml(campaignName.replace(/&#39;/g, "'"))}</span>`;
+  result.innerHTML = '<div class="empty-state" style="color:#1877f2">⏳ AI đang phân tích campaign... (thường ~5-10s với Llama 70B)</div>';
+  meta.textContent = '';
+  // Scroll vào view
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const startTs = Date.now();
+  try {
+    const body = {
+      mode: 'optimize_campaign',
+      time_preset: state.timePreset,
+      custom_start: state.customStart,
+      custom_end: state.customEnd,
+      account_id: state.accountId,
+      campaign_id: campaignId,
+      model: document.getElementById('model-pref')?.value || 'big',
+    };
+    const r = await fetch('/api/agent-fb-ai', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const j = await r.json();
+    const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
+    if (!r.ok || !j.ok) {
+      result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`;
+      return;
+    }
+    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · model: ${(j.model || '').split('/').pop()} · time: ${state.timeRange?.label || '?'}`;
+    if (j.parsed_json && !j.parsed_json._parse_error) {
+      result.innerHTML = renderOptimizeResult(j.parsed_json, campaignName);
+    } else {
+      // Fallback: hiển thị raw markdown
+      result.innerHTML = `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div>` + md2html(j.response);
+    }
+  } catch (e) {
+    result.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
+  }
+}
+
+function renderOptimizeResult(json, campaignName) {
+  const verdictMap = {
+    SCALE: { icon: '🟢', label: 'SCALE — Tăng budget', color: 'green' },
+    KEEP: { icon: '✅', label: 'KEEP — Giữ nguyên', color: 'green' },
+    REFRESH: { icon: '🔄', label: 'REFRESH — Đổi creative', color: 'yellow' },
+    AUDIENCE: { icon: '🎯', label: 'AUDIENCE — Sửa targeting', color: 'yellow' },
+    PAUSE: { icon: '🔴', label: 'PAUSE — Tạm dừng', color: 'red' },
+  };
+  const v = verdictMap[json.verdict] || { icon: '❓', label: json.verdict || 'Unknown', color: 'yellow' };
+  const color = json.verdict_color || v.color;
+
+  // Performance cards
+  const p = json.performance || {};
+  const ratingClass = (p.rating_overall >= 7) ? 'high' : (p.rating_overall >= 5 ? 'mid' : 'low');
+  const perfCards = `
+    <div class="opt-perf-cards">
+      <div class="opt-perf-card"><div class="label">Spend</div><div class="value">${fmtVnd(p.spend_vnd || 0)}</div></div>
+      <div class="opt-perf-card"><div class="label">Kết quả</div><div class="value">${fmt(p.conversions || 0)}</div></div>
+      <div class="opt-perf-card"><div class="label">CPA</div><div class="value">${p.cpa_vnd ? fmtVnd(p.cpa_vnd) : '—'}</div></div>
+      <div class="opt-perf-card"><div class="label">CTR</div><div class="value">${(p.ctr_pct || 0).toFixed(2)}%</div></div>
+      <div class="opt-perf-card"><div class="label">Đánh giá</div><div class="value">${p.rating_overall || '—'}/10</div><span class="rating ${ratingClass}">${ratingClass.toUpperCase()}</span></div>
+    </div>
+  `;
+
+  // Evaluation grid
+  const evalDimensions = ['spend_efficiency', 'volume', 'ctr_quality', 'trend'];
+  const evalLabels = {
+    spend_efficiency: '💰 Hiệu suất chi phí',
+    volume: '📊 Volume',
+    ctr_quality: '🎯 CTR Quality',
+    trend: '📈 Trend',
+  };
+  let evalCards = '';
+  for (const k of evalDimensions) {
+    const e = json.evaluation?.[k] || {};
+    const sc = Number(e.score) || 0;
+    const fillColor = sc >= 7 ? '#059669' : sc >= 5 ? '#d97706' : '#dc2626';
+    evalCards += `<div class="opt-eval-card">
+      <div class="row"><strong>${evalLabels[k]}</strong> <span style="color:${fillColor};font-weight:600">${sc}/10</span></div>
+      <div class="bar"><div class="fill" style="width:${sc * 10}%;background:${fillColor}"></div></div>
+      <div class="note">${escapeHtml(e.note || '—')}</div>
+    </div>`;
+  }
+
+  // Action box
+  const a = json.action || {};
+  const actionBox = `
+    <div class="opt-action-box">
+      <h3>💡 ${v.icon} ${v.label}</h3>
+      <div class="field"><strong>WHAT:</strong> ${escapeHtml(a.what || '—')}</div>
+      <div class="field"><strong>WHY:</strong> ${escapeHtml(a.why || '—')}</div>
+      <div class="field"><strong>EXPECTED:</strong> ${escapeHtml(a.impact_expected || '—')}</div>
+      <div class="field"><strong>RISK:</strong> <span class="risk ${a.risk || 'medium'}">${(a.risk || 'medium').toUpperCase()}</span> — ${escapeHtml(a.risk_note || '')}</div>
+    </div>
+  `;
+
+  // Next check
+  const nc = json.next_check || {};
+  const nextCheck = `
+    <div class="opt-next">
+      ⏰ <strong>Check lại sau ${nc.after_days || '?'} ngày:</strong> ${escapeHtml(nc.metric_to_watch || '—')}.<br>
+      ${nc.threshold_revert ? `🚨 Revert nếu: ${escapeHtml(nc.threshold_revert)}` : ''}
+    </div>
+  `;
+
+  // Warnings
+  let warningsHtml = '';
+  if (Array.isArray(json.warnings) && json.warnings.length) {
+    warningsHtml = `<div class="opt-warnings"><strong>⚠ Cảnh báo:</strong><ul>${json.warnings.map(w => `<li>${escapeHtml(w)}</li>`).join('')}</ul></div>`;
+  }
+
+  return `
+    <div class="opt-verdict ${color}">
+      <div class="icon">${v.icon}</div>
+      <div class="text">
+        <div class="verdict-label">${v.label}</div>
+        <div class="summary">${escapeHtml(json.summary || '')}</div>
+      </div>
+    </div>
+    ${perfCards}
+    <div class="opt-eval-grid">${evalCards}</div>
+    ${actionBox}
+    ${nextCheck}
+    ${warningsHtml}
+  `;
 }
 
 // ── AI calls ──
@@ -424,6 +589,7 @@ async function runAI(mode, question, context_hint) {
       custom_end: state.customEnd,
       account_id: state.accountId,
       campaign_id: state.campaignId,
+      model: document.getElementById('model-pref')?.value || 'fast',
     };
     const r = await fetch('/api/agent-fb-ai', {
       method: 'POST', credentials: 'same-origin',
