@@ -216,39 +216,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     </div>
   </div>
 
-  <!-- CAMPAIGN ANALYSIS RESULT (xuất hiện sau khi click 'Tối ưu' 1 campaign) -->
-  <div class="section" id="optimize-section" style="display:none">
-    <h2 id="optimize-title">🛡 Phân tích campaign
-      <span class="right" id="optimize-meta"></span>
-    </h2>
-    <div id="optimize-result"></div>
-  </div>
-
-  <!-- ASK + Model selector -->
+  <!-- ASK box (giữ lại cho free question) -->
   <div class="section">
-    <h2>💬 Hỏi tự do với AI</h2>
-    <div class="model-pref-bar">
-      <label>🤖 Model:</label>
-      <select id="model-pref">
-        <option value="fast" selected>Llama 3.1 8B (rẻ, default)</option>
-        <option value="big">Llama 3.3 70B (chất lượng tốt — tốn nhiều neurons hơn)</option>
-        <option value="claude_haiku">Claude Haiku 4.5 (best, cần Workers Paid + binding)</option>
-      </select>
-      <span style="color:#9ca3af">⚠ "Tối ưu campaign" tự dùng 70B (override). Audit/Ask theo dropdown.</span>
-    </div>
+    <h2>💬 Hỏi tự do với AI <span class="right">Llama 3.3 70B · cache 6h</span></h2>
     <div class="ask-box">
-      <input type="text" id="ask-input" placeholder="Vd: Campaign nào CPA cao nhất? Trend 7 ngày qua?" onkeydown="if(event.key==='Enter')askQuestion()">
+      <input type="text" id="ask-input" placeholder="Vd: Campaign nào CPA cao nhất? Trend 7 ngày qua? So sánh DUY vs PHƯƠNG NAM?" onkeydown="if(event.key==='Enter')askQuestion()">
       <button onclick="askQuestion()">Hỏi AI</button>
     </div>
-  </div>
-
-  <!-- OUTPUT -->
-  <div class="section">
-    <h2>📋 Kết quả AI
-      <span class="copy-btn" onclick="copyOutput()">📋 Copy</span>
-    </h2>
-    <div id="output" class="output"><div class="empty-state">Bấm 1 nút audit hoặc gõ câu hỏi để bắt đầu.</div></div>
-    <div class="meta" id="meta"></div>
+    <div id="ask-output" style="margin-top:10px"></div>
   </div>
 
 </div>
@@ -405,39 +380,108 @@ function renderCampaigns(campaigns) {
     document.getElementById('campaign-account-name').textContent = campaigns?.account?.name || '';
     return;
   }
+  // Filter chỉ campaigns có spend > 0 (đang chạy thực sự trong time range)
+  const activeCampaigns = campaigns.campaigns.filter(c => c.spend > 0);
   const accInfo = campaigns.account.name +
-    ` · ${campaigns.campaigns.length}/${campaigns.total_campaigns_in_account} campaigns shown` +
-    ` (${campaigns.active_campaigns_count} ACTIVE)`;
+    ` · ${activeCampaigns.length} campaigns đang chạy (có spend) trong time range`;
   document.getElementById('campaign-account-name').textContent = accInfo;
+
+  if (activeCampaigns.length === 0) {
+    wrap.innerHTML = `<div class="warning-banner">Không có campaign nào có spend > 0 trong khoảng thời gian này.</div>`;
+    return;
+  }
+
+  // Render mỗi campaign thành 1 card stacked (không phải table) để có chỗ cho analysis bên dưới
   wrap.innerHTML = `
-    <table class="campaign-table">
-      <thead>
-        <tr>
-          <th>Campaign</th><th>Status</th><th class="num">Chi phí</th><th class="num">Lượt hiển thị</th>
-          <th class="num">Lượt click</th><th class="num">CTR</th><th class="num">Kết quả</th><th class="num">CP/KQ</th><th></th>
-        </tr>
-      </thead>
-      <tbody>
-        ${campaigns.campaigns.map(c => {
-          const statusBadge = c.effective_status === 'ACTIVE'
-            ? '<span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-size:10.5px">ACTIVE</span>'
-            : `<span style="background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-size:10.5px">${c.effective_status}</span>`;
-          return `<tr>
-            <td title="${escapeHtml(c.name)}">${escapeHtml(c.name.length > 50 ? c.name.slice(0, 50) + '…' : c.name)}</td>
-            <td>${statusBadge}</td>
-            <td class="num">${fmtVnd(c.spend)}</td>
-            <td class="num">${fmt(c.impressions)}</td>
-            <td class="num">${fmt(c.clicks)}</td>
-            <td class="num">${(c.ctr * 100).toFixed(2)}%</td>
-            <td class="num"><strong>${fmt(c.conversions)}</strong></td>
-            <td class="num">${c.cpa ? fmtVnd(c.cpa) : '—'}</td>
-            <td><button class="btn-optimize" onclick="optimizeCampaign('${c.id}', '${escapeHtml(c.name).replace(/'/g, '&#39;')}')">🛡 Tối ưu</button></td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    <div style="margin-top:6px;font-size:11px;color:#9ca3af">"Kết quả" = complete_registrations (lead form). "CP/KQ" = chi phí mỗi kết quả.</div>
+    <div class="warning-banner" id="batch-progress" style="background:#dbeafe;border-color:#3b82f6;color:#1e40af">
+      ⏳ Đang phân tích ${activeCampaigns.length} campaigns bằng Llama 70B...
+      <span id="progress-counter">0/${activeCampaigns.length}</span>
+    </div>
+    ${activeCampaigns.map((c, i) => `
+      <div class="campaign-card" id="campaign-card-${i}" style="margin-bottom:12px;padding:12px;border:1px solid #e5e7eb;border-radius:8px;background:white">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:600;font-size:13.5px">${escapeHtml(c.name)}</div>
+            <div style="font-size:11.5px;color:#6b7280;margin-top:2px">
+              <span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-size:10.5px;margin-right:6px">${c.effective_status}</span>
+              Spend <strong>${fmtVnd(c.spend)}</strong> ·
+              ${fmt(c.impressions)} impr ·
+              CTR ${(c.ctr * 100).toFixed(2)}% ·
+              <strong>${fmt(c.conversions)}</strong> kết quả ·
+              CP/KQ ${c.cpa ? fmtVnd(c.cpa) : '—'}
+            </div>
+          </div>
+        </div>
+        <div id="analysis-${i}" style="border-top:1px dashed #e5e7eb;padding-top:10px;margin-top:8px">
+          <div class="empty-state" style="padding:14px;color:#9ca3af;font-size:12.5px">⏳ Chờ AI phân tích...</div>
+        </div>
+      </div>
+    `).join('')}
+    <div style="margin-top:8px;font-size:11px;color:#9ca3af">"Kết quả" = complete_registrations (lead form). "CP/KQ" = chi phí mỗi kết quả.</div>
   `;
+
+  // Auto-loop analyze mỗi campaign (sequential để tránh rate limit + dễ track progress)
+  autoAnalyzeAll(activeCampaigns);
+}
+
+async function autoAnalyzeAll(campaigns) {
+  const total = campaigns.length;
+  for (let i = 0; i < total; i++) {
+    const c = campaigns[i];
+    const targetEl = document.getElementById('analysis-' + i);
+    if (!targetEl) continue;
+    targetEl.innerHTML = `<div class="empty-state" style="padding:14px;color:#1877f2;font-size:12.5px">⏳ AI đang phân tích campaign ${i+1}/${total}... (~5-15s với Llama 70B)</div>`;
+
+    const ctrl = new AbortController();
+    const timeoutId = setTimeout(() => ctrl.abort(), 90000);
+    try {
+      const r = await fetch('/api/agent-fb-ai', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'optimize_campaign',
+          time_preset: state.timePreset,
+          custom_start: state.customStart,
+          custom_end: state.customEnd,
+          account_id: state.accountId,
+          campaign_id: c.id,
+          model: 'big',
+        }),
+        signal: ctrl.signal,
+      });
+      clearTimeout(timeoutId);
+      const j = await r.json();
+      if (!r.ok || !j.ok) {
+        targetEl.innerHTML = `<div class="alert-empty">⚠ ${j.error || 'Lỗi'} ${j.hint ? '<br>'+j.hint : ''}</div>`;
+      } else {
+        let dataObj = null;
+        if (j.parsed_json && !j.parsed_json._parse_error) dataObj = j.parsed_json;
+        else if (j.response && typeof j.response === 'object' && j.response.verdict) dataObj = j.response;
+        if (dataObj) {
+          targetEl.innerHTML = renderOptimizeResult(dataObj, c.name);
+        } else {
+          const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
+          targetEl.innerHTML = `<div class="warning-banner">AI không trả JSON đúng format</div><pre style="background:#f9fafb;padding:10px;font-size:11px;overflow:auto;max-height:300px">${escapeHtml(respText)}</pre>`;
+        }
+      }
+    } catch (e) {
+      clearTimeout(timeoutId);
+      const isTimeout = e.name === 'AbortError';
+      targetEl.innerHTML = `<div class="alert-empty">${isTimeout ? '⏱ Timeout 90s — campaign quá lớn hoặc Llama 70B đang quá tải' : '⚠ Lỗi: ' + e.message}</div>`;
+    }
+
+    // Update progress
+    const counter = document.getElementById('progress-counter');
+    if (counter) counter.textContent = `${i+1}/${total}`;
+  }
+  // Hide progress banner sau khi xong
+  const banner = document.getElementById('batch-progress');
+  if (banner) {
+    banner.style.background = '#d1fae5';
+    banner.style.borderColor = '#059669';
+    banner.style.color = '#065f46';
+    banner.innerHTML = `✅ Đã phân tích xong ${total} campaigns`;
+  }
 }
 
 async function optimizeCampaign(campaignId, campaignName) {
@@ -619,42 +663,35 @@ function renderOptimizeResult(json, campaignName) {
 }
 
 // ── AI calls ──
-async function runAI(mode, question, context_hint) {
-  const out = document.getElementById('output');
-  const meta = document.getElementById('meta');
+// ── ASK free-form ──
+async function askQuestion() {
+  const q = document.getElementById('ask-input').value.trim();
+  if (!q) { alert('Nhập câu hỏi đã'); return; }
+  const out = document.getElementById('ask-output');
+  out.innerHTML = '<div class="empty-state" style="color:#1877f2;padding:14px">⏳ AI đang trả lời...</div>';
   const startTs = Date.now();
-  out.innerHTML = '<div class="empty-state" style="color:#1877f2">⏳ AI đang phân tích...</div>';
-  meta.textContent = '';
   try {
-    const body = {
-      mode, question,
-      time_preset: state.timePreset,
-      custom_start: state.customStart,
-      custom_end: state.customEnd,
-      account_id: state.accountId,
-      campaign_id: state.campaignId,
-      model: document.getElementById('model-pref')?.value || 'fast',
-    };
     const r = await fetch('/api/agent-fb-ai', {
       method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        mode: 'ask',
+        question: q,
+        time_preset: state.timePreset,
+        custom_start: state.customStart,
+        custom_end: state.customEnd,
+        account_id: state.accountId,
+        model: 'big',
+      }),
     });
     const j = await r.json();
-    if (!r.ok || !j.ok) { out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`; return; }
     const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
-    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · time: ${state.timeRange?.label || '?'}`;
-    out.innerHTML = (mode === 'audit_account_json' && j.parsed_json) ? renderJSON(j.parsed_json) : md2html(j.response);
-    if (j.cache_note) out.innerHTML = `<div class="note">${j.cache_note}</div>` + out.innerHTML;
+    if (!r.ok || !j.ok) { out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${j.error || r.status}</div>`; return; }
+    const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
+    out.innerHTML = `<div class="meta" style="margin-bottom:6px">${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'}</div>` + md2html(respText);
   } catch (e) {
     out.innerHTML = `<div class="alert-empty"><strong>Lỗi:</strong> ${e.message}</div>`;
   }
-}
-
-function askQuestion() {
-  const q = document.getElementById('ask-input').value.trim();
-  if (!q) { alert('Nhập câu hỏi đã'); return; }
-  runAI('ask', q);
 }
 
 function renderJSON(json) {

@@ -28,26 +28,26 @@ const MODEL_BIG  = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";   // structured o
 const MODEL_CLAUDE_HAIKU = "anthropic/claude-haiku-4-5";        // best quality, billed per token (cần Workers Paid + AI Models marketplace)
 
 // Map model_pref string → actual model id
+// Default 70B cho tất cả mode quan trọng. 8B chỉ dùng làm fallback nếu 70B fail.
 const MODEL_MAP = {
-  fast: MODEL_FAST,
-  big: MODEL_BIG,
+  big: MODEL_BIG,                 // default + recommend
+  fast: MODEL_FAST,               // chỉ làm fallback
   claude_haiku: MODEL_CLAUDE_HAIKU,
 };
 
-const CACHE_VERSION = "v4";  // bumped: object response → parsed_json fix
+const CACHE_VERSION = "v5";  // bumped: stronger scale prompt + 70B default
 const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
 
-// MODE config
-// model_pref: "fast" (Llama 8B, default light) | "big" (Llama 70B, recommend) | "claude_haiku"
+// MODE config — default 70B cho mọi mode (chất lượng tốt). 8B chỉ làm fallback.
 const MODE_CONFIG = {
-  audit_account_json:  { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "fast" },
-  audit_account:       { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"], model_pref: "fast" },
-  audit_funnel:        { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"], model_pref: "fast" },
-  analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"], model_pref: "fast" },
-  optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },  // mode quan trọng → 70B
-  ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"], model_pref: "fast" },
+  audit_account_json:  { skills: ["fb_overview"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },
+  audit_account:       { skills: ["fb_overview"], data: ["insights", "orders", "profit", "trend"], model_pref: "big" },
+  audit_funnel:        { skills: ["fb_funnel"],   data: ["insights", "orders", "trend"], model_pref: "big" },
+  analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"], model_pref: "big" },
+  optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },
+  ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"], model_pref: "big" },
 };
 
 // Skill summary compact (Vietnamese)
@@ -84,20 +84,122 @@ Cần check:
 - Lead chất lượng theo audience/campaign
 - Phone capture rate (form fail?)`,
 
-  fb_optimize: `# FB ADS CAMPAIGN OPTIMIZATION
-Khi audit 1 campaign cụ thể, đánh giá theo 5 dimension:
-1. Spend efficiency: CPL vs target (target = AOV × 0.65 × 0.40)
-2. Volume: leads/day vs benchmark (NOMA ~30, MAY_DO ~2, DA8.1 ~3)
-3. Frequency: > 4 = saturate, cần refresh creative
-4. CTR: > 2% là OK, < 1% là weak hook
-5. Trend: spend tăng nhưng leads không tăng = scale broken
+  fb_optimize: `# FB ADS CAMPAIGN OPTIMIZATION — DOSCOM SCALE FRAMEWORK
 
-Action recommendations:
-- KILL: spend > 2× CPL_target và 0 lead → pause
-- SCALE: ROAS > 4 và CPL < CPL_target × 0.7 → tăng budget +20%
-- REFRESH: frequency > 4 → đổi creative
-- AUDIENCE: CTR thấp + frequency thấp → audience sai target
-- BUDGET: spend ratio > 50% revenue → cắt bid 30%`,
+Bạn là FB Ads Strategist 8 năm tại agency US. Phân tích campaign + đưa ra scale recommendation CỤ THỂ với số liệu.
+
+═══ DOSCOM CONTEXT ═══
+- 4 nhóm SP active (DUY+PHƯƠNG NAM chốt qua Pancake):
+  • MAY_DO: AOV 2.5M, CPL target 655K, margin 33.9% ⭐ (winner)
+  • CAMERA_VIDEO_CALL (DA8.1): AOV 1.07M, CPL target 279K, margin 18.3% ⚠
+  • GHI_AM (DR1): AOV 1.26M, CPL target 328K, margin 11% 🔴 (margin yếu)
+  • NOMA: AOV 216K, CPL target 56K, margin 31% (volume play, 30+ đơn/ngày)
+- Cost ratio target: spend/revenue ≤ 40%
+- Lead close rate: 65%
+
+═══ 5 EVALUATION DIMENSIONS (mỗi cái 1-10 score) ═══
+
+1. **SPEND EFFICIENCY** (CPA quality):
+   - Score 9-10: CPA ≤ 50% target → cực ngon, scale aggressive
+   - Score 7-8: CPA 50-80% target → tốt, scale moderate
+   - Score 5-6: CPA 80-120% target → OK, giữ hoặc optimize creative
+   - Score 3-4: CPA 120-200% target → cảnh báo, cắt bid
+   - Score 1-2: CPA > 2x target → pause
+
+2. **VOLUME** (conversions/day so với benchmark):
+   - 9-10: > 2x benchmark
+   - 7-8: 1.2-2x benchmark
+   - 5-6: 0.7-1.2x benchmark (đúng kỳ vọng)
+   - 3-4: 0.3-0.7x → volume yếu
+   - 1-2: < 0.3x → almost dead
+
+3. **CTR QUALITY**:
+   - 9-10: CTR > 3%
+   - 7-8: CTR 2-3% (chuẩn FB)
+   - 5-6: CTR 1.5-2%
+   - 3-4: CTR 1-1.5%
+   - 1-2: CTR < 1% → hook yếu
+
+4. **FREQUENCY** (saturation):
+   - 9-10: < 1.5 (mới, chưa saturate)
+   - 7-8: 1.5-2.5 (healthy)
+   - 5-6: 2.5-3.5 (đang saturate)
+   - 3-4: 3.5-4.5 (cần refresh creative)
+   - 1-2: > 4.5 (saturate hoàn toàn)
+
+5. **TREND**: so spend/conv 7d trước (nếu có data trend), hoặc trend trong time range:
+   - Stable + scaling: 8-10
+   - Stable performance: 6-7
+   - Slight decline: 4-5
+   - Sharp decline: 1-3
+
+═══ VERDICT DECISION TREE (BẮT BUỘC theo logic này) ═══
+
+**SCALE** (verdict_color: "green"):
+- Điều kiện: AVG score ≥ 7.5 AND CPA < 70% target AND CTR ≥ 2% AND frequency < 3
+- Action: Tăng budget +20% đến +50% theo độ stable
+- WHAT cụ thể: "Tăng daily budget từ X → Y (+Z%) trong 3 ngày, monitor CPA"
+- Risk: low
+
+**SCALE_CAREFUL** (verdict: "SCALE", color: "yellow"):
+- Điều kiện: AVG score 6-7.5 AND CPA < 90% target AND có volume
+- Action: Tăng budget +10-15% (chậm), test trước khi tăng tiếp
+- Risk: medium
+
+**KEEP** (verdict_color: "green" or "yellow"):
+- Điều kiện: AVG score 5-7, performance OK, CPA gần target
+- Action: "Giữ nguyên budget, theo dõi 3-5 ngày tiếp"
+- Risk: low
+
+**REFRESH** (verdict_color: "yellow"):
+- Điều kiện: Frequency > 3.5 OR CTR giảm > 25% so trend
+- Action: "Đổi 2-3 creative mới (hook khác, hình mới), giữ targeting"
+- Risk: medium
+
+**AUDIENCE_FIX** (verdict: "AUDIENCE", color: "yellow"):
+- Điều kiện: CTR < 1% AND frequency < 2 AND volume thấp
+- Action: "Audience sai target. Test LAL từ buyer 30d gần nhất, hoặc thêm interest cụ thể"
+- Risk: medium
+
+**PAUSE** (verdict_color: "red"):
+- Điều kiện: CPA > 2x target AND spend > 200K AND conversions = 0
+  HOẶC trend giảm sâu + CPA tăng 50%+
+- Action: "Pause ngay, audit creative + audience trước khi reactivate"
+- Risk: low (lose audience nhỏ vs bleeding tiền)
+
+═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
+
+{
+  "verdict": "SCALE" | "KEEP" | "REFRESH" | "AUDIENCE" | "PAUSE",
+  "verdict_color": "green" | "yellow" | "red",
+  "summary": "2-3 câu có 4 con số: spend, conversions, CPA, CTR — và verdict reason ngắn gọn",
+  "performance": {
+    "spend_vnd": <int>,
+    "conversions": <int>,
+    "cpa_vnd": <int_or_null>,
+    "ctr_pct": <float>,
+    "rating_overall": <1-10 - average của 4 evaluation scores>
+  },
+  "evaluation": {
+    "spend_efficiency": {"score": 1-10, "note": "CPA X = Y% target Z (group)"},
+    "volume":           {"score": 1-10, "note": "conversions/day = N, benchmark cho group là M"},
+    "ctr_quality":      {"score": 1-10, "note": "CTR X% — chuẩn FB là 2-3%"},
+    "trend":            {"score": 1-10, "note": "trend stable/up/down theo time range"}
+  },
+  "action": {
+    "what": "1 dòng hướng dẫn CỤ THỂ với SỐ TIỀN/% (vd 'Tăng daily budget từ 500K → 600K (+20%)')",
+    "why": "Lý do dựa trên SCORES + thresholds (vd 'AVG score 8.5, CPA chỉ 45% target → có dư cap budget')",
+    "impact_expected": "Số liệu dự kiến (vd '+5-8 conversions/ngày, +250K profit/ngày')",
+    "risk": "low" | "medium" | "high",
+    "risk_note": "Risk cụ thể (vd 'CPA có thể tăng nhẹ 10-20%, monitor trong 3 ngày')"
+  },
+  "next_check": {
+    "after_days": <SCALE: 3, KEEP: 7, REFRESH/AUDIENCE: 5, PAUSE: 1>,
+    "metric_to_watch": "metric chính cần check (vd 'CPA + conversions/day')",
+    "threshold_revert": "Khi nào revert (vd 'Nếu CPA > 350K trong 3 ngày → revert budget cũ')"
+  },
+  "warnings": []
+}`,
 };
 
 const GROUPS = ["ALL", ...FB_ACTIVE_GROUPS];
