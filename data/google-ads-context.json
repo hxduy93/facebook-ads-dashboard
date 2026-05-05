@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06 00:07",
+  "generated_at": "2026-05-06 03:47",
   "source_data_date_range": {
     "start_7d": "2026-04-28",
     "end": "2026-05-04",
@@ -25,7 +25,7 @@
   "summary": {
     "total_spend_30d_vnd": 85356800.0,
     "total_clicks_30d": 24629,
-    "total_impressions_30d": 1774287,
+    "total_impressions_30d": 1774289,
     "active_campaigns_30d": 19,
     "total_campaigns": 22
   },
@@ -269,7 +269,7 @@
       },
       "total_spend": 2234870,
       "total_clicks": 643,
-      "total_impressions": 50359,
+      "total_impressions": 50361,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -329,7 +329,7 @@
           "label": "Định vị",
           "spend": 533496,
           "clicks": 228,
-          "impressions": 16630,
+          "impressions": 16632,
           "ctr": 0.0137,
           "cpc": 2340,
           "campaigns_count": 2
@@ -455,7 +455,7 @@
       },
       "total_spend": 2292428,
       "total_clicks": 661,
-      "total_impressions": 51129,
+      "total_impressions": 51131,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -515,7 +515,7 @@
           "label": "Định vị",
           "spend": 548168,
           "clicks": 232,
-          "impressions": 16735,
+          "impressions": 16737,
           "ctr": 0.0139,
           "cpc": 2363,
           "campaigns_count": 2
@@ -641,7 +641,7 @@
       },
       "total_spend": 4391625,
       "total_clicks": 1297,
-      "total_impressions": 94217,
+      "total_impressions": 94219,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -701,7 +701,7 @@
           "label": "Định vị",
           "spend": 933821,
           "clicks": 424,
-          "impressions": 28073,
+          "impressions": 28075,
           "ctr": 0.0151,
           "cpc": 2202,
           "campaigns_count": 2
@@ -734,7 +734,7 @@
       },
       "total_spend": 81368470,
       "total_clicks": 23405,
-      "total_impressions": 1675450,
+      "total_impressions": 1675452,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -794,7 +794,7 @@
           "label": "Định vị",
           "spend": 20491869,
           "clicks": 8474,
-          "impressions": 523997,
+          "impressions": 523999,
           "ctr": 0.0162,
           "cpc": 2418,
           "campaigns_count": 3
@@ -827,7 +827,7 @@
       },
       "total_spend": 256005636,
       "total_clicks": 72302,
-      "total_impressions": 5167394,
+      "total_impressions": 5167396,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -887,7 +887,7 @@
           "label": "Định vị",
           "spend": 66870234,
           "clicks": 26565,
-          "impressions": 1583107,
+          "impressions": 1583109,
           "ctr": 0.0168,
           "cpc": 2517,
           "campaigns_count": 3
@@ -966,7 +966,7 @@
       "spend_30d": 21610016.0,
       "spend_7d": 1597948.0,
       "clicks_30d": 8928,
-      "impressions_30d": 552170,
+      "impressions_30d": 552172,
       "ctr_30d": 0.0162,
       "cpc_30d": 2420.0,
       "spend_trend_7d_pct": -75.0,
@@ -1195,10 +1195,10 @@
       "spend_prior_7d": 4128320.0,
       "clicks_30d": 3387,
       "clicks_7d": 285,
-      "impressions_30d": 27273,
-      "impressions_7d": 2341,
+      "impressions_30d": 27275,
+      "impressions_7d": 2343,
       "ctr_30d": 0.1242,
-      "ctr_7d": 0.1217,
+      "ctr_7d": 0.1216,
       "ctr_prior_7d": 0.1232,
       "cpc_30d": 3587.0,
       "cpc_7d": 3233.0,
@@ -1206,7 +1206,7 @@
       "active_days_30d": 27,
       "avg_daily_spend_30d": 450020.0,
       "spend_trend_pct": -77.7,
-      "ctr_trend_pct": -1.2,
+      "ctr_trend_pct": -1.3,
       "cpc_trend_pct": -15.3,
       "flags": []
     },
@@ -1630,7 +1630,7 @@
   "search_term_insights": {
     "summary": {
       "total_unique_terms": 14007,
-      "terms_with_conversions": 73,
+      "terms_with_conversions": 74,
       "conv_rate_terms": 0.005,
       "total_spend_30d": 35934902.0
     },
@@ -2344,19 +2344,19 @@
       "BROAD": {
         "spend_30d": 23642243.0,
         "clicks_30d": 4201,
-        "conversions_30d": 45.74,
+        "conversions_30d": 46.74,
         "term_count": 4631
       },
       "EXACT": {
         "spend_30d": 23587796.0,
         "clicks_30d": 5043,
-        "conversions_30d": 42.93,
+        "conversions_30d": 43.93,
         "term_count": 9497
       },
       "NEAR_PHRASE": {
         "spend_30d": 11066649.0,
         "clicks_30d": 2390,
-        "conversions_30d": 20.2,
+        "conversions_30d": 21.2,
         "term_count": 1984
       },
       "PHRASE": {
@@ -2375,14 +2375,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 16990,
+      "total_unique_placements": 17022,
       "total_spend_30d": 19815068.0
     },
     "network_breakdown": {
       "CONTENT": {
         "spend_30d": 19815069.0,
         "clicks_30d": 12762,
-        "impressions_30d": 1020739,
+        "impressions_30d": 1020736,
         "ctr_30d": 0.0125,
         "cpc_30d": 1553.0,
         "campaign_count": 9
@@ -2390,7 +2390,7 @@
       "SEARCH": {
         "spend_30d": 65576142.0,
         "clicks_30d": 11904,
-        "impressions_30d": 215544,
+        "impressions_30d": 215546,
         "ctr_30d": 0.0552,
         "cpc_30d": 5509.0,
         "campaign_count": 10
@@ -2400,9 +2400,9 @@
       "WEBSITE": {
         "spend_30d": 19815068.0,
         "clicks_30d": 12762,
-        "impressions_30d": 994777,
+        "impressions_30d": 995111,
         "ctr_30d": 0.0128,
-        "placement_count": 16990
+        "placement_count": 17022
       }
     },
     "top_waste_placements": [],
@@ -2627,7 +2627,7 @@
       "OTHER": {
         "spend_30d": 78026386.0,
         "clicks_30d": 21254,
-        "impressions_30d": 1435837,
+        "impressions_30d": 1435839,
         "ctr_30d": 0.0148,
         "ad_count": 150
       },
