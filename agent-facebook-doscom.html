@@ -332,11 +332,28 @@ function renderProfitSummary(profit) {
   }
   const t = profit.total;
   const cardCls = (m) => m >= 25 ? '' : m >= 15 ? 'warning' : 'danger';
+
+  // Cảnh báo data freshness — Pancake fetch chạy mỗi 30 phút (9-17h VN)
+  let freshnessNote = '';
+  if (profit.data_freshness) {
+    const fresh = new Date(profit.data_freshness.replace(' UTC', 'Z'));
+    const ageMin = Math.round((Date.now() - fresh.getTime()) / 60000);
+    if (ageMin > 90) {
+      freshnessNote = `<div class="warning-banner" style="margin-bottom:8px">⏱ Data Pancake cập nhật cách đây ${ageMin} phút (${profit.data_freshness}). Đơn mới hôm nay có thể chưa hiển thị — workflow auto-sync chạy mỗi 30 phút từ 9h-17h VN.</div>`;
+    }
+  }
+  let cogsNote = '';
+  if (profit.cogs_coverage_note) {
+    cogsNote = `<div class="warning-banner" style="margin-bottom:8px;background:#fef3c7">⚠ ${profit.cogs_coverage_note}</div>`;
+  }
+
   wrap.innerHTML = `
+    ${freshnessNote}
+    ${cogsNote}
     <div class="stats-grid">
       <div class="stat-card"><div class="label">Doanh thu</div><div class="value">${fmt(t.revenue)}đ</div></div>
       <div class="stat-card"><div class="label">Đơn</div><div class="value">${fmt(t.orders)}</div></div>
-      <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Lợi nhuận</div><div class="value">${fmt(t.profit)}đ</div></div>
+      <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Lợi nhuận (ước)</div><div class="value">${fmt(t.profit)}đ</div></div>
       <div class="stat-card ${cardCls(t.margin_pct)}"><div class="label">Margin</div><div class="value">${t.margin_pct}%</div></div>
       <div class="stat-card"><div class="label">FB Spend (ước)</div><div class="value">${fmt(t.fb_spend_estimated)}đ</div><div class="sub">40% revenue</div></div>
       <div class="stat-card"><div class="label">Profit/đơn</div><div class="value">${fmt(t.profit_per_order)}đ</div></div>

@@ -287,6 +287,10 @@ export function getComparisonRange(timeRange, preset) {
 }
 
 // Filter orders/revenue by date range — works with Pancake source_groups.products[*].orders_by_date
+//
+// 2026-05-06 fix: thêm `total` field tính TRUE total từ top-level
+// `total_orders_by_date` + `order_revenue_by_status_by_date` (tất cả status,
+// tất cả SP), không bị giới hạn 4 FB_ACTIVE_GROUPS hay 13 SP của PRODUCT_MAPPING.
 export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
   if (!productRevenueJson?.source_groups || !timeRange) return { has_data: false };
   const { start, end } = timeRange;
@@ -326,48 +330,111 @@ export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
     t.aov = t.orders > 0 ? Math.round(t.revenue / t.orders) : 0;
     out[g] = t;
   }
+
+  // TRUE totals từ top-level Pancake fields (gộp all status + all SP)
+  let trueRevenue = 0, trueOrders = 0;
+  for (const sg of FB_SALES_GROUPS) {
+    const sgData = productRevenueJson.source_groups[sg];
+    if (!sgData) continue;
+    for (const [date, cnt] of Object.entries(sgData.total_orders_by_date || {})) {
+      if (date >= start && date <= end) trueOrders += Number(cnt) || 0;
+    }
+    for (const stMap of Object.values(sgData.order_revenue_by_status_by_date || {})) {
+      for (const [date, rev] of Object.entries(stMap || {})) {
+        if (date >= start && date <= end) trueRevenue += Number(rev) || 0;
+      }
+    }
+  }
+
   return {
-    has_data: Object.values(out).some(t => t.orders > 0),
+    has_data: trueOrders > 0,
     time_range: timeRange,
     groups: out,
+    total: {
+      revenue: Math.round(trueRevenue),
+      orders: trueOrders,
+      aov: trueOrders > 0 ? Math.round(trueRevenue / trueOrders) : 0,
+    },
+    data_freshness: productRevenueJson.generated_at || null,
   };
 }
 
-// Compute profit (using product-costs) within time range
+// Compute profit (using product-costs) within time range.
+//
+// IMPORTANT (2026-05-06 fix):
+//   - revenue + orders dùng TOP-LEVEL totals (`total_orders_by_date`,
+//     `order_revenue_by_status_by_date`) gộp TẤT CẢ status + TẤT CẢ SP của
+//     DUY+PHƯƠNG NAM → khớp Pancake POS UI 100%.
+//   - cogs vẫn tính per-product theo PRODUCT_MAPPING (13 SP) vì chỉ có giá
+//     nhập cho 13 SP đó. Đơn ngoài 13 SP không có cogs → margin/profit có
+//     thể hơi over-estimate, có note `cogs_coverage_note` để FE hiển thị.
+//   - Per-group breakdown (groupTotals) vẫn dùng để hiển thị top SP per nhóm
+//     nhưng total dùng top-level.
 export function computeFbProfitInRange(productRevenueJson, productCostsJson, group, timeRange) {
   if (!productRevenueJson?.source_groups || !productCostsJson?.products || !timeRange) {
     return { has_data: false };
   }
   const { start, end } = timeRange;
   const costs = productCostsJson.products;
+
+  // ── Per-group breakdown (4 FB_ACTIVE_GROUPS) — dùng cho top SP per group ──
   const groupTotals = {};
   for (const g of FB_ACTIVE_GROUPS) groupTotals[g] = { revenue: 0, orders: 0, cogs: 0 };
+
+  let mappedRevenue = 0, mappedOrderUnits = 0, mappedCogs = 0;
 
   for (const sg of FB_SALES_GROUPS) {
     const products = productRevenueJson.source_groups[sg]?.products;
     if (!products) continue;
     for (const [name, p] of Object.entries(products)) {
       const grp = classifyFbProduct(name);
-      if (!FB_ACTIVE_GROUPS.includes(grp)) continue;
-      const ordersByDate = p.orders_by_date || {};
-      const revByDate = p.by_date || {};
       const costEntry = costs[name.toLowerCase()] ||
         Object.values(costs).find(c => c.ma_ten_goi?.toLowerCase() === name.toLowerCase());
       const unitCost = costEntry?.gia_nhap_vnd ? Number(costEntry.gia_nhap_vnd) : 0;
+      const ordersByDate = p.orders_by_date || {};
+      const revByDate = p.by_date || {};
       for (const [date, ord] of Object.entries(ordersByDate)) {
         if (date < start || date > end) continue;
         const orders = Number(ord) || 0;
         const rev = Number(revByDate[date]) || 0;
-        groupTotals[grp].revenue += rev;
-        groupTotals[grp].orders += orders;
-        groupTotals[grp].cogs += unitCost * orders;
+        if (FB_ACTIVE_GROUPS.includes(grp)) {
+          groupTotals[grp].revenue += rev;
+          groupTotals[grp].orders += orders;
+          groupTotals[grp].cogs += unitCost * orders;
+        }
+        mappedRevenue += rev;
+        mappedOrderUnits += orders;
+        mappedCogs += unitCost * orders;
       }
     }
   }
 
+  // ── TRUE TOTALS — gộp tất cả status + tất cả SP từ top-level fields ──
+  // Pancake JSON có `order_revenue_by_status_by_date[status][date]` đã sum
+  // all SP per đơn (dùng total_price_after_sub_discount), và
+  // `total_orders_by_date[date]` đếm unique đơn (1 đơn = +1).
+  let trueRevenue = 0;
+  let trueOrders = 0;
+  for (const sg of FB_SALES_GROUPS) {
+    const sgData = productRevenueJson.source_groups[sg];
+    if (!sgData) continue;
+    const obd = sgData.total_orders_by_date || {};
+    for (const [date, cnt] of Object.entries(obd)) {
+      if (date < start || date > end) continue;
+      trueOrders += Number(cnt) || 0;
+    }
+    const rbsbd = sgData.order_revenue_by_status_by_date || {};
+    for (const stMap of Object.values(rbsbd)) {
+      for (const [date, rev] of Object.entries(stMap || {})) {
+        if (date < start || date > end) continue;
+        trueRevenue += Number(rev) || 0;
+      }
+    }
+  }
+
+  // Per-group filter cho output `groups` (giữ logic cũ cho top SP breakdown)
   const filterGroups = (group === "ALL") ? FB_ACTIVE_GROUPS : [group];
   const out = {};
-  let agg = { revenue: 0, orders: 0, cogs: 0, fb_spend: 0, vat: 0, profit: 0 };
   for (const g of filterGroups) {
     const t = groupTotals[g];
     if (!t || t.orders === 0) continue;
@@ -385,23 +452,41 @@ export function computeFbProfitInRange(productRevenueJson, productCostsJson, gro
       margin_pct: t.revenue > 0 ? Math.round((profit / t.revenue) * 1000) / 10 : 0,
       aov: t.orders > 0 ? Math.round(t.revenue / t.orders) : 0,
     };
-    agg.revenue += t.revenue; agg.orders += t.orders; agg.cogs += t.cogs;
-    agg.fb_spend += fbSpend; agg.vat += vat; agg.profit += profit;
   }
+
+  // Total dùng TRUE values từ top-level Pancake aggregation
+  const fbSpendTrue = trueRevenue * 0.40;
+  const vatTrue = trueRevenue * 0.10;
+  // Scale cogs theo tỷ lệ trueRevenue / mappedRevenue (vì chỉ có cogs cho mapped SP).
+  // Nếu mappedRevenue = 0 → fallback cogs = 0.
+  const cogsScale = mappedRevenue > 0 ? trueRevenue / mappedRevenue : 0;
+  const cogsTrue = mappedCogs * cogsScale;
+  const profitTrue = trueRevenue - cogsTrue - fbSpendTrue - vatTrue;
+
+  const cogsCoverage = mappedRevenue > 0 && trueRevenue > 0
+    ? Math.round((mappedRevenue / trueRevenue) * 1000) / 10
+    : 0;
+
   return {
-    has_data: agg.orders > 0,
+    has_data: trueOrders > 0,
     time_range: timeRange,
     groups: out,
     total: {
-      revenue: Math.round(agg.revenue),
-      orders: agg.orders,
-      cogs: Math.round(agg.cogs),
-      fb_spend_estimated: Math.round(agg.fb_spend),
-      vat: Math.round(agg.vat),
-      profit: Math.round(agg.profit),
-      profit_per_order: agg.orders > 0 ? Math.round(agg.profit / agg.orders) : 0,
-      margin_pct: agg.revenue > 0 ? Math.round((agg.profit / agg.revenue) * 1000) / 10 : 0,
+      revenue: Math.round(trueRevenue),
+      orders: trueOrders,
+      cogs: Math.round(cogsTrue),
+      fb_spend_estimated: Math.round(fbSpendTrue),
+      vat: Math.round(vatTrue),
+      profit: Math.round(profitTrue),
+      profit_per_order: trueOrders > 0 ? Math.round(profitTrue / trueOrders) : 0,
+      margin_pct: trueRevenue > 0 ? Math.round((profitTrue / trueRevenue) * 1000) / 10 : 0,
     },
+    // Audit fields — frontend có thể hiển thị nếu coverage < 95%
+    cogs_coverage_pct: cogsCoverage,
+    cogs_coverage_note: cogsCoverage < 95
+      ? `Giá nhập chỉ cover ${cogsCoverage}% doanh thu. Profit là ước lượng (scale theo tỷ lệ).`
+      : null,
+    data_freshness: productRevenueJson.generated_at || null,
   };
 }
 
