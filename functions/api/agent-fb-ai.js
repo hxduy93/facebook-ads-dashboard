@@ -28,8 +28,17 @@ const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";       // light, weak, 
 const MODEL_BIG  = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";   // structured output reliable, ~500-1500 neurons
 const CLAUDE_MODEL_SONNET = "claude-sonnet-4-6";                 // Anthropic — phân tích sâu hơn nhiều Llama
 
-// Mode nào ưu tiên Claude (chất lượng cao). Các mode còn lại dùng Llama (rẻ hơn).
-const CLAUDE_MODES = new Set(["optimize_campaign", "audit_account_json"]);
+// Tất cả mode dùng Claude Sonnet (chất lượng cao nhất).
+// Để revert về Llama (không cần code change): Cloudflare Pages → Settings →
+// Environment variables → Add `USE_CLAUDE` = `false` (Plaintext) → Save.
+const CLAUDE_MODES = new Set([
+  "audit_account",
+  "audit_account_json",
+  "audit_funnel",
+  "analyze_metrics",
+  "optimize_campaign",
+  "ask",
+]);
 const MODEL_CLAUDE_HAIKU = "anthropic/claude-haiku-4-5";        // best quality, billed per token (cần Workers Paid + AI Models marketplace)
 
 // Map model_pref string → actual model id
@@ -566,11 +575,18 @@ export async function onRequestPost(context) {
     max_tokens: cfg.json_output ? 3500 : 2500,
   };
 
-  // Quyết định có gọi Claude không. User có thể force Llama qua body.model="llama".
-  const wantClaude = CLAUDE_MODES.has(mode)
+  // Quyết định có gọi Claude không.
+  // - User force Llama qua body.model="llama" → skip Claude
+  // - Env var USE_CLAUDE="false" → kill switch, skip Claude (revert về Llama)
+  // - Default: Claude bật cho mọi mode trong CLAUDE_MODES
+  const claudeEnabled = env.USE_CLAUDE !== "false";
+  const wantClaude = claudeEnabled
+    && CLAUDE_MODES.has(mode)
     && modelPref !== "llama" && modelPref !== "fast"
     && env.ANTHROPIC_API_KEY && env.CF_ACCOUNT_ID;
 
+  let claudeError = null;
+  let claudeDebug = null;
   if (wantClaude) {
     try {
       const claudeRes = await callClaudeViaGateway(env, systemPrompt, userPrompt, cfg.json_output);
@@ -580,9 +596,20 @@ export async function onRequestPost(context) {
       claudeUsage = claudeRes.usage;
     } catch (e) {
       const errMsg = String(e.message || e);
-      console.log(`[CLAUDE FAIL] ${errMsg.slice(0, 150)}, fallback Llama 70B`);
+      claudeError = errMsg.slice(0, 300);
+      console.log(`[CLAUDE FAIL] ${errMsg.slice(0, 200)}, fallback Llama 70B`);
       // Fall through to Llama path below
     }
+  } else {
+    // Diagnostic: tại sao không gọi Claude?
+    claudeDebug = {
+      mode_in_claude_modes: CLAUDE_MODES.has(mode),
+      modelPref,
+      has_anthropic_key: !!env.ANTHROPIC_API_KEY,
+      has_cf_account_id: !!env.CF_ACCOUNT_ID,
+      anthropic_key_preview: env.ANTHROPIC_API_KEY ? env.ANTHROPIC_API_KEY.slice(0, 12) + "..." : null,
+      cf_account_id_preview: env.CF_ACCOUNT_ID ? env.CF_ACCOUNT_ID.slice(0, 8) + "..." : null,
+    };
   }
 
   if (!claudeUsed) {
@@ -706,6 +733,8 @@ export async function onRequestPost(context) {
     fallback_note: fallbackUsed ? `${selectedModel} fail → fallback ${actualModel}` : null,
     claude_used: claudeUsed,
     claude_usage: claudeUsage,  // {input_tokens, output_tokens, cache_creation_input_tokens, cache_read_input_tokens}
+    claude_error: claudeError,  // exact error message khi Claude fail
+    claude_debug: claudeDebug,  // info debug khi không gọi Claude (env vars thiếu/sai)
     response: rawResp, parsed_json: parsedJson,
     skills_used: cfg.skills, data_used: cfg.data,
     cached: false,
