@@ -433,7 +433,7 @@ function renderCampaigns(campaigns) {
   // Render mỗi campaign thành 1 card stacked (không phải table) để có chỗ cho analysis bên dưới
   wrap.innerHTML = `
     <div class="warning-banner" id="batch-progress" style="background:#dbeafe;border-color:#3b82f6;color:#1e40af">
-      ⏳ Đang phân tích ${activeCampaigns.length} campaigns bằng Llama 70B...
+      ⏳ Đang phân tích ${activeCampaigns.length} campaigns bằng Claude Sonnet 4.6 (fallback Llama nếu lỗi)...
       <span id="progress-counter">0/${activeCampaigns.length}</span>
     </div>
     ${activeCampaigns.map((c, i) => `
@@ -469,7 +469,7 @@ async function autoAnalyzeAll(campaigns) {
     const c = campaigns[i];
     const targetEl = document.getElementById('analysis-' + i);
     if (!targetEl) continue;
-    targetEl.innerHTML = `<div class="empty-state" style="padding:14px;color:#1877f2;font-size:12.5px">⏳ AI đang phân tích campaign ${i+1}/${total}... (~5-15s với Llama 70B)</div>`;
+    targetEl.innerHTML = `<div class="empty-state" style="padding:14px;color:#1877f2;font-size:12.5px">⏳ AI đang phân tích campaign ${i+1}/${total}... (~3-8s với Claude Sonnet)</div>`;
 
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), 90000);
