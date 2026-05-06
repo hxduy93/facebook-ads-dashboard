@@ -850,13 +850,33 @@ def main():
     per_group_orders = {}   # NEW: cache raw orders để build top_products_website_by_period
     grand_total_orders = 0
     all_orders_combined = []
+    # 2026-05-06: dedup theo order.id giữa các groups. Pancake saved filters
+    # DUY và PHƯƠNG NAM có thể overlap → 1 đơn fetch ở cả 2 groups → double count.
+    # Đơn nào đã xuất hiện ở group trước thì SKIP ở group sau (priority order:
+    # DUY → PHUONG_NAM → WEBSITE → ZALO_OA → HOTLINE — matches SOURCE_GROUPS order).
+    seen_order_ids = set()
+    duplicate_count_by_group = {}
 
     for group in SOURCE_GROUPS:
         key = group["key"]
         label = group["label"]
         print(f"─── [{label}] ───────────────────────────────────")
-        orders = fetch_all_orders_for_group(group, start_dt, end_dt)
-        print(f"[INFO] group={key}: fetched {len(orders)} đơn")
+        raw_orders = fetch_all_orders_for_group(group, start_dt, end_dt)
+        # Dedup
+        orders = []
+        dup = 0
+        for o in raw_orders:
+            oid = o.get("id")
+            if oid is None:
+                orders.append(o)
+                continue
+            if oid in seen_order_ids:
+                dup += 1
+                continue
+            seen_order_ids.add(oid)
+            orders.append(o)
+        duplicate_count_by_group[key] = dup
+        print(f"[INFO] group={key}: fetched {len(raw_orders)} đơn → {len(orders)} unique (skip {dup} đã thấy ở group trước)")
 
         status_counter = Counter(o.get("status") for o in orders)
         print(f"[DEBUG] {key} status: {dict(status_counter.most_common())}")
