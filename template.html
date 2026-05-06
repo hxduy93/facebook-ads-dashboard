@@ -1866,7 +1866,6 @@ function AdsCreatorPanel() {
 
   const handleConfirm = async () => {
     setStatus("sending")
-    setStatusMsg("Đang upload media và tạo campaign trên Meta Ads...")
     const config = buildSummary()
 
     // Backup config to localStorage (safety net if endpoint fails)
@@ -1876,16 +1875,51 @@ function AdsCreatorPanel() {
       localStorage.setItem("doscom_pending_ads", JSON.stringify(pending))
     } catch(e) {}
 
-    // Build multipart FormData — config JSON + 1 file per ad
-    const fd = new FormData()
-    fd.append("config", JSON.stringify(config))
-    ads.forEach((a, idx) => {
-      if (a.videoFile) fd.append(`video_${idx}`, a.videoFile, a.videoFile.name)
-      else if (a.imageFile) fd.append(`image_${idx}`, a.imageFile, a.imageFile.name)
-    })
-
+    // ─── Step 1: Upload từng media qua /api/fb-upload-media ───
+    // Tách step này ra để mỗi upload có 30s timeout riêng — không bị
+    // Cloudflare cắt ở giữa lúc đợi FB xử lý video.
     try {
-      const res = await fetch("/api/create-campaign", { method: "POST", body: fd })
+      for (let i = 0; i < ads.length; i++) {
+        const a = ads[i]
+        if (!a.videoFile && !a.imageFile) {
+          throw new Error(`Ad #${i + 1} thiếu video hoặc ảnh`)
+        }
+        const file = a.videoFile || a.imageFile
+        const kind = a.videoFile ? "video" : "image"
+        setStatusMsg(`Đang upload ${kind} của Ad #${i + 1}/${ads.length}... ${kind === 'video' ? '(video cần ~10-25s để FB xử lý)' : ''}`)
+
+        const fd = new FormData()
+        fd.append("file", file, file.name)
+        fd.append("account_id", config.account_id)
+        fd.append("kind", kind)
+
+        const res = await fetch("/api/fb-upload-media", { method: "POST", body: fd })
+        const data = await res.json()
+        if (!res.ok || !data.ok) {
+          throw new Error(`[upload Ad #${i + 1} - ${data.step || '?'}] ${data.error || res.status}`)
+        }
+        // Inject media IDs vào config.ads[i]
+        if (data.kind === "video") {
+          config.ads[i].video_id = data.video_id
+          config.ads[i].thumbnail_url = data.thumbnail_url
+        } else {
+          config.ads[i].image_hash = data.image_hash
+        }
+      }
+    } catch (e) {
+      setStatus("error")
+      setStatusMsg(`Lỗi upload media: ${e.message}\n\nConfig đã backup vào localStorage. Đợi 30-60s rồi thử lại — video đã upload sẽ ready ở lần sau.`)
+      return
+    }
+
+    // ─── Step 2: Tạo campaign + adset + ads với media IDs đã sẵn ───
+    setStatusMsg("Đã upload xong media. Đang tạo campaign + adset + ads trên Meta Ads...")
+    try {
+      const fd2 = new FormData()
+      fd2.append("config", JSON.stringify(config))
+      // KHÔNG kèm file nữa — endpoint sẽ dùng video_id/image_hash trong config
+
+      const res = await fetch("/api/create-campaign", { method: "POST", body: fd2 })
       const data = await res.json()
       if (!res.ok || !data.success) {
         const step = data.step || "unknown"

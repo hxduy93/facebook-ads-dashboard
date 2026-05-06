@@ -264,17 +264,30 @@ export async function onRequestPost(context) {
   const partial = {};
 
   try {
-    // ── Step 1: Upload all media ────────────────────────────────
-    const uploaded = {}; // idx → { video_id?, image_hash? }
+    // ── Step 1: Upload all media (HOẶC dùng media đã upload trước qua /api/fb-upload-media) ──
+    // 2026-05-06: split flow để tránh CF 30s timeout. Frontend nên upload qua
+    // /api/fb-upload-media trước → nhận video_id + thumbnail_url, gửi vào cfg.ads[i].
+    // Endpoint này nếu thấy ad đã có video_id/image_hash sẽ SKIP upload+wait.
+    const uploaded = {}; // idx → { video_id?, image_hash?, thumbnail_url? }
     for (let i = 0; i < cfg.ads.length; i++) {
+      const ad = cfg.ads[i];
       const files = filesByAd[i] || {};
       uploaded[i] = {};
-      if (files.video) {
+
+      // Pre-uploaded path (preferred — nhanh, không bị timeout)
+      if (ad.video_id) {
+        uploaded[i].video_id = ad.video_id;
+        uploaded[i].thumbnail_url = ad.thumbnail_url || null;
+      } else if (ad.image_hash) {
+        uploaded[i].image_hash = ad.image_hash;
+      }
+      // Fallback: file kèm trong form (backward compat — nhưng dễ timeout với video)
+      else if (files.video) {
         uploaded[i].video_id = await uploadVideo(accountIdRaw, files.video, token);
       } else if (files.image) {
         uploaded[i].image_hash = await uploadImage(accountIdRaw, files.image, token);
       } else {
-        throw new Error(`Ad #${i + 1} thiếu video hoặc ảnh`);
+        throw new Error(`Ad #${i + 1} thiếu video_id/image_hash trong cfg HOẶC file kèm trong form`);
       }
     }
     partial.uploaded = uploaded;
@@ -357,8 +370,10 @@ export async function onRequestPost(context) {
         const media = uploaded[i];
 
         // Video ads need: (1) status=ready (xử lý xong) (2) thumbnail
-        let videoThumbnailUrl = null;
-        if (media.video_id) {
+        // Nếu đã pre-upload qua /api/fb-upload-media → media.thumbnail_url có
+        // sẵn, video chắc chắn ready → skip wait, không lo timeout.
+        let videoThumbnailUrl = media.thumbnail_url || null;
+        if (media.video_id && !videoThumbnailUrl) {
           currentAdSubStep = "wait_video_ready";
           await waitForVideoReady(media.video_id, token);
           currentAdSubStep = "wait_video_thumbnail";
