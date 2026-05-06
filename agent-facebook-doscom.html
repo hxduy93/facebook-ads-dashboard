@@ -579,6 +579,7 @@ async function optimizeCampaign(campaignId, campaignName) {
       return;
     }
     let modelInfo = (j.model || '').split('/').pop();
+    if (j.claude_used) modelInfo = `🤖 ${modelInfo}`;
     if (j.fallback_used) {
       modelInfo = `${(j.requested_model || '').split('/').pop()} → fallback ${modelInfo}`;
     }

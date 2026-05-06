@@ -26,6 +26,10 @@ import {
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";       // light, weak, ~30-100 neurons
 const MODEL_BIG  = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";   // structured output reliable, ~500-1500 neurons
+const CLAUDE_MODEL_SONNET = "claude-sonnet-4-6";                 // Anthropic — phân tích sâu hơn nhiều Llama
+
+// Mode nào ưu tiên Claude (chất lượng cao). Các mode còn lại dùng Llama (rẻ hơn).
+const CLAUDE_MODES = new Set(["optimize_campaign", "audit_account_json"]);
 const MODEL_CLAUDE_HAIKU = "anthropic/claude-haiku-4-5";        // best quality, billed per token (cần Workers Paid + AI Models marketplace)
 
 // Map model_pref string → actual model id
@@ -255,6 +259,54 @@ async function fetchJson(origin, path, cookieHeader) {
   } catch { return null; }
 }
 
+// Gọi Claude API qua Cloudflare AI Gateway (giữ observability của gateway 'doscom-erp').
+// System prompt đặt trong array với cache_control: ephemeral → cache 5 phút.
+// Auto-loop khi click 1 account scan nhiều campaigns liên tiếp = cache hit ~90% → tiết kiệm cost.
+async function callClaudeViaGateway(env, systemPrompt, userPrompt, jsonOutput) {
+  if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY chưa set trong Cloudflare env vars");
+  if (!env.CF_ACCOUNT_ID) throw new Error("CF_ACCOUNT_ID chưa set trong Cloudflare env vars");
+
+  const url = `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/doscom-erp/anthropic/v1/messages`;
+  const body = {
+    model: CLAUDE_MODEL_SONNET,
+    max_tokens: jsonOutput ? 4000 : 3000,
+    system: [
+      {
+        type: "text",
+        text: systemPrompt,
+        cache_control: { type: "ephemeral" },
+      },
+    ],
+    messages: [{ role: "user", content: userPrompt }],
+  };
+
+  const r = await fetch(url, {
+    method: "POST",
+    headers: {
+      "x-api-key": env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(90000),
+  });
+
+  if (!r.ok) {
+    const errText = await r.text().catch(() => "");
+    throw new Error(`Claude API ${r.status}: ${errText.slice(0, 300)}`);
+  }
+
+  const data = await r.json();
+  const textBlock = (data.content || []).find(b => b.type === "text");
+  if (!textBlock?.text) throw new Error("Claude trả empty content");
+
+  return {
+    response: textBlock.text,
+    usage: data.usage || {},
+    model_id: data.model || CLAUDE_MODEL_SONNET,
+  };
+}
+
 function buildSystemPrompt(skills, group, jsonOutput) {
   const skillBlocks = skills.map(s => SKILL_SUMMARY[s]).filter(Boolean).join("\n\n");
   const formatNote = jsonOutput
@@ -443,6 +495,7 @@ export async function onRequestPost(context) {
           response: cached.response, parsed_json: cached.parsed_json || null,
           cached: true, cached_at: cached.cached_at,
           cache_note: `Cache từ ${cached.cached_at}. Bấm Làm mới để regenerate.`,
+          claude_used: cached.claude_used || false,
           focus_deltas: cached.focus_deltas || null,
           focus_comparison: cached.focus_comparison || null,
           comparison_range: cached.comparison_range || comparisonRange,
@@ -495,10 +548,14 @@ export async function onRequestPost(context) {
   const modelPref = body.model || cfg.model_pref || "fast";
   const selectedModel = MODEL_MAP[modelPref] || MODEL_FAST;
 
-  // Call AI với auto-fallback: nếu model lớn fail (quota / timeout) → retry với Llama 8B
+  // Call AI: ưu tiên Claude cho mode quan trọng (optimize_campaign, audit_account_json),
+  // fail thì fallback về Llama 70B, fail tiếp thì Llama 8B.
   let aiResult;
   let actualModel = selectedModel;
   let fallbackUsed = false;
+  let claudeUsed = false;
+  let claudeUsage = null;  // tracking cost: input/output/cache tokens
+
   // temperature 0 cho json_output → output deterministic, F5 ra cùng kết quả
   const aiParams = {
     messages: [
@@ -509,34 +566,55 @@ export async function onRequestPost(context) {
     max_tokens: cfg.json_output ? 3500 : 2500,
   };
 
-  try {
-    aiResult = await env.AI.run(selectedModel, aiParams, { gateway: { id: "doscom-erp" } });
-  } catch (e) {
-    const errMsg = String(e.message || e);
-    const isQuotaErr = /4006|neurons|quota|allocation|paid plan/i.test(errMsg);
+  // Quyết định có gọi Claude không. User có thể force Llama qua body.model="llama".
+  const wantClaude = CLAUDE_MODES.has(mode)
+    && modelPref !== "llama" && modelPref !== "fast"
+    && env.ANTHROPIC_API_KEY && env.CF_ACCOUNT_ID;
 
-    // Nếu đang dùng model lớn (big/claude) + lỗi quota → fallback xuống 8B Fast
-    if ((modelPref === "big" || modelPref === "claude_haiku") && (isQuotaErr || /timeout|503|502/i.test(errMsg))) {
-      console.log(`[FALLBACK] ${selectedModel} fail (${errMsg.slice(0,80)}), retry với 8B Fast`);
-      try {
-        aiResult = await env.AI.run(MODEL_FAST, aiParams, { gateway: { id: "doscom-erp" } });
-        actualModel = MODEL_FAST;
-        fallbackUsed = true;
-      } catch (e2) {
+  if (wantClaude) {
+    try {
+      const claudeRes = await callClaudeViaGateway(env, systemPrompt, userPrompt, cfg.json_output);
+      aiResult = { response: claudeRes.response };
+      actualModel = claudeRes.model_id;
+      claudeUsed = true;
+      claudeUsage = claudeRes.usage;
+    } catch (e) {
+      const errMsg = String(e.message || e);
+      console.log(`[CLAUDE FAIL] ${errMsg.slice(0, 150)}, fallback Llama 70B`);
+      // Fall through to Llama path below
+    }
+  }
+
+  if (!claudeUsed) {
+    try {
+      aiResult = await env.AI.run(selectedModel, aiParams, { gateway: { id: "doscom-erp" } });
+    } catch (e) {
+      const errMsg = String(e.message || e);
+      const isQuotaErr = /4006|neurons|quota|allocation|paid plan/i.test(errMsg);
+
+      // Nếu đang dùng model lớn + lỗi quota/timeout → fallback xuống 8B Fast
+      if ((modelPref === "big" || modelPref === "claude_haiku" || wantClaude) && (isQuotaErr || /timeout|503|502/i.test(errMsg))) {
+        console.log(`[FALLBACK] ${selectedModel} fail (${errMsg.slice(0,80)}), retry với 8B Fast`);
+        try {
+          aiResult = await env.AI.run(MODEL_FAST, aiParams, { gateway: { id: "doscom-erp" } });
+          actualModel = MODEL_FAST;
+          fallbackUsed = true;
+        } catch (e2) {
+          return jsonResponse({
+            error: `Cả 2 models Llama đều fail. Quota có thể hết hoặc Workers AI down.`,
+            original_error: errMsg.slice(0, 200),
+            fallback_error: String(e2.message || e2).slice(0, 200),
+            hint: "Đợi 7h sáng mai VN reset quota free, hoặc upgrade Workers Paid $5/tháng (10M neurons).",
+          }, 502);
+        }
+      } else {
         return jsonResponse({
-          error: `Cả 2 models đều fail. Quota có thể hết hoặc Workers AI down.`,
-          original_error: errMsg.slice(0, 200),
-          fallback_error: String(e2.message || e2).slice(0, 200),
-          hint: "Đợi 7h sáng mai VN reset quota free, hoặc upgrade Workers Paid $5/tháng (10M neurons).",
+          error: `Workers AI fail (${selectedModel}): ${errMsg.slice(0, 200)}`,
+          hint: isQuotaErr
+            ? "Hết 10K neurons free hôm nay. Reset 7h sáng mai VN. Hoặc upgrade Workers Paid $5/tháng."
+            : null,
         }, 502);
       }
-    } else {
-      return jsonResponse({
-        error: `Workers AI fail (${selectedModel}): ${errMsg.slice(0, 200)}`,
-        hint: isQuotaErr
-          ? "Hết 10K neurons free hôm nay. Reset 7h sáng mai VN. Hoặc upgrade Workers Paid $5/tháng."
-          : (modelPref === "claude_haiku" ? "Claude Haiku cần Workers Paid + AI Models marketplace access" : null),
-      }, 502);
     }
   }
 
@@ -609,6 +687,7 @@ export async function onRequestPost(context) {
         parsed_json: parsedJson,
         cached_at: nowVN,
         model: actualModel,
+        claude_used: claudeUsed,
         focus_deltas: dataContext.fb_focus_campaign?.deltas || null,
         focus_comparison: dataContext.fb_focus_campaign?.comparison || null,
         comparison_range: comparisonRange,
@@ -625,6 +704,8 @@ export async function onRequestPost(context) {
     requested_model: selectedModel,
     fallback_used: fallbackUsed,
     fallback_note: fallbackUsed ? `${selectedModel} fail → fallback ${actualModel}` : null,
+    claude_used: claudeUsed,
+    claude_usage: claudeUsage,  // {input_tokens, output_tokens, cache_creation_input_tokens, cache_read_input_tokens}
     response: rawResp, parsed_json: parsedJson,
     skills_used: cfg.skills, data_used: cfg.data,
     cached: false,
