@@ -25,6 +25,15 @@ const GRAPH = `https://graph.facebook.com/${FB_API_VERSION}`;
 
 // ───────────────────────── helpers ─────────────────────────
 
+// JSON response helper — trước đây thiếu, gây ReferenceError khi catch block
+// chạy → user thấy "ad không tạo được" thay vì error thật từ FB.
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { "content-type": "application/json; charset=utf-8" },
+  });
+}
+
 async function fbGet(endpoint, params, token) {
   const qs = new URLSearchParams(params || {});
   qs.append("access_token", token);
@@ -339,53 +348,62 @@ export async function onRequestPost(context) {
 
     // ── Step 4: Create Creative + Ad for each ad in config ───────
     partial.ads = [];
-    for (let i = 0; i < cfg.ads.length; i++) {
-      const ad = cfg.ads[i];
-      const media = uploaded[i];
+    let currentAdSubStep = "";  // để báo lỗi chính xác sub-step nào fail
+    let currentAdIndex = -1;
+    try {
+      for (let i = 0; i < cfg.ads.length; i++) {
+        currentAdIndex = i;
+        const ad = cfg.ads[i];
+        const media = uploaded[i];
 
-      // Video ads need: (1) status=ready (xử lý xong) (2) thumbnail
-      // FB sẽ reject ad creation nếu video còn 'processing' với lỗi
-      // "Hệ thống vẫn đang xử lý video này" → phải đợi ready trước.
-      let videoThumbnailUrl = null;
-      if (media.video_id) {
-        await waitForVideoReady(media.video_id, token);
-        videoThumbnailUrl = await waitForVideoThumbnail(media.video_id, token);
+        // Video ads need: (1) status=ready (xử lý xong) (2) thumbnail
+        let videoThumbnailUrl = null;
+        if (media.video_id) {
+          currentAdSubStep = "wait_video_ready";
+          await waitForVideoReady(media.video_id, token);
+          currentAdSubStep = "wait_video_thumbnail";
+          videoThumbnailUrl = await waitForVideoThumbnail(media.video_id, token);
+        }
+
+        currentAdSubStep = "build_story_spec";
+        const storySpec = buildStorySpec({
+          pageId: cfg.page_id,
+          ad,
+          videoId: media.video_id,
+          videoThumbnailUrl,
+          imageHash: media.image_hash,
+          destinationType: cfg.destination_type,
+        });
+
+        // Build adcreative body — attach url_tags if ad has UTM params
+        const creativeBody = {
+          name: `${ad.ad_name || `Ad ${i + 1}`} — creative`,
+          object_story_spec: storySpec,
+        };
+        if (ad.url_tags && typeof ad.url_tags === "string" && ad.url_tags.trim()) {
+          creativeBody.url_tags = ad.url_tags.trim();
+        }
+        currentAdSubStep = "create_adcreative";
+        const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, creativeBody, token);
+
+        currentAdSubStep = "create_ad";
+        const adRes = await fbPost(`/act_${accountIdRaw}/ads`, {
+          name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,
+          adset_id: partial.adset_id,
+          creative: { creative_id: creativeRes.id },
+          status: launchStatus,
+        }, token);
+
+        partial.ads.push({
+          ad_id: adRes.id,
+          creative_id: creativeRes.id,
+          video_id: media.video_id || null,
+          image_hash: media.image_hash || null,
+        });
       }
-
-      const storySpec = buildStorySpec({
-        pageId: cfg.page_id,
-        ad,
-        videoId: media.video_id,
-        videoThumbnailUrl,
-        imageHash: media.image_hash,
-        destinationType: cfg.destination_type,
-      });
-
-      // Build adcreative body — attach url_tags if ad has UTM params.
-      // url_tags format: "utm_source=X&utm_medium=Y&..." (no leading ?).
-      // Meta sẽ tự append vào mọi outbound click URL.
-      const creativeBody = {
-        name: `${ad.ad_name || `Ad ${i + 1}`} — creative`,
-        object_story_spec: storySpec,
-      };
-      if (ad.url_tags && typeof ad.url_tags === "string" && ad.url_tags.trim()) {
-        creativeBody.url_tags = ad.url_tags.trim();
-      }
-      const creativeRes = await fbPost(`/act_${accountIdRaw}/adcreatives`, creativeBody, token);
-
-      const adRes = await fbPost(`/act_${accountIdRaw}/ads`, {
-        name: ad.ad_name || `${cfg.campaign_name} - Ad ${i + 1}`,
-        adset_id: partial.adset_id,
-        creative: { creative_id: creativeRes.id },
-        status: launchStatus,
-      }, token);
-
-      partial.ads.push({
-        ad_id: adRes.id,
-        creative_id: creativeRes.id,
-        video_id: media.video_id || null,
-        image_hash: media.image_hash || null,
-      });
+    } catch (adErr) {
+      // Re-throw nhưng kèm context: ad index + sub-step nào fail
+      throw new Error(`[Ad #${currentAdIndex + 1} - ${currentAdSubStep}] ${adErr.message || adErr}`);
     }
 
     return json({
