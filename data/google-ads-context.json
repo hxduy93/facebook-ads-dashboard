@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07 16:47",
+  "generated_at": "2026-05-07 23:26",
   "source_data_date_range": {
     "start_7d": "2026-04-30",
     "end": "2026-05-06",
@@ -42,20 +42,20 @@
     "orders_30d": 108,
     "by_status": {
       "delivered": {
-        "revenue": 183120000.0,
-        "orders": 87
+        "revenue": 199555000.0,
+        "orders": 92
       },
       "returning": {
-        "revenue": 16355000.0,
-        "orders": 10
+        "revenue": 6399000.0,
+        "orders": 4
       },
       "returned": {
-        "revenue": 2299000.0,
-        "orders": 2
+        "revenue": 12255000.0,
+        "orders": 8
       },
       "other": {
-        "revenue": 26965000.0,
-        "orders": 9
+        "revenue": 10530000.0,
+        "orders": 4
       }
     },
     "by_source": {
@@ -2370,14 +2370,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 17355,
-      "total_spend_30d": 20043338.0
+      "total_unique_placements": 17396,
+      "total_spend_30d": 20034933.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 20044186.0,
-        "clicks_30d": 12750,
-        "impressions_30d": 1011684,
+        "spend_30d": 20035784.0,
+        "clicks_30d": 12745,
+        "impressions_30d": 1011682,
         "ctr_30d": 0.0126,
         "cpc_30d": 1572.0,
         "campaign_count": 9
@@ -2393,11 +2393,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 20043338.0,
-        "clicks_30d": 12749,
-        "impressions_30d": 982710,
+        "spend_30d": 20034933.0,
+        "clicks_30d": 12744,
+        "impressions_30d": 983139,
         "ctr_30d": 0.013,
-        "placement_count": 17355
+        "placement_count": 17396
       }
     },
     "top_waste_placements": [],
@@ -2430,7 +2430,7 @@
         "placement": "giavang.org/the-gioi",
         "spend_30d": 64856.0,
         "clicks_30d": 22,
-        "impressions_30d": 9407,
+        "impressions_30d": 9408,
         "ctr_30d": 0.0023,
         "placement_type": "WEBSITE"
       },
@@ -2590,9 +2590,9 @@
       },
       {
         "placement": "zigavn.com",
-        "spend_30d": 112211.0,
-        "clicks_30d": 95,
-        "ctr_30d": 0.0147,
+        "spend_30d": 112491.0,
+        "clicks_30d": 96,
+        "ctr_30d": 0.0148,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
@@ -2609,19 +2609,19 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 83306714.0
+      "total_spend_30d": 83300334.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
         "spend_30d": 2389590.0,
         "clicks_30d": 1719,
-        "impressions_30d": 200813,
+        "impressions_30d": 200810,
         "ctr_30d": 0.0086,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 76713004.0,
-        "clicks_30d": 21076,
+        "spend_30d": 76706624.0,
+        "clicks_30d": 21072,
         "impressions_30d": 1430005,
         "ctr_30d": 0.0147,
         "ad_count": 150
