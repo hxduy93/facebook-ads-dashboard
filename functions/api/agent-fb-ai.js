@@ -51,7 +51,7 @@ const MODEL_MAP = {
 };
 
 const CACHE_VERSION = "v6";  // bumped: comparison-period analysis + scale_plan + 100% TV
-const CACHE_TTL_SECONDS = 21600;  // 6h cho mode analyze (FB data ít cập nhật)
+const CACHE_TTL_SECONDS = 86400;  // 24h. Cache key đã include todayVN nên thực tế = đến hết ngày VN. F5 cùng ngày + click lại = HIT, KHÔNG tốn Claude credit.
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
 

@@ -920,7 +920,13 @@ async function autoAnalyzeAll(campaigns) {
           // Inject deltas + comparison range từ server vào dataObj để render hiển thị badge
           if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
           if (j.comparison_range) dataObj._comparison_range = j.comparison_range;
-          targetEl.innerHTML = renderOptimizeResult(dataObj, c.name, c.id);
+          // Meta line: hiển thị cached vs live + thời gian cache (giúp user biết có tốn API call không)
+          const cacheTag = j.cached
+            ? `<span style="color:#16a34a">📌 cached (lưu lúc ${j.cached_at || '?'}) — KHÔNG tốn Claude credit</span>`
+            : `<span style="color:#1877f2">🔄 live (vừa gọi Claude API)</span>`;
+          const modelTag = j.claude_used ? '🤖 Sonnet' : 'Llama';
+          const metaLine = `<div style="font-size:10.5px;color:#6b7280;margin-bottom:6px;padding:3px 6px;background:#f9fafb;border-radius:3px;display:inline-block">${cacheTag} · ${modelTag}</div>`;
+          targetEl.innerHTML = metaLine + renderOptimizeResult(dataObj, c.name, c.id);
         } else {
           const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
           const errMsg = parseError ? ` (${escapeHtml(parseError)})` : '';
@@ -1004,7 +1010,8 @@ async function optimizeCampaign(campaignId, campaignName) {
     if (j.fallback_used) {
       modelInfo = `${(j.requested_model || '').split('/').pop()} → fallback ${modelInfo}`;
     }
-    meta.textContent = `${elapsed}s · ${j.cached ? '📌 cached' : '🔄 live'} · ${modelInfo} · time: ${state.timeRange?.label || '?'}`;
+    const cacheTag = j.cached ? `📌 cached (lưu lúc ${j.cached_at || '?'})` : '🔄 live (vừa gọi AI)';
+    meta.textContent = `${elapsed}s · ${cacheTag} · ${modelInfo} · time: ${state.timeRange?.label || '?'}`;
 
     let html = '';
     if (j.fallback_used) {
