@@ -42,8 +42,9 @@ jobs:
       - name: Re-run update script to refresh competitor + radar blocks
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-          NETLIFY_TOKEN:   ${{ secrets.NETLIFY_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          # Skip Netlify deploy — đã chuyển sang Cloudflare Pages.
+          # Netlify trial credit hết → 403 chặn deploy.
+          SKIP_NETLIFY_DEPLOY: "1"
         run: python update_dashboard.py
 
       - name: Commit updated competitor history
