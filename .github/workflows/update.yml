@@ -33,6 +33,25 @@ jobs:
       - name: Run update script (FB Ads insights + rebuild index.html)
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-          NETLIFY_TOKEN:   ${{ secrets.NETLIFY_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          # Skip Netlify deploy — đã chuyển sang Cloudflare Pages auto-deploy.
+          # Netlify trial credit hết → 403 chặn deploy. Cloudflare sẽ tự deploy
+          # index.html khi git push commit chứa data mới.
+          SKIP_NETLIFY_DEPLOY: "1"
         run: python update_dashboard.py
+
+      - name: Commit + push updated index.html (trigger Cloudflare deploy)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain index.html data/)" ]; then
+            git add index.html data/
+            git commit -m "chore: auto-update FB Ads dashboard (every 30min)"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push reject, chờ $((i*5))s rồi rebase..."
+              sleep $((i*5))
+            done
+            exit 1
+          else
+            echo "No changes to commit."
+          fi
