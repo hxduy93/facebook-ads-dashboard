@@ -116,11 +116,21 @@ Mọi đánh giá phải có SỐ LIỆU CỤ THỂ + LÝ DO RÕ RÀNG, không c
 ═══ DỮ LIỆU SO SÁNH (BẮT BUỘC SỬ DỤNG) ═══
 fb_focus_campaign sẽ có:
 - Metrics KỲ HIỆN TẠI: spend, conversions, cpa, ctr, impressions, days_with_data
-- comparison: { spend, conversions, cpa, ctr, days_with_data, range } — KỲ LIỀN KỀ TRƯỚC
+- comparison: { spend, conversions, cpa, ctr, days_with_data, range:{start,end,label} } — KỲ LIỀN KỀ TRƯỚC
 - deltas: { spend_per_day_pct, conv_per_day_pct, cpa_pct, ctr_pct } — % thay đổi (đã chuẩn hóa /ngày)
 
-🔴 BẮT BUỘC: mọi note trong evaluation phải tham chiếu deltas hoặc comparison.
-   Vd KHÔNG được nói "CTR ổn định" — phải nói "CTR 1.53% (kỳ trước 1.41%, +8.5%) — đang cải thiện nhẹ".
+🔴 BẮT BUỘC ghi đầy đủ EVIDENCE trong mọi note:
+   Format chuẩn: "metric kỳ này = X (kỳ này: dd/mm-dd/mm). Kỳ trước (dd/mm-dd/mm) = Y → tăng/giảm Z% (chênh ±W)"
+
+   ❌ SAI: "CPA tăng 10% so kỳ trước"
+   ❌ SAI: "CTR ổn định"
+   ❌ SAI: "Volume yếu"
+
+   ✅ ĐÚNG: "CPA hiện tại 84.795đ (kỳ này 04/05-06/05, 3 ngày). Kỳ trước (01/05-03/05) CPA = 76.700đ → tăng 10.6% (chênh +8.095đ/đơn)"
+   ✅ ĐÚNG: "CTR 1.62% (kỳ này). Kỳ trước CTR 1.30% → tăng 24.6% (cải thiện rõ)"
+   ✅ ĐÚNG: "Đơn/ngày 5.5 (kỳ này). Kỳ trước 5.86 → giảm 6.1% (chênh -0.36 đơn/ngày). Benchmark NOMA 30 đơn/ngày → đạt 18%"
+
+   → User cần check chéo được số liệu với Ads Manager → bắt buộc cite ngày tháng + giá trị cụ thể.
 
 ═══ LỊCH SỬ PHÂN TÍCH (previous_analyses) — DÙNG ĐỂ ĐÁNH GIÁ HIỆU QUẢ ═══
 Field previous_analyses (nếu có) là array tối đa 10 entry GẦN NHẤT của campaign:
@@ -139,6 +149,27 @@ Field previous_analyses (nếu có) là array tối đa 10 entry GẦN NHẤT c�
    • Nếu campaign mới (history rỗng) → quyết verdict dựa data hiện tại như bình thường
 
 🔴 PHẢI xuất field "comparison_with_previous_analysis" trong JSON output (xem schema dưới).
+
+═══ LỢI NHUẬN ƯỚC TÍNH (profit_attribution) — DÙNG ĐỂ QUYẾT VERDICT ═══
+Field profit_attribution (nếu mapping_status="ok") có:
+- group_summary: revenue_actual, orders_actual, cogs_actual, profit_actual, margin_pct, aov_vnd
+  (data THẬT từ Pancake, không phải estimate)
+- campaign_attribution: share_pct, est_orders_from_close_rate, est_revenue, est_cogs,
+  est_vat, est_profit, est_margin_pct (theo share spend của campaign trong account)
+- close_rate_pct, vat_pct (config tháng — user set)
+
+🎯 VERDICT BẮT BUỘC dùng MARGIN của group + campaign:
+  • Group margin < 5% (gần lỗ hoặc lỗ) → REFRESH/PAUSE — KHÔNG SCALE dù CPA tốt
+    (lý do: scale lúc lỗ chỉ làm lỗ thêm; phải tối ưu creative/audience trước)
+  • Group margin 5-15% → KEEP — chấp nhận, theo dõi, tối ưu nhỏ
+  • Group margin 15-25% → SCALE moderate (+15-25% budget)
+  • Group margin > 25% → SCALE aggressive (+30-50% budget)
+
+Nếu mapping_status="unmapped" hoặc "no_profit_data" → quyết verdict theo logic CPA/CTR cũ
+(không dùng profit), VÀ ghi note: "Account chưa map nhóm SP → không có dữ liệu profit
+để đánh giá. Khuyến nghị vào ⚙ Cấu hình để map account này."
+
+🔴 PHẢI xuất field "profit_analysis" trong JSON output (xem schema dưới).
 
 ═══ 5 EVALUATION DIMENSIONS (mỗi cái 1-10 score) ═══
 
@@ -215,6 +246,19 @@ Field previous_analyses (nếu có) là array tối đa 10 entry GẦN NHẤT c�
     "ctr_change": "vd '1.53% → 1.78% (+16.3%)'",
     "trend_assessment": "[≥30 từ tiếng Việt] Đánh giá tổng quan: campaign đang cải thiện đều / xấu đi / dao động. Lý do hành động trước có hiệu quả hay không (vd 'Lần trước SCALE budget +20%, kết quả CPA giảm 8% — scale work, tiếp tục SCALE thêm 15%').",
     "verdict_continuity": "vd 'Verdict lần này nhất quán với history (3 lần liên tiếp SCALE)' hoặc 'Đảo verdict vì CPA tăng đột biến sau lần SCALE trước'"
+  },
+  "profit_analysis": null | {
+    // CHỈ XUẤT khi profit_attribution.mapping_status = 'ok'. Còn lại null.
+    "group_revenue_actual": <int — revenue thật từ Pancake>,
+    "group_orders_actual": <int>,
+    "group_profit_actual": <int>,
+    "group_margin_pct": <float>,
+    "campaign_share_pct": <float — campaign chiếm bao nhiêu % spend của account>,
+    "est_campaign_profit": <int>,
+    "est_campaign_margin_pct": <float>,
+    "est_orders_from_close_rate": <int — FB conv × close_rate%>,
+    "profit_assessment": "[≥40 từ tiếng Việt] Đánh giá: campaign đang lãi/lỗ ƯỚC TÍNH bao nhiêu. Group đang ở margin nào (lỗ/break-even/lãi vừa/lãi cao). Tham chiếu close_rate X% (config tháng) + AOV của group. Vd 'Group NOMA margin 4.0% (gần lỗ) — campaign này chiếm 6% spend của account → est_profit ~120K/3 ngày, margin 1.7%. Lý do margin thấp: AOV NOMA chỉ 216K, COGS chiếm 36%, FB spend chiếm 50% revenue.'",
+    "verdict_reason_from_profit": "1-2 câu giải thích verdict được CHỌN dựa trên margin. Vd 'Group margin 4% < 5% → REFRESH thay vì SCALE: tối ưu creative + close rate trước khi tăng quy mô' hoặc 'Group margin 22% → SCALE moderate +20% budget: trong vùng winner.'"
   },
   "performance": {
     "spend_vnd": <int>,
@@ -342,6 +386,127 @@ function buildHistoryEntry(parsedJson, campaignId, campaignName) {
       trend:            Number(parsedJson.evaluation?.trend?.score) || 0,
     },
     action_summary: (parsedJson.action?.what || "").slice(0, 200),
+  };
+}
+
+// ── Config loader (close_rate + account → group mapping) ────────────────
+// Ưu tiên KV `fb_config` (user đã edit). Fallback /data/fb-config.json (default).
+async function loadFbConfig(env, origin) {
+  // Try KV first
+  if (env.INVENTORY) {
+    try {
+      const cached = await env.INVENTORY.get("fb_config", { type: "json" });
+      if (cached && cached.close_rate_pct !== undefined) return cached;
+    } catch { /* ignore */ }
+  }
+  // Fallback: load default file
+  try {
+    const r = await fetch(new URL("/data/fb-config.json", origin).toString());
+    if (r.ok) return await r.json();
+  } catch { /* ignore */ }
+  return { close_rate_pct: 65, vat_pct: 10, account_to_groups: {} };
+}
+
+// Tính profit attribution của 1 campaign trong account (multi-group support)
+// Logic:
+// 1. Lấy account → groups[] từ config
+// 2. Với mỗi group, lấy profit summary từ fb_profit (đã có sẵn)
+// 3. Tính tỷ lệ campaign spend / total account spend → attribute profit
+// 4. Trả về estimated_profit per period + group context
+function computeCampaignProfitAttribution(focusCampaign, accountId, accountSpend, fbProfit, fbConfig) {
+  if (!focusCampaign || !accountId) return null;
+  const accountInfo = fbConfig?.account_to_groups?.[accountId];
+  if (!accountInfo || !Array.isArray(accountInfo.groups) || accountInfo.groups.length === 0) {
+    return {
+      account_id: accountId,
+      mapping_status: "unmapped",
+      note: "Account này chưa map nhóm SP. Vào ⚙ Cấu hình để set mapping.",
+    };
+  }
+
+  const closeRatePct = Number(fbConfig.close_rate_pct) || 65;
+  const vatPct = Number(fbConfig.vat_pct) || 10;
+  const groups = accountInfo.groups;
+  const campaignSpend = Number(focusCampaign.spend) || 0;
+  const campaignConv = Number(focusCampaign.conversions) || 0;
+
+  // Aggregate group profit data từ fbProfit
+  const groupProfits = [];
+  for (const g of groups) {
+    const gp = fbProfit?.groups?.[g];
+    if (gp) {
+      groupProfits.push({ group: g, ...gp });
+    }
+  }
+
+  if (groupProfits.length === 0) {
+    return {
+      account_id: accountId,
+      mapping_status: "no_profit_data",
+      groups,
+      note: `Account map vào nhóm ${groups.join("+")} nhưng chưa có profit data trong time range. Có thể chưa có đơn hoàn thành trong Pancake.`,
+    };
+  }
+
+  // Aggregate sum across mapped groups (for MIXED accounts)
+  const totals = groupProfits.reduce((acc, g) => ({
+    revenue: acc.revenue + (g.revenue || 0),
+    orders: acc.orders + (g.orders || 0),
+    cogs: acc.cogs + (g.cogs || 0),
+    fb_spend_pancake: acc.fb_spend_pancake + (g.fb_spend_estimated || 0),
+    profit: acc.profit + (g.profit || 0),
+  }), { revenue: 0, orders: 0, cogs: 0, fb_spend_pancake: 0, profit: 0 });
+
+  const groupMarginPct = totals.revenue > 0
+    ? Math.round((totals.profit / totals.revenue) * 1000) / 10 : 0;
+  const groupAOV = totals.orders > 0 ? Math.round(totals.revenue / totals.orders) : 0;
+
+  // Estimate campaign-level profit attribution (theo share spend)
+  const accountSpendNum = Number(accountSpend) || 0;
+  const campaignShare = accountSpendNum > 0 ? campaignSpend / accountSpendNum : 0;
+
+  const estCampaignRevenue = Math.round(totals.revenue * campaignShare);
+  const estCampaignCogs = Math.round(totals.cogs * campaignShare);
+  const estCampaignVat = Math.round(estCampaignRevenue * vatPct / 100);
+  const estCampaignProfit = estCampaignRevenue - estCampaignCogs - campaignSpend - estCampaignVat;
+  const estCampaignMargin = estCampaignRevenue > 0
+    ? Math.round((estCampaignProfit / estCampaignRevenue) * 1000) / 10 : 0;
+
+  // Estimate orders thực từ FB conversions × close_rate
+  const estOrdersFromCloseRate = Math.round(campaignConv * closeRatePct / 100);
+
+  return {
+    account_id: accountId,
+    mapping_status: "ok",
+    groups,
+    close_rate_pct: closeRatePct,
+    vat_pct: vatPct,
+
+    // Group level (data thật từ Pancake)
+    group_summary: {
+      revenue_actual: totals.revenue,
+      orders_actual: totals.orders,
+      cogs_actual: totals.cogs,
+      fb_spend_estimated: totals.fb_spend_pancake,
+      profit_actual: totals.profit,
+      margin_pct: groupMarginPct,
+      aov_vnd: groupAOV,
+    },
+
+    // Campaign level (attribution theo share spend)
+    campaign_attribution: {
+      campaign_spend: campaignSpend,
+      account_spend_total: accountSpendNum,
+      share_pct: Math.round(campaignShare * 1000) / 10,
+      est_orders_from_close_rate: estOrdersFromCloseRate,
+      est_revenue: estCampaignRevenue,
+      est_cogs: estCampaignCogs,
+      est_vat: estCampaignVat,
+      est_profit: estCampaignProfit,
+      est_margin_pct: estCampaignMargin,
+    },
+
+    formula_note: `est_profit = group_revenue × share - group_cogs × share - campaign_spend - revenue × ${vatPct}%. share = campaign_spend / total_account_spend.`,
   };
 }
 
@@ -645,6 +810,23 @@ export async function onRequestPost(context) {
       // Pass vào dataContext để AI thấy trong user prompt
       dataContext.previous_analyses = campaignHistory;
     }
+  }
+
+  // Tính profit attribution (Plan C) — dùng config + Pancake data
+  if (mode === "optimize_campaign" && campaign_id && account_id && dataContext.fb_focus_campaign) {
+    const fbConfig = await loadFbConfig(env, origin);
+    // Tổng spend của account trong time range (dùng cho share calc)
+    const accountSpend = (dataContext.fb_campaigns?.campaigns || [])
+      .reduce((s, c) => s + (Number(c.spend) || 0), 0);
+    dataContext.profit_attribution = computeCampaignProfitAttribution(
+      dataContext.fb_focus_campaign, account_id, accountSpend, dataContext.fb_profit, fbConfig
+    );
+    // Pass close_rate + vat sang AI cho transparency
+    dataContext.fb_config = {
+      close_rate_pct: fbConfig.close_rate_pct,
+      vat_pct: fbConfig.vat_pct,
+      updated_at: fbConfig.updated_at,
+    };
   }
 
   const skills = cfg.skills;

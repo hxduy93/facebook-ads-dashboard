@@ -1,0 +1,45 @@
+{
+  "_note": "Cấu hình tỉ lệ chốt + VAT + mapping account → nhóm SP. UI edit qua agent-facebook-doscom.html (section Cấu hình). Backend đọc qua /api/fb-config (KV) — file JSON này là DEFAULT khi KV rỗng.",
+  "close_rate_pct": 65,
+  "vat_pct": 10,
+  "fb_spend_to_revenue_target_pct": 40,
+  "account_to_groups": {
+    "1449385949897024": {
+      "staff": "DUY",
+      "groups": ["CAMERA_VIDEO_CALL", "GHI_AM"],
+      "products_note": "DA8.1 (camera video call) + DR1 (ghi âm)"
+    },
+    "927390616363424": {
+      "staff": "DUY",
+      "groups": ["MAY_DO"],
+      "products_note": "D1 (máy dò)"
+    },
+    "1655506672244826": {
+      "staff": "DUY",
+      "groups": ["NOMA"],
+      "products_note": "Noma chăm sóc xe"
+    },
+    "764394829882083": {
+      "staff": "PHUONG_NAM",
+      "groups": ["NOMA"],
+      "products_note": "Noma 911"
+    },
+    "906015559004892": {
+      "staff": "PHUONG_NAM",
+      "groups": ["MAY_DO"],
+      "products_note": "D1 (máy dò)"
+    },
+    "1416634670476226": {
+      "staff": "PHUONG_NAM",
+      "groups": [],
+      "products_note": "Chưa chạy QC"
+    },
+    "1418124406240173": {
+      "staff": "PHUONG_NAM",
+      "groups": ["CAMERA_VIDEO_CALL"],
+      "products_note": "DA8.1 (camera video call) — account mới chuẩn bị chạy"
+    }
+  },
+  "updated_at": "2026-05-07",
+  "updated_by": "manhthangvu888@gmail.com"
+}

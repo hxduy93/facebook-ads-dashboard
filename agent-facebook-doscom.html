@@ -146,6 +146,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .modal-box .btn-confirm { background: #dc2626; color: white; }
 .modal-box .btn-confirm.green { background: #16a34a; }
 
+/* Profit analysis box */
+.opt-profit { padding: 12px 14px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-left: 4px solid #16a34a; border-radius: 6px; font-size: 12.5px; color: #064e3b; margin-bottom: 10px; }
+.opt-profit.danger { background: linear-gradient(135deg, #fef2f2, #fecaca); border-left-color: #dc2626; color: #7f1d1d; }
+.opt-profit.warn { background: linear-gradient(135deg, #fffbeb, #fde68a); border-left-color: #d97706; color: #78350f; }
+.opt-profit h4 { margin: 0 0 8px; font-size: 13px; }
+.opt-profit .row { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 6px; font-size: 12px; }
+.opt-profit .assess { padding: 8px 10px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-top: 6px; line-height: 1.5; }
+.opt-profit .reason { padding: 6px 10px; background: rgba(255,255,255,0.4); border-radius: 4px; margin-top: 6px; font-style: italic; font-size: 11.5px; }
+
+/* Config section */
+.config-section { background: #fafbff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+.config-section h2 { margin: 0 0 8px; font-size: 14px; color: #1e3a8a; }
+.config-section .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 8px 0; }
+.config-section label { font-size: 12px; color: #4b5563; font-weight: 600; }
+.config-section input[type=number] { width: 80px; padding: 4px 8px; border: 1px solid #c7d2fe; border-radius: 4px; font-size: 13px; }
+.config-section .save-btn { padding: 6px 14px; background: #4f46e5; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.config-section .save-btn:hover { background: #4338ca; }
+.config-section .save-result { font-size: 11.5px; color: #6b7280; margin-left: 10px; }
+.config-section table.acc-map { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 8px; }
+.config-section table.acc-map th, .config-section table.acc-map td { padding: 4px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.config-section table.acc-map th { background: #eef2ff; color: #1e3a8a; }
+
 /* So với phân tích trước (history) */
 .opt-history { padding: 12px 14px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #d97706; border-radius: 6px; font-size: 12.5px; color: #78350f; margin-bottom: 10px; }
 .opt-history h4 { margin: 0 0 8px; color: #78350f; font-size: 13px; }
@@ -249,6 +271,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     </div>
   </div>
 
+  <!-- CONFIG SECTION (close rate, VAT, account → group mapping) -->
+  <div class="config-section" id="config-section">
+    <h2>⚙ Cấu hình tháng (cập nhật khi thay đổi)</h2>
+    <div class="row">
+      <label>Tỉ lệ chốt:</label>
+      <input type="number" id="cfg-close-rate" min="0" max="100" step="0.1" />
+      <span>%</span>
+      <label style="margin-left:16px">VAT:</label>
+      <input type="number" id="cfg-vat" min="0" max="50" step="0.1" />
+      <span>%</span>
+      <button class="save-btn" onclick="saveFbConfig()">💾 Lưu</button>
+      <span class="save-result" id="cfg-result"></span>
+    </div>
+    <details style="margin-top:8px;font-size:12px">
+      <summary style="cursor:pointer;color:#4338ca">📋 Mapping account → nhóm SP (đọc từ data/fb-config.json)</summary>
+      <table class="acc-map" id="cfg-mapping-table">
+        <thead><tr><th>Account ID</th><th>Nhân sự</th><th>Nhóm SP</th><th>Ghi chú</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top:6px;color:#6b7280;font-size:11px">
+        Edit mapping: sửa file <code>data/fb-config.json</code> trong repo (manual cho v1).
+      </div>
+    </details>
+  </div>
+
   <!-- PROFIT SUMMARY -->
   <div class="section">
     <h2>💰 Tổng quan lợi nhuận
@@ -329,6 +376,63 @@ function applyCustomRange() {
   state.customEnd = e;
   state.timePreset = 'custom';
   refresh();
+}
+
+// ── FB CONFIG (close rate, VAT, account → group mapping) ──
+async function loadFbConfig() {
+  try {
+    const r = await fetch('/api/fb-config', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const cfg = await r.json();
+    document.getElementById('cfg-close-rate').value = cfg.close_rate_pct ?? 65;
+    document.getElementById('cfg-vat').value = cfg.vat_pct ?? 10;
+    const note = `Cập nhật cuối: ${cfg.updated_at || '—'} (${cfg.source || 'default'})`;
+    document.getElementById('cfg-result').textContent = note;
+    // Render mapping table
+    const tbody = document.querySelector('#cfg-mapping-table tbody');
+    tbody.innerHTML = '';
+    const accs = cfg.account_to_groups || {};
+    for (const [accId, info] of Object.entries(accs)) {
+      const groups = (info.groups || []).join(', ') || '—';
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><code>${escapeHtml(accId)}</code></td>
+          <td>${escapeHtml(info.staff || '—')}</td>
+          <td>${escapeHtml(groups)}</td>
+          <td>${escapeHtml(info.products_note || '')}</td>
+        </tr>
+      `);
+    }
+  } catch (e) {
+    document.getElementById('cfg-result').textContent = `Load fail: ${e.message}`;
+  }
+}
+
+async function saveFbConfig() {
+  const closeRate = Number(document.getElementById('cfg-close-rate').value);
+  const vat = Number(document.getElementById('cfg-vat').value);
+  if (isNaN(closeRate) || closeRate < 0 || closeRate > 100) {
+    alert('Tỉ lệ chốt phải 0-100%'); return;
+  }
+  if (isNaN(vat) || vat < 0 || vat > 50) {
+    alert('VAT phải 0-50%'); return;
+  }
+  document.getElementById('cfg-result').textContent = 'Đang lưu...';
+  try {
+    const r = await fetch('/api/fb-config', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ close_rate_pct: closeRate, vat_pct: vat }),
+    });
+    const j = await r.json();
+    if (!r.ok || !j.ok) {
+      document.getElementById('cfg-result').textContent = `❌ ${j.error || r.status}`;
+      return;
+    }
+    document.getElementById('cfg-result').textContent = `✅ Đã lưu lúc ${j.saved_at}`;
+  } catch (e) {
+    document.getElementById('cfg-result').textContent = `❌ ${e.message}`;
+  }
 }
 
 // ── REFRESH (gọi snapshot endpoint) ──
@@ -904,6 +1008,33 @@ function renderOptimizeResult(json, campaignName, campaignId) {
     compareBox = `<div class="opt-compare">📊 <strong>So sánh kỳ trước:</strong> ${escapeHtml(json.comparison_summary)}</div>`;
   }
 
+  // Profit analysis box (Plan C)
+  let profitBox = '';
+  const pa = json.profit_analysis;
+  if (pa && typeof pa === 'object') {
+    const margin = Number(pa.group_margin_pct) || 0;
+    const cls = margin < 5 ? 'danger' : margin < 15 ? 'warn' : '';
+    const profit = Number(pa.est_campaign_profit) || 0;
+    const profitColor = profit >= 0 ? '#16a34a' : '#dc2626';
+    profitBox = `
+      <div class="opt-profit ${cls}">
+        <h4>💰 Phân tích lợi nhuận (group ${pa.group_revenue_actual ? 'data thật từ Pancake' : 'ước tính'})</h4>
+        <div class="row">
+          <span><strong>Group margin:</strong> ${margin.toFixed(1)}% ${margin < 5 ? '⚠ thấp' : margin > 25 ? '✅ cao' : ''}</span>
+          <span><strong>Group profit:</strong> ${fmtVnd(pa.group_profit_actual || 0)}</span>
+          <span><strong>Group revenue:</strong> ${fmtVnd(pa.group_revenue_actual || 0)}</span>
+        </div>
+        <div class="row">
+          <span><strong>Campaign chiếm:</strong> ${(pa.campaign_share_pct || 0).toFixed(1)}% spend account</span>
+          <span><strong>Est. profit campaign:</strong> <strong style="color:${profitColor}">${fmtVnd(profit)}</strong> (margin ${(pa.est_campaign_margin_pct || 0).toFixed(1)}%)</span>
+          <span><strong>Đơn ước (close rate):</strong> ${pa.est_orders_from_close_rate || 0}</span>
+        </div>
+        ${pa.profit_assessment ? `<div class="assess">📊 ${escapeHtml(pa.profit_assessment)}</div>` : ''}
+        ${pa.verdict_reason_from_profit ? `<div class="reason">🎯 ${escapeHtml(pa.verdict_reason_from_profit)}</div>` : ''}
+      </div>
+    `;
+  }
+
   // So với phân tích trước (history). Chỉ render nếu có data từ KV.
   let historyBox = '';
   const cwp = json.comparison_with_previous_analysis;
@@ -1026,6 +1157,7 @@ function renderOptimizeResult(json, campaignName, campaignId) {
     </div>
     ${compareBox}
     ${historyBox}
+    ${profitBox}
     ${perfCards}
     <div class="opt-eval-grid">${evalCards}</div>
     ${actionBox}
@@ -1129,7 +1261,10 @@ function md2html(s) {
 }
 
 // Init
-window.addEventListener('DOMContentLoaded', refresh);
+window.addEventListener('DOMContentLoaded', () => {
+  refresh();
+  loadFbConfig();
+});
 </script>
 </body>
 </html>

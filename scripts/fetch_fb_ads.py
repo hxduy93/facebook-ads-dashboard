@@ -37,6 +37,7 @@ AD_ACCOUNTS = [
     {"id": "1449385949897024", "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống"},
     {"id": "906015559004892",  "name": "Doscom Mart"},
     {"id": "1416634670476226", "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart"},
+    {"id": "1418124406240173", "name": "DA8.1 mới (PN, chưa chạy)"},
 ]
 
 # Fields to fetch from insights

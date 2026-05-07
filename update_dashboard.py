@@ -38,6 +38,7 @@ ACCOUNTS = [
     {"id": "1449385949897024", "staff": "DUY",        "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống",   "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống"},
     {"id": "906015559004892",  "staff": "PHUONG_NAM", "short": "Doscom Mart",                                                   "name": "Doscom Mart"},
     {"id": "1416634670476226", "staff": "PHUONG_NAM", "short": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart",                    "name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart"},
+    {"id": "1418124406240173", "staff": "PHUONG_NAM", "short": "DA8.1 mới (PN, chưa chạy)",                                      "name": "DA8.1 mới (PN, chưa chạy)"},
 ]
 
 # 13 SP tính lợi nhuận — khớp PRODUCT_LIST trong fetch_pancake_revenue.py
