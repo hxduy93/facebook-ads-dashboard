@@ -113,6 +113,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .opt-compare { padding: 10px 12px; background: #f0f9ff; border-left: 3px solid #0284c7; border-radius: 4px; font-size: 12.5px; color: #075985; margin-bottom: 10px; }
 .opt-compare strong { color: #0c4a6e; }
 
+/* Action buttons — execute AI suggestions */
+.opt-actions { margin-top: 10px; padding: 12px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; }
+.opt-actions h4 { margin: 0 0 8px; font-size: 13px; color: #1f2937; }
+.opt-actions .action-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-action-exec { padding: 8px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; }
+.btn-action-exec:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.btn-action-exec:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-action-exec.btn-scale  { background: #16a34a; color: white; }
+.btn-action-exec.btn-scale:hover { background: #15803d; }
+.btn-action-exec.btn-pause  { background: #dc2626; color: white; }
+.btn-action-exec.btn-pause:hover { background: #b91c1c; }
+.btn-action-exec.btn-dup    { background: #2563eb; color: white; }
+.btn-action-exec.btn-dup:hover { background: #1d4ed8; }
+.btn-action-exec.btn-creative { background: #7c3aed; color: white; }
+.btn-action-exec.btn-creative:hover { background: #6d28d9; }
+.action-result { margin-top: 8px; padding: 8px 10px; border-radius: 4px; font-size: 12px; }
+.action-result.success { background: #d1fae5; color: #065f46; border-left: 3px solid #059669; }
+.action-result.error   { background: #fee2e2; color: #991b1b; border-left: 3px solid #dc2626; }
+
+/* 2-step confirm modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.modal-box { background: white; border-radius: 10px; padding: 22px 26px; max-width: 480px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+.modal-box h3 { margin: 0 0 12px; color: #111827; font-size: 17px; }
+.modal-box .step-tag { display: inline-block; padding: 2px 10px; background: #fef3c7; color: #92400e; border-radius: 12px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+.modal-box .step-tag.danger { background: #fee2e2; color: #991b1b; }
+.modal-box p { color: #374151; line-height: 1.5; font-size: 13.5px; margin: 8px 0; }
+.modal-box .warn { background: #fef3c7; padding: 10px 12px; border-left: 3px solid #f59e0b; border-radius: 4px; font-size: 12.5px; color: #78350f; margin: 10px 0; }
+.modal-box .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+.modal-box button { padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.modal-box .btn-cancel { background: #e5e7eb; color: #374151; }
+.modal-box .btn-confirm { background: #dc2626; color: white; }
+.modal-box .btn-confirm.green { background: #16a34a; }
+
 /* So với phân tích trước (history) */
 .opt-history { padding: 12px 14px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #d97706; border-radius: 6px; font-size: 12.5px; color: #78350f; margin-bottom: 10px; }
 .opt-history h4 { margin: 0 0 8px; color: #78350f; font-size: 13px; }
@@ -530,7 +563,7 @@ async function autoAnalyzeAll(campaigns) {
           // Inject deltas + comparison range từ server vào dataObj để render hiển thị badge
           if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
           if (j.comparison_range) dataObj._comparison_range = j.comparison_range;
-          targetEl.innerHTML = renderOptimizeResult(dataObj, c.name);
+          targetEl.innerHTML = renderOptimizeResult(dataObj, c.name, c.id);
         } else {
           const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
           const errMsg = parseError ? ` (${escapeHtml(parseError)})` : '';
@@ -650,7 +683,7 @@ async function optimizeCampaign(campaignId, campaignName) {
     if (dataObj) {
       if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
       if (j.comparison_range) dataObj._comparison_range = j.comparison_range;
-      html += renderOptimizeResult(dataObj, campaignName);
+      html += renderOptimizeResult(dataObj, campaignName, state.campaignId);
     } else {
       const respText = (typeof j.response === 'string')
         ? j.response
@@ -688,7 +721,173 @@ function deltaBadge(pct, metricType) {
   return `<span class="delta-badge ${cls}">${sign}${v.toFixed(1)}%</span>`;
 }
 
-function renderOptimizeResult(json, campaignName) {
+// ── 2-step confirm modal + action execution ──
+function showConfirmModal({ title, body, warn, confirmLabel, confirmClass, onConfirm }) {
+  return new Promise((resolve) => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = `
+      <div class="modal-box">
+        <h3>${title}</h3>
+        ${body}
+        ${warn ? `<div class="warn">${warn}</div>` : ''}
+        <div class="actions">
+          <button class="btn-cancel">Hủy</button>
+          <button class="btn-confirm ${confirmClass || ''}">${confirmLabel || 'Xác nhận'}</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+    backdrop.querySelector('.btn-cancel').onclick = () => {
+      backdrop.remove();
+      resolve(false);
+    };
+    backdrop.querySelector('.btn-confirm').onclick = async () => {
+      backdrop.remove();
+      const result = onConfirm ? await onConfirm() : true;
+      resolve(result);
+    };
+  });
+}
+
+// Wrapper 2-step confirm cho action high-risk
+async function confirmTwoStep({ step1, step2 }) {
+  const ok1 = await showConfirmModal({
+    title: step1.title,
+    body: step1.body,
+    confirmLabel: 'Tiếp tục →',
+    confirmClass: 'green',
+  });
+  if (!ok1) return false;
+
+  const ok2 = await showConfirmModal({
+    title: step2.title,
+    body: step2.body,
+    warn: step2.warn,
+    confirmLabel: '⚠ Xác nhận thực hiện',
+    confirmClass: '',
+  });
+  return ok2;
+}
+
+// Gọi /api/fb-actions
+async function executeFbAction(payload, resultEl) {
+  resultEl.innerHTML = '<div class="action-result">⏳ Đang gọi Meta API...</div>';
+  try {
+    const r = await fetch('/api/fb-actions', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const j = await r.json();
+    if (!r.ok || !j.success) {
+      const hint = j.hint ? `<br><small style="opacity:0.85">💡 ${escapeHtml(j.hint)}</small>` : '';
+      resultEl.innerHTML = `<div class="action-result error">⚠ ${escapeHtml(j.error || 'Lỗi không xác định')}${hint}</div>`;
+      return false;
+    }
+    resultEl.innerHTML = `<div class="action-result success">✅ ${escapeHtml(j.message || 'Đã thực thi')}</div>`;
+    return true;
+  } catch (e) {
+    resultEl.innerHTML = `<div class="action-result error">⚠ Network error: ${escapeHtml(e.message)}</div>`;
+    return false;
+  }
+}
+
+// Action handlers
+async function handlePauseCampaign(campaignId, campaignName, aiVerdict, resultEl, btnEl) {
+  const ok = await confirmTwoStep({
+    step1: {
+      title: '🔴 PAUSE Campaign',
+      body: `<p>Campaign: <strong>${escapeHtml(campaignName)}</strong></p><p>Sau khi PAUSE, campaign sẽ DỪNG ngay lập tức trên Facebook. Để bật lại, bạn phải vào Ads Manager.</p>`,
+    },
+    step2: {
+      title: '⚠ Xác nhận PAUSE',
+      body: `<p>Bạn chắc chắn muốn PAUSE campaign này?</p>`,
+      warn: 'Action không undo nhanh được. Reactivate phải vào Ads Manager.',
+    },
+  });
+  if (!ok) return;
+  btnEl.disabled = true;
+  await executeFbAction({ action: 'pause', campaign_id: campaignId, ai_verdict: aiVerdict }, resultEl);
+}
+
+async function handleUpdateBudget(campaignId, newBudgetVnd, currentBudgetEstimate, aiVerdict, resultEl, btnEl) {
+  const ok = await confirmTwoStep({
+    step1: {
+      title: '🟢 Tăng Budget Campaign',
+      body: `<p>Daily budget mới: <strong>${newBudgetVnd.toLocaleString()}đ</strong></p><p>Action sẽ áp dụng LÊN FACEBOOK NGAY. Server sẽ tự fetch budget hiện tại của adset rồi update.</p>`,
+    },
+    step2: {
+      title: '⚠ Xác nhận update budget',
+      body: `<p>Tăng daily budget lên <strong>${newBudgetVnd.toLocaleString()}đ</strong>?</p>`,
+      warn: 'Server enforce: nếu tăng > 50% budget hiện tại → reject (an toàn). Nếu reject → vào Ads Manager update tay.',
+    },
+  });
+  if (!ok) return;
+  btnEl.disabled = true;
+  await executeFbAction({
+    action: 'update_budget',
+    campaign_id: campaignId,
+    new_budget_vnd: newBudgetVnd,
+    ai_verdict: aiVerdict,
+  }, resultEl);
+}
+
+async function handleDuplicateAdset(campaignId, aiVerdict, resultEl, btnEl) {
+  const ok = await confirmTwoStep({
+    step1: {
+      title: '🔄 Nhân Ad Set',
+      body: `<p>Ad set sẽ được nhân thành 1 bản copy mới.</p><p>Adset mới mặc định ở trạng thái <strong>PAUSED</strong> để bạn vào Ads Manager: (1) đổi audience interest, (2) review creative, (3) Activate.</p>`,
+    },
+    step2: {
+      title: '⚠ Xác nhận nhân adset',
+      body: `<p>Tiến hành nhân ad set?</p>`,
+      warn: 'Adset mới ở PAUSED → không tốn tiền cho đến khi bạn Activate trong Ads Manager.',
+    },
+  });
+  if (!ok) return;
+  btnEl.disabled = true;
+  await executeFbAction({ action: 'duplicate_adset', campaign_id: campaignId, ai_verdict: aiVerdict }, resultEl);
+}
+
+// Render action buttons block dựa trên verdict
+function renderActionButtons(json, campaignId, campaignName) {
+  const verdict = json.verdict;
+  if (!verdict || !campaignId) return '';
+
+  const btnId = `actbtn-${campaignId}-${Math.random().toString(36).slice(2, 8)}`;
+  const buttons = [];
+
+  // SCALE → tăng budget + nhân adset
+  if (verdict === 'SCALE' && json.scale_plan) {
+    const targetBudget = Number(json.scale_plan.budget_target_vnd) || 0;
+    if (targetBudget > 0) {
+      buttons.push(`<button class="btn-action-exec btn-scale" onclick="handleUpdateBudget('${campaignId}', ${targetBudget}, 0, '${verdict}', document.getElementById('${btnId}-result'), this)">🟢 Tăng budget → ${targetBudget.toLocaleString()}đ</button>`);
+    }
+    buttons.push(`<button class="btn-action-exec btn-dup" onclick="handleDuplicateAdset('${campaignId}', '${verdict}', document.getElementById('${btnId}-result'), this)">🔄 Nhân adset</button>`);
+  }
+
+  // REFRESH/AUDIENCE → tạo creative mới (Phase 1B sẽ wire)
+  if (verdict === 'REFRESH' || verdict === 'AUDIENCE') {
+    buttons.push(`<button class="btn-action-exec btn-creative" disabled title="Phase 1B sắp ra mắt">🎨 Thêm creative mới (sắp có)</button>`);
+  }
+
+  // PAUSE — luôn cho phép pause (kể cả các verdict khác, user có thể muốn manual pause)
+  buttons.push(`<button class="btn-action-exec btn-pause" onclick="handlePauseCampaign('${campaignId}', ${JSON.stringify(campaignName)}, '${verdict}', document.getElementById('${btnId}-result'), this)">🔴 Pause campaign</button>`);
+
+  if (buttons.length === 0) return '';
+
+  return `
+    <div class="opt-actions">
+      <h4>⚡ Thực thi tối ưu (auto-apply lên Facebook)</h4>
+      <div class="action-btns">${buttons.join('')}</div>
+      <div id="${btnId}-result"></div>
+    </div>
+  `;
+}
+
+function renderOptimizeResult(json, campaignName, campaignId) {
   const verdictMap = {
     SCALE: { icon: '🟢', label: 'SCALE — Tăng quy mô', color: 'green' },
     KEEP: { icon: '✅', label: 'KEEP — Giữ nguyên', color: 'green' },
@@ -833,6 +1032,7 @@ function renderOptimizeResult(json, campaignName) {
     ${scalePlanBox}
     ${nextCheck}
     ${warningsHtml}
+    ${renderActionButtons(json, campaignId, campaignName)}
   `;
 }
 
