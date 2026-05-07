@@ -112,6 +112,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 /* So sánh kỳ trước */
 .opt-compare { padding: 10px 12px; background: #f0f9ff; border-left: 3px solid #0284c7; border-radius: 4px; font-size: 12.5px; color: #075985; margin-bottom: 10px; }
 .opt-compare strong { color: #0c4a6e; }
+
+/* So với phân tích trước (history) */
+.opt-history { padding: 12px 14px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #d97706; border-radius: 6px; font-size: 12.5px; color: #78350f; margin-bottom: 10px; }
+.opt-history h4 { margin: 0 0 8px; color: #78350f; font-size: 13px; }
+.opt-history .row { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 6px; font-size: 12px; }
+.opt-history .row span { white-space: nowrap; }
+.opt-history .trend { padding: 6px 8px; background: rgba(255,255,255,0.5); border-radius: 4px; margin-top: 6px; line-height: 1.5; }
+.opt-history .continuity { padding: 4px 8px; background: rgba(255,255,255,0.4); border-radius: 4px; margin-top: 6px; font-size: 11.5px; font-style: italic; }
 .delta-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10.5px; font-weight: 600; margin-left: 4px; vertical-align: middle; }
 .delta-badge.up-good { background: #d1fae5; color: #065f46; }
 .delta-badge.up-bad { background: #fee2e2; color: #991b1b; }
@@ -420,7 +428,11 @@ function renderCampaigns(campaigns) {
     return;
   }
   // Filter chỉ campaigns có spend > 0 (đang chạy thực sự trong time range)
-  const activeCampaigns = campaigns.campaigns.filter(c => c.spend > 0);
+  // Chỉ phân tích campaign đang ACTIVE + có spend trong time range.
+  // Bỏ qua PAUSED/ARCHIVED dù có spend trước đó — không tối ưu campaign đã dừng.
+  const activeCampaigns = campaigns.campaigns.filter(c =>
+    c.effective_status === "ACTIVE" && c.spend > 0
+  );
   const accInfo = campaigns.account.name +
     ` · ${activeCampaigns.length} campaigns đang chạy (có spend) trong time range`;
   document.getElementById('campaign-account-name').textContent = accInfo;
@@ -693,6 +705,28 @@ function renderOptimizeResult(json, campaignName) {
     compareBox = `<div class="opt-compare">📊 <strong>So sánh kỳ trước:</strong> ${escapeHtml(json.comparison_summary)}</div>`;
   }
 
+  // So với phân tích trước (history). Chỉ render nếu có data từ KV.
+  let historyBox = '';
+  const cwp = json.comparison_with_previous_analysis;
+  if (cwp && typeof cwp === 'object') {
+    const daysSince = cwp.days_since !== undefined ? `${cwp.days_since} ngày trước` : '';
+    historyBox = `
+      <div class="opt-history">
+        <h4>📈 So với phân tích trước ${daysSince ? `(${daysSince}, ${escapeHtml(cwp.previous_analyzed_at || '')})` : ''}</h4>
+        <div class="row">
+          ${cwp.verdict_change ? `<span><strong>Verdict:</strong> ${escapeHtml(cwp.verdict_change)}</span>` : ''}
+          ${cwp.rating_change ? `<span><strong>Đánh giá:</strong> ${escapeHtml(cwp.rating_change)}</span>` : ''}
+        </div>
+        <div class="row">
+          ${cwp.cpa_change ? `<span><strong>CPA:</strong> ${escapeHtml(cwp.cpa_change)}</span>` : ''}
+          ${cwp.ctr_change ? `<span><strong>CTR:</strong> ${escapeHtml(cwp.ctr_change)}</span>` : ''}
+        </div>
+        ${cwp.trend_assessment ? `<div class="trend">💡 ${escapeHtml(cwp.trend_assessment)}</div>` : ''}
+        ${cwp.verdict_continuity ? `<div class="continuity">🎯 ${escapeHtml(cwp.verdict_continuity)}</div>` : ''}
+      </div>
+    `;
+  }
+
   // Performance cards (có delta badge nếu có comparison data)
   const p = json.performance || {};
   // Try đọc deltas từ raw campaign data nếu truyền vào (sẽ có ở wrapper)
@@ -792,6 +826,7 @@ function renderOptimizeResult(json, campaignName) {
       </div>
     </div>
     ${compareBox}
+    ${historyBox}
     ${perfCards}
     <div class="opt-eval-grid">${evalCards}</div>
     ${actionBox}

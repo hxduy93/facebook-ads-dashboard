@@ -122,6 +122,24 @@ fb_focus_campaign sẽ có:
 🔴 BẮT BUỘC: mọi note trong evaluation phải tham chiếu deltas hoặc comparison.
    Vd KHÔNG được nói "CTR ổn định" — phải nói "CTR 1.53% (kỳ trước 1.41%, +8.5%) — đang cải thiện nhẹ".
 
+═══ LỊCH SỬ PHÂN TÍCH (previous_analyses) — DÙNG ĐỂ ĐÁNH GIÁ HIỆU QUẢ ═══
+Field previous_analyses (nếu có) là array tối đa 10 entry GẦN NHẤT của campaign:
+[ { analyzed_at, verdict, performance, evaluation_scores, action_summary }, ... ]
+- Index 0 = lần phân tích GẦN NHẤT trước lần này
+- Index N = lần cũ hơn
+
+🎯 BẮT BUỘC sử dụng history để:
+1. Track tiến triển: rating_overall, evaluation_scores, CPA, CTR qua các lần phân tích
+2. Đánh giá xem hành động trước có hiệu quả không (vd lần trước SCALE → CPA cải thiện hay xấu đi?)
+3. ĐIỀU CHỈNH VERDICT theo tiền lệ:
+   • Nếu 3 lần liên tiếp SCALE mà CPA giảm đều → tiếp tục SCALE mạnh hơn
+   • Nếu lần trước SCALE mà CPA tăng > 20% → REVERT (PAUSE/giảm budget)
+   • Nếu 2 lần liên tiếp KEEP nhưng CPA bắt đầu giảm → chuyển SCALE thử
+   • Nếu 3 lần liên tiếp REFRESH mà CTR vẫn yếu → đổi sang AUDIENCE (đổi targeting thay creative)
+   • Nếu campaign mới (history rỗng) → quyết verdict dựa data hiện tại như bình thường
+
+🔴 PHẢI xuất field `comparison_with_previous_analysis` trong JSON output (xem schema dưới).
+
 ═══ 5 EVALUATION DIMENSIONS (mỗi cái 1-10 score) ═══
 
 1. **SPEND EFFICIENCY** (chất lượng CPA so benchmark group):
@@ -186,6 +204,18 @@ fb_focus_campaign sẽ có:
   "verdict_color": "green" | "yellow" | "red",
   "summary": "2-3 câu tiếng Việt 100%, có 4 con số (spend, đơn, CPA, CTR) + 1 con số so sánh kỳ trước (vd '+12% so 7 ngày trước').",
   "comparison_summary": "1-2 câu so kỳ này vs kỳ trước. Vd 'So với 3 ngày trước đó: spend/ngày tăng 18%, đơn/ngày tăng 25%, CPA giảm 6% — hiệu suất đang cải thiện'.",
+  "comparison_with_previous_analysis": null | {
+    // CHỈ XUẤT khi previous_analyses có data (history rỗng → null).
+    // So với entry GẦN NHẤT trước (previous_analyses[0]).
+    "previous_analyzed_at": "vd '2026-05-03 14:30'",
+    "days_since": <int — số ngày từ lần phân tích trước>,
+    "verdict_change": "vd 'KEEP → SCALE' hoặc 'không đổi (SCALE)'",
+    "rating_change": "vd '7/10 → 8/10 (+1)' hoặc '6/10 → 5/10 (-1, suy giảm)'",
+    "cpa_change": "vd '60.210đ → 55.300đ (-8.2%, cải thiện)' hoặc '50K → 65K (+30%, xấu đi)'",
+    "ctr_change": "vd '1.53% → 1.78% (+16.3%)'",
+    "trend_assessment": "[≥30 từ tiếng Việt] Đánh giá tổng quan: campaign đang cải thiện đều / xấu đi / dao động. Lý do hành động trước có hiệu quả hay không (vd 'Lần trước SCALE budget +20%, kết quả CPA giảm 8% — scale work, tiếp tục SCALE thêm 15%').",
+    "verdict_continuity": "vd 'Verdict lần này nhất quán với history (3 lần liên tiếp SCALE)' hoặc 'Đảo verdict vì CPA tăng đột biến sau lần SCALE trước'"
+  },
   "performance": {
     "spend_vnd": <int>,
     "conversions": <int>,
@@ -256,6 +286,63 @@ function jsonResponse(obj, status = 200) {
     status,
     headers: { "Content-Type": "application/json; charset=utf-8" },
   });
+}
+
+// ── History storage (KV) ────────────────────────────────────────────────
+// Lưu lịch sử phân tích campaign trong KV. Mỗi campaign giữ 10 entry gần nhất.
+// AI sẽ đọc history để track tiến triển (verdict, score, CPA) qua thời gian
+// và đề xuất verdict thông minh hơn (vd 3 lần CPA giảm liên tiếp → SCALE mạnh).
+const HISTORY_MAX_ENTRIES = 10;
+const HISTORY_TTL_SECONDS = 45 * 86400;  // 45 ngày
+
+async function getCampaignHistory(env, campaignId) {
+  if (!env.INVENTORY || !campaignId) return [];
+  try {
+    const key = `fb_analysis_history:${campaignId}`;
+    const data = await env.INVENTORY.get(key, { type: "json" });
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+
+async function saveCampaignHistory(env, campaignId, newEntry) {
+  if (!env.INVENTORY || !campaignId || !newEntry) return;
+  try {
+    const key = `fb_analysis_history:${campaignId}`;
+    const existing = await getCampaignHistory(env, campaignId);
+    // Prepend mới nhất, giữ tối đa HISTORY_MAX_ENTRIES
+    const updated = [newEntry, ...existing].slice(0, HISTORY_MAX_ENTRIES);
+    await env.INVENTORY.put(key, JSON.stringify(updated), {
+      expirationTtl: HISTORY_TTL_SECONDS,
+    });
+  } catch (e) {
+    console.log(`[HISTORY SAVE FAIL] ${campaignId}: ${e.message}`);
+  }
+}
+
+// Compact entry để lưu KV (giữ field cần thiết, bỏ note dài để tiết kiệm space)
+function buildHistoryEntry(parsedJson, campaignId, campaignName) {
+  if (!parsedJson || parsedJson._parse_error) return null;
+  const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
+  return {
+    analyzed_at: nowVN,
+    campaign_id: campaignId,
+    campaign_name: campaignName || "",
+    verdict: parsedJson.verdict || null,
+    performance: {
+      spend_vnd: parsedJson.performance?.spend_vnd || 0,
+      conversions: parsedJson.performance?.conversions || 0,
+      cpa_vnd: parsedJson.performance?.cpa_vnd || null,
+      ctr_pct: parsedJson.performance?.ctr_pct || 0,
+      rating_overall: parsedJson.performance?.rating_overall || 0,
+    },
+    evaluation_scores: {
+      spend_efficiency: Number(parsedJson.evaluation?.spend_efficiency?.score) || 0,
+      volume:           Number(parsedJson.evaluation?.volume?.score) || 0,
+      ctr_quality:      Number(parsedJson.evaluation?.ctr_quality?.score) || 0,
+      trend:            Number(parsedJson.evaluation?.trend?.score) || 0,
+    },
+    action_summary: (parsedJson.action?.what || "").slice(0, 200),
+  };
 }
 
 async function fetchJson(origin, path, cookieHeader) {
@@ -549,6 +636,17 @@ export async function onRequestPost(context) {
   }
   await Promise.all(tasks);
 
+  // Fetch lịch sử phân tích (KV) cho mode optimize_campaign — AI sẽ dùng
+  // history để track tiến triển và đề xuất verdict thông minh hơn.
+  let campaignHistory = [];
+  if (mode === "optimize_campaign" && campaign_id) {
+    campaignHistory = await getCampaignHistory(env, campaign_id);
+    if (campaignHistory.length > 0) {
+      // Pass vào dataContext để AI thấy trong user prompt
+      dataContext.previous_analyses = campaignHistory;
+    }
+  }
+
   const skills = cfg.skills;
   const systemPrompt = buildSystemPrompt(skills, group, !!cfg.json_output);
   const userPrompt = buildUserPrompt(mode, question, dataContext, group);
@@ -720,6 +818,15 @@ export async function onRequestPost(context) {
         comparison_range: comparisonRange,
       }), { expirationTtl: CACHE_TTL_SECONDS });
     } catch { /* ignore */ }
+  }
+
+  // Save analysis history vào KV (chỉ optimize_campaign + parse OK)
+  if (mode === "optimize_campaign" && campaign_id && parsedJson && !parsedJson._parse_error) {
+    const focusName = dataContext.fb_focus_campaign?.name || "";
+    const historyEntry = buildHistoryEntry(parsedJson, campaign_id, focusName);
+    if (historyEntry) {
+      await saveCampaignHistory(env, campaign_id, historyEntry);
+    }
   }
 
   // Trả deltas + comparison của focus campaign cho frontend hiển thị badge
