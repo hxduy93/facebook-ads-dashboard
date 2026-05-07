@@ -2,12 +2,13 @@
 Facebook Ads Dashboard Auto-Updater
 ====================================
 Fetches latest Facebook Ads data for 6 ad accounts under BM "Yoday Media
-Retail", rebuilds index.html from template.html, and deploys to Netlify.
+Retail" and rebuilds index.html from template.html.
 
-Run via GitHub Actions every 30 minutes. Requires these env vars:
+Hosting đã chuyển sang Cloudflare Pages — script chỉ generate file, GitHub
+Actions tự commit + push lên repo, Cloudflare auto-detect và deploy.
+
+Run via GitHub Actions every 30 minutes. Requires:
   - FB_ACCESS_TOKEN   Facebook Marketing API long-lived token
-  - NETLIFY_TOKEN     Netlify Personal Access Token
-  - NETLIFY_SITE_ID   Netlify site UUID (from Site configuration > Site details)
 
 Conversion metric = complete_registration (số lượt đăng ký hoàn tất).
 """
@@ -23,15 +24,7 @@ import requests
 # -----------------------------------------------------------------------------
 # CONFIG
 # -----------------------------------------------------------------------------
-FB_TOKEN        = os.environ["FB_ACCESS_TOKEN"]
-# Netlify credentials are only required when this script is responsible for
-# deploying (GitHub Actions cron path). When running INSIDE a Netlify build,
-# Netlify publishes the generated file itself — these env vars aren't needed.
-NETLIFY_TOKEN   = os.environ.get("NETLIFY_TOKEN", "")
-NETLIFY_SITE_ID = os.environ.get("NETLIFY_SITE_ID", "")
-# If SKIP_NETLIFY_DEPLOY is set (Netlify build env), generate index.html but
-# skip the API deploy step — Netlify itself will publish the file.
-SKIP_DEPLOY     = os.environ.get("SKIP_NETLIFY_DEPLOY", "").lower() in ("1", "true", "yes")
+FB_TOKEN = os.environ["FB_ACCESS_TOKEN"]
 
 FB_API_VERSION = "v20.0"
 DAYS_BACK      = 30  # last 30 days of data
@@ -550,47 +543,6 @@ def generate_html(data_obj):
     return template.replace(placeholder, injection)
 
 # -----------------------------------------------------------------------------
-# NETLIFY DEPLOY (file digest API — proper way to upload single file)
-# -----------------------------------------------------------------------------
-def deploy_netlify(html: str):
-    import hashlib
-    html_bytes = html.encode("utf-8")
-    sha1 = hashlib.sha1(html_bytes).hexdigest()
-
-    # Step 1: create deploy with file manifest
-    create_resp = requests.post(
-        f"https://api.netlify.com/api/v1/sites/{NETLIFY_SITE_ID}/deploys",
-        headers={
-            "Authorization": f"Bearer {NETLIFY_TOKEN}",
-            "Content-Type": "application/json",
-        },
-        json={"files": {"/index.html": sha1}, "async": False},
-        timeout=60,
-    )
-    if create_resp.status_code >= 400:
-        raise RuntimeError(f"Netlify create deploy failed {create_resp.status_code}: {create_resp.text[:500]}")
-    deploy = create_resp.json()
-    deploy_id = deploy["id"]
-
-    # Step 2: upload required files (Netlify tells us which files it doesn't have yet)
-    required = deploy.get("required", [])
-    if sha1 in required:
-        up_resp = requests.put(
-            f"https://api.netlify.com/api/v1/deploys/{deploy_id}/files/index.html",
-            headers={
-                "Authorization": f"Bearer {NETLIFY_TOKEN}",
-                "Content-Type": "application/octet-stream",
-            },
-            data=html_bytes,
-            timeout=180,
-        )
-        if up_resp.status_code >= 400:
-            raise RuntimeError(f"Netlify upload failed {up_resp.status_code}: {up_resp.text[:500]}")
-        deploy = up_resp.json()
-
-    return deploy
-
-# -----------------------------------------------------------------------------
 # MAIN
 # -----------------------------------------------------------------------------
 def main():
@@ -598,7 +550,7 @@ def main():
     print(f"Facebook Ads Dashboard update — {datetime.now().isoformat()}")
     print("=" * 60)
 
-    print("\n[1/3] Fetching Facebook Ads data...")
+    print("\n[1/2] Fetching Facebook Ads data...")
     data = build_data()
     print(f"      ✓ {len(data['accounts'])} accounts, "
           f"{len(data['campaigns'])} campaigns, "
@@ -607,25 +559,12 @@ def main():
     total_spend = sum(sum(d['spend'] for d in a['daily']) for a in data['accounts'])
     print(f"      ✓ last {DAYS_BACK} days: {total_reg} đăng ký, {total_spend:,.0f}₫ spend")
 
-    print("\n[2/3] Generating HTML from template...")
+    print("\n[2/2] Generating HTML from template...")
     html = generate_html(data)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
     print(f"      ✓ wrote {len(html):,} bytes to index.html")
-
-    if SKIP_DEPLOY:
-        print("\n[3/3] Skipping Netlify API deploy (SKIP_NETLIFY_DEPLOY is set).")
-        print("      Netlify build runner will publish index.html itself.")
-    else:
-        if not NETLIFY_TOKEN or not NETLIFY_SITE_ID:
-            raise RuntimeError(
-                "NETLIFY_TOKEN and NETLIFY_SITE_ID are required when SKIP_NETLIFY_DEPLOY is not set."
-            )
-        print("\n[3/3] Deploying to Netlify...")
-        result = deploy_netlify(html)
-        print(f"      ✓ deploy id:  {result.get('id')}")
-        print(f"      ✓ state:      {result.get('state')}")
-        print(f"      ✓ deploy url: {result.get('deploy_ssl_url') or result.get('ssl_url')}")
+    print("      → GitHub Actions sẽ commit + push, Cloudflare Pages auto-deploy.")
 
     print("\n✅ Done.")
 

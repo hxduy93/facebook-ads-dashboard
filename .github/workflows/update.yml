@@ -33,10 +33,6 @@ jobs:
       - name: Run update script (FB Ads insights + rebuild index.html)
         env:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-          # Skip Netlify deploy — đã chuyển sang Cloudflare Pages auto-deploy.
-          # Netlify trial credit hết → 403 chặn deploy. Cloudflare sẽ tự deploy
-          # index.html khi git push commit chứa data mới.
-          SKIP_NETLIFY_DEPLOY: "1"
         run: python update_dashboard.py
 
       - name: Commit + push updated index.html (trigger Cloudflare deploy)
