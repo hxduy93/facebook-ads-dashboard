@@ -38,6 +38,7 @@ const CLAUDE_MODES = new Set([
   "analyze_metrics",
   "optimize_campaign",
   "ask",
+  "staff_overview",
 ]);
 const MODEL_CLAUDE_HAIKU = "anthropic/claude-haiku-4-5";        // best quality, billed per token (cần Workers Paid + AI Models marketplace)
 
@@ -62,6 +63,7 @@ const MODE_CONFIG = {
   analyze_metrics:     { skills: ["fb_overview"], data: ["insights", "trend"], model_pref: "big" },
   optimize_campaign:   { skills: ["fb_overview", "fb_optimize"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },
   ask:                 { skills: ["fb_overview", "fb_funnel"], data: ["insights", "orders", "profit", "trend"], model_pref: "big" },
+  staff_overview:      { skills: ["fb_overview", "fb_staff_overview"], data: ["insights", "orders", "profit"], json_output: true, model_pref: "big" },
 };
 
 // Skill summary compact (Vietnamese)
@@ -315,6 +317,99 @@ Thay bằng: "ổn định", "tích cực", "tăng quy mô", "làm mới creativ
 
 ═══ DETERMINISM ═══
 Output PHẢI giống nhau khi gọi lại với cùng input. KHÔNG thêm random text/emoji ngẫu nhiên.`,
+
+  fb_staff_overview: `# FB ADS STAFF OVERVIEW — DOSCOM
+
+Bạn là Sarah Strategist phụ trách 1 nhân sự FB Ads (DUY hoặc PHƯƠNG NAM).
+Đánh giá toàn bộ performance của nhân sự trong THÁNG HIỆN TẠI và đề xuất
+chiến lược scale để đạt KPI.
+
+═══ INPUT DATA ═══
+Bạn sẽ thấy:
+- staff: "DUY" | "PHUONG_NAM"
+- staff_accounts: list account FB của nhân sự + groups SP họ chạy
+- staff_aggregate_mtd: tổng spend, revenue, profit, margin của nhân sự (tháng này)
+- groups_breakdown: revenue/profit/margin per group nhân sự phụ trách
+- top_campaigns: 5-10 campaign tốt nhất (theo profit/conv)
+- weak_campaigns: 3-5 campaign yếu (low margin/high CPA)
+- monthly_kpi_context: KPI tổng + tiến độ
+- kpi_share: % nhân sự đóng góp vào KPI
+
+═══ MỤC TIÊU PHÂN TÍCH ═══
+1. Tổng quan: nhân sự đang đứng ở đâu so với KPI và so với nhân sự còn lại
+2. SP nào đang ngon (winner) → đề xuất scale làm key chính tháng
+3. SP nào yếu/lỗ → đề xuất pause/refresh/audience
+4. Action plan tuần để đạt KPI
+
+═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
+
+{
+  "staff": "DUY" | "PHUONG_NAM",
+  "month_label": "Tháng 5/2026",
+  "executive_summary": "[≥40 từ tiếng Việt] Tổng quan 2-3 câu: nhân sự đang ở đâu, key result nổi bật/yếu nhất, định hướng tháng",
+
+  "performance_summary": {
+    "total_accounts": <int — số account của nhân sự đang chạy>,
+    "active_campaigns": <int — số campaign có spend > 0 tháng này>,
+    "spend_mtd_vnd": <int — tổng spend tháng này>,
+    "revenue_mtd_vnd": <int — tổng revenue tháng này (Pancake actual)>,
+    "profit_mtd_vnd": <int — profit ước tính>,
+    "margin_pct": <float>,
+    "orders_mtd": <int — đơn đã giao (Pancake)>
+  },
+
+  "kpi_contribution": {
+    "share_pct": <float — % nhân sự này đóng góp vào KPI tháng>,
+    "expected_share_pct": <float — vd 50% nếu chia đều 2 nhân sự>,
+    "vs_expected_pct": <float — chênh lệch>,
+    "status": "leading" | "on_track" | "behind",
+    "assessment": "[≥30 từ] Vd 'DUY đóng góp 47.5% revenue tháng này, kỳ vọng 50% — chậm 2.5%. Nguyên nhân chính: account NOMA giảm volume tuần qua.'"
+  },
+
+  "top_products": [
+    // 1-3 SP đang chạy ngon nhất theo profit + margin + volume
+    {
+      "group": "MAY_DO" | "NOMA" | ...,
+      "rating": <1-10>,
+      "verdict": "WINNER_SCALE" | "SCALE_MODERATE" | "KEEP",
+      "revenue_mtd_vnd": <int>,
+      "margin_pct": <float>,
+      "reason": "[≥30 từ] Lý do tại sao là winner — số liệu cụ thể"
+    }
+  ],
+
+  "weak_products": [
+    // 1-3 SP yếu, cần optimize hoặc dừng
+    {
+      "group": "...",
+      "rating": <1-10>,
+      "verdict": "REFRESH" | "AUDIENCE" | "PAUSE",
+      "revenue_mtd_vnd": <int>,
+      "margin_pct": <float>,
+      "reason": "[≥30 từ] Lý do yếu — số liệu cụ thể",
+      "fix_recommendation": "[≥20 từ] Đề xuất cụ thể"
+    }
+  ],
+
+  "monthly_action_plan": {
+    "key_focus_product": "Tên nhóm SP đề xuất làm key chính tháng (winner để push)",
+    "key_focus_reason": "[≥30 từ] Tại sao chọn SP này",
+    "weekly_actions": [
+      "Tuần 1 (đến dd/mm): hành động cụ thể với số liệu",
+      "Tuần 2: ...",
+      "Tuần 3: ...",
+      "Tuần 4: ..."
+    ],
+    "expected_kpi_impact": "[≥30 từ] Nếu thực hiện đầy đủ → KPI sẽ đạt bao nhiêu %, tăng X% so hiện tại"
+  },
+
+  "warnings": []  // optional, có thể empty
+}
+
+═══ NGÔN NGỮ ═══
+🚨 100% TIẾNG VIỆT trong mọi field text. Trừ verdict enum (WINNER_SCALE, REFRESH...) + status enum.
+🚨 Tất cả số liệu phải DẪN CHỨNG cụ thể (revenue_vnd, margin_pct), KHÔNG nói chung chung.
+🚨 Output phải ACTIONABLE — user đọc xong phải biết LÀM GÌ trong tuần.`,
 };
 
 const GROUPS = ["ALL", ...FB_ACTIVE_GROUPS];
@@ -360,6 +455,56 @@ async function saveCampaignHistory(env, campaignId, newEntry) {
     });
   } catch (e) {
     console.log(`[HISTORY SAVE FAIL] ${campaignId}: ${e.message}`);
+  }
+}
+
+// ── Staff overview history (12 months per staff) ────────────────────────
+const STAFF_HISTORY_MAX = 12;
+const STAFF_HISTORY_TTL_SECONDS = 365 * 86400;
+
+async function getStaffHistory(env, staff) {
+  if (!env.INVENTORY || !staff) return [];
+  try {
+    const key = `fb_staff_history:${staff}`;
+    const data = await env.INVENTORY.get(key, { type: "json" });
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+
+async function saveStaffHistory(env, staff, parsedJson, monthLabel) {
+  if (!env.INVENTORY || !staff || !parsedJson || parsedJson._parse_error) return;
+  try {
+    const key = `fb_staff_history:${staff}`;
+    const existing = await getStaffHistory(env, staff);
+    const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
+
+    // Compact entry — giữ field summary, bỏ field dài
+    const newEntry = {
+      analyzed_at: nowVN,
+      month_label: monthLabel || parsedJson.month_label,
+      executive_summary: (parsedJson.executive_summary || "").slice(0, 300),
+      performance_summary: parsedJson.performance_summary || {},
+      kpi_contribution: {
+        share_pct: parsedJson.kpi_contribution?.share_pct || 0,
+        status: parsedJson.kpi_contribution?.status || "unknown",
+      },
+      key_focus_product: parsedJson.monthly_action_plan?.key_focus_product || "",
+    };
+
+    // Nếu entry mới nhất cùng month → thay; khác → prepend
+    let updated;
+    if (existing.length > 0 && existing[0].month_label === newEntry.month_label) {
+      updated = [newEntry, ...existing.slice(1)];
+    } else {
+      updated = [newEntry, ...existing];
+    }
+    updated = updated.slice(0, STAFF_HISTORY_MAX);
+
+    await env.INVENTORY.put(key, JSON.stringify(updated), {
+      expirationTtl: STAFF_HISTORY_TTL_SECONDS,
+    });
+  } catch (e) {
+    console.log(`[STAFF HISTORY SAVE FAIL] ${staff}: ${e.message}`);
   }
 }
 
@@ -507,6 +652,192 @@ function computeCampaignProfitAttribution(focusCampaign, accountId, accountSpend
     },
 
     formula_note: `est_profit = group_revenue × share - group_cogs × share - campaign_spend - revenue × ${vatPct}%. share = campaign_spend / total_account_spend.`,
+  };
+}
+
+// ── Monthly KPI context ─────────────────────────────────────────────────
+// Luôn dùng range "this_month" để track tiến độ KPI tháng. Independent với
+// time filter user chọn ở UI (filter đó dùng cho campaign analysis).
+async function computeMonthlyKpiContext(env, origin, cookieHeader) {
+  const fbConfig = await loadFbConfig(env, origin);
+  const kpiVnd = Number(fbConfig.kpi_revenue_monthly_vnd) || 0;
+  if (kpiVnd <= 0) return null;
+
+  const monthRange = resolveTimeRange("this_month");
+  const [revJson, costsJson] = await Promise.all([
+    fetchJson(origin, "/data/product-revenue.json", cookieHeader),
+    fetchJson(origin, "/data/product-costs.json", cookieHeader),
+  ]);
+  if (!revJson || !costsJson) return null;
+
+  const profit = computeFbProfitInRange(revJson, costsJson, "ALL", monthRange);
+  const actualMtd = profit?.total?.revenue || 0;
+  const ordersMtd = profit?.total?.orders || 0;
+
+  // Date math (VN timezone)
+  const tzOffset = 7 * 3600 * 1000;
+  const nowVN = new Date(Date.now() + tzOffset);
+  const year = nowVN.getUTCFullYear();
+  const monthIdx = nowVN.getUTCMonth();  // 0-indexed
+  const lastDayOfMonth = new Date(Date.UTC(year, monthIdx + 1, 0)).getUTCDate();
+  const daysPassed = nowVN.getUTCDate();
+  const daysRemaining = Math.max(0, lastDayOfMonth - daysPassed);
+
+  const progressPct = (actualMtd / kpiVnd) * 100;
+  const expectedProgressPct = (daysPassed / lastDayOfMonth) * 100;
+  const gapPct = progressPct - expectedProgressPct;
+
+  const remainingKpi = Math.max(0, kpiVnd - actualMtd);
+  const requiredDailyRate = daysRemaining > 0 ? remainingKpi / daysRemaining : 0;
+  const actualDailyRate = daysPassed > 0 ? actualMtd / daysPassed : 0;
+  const rateGapPct = actualDailyRate > 0
+    ? ((requiredDailyRate / actualDailyRate) - 1) * 100 : 0;
+
+  let status = "on_track";
+  if (progressPct >= 100) status = "achieved";
+  else if (gapPct < -15) status = "behind";
+  else if (gapPct < -5) status = "near_track";
+  else status = "on_track";
+
+  return {
+    kpi_vnd: kpiVnd,
+    month_label: `Tháng ${monthIdx + 1}/${year}`,
+    month_range: monthRange,
+    actual_mtd_vnd: actualMtd,
+    orders_mtd: ordersMtd,
+    progress_pct: Math.round(progressPct * 10) / 10,
+    expected_progress_pct: Math.round(expectedProgressPct * 10) / 10,
+    gap_pct: Math.round(gapPct * 10) / 10,
+    days_passed: daysPassed,
+    days_remaining: daysRemaining,
+    last_day_of_month: lastDayOfMonth,
+    required_daily_rate_vnd: Math.round(requiredDailyRate),
+    actual_daily_rate_vnd: Math.round(actualDailyRate),
+    rate_gap_pct: Math.round(rateGapPct * 10) / 10,
+    status,
+  };
+}
+
+// ── Staff aggregate: tổng spend/revenue/profit của 1 nhân sự ────────────
+// Filter accounts của staff từ config, fetch campaigns + Pancake data,
+// aggregate per group. Always dùng range "this_month".
+async function computeStaffAggregate(env, origin, cookieHeader, staff, fbConfig) {
+  const monthRange = resolveTimeRange("this_month");
+  const [fbAdsJson, revJson, costsJson] = await Promise.all([
+    fetchJson(origin, "/data/fb-ads-data.json", cookieHeader),
+    fetchJson(origin, "/data/product-revenue.json", cookieHeader),
+    fetchJson(origin, "/data/product-costs.json", cookieHeader),
+  ]);
+
+  // Find accounts của staff từ config
+  const accountsOfStaff = Object.entries(fbConfig.account_to_groups || {})
+    .filter(([_, info]) => info.staff === staff)
+    .map(([id, info]) => ({ id, ...info }));
+
+  if (accountsOfStaff.length === 0) {
+    return { staff, error: `Không có account nào map cho staff ${staff} trong config` };
+  }
+
+  // Aggregate per account: spend MTD, conversions, campaign list
+  let totalSpend = 0, totalConversions = 0, totalImpressions = 0, totalClicks = 0;
+  const accountSummaries = [];
+  const allActiveCampaigns = [];
+
+  for (const acc of accountsOfStaff) {
+    const camps = compactFbCampaigns(fbAdsJson, acc.id, monthRange, { activeOnly: true });
+    const activeOnly = (camps?.campaigns || []).filter(c => c.spend > 0 && c.effective_status === "ACTIVE");
+    const accSpend = activeOnly.reduce((s, c) => s + c.spend, 0);
+    const accConv = activeOnly.reduce((s, c) => s + c.conversions, 0);
+    const accImp = activeOnly.reduce((s, c) => s + c.impressions, 0);
+    const accClicks = activeOnly.reduce((s, c) => s + c.clicks, 0);
+
+    totalSpend += accSpend;
+    totalConversions += accConv;
+    totalImpressions += accImp;
+    totalClicks += accClicks;
+
+    accountSummaries.push({
+      id: acc.id,
+      name: camps?.account?.name || "?",
+      groups: acc.groups,
+      products_note: acc.products_note || "",
+      active_campaigns: activeOnly.length,
+      spend_mtd: accSpend,
+      conversions_mtd: accConv,
+      cpa: accConv > 0 ? Math.round(accSpend / accConv) : null,
+    });
+
+    // Push top/weak campaigns kèm group ownership
+    activeOnly.forEach(c => allActiveCampaigns.push({
+      ...c,
+      account_id: acc.id,
+      account_groups: acc.groups,
+    }));
+  }
+
+  // Pancake profit per group cho staff
+  // Pancake source group key: "DUY" hoặc "PHUONG_NAM" — match staff
+  // Filter computeFbProfitInRange chỉ source của staff này
+  // (helper hiện tại lấy cả 2 source, tạm thời inline filter)
+  const profit = computeFbProfitInRange(revJson, costsJson, "ALL", monthRange);
+  // Filter profit groups → chỉ lấy group nhân sự phụ trách
+  const staffGroups = [...new Set(accountsOfStaff.flatMap(a => a.groups))];
+  const groupsBreakdown = {};
+  let revenueMtd = 0, profitMtd = 0, ordersMtd = 0, cogsMtd = 0;
+  for (const g of staffGroups) {
+    const gp = profit?.groups?.[g];
+    if (gp) {
+      groupsBreakdown[g] = gp;
+      revenueMtd += gp.revenue || 0;
+      profitMtd += gp.profit || 0;
+      ordersMtd += gp.orders || 0;
+      cogsMtd += gp.cogs || 0;
+    }
+  }
+  // NOTE: profit này có thể OVER-ATTRIBUTE nếu group cũng có account nhân sự
+  // khác (vd NOMA = DUY 1655506672244826 + PN 764394829882083). Logic hiện tại
+  // gộp tất cả → profit của group sẽ bao gồm cả 2 staff. Để chính xác sau, cần
+  // filter Pancake source group theo staff (DUY/PHUONG_NAM).
+
+  // Top 5 + weak 3 campaigns
+  const sorted = [...allActiveCampaigns].sort((a, b) => {
+    const aProfit = (a.conversions || 0) > 0 ? -a.cpa || 0 : -Infinity;
+    const bProfit = (b.conversions || 0) > 0 ? -b.cpa || 0 : -Infinity;
+    return aProfit - bProfit;
+  });
+  const topCampaigns = sorted.slice(0, 5).map(c => ({
+    name: c.name, account_id: c.account_id, groups: c.account_groups,
+    spend: c.spend, conversions: c.conversions, cpa: c.cpa, ctr: c.ctr,
+  }));
+  const weakCampaigns = [...allActiveCampaigns]
+    .filter(c => c.spend > 100000)  // có spend đáng kể
+    .sort((a, b) => (b.cpa || 0) - (a.cpa || 0))  // CPA cao nhất = yếu nhất
+    .slice(0, 3)
+    .map(c => ({
+      name: c.name, account_id: c.account_id, groups: c.account_groups,
+      spend: c.spend, conversions: c.conversions, cpa: c.cpa, ctr: c.ctr,
+    }));
+
+  return {
+    staff,
+    month_label: `Tháng ${new Date(Date.now() + 7*3600*1000).getUTCMonth() + 1}/${new Date(Date.now() + 7*3600*1000).getUTCFullYear()}`,
+    accounts: accountSummaries,
+    aggregate_mtd: {
+      total_accounts: accountsOfStaff.length,
+      active_campaigns: allActiveCampaigns.length,
+      spend_mtd_vnd: totalSpend,
+      revenue_mtd_vnd: revenueMtd,
+      profit_mtd_vnd: profitMtd,
+      orders_mtd: ordersMtd,
+      cogs_mtd_vnd: cogsMtd,
+      margin_pct: revenueMtd > 0 ? Math.round((profitMtd / revenueMtd) * 1000) / 10 : 0,
+      cpa_avg: totalConversions > 0 ? Math.round(totalSpend / totalConversions) : null,
+      ctr_avg_pct: totalImpressions > 0 ? Math.round((totalClicks / totalImpressions) * 10000) / 100 : 0,
+    },
+    groups_breakdown: groupsBreakdown,
+    top_campaigns: topCampaigns,
+    weak_campaigns: weakCampaigns,
+    _data_note: "groups_breakdown profit lấy từ Pancake (data thật); có thể bao gồm orders của staff khác nếu group được chia sẻ giữa 2 staff (vd NOMA)",
   };
 }
 
@@ -701,6 +1032,29 @@ Schema BẮT BUỘC tuân thủ ĐÚNG (skill prompt đã định nghĩa chi ti�
     case "ask":
       parts.push("Trả lời ngắn gọn, có dẫn chứng từ data + skill rule. Tiếng Việt.");
       break;
+
+    case "staff_overview":
+      parts.push(`🚨 OUTPUT 1 JSON object hợp lệ. Schema theo skill fb_staff_overview ở system prompt.
+
+Tham chiếu DATA:
+- staff_overview.staff = nhân sự đang phân tích
+- staff_overview.aggregate_mtd = tổng spend/revenue/profit/orders MTD của nhân sự
+- staff_overview.groups_breakdown = profit per group nhân sự phụ trách
+- staff_overview.top_campaigns / weak_campaigns = top + weak campaigns theo CPA
+- monthly_kpi_context = KPI tổng + tiến độ
+- staff_kpi_contribution = % share của nhân sự trong KPI tổng
+
+🔴 BẮT BUỘC tuân thủ schema fb_staff_overview:
+- executive_summary, performance_summary (object)
+- kpi_contribution (object với assessment ≥ 30 từ)
+- top_products[1-3] với reason ≥ 30 từ
+- weak_products[1-3] với reason + fix_recommendation
+- monthly_action_plan (key_focus + 4 weekly_actions + expected_kpi_impact)
+
+🔴 100% TIẾNG VIỆT trừ enum.
+🔴 Số liệu CỤ THỂ (revenue_vnd, margin_pct, ...) không nói chung chung.
+🔴 Action plan ACTIONABLE — đọc xong biết phải làm gì.`);
+      break;
   }
   return parts.join("\n");
 }
@@ -815,18 +1169,38 @@ export async function onRequestPost(context) {
   // Tính profit attribution (Plan C) — dùng config + Pancake data
   if (mode === "optimize_campaign" && campaign_id && account_id && dataContext.fb_focus_campaign) {
     const fbConfig = await loadFbConfig(env, origin);
-    // Tổng spend của account trong time range (dùng cho share calc)
     const accountSpend = (dataContext.fb_campaigns?.campaigns || [])
       .reduce((s, c) => s + (Number(c.spend) || 0), 0);
     dataContext.profit_attribution = computeCampaignProfitAttribution(
       dataContext.fb_focus_campaign, account_id, accountSpend, dataContext.fb_profit, fbConfig
     );
-    // Pass close_rate + vat sang AI cho transparency
-    dataContext.fb_config = {
-      close_rate_pct: fbConfig.close_rate_pct,
-      vat_pct: fbConfig.vat_pct,
-      updated_at: fbConfig.updated_at,
-    };
+  }
+
+  // Monthly KPI context — pass cho mọi mode analysis (AI dùng để recommend scaling)
+  if (["optimize_campaign", "audit_account_json", "audit_account", "staff_overview"].includes(mode)) {
+    dataContext.monthly_kpi_context = await computeMonthlyKpiContext(env, origin, cookieHeader);
+  }
+
+  // Staff aggregate — chỉ cho mode staff_overview
+  if (mode === "staff_overview") {
+    const staff = body.staff;  // "DUY" | "PHUONG_NAM"
+    if (!staff || !["DUY", "PHUONG_NAM"].includes(staff)) {
+      return jsonResponse({ error: "staff_overview cần body.staff = 'DUY' hoặc 'PHUONG_NAM'" }, 400);
+    }
+    const fbConfig = await loadFbConfig(env, origin);
+    dataContext.staff_overview = await computeStaffAggregate(env, origin, cookieHeader, staff, fbConfig);
+    // KPI share của staff
+    if (dataContext.monthly_kpi_context && dataContext.staff_overview?.aggregate_mtd) {
+      const staffRev = dataContext.staff_overview.aggregate_mtd.revenue_mtd_vnd || 0;
+      const totalKpi = dataContext.monthly_kpi_context.kpi_vnd || 1;
+      const totalActual = dataContext.monthly_kpi_context.actual_mtd_vnd || 1;
+      dataContext.staff_kpi_contribution = {
+        staff_revenue_mtd: staffRev,
+        kpi_share_pct: Math.round((staffRev / totalKpi) * 1000) / 10,
+        actual_share_pct: Math.round((staffRev / totalActual) * 1000) / 10,
+        expected_share_pct: 50,  // 2 staff = 50% mỗi người (heuristic đơn giản)
+      };
+    }
   }
 
   const skills = cfg.skills;
@@ -1009,6 +1383,12 @@ export async function onRequestPost(context) {
     if (historyEntry) {
       await saveCampaignHistory(env, campaign_id, historyEntry);
     }
+  }
+
+  // Save staff overview history (12 entries / 12 months)
+  if (mode === "staff_overview" && body.staff && parsedJson && !parsedJson._parse_error) {
+    const monthLabel = dataContext.monthly_kpi_context?.month_label || null;
+    await saveStaffHistory(env, body.staff, parsedJson, monthLabel);
   }
 
   // Trả deltas + comparison của focus campaign cho frontend hiển thị badge

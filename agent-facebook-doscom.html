@@ -155,6 +155,43 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .opt-profit .assess { padding: 8px 10px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-top: 6px; line-height: 1.5; }
 .opt-profit .reason { padding: 6px 10px; background: rgba(255,255,255,0.4); border-radius: 4px; margin-top: 6px; font-style: italic; font-size: 11.5px; }
 
+/* KPI progress block */
+.kpi-progress { padding: 12px 14px; border-radius: 6px; }
+.kpi-progress.green { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-left: 4px solid #16a34a; color: #064e3b; }
+.kpi-progress.yellow { background: linear-gradient(135deg, #fffbeb, #fde68a); border-left: 4px solid #d97706; color: #78350f; }
+.kpi-progress.red { background: linear-gradient(135deg, #fef2f2, #fecaca); border-left: 4px solid #dc2626; color: #7f1d1d; }
+.kpi-progress .row { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12.5px; }
+.kpi-progress .row strong { font-weight: 700; }
+.kpi-progress .bar-wrap { margin: 8px 0; height: 14px; background: rgba(255,255,255,0.5); border-radius: 7px; overflow: hidden; position: relative; }
+.kpi-progress .bar-fill { height: 100%; background: rgba(22,163,74,0.6); transition: width 0.3s; }
+.kpi-progress .bar-fill.warn { background: rgba(217,119,6,0.6); }
+.kpi-progress .bar-fill.danger { background: rgba(220,38,38,0.6); }
+.kpi-progress .bar-target { position: absolute; top: 0; height: 100%; width: 2px; background: #1e3a8a; }
+.kpi-progress .alert { font-size: 13px; font-weight: 600; margin-top: 6px; }
+
+/* Staff buttons */
+.btn-staff { padding: 10px 18px; background: white; border: 2px solid #4f46e5; color: #4f46e5; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+.btn-staff:hover { background: #4f46e5; color: white; transform: translateY(-1px); }
+.btn-staff:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Staff overview result card */
+.staff-card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; margin-top: 8px; }
+.staff-card h3 { margin: 0 0 12px; color: #1e3a8a; font-size: 16px; border-bottom: 2px solid #c7d2fe; padding-bottom: 6px; }
+.staff-card .exec-summary { padding: 10px 14px; background: #eff6ff; border-left: 3px solid #2563eb; border-radius: 4px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
+.staff-card .perf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.staff-card .perf-grid .stat-mini { padding: 8px 10px; background: #f9fafb; border-radius: 6px; text-align: center; }
+.staff-card .perf-grid .stat-mini .label { font-size: 10.5px; color: #6b7280; text-transform: uppercase; }
+.staff-card .perf-grid .stat-mini .value { font-size: 15px; font-weight: 700; color: #1f2937; margin-top: 2px; }
+.staff-card .product-block { padding: 10px 12px; background: #f9fafb; border-radius: 6px; margin: 6px 0; border-left: 3px solid #d1d5db; }
+.staff-card .product-block.top { border-left-color: #16a34a; background: #ecfdf5; }
+.staff-card .product-block.weak { border-left-color: #dc2626; background: #fef2f2; }
+.staff-card .product-block strong { color: #1f2937; }
+.staff-card .action-plan { padding: 12px 14px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #d97706; border-radius: 6px; margin-top: 12px; }
+.staff-card .action-plan h4 { margin: 0 0 6px; color: #78350f; font-size: 13.5px; }
+.staff-card .action-plan ol { margin: 6px 0 6px 20px; font-size: 12.5px; line-height: 1.6; }
+.staff-card .action-plan ol li { margin-bottom: 2px; }
+.staff-card .action-plan .impact { margin-top: 8px; padding: 6px 10px; background: rgba(255,255,255,0.6); border-radius: 4px; font-size: 12px; font-style: italic; }
+
 /* Config section */
 .config-section { background: #fafbff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
 .config-section h2 { margin: 0 0 8px; font-size: 14px; color: #1e3a8a; }
@@ -271,19 +308,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
     </div>
   </div>
 
-  <!-- CONFIG SECTION (close rate, VAT, account → group mapping) -->
+  <!-- KPI + CONFIG SECTION (đầu trang) -->
   <div class="config-section" id="config-section">
-    <h2>⚙ Cấu hình tháng (cập nhật khi thay đổi)</h2>
+    <h2>🎯 KPI tháng <span id="kpi-month-label" style="color:#6b7280;font-weight:normal">—</span></h2>
     <div class="row">
-      <label>Tỉ lệ chốt:</label>
-      <input type="number" id="cfg-close-rate" min="0" max="100" step="0.1" />
-      <span>%</span>
-      <label style="margin-left:16px">VAT:</label>
-      <input type="number" id="cfg-vat" min="0" max="50" step="0.1" />
-      <span>%</span>
+      <label>KPI doanh thu tháng:</label>
+      <input type="number" id="cfg-kpi-vnd" min="0" step="1000000" style="width:160px" placeholder="vd 1000000000" />
+      <span>VND</span>
       <button class="save-btn" onclick="saveFbConfig()">💾 Lưu</button>
       <span class="save-result" id="cfg-result"></span>
     </div>
+    <div id="kpi-progress-block" style="margin-top:10px"></div>
     <details style="margin-top:8px;font-size:12px">
       <summary style="cursor:pointer;color:#4338ca">📋 Mapping account → nhóm SP (đọc từ data/fb-config.json)</summary>
       <table class="acc-map" id="cfg-mapping-table">
@@ -294,6 +329,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
         Edit mapping: sửa file <code>data/fb-config.json</code> trong repo (manual cho v1).
       </div>
     </details>
+  </div>
+
+  <!-- STAFF OVERVIEW SECTION -->
+  <div class="section" id="staff-overview-section">
+    <h2>📊 Đánh giá tổng quan nhân sự
+      <span class="right" style="font-size:11.5px;color:#6b7280">Click để xem báo cáo tháng + action plan (cache 24h)</span>
+    </h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="btn-staff" onclick="analyzeStaff('DUY')">👤 Phân tích DUY</button>
+      <button class="btn-staff" onclick="analyzeStaff('PHUONG_NAM')">👤 Phân tích PHƯƠNG NAM</button>
+    </div>
+    <div id="staff-overview-result"></div>
   </div>
 
   <!-- PROFIT SUMMARY -->
@@ -378,14 +425,13 @@ function applyCustomRange() {
   refresh();
 }
 
-// ── FB CONFIG (close rate, VAT, account → group mapping) ──
+// ── FB CONFIG (KPI tháng + account → group mapping) ──
 async function loadFbConfig() {
   try {
     const r = await fetch('/api/fb-config', { credentials: 'same-origin' });
     if (!r.ok) return;
     const cfg = await r.json();
-    document.getElementById('cfg-close-rate').value = cfg.close_rate_pct ?? 65;
-    document.getElementById('cfg-vat').value = cfg.vat_pct ?? 10;
+    document.getElementById('cfg-kpi-vnd').value = cfg.kpi_revenue_monthly_vnd ?? 0;
     const note = `Cập nhật cuối: ${cfg.updated_at || '—'} (${cfg.source || 'default'})`;
     document.getElementById('cfg-result').textContent = note;
     // Render mapping table
@@ -403,26 +449,24 @@ async function loadFbConfig() {
         </tr>
       `);
     }
+    // After load → render KPI progress (cần fetch riêng từ profit data)
+    renderKpiProgress(cfg.kpi_revenue_monthly_vnd || 0);
   } catch (e) {
     document.getElementById('cfg-result').textContent = `Load fail: ${e.message}`;
   }
 }
 
 async function saveFbConfig() {
-  const closeRate = Number(document.getElementById('cfg-close-rate').value);
-  const vat = Number(document.getElementById('cfg-vat').value);
-  if (isNaN(closeRate) || closeRate < 0 || closeRate > 100) {
-    alert('Tỉ lệ chốt phải 0-100%'); return;
-  }
-  if (isNaN(vat) || vat < 0 || vat > 50) {
-    alert('VAT phải 0-50%'); return;
+  const kpi = Number(document.getElementById('cfg-kpi-vnd').value);
+  if (isNaN(kpi) || kpi < 0) {
+    alert('KPI phải là số ≥ 0'); return;
   }
   document.getElementById('cfg-result').textContent = 'Đang lưu...';
   try {
     const r = await fetch('/api/fb-config', {
       method: 'POST', credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ close_rate_pct: closeRate, vat_pct: vat }),
+      body: JSON.stringify({ kpi_revenue_monthly_vnd: kpi }),
     });
     const j = await r.json();
     if (!r.ok || !j.ok) {
@@ -430,9 +474,218 @@ async function saveFbConfig() {
       return;
     }
     document.getElementById('cfg-result').textContent = `✅ Đã lưu lúc ${j.saved_at}`;
+    renderKpiProgress(kpi);  // re-render với KPI mới
   } catch (e) {
     document.getElementById('cfg-result').textContent = `❌ ${e.message}`;
   }
+}
+
+// Render KPI progress block (fetch this_month profit từ snapshot endpoint)
+async function renderKpiProgress(kpiVnd) {
+  const block = document.getElementById('kpi-progress-block');
+  if (!kpiVnd || kpiVnd <= 0) {
+    block.innerHTML = '<div style="font-size:12px;color:#6b7280;font-style:italic">Set KPI ở trên để xem tiến độ tháng.</div>';
+    document.getElementById('kpi-month-label').textContent = '';
+    return;
+  }
+  block.innerHTML = '<div style="font-size:12px;color:#6b7280">Đang tính tiến độ...</div>';
+  try {
+    // Fetch profit cho this_month
+    const r = await fetch('/api/fb/snapshot?time=this_month', { credentials: 'same-origin' });
+    if (!r.ok) {
+      block.innerHTML = '<div style="color:#dc2626">Không load được profit data</div>';
+      return;
+    }
+    const j = await r.json();
+    const actualMtd = j.profit?.total?.revenue || 0;
+
+    // Date math
+    const now = new Date();
+    const monthName = `Tháng ${now.getMonth() + 1}/${now.getFullYear()}`;
+    document.getElementById('kpi-month-label').textContent = monthName;
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const daysPassed = now.getDate();
+    const daysRemaining = lastDay - daysPassed;
+
+    const progressPct = (actualMtd / kpiVnd) * 100;
+    const expectedPct = (daysPassed / lastDay) * 100;
+    const gapPct = progressPct - expectedPct;
+    const remaining = Math.max(0, kpiVnd - actualMtd);
+    const requiredDaily = daysRemaining > 0 ? remaining / daysRemaining : 0;
+    const actualDaily = daysPassed > 0 ? actualMtd / daysPassed : 0;
+    const rateGapPct = actualDaily > 0 ? ((requiredDaily / actualDaily) - 1) * 100 : 0;
+
+    let cls = 'green', alert = '✅ Đang đúng tiến độ — duy trì';
+    if (progressPct >= 100) { cls = 'green'; alert = '🎉 Đã đạt KPI tháng!'; }
+    else if (gapPct < -15) { cls = 'red'; alert = `🔴 Chậm tiến độ ${Math.abs(gapPct).toFixed(1)}% — cần tăng daily rate +${rateGapPct.toFixed(1)}%`; }
+    else if (gapPct < -5)  { cls = 'yellow'; alert = `⚠ Hơi chậm ${Math.abs(gapPct).toFixed(1)}% — cần tăng +${rateGapPct.toFixed(1)}% rate`; }
+    else if (gapPct > 5)   { cls = 'green'; alert = `✅ Đang vượt tiến độ +${gapPct.toFixed(1)}%`; }
+
+    const fillCls = cls === 'red' ? 'danger' : cls === 'yellow' ? 'warn' : '';
+    const fillWidth = Math.min(100, progressPct).toFixed(1);
+    const targetWidth = Math.min(100, expectedPct).toFixed(1);
+
+    block.innerHTML = `
+      <div class="kpi-progress ${cls}">
+        <div class="row">
+          <span><strong>KPI:</strong> ${kpiVnd.toLocaleString()}đ</span>
+          <span><strong>Đã đạt:</strong> ${actualMtd.toLocaleString()}đ (${progressPct.toFixed(1)}%)</span>
+          <span><strong>Còn:</strong> ${remaining.toLocaleString()}đ trong ${daysRemaining} ngày</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill ${fillCls}" style="width:${fillWidth}%"></div>
+          <div class="bar-target" style="left:${targetWidth}%" title="Tiến độ kỳ vọng"></div>
+        </div>
+        <div class="row">
+          <span><strong>Daily cần:</strong> ${Math.round(requiredDaily).toLocaleString()}đ/ngày</span>
+          <span><strong>Daily hiện:</strong> ${Math.round(actualDaily).toLocaleString()}đ/ngày</span>
+          <span><strong>Kỳ vọng tiến độ:</strong> ${expectedPct.toFixed(1)}%</span>
+        </div>
+        <div class="alert">${alert}</div>
+      </div>
+    `;
+  } catch (e) {
+    block.innerHTML = `<div style="color:#dc2626">Lỗi: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+// ── Phân tích nhân sự (staff_overview mode) ──
+async function analyzeStaff(staff) {
+  const result = document.getElementById('staff-overview-result');
+  const startTs = Date.now();
+  result.innerHTML = `<div class="empty-state" style="color:#1877f2;padding:14px">⏳ Đang phân tích nhân sự ${staff}... (~10-20s với Claude Sonnet)</div>`;
+  // Disable cả 2 buttons trong lúc analyze
+  document.querySelectorAll('.btn-staff').forEach(b => b.disabled = true);
+
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), 90000);
+
+  try {
+    const r = await fetch('/api/agent-fb-ai', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'staff_overview',
+        staff,
+        time_preset: 'this_month',
+        model: 'big',
+      }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(timeoutId);
+    const j = await r.json();
+    const elapsed = ((Date.now() - startTs) / 1000).toFixed(1);
+    if (!r.ok || !j.ok) {
+      result.innerHTML = `<div class="alert-empty">⚠ ${escapeHtml(j.error || ('HTTP ' + r.status))}</div>`;
+      return;
+    }
+    let dataObj = null;
+    if (j.parsed_json && !j.parsed_json._parse_error) dataObj = j.parsed_json;
+    else if (j.response && typeof j.response === 'object' && j.response.staff) dataObj = j.response;
+    if (!dataObj) {
+      // Try client-side rescue
+      try {
+        const raw = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response);
+        const fenced = raw.match(/```(?:json)?\s*([\s\S]+?)```/);
+        const cleaned = (fenced ? fenced[1] : raw).trim();
+        const startIdx = cleaned.indexOf('{');
+        const endIdx = cleaned.lastIndexOf('}');
+        if (startIdx >= 0 && endIdx > startIdx) {
+          dataObj = JSON.parse(cleaned.slice(startIdx, endIdx + 1));
+        }
+      } catch {}
+    }
+    if (!dataObj) {
+      const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
+      result.innerHTML = `<div class="warning-banner">AI không trả JSON đúng format</div><pre style="background:#f9fafb;padding:10px;font-size:11px;overflow:auto;max-height:300px">${escapeHtml(respText)}</pre>`;
+      return;
+    }
+    const cacheLabel = j.cached ? `📌 cached (${j.cached_at})` : '🔄 live';
+    result.innerHTML = renderStaffOverview(dataObj, elapsed, cacheLabel, j.claude_used);
+  } catch (e) {
+    clearTimeout(timeoutId);
+    const isTimeout = e.name === 'AbortError';
+    result.innerHTML = `<div class="alert-empty">${isTimeout ? '⏱ Timeout 90s' : '⚠ Lỗi: ' + escapeHtml(e.message)}</div>`;
+  } finally {
+    document.querySelectorAll('.btn-staff').forEach(b => b.disabled = false);
+  }
+}
+
+function renderStaffOverview(json, elapsed, cacheLabel, claudeUsed) {
+  const perf = json.performance_summary || {};
+  const kpi = json.kpi_contribution || {};
+  const top = Array.isArray(json.top_products) ? json.top_products : [];
+  const weak = Array.isArray(json.weak_products) ? json.weak_products : [];
+  const plan = json.monthly_action_plan || {};
+
+  const statusColor = { leading: '#16a34a', on_track: '#16a34a', behind: '#dc2626' };
+  const statusLabel = { leading: '✅ Đang dẫn đầu', on_track: '✅ Đúng tiến độ', behind: '🔴 Chậm tiến độ' };
+  const stColor = statusColor[kpi.status] || '#6b7280';
+  const stLabel = statusLabel[kpi.status] || (kpi.status || '');
+
+  const topHtml = top.map(p => `
+    <div class="product-block top">
+      <strong>${escapeHtml(p.group)}</strong> · Rating ${p.rating || '?'}/10 · ${escapeHtml(p.verdict || '')}
+      <div style="font-size:12px;color:#374151;margin-top:3px">
+        Revenue: ${(p.revenue_mtd_vnd || 0).toLocaleString()}đ · Margin: ${(p.margin_pct || 0).toFixed(1)}%
+      </div>
+      <div style="font-size:12px;color:#4b5563;margin-top:4px;line-height:1.5">${escapeHtml(p.reason || '')}</div>
+    </div>
+  `).join('');
+
+  const weakHtml = weak.map(p => `
+    <div class="product-block weak">
+      <strong>${escapeHtml(p.group)}</strong> · Rating ${p.rating || '?'}/10 · ${escapeHtml(p.verdict || '')}
+      <div style="font-size:12px;color:#374151;margin-top:3px">
+        Revenue: ${(p.revenue_mtd_vnd || 0).toLocaleString()}đ · Margin: ${(p.margin_pct || 0).toFixed(1)}%
+      </div>
+      <div style="font-size:12px;color:#4b5563;margin-top:4px;line-height:1.5">${escapeHtml(p.reason || '')}</div>
+      ${p.fix_recommendation ? `<div style="font-size:12px;color:#7f1d1d;margin-top:4px;font-weight:600">🔧 ${escapeHtml(p.fix_recommendation)}</div>` : ''}
+    </div>
+  `).join('');
+
+  const weeklyActions = Array.isArray(plan.weekly_actions) ? plan.weekly_actions : [];
+  const weeklyHtml = weeklyActions.map(a => `<li>${escapeHtml(a)}</li>`).join('');
+
+  const claudeBadge = claudeUsed ? '🤖 Claude Sonnet' : '⚠ Llama';
+
+  return `
+    <div class="staff-card">
+      <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">${elapsed}s · ${cacheLabel} · ${claudeBadge}</div>
+      <h3>👤 ${escapeHtml(json.staff || '?')} — ${escapeHtml(json.month_label || '')}</h3>
+      <div class="exec-summary">${escapeHtml(json.executive_summary || '—')}</div>
+
+      <div class="perf-grid">
+        <div class="stat-mini"><div class="label">Spend MTD</div><div class="value">${(perf.spend_mtd_vnd || 0).toLocaleString()}đ</div></div>
+        <div class="stat-mini"><div class="label">Revenue MTD</div><div class="value">${(perf.revenue_mtd_vnd || 0).toLocaleString()}đ</div></div>
+        <div class="stat-mini"><div class="label">Profit MTD</div><div class="value">${(perf.profit_mtd_vnd || 0).toLocaleString()}đ</div></div>
+        <div class="stat-mini"><div class="label">Margin</div><div class="value">${(perf.margin_pct || 0).toFixed(1)}%</div></div>
+        <div class="stat-mini"><div class="label">Đơn MTD</div><div class="value">${perf.orders_mtd || 0}</div></div>
+        <div class="stat-mini"><div class="label">Active campaigns</div><div class="value">${perf.active_campaigns || 0}</div></div>
+      </div>
+
+      <div style="padding:10px 12px;background:#eef2ff;border-left:3px solid #4f46e5;border-radius:4px;margin-bottom:12px">
+        <div><strong>📊 Đóng góp KPI:</strong> ${(kpi.share_pct || 0).toFixed(1)}% (kỳ vọng ${(kpi.expected_share_pct || 50).toFixed(0)}% — chênh ${(kpi.vs_expected_pct || 0).toFixed(1)}%)</div>
+        <div style="color:${stColor};font-weight:600;margin-top:4px">${stLabel}</div>
+        <div style="margin-top:6px;font-size:12.5px;line-height:1.5">${escapeHtml(kpi.assessment || '')}</div>
+      </div>
+
+      <h4 style="margin:12px 0 6px;font-size:13.5px;color:#16a34a">⭐ Top SP đang chạy ngon</h4>
+      ${topHtml || '<div style="font-size:12px;color:#6b7280">Chưa có top product</div>'}
+
+      <h4 style="margin:12px 0 6px;font-size:13.5px;color:#dc2626">⚠ SP yếu cần tối ưu</h4>
+      ${weakHtml || '<div style="font-size:12px;color:#6b7280">Chưa có weak product</div>'}
+
+      ${plan.key_focus_product ? `
+      <div class="action-plan">
+        <h4>🎯 Action Plan tháng — Focus: ${escapeHtml(plan.key_focus_product)}</h4>
+        <div style="font-size:12.5px;line-height:1.5">${escapeHtml(plan.key_focus_reason || '')}</div>
+        ${weeklyHtml ? `<div style="margin-top:8px"><strong>Weekly actions:</strong><ol>${weeklyHtml}</ol></div>` : ''}
+        ${plan.expected_kpi_impact ? `<div class="impact">📈 Kỳ vọng: ${escapeHtml(plan.expected_kpi_impact)}</div>` : ''}
+      </div>
+      ` : ''}
+    </div>
+  `;
 }
 
 // ── REFRESH (gọi snapshot endpoint) ──

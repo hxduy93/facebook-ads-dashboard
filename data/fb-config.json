@@ -1,8 +1,6 @@
 {
-  "_note": "Cấu hình tỉ lệ chốt + VAT + mapping account → nhóm SP. UI edit qua agent-facebook-doscom.html (section Cấu hình). Backend đọc qua /api/fb-config (KV) — file JSON này là DEFAULT khi KV rỗng.",
-  "close_rate_pct": 65,
-  "vat_pct": 10,
-  "fb_spend_to_revenue_target_pct": 40,
+  "_note": "Config tháng cho FB Ads agent. UI edit qua agent-facebook-doscom.html (đầu trang). Backend đọc qua /api/fb-config (KV) — file này là DEFAULT khi KV rỗng.",
+  "kpi_revenue_monthly_vnd": 1000000000,
   "account_to_groups": {
     "1449385949897024": {
       "staff": "DUY",

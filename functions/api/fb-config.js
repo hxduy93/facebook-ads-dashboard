@@ -94,13 +94,12 @@ export async function onRequestPost(context) {
   try { body = await request.json(); }
   catch { return json({ error: "Body không phải JSON hợp lệ" }, 400); }
 
-  const closeRate = Number(body.close_rate_pct);
-  const vat = Number(body.vat_pct);
-  if (isNaN(closeRate) || closeRate < 0 || closeRate > 100) {
-    return json({ error: "close_rate_pct phải là số 0-100" }, 400);
+  const kpiVnd = Number(body.kpi_revenue_monthly_vnd);
+  if (isNaN(kpiVnd) || kpiVnd < 0) {
+    return json({ error: "kpi_revenue_monthly_vnd phải là số ≥ 0" }, 400);
   }
-  if (isNaN(vat) || vat < 0 || vat > 50) {
-    return json({ error: "vat_pct phải là số 0-50" }, 400);
+  if (kpiVnd > 100_000_000_000) {  // 100 tỷ — sanity
+    return json({ error: "kpi_revenue_monthly_vnd quá lớn (> 100 tỷ). Check lại" }, 400);
   }
 
   // Load existing config (để giữ account_to_groups nếu user không gửi)
@@ -115,9 +114,7 @@ export async function onRequestPost(context) {
 
   const nowVN = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 16).replace("T", " ");
   const newConfig = {
-    close_rate_pct: closeRate,
-    vat_pct: vat,
-    fb_spend_to_revenue_target_pct: existing.fb_spend_to_revenue_target_pct || 40,
+    kpi_revenue_monthly_vnd: kpiVnd,
     account_to_groups: body.account_to_groups || existing.account_to_groups || {},
     updated_at: nowVN,
     updated_by: session?.email || "test_bypass",
