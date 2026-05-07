@@ -494,8 +494,26 @@ async function autoAnalyzeAll(campaigns) {
         targetEl.innerHTML = `<div class="alert-empty">⚠ ${j.error || 'Lỗi'} ${j.hint ? '<br>'+j.hint : ''}</div>`;
       } else {
         let dataObj = null;
+        let parseError = null;
         if (j.parsed_json && !j.parsed_json._parse_error) dataObj = j.parsed_json;
         else if (j.response && typeof j.response === 'object' && j.response.verdict) dataObj = j.response;
+        else if (j.parsed_json && j.parsed_json._parse_error) parseError = j.parsed_json._parse_error;
+
+        // Rescue: thử parse client-side nếu backend lỡ. Claude hay wrap markdown.
+        if (!dataObj && typeof j.response === 'string') {
+          try {
+            let raw = j.response.trim();
+            const fenced = raw.match(/```(?:json)?\s*([\s\S]+?)```/);
+            if (fenced) raw = fenced[1].trim();
+            const start = raw.indexOf('{');
+            const end = raw.lastIndexOf('}');
+            if (start >= 0 && end > start) {
+              const candidate = JSON.parse(raw.slice(start, end + 1));
+              if (candidate && candidate.verdict) dataObj = candidate;
+            }
+          } catch (e2) { parseError = e2.message; }
+        }
+
         if (dataObj) {
           // Inject deltas + comparison range từ server vào dataObj để render hiển thị badge
           if (j.focus_deltas) dataObj._deltas = j.focus_deltas;
@@ -503,7 +521,8 @@ async function autoAnalyzeAll(campaigns) {
           targetEl.innerHTML = renderOptimizeResult(dataObj, c.name);
         } else {
           const respText = (typeof j.response === 'string') ? j.response : JSON.stringify(j.response, null, 2);
-          targetEl.innerHTML = `<div class="warning-banner">AI không trả JSON đúng format</div><pre style="background:#f9fafb;padding:10px;font-size:11px;overflow:auto;max-height:300px">${escapeHtml(respText)}</pre>`;
+          const errMsg = parseError ? ` (${escapeHtml(parseError)})` : '';
+          targetEl.innerHTML = `<div class="warning-banner">⚠ AI không trả JSON đúng format${errMsg}. Có thể max_tokens cắt giữa JSON, hoặc Claude wrap markdown lỗi. Raw output bên dưới:</div><pre style="background:#f9fafb;padding:10px;font-size:11px;overflow:auto;max-height:300px">${escapeHtml(respText)}</pre>`;
         }
       }
     } catch (e) {
@@ -592,11 +611,28 @@ async function optimizeCampaign(campaignId, campaignName) {
 
     // Robust extraction: parsed_json hoặc response (nếu là object) đều OK
     let dataObj = null;
+    let parseErrManual = null;
     if (j.parsed_json && !j.parsed_json._parse_error) {
       dataObj = j.parsed_json;
     } else if (j.response && typeof j.response === 'object' && j.response.verdict) {
-      // Cache cũ hoặc backend trả response = object trực tiếp
       dataObj = j.response;
+    } else if (j.parsed_json && j.parsed_json._parse_error) {
+      parseErrManual = j.parsed_json._parse_error;
+    }
+
+    // Client-side rescue parse khi backend lỡ
+    if (!dataObj && typeof j.response === 'string') {
+      try {
+        let raw = j.response.trim();
+        const fenced = raw.match(/```(?:json)?\s*([\s\S]+?)```/);
+        if (fenced) raw = fenced[1].trim();
+        const startIdx = raw.indexOf('{');
+        const endIdx = raw.lastIndexOf('}');
+        if (startIdx >= 0 && endIdx > startIdx) {
+          const candidate = JSON.parse(raw.slice(startIdx, endIdx + 1));
+          if (candidate && candidate.verdict) dataObj = candidate;
+        }
+      } catch (e3) { parseErrManual = e3.message; }
     }
 
     if (dataObj) {
@@ -607,7 +643,8 @@ async function optimizeCampaign(campaignId, campaignName) {
       const respText = (typeof j.response === 'string')
         ? j.response
         : JSON.stringify(j.response, null, 2);
-      html += `<div class="warning-banner">AI không trả JSON đúng format, hiển thị raw output:</div><pre style="background:#f9fafb;padding:12px;border-radius:6px;font-size:11px;overflow:auto;max-height:400px">${escapeHtml(respText)}</pre>`;
+      const errMsg = parseErrManual ? ` (${escapeHtml(parseErrManual)})` : '';
+      html += `<div class="warning-banner">⚠ AI không trả JSON đúng format${errMsg}. Có thể max_tokens cắt giữa JSON, hoặc Claude wrap markdown lỗi. Raw output:</div><pre style="background:#f9fafb;padding:12px;border-radius:6px;font-size:11px;overflow:auto;max-height:400px">${escapeHtml(respText)}</pre>`;
     }
     result.innerHTML = html;
   } catch (e) {

@@ -278,7 +278,7 @@ async function callClaudeViaGateway(env, systemPrompt, userPrompt, jsonOutput) {
   const url = `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/doscom-erp/anthropic/v1/messages`;
   const body = {
     model: CLAUDE_MODEL_SONNET,
-    max_tokens: jsonOutput ? 4000 : 3000,
+    max_tokens: jsonOutput ? 6000 : 4000,  // tăng để tránh JSON bị cắt giữa
     system: [
       {
         type: "text",
