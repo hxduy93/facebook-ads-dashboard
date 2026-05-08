@@ -23,9 +23,9 @@ import urllib.request
 API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE = "https://pos.pancake.vn/api/v1"
-LOOKBACK_DAYS = 180   # 6 tháng để cover các nguồn ít đơn
+LOOKBACK_DAYS = 60    # 60 ngày — chỉ list nguồn có đơn trong window này
 PAGE_SIZE = 100
-MAX_PAGES = 200       # 200 × 100 = 20000 đơn — đủ cho shop trung bình
+MAX_PAGES = 100       # 100 × 100 = 10000 đơn
 
 if not API_KEY or not SHOP_ID:
     sys.exit("ERROR: PANCAKE_API_KEY or PANCAKE_SHOP_ID not set")
