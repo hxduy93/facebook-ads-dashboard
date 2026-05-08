@@ -194,7 +194,9 @@ LOOKBACK_DAYS = 90
 # Nếu chỉ có sources mà không có filter_id → dùng raw source IDs.
 
 SOURCE_GROUPS = [
-    # ── Group cũ DUY (full, 24 raw IDs) — giữ backward compat ──
+    # 2026-05-08: Pancake saved_filters_id NOT pure-prefix — include ca don
+    # Facebook generic (-1) ma seller DUY/PN chot. Them `name_prefix` post-filter
+    # sau khi fetch -> chi giu don co order_sources_name khop prefix.
     {
         "key": "DUY",
         "label": "DUY",
@@ -208,6 +210,7 @@ SOURCE_GROUPS = [
             '["1535037303"]', '["1228042142"]', '["1535038664"]',
             '["-1","842243695641184"]',
         ],
+        "name_prefix": ["DUY -", "DUY-"],   # post-filter: chi don co ten "DUY -..."
     },
     {
         "key": "PHUONG_NAM",
@@ -216,6 +219,7 @@ SOURCE_GROUPS = [
         "sources": [
             '["1008799"]', '["1536008673"]', '["1229011407"]',
         ],
+        "name_prefix": ["PHƯƠNG NAM -", "PHUONG NAM -", "PHƯƠNG NAM-", "PHUONG NAM-"],
     },
     {
         "key": "WEBSITE",
@@ -342,7 +346,12 @@ def fetch_orders(group, page=1, page_size=100, start_date=None, end_date=None, m
 
 
 def fetch_all_orders_for_group(group, start_dt, end_dt):
-    """Fetch tất cả orders của 1 source group trong date range."""
+    """Fetch tất cả orders của 1 source group trong date range.
+
+    Nếu group có `name_prefix`, post-filter theo `order_sources_name` (chỉ giữ
+    đơn có tên nguồn khớp prefix) — Pancake saved_filters_id không pure-prefix,
+    có thể include cả đơn Facebook generic (ID -1) mà seller chốt.
+    """
     all_orders = []
     page = 1
     consecutive_fails = 0
@@ -369,6 +378,24 @@ def fetch_all_orders_for_group(group, start_dt, end_dt):
         if page > 200:
             print(f"[WARN] group={group['key']}: Hit 200-page safety cap", file=sys.stderr)
             break
+
+    # Post-filter theo name_prefix nếu có — chỉ giữ đơn có order_sources_name
+    # khớp prefix (loại đơn Facebook generic / Hotline mà saved_filter include nhầm)
+    prefixes = group.get("name_prefix")
+    if prefixes:
+        before = len(all_orders)
+        all_orders = [
+            o for o in all_orders
+            if any(
+                (o.get("order_sources_name") or "").strip().startswith(p)
+                for p in prefixes
+            )
+        ]
+        skipped = before - len(all_orders)
+        if skipped > 0:
+            print(f"[INFO] group={group['key']}: post-filter prefix {prefixes} -> "
+                  f"giữ {len(all_orders)} / {before} đơn (skip {skipped} đơn không khớp prefix)")
+
     return all_orders
 
 
