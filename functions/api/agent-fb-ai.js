@@ -11,6 +11,7 @@ import { verifySession, hasTestBypass } from "../_middleware.js";
 import {
   FB_GROUP_LABELS,
   FB_ACTIVE_GROUPS,
+  STAFF_TO_SOURCE_GROUP,
   compactFbInsights,
   compactFbOrders,
   computeFbProfit,
@@ -775,29 +776,23 @@ async function computeStaffAggregate(env, origin, cookieHeader, staff, fbConfig)
     }));
   }
 
-  // Pancake profit per group cho staff
-  // Pancake source group key: "DUY" hoặc "PHUONG_NAM" — match staff
-  // Filter computeFbProfitInRange chỉ source của staff này
-  // (helper hiện tại lấy cả 2 source, tạm thời inline filter)
-  const profit = computeFbProfitInRange(revJson, costsJson, "ALL", monthRange);
-  // Filter profit groups → chỉ lấy group nhân sự phụ trách
-  const staffGroups = [...new Set(accountsOfStaff.flatMap(a => a.groups))];
-  const groupsBreakdown = {};
-  let revenueMtd = 0, profitMtd = 0, ordersMtd = 0, cogsMtd = 0;
-  for (const g of staffGroups) {
-    const gp = profit?.groups?.[g];
-    if (gp) {
-      groupsBreakdown[g] = gp;
-      revenueMtd += gp.revenue || 0;
-      profitMtd += gp.profit || 0;
-      ordersMtd += gp.orders || 0;
-      cogsMtd += gp.cogs || 0;
-    }
-  }
-  // NOTE: profit này có thể OVER-ATTRIBUTE nếu group cũng có account nhân sự
-  // khác (vd NOMA = DUY 1655506672244826 + PN 764394829882083). Logic hiện tại
-  // gộp tất cả → profit của group sẽ bao gồm cả 2 staff. Để chính xác sau, cần
-  // filter Pancake source group theo staff (DUY/PHUONG_NAM).
+  // 2026-05-08 fix: lấy revenue/profit RIÊNG cho staff này, không gộp staff khác.
+  // Pancake source group: DUY -> "DUY_FB_ADS", PHUONG_NAM -> "PHUONG_NAM_FB_ADS"
+  // (chỉ đơn từ FB ad accounts, không gồm Hotline/Inbox manual).
+  const staffSourceGroup = STAFF_TO_SOURCE_GROUP[staff];
+  const profit = staffSourceGroup
+    ? computeFbProfitInRange(revJson, costsJson, "ALL", monthRange, {
+        salesGroups: [staffSourceGroup],
+      })
+    : { has_data: false, total: {}, groups: {} };
+
+  const revenueMtd = profit?.total?.revenue || 0;
+  const profitMtd = profit?.total?.profit || 0;
+  const ordersMtd = profit?.total?.orders || 0;
+  const cogsMtd = profit?.total?.cogs || 0;
+  // groups_breakdown giờ là per-SP-group (NOMA, MAY_DO, ...) đã filter chỉ
+  // đơn của staff này → không bị double-count với staff khác.
+  const groupsBreakdown = profit?.groups || {};
 
   // Top 5 + weak 3 campaigns
   const sorted = [...allActiveCampaigns].sort((a, b) => {
@@ -837,7 +832,7 @@ async function computeStaffAggregate(env, origin, cookieHeader, staff, fbConfig)
     groups_breakdown: groupsBreakdown,
     top_campaigns: topCampaigns,
     weak_campaigns: weakCampaigns,
-    _data_note: "groups_breakdown profit lấy từ Pancake (data thật); có thể bao gồm orders của staff khác nếu group được chia sẻ giữa 2 staff (vd NOMA)",
+    _data_note: `groups_breakdown profit lấy RIÊNG từ source_groups.${staffSourceGroup} (Pancake data thật, chỉ đơn FB Ads của staff này — không gộp staff khác).`,
   };
 }
 
@@ -1166,13 +1161,29 @@ export async function onRequestPost(context) {
     }
   }
 
-  // Tính profit attribution (Plan C) — dùng config + Pancake data
+  // Tính profit attribution (Plan C) — dùng config + Pancake data.
+  // 2026-05-08 fix: dùng profit RIÊNG cho staff sở hữu account này (không gộp
+  // staff khác cùng phụ trách 1 nhóm SP, vd NOMA chia DUY+PN).
   if (mode === "optimize_campaign" && campaign_id && account_id && dataContext.fb_focus_campaign) {
     const fbConfig = await loadFbConfig(env, origin);
     const accountSpend = (dataContext.fb_campaigns?.campaigns || [])
       .reduce((s, c) => s + (Number(c.spend) || 0), 0);
+    const staffOfAccount = fbConfig?.account_to_groups?.[account_id]?.staff;
+    const staffSourceGroup = STAFF_TO_SOURCE_GROUP[staffOfAccount];
+    let profitForAttribution = dataContext.fb_profit;
+    if (staffSourceGroup) {
+      const [revJson2, costsJson2] = await Promise.all([
+        fetchJson(origin, "/data/product-revenue.json", cookieHeader),
+        fetchJson(origin, "/data/product-costs.json", cookieHeader),
+      ]);
+      if (revJson2 && costsJson2) {
+        profitForAttribution = computeFbProfitInRange(revJson2, costsJson2, group, timeRange, {
+          salesGroups: [staffSourceGroup],
+        });
+      }
+    }
     dataContext.profit_attribution = computeCampaignProfitAttribution(
-      dataContext.fb_focus_campaign, account_id, accountSpend, dataContext.fb_profit, fbConfig
+      dataContext.fb_focus_campaign, account_id, accountSpend, profitForAttribution, fbConfig
     );
   }
 

@@ -1,8 +1,19 @@
-// FB Ads Helpers — đọc data từ fb-ads-data.json + Pancake DUY+PHUONG_NAM
+// FB Ads Helpers — đọc data từ fb-ads-data.json + Pancake DUY_FB_ADS + PHUONG_NAM_FB_ADS
 // + product-costs.json để tính profit. Compact format → feed vào prompt.
 
-// Sales staff routing FB Ads leads (filter Pancake source_groups)
-export const FB_SALES_GROUPS = ["DUY", "PHUONG_NAM"];
+// Sales staff routing FB Ads leads (filter Pancake source_groups).
+// 2026-05-08: chuyển từ "DUY"/"PHUONG_NAM" (full, gồm cả Hotline/manual) sang
+// "DUY_FB_ADS"/"PHUONG_NAM_FB_ADS" (chỉ đơn từ FB ad accounts) — khớp Pancake
+// POS UI khi filter theo các nguồn quảng cáo Facebook.
+export const FB_SALES_GROUPS = ["DUY_FB_ADS", "PHUONG_NAM_FB_ADS"];
+
+// Map staff key (FB ad config) → Pancake source group key.
+// Dùng khi tính revenue/profit per staff riêng (tránh double-count khi 2 staff
+// cùng phụ trách 1 nhóm SP, vd NOMA = DUY + PHƯƠNG NAM).
+export const STAFF_TO_SOURCE_GROUP = {
+  DUY: "DUY_FB_ADS",
+  PHUONG_NAM: "PHUONG_NAM_FB_ADS",
+};
 
 // Active FB groups (chỉ 4 nhóm có order trong 90d):
 export const FB_ACTIVE_GROUPS = ["MAY_DO", "CAMERA_VIDEO_CALL", "GHI_AM", "NOMA"];
@@ -291,14 +302,15 @@ export function getComparisonRange(timeRange, preset) {
 // 2026-05-06 fix: thêm `total` field tính TRUE total từ top-level
 // `total_orders_by_date` + `order_revenue_by_status_by_date` (tất cả status,
 // tất cả SP), không bị giới hạn 4 FB_ACTIVE_GROUPS hay 13 SP của PRODUCT_MAPPING.
-export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
+export function compactFbOrdersInRange(productRevenueJson, group, timeRange, opts = {}) {
   if (!productRevenueJson?.source_groups || !timeRange) return { has_data: false };
   const { start, end } = timeRange;
+  const salesGroups = opts.salesGroups || FB_SALES_GROUPS;
   const groupTotals = {};
   for (const g of FB_ACTIVE_GROUPS) {
     groupTotals[g] = { revenue: 0, orders: 0, top_products: [] };
   }
-  for (const sg of FB_SALES_GROUPS) {
+  for (const sg of salesGroups) {
     const products = productRevenueJson.source_groups[sg]?.products;
     if (!products) continue;
     for (const [name, p] of Object.entries(products)) {
@@ -333,7 +345,7 @@ export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
 
   // TRUE totals từ top-level Pancake fields (gộp all status + all SP)
   let trueRevenue = 0, trueOrders = 0;
-  for (const sg of FB_SALES_GROUPS) {
+  for (const sg of salesGroups) {
     const sgData = productRevenueJson.source_groups[sg];
     if (!sgData) continue;
     for (const [date, cnt] of Object.entries(sgData.total_orders_by_date || {})) {
@@ -370,12 +382,13 @@ export function compactFbOrdersInRange(productRevenueJson, group, timeRange) {
 //     thể hơi over-estimate, có note `cogs_coverage_note` để FE hiển thị.
 //   - Per-group breakdown (groupTotals) vẫn dùng để hiển thị top SP per nhóm
 //     nhưng total dùng top-level.
-export function computeFbProfitInRange(productRevenueJson, productCostsJson, group, timeRange) {
+export function computeFbProfitInRange(productRevenueJson, productCostsJson, group, timeRange, opts = {}) {
   if (!productRevenueJson?.source_groups || !productCostsJson?.products || !timeRange) {
     return { has_data: false };
   }
   const { start, end } = timeRange;
   const costs = productCostsJson.products;
+  const salesGroups = opts.salesGroups || FB_SALES_GROUPS;
 
   // ── Per-group breakdown (4 FB_ACTIVE_GROUPS) — dùng cho top SP per group ──
   const groupTotals = {};
@@ -383,7 +396,7 @@ export function computeFbProfitInRange(productRevenueJson, productCostsJson, gro
 
   let mappedRevenue = 0, mappedOrderUnits = 0, mappedCogs = 0;
 
-  for (const sg of FB_SALES_GROUPS) {
+  for (const sg of salesGroups) {
     const products = productRevenueJson.source_groups[sg]?.products;
     if (!products) continue;
     for (const [name, p] of Object.entries(products)) {
@@ -415,7 +428,7 @@ export function computeFbProfitInRange(productRevenueJson, productCostsJson, gro
   // `total_orders_by_date[date]` đếm unique đơn (1 đơn = +1).
   let trueRevenue = 0;
   let trueOrders = 0;
-  for (const sg of FB_SALES_GROUPS) {
+  for (const sg of salesGroups) {
     const sgData = productRevenueJson.source_groups[sg];
     if (!sgData) continue;
     const obd = sgData.total_orders_by_date || {};
@@ -635,11 +648,12 @@ export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
 }
 
 // ── DAILY TREND (lead per day for trend analysis) ────────────────────────
-export function compactFbDailyTrend(productRevenueJson, days = 30) {
+export function compactFbDailyTrend(productRevenueJson, days = 30, opts = {}) {
   if (!productRevenueJson?.source_groups) return { has_data: false };
+  const salesGroups = opts.salesGroups || FB_SALES_GROUPS;
   const dailyOrders = {};   // date → total orders FB
   const dailyRevenue = {};  // date → total revenue FB
-  for (const sg of FB_SALES_GROUPS) {
+  for (const sg of salesGroups) {
     const products = productRevenueJson.source_groups[sg]?.products;
     if (!products) continue;
     for (const [name, p] of Object.entries(products)) {

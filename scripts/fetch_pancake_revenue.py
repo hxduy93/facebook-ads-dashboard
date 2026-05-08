@@ -194,6 +194,7 @@ LOOKBACK_DAYS = 90
 # Nếu chỉ có sources mà không có filter_id → dùng raw source IDs.
 
 SOURCE_GROUPS = [
+    # ── Group cũ DUY (full, 24 raw IDs) — giữ backward compat ──
     {
         "key": "DUY",
         "label": "DUY",
@@ -233,6 +234,40 @@ SOURCE_GROUPS = [
         "label": "Hotline",
         "filter_id": None,
         "sources": ['["614042808"]'],
+    },
+
+    # ── Group MỚI — chỉ FB Ads sources (mapping confirmed 2026-05-08) ──
+    # Mapping được trích xuất từ Pancake POS qua scripts/list_pancake_sources.py.
+    # Dùng cho agent FB Ads (chỉ tính đơn từ ad accounts, KHÔNG bao gồm Hotline/manual).
+    {
+        "key": "DUY_FB_ADS",
+        "label": "DUY - FB Ads",
+        "filter_id": None,
+        "sources": [
+            '["1535037303"]',  # DUY - D1
+            '["1228042142"]',  # DUY - DA8.1
+            '["39739"]',       # DUY - DR1
+            '["921041902"]',   # DUY - NOMA 911
+            '["922003735"]',   # DUY - NOMA 911 MESSENGER (click-to-Messenger ad)
+        ],
+    },
+    {
+        "key": "PHUONG_NAM_FB_ADS",
+        "label": "PHƯƠNG NAM - FB Ads",
+        "filter_id": None,
+        "sources": [
+            '["1229011407"]',  # PHƯƠNG NAM - D1
+            '["1008799"]',     # PHƯƠNG NAM - DA8.1
+            '["1536008673"]',  # PHƯƠNG NAM - NOMA911
+        ],
+    },
+    {
+        "key": "FB_MESSENGER",
+        "label": "Facebook Messenger",
+        "filter_id": None,
+        # Source -1 = đơn nhắn tin qua page FB (organic Messenger inbox).
+        # Track riêng vì không xác định là từ ad campaign nào.
+        "sources": ['["-1"]'],
     },
 ]
 
