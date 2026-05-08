@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-List unique Pancake order sources by sampling recent orders.
+List Pancake order sources for DUY và PHƯƠNG NAM.
 
-Pancake không có public endpoint `/order_sources` (đều 404). Workaround: fetch
-~500 đơn gần đây của shop (mọi nguồn), extract field `order_sources` của từng
-đơn, dedupe và in ra bảng (ID | Tên nguồn).
+Pancake không có endpoint public list nguồn. Workaround: dùng 2 saved_filters_id
+đã có sẵn trong fetch_pancake_revenue.py để fetch đơn của riêng 2 nhân sự,
+extract field `order_sources` (ID) + `order_sources_name` (name) per đơn.
 
-Usage (GitHub Actions): trigger workflow `.github/workflows/list-pancake-sources.yml`.
-
-Output: bảng (ID | Tên nguồn) + tổng count, in ra stdout.
+Usage (GitHub Actions): trigger workflow `list-pancake-sources.yml`.
 """
 import json
 import os
@@ -21,21 +19,25 @@ import urllib.request
 API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE = "https://pos.pancake.vn/api/v1"
-LOOKBACK_DAYS = 30   # Sample đơn 30 ngày gần đây — đủ cover mọi nguồn active
+LOOKBACK_DAYS = 60   # 60 ngày để đảm bảo cover hết nguồn
 PAGE_SIZE = 100
-MAX_PAGES = 10       # 10 × 100 = 1000 đơn — đủ thấy nguồn rare
+MAX_PAGES_PER_GROUP = 30   # 30 × 100 = 3000 đơn / group
 
 if not API_KEY or not SHOP_ID:
-    sys.exit("ERROR: PANCAKE_API_KEY or PANCAKE_SHOP_ID not set in env")
+    sys.exit("ERROR: PANCAKE_API_KEY or PANCAKE_SHOP_ID not set")
+
+# Saved filters từ fetch_pancake_revenue.py
+STAFF_FILTERS = [
+    {"key": "DUY",        "filter_id": "8350fe1d-fd9b-41d8-bb3a-f075a5e94df5"},
+    {"key": "PHUONG_NAM", "filter_id": "78a874c7-0601-4416-a377-481dce360b87"},
+]
 
 
 def call_api(method, path, params):
-    """Pancake style: api_key + params luôn trong URL query string,
-    POST với body rỗng. Trả về JSON parsed hoặc {'_error': ...}."""
+    """Pancake style: api_key + params trong URL query, body rỗng."""
     url = f"{BASE}/{path}?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(
-        url, method=method, headers={"Accept": "application/json"}
-    )
+    req = urllib.request.Request(url, method=method,
+                                 headers={"Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=45) as r:
             return json.loads(r.read().decode("utf-8"))
@@ -46,70 +48,47 @@ def call_api(method, path, params):
         return {"_error": f"{type(e).__name__}: {e}"}
 
 
-def dump_sample_order():
-    """Fetch 1 đơn để inspect schema — hiển thị field source-related."""
-    resp = call_api("POST", f"shops/{SHOP_ID}/orders/get_orders",
-                    {"api_key": API_KEY, "page": 1, "page_size": 1,
-                     "status": -1, "es_only": "true"})
-    if "_error" in resp:
-        print(f"[ERROR] Sample fetch failed: {resp['_error']}", file=sys.stderr)
-        return
-    data = resp.get("data") or resp.get("orders") or []
-    if not data:
-        print("[ERROR] No orders found in shop", file=sys.stderr)
-        return
-    order = data[0]
-    print("\n=== Top-level keys của 1 đơn (snippet) ===", file=sys.stderr)
-    interesting = ["order_sources", "source_id", "source", "partner_id",
-                   "account_id", "account", "page_id", "channel",
-                   "customer_referral_source", "id", "inserted_at"]
-    for k in interesting:
-        if k in order:
-            v = order[k]
-            snip = json.dumps(v, ensure_ascii=False)[:200] \
-                   if isinstance(v, (dict, list)) else str(v)[:200]
-            print(f"  {k:30} = {snip}", file=sys.stderr)
-    print("=== End sample ===\n", file=sys.stderr)
+def parse_source_field(val):
+    """Pancake `order_sources` có thể là:
+    - String: "308004272" hoặc "-9"
+    - String chứa CSV: "-1,842243695641184"
+    - List: ["308004272"] (rare)
+    Return list of ID strings."""
+    if val is None:
+        return []
+    if isinstance(val, list):
+        return [str(v).strip() for v in val if v not in (None, "")]
+    s = str(val).strip()
+    if not s:
+        return []
+    # CSV style?
+    if "," in s:
+        return [p.strip() for p in s.split(",") if p.strip()]
+    return [s]
 
 
-def extract_source_info(order):
-    """
-    Return list of (id_str, name_str) tuples extracted from order.
-
-    Pancake schema (theo Pancake docs):
-    - `order_sources`: list of source ID (strings hoặc objects)
-    - `order_sources_name`: list of source NAME tương ứng (theo cùng order)
-    Các field khác như `partner_id`, `account_id` thường là cho Messenger/sàn,
-    không phải nguồn đơn user-defined.
-    """
-    out = []
-    src_ids = order.get("order_sources") or []
-    src_names = order.get("order_sources_name") or []
-
-    if isinstance(src_ids, list) and src_ids:
-        # Pad names list if shorter
-        for i, sid in enumerate(src_ids):
-            sid_str = str(sid).strip() if not isinstance(sid, dict) \
-                      else str(sid.get("id") or sid.get("_id") or "").strip()
-            if not sid_str:
-                continue
-            name = ""
-            if i < len(src_names):
-                n = src_names[i]
-                name = (str(n).strip() if not isinstance(n, dict)
-                        else str(n.get("name") or n.get("title") or "").strip())
-            out.append((sid_str, name))
-
-    return out
+def parse_name_field(val):
+    """`order_sources_name` cùng format. Return list of name strings."""
+    if val is None:
+        return []
+    if isinstance(val, list):
+        return [str(v).strip() for v in val if v not in (None, "")]
+    s = str(val).strip()
+    if not s:
+        return []
+    if "," in s:
+        return [p.strip() for p in s.split(",") if p.strip()]
+    return [s]
 
 
-def fetch_recent_orders(days=LOOKBACK_DAYS):
-    """Fetch ~MAX_PAGES × PAGE_SIZE orders trong lookback window, mọi nguồn."""
+def fetch_for_filter(filter_id, key):
+    """Fetch all orders for 1 saved_filter, dedupe sources."""
     end_ts = int(time.time())
-    start_ts = end_ts - days * 86400
-    all_orders = []
+    start_ts = end_ts - LOOKBACK_DAYS * 86400
+    sources_seen = {}   # id -> name (first non-empty wins)
+    total_orders = 0
 
-    for page in range(1, MAX_PAGES + 1):
+    for page in range(1, MAX_PAGES_PER_GROUP + 1):
         params = {
             "api_key": API_KEY,
             "page": page,
@@ -118,70 +97,62 @@ def fetch_recent_orders(days=LOOKBACK_DAYS):
             "updateStatus": "inserted_at",
             "option_sort": "inserted_at_desc",
             "es_only": "true",
+            "is_filter_multiple_source": "true",
+            "saved_filters_id": filter_id,
             "startDateTime": start_ts,
             "endDateTime": end_ts,
         }
         resp = call_api("POST", f"shops/{SHOP_ID}/orders/get_orders", params)
         if "_error" in resp:
-            print(f"[WARN] page {page}: {resp['_error']}", file=sys.stderr)
+            print(f"[WARN] {key} page {page}: {resp['_error']}", file=sys.stderr)
             break
         batch = resp.get("data") or resp.get("orders") or []
         if not batch:
             break
-        all_orders.extend(batch)
-        print(f"[INFO] page {page}: +{len(batch)} (total {len(all_orders)})",
-              file=sys.stderr)
+        total_orders += len(batch)
+        for o in batch:
+            ids = parse_source_field(o.get("order_sources"))
+            names = parse_name_field(o.get("order_sources_name"))
+            for i, sid in enumerate(ids):
+                name = names[i] if i < len(names) else ""
+                if sid not in sources_seen or (not sources_seen[sid] and name):
+                    sources_seen[sid] = name
+        print(f"[INFO] {key} page {page}: +{len(batch)} (orders {total_orders}, "
+              f"unique sources {len(sources_seen)})", file=sys.stderr)
         if len(batch) < PAGE_SIZE:
             break
         time.sleep(0.3)
 
-    return all_orders
+    return sources_seen, total_orders
 
 
 def main():
-    # Step 1: dump 1 sample order schema (debug aid)
-    dump_sample_order()
+    print(f"\n=== Lookback {LOOKBACK_DAYS} days, max {MAX_PAGES_PER_GROUP} "
+          f"pages × {PAGE_SIZE} per staff ===\n", file=sys.stderr)
 
-    # Step 2: fetch ~1000 orders, dedupe sources
-    orders = fetch_recent_orders()
-    if not orders:
-        sys.exit("ERROR: Không fetch được order nào")
-
-    # ID -> name (first non-empty wins)
-    source_map = {}
-    for o in orders:
-        for sid, name in extract_source_info(o):
-            if sid not in source_map or (not source_map[sid] and name):
-                source_map[sid] = name
-
-    if not source_map:
-        print("\n!!! Không thấy field 'order_sources' trong đơn.", file=sys.stderr)
-        print("!!! Cần inspect schema thủ công — xem dump sample ở trên.",
+    all_results = {}
+    for staff in STAFF_FILTERS:
+        print(f"\n>>> Fetching {staff['key']} (filter_id={staff['filter_id']})",
               file=sys.stderr)
-        # Print 1 full order as JSON for debugging
-        print("\n=== Full sample order (JSON) ===")
-        print(json.dumps(orders[0], indent=2, ensure_ascii=False)[:5000])
-        sys.exit(1)
+        sources, total = fetch_for_filter(staff["filter_id"], staff["key"])
+        all_results[staff["key"]] = {"sources": sources, "total_orders": total}
 
-    # Sort: DUY trước, PHƯƠNG NAM, sau đó alphabetical
-    def sort_key(item):
-        sid, name = item
-        n = name.upper()
-        if n.startswith("DUY"):
-            return (0, n)
-        if n.startswith("PHƯƠNG NAM") or n.startswith("PHUONG NAM"):
-            return (1, n)
-        return (2, n)
-
-    items = sorted(source_map.items(), key=sort_key)
-
+    # Print final mapping (stdout — what user copies)
     print()
-    print(f"{'ID':<14} | Tên nguồn")
-    print("-" * 70)
-    for sid, name in items:
-        print(f"{sid:<14} | {name or '(no name)'}")
-    print()
-    print(f"Total: {len(items)} unique sources từ {len(orders)} đơn (lookback {LOOKBACK_DAYS}d)")
+    for staff_key, data in all_results.items():
+        sources = data["sources"]
+        total = data["total_orders"]
+        print(f"\n========== {staff_key} ==========")
+        print(f"(extracted from {total} orders, {len(sources)} unique sources)")
+        print(f"{'ID':<14} | Name")
+        print("-" * 70)
+        # Sort by name
+        for sid, name in sorted(sources.items(), key=lambda x: x[1].upper()):
+            print(f"{sid:<14} | {name or '(no name)'}")
+
+    print(f"\n\nDone. Total unique sources: "
+          f"DUY={len(all_results.get('DUY',{}).get('sources',{}))}, "
+          f"PN={len(all_results.get('PHUONG_NAM',{}).get('sources',{}))}")
 
 
 if __name__ == "__main__":
