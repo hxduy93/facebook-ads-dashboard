@@ -243,12 +243,11 @@ SOURCE_GROUPS = [
         "key": "DUY_FB_ADS",
         "label": "DUY - FB Ads",
         "filter_id": None,
+        # Pancake API: nhieu IDs trong 1 array = OR. Nhieu array = AND.
+        # Vi vay phai gop 5 IDs vao 1 entry, KHONG split 5 entries (= 0 don).
         "sources": [
-            '["1535037303"]',  # DUY - D1
-            '["1228042142"]',  # DUY - DA8.1
-            '["39739"]',       # DUY - DR1
-            '["921041902"]',   # DUY - NOMA 911
-            '["922003735"]',   # DUY - NOMA 911 MESSENGER (click-to-Messenger ad)
+            '["1535037303","1228042142","39739","921041902","922003735"]',
+            # DUY - D1, DA8.1, DR1, NOMA 911, NOMA 911 MESSENGER (click-to-Messenger ad)
         ],
     },
     {
@@ -256,9 +255,8 @@ SOURCE_GROUPS = [
         "label": "PHƯƠNG NAM - FB Ads",
         "filter_id": None,
         "sources": [
-            '["1229011407"]',  # PHƯƠNG NAM - D1
-            '["1008799"]',     # PHƯƠNG NAM - DA8.1
-            '["1536008673"]',  # PHƯƠNG NAM - NOMA911
+            '["1229011407","1008799","1536008673"]',
+            # PHƯƠNG NAM - D1, DA8.1, NOMA911
         ],
     },
     {
