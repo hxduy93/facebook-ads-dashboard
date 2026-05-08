@@ -239,6 +239,14 @@ SOURCE_GROUPS = [
         "filter_id": None,
         "sources": ['["614042808"]'],
     },
+    {
+        # Don nhan tin truc tiep qua page Facebook (organic Messenger, KHONG qua ad).
+        # Source ID -1 = Pancake builtin "Facebook" generic source.
+        "key": "FB_PAGE",
+        "label": "Page Facebook",
+        "filter_id": None,
+        "sources": ['["-1"]'],
+    },
 ]
 
 # Pancake status codes

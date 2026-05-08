@@ -3432,6 +3432,8 @@ function ProfitBreakdown({ staffKey, dateRange, onClose }) {
     "PHUONG_NAM":    { label: "Phương Nam",    sources: ["PHUONG_NAM"],                                         adKeys: ["PHUONG_NAM"],        color: { bg: "bg-purple-50",  border: "border-purple-300" },  showCloseBtn: true },
     // WEBSITE — component riêng (GoogleAdsProfit) với rows theo category + spend Google Ads
     "WEBSITE_STAFF": { label: "Google Ads — Website",       sources: ["WEBSITE"],                               adKeys: ["GOOGLE"],            color: { bg: "bg-emerald-50", border: "border-emerald-300" }, showCloseBtn: true, isGoogleAds: true },
+    // Đơn organic từ Messenger inbox của page (nguồn -1) — không có ad spend trực tiếp, LN = revenue − VAT − COGS.
+    "FB_PAGE":       { label: "Page Facebook",  sources: ["FB_PAGE"],                                            adKeys: [],                    color: { bg: "bg-pink-50",    border: "border-pink-300" },    showCloseBtn: true },
   }
   const staff = STAFF_MAP[staffKey || "ALL"]
   if (!staff) return null
@@ -4242,6 +4244,13 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
       ],
       color: { bg: "bg-emerald-50", border: "border-emerald-300", text: "text-emerald-700", bar: "bg-emerald-500", sub: "bg-emerald-100 text-emerald-700" },
     },
+    {
+      key: "FB_PAGE",
+      label: "Page Facebook",
+      shortLabel: "Page FB",
+      subSources: [{ key: "FB_PAGE", label: "Page Facebook (organic)" }],
+      color: { bg: "bg-pink-50", border: "border-pink-300", text: "text-pink-700", bar: "bg-pink-500", sub: "bg-pink-100 text-pink-700" },
+    },
   ]
 
   const isInRange = (ymd) => {
@@ -4393,9 +4402,9 @@ function RevenueByStaffBreakdown({ dateRange, selectedStaff, onSelectStaff }) {
     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-lg font-bold text-red-700 tracking-tight">👥 Doanh thu theo nhân sự — 3 nhóm</h2>
+          <h2 className="text-lg font-bold text-red-700 tracking-tight">👥 Doanh thu theo nhân sự — 4 nhóm</h2>
           <p className="text-xs text-gray-500 mt-1">
-            Doanh thu thực thu (đã trừ giảm giá đơn) · <span className="font-semibold text-emerald-700">Khớp POS Pancake — delivered + other, loại đang hoàn / đã hoàn / đã hủy</span> · WEBSITE = Website + Zalo OA + Hotline
+            Doanh thu thực thu (đã trừ giảm giá đơn) · <span className="font-semibold text-emerald-700">Khớp POS Pancake — delivered + other, loại đang hoàn / đã hoàn / đã hủy</span> · WEBSITE = Website + Zalo OA + Hotline · Page Facebook = đơn nhắn tin organic qua page (nguồn -1)
           </p>
         </div>
         <div className="text-right">
@@ -4602,12 +4611,13 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
 
   // Mapping staff → source group keys để lọc
   const STAFF_FILTER_MAP = {
-    ALL:           { label: "Tất cả",     sourceKeys: groupsOrder },
-    DUY:           { label: "Duy",        sourceKeys: ["DUY"] },
-    PHUONG_NAM:    { label: "Phương Nam", sourceKeys: ["PHUONG_NAM"] },
-    WEBSITE_STAFF: { label: "WEBSITE",    sourceKeys: ["WEBSITE", "ZALO_OA", "HOTLINE"] },
+    ALL:           { label: "Tất cả",         sourceKeys: groupsOrder },
+    DUY:           { label: "Duy",            sourceKeys: ["DUY"] },
+    PHUONG_NAM:    { label: "Phương Nam",     sourceKeys: ["PHUONG_NAM"] },
+    WEBSITE_STAFF: { label: "WEBSITE",        sourceKeys: ["WEBSITE", "ZALO_OA", "HOTLINE"] },
+    FB_PAGE:       { label: "Page Facebook",  sourceKeys: ["FB_PAGE"] },
   }
-  const STAFF_FILTER_ORDER = ["ALL", "DUY", "PHUONG_NAM", "WEBSITE_STAFF"]
+  const STAFF_FILTER_ORDER = ["ALL", "DUY", "PHUONG_NAM", "WEBSITE_STAFF", "FB_PAGE"]
 
   // Brand color cho từng group
   const GROUP_COLOR = {
@@ -4616,6 +4626,7 @@ function RevenueBySourceBreakdown({ dateRange, staffFilter, setStaffFilter }) {
     "WEBSITE":    { bg: "bg-emerald-50",border: "border-emerald-300",text: "text-emerald-700",bar: "bg-emerald-500"},
     "ZALO_OA":    { bg: "bg-amber-50",  border: "border-amber-300",  text: "text-amber-700",  bar: "bg-amber-500"  },
     "HOTLINE":    { bg: "bg-red-50",    border: "border-red-300",    text: "text-red-700",    bar: "bg-red-500"    },
+    "FB_PAGE":    { bg: "bg-pink-50",   border: "border-pink-300",   text: "text-pink-700",   bar: "bg-pink-500"   },
   }
 
   // Helper: filter by_date theo dateRange
@@ -4894,16 +4905,18 @@ function RevenueStatusBreakdown({ dateRange, staffFilter }) {
 
   // Mapping nhân sự → danh sách source keys để gộp
   const STAFF_TO_SOURCES = {
-    ALL:           ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE"],
+    ALL:           ["DUY", "PHUONG_NAM", "WEBSITE", "ZALO_OA", "HOTLINE", "FB_PAGE"],
     DUY:           ["DUY"],
     PHUONG_NAM:    ["PHUONG_NAM"],
     WEBSITE_STAFF: ["WEBSITE", "ZALO_OA", "HOTLINE"],
+    FB_PAGE:       ["FB_PAGE"],
   }
   const STAFF_LABEL = {
     ALL: "Tất cả nhân sự",
     DUY: "Nhân sự Duy",
     PHUONG_NAM: "Nhân sự Phương Nam",
     WEBSITE_STAFF: "Nhân sự WEBSITE (Website + Zalo OA + Hotline)",
+    FB_PAGE: "Page Facebook (đơn organic)",
   }
 
   // Self-compute revenueByStatus theo staffFilter + dateRange
