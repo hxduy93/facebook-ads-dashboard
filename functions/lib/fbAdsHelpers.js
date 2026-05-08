@@ -2,17 +2,18 @@
 // + product-costs.json để tính profit. Compact format → feed vào prompt.
 
 // Sales staff routing FB Ads leads (filter Pancake source_groups).
-// 2026-05-08: chuyển từ "DUY"/"PHUONG_NAM" (full, gồm cả Hotline/manual) sang
-// "DUY_FB_ADS"/"PHUONG_NAM_FB_ADS" (chỉ đơn từ FB ad accounts) — khớp Pancake
-// POS UI khi filter theo các nguồn quảng cáo Facebook.
-export const FB_SALES_GROUPS = ["DUY_FB_ADS", "PHUONG_NAM_FB_ADS"];
+// "DUY" = tất cả nguồn tên "DUY -..." (qua saved_filters_id Pancake).
+// "PHUONG_NAM" = tất cả nguồn tên "PHƯƠNG NAM -...".
+// 2 source_groups này là 2 bucket RIÊNG BIỆT trong Pancake → KHÔNG double-count
+// khi cộng (đơn của DUY chốt và đơn của PN chốt là tách biệt).
+export const FB_SALES_GROUPS = ["DUY", "PHUONG_NAM"];
 
 // Map staff key (FB ad config) → Pancake source group key.
-// Dùng khi tính revenue/profit per staff riêng (tránh double-count khi 2 staff
-// cùng phụ trách 1 nhóm SP, vd NOMA = DUY + PHƯƠNG NAM).
+// Dùng khi tính revenue/profit per staff riêng — `computeFbProfitInRange` với
+// `salesGroups: [STAFF_TO_SOURCE_GROUP[staff]]` chỉ lấy đơn của staff đó.
 export const STAFF_TO_SOURCE_GROUP = {
-  DUY: "DUY_FB_ADS",
-  PHUONG_NAM: "PHUONG_NAM_FB_ADS",
+  DUY: "DUY",
+  PHUONG_NAM: "PHUONG_NAM",
 };
 
 // Active FB groups (chỉ 4 nhóm có order trong 90d):

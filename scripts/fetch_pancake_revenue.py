@@ -235,38 +235,6 @@ SOURCE_GROUPS = [
         "filter_id": None,
         "sources": ['["614042808"]'],
     },
-
-    # ── Group MỚI — chỉ FB Ads sources (mapping confirmed 2026-05-08) ──
-    # Mapping được trích xuất từ Pancake POS qua scripts/list_pancake_sources.py.
-    # Dùng cho agent FB Ads (chỉ tính đơn từ ad accounts, KHÔNG bao gồm Hotline/manual).
-    {
-        "key": "DUY_FB_ADS",
-        "label": "DUY - FB Ads",
-        "filter_id": None,
-        # Pancake API: nhieu IDs trong 1 array = OR. Nhieu array = AND.
-        # Vi vay phai gop 5 IDs vao 1 entry, KHONG split 5 entries (= 0 don).
-        "sources": [
-            '["1535037303","1228042142","39739","921041902","922003735"]',
-            # DUY - D1, DA8.1, DR1, NOMA 911, NOMA 911 MESSENGER (click-to-Messenger ad)
-        ],
-    },
-    {
-        "key": "PHUONG_NAM_FB_ADS",
-        "label": "PHƯƠNG NAM - FB Ads",
-        "filter_id": None,
-        "sources": [
-            '["1229011407","1008799","1536008673"]',
-            # PHƯƠNG NAM - D1, DA8.1, NOMA911
-        ],
-    },
-    {
-        "key": "FB_MESSENGER",
-        "label": "Facebook Messenger",
-        "filter_id": None,
-        # Source -1 = đơn nhắn tin qua page FB (organic Messenger inbox).
-        # Track riêng vì không xác định là từ ad campaign nào.
-        "sources": ['["-1"]'],
-    },
 ]
 
 # Pancake status codes
