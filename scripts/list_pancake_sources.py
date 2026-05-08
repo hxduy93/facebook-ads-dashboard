@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-List all Pancake order sources (one-shot debug).
+List unique Pancake order sources by sampling recent orders.
 
-Mục đích: lấy danh sách `id + name` của tất cả nguồn đơn (Pancake "order sources")
-để map FB ad account -> source ID, từ đó tách doanh số FB-only per nhân sự
-trong scripts/fetch_pancake_revenue.py.
-
-Usage (local):
-    PANCAKE_API_KEY=... PANCAKE_SHOP_ID=... python scripts/list_pancake_sources.py
+Pancake không có public endpoint `/order_sources` (đều 404). Workaround: fetch
+~500 đơn gần đây của shop (mọi nguồn), extract field `order_sources` của từng
+đơn, dedupe và in ra bảng (ID | Tên nguồn).
 
 Usage (GitHub Actions): trigger workflow `.github/workflows/list-pancake-sources.yml`.
 
@@ -16,33 +13,31 @@ Output: bảng (ID | Tên nguồn) + tổng count, in ra stdout.
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
 API_KEY = os.environ.get("PANCAKE_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE = "https://pos.pancake.vn/api/v1"
+LOOKBACK_DAYS = 30   # Sample đơn 30 ngày gần đây — đủ cover mọi nguồn active
+PAGE_SIZE = 100
+MAX_PAGES = 10       # 10 × 100 = 1000 đơn — đủ thấy nguồn rare
 
 if not API_KEY or not SHOP_ID:
     sys.exit("ERROR: PANCAKE_API_KEY or PANCAKE_SHOP_ID not set in env")
 
 
-def try_endpoint(method, path, params):
-    """Call API, return parsed JSON or {'_error': msg}."""
-    url = f"{BASE}/{path}"
-    if method == "GET":
-        url += "?" + urllib.parse.urlencode(params)
-        req = urllib.request.Request(url, method="GET",
-                                     headers={"Accept": "application/json"})
-    else:
-        body = urllib.parse.urlencode(params).encode()
-        req = urllib.request.Request(
-            url, data=body, method="POST",
-            headers={"Accept": "application/json",
-                     "Content-Type": "application/x-www-form-urlencoded"},
-        )
+def call_api(method, path, params):
+    """Pancake style: api_key + params luôn trong URL query string,
+    POST với body rỗng. Trả về JSON parsed hoặc {'_error': ...}."""
+    url = f"{BASE}/{path}?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(
+        url, method=method, headers={"Accept": "application/json"}
+    )
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=45) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="ignore")[:300]
@@ -51,119 +46,142 @@ def try_endpoint(method, path, params):
         return {"_error": f"{type(e).__name__}: {e}"}
 
 
-def normalize_sources(resp):
-    """Pancake có vài shape khác nhau — extract list of {id, name}."""
-    if not isinstance(resp, dict):
-        return []
-    raw = (resp.get("data") or resp.get("sources")
-           or resp.get("order_sources") or resp.get("entries") or [])
-    if isinstance(raw, dict):
-        # Some Pancake endpoints wrap in {"data": {"items": [...]}}
-        raw = raw.get("items") or raw.get("data") or []
+def dump_sample_order():
+    """Fetch 1 đơn để inspect schema — hiển thị field source-related."""
+    resp = call_api("POST", f"shops/{SHOP_ID}/orders/get_orders",
+                    {"api_key": API_KEY, "page": 1, "page_size": 1,
+                     "status": -1, "es_only": "true"})
+    if "_error" in resp:
+        print(f"[ERROR] Sample fetch failed: {resp['_error']}", file=sys.stderr)
+        return
+    data = resp.get("data") or resp.get("orders") or []
+    if not data:
+        print("[ERROR] No orders found in shop", file=sys.stderr)
+        return
+    order = data[0]
+    print("\n=== Top-level keys của 1 đơn (snippet) ===", file=sys.stderr)
+    interesting = ["order_sources", "source_id", "source", "partner_id",
+                   "account_id", "account", "page_id", "channel",
+                   "customer_referral_source", "id", "inserted_at"]
+    for k in interesting:
+        if k in order:
+            v = order[k]
+            snip = json.dumps(v, ensure_ascii=False)[:200] \
+                   if isinstance(v, (dict, list)) else str(v)[:200]
+            print(f"  {k:30} = {snip}", file=sys.stderr)
+    print("=== End sample ===\n", file=sys.stderr)
+
+
+def extract_source_info(order):
+    """
+    Return list of (id_str, name_str) tuples extracted from order.
+
+    Pancake schema (theo Pancake docs):
+    - `order_sources`: list of source ID (strings hoặc objects)
+    - `order_sources_name`: list of source NAME tương ứng (theo cùng order)
+    Các field khác như `partner_id`, `account_id` thường là cho Messenger/sàn,
+    không phải nguồn đơn user-defined.
+    """
     out = []
-    for s in raw if isinstance(raw, list) else []:
-        if not isinstance(s, dict):
-            continue
-        sid = s.get("id") or s.get("source_id") or s.get("_id")
-        name = (s.get("name") or s.get("display_name")
-                or s.get("label") or s.get("title") or "")
-        if sid:
-            out.append({"id": str(sid), "name": str(name)})
+    src_ids = order.get("order_sources") or []
+    src_names = order.get("order_sources_name") or []
+
+    if isinstance(src_ids, list) and src_ids:
+        # Pad names list if shorter
+        for i, sid in enumerate(src_ids):
+            sid_str = str(sid).strip() if not isinstance(sid, dict) \
+                      else str(sid.get("id") or sid.get("_id") or "").strip()
+            if not sid_str:
+                continue
+            name = ""
+            if i < len(src_names):
+                n = src_names[i]
+                name = (str(n).strip() if not isinstance(n, dict)
+                        else str(n.get("name") or n.get("title") or "").strip())
+            out.append((sid_str, name))
+
     return out
 
 
-def fetch_all_sources():
-    """Try several endpoint shapes, return first that works."""
-    candidates = [
-        ("GET",  f"shops/{SHOP_ID}/order_sources"),
-        ("POST", f"shops/{SHOP_ID}/order_sources"),
-        ("GET",  f"shops/{SHOP_ID}/order_sources/get_list"),
-        ("POST", f"shops/{SHOP_ID}/order_sources/get_list"),
-        ("GET",  f"shops/{SHOP_ID}/sources"),
-    ]
-    all_sources = []
-    seen_ids = set()
-    last_error = None
-    for method, path in candidates:
-        print(f"[TRY] {method} /{path}", file=sys.stderr)
-        # Pagination: try page 1..10 (Pancake usually small list, 200/page enough)
-        for page in range(1, 11):
-            params = {"api_key": API_KEY, "page": page, "page_size": 200}
-            resp = try_endpoint(method, path, params)
-            if "_error" in resp:
-                last_error = resp["_error"]
-                print(f"  page {page}: {last_error[:150]}", file=sys.stderr)
-                break
-            sources = normalize_sources(resp)
-            if not sources:
-                if page == 1:
-                    print(f"  empty/wrong shape, top-level keys = "
-                          f"{list(resp.keys())[:6]}", file=sys.stderr)
-                break
-            new = [s for s in sources if s["id"] not in seen_ids]
-            for s in new:
-                seen_ids.add(s["id"])
-            all_sources.extend(new)
-            print(f"  page {page}: +{len(new)} new (total {len(all_sources)})",
-                  file=sys.stderr)
-            if len(sources) < 200:
-                break
-        if all_sources:
-            return all_sources, None
-    return [], last_error
+def fetch_recent_orders(days=LOOKBACK_DAYS):
+    """Fetch ~MAX_PAGES × PAGE_SIZE orders trong lookback window, mọi nguồn."""
+    end_ts = int(time.time())
+    start_ts = end_ts - days * 86400
+    all_orders = []
 
+    for page in range(1, MAX_PAGES + 1):
+        params = {
+            "api_key": API_KEY,
+            "page": page,
+            "page_size": PAGE_SIZE,
+            "status": -1,
+            "updateStatus": "inserted_at",
+            "option_sort": "inserted_at_desc",
+            "es_only": "true",
+            "startDateTime": start_ts,
+            "endDateTime": end_ts,
+        }
+        resp = call_api("POST", f"shops/{SHOP_ID}/orders/get_orders", params)
+        if "_error" in resp:
+            print(f"[WARN] page {page}: {resp['_error']}", file=sys.stderr)
+            break
+        batch = resp.get("data") or resp.get("orders") or []
+        if not batch:
+            break
+        all_orders.extend(batch)
+        print(f"[INFO] page {page}: +{len(batch)} (total {len(all_orders)})",
+              file=sys.stderr)
+        if len(batch) < PAGE_SIZE:
+            break
+        time.sleep(0.3)
 
-def fetch_sample_order():
-    """Fallback: dump 1 order raw to inspect schema for source-like fields."""
-    resp = try_endpoint("POST", f"shops/{SHOP_ID}/orders/get_orders",
-                        {"api_key": API_KEY, "page": 1, "page_size": 1,
-                         "status": -1})
-    return resp
+    return all_orders
 
 
 def main():
-    sources, err = fetch_all_sources()
+    # Step 1: dump 1 sample order schema (debug aid)
+    dump_sample_order()
 
-    if not sources:
-        print("\n!!! Không fetch được order_sources qua endpoint nào.",
+    # Step 2: fetch ~1000 orders, dedupe sources
+    orders = fetch_recent_orders()
+    if not orders:
+        sys.exit("ERROR: Không fetch được order nào")
+
+    # ID -> name (first non-empty wins)
+    source_map = {}
+    for o in orders:
+        for sid, name in extract_source_info(o):
+            if sid not in source_map or (not source_map[sid] and name):
+                source_map[sid] = name
+
+    if not source_map:
+        print("\n!!! Không thấy field 'order_sources' trong đơn.", file=sys.stderr)
+        print("!!! Cần inspect schema thủ công — xem dump sample ở trên.",
               file=sys.stderr)
-        if err:
-            print(f"!!! Last error: {err}", file=sys.stderr)
-        print("\n[FALLBACK] Dump 1 sample order để inspect schema:\n")
-        sample = fetch_sample_order()
-        # Print top-level keys of first order so we can see source-related fields
-        if isinstance(sample, dict):
-            data = sample.get("data") or sample.get("orders") or []
-            if data and isinstance(data, list):
-                first = data[0]
-                print("Top-level keys của 1 order:")
-                for k in sorted(first.keys()):
-                    v = first[k]
-                    snippet = (json.dumps(v, ensure_ascii=False)[:120]
-                               if not isinstance(v, (str, int, float, bool, type(None)))
-                               else str(v)[:120])
-                    print(f"  {k:30} = {snippet}")
-            else:
-                print(json.dumps(sample, indent=2, ensure_ascii=False)[:3000])
+        # Print 1 full order as JSON for debugging
+        print("\n=== Full sample order (JSON) ===")
+        print(json.dumps(orders[0], indent=2, ensure_ascii=False)[:5000])
         sys.exit(1)
 
-    # Sort: by name (DUY first, then PHƯƠNG NAM, then alphabetical)
-    def sort_key(s):
-        n = s["name"].upper()
+    # Sort: DUY trước, PHƯƠNG NAM, sau đó alphabetical
+    def sort_key(item):
+        sid, name = item
+        n = name.upper()
         if n.startswith("DUY"):
             return (0, n)
         if n.startswith("PHƯƠNG NAM") or n.startswith("PHUONG NAM"):
             return (1, n)
         return (2, n)
-    sources.sort(key=sort_key)
+
+    items = sorted(source_map.items(), key=sort_key)
 
     print()
     print(f"{'ID':<14} | Tên nguồn")
     print("-" * 70)
-    for s in sources:
-        print(f"{s['id']:<14} | {s['name']}")
+    for sid, name in items:
+        print(f"{sid:<14} | {name or '(no name)'}")
     print()
-    print(f"Total: {len(sources)} order sources")
+    print(f"Total: {len(items)} unique sources từ {len(orders)} đơn (lookback {LOOKBACK_DAYS}d)")
 
 
 if __name__ == "__main__":
