@@ -703,31 +703,35 @@ function aggregateSpendByGroup(spendData, startDate, endDate) {
   return out;
 }
 
-// Per-group breakdown — chỉ tính status "delivered" để khớp doanh thu THỰC THU.
-// Dùng source_groups[X].products_by_status.delivered[code].by_date
-// (Cấu trúc: source_groups[X].products là sum tất cả status, products_by_status[status] tách riêng.)
+// Per-group breakdown từ 3 nguồn online.
+// statusFilter:
+//   - "all"          → dùng sg.products (sum tất cả status, gồm cả hoàn/hủy)
+//   - string status  → chỉ status đó (vd "delivered")
+//   - array status   → cộng nhiều status (vd ["delivered","other"] = POS Tất cả tab)
+// Cấu trúc: source_groups[X].products = sum all status, products_by_status[status] = tách riêng.
 function aggregateRevenueByGroupFromOnlineSources(rev, startDate, endDate, statusFilter = "delivered") {
   const inRange = (d) => d >= startDate && d <= endDate;
   const out = {};
   for (const g of GROUP_DISPLAY_ORDER) out[g] = { revenue: 0, orders: 0, units: 0 };
   if (!rev?.source_groups) return out;
+  // Normalize statusFilter → list product buckets sẽ cộng vào.
+  const wantStatuses = (statusFilter === "all")
+    ? null
+    : (Array.isArray(statusFilter) ? statusFilter : [statusFilter]);
   for (const src of ONLINE_SOURCE_KEYS) {
     const sg = rev.source_groups[src];
     if (!sg) continue;
-    // Pick products bucket per statusFilter
-    let products;
-    if (statusFilter === "all") {
-      products = sg.products || {};
-    } else {
-      const pbs = sg.products_by_status || {};
-      products = pbs[statusFilter] || {};
-    }
-    for (const [code, p] of Object.entries(products)) {
-      const grp = classifySpCode(code);
-      if (!(grp in out)) continue;
-      for (const [d, v] of Object.entries(p.by_date || {}))        if (inRange(d)) out[grp].revenue += Number(v || 0);
-      for (const [d, v] of Object.entries(p.orders_by_date || {})) if (inRange(d)) out[grp].orders  += Number(v || 0);
-      for (const [d, v] of Object.entries(p.units_by_date || {}))  if (inRange(d)) out[grp].units   += Number(v || 0);
+    const productBuckets = (wantStatuses === null)
+      ? [sg.products || {}]
+      : wantStatuses.map(st => (sg.products_by_status || {})[st] || {});
+    for (const productMap of productBuckets) {
+      for (const [code, p] of Object.entries(productMap)) {
+        const grp = classifySpCode(code);
+        if (!(grp in out)) continue;
+        for (const [d, v] of Object.entries(p.by_date || {}))        if (inRange(d)) out[grp].revenue += Number(v || 0);
+        for (const [d, v] of Object.entries(p.orders_by_date || {})) if (inRange(d)) out[grp].orders  += Number(v || 0);
+        for (const [d, v] of Object.entries(p.units_by_date || {}))  if (inRange(d)) out[grp].units   += Number(v || 0);
+      }
     }
   }
   return out;
@@ -748,8 +752,11 @@ function aggregateTrueTotalsBySource(rev, startDate, endDate) {
   const inRange = (d) => d >= startDate && d <= endDate;
   const STATUSES = ["delivered", "other", "returning", "returned", "canceled"];
   const newBucket = () => {
-    const b = { orders: 0, total: 0, orders_delivered: 0 };
-    for (const s of STATUSES) b[s] = 0;
+    const b = { orders: 0, total: 0 };
+    for (const s of STATUSES) {
+      b[s] = 0;             // revenue per status
+      b[`orders_${s}`] = 0; // count per status
+    }
     return b;
   };
   const out = { _total: newBucket() };
@@ -758,24 +765,30 @@ function aggregateTrueTotalsBySource(rev, startDate, endDate) {
   for (const src of ONLINE_SOURCE_KEYS) {
     const sg = rev.source_groups[src];
     if (!sg) continue;
+    // total orders per ngày (gộp all status, gồm cả hoàn/hủy)
     for (const [date, cnt] of Object.entries(sg.total_orders_by_date || {})) {
       if (inRange(date)) out[src].orders += Number(cnt || 0);
     }
-    // Đơn đã giao (delivered): đếm riêng từ order_count_by_status_by_date.delivered
-    const deliveredCnts = (sg.order_count_by_status_by_date || {}).delivered || {};
-    for (const [date, cnt] of Object.entries(deliveredCnts)) {
-      if (inRange(date)) out[src].orders_delivered += Number(cnt || 0);
-    }
+    // revenue per status
     for (const [stKey, stMap] of Object.entries(sg.order_revenue_by_status_by_date || {})) {
       const bucket = STATUSES.includes(stKey) ? stKey : "other";
       for (const [date, v] of Object.entries(stMap || {})) {
         if (inRange(date)) out[src][bucket] += Number(v || 0);
       }
     }
+    // count per status (cần để biết số đơn delivered + đơn đang xử lý cho TOTAL row)
+    for (const [stKey, stMap] of Object.entries(sg.order_count_by_status_by_date || {})) {
+      const bucket = STATUSES.includes(stKey) ? stKey : "other";
+      for (const [date, cnt] of Object.entries(stMap || {})) {
+        if (inRange(date)) out[src][`orders_${bucket}`] += Number(cnt || 0);
+      }
+    }
     out[src].total = STATUSES.reduce((s, k) => s + out[src][k], 0);
     out._total.orders += out[src].orders;
-    out._total.orders_delivered += out[src].orders_delivered;
-    for (const s of STATUSES) out._total[s] += out[src][s];
+    for (const s of STATUSES) {
+      out._total[s] += out[src][s];
+      out._total[`orders_${s}`] += out[src][`orders_${s}`];
+    }
   }
   out._total.total = STATUSES.reduce((s, k) => s + out._total[k], 0);
   return out;
@@ -863,8 +876,9 @@ function renderProfitTable() {
   if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
 
   const spendByGroup = aggregateSpendByGroup(DATA_SPEND, range.start, range.end);
-  // Per-row revenue: chỉ lấy status "delivered" (doanh thu thực thu)
-  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, "delivered");
+  // Per-row revenue: gộp Đã giao (delivered) + Đang xử lý (other) — khớp Pancake POS UI tab "Tất cả".
+  // Loại đơn hoàn/hủy (returning/returned/canceled).
+  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, ["delivered", "other"]);
   const srcTotals = aggregateTrueTotalsBySource(DATA_REVENUE, range.start, range.end);
 
   // Render 3-source breakdown cards (kèm freshness warning)
@@ -883,7 +897,8 @@ function renderProfitTable() {
   }).filter(r => r.spend > 0 || r.revenue > 0);
 
   const root = document.getElementById('profit-table-wrap');
-  if (!rows.length && srcTotals._total.delivered === 0) {
+  const posLikeTotal = posEquivalentRevenue(srcTotals._total);  // delivered + other
+  if (!rows.length && posLikeTotal === 0) {
     root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} cho nhóm "${group}".</div>`;
     return;
   }
@@ -892,24 +907,25 @@ function renderProfitTable() {
   // Sum spend trong filter
   const totSpend = rows.reduce((s, r) => s + r.spend, 0);
 
-  // ── TOTAL row dùng "delivered" (doanh thu THỰC THU) — khớp POS "đã giao thành công" ──
-  // Khi group filter = ALL, lấy realized revenue từ 3 nguồn online (delivered only).
+  // ── TOTAL row dùng POS "Tất cả" tab = delivered + đang xử lý (other) ──
+  // Khi group = ALL, lấy đúng số POS-like từ 3 nguồn online.
   // Khi group filter !== ALL, total = sum row đang filter.
   const useTrueTotal = (!group || group === "ALL");
-  const realizedTotal = realizedRevenue(srcTotals._total);  // delivered only
-  const totRev    = useTrueTotal ? realizedTotal : rows.reduce((s, r) => s + r.revenue, 0);
-  const totOrders = useTrueTotal ? srcTotals._total.orders_delivered : rows.reduce((s, r) => s + r.orders, 0);
+  const totRev    = useTrueTotal ? posLikeTotal : rows.reduce((s, r) => s + r.revenue, 0);
+  const totOrders = useTrueTotal
+    ? ((srcTotals._total.orders_delivered || 0) + (srcTotals._total.orders_other || 0))
+    : rows.reduce((s, r) => s + r.orders, 0);
   const totUnits  = rows.reduce((s, r) => s + r.units, 0);
   const totVat    = totRev * VAT_RATE;
   const totProfit = totRev - totVat - totSpend;
   const totMargin = totRev > 0 ? totProfit / totRev : 0;
 
-  // Coverage: bao nhiêu % rev được map về 8 nhóm SP (so với realized total)
+  // Coverage: % rev được classify về nhóm SP (so với POS-like total)
   const mappedRev = rows.reduce((s, r) => s + r.revenue, 0);
-  const coverage = realizedTotal > 0 ? (mappedRev / realizedTotal) * 100 : 0;
+  const coverage = posLikeTotal > 0 ? (mappedRev / posLikeTotal) * 100 : 0;
 
   const totalRowLabel = useTrueTotal
-    ? `TỔNG (Đã giao · 3 nguồn online)`
+    ? `TỔNG (POS Tất cả · 3 nguồn online)`
     : `TỔNG (chỉ nhóm "${GROUP_NAMES_VN[group] || group}")`;
 
   const html = `<table class="profit-table">
@@ -941,9 +957,8 @@ function renderProfitTable() {
     </tbody>
   </table>
   <p style="font-size:11.5px;color:#6b7280;margin-top:8px;line-height:1.6">
-    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> trong Pancake — CHỈ tính status <strong>"Đã giao"</strong> (delivered) = đơn đã giao thành công, đã thu COD.
-    KHÔNG bao gồm đơn đang xử lý (Mới/Chờ/Đã gửi) — vì chưa thực sự thu được tiền. KHÔNG bao gồm đơn hoàn/hủy.
-    Per-row breakdown classify theo SP code (chỉ bao SP có mapping → coverage <strong>${coverage.toFixed(1)}%</strong>).<br>
+    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website (921043352) + Zalo OA (37931) + Hotline (614042808)</strong> trong Pancake — gộp status <strong>"Đã giao"</strong> + <strong>"Đang xử lý"</strong> (Mới/Chờ/Đã shipped) = khớp Pancake POS UI tab <strong>"Tất cả"</strong>. KHÔNG bao gồm đơn hoàn/hủy.
+    Per-row breakdown classify theo SP code (chỉ bao SP có mapping → coverage <strong>${coverage.toFixed(1)}%</strong>; phần chưa map nằm trong TỔNG nhưng không hiện trên row).<br>
     ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng (COGS) + chi phí khác (lương, kho, vận chuyển).<br>
     ⚠ Mapping nhóm: prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G, NOMA=chăm sóc xe).
   </p>`;
