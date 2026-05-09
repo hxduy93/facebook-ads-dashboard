@@ -389,22 +389,45 @@ function inTimeRange(dateStr, timeRange) {
   return dateStr >= timeRange.start && dateStr <= timeRange.end;
 }
 
+// 3 nguồn online dùng để aggregate doanh thu cho Google Ads agent.
+// Khớp dashboard: chỉ tính WEBSITE + ZALO_OA + HOTLINE, loại DUY/PHƯƠNG_NAM (FB team)
+// và FB_PAGE (organic Messenger). Field `source_groups[X].products` đã sum tất cả status
+// (delivered + đang xử lý + đang hoàn + đã hoàn + đã hủy) → doanh thu TRƯỚC HOÀN.
+const ONLINE_SOURCE_KEYS = ["WEBSITE", "ZALO_OA", "HOTLINE"];
+
 function compactRevenue(j, group, timeRange) {
-  if (!j || !j.products) return null;
-  const products = j.products;
+  if (!j || !j.source_groups) return null;
+  // Merge 3 nguồn online theo SKU code: cộng total/orders/units + by_date của mỗi product.
+  // Field `products` per-source đã là sum all-status — đúng "doanh thu trước hoàn".
+  const merged = {};
+  for (const src of ONLINE_SOURCE_KEYS) {
+    const srcProducts = (j.source_groups[src] && j.source_groups[src].products) || {};
+    for (const [code, p] of Object.entries(srcProducts)) {
+      if (!merged[code]) {
+        merged[code] = { total: 0, orders: 0, units: 0, by_date: {}, orders_by_date: {}, units_by_date: {} };
+      }
+      const m = merged[code];
+      m.total += Number(p.total || 0);
+      m.orders += Number(p.orders || 0);
+      m.units += Number(p.units || 0);
+      for (const [d, v] of Object.entries(p.by_date || {})) m.by_date[d] = (m.by_date[d] || 0) + Number(v || 0);
+      for (const [d, v] of Object.entries(p.orders_by_date || {})) m.orders_by_date[d] = (m.orders_by_date[d] || 0) + Number(v || 0);
+      for (const [d, v] of Object.entries(p.units_by_date || {})) m.units_by_date[d] = (m.units_by_date[d] || 0) + Number(v || 0);
+    }
+  }
   const byGroup = {};
-  for (const [code, p] of Object.entries(products)) {
+  for (const [code, p] of Object.entries(merged)) {
     const grp = classifyByCode(code);
     if (!byGroup[grp]) byGroup[grp] = { revenue: 0, orders: 0, units: 0, products: [] };
     let revenue = 0, orders = 0, units = 0;
     if (timeRange) {
-      for (const [d, v] of Object.entries(p.by_date || {})) if (inTimeRange(d, timeRange)) revenue += Number(v || 0);
-      for (const [d, v] of Object.entries(p.orders_by_date || {})) if (inTimeRange(d, timeRange)) orders += Number(v || 0);
-      for (const [d, v] of Object.entries(p.units_by_date || {})) if (inTimeRange(d, timeRange)) units += Number(v || 0);
+      for (const [d, v] of Object.entries(p.by_date)) if (inTimeRange(d, timeRange)) revenue += v;
+      for (const [d, v] of Object.entries(p.orders_by_date)) if (inTimeRange(d, timeRange)) orders += v;
+      for (const [d, v] of Object.entries(p.units_by_date)) if (inTimeRange(d, timeRange)) units += v;
     } else {
-      revenue = Number(p.total || 0);
-      orders = Number(p.orders || 0);
-      units = Number(p.units || 0);
+      revenue = p.total;
+      orders = p.orders;
+      units = p.units;
     }
     byGroup[grp].revenue += revenue;
     byGroup[grp].orders += orders;
@@ -414,6 +437,7 @@ function compactRevenue(j, group, timeRange) {
     }
   }
   const totalRev = Object.values(byGroup).reduce((a, b) => a + b.revenue, 0);
+  const sourcesNote = `Doanh thu TRƯỚC HOÀN từ 3 nguồn online: WEBSITE(921043352) + ZALO_OA(37931) + HOTLINE(614042808). Gộp tất cả status (Đã giao + Đang xử lý + Đang hoàn + Đã hoàn + Đã hủy). KHÔNG bao gồm DUY/PHƯƠNG NAM (team FB Ads) và FB_PAGE (Messenger organic).`;
   if (group === "ALL") {
     const summary = {};
     for (const [g, v] of Object.entries(byGroup)) {
@@ -421,6 +445,8 @@ function compactRevenue(j, group, timeRange) {
     }
     return {
       window_label: timeRange ? (timeRange.start + " -> " + timeRange.end) : "90d (no filter)",
+      sources: ONLINE_SOURCE_KEYS,
+      sources_note: sourcesNote,
       by_doscom_group: summary,
       total_revenue: Math.round(totalRev),
     };
@@ -428,6 +454,8 @@ function compactRevenue(j, group, timeRange) {
   const g = byGroup[group] || { revenue: 0, orders: 0, units: 0, products: [] };
   return {
     window_label: timeRange ? (timeRange.start + " -> " + timeRange.end) : "90d (no filter)",
+    sources: ONLINE_SOURCE_KEYS,
+    sources_note: sourcesNote,
     group_filter: group,
     revenue: Math.round(g.revenue),
     orders: g.orders,

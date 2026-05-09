@@ -876,9 +876,10 @@ function renderProfitTable() {
   if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
 
   const spendByGroup = aggregateSpendByGroup(DATA_SPEND, range.start, range.end);
-  // Per-row revenue: gộp Đã giao (delivered) + Đang xử lý (other) — khớp Pancake POS UI tab "Tất cả".
-  // Loại đơn hoàn/hủy (returning/returned/canceled).
-  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, ["delivered", "other"]);
+  // Per-row revenue: GỘP TẤT CẢ STATUS (đã giao + đang xử lý + đang hoàn + đã hoàn + đã hủy)
+  // = Doanh thu TRƯỚC HOÀN từ 3 nguồn online. User chốt: phân tích quảng cáo cần nhìn
+  // gross revenue (chưa trừ hoàn/hủy) để khớp với chi tiêu Google Ads.
+  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, "all");
   const srcTotals = aggregateTrueTotalsBySource(DATA_REVENUE, range.start, range.end);
 
   // Render 3-source breakdown cards (kèm freshness warning)
@@ -897,8 +898,8 @@ function renderProfitTable() {
   }).filter(r => r.spend > 0 || r.revenue > 0);
 
   const root = document.getElementById('profit-table-wrap');
-  const posLikeTotal = posEquivalentRevenue(srcTotals._total);  // delivered + other
-  if (!rows.length && posLikeTotal === 0) {
+  const grossTotal = srcTotals._total.total || 0;  // gộp tất cả status — doanh thu trước hoàn
+  if (!rows.length && grossTotal === 0) {
     root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} cho nhóm "${group}".</div>`;
     return;
   }
@@ -907,25 +908,25 @@ function renderProfitTable() {
   // Sum spend trong filter
   const totSpend = rows.reduce((s, r) => s + r.spend, 0);
 
-  // ── TOTAL row dùng POS "Tất cả" tab = delivered + đang xử lý (other) ──
-  // Khi group = ALL, lấy đúng số POS-like từ 3 nguồn online.
-  // Khi group filter !== ALL, total = sum row đang filter.
+  // ── TOTAL row = doanh thu TRƯỚC HOÀN (gộp tất cả status từ 3 nguồn online) ──
+  // Khi group = ALL → lấy gross total trực tiếp từ srcTotals (đã sum mọi status, mọi date).
+  // Khi group filter !== ALL → total = sum rows đang filter (cũng all-status do statusFilter="all").
   const useTrueTotal = (!group || group === "ALL");
-  const totRev    = useTrueTotal ? posLikeTotal : rows.reduce((s, r) => s + r.revenue, 0);
+  const totRev    = useTrueTotal ? grossTotal : rows.reduce((s, r) => s + r.revenue, 0);
   const totOrders = useTrueTotal
-    ? ((srcTotals._total.orders_delivered || 0) + (srcTotals._total.orders_other || 0))
+    ? (srcTotals._total.orders || 0)  // total orders đã đếm all-status từ total_orders_by_date
     : rows.reduce((s, r) => s + r.orders, 0);
   const totUnits  = rows.reduce((s, r) => s + r.units, 0);
   const totVat    = totRev * VAT_RATE;
   const totProfit = totRev - totVat - totSpend;
   const totMargin = totRev > 0 ? totProfit / totRev : 0;
 
-  // Coverage: % rev được classify về nhóm SP (so với POS-like total)
+  // Coverage: % rev được classify về nhóm SP (so với gross total)
   const mappedRev = rows.reduce((s, r) => s + r.revenue, 0);
-  const coverage = posLikeTotal > 0 ? (mappedRev / posLikeTotal) * 100 : 0;
+  const coverage = grossTotal > 0 ? (mappedRev / grossTotal) * 100 : 0;
 
   const totalRowLabel = useTrueTotal
-    ? `TỔNG (POS Tất cả · 3 nguồn online)`
+    ? `TỔNG (Doanh thu trước hoàn · 3 nguồn online)`
     : `TỔNG (chỉ nhóm "${GROUP_NAMES_VN[group] || group}")`;
 
   const html = `<table class="profit-table">
@@ -957,7 +958,7 @@ function renderProfitTable() {
     </tbody>
   </table>
   <p style="font-size:11.5px;color:#6b7280;margin-top:8px;line-height:1.6">
-    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website (921043352) + Zalo OA (37931) + Hotline (614042808)</strong> trong Pancake — gộp status <strong>"Đã giao"</strong> + <strong>"Đang xử lý"</strong> (Mới/Chờ/Đã shipped) = khớp Pancake POS UI tab <strong>"Tất cả"</strong>. KHÔNG bao gồm đơn hoàn/hủy.
+    ⚠ <strong>Doanh thu = doanh thu TRƯỚC HOÀN</strong>: lấy từ 3 nguồn online <strong>Website (921043352) + Zalo OA (37931) + Hotline (614042808)</strong> trong Pancake — gộp <strong>TẤT CẢ status</strong> (Đã giao + Đã lên đơn + Đã gửi + Đang giao + Đang hoàn + Đã hoàn + Đã hủy). Lý do: phân tích Google Ads cần nhìn gross revenue để khớp với spend, hoàn/hủy là bộ phận khác xử lý.
     Per-row breakdown classify theo SP code (chỉ bao SP có mapping → coverage <strong>${coverage.toFixed(1)}%</strong>; phần chưa map nằm trong TỔNG nhưng không hiện trên row).<br>
     ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng (COGS) + chi phí khác (lương, kho, vận chuyển).<br>
     ⚠ Mapping nhóm: prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G, NOMA=chăm sóc xe).
