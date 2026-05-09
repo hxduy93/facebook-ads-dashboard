@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-09 05:56",
+  "generated_at": "2026-05-09 08:14",
   "source_data_date_range": {
     "start_7d": "2026-05-01",
     "end": "2026-05-07",
@@ -2411,237 +2411,237 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 17674,
-      "total_spend_30d": 20457510.0
+      "total_unique_placements": 17486,
+      "total_spend_30d": 20420493.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 20458356.0,
-        "clicks_30d": 12989,
-        "impressions_30d": 1023755,
-        "ctr_30d": 0.0127,
-        "cpc_30d": 1575.0,
+        "spend_30d": 20421343.0,
+        "clicks_30d": 12932,
+        "impressions_30d": 1009945,
+        "ctr_30d": 0.0128,
+        "cpc_30d": 1579.0,
         "campaign_count": 9
       },
       "SEARCH": {
-        "spend_30d": 62529362.0,
-        "clicks_30d": 11392,
-        "impressions_30d": 187537,
-        "ctr_30d": 0.0607,
-        "cpc_30d": 5489.0,
+        "spend_30d": 61166199.0,
+        "clicks_30d": 11180,
+        "impressions_30d": 176451,
+        "ctr_30d": 0.0634,
+        "cpc_30d": 5471.0,
         "campaign_count": 10
       }
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 20457510.0,
-        "clicks_30d": 12988,
-        "impressions_30d": 994575,
-        "ctr_30d": 0.0131,
-        "placement_count": 17674
+        "spend_30d": 20420493.0,
+        "clicks_30d": 12931,
+        "impressions_30d": 979954,
+        "ctr_30d": 0.0132,
+        "placement_count": 17486
       }
     },
     "top_waste_placements": [],
     "low_ctr_placements": [
       {
         "placement": "dantri.com.vn",
-        "spend_30d": 247075.0,
+        "spend_30d": 245485.0,
         "clicks_30d": 65,
-        "impressions_30d": 30277,
-        "ctr_30d": 0.0021,
+        "impressions_30d": 29682,
+        "ctr_30d": 0.0022,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xsmn.mobi",
-        "spend_30d": 158037.0,
-        "clicks_30d": 123,
-        "impressions_30d": 30408,
-        "ctr_30d": 0.004,
+        "spend_30d": 155256.0,
+        "clicks_30d": 122,
+        "impressions_30d": 29995,
+        "ctr_30d": 0.0041,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
-        "spend_30d": 148384.0,
-        "clicks_30d": 42,
-        "impressions_30d": 17759,
+        "spend_30d": 141779.0,
+        "clicks_30d": 41,
+        "impressions_30d": 17445,
         "ctr_30d": 0.0024,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "giavang.org/the-gioi",
-        "spend_30d": 73672.0,
-        "clicks_30d": 24,
-        "impressions_30d": 9654,
-        "ctr_30d": 0.0025,
+        "spend_30d": 70156.0,
+        "clicks_30d": 22,
+        "impressions_30d": 9205,
+        "ctr_30d": 0.0024,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "phatnguoi.com",
+        "spend_30d": 56659.0,
+        "clicks_30d": 20,
+        "impressions_30d": 4134,
+        "ctr_30d": 0.0048,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xskt.com.vn",
-        "spend_30d": 48690.0,
-        "clicks_30d": 23,
-        "impressions_30d": 5320,
-        "ctr_30d": 0.0043,
+        "spend_30d": 48812.0,
+        "clicks_30d": 24,
+        "impressions_30d": 5460,
+        "ctr_30d": 0.0044,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "rongbachkim.net",
-        "spend_30d": 47501.0,
-        "clicks_30d": 26,
-        "impressions_30d": 7106,
-        "ctr_30d": 0.0037,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "home.vn",
-        "spend_30d": 43926.0,
-        "clicks_30d": 17,
-        "impressions_30d": 3750,
-        "ctr_30d": 0.0045,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "xskt.com.vn/xsmn",
-        "spend_30d": 42752.0,
-        "clicks_30d": 24,
-        "impressions_30d": 5059,
-        "ctr_30d": 0.0047,
+        "spend_30d": 48310.0,
+        "clicks_30d": 27,
+        "impressions_30d": 7036,
+        "ctr_30d": 0.0038,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "giacaphe.com/gia-ca-phe-truc-tuyen",
-        "spend_30d": 41337.0,
-        "clicks_30d": 25,
-        "impressions_30d": 6832,
-        "ctr_30d": 0.0037,
+        "spend_30d": 44386.0,
+        "clicks_30d": 26,
+        "impressions_30d": 6639,
+        "ctr_30d": 0.0039,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "xskt.com.vn/xsmn",
+        "spend_30d": 43144.0,
+        "clicks_30d": 23,
+        "impressions_30d": 5080,
+        "ctr_30d": 0.0045,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "home.vn",
+        "spend_30d": 39410.0,
+        "clicks_30d": 15,
+        "impressions_30d": 3647,
+        "ctr_30d": 0.0041,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "www.xemlicham.com",
-        "spend_30d": 34528.0,
+        "spend_30d": 32783.0,
         "clicks_30d": 15,
-        "impressions_30d": 3239,
-        "ctr_30d": 0.0046,
+        "impressions_30d": 3297,
+        "ctr_30d": 0.0045,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "webgia.com/gia-vang/the-gioi",
+        "spend_30d": 29664.0,
+        "clicks_30d": 8,
+        "impressions_30d": 2769,
+        "ctr_30d": 0.0029,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "vietnamnet.vn",
-        "spend_30d": 25861.0,
-        "clicks_30d": 12,
-        "impressions_30d": 3290,
-        "ctr_30d": 0.0036,
+        "spend_30d": 24609.0,
+        "clicks_30d": 11,
+        "impressions_30d": 3212,
+        "ctr_30d": 0.0034,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xsmn.mobi/xsmb-xo-so-mien-bac.html",
         "spend_30d": 24485.0,
         "clicks_30d": 18,
-        "impressions_30d": 6837,
-        "ctr_30d": 0.0026,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "webgia.com/gia-vang/the-gioi",
-        "spend_30d": 24179.0,
-        "clicks_30d": 7,
-        "impressions_30d": 2996,
-        "ctr_30d": 0.0023,
+        "impressions_30d": 6643,
+        "ctr_30d": 0.0027,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xskt.com.vn/soi-cau/mien-bac-xsmb",
         "spend_30d": 23722.0,
         "clicks_30d": 15,
-        "impressions_30d": 3332,
-        "ctr_30d": 0.0045,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "vnexpress.net",
-        "spend_30d": 18905.0,
-        "clicks_30d": 4,
-        "impressions_30d": 2555,
-        "ctr_30d": 0.0016,
+        "impressions_30d": 3291,
+        "ctr_30d": 0.0046,
         "placement_type": "WEBSITE"
       }
     ],
     "top_spend_placements": [
       {
         "placement": "xosodaiphat.com/xsmn-xo-so-mien-nam.html",
-        "spend_30d": 862968.0,
-        "clicks_30d": 1393,
-        "ctr_30d": 0.0178,
+        "spend_30d": 857949.0,
+        "clicks_30d": 1368,
+        "ctr_30d": 0.0177,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xosodaiphat.com/xsmb-xo-so-mien-bac.html",
-        "spend_30d": 732361.0,
-        "clicks_30d": 1151,
+        "spend_30d": 723489.0,
+        "clicks_30d": 1139,
         "ctr_30d": 0.0121,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "az24.vn/xsmb-sxmb-xo-so-mien-bac.html",
-        "spend_30d": 298841.0,
-        "clicks_30d": 305,
-        "ctr_30d": 0.0078,
+        "spend_30d": 292275.0,
+        "clicks_30d": 296,
+        "ctr_30d": 0.0077,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "dantri.com.vn",
-        "spend_30d": 247075.0,
+        "spend_30d": 245485.0,
         "clicks_30d": 65,
-        "ctr_30d": 0.0021,
+        "ctr_30d": 0.0022,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xosodaiphat.com/xsmt-xo-so-mien-trung.html",
-        "spend_30d": 181569.0,
-        "clicks_30d": 266,
-        "ctr_30d": 0.0118,
-        "placement_type": "WEBSITE",
-        "ad_network_type": "CONTENT"
-      },
-      {
-        "placement": "az24.vn/xsmn-sxmn-xo-so-mien-nam.html",
-        "spend_30d": 165744.0,
-        "clicks_30d": 218,
-        "ctr_30d": 0.0116,
+        "spend_30d": 183119.0,
+        "clicks_30d": 267,
+        "ctr_30d": 0.0119,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xsmn.mobi",
-        "spend_30d": 158037.0,
-        "clicks_30d": 123,
-        "ctr_30d": 0.004,
+        "spend_30d": 155256.0,
+        "clicks_30d": 122,
+        "ctr_30d": 0.0041,
+        "placement_type": "WEBSITE",
+        "ad_network_type": "CONTENT"
+      },
+      {
+        "placement": "az24.vn/xsmn-sxmn-xo-so-mien-nam.html",
+        "spend_30d": 151627.0,
+        "clicks_30d": 199,
+        "ctr_30d": 0.0109,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
-        "spend_30d": 148384.0,
-        "clicks_30d": 42,
+        "spend_30d": 141779.0,
+        "clicks_30d": 41,
         "ctr_30d": 0.0024,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "zigavn.com",
-        "spend_30d": 104504.0,
-        "clicks_30d": 94,
-        "ctr_30d": 0.0141,
+        "spend_30d": 95423.0,
+        "clicks_30d": 84,
+        "ctr_30d": 0.0126,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
-        "placement": "xoso.com.vn/xo-so-mien-nam/xsmn-p1.html",
-        "spend_30d": 89187.0,
-        "clicks_30d": 76,
-        "ctr_30d": 0.0093,
+        "placement": "masothue.com",
+        "spend_30d": 86397.0,
+        "clicks_30d": 46,
+        "ctr_30d": 0.0353,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       }
