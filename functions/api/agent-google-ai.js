@@ -1,10 +1,16 @@
-// API Agent Google Ads AI v3.1 — Cloudflare Workers AI + Filter theo nhóm SP
+// API Agent Google Ads AI v3.2 — Anthropic Claude Sonnet 4.6 (qua Cloudflare AI Gateway)
+//                              + Cloudflare Workers AI Llama (fallback khi Claude fail)
 // Endpoint: POST /api/agent-google-ai
 // Body: {
 //   mode,
 //   question?,
 //   context?: { product_group?: "ALL"|"CAMERA_WIFI"|"CAMERA_4G"|"CAMERA_VIDEO_CALL"|"MAY_DO"|"GHI_AM"|"DINH_VI"|"CHONG_GHI_AM"|"NOMA" }
 // }
+//
+// Migration v3.1 → v3.2 (2026-05-09): tất cả mode (audit + suggest + ask) mặc định gọi Claude
+// Sonnet qua Anthropic API console (gateway 'doscom-erp'), fallback Llama 70B → 8B nếu fail.
+// Kill switch: Cloudflare Pages → Settings → Environment variables → set USE_CLAUDE=false
+// để revert về Llama mà không cần code change.
 
 import { verifySession, hasTestBypass } from "../_middleware.js";
 import { buildEnrichedCandidates } from "../lib/googleKeywordResearch.js";
@@ -13,6 +19,22 @@ import { getEngagementByGroup, getDeviceBreakdown } from "../lib/googleAnalytics
 const SESSION_COOKIE = "doscom_session";
 const MODEL_FAST = "@cf/meta/llama-3.1-8b-instruct-fast";
 const MODEL_BIG = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+const CLAUDE_MODEL_SONNET = "claude-sonnet-4-6";  // Anthropic — phân tích sâu hơn nhiều Llama
+
+// Tất cả mode dùng Claude Sonnet (chất lượng cao nhất). Fallback xuống Llama 70B → 8B nếu fail.
+// Để revert về Llama (không code change): Cloudflare Pages → Settings → Env vars → USE_CLAUDE=false.
+const CLAUDE_MODES = new Set([
+  "audit_account",
+  "audit_account_json",
+  "analyze_ga",
+  "audit_keyword",
+  "audit_gdn",
+  "audit_headline",
+  "suggest_keyword",
+  "suggest_headline",
+  "suggest_banner",
+  "ask",
+]);
 
 const GROUP_LABELS = {
   ALL: "Tất cả 8 nhóm SP",
@@ -819,6 +841,54 @@ CẤM TUYỆT ĐỐI:
   return parts.join("\n");
 }
 
+// Gọi Claude API qua Cloudflare AI Gateway (giữ observability của gateway 'doscom-erp').
+// System prompt đặt trong array với cache_control: ephemeral → cache 5 phút.
+// Khi user F5 audit cùng group cùng ngày → cache hit ~90% → tiết kiệm cost.
+async function callClaudeViaGateway(env, systemPrompt, userPrompt, jsonOutput) {
+  if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY chưa set trong Cloudflare env vars");
+  if (!env.CF_ACCOUNT_ID) throw new Error("CF_ACCOUNT_ID chưa set trong Cloudflare env vars");
+
+  const url = `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/doscom-erp/anthropic/v1/messages`;
+  const body = {
+    model: CLAUDE_MODEL_SONNET,
+    max_tokens: jsonOutput ? 6000 : 4000,
+    system: [
+      {
+        type: "text",
+        text: systemPrompt,
+        cache_control: { type: "ephemeral" },
+      },
+    ],
+    messages: [{ role: "user", content: userPrompt }],
+  };
+
+  const r = await fetch(url, {
+    method: "POST",
+    headers: {
+      "x-api-key": env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(90000),
+  });
+
+  if (!r.ok) {
+    const errText = await r.text().catch(() => "");
+    throw new Error(`Claude API ${r.status}: ${errText.slice(0, 300)}`);
+  }
+
+  const data = await r.json();
+  const textBlock = (data.content || []).find(b => b.type === "text");
+  if (!textBlock?.text) throw new Error("Claude trả empty content");
+
+  return {
+    response: textBlock.text,
+    usage: data.usage || {},
+    model_id: data.model || CLAUDE_MODEL_SONNET,
+  };
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -896,7 +966,7 @@ export async function onRequestPost(context) {
           mode,
           group,
           group_label: GROUP_LABELS[group],
-          model: cfg.model,
+          model: cached.model || cfg.model,
           response: cached.response,
           parsed_json: cached.parsed_json || null,
           skills_used: cfg.skills,
@@ -904,6 +974,7 @@ export async function onRequestPost(context) {
           cached: true,
           cached_at: cached.cached_at,
           cache_note: `Kết quả đã lưu từ ${cached.cached_at}. Bấm "Làm mới" để tạo đề xuất mới.`,
+          claude_used: cached.claude_used || false,
           _enrichment: cached.enrichment || null,
         });
       }
@@ -920,24 +991,18 @@ export async function onRequestPost(context) {
     } catch { enrichedData = null; }
   }
 
-  let aiResult;
-  try {
-    // Suggest modes: temperature=0 → deterministic (cùng data = cùng kết quả)
-    // Audit modes: temperature=0.1-0.3 → cho phép biến đổi nhẹ
-    const temperature = isSuggest ? 0 : (cfg.json_output ? 0.1 : 0.3);
-
-    // Augment userPrompt với enriched candidates (nếu có)
-    let finalUserPrompt = userPrompt;
-    if (enrichedData && enrichedData.candidates.length > 0) {
-      const candidatesBlock = enrichedData.candidates.map((c, i) => {
-        const vol = c.volume != null ? c.volume.toLocaleString("en-US") : "?";
-        const trend = c.trendsScore != null ? `, trends=${c.trendsScore}/100` : "";
-        return `${i + 1}. "${c.keyword}" — vol≈${vol} (${c.source}, ${c.confidence})${trend}`;
-      }).join("\n");
-      const anchorInfo = enrichedData.anchor
-        ? `Anchor: "${enrichedData.anchor.keyword}" vol=${enrichedData.anchor.volume.toLocaleString("en-US")} score=${enrichedData.anchor.score}`
-        : "Anchor: không tìm được";
-      finalUserPrompt = userPrompt + `
+  // Augment userPrompt với enriched candidates (nếu có) — phải làm trước khi gọi bất kỳ AI nào
+  let finalUserPrompt = userPrompt;
+  if (enrichedData && enrichedData.candidates.length > 0) {
+    const candidatesBlock = enrichedData.candidates.map((c, i) => {
+      const vol = c.volume != null ? c.volume.toLocaleString("en-US") : "?";
+      const trend = c.trendsScore != null ? `, trends=${c.trendsScore}/100` : "";
+      return `${i + 1}. "${c.keyword}" — vol≈${vol} (${c.source}, ${c.confidence})${trend}`;
+    }).join("\n");
+    const anchorInfo = enrichedData.anchor
+      ? `Anchor: "${enrichedData.anchor.keyword}" vol=${enrichedData.anchor.volume.toLocaleString("en-US")} score=${enrichedData.anchor.score}`
+      : "Anchor: không tìm được";
+    finalUserPrompt = userPrompt + `
 
 ═══ CANDIDATES TỪ GOOGLE SUGGEST + TRENDS (data thật, ưu tiên dùng) ═══
 ${anchorInfo}
@@ -949,22 +1014,108 @@ ${candidatesBlock}
 🎯 BẮT BUỘC: Chọn 12-15 keyword TỪ LIST TRÊN (ưu tiên confidence=high trước, sau đó medium).
    Cột "Lượt tìm/tháng" trong bảng PHẢI lấy số "vol" tương ứng ở list này — KHÔNG tự đoán.
    Nếu list không đủ 12 keyword → bổ sung thêm bằng kiến thức + ghi rõ trong "Lý do" là "ước lượng".`;
-    }
+  }
 
-    const aiParams = {
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: finalUserPrompt },
-      ],
-      temperature,
-      max_tokens: cfg.json_output ? 3500 : 2500,
+  // Suggest modes: temperature=0 → deterministic (cùng data = cùng kết quả)
+  // Audit modes: temperature=0.1-0.3 → cho phép biến đổi nhẹ
+  const temperature = isSuggest ? 0 : (cfg.json_output ? 0.1 : 0.3);
+
+  let aiResult;
+  let actualModel = cfg.model;  // sẽ overwrite nếu Claude success hoặc fallback Llama 8B
+  let claudeUsed = false;
+  let claudeUsage = null;       // { input_tokens, output_tokens, cache_creation_input_tokens, cache_read_input_tokens }
+  let claudeError = null;
+  let claudeDebug = null;
+  let fallbackUsed = false;
+
+  // Quyết định có gọi Claude không.
+  // - Env var USE_CLAUDE="false" → kill switch, skip Claude (revert về Llama)
+  // - body.model="llama" hoặc "fast" → user force Llama
+  // - Default: Claude bật cho mọi mode trong CLAUDE_MODES
+  const claudeEnabled = env.USE_CLAUDE !== "false";
+  const modelPref = body.model || null;
+  const wantClaude = claudeEnabled
+    && CLAUDE_MODES.has(mode)
+    && modelPref !== "llama" && modelPref !== "fast"
+    && env.ANTHROPIC_API_KEY && env.CF_ACCOUNT_ID;
+
+  if (wantClaude) {
+    try {
+      const claudeRes = await callClaudeViaGateway(env, systemPrompt, finalUserPrompt, !!cfg.json_output);
+      aiResult = { response: claudeRes.response };
+      actualModel = claudeRes.model_id;
+      claudeUsed = true;
+      claudeUsage = claudeRes.usage;
+    } catch (e) {
+      const errMsg = String(e.message || e);
+      claudeError = errMsg.slice(0, 300);
+      console.log(`[CLAUDE FAIL] ${errMsg.slice(0, 200)}, fallback Llama ${cfg.model}`);
+      // Fall through to Llama path below
+    }
+  } else {
+    // Diagnostic: tại sao không gọi Claude?
+    claudeDebug = {
+      mode_in_claude_modes: CLAUDE_MODES.has(mode),
+      use_claude_env: env.USE_CLAUDE !== "false",
+      modelPref,
+      has_anthropic_key: !!env.ANTHROPIC_API_KEY,
+      has_cf_account_id: !!env.CF_ACCOUNT_ID,
+      anthropic_key_preview: env.ANTHROPIC_API_KEY ? env.ANTHROPIC_API_KEY.slice(0, 12) + "..." : null,
+      cf_account_id_preview: env.CF_ACCOUNT_ID ? env.CF_ACCOUNT_ID.slice(0, 8) + "..." : null,
     };
-    // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
-    // có thể không support hoặc throw exception. Prompt đã đủ chặt + parser robust.
-    // if (cfg.json_output) aiParams.response_format = { type: "json_object" };
-    aiResult = await env.AI.run(cfg.model, aiParams, { gateway: { id: "doscom-erp" } });
-  } catch (e) {
-    return jsonResponse({ error: "Lỗi gọi Workers AI: " + e.message }, 502);
+  }
+
+  if (!claudeUsed) {
+    try {
+      const aiParams = {
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: finalUserPrompt },
+        ],
+        temperature,
+        max_tokens: cfg.json_output ? 3500 : 2500,
+      };
+      // NOTE: bỏ response_format vì Llama 3.1 8B Fast trên Cloudflare Workers AI
+      // có thể không support hoặc throw exception. Prompt đã đủ chặt + parser robust.
+      aiResult = await env.AI.run(cfg.model, aiParams, { gateway: { id: "doscom-erp" } });
+      actualModel = cfg.model;
+    } catch (e) {
+      const errMsg = String(e.message || e);
+      const isQuotaErr = /4006|neurons|quota|allocation|paid plan/i.test(errMsg);
+      // Nếu cfg.model là 70B và lỗi quota/timeout → fallback xuống 8B Fast
+      if (cfg.model === MODEL_BIG && (isQuotaErr || /timeout|503|502/i.test(errMsg))) {
+        console.log(`[FALLBACK] ${cfg.model} fail (${errMsg.slice(0,80)}), retry với 8B Fast`);
+        try {
+          const aiParams = {
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: finalUserPrompt },
+            ],
+            temperature,
+            max_tokens: cfg.json_output ? 3500 : 2500,
+          };
+          aiResult = await env.AI.run(MODEL_FAST, aiParams, { gateway: { id: "doscom-erp" } });
+          actualModel = MODEL_FAST;
+          fallbackUsed = true;
+        } catch (e2) {
+          return jsonResponse({
+            error: "Cả Claude + Llama 70B + Llama 8B đều fail.",
+            claude_error: claudeError,
+            llama_error: errMsg.slice(0, 200),
+            fallback_error: String(e2.message || e2).slice(0, 200),
+            hint: "Đợi 7h sáng mai VN reset Workers AI quota free, hoặc upgrade Workers Paid $5/tháng.",
+          }, 502);
+        }
+      } else {
+        return jsonResponse({
+          error: `Lỗi gọi AI (${cfg.model}): ${errMsg.slice(0, 200)}`,
+          claude_error: claudeError,
+          hint: isQuotaErr
+            ? "Hết 10K neurons free hôm nay. Reset 7h sáng mai VN. Hoặc upgrade Workers Paid $5/tháng."
+            : null,
+        }, 502);
+      }
+    }
   }
 
   let rawResp = aiResult.response || aiResult.result || "";
@@ -1086,6 +1237,8 @@ ${candidatesBlock}
         response: rawResp,
         parsed_json: parsedJson,
         cached_at: nowVN,
+        model: actualModel,
+        claude_used: claudeUsed,
         enrichment: enrichedData ? {
           candidates_count: enrichedData.candidates.length,
           anchor: enrichedData.anchor || null,
@@ -1103,7 +1256,14 @@ ${candidatesBlock}
     mode,
     group,
     group_label: GROUP_LABELS[group],
-    model: cfg.model,
+    model: actualModel,
+    requested_model: cfg.model,
+    fallback_used: fallbackUsed,
+    fallback_note: fallbackUsed ? `${cfg.model} fail → fallback ${actualModel}` : null,
+    claude_used: claudeUsed,
+    claude_usage: claudeUsage,   // {input_tokens, output_tokens, cache_creation_input_tokens, cache_read_input_tokens}
+    claude_error: claudeError,   // exact error message khi Claude fail (đã fallback Llama)
+    claude_debug: claudeDebug,   // diagnostic khi không gọi Claude (env vars thiếu/sai)
     response: rawResp,
     parsed_json: parsedJson,
     skills_used: cfg.skills,
