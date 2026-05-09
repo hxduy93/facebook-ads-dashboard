@@ -285,7 +285,6 @@ Hoặc trigger workflow GitHub Actions tạm dạng `compute-ctr-benchmarks.yml`
 - [`functions/lib/fbAdsHelpers.js`](../functions/lib/fbAdsHelpers.js) — Helper compact data + benchmark.
 - [`agent-facebook-doscom.html`](../agent-facebook-doscom.html) — UI agent.
 - [`data/fb-config.json`](../data/fb-config.json) — Mapping account → staff/nhóm SP + KPI tháng.
-- [`docs/fb-ads-rule-engine.md`](./fb-ads-rule-engine.md) — Rule engine offline (Draft v2, 2026-04-30) — reference.
 
 ---
 
