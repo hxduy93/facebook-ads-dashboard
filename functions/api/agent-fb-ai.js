@@ -82,7 +82,12 @@ Lead close rate trung bình: 65%.
 
 8 nhóm chấm điểm:
 1. Tracking 15% — pixel + lead form working, leads count khớp Pancake?
-2. Creative 20% — CTR, frequency, hook quality
+2. Creative 20% — CTR all + CTR link + Link/Click ratio (so benchmark NHÓM SP, KHÔNG dùng chuẩn FB chung):
+   • MAY_DO benchmark: CTR all 1.69%, CTR link 1.03%, Link/Click 61%
+   • CAMERA (DA8.1): CTR all 2.59%, CTR link 1.63%, Link/Click 63%
+   • GHI_AM (DR1):    CTR all 3.30%, CTR link 1.98%, Link/Click 60%
+   • NOMA:            CTR all 1.91%, CTR link 1.16%, Link/Click 61%
+   Link/Click < 30% = click rác (REFRESH CTA). Link/Click > 70% = audience chất, hook yếu.
 3. Audience 15% — demographics targeting hiệu quả
 4. Cost ratio 20% — Spend/Revenue ≤ 40%
 5. Profit/SP 15% — margin theo từng nhóm SP
@@ -174,61 +179,108 @@ Nếu mapping_status="unmapped" hoặc "no_profit_data" → quyết verdict theo
 
 🔴 PHẢI xuất field "profit_analysis" trong JSON output (xem schema dưới).
 
+═══ CTR BENCHMARK PER NHÓM SP (90d, 7 ad accounts — extract 2026-05-08) ═══
+Field fb_focus_campaign giờ có thêm: ctr (CTR all), ctr_link (CTR link click),
+link_click_ratio (% click vào đúng link, không phải like/share/profile),
+link_clicks (lượt click vào link tuyệt đối). Tương tự cho comparison + deltas.
+
+| Nhóm SP            | CTR all bm | CTR link bm | Link/Click bm | CPL bm    |
+|--------------------|-----------:|------------:|--------------:|----------:|
+| MAY_DO             |   1.69%    |   1.03%     |   61.2%       |  359.600đ |
+| CAMERA_VIDEO_CALL  |   2.59%    |   1.63%     |   63.0%       |  269.547đ |
+| GHI_AM (DR1)       |   3.30%    |   1.98%     |   60.0%       |  227.341đ |
+| NOMA               |   1.91%    |   1.16%     |   61.0%       |  105.640đ |
+
+🔴 BẮT BUỘC dùng benchmark TƯƠNG ỨNG nhóm SP của campaign (không dùng chuẩn FB chung 2-3%).
+   Vd campaign NOMA có CTR 1.5% là "0.79× benchmark NOMA 1.91%" — không phải "yếu so chuẩn FB 2%".
+
 ═══ 5 EVALUATION DIMENSIONS (mỗi cái 1-10 score) ═══
 
-1. **SPEND EFFICIENCY** (chất lượng CPA so benchmark group):
-   - 9-10: CPA ≤ 50% mục tiêu → cực tốt, có thể tăng quy mô mạnh
-   - 7-8: CPA 50-80% mục tiêu → tốt, tăng quy mô vừa
-   - 5-6: CPA 80-120% mục tiêu → đạt yêu cầu, giữ hoặc tối ưu creative
-   - 3-4: CPA 120-200% mục tiêu → cảnh báo, cắt bid hoặc đổi audience
-   - 1-2: CPA > 2x mục tiêu → tạm dừng
+1. **SPEND EFFICIENCY** (chất lượng CPL so benchmark nhóm SP):
+   - 9-10: CPL ≤ 50% benchmark → cực tốt, có thể tăng quy mô mạnh
+   - 7-8: CPL 50-80% benchmark → tốt, tăng quy mô vừa
+   - 5-6: CPL 80-120% benchmark → đạt yêu cầu
+   - 3-4: CPL 120-200% benchmark → cảnh báo
+   - 1-2: CPL > 2x benchmark → tạm dừng
 
-2. **VOLUME** (conversions/ngày so benchmark + so kỳ trước):
-   - 9-10: > 2x benchmark VÀ tăng > 30% so kỳ trước
-   - 7-8: 1.2-2x benchmark, ổn định/tăng
-   - 5-6: 0.7-1.2x benchmark (đúng kỳ vọng nhóm)
-   - 3-4: 0.3-0.7x → đơn yếu, giảm so kỳ trước
-   - 1-2: < 0.3x → gần như chết
+2. **VOLUME** (link clicks/ngày so benchmark + so kỳ trước):
+   - 9-10: link_clicks/ngày > 100 VÀ tăng > 30% so kỳ trước
+   - 7-8: link_clicks/ngày 30-100, ổn định/tăng
+   - 5-6: link_clicks/ngày 10-30 (vol vừa, có volume gate cho SCALE)
+   - 3-4: link_clicks/ngày 3-10 → vol yếu, giảm so kỳ trước
+   - 1-2: < 3 link clicks/ngày → audience cap hoặc creative chết
 
-3. **CTR QUALITY** (so chuẩn FB + so kỳ trước):
-   - 9-10: CTR > 3% hoặc tăng > 30% so kỳ trước
-   - 7-8: CTR 2-3% (chuẩn FB), ổn định
-   - 5-6: CTR 1.5-2% (dưới chuẩn nhưng chấp nhận)
-   - 3-4: CTR 1-1.5% (yếu, cần refresh hook)
-   - 1-2: CTR < 1% → hook fail
+3. **CTR QUALITY** (CTR all + CTR link so benchmark NHÓM SP, KHÔNG phải chuẩn FB):
+   - 9-10: CTR all > 1.5× benchmark group VÀ link/click ≥ 60%
+   - 7-8: CTR all 1.0-1.5× benchmark, link/click 50-60%
+   - 5-6: CTR all 0.8-1.0× benchmark, link/click 50-60% (đạt mức nhóm)
+   - 3-4: CTR all 0.5-0.8× benchmark HOẶC link/click 30-50%
+   - 1-2: CTR all < 0.5× benchmark HOẶC link/click < 30% (click rác dominant)
 
-4. **TREND** (so kỳ trước qua deltas):
-   - 9-10: Đơn/ngày tăng > 20% VÀ CPA giữ/giảm
-   - 7-8: Đơn/ngày tăng 5-20% hoặc CPA giảm 5-15%
+4. **CLICK QUALITY** (Link/Click ratio — chỉ số MỚI, % click thật vào link):
+   - 9-10: Link/Click > 75% → audience cực chất, click toàn vào link
+   - 7-8: 60-75% → healthy, đúng baseline FB VN
+   - 5-6: 45-60% → mixed quality, có đáng kể click rác
+   - 3-4: 30-45% → click rác chiếm phần lớn (like/share/profile)
+   - 1-2: < 30% → CTA yếu hoặc landing đáng ngại — gần như không drive traffic
+
+5. **TREND** (so kỳ trước qua deltas):
+   - 9-10: Link clicks/ngày tăng > 20% VÀ CPL giữ/giảm
+   - 7-8: Link clicks/ngày tăng 5-20% hoặc CPL giảm 5-15%
    - 5-6: Ổn định (delta trong ±5%)
-   - 3-4: Đơn/ngày giảm 10-30% hoặc CPA tăng 10-30%
-   - 1-2: Đơn giảm > 30% hoặc CPA tăng > 30% (xu hướng xấu)
+   - 3-4: Link clicks/ngày giảm 10-30% hoặc CPL tăng 10-30%
+   - 1-2: Giảm > 30% hoặc CPL tăng > 30% (xu hướng xấu)
+
+═══ DIAGNOSTIC RULES — DỰA VÀO CTR all + CTR link + Link/Click ═══
+
+🔴 Diagnostic 4 trạng thái creative theo MA TRẬN CTR all × Link/Click:
+
+| Trạng thái                       | Triệu chứng                              | Action                              |
+|----------------------------------|------------------------------------------|-------------------------------------|
+| ⭐ Healthy                       | CTR all ≥ benchmark + Link/Click 50-70%  | SCALE / KEEP                        |
+| 🔴 Click rác (CTR cao, link thấp)| CTR all cao + Link/Click < 40%           | REFRESH CTA + audit landing page    |
+| ⚠️ Hook yếu (CTR thấp, link cao) | CTR all < 0.7× bm + Link/Click > 70%     | REFRESH creative (giữ CTA)          |
+| 🔴 Yếu toàn diện                 | CTR all < 0.5× bm + Link/Click < 40%     | PAUSE / AUDIENCE                    |
+
+🔴 Volume gate cho SCALE (BẮT BUỘC check trước khi verdict SCALE):
+   - link_clicks/ngày < 30 → KHÔNG SCALE — phải AUDIENCE expand trước (top funnel hẹp).
+   - link_clicks/ngày 30-100 → SCALE moderate (+15-20%).
+   - link_clicks/ngày > 100 → SCALE aggressive (+30-50%) nếu CPL ≤ 80% benchmark.
 
 ═══ VERDICT DECISION TREE (BẮT BUỘC theo logic) ═══
 
 **SCALE** (verdict_color: "green"):
-- Điều kiện: AVG score ≥ 7.5 AND CPA < 70% mục tiêu AND CTR ≥ 2% AND deltas.cpa_pct ≤ 10
+- Điều kiện: AVG score ≥ 7.5 AND CPL < 80% benchmark nhóm AND CTR all ≥ 1.0× benchmark
+  AND link_click_ratio ≥ 50% AND link_clicks/ngày ≥ 30 AND deltas.cpa_pct ≤ 10
 - BẮT BUỘC xuất scale_plan đầy đủ 3 cách (budget / nhân nhóm QC / creative)
 - WHAT: số tiền cụ thể (vd "Tăng daily budget từ 500K → 600K +20%")
 
 **KEEP** (verdict_color: "green" hoặc "yellow"):
-- Điều kiện: AVG score 5-7.5, CPA gần mục tiêu (80-120%), không có biến động xấu so kỳ trước
-- WHY phải nêu rõ TẠI SAO KHÔNG SCALE: vd "CTR còn dưới chuẩn FB 2%, scale lúc này dễ làm CPA tăng vì FB phải mở rộng audience yếu"
+- Điều kiện: AVG score 5-7.5, CPL gần benchmark (80-120%), không có biến động xấu so kỳ trước
+- WHY phải nêu rõ TẠI SAO KHÔNG SCALE — TRÍCH SỐ CỤ THỂ:
+  • Vd 1: "CTR all 1.4% < 1.5× benchmark NOMA 1.91% — chưa đủ ngưỡng SCALE"
+  • Vd 2: "Link/Click 48% < 50% — click rác còn cao, scale lúc này lãng phí budget"
+  • Vd 3: "Link clicks/ngày = 22 < 30 — volume yếu, cần audience expand trước SCALE"
 - scale_plan = null
 
-**REFRESH** (verdict_color: "yellow"):
-- Điều kiện: CTR giảm > 25% so kỳ trước HOẶC CTR < 1.5% kéo dài
-- Action: đổi 2-3 creative, hook mới
+**REFRESH** (verdict_color: "yellow") — chia 2 sub-mode dựa Link/Click ratio:
+- Điều kiện chung: CTR all giảm > 25% so kỳ trước HOẶC CTR all < 0.7× benchmark nhóm
+- Sub-mode REFRESH_HOOK: Link/Click ≥ 60% (audience chất, hook yếu) → đổi 2-3 creative,
+  thay hook + thumbnail. Giữ CTA + landing.
+- Sub-mode REFRESH_CTA: Link/Click < 40% (click rác dominant) → đổi CTA button + audit
+  landing page. KHÔNG đổi creative chính (vì CTR all đang OK).
 - scale_plan = null
 
 **AUDIENCE** (verdict_color: "yellow"):
-- Điều kiện: CTR < 1% AND volume thấp (< 50% benchmark)
+- Điều kiện: CTR all < 0.5× benchmark nhóm AND link_clicks/ngày < 10
+  HOẶC link_click_ratio ≥ 70% nhưng link_clicks/ngày < 30 (audience chất nhưng quá hẹp)
 - Action: đổi audience (LAL buyer 30d hoặc interest mới)
 - scale_plan = null
 
 **PAUSE** (verdict_color: "red"):
-- Điều kiện: CPA > 2x mục tiêu AND spend > 200K AND conversions ≤ 1
+- Điều kiện: CPL > 2× benchmark nhóm AND spend > 200K AND conversions ≤ 1
   HOẶC deltas.cpa_pct > 50 VÀ delta.conv_per_day_pct < -30
+  HOẶC link_click_ratio < 25% kéo dài (click rác cực đoan, FB serve sai audience)
 - scale_plan = null
 
 ═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
@@ -267,25 +319,38 @@ Nếu mapping_status="unmapped" hoặc "no_profit_data" → quyết verdict theo
     "spend_vnd": <int>,
     "conversions": <int>,
     "cpa_vnd": <int_or_null>,
-    "ctr_pct": <float>,
-    "rating_overall": <1-10 = trung bình 4 evaluation scores, làm tròn>
+    "ctr_pct": <float — CTR all>,
+    "ctr_link_pct": <float — CTR link click>,
+    "link_clicks": <int — lượt click vào link tuyệt đối kỳ này>,
+    "link_click_ratio_pct": <float — % link/click (chất lượng click)>,
+    "rating_overall": <1-10 = trung bình 5 evaluation scores, làm tròn>
+  },
+  "creative_diagnostic": {
+    // Phân loại trạng thái creative dựa CTR all + Link/Click ratio (BẮT BUỘC tham chiếu benchmark nhóm)
+    "state": "HEALTHY" | "CLICK_RAC" | "HOOK_YEU" | "YEU_TOAN_DIEN",
+    "evidence": "[≥40 từ] Số liệu cụ thể: CTR all X% (kỳ này) so benchmark nhóm Y% (= Z×). Link/Click W%. Diagnosis dựa ma trận. Vd 'CTR all 3.2% > 1.7× benchmark NOMA 1.91% nhưng Link/Click chỉ 28% → CLICK_RAC: creative attractive (CTR cao gấp 1.7×) nhưng người click toàn like/share/profile (28% < 40%), CTA hoặc landing có vấn đề.'",
+    "recommended_fix": "1-2 câu action cụ thể. Vd 'Đổi CTA từ Tìm hiểu thêm sang Đặt hàng ngay + audit landing page có giật lag không. KHÔNG đổi creative chính (CTR cao là thế mạnh).'"
   },
   "evaluation": {
     "spend_efficiency": {
       "score": 1-10,
-      "note": "[≥30 từ tiếng Việt, BẮT BUỘC có số] CPA hiện tại X VND, bằng Y% mục tiêu Z VND của nhóm [tên nhóm]. So kỳ trước CPA W VND → tăng/giảm K%. Đánh giá: [tốt/đạt/yếu] vì [lý do dựa số]."
+      "note": "[≥30 từ tiếng Việt, BẮT BUỘC có số] CPL hiện tại X VND, bằng Y% benchmark Z VND của nhóm [tên nhóm]. So kỳ trước CPL W VND → tăng/giảm K%. Đánh giá: [tốt/đạt/yếu] vì [lý do dựa số]."
     },
     "volume": {
       "score": 1-10,
-      "note": "[≥30 từ] Đơn/ngày = N (kỳ trước M, +/-X%). Benchmark nhóm [...]. Lý do điểm này: [giải thích vì sao volume đạt/yếu, có phải do scale, audience, hay seasonal]."
+      "note": "[≥30 từ] Link clicks/ngày = N (kỳ trước M, +/-X%). Conversions/ngày = P. Benchmark nhóm [...]. Lý do điểm này: [giải thích vì sao volume đạt/yếu, có phải do scale, audience, hay seasonal]."
     },
     "ctr_quality": {
       "score": 1-10,
-      "note": "[≥30 từ] CTR X% (kỳ trước Y%, +/-Z%). Chuẩn FB là 2-3%. Đánh giá hook: [mạnh/trung bình/yếu]. Nguyên nhân CTR cao/thấp: [đoán dựa data, vd frequency cao gây mệt audience, hoặc creative mới hấp dẫn]."
+      "note": "[≥30 từ] CTR all X% so benchmark nhóm [tên nhóm] Y% (= Z×). CTR link W%. Kỳ trước CTR all V%. Đánh giá hook: [mạnh/trung bình/yếu] dựa benchmark NHÓM (KHÔNG dùng chuẩn FB chung 2-3%). Vd 'CTR all 1.4% / benchmark NOMA 1.91% = 0.73× → dưới chuẩn nhóm, hook đang yếu so các campaign NOMA khác trong shop.'"
+    },
+    "click_quality": {
+      "score": 1-10,
+      "note": "[≥30 từ] Link/Click ratio = X% (kỳ trước Y%, +/-Z%). So benchmark nhóm 60-63% (baseline FB VN). Diagnosis: [click rác / mixed / healthy / audience chất]. Nguyên nhân: [CTA yếu / landing đáng ngại / audience đúng]. Vd 'Link/Click 35% < 50% benchmark → đang trong vùng click rác, 65% click không vào link (toàn like/share/profile).'"
     },
     "trend": {
       "score": 1-10,
-      "note": "[≥30 từ] Spend/ngày X% so kỳ trước, đơn/ngày Y%, CPA Z%. Xu hướng [tăng đều/ổn định/giảm dần/biến động]. Ý nghĩa: [giải thích campaign đang ở giai đoạn nào — học máy, ổn định, bão hòa, hay suy thoái]."
+      "note": "[≥30 từ] Spend/ngày X% so kỳ trước, link_clicks/ngày Y%, CPL Z%. Xu hướng [tăng đều/ổn định/giảm dần/biến động]. Ý nghĩa: [giải thích campaign đang ở giai đoạn nào — học máy, ổn định, bão hòa, hay suy thoái]."
     }
   },
   "action": {
@@ -523,12 +588,16 @@ function buildHistoryEntry(parsedJson, campaignId, campaignName) {
       conversions: parsedJson.performance?.conversions || 0,
       cpa_vnd: parsedJson.performance?.cpa_vnd || null,
       ctr_pct: parsedJson.performance?.ctr_pct || 0,
+      ctr_link_pct: parsedJson.performance?.ctr_link_pct || 0,
+      link_clicks: parsedJson.performance?.link_clicks || 0,
+      link_click_ratio_pct: parsedJson.performance?.link_click_ratio_pct || 0,
       rating_overall: parsedJson.performance?.rating_overall || 0,
     },
     evaluation_scores: {
       spend_efficiency: Number(parsedJson.evaluation?.spend_efficiency?.score) || 0,
       volume:           Number(parsedJson.evaluation?.volume?.score) || 0,
       ctr_quality:      Number(parsedJson.evaluation?.ctr_quality?.score) || 0,
+      click_quality:    Number(parsedJson.evaluation?.click_quality?.score) || 0,
       trend:            Number(parsedJson.evaluation?.trend?.score) || 0,
     },
     action_summary: (parsedJson.action?.what || "").slice(0, 200),
@@ -1011,8 +1080,9 @@ Tham chiếu DATA:
 
 Schema BẮT BUỘC tuân thủ ĐÚNG (skill prompt đã định nghĩa chi tiết):
 - verdict, verdict_color, summary, comparison_summary
-- performance { spend_vnd, conversions, cpa_vnd, ctr_pct, rating_overall }
-- evaluation { spend_efficiency, volume, ctr_quality, trend } — mỗi note ≥ 30 từ tiếng Việt + có số
+- performance { spend_vnd, conversions, cpa_vnd, ctr_pct, ctr_link_pct, link_clicks, link_click_ratio_pct, rating_overall }
+- creative_diagnostic { state, evidence, recommended_fix }
+- evaluation { spend_efficiency, volume, ctr_quality, click_quality, trend } — mỗi note ≥ 30 từ tiếng Việt + có số
 - action { what, why ≥ 40 từ, impact_expected, risk, risk_note ≥ 20 từ }
 - scale_plan = null KHÁC SCALE; nếu SCALE phải có method_1_budget, method_2_duplicate, method_3_creative, recommended, budget_target_vnd, increase_pct
 - next_check { after_days, metric_to_watch, threshold_revert }

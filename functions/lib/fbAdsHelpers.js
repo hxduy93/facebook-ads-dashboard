@@ -19,6 +19,16 @@ export const STAFF_TO_SOURCE_GROUP = {
 // Active FB groups (chỉ 4 nhóm có order trong 90d):
 export const FB_ACTIVE_GROUPS = ["MAY_DO", "CAMERA_VIDEO_CALL", "GHI_AM", "NOMA"];
 
+// CTR benchmark per nhóm SP — extract từ data/fb-ads-data.json (90d, 7 ad accounts).
+// Update bằng cách chạy lại script PowerShell ./scripts/compute-ctr-benchmark.ps1 (TODO).
+// Last updated: 2026-05-08 (snapshot 2026-05-08 13:24).
+export const CTR_BENCHMARKS = {
+  MAY_DO:            { ctr_all_pct: 1.69, ctr_link_pct: 1.03, link_click_ratio_pct: 61.2, cpl_vnd: 359600 },
+  CAMERA_VIDEO_CALL: { ctr_all_pct: 2.59, ctr_link_pct: 1.63, link_click_ratio_pct: 63.0, cpl_vnd: 269547 },
+  GHI_AM:            { ctr_all_pct: 3.30, ctr_link_pct: 1.98, link_click_ratio_pct: 60.0, cpl_vnd: 227341 },
+  NOMA:              { ctr_all_pct: 1.91, ctr_link_pct: 1.16, link_click_ratio_pct: 61.0, cpl_vnd: 105640 },
+};
+
 // Group label (UI display)
 export const FB_GROUP_LABELS = {
   ALL:               "Tất cả nhóm SP qua FB",
@@ -582,13 +592,19 @@ export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
     }
     const conversions = completeReg;
     const ctr = impressions > 0 ? clicks / impressions : 0;
+    const ctrLink = impressions > 0 ? linkClicks / impressions : 0;
+    const linkClickRatio = clicks > 0 ? linkClicks / clicks : 0;  // % click vào đúng link (vs like/share/profile)
     const cpc = clicks > 0 ? spend / clicks : 0;
+    const cpcLink = linkClicks > 0 ? spend / linkClicks : 0;
     const cpa = conversions > 0 ? Math.round(spend / conversions) : null;
     return {
       spend: Math.round(spend),
       impressions, clicks, link_clicks: linkClicks, leads, conversions,
-      ctr: Math.round(ctr * 10000) / 10000,
+      ctr: Math.round(ctr * 10000) / 10000,                 // CTR all (any click)
+      ctr_link: Math.round(ctrLink * 10000) / 10000,         // CTR link click (chỉ click link landing)
+      link_click_ratio: Math.round(linkClickRatio * 1000) / 10,  // % link/click (chất lượng click) — pct
       cpc: Math.round(cpc),
+      cpc_link: Math.round(cpcLink),
       cpa,
       days_with_data: days,
     };
@@ -612,11 +628,16 @@ export function compactFbCampaigns(fbAdsJson, accountId, timeRange, opts = {}) {
       const compDailySpend = comp.days_with_data > 0 ? comp.spend / comp.days_with_data : 0;
       const curDailyConv = cur.days_with_data > 0 ? cur.conversions / cur.days_with_data : 0;
       const compDailyConv = comp.days_with_data > 0 ? comp.conversions / comp.days_with_data : 0;
+      const curDailyLinkClicks = cur.days_with_data > 0 ? cur.link_clicks / cur.days_with_data : 0;
+      const compDailyLinkClicks = comp.days_with_data > 0 ? comp.link_clicks / comp.days_with_data : 0;
       deltas = {
         spend_per_day_pct: pctDelta(curDailySpend, compDailySpend),
         conv_per_day_pct: pctDelta(curDailyConv, compDailyConv),
         cpa_pct: (cur.cpa !== null && comp.cpa !== null) ? pctDelta(cur.cpa, comp.cpa) : null,
         ctr_pct: pctDelta(cur.ctr, comp.ctr),
+        ctr_link_pct: pctDelta(cur.ctr_link, comp.ctr_link),
+        link_clicks_per_day_pct: pctDelta(curDailyLinkClicks, compDailyLinkClicks),
+        link_click_ratio_pct: pctDelta(cur.link_click_ratio, comp.link_click_ratio),
       };
     }
 
