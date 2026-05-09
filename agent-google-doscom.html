@@ -118,6 +118,27 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .ga-lp-table .er-bad{color:#dc2626;font-weight:600}
 .ga-lp-table .er-mid{color:#d97706;font-weight:600}
 .ga-loading{padding:30px;text-align:center;color:#9ca3af}
+/* ── Time filter (giống FB Ads) ── */
+.time-filter{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.time-btn{padding:6px 12px;border:1px solid #fbbf24;background:white;border-radius:5px;cursor:pointer;font-size:12.5px;font-weight:500;color:#92400e;transition:all 0.15s}
+.time-btn:hover{background:#fef3c7}
+.time-btn.active{background:#d97706;color:white;border-color:#d97706}
+.custom-range{display:none;gap:6px;align-items:center;margin-left:8px}
+.custom-range.show{display:flex}
+.custom-range input{padding:5px 8px;border:1px solid #fbbf24;border-radius:4px;font-size:12.5px}
+.custom-range button{padding:5px 12px;background:#d97706;color:white;border:none;border-radius:4px;cursor:pointer;font-size:12.5px}
+/* ── Source breakdown cards (3 nguồn online) ── */
+.source-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.source-card{padding:12px 14px;border:1px solid #e5e7eb;border-radius:8px;background:linear-gradient(135deg,#fafbff 0%,#eff6ff 100%)}
+.source-card .label{font-size:10.5px;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.source-card .value{font-size:18px;font-weight:700;color:#1e3a8a;margin-top:3px}
+.source-card .sub{font-size:11px;color:#6b7280;margin-top:2px}
+.source-card.hotline{background:linear-gradient(135deg,#fff7ed,#ffedd5)}
+.source-card.hotline .value{color:#9a3412}
+.source-card.zalo{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
+.source-card.zalo .value{color:#1e40af}
+.source-card.website{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+.source-card.website .value{color:#166534}
 </style>
 </head>
 <body>
@@ -133,25 +154,44 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     </div>
   </div>
 
-  <!-- BỘ LỌC CHUNG: Tháng + Nhóm SP — áp dụng cho Card chấm điểm + Chart + Bảng lợi nhuận -->
-  <div class="section" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fffbeb;border-color:#fde68a">
-    <label style="font-weight:600;color:#92400e">🕐 Tháng:</label>
-    <input type="month" id="profit-month" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;background:white">
-    <span id="profit-range-label" style="font-size:11.5px;color:#92400e;font-weight:500">—</span>
-    <span style="color:#fbbf24;font-size:18px">|</span>
-    <label for="group-filter" style="font-weight:600;color:#92400e">🎯 Nhóm SP:</label>
-    <select id="group-filter" onchange="onFilterChange()" style="padding:8px 12px;border:1px solid #fbbf24;border-radius:6px;font-size:14px;min-width:220px;background:white">
-      <option value="ALL" selected>Tất cả 8 nhóm SP</option>
-      <option value="CAMERA_VIDEO_CALL">📞 Camera video call (DA8.1)</option>
-      <option value="CAMERA_4G">📡 Camera 4G</option>
-      <option value="CAMERA_WIFI">📶 Camera WiFi</option>
-      <option value="MAY_DO">🔍 Máy dò</option>
-      <option value="GHI_AM">🎙️ Máy ghi âm</option>
-      <option value="DINH_VI">📍 Định vị</option>
-      <option value="CHONG_GHI_AM">🛡️ Chống ghi âm</option>
-      <option value="NOMA">🚗 NOMA (chăm sóc xe)</option>
-    </select>
-    <span style="font-size:11.5px;color:#92400e;margin-left:auto;font-style:italic">→ Card chấm điểm · Chart trend · Bảng lợi nhuận đều lọc theo bộ lọc này</span>
+  <!-- BỘ LỌC CHUNG: Thời gian + Nhóm SP — áp dụng cho Card chấm điểm + Chart + Bảng lợi nhuận -->
+  <div class="section" style="background:#fffbeb;border-color:#fde68a">
+    <h2 style="border-color:#fde68a;color:#92400e;margin-bottom:10px">🔍 Bộ lọc — Thời gian × Nhóm SP
+      <span id="profit-range-label" style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">—</span>
+    </h2>
+    <div class="time-filter" id="time-filter" style="margin-bottom:8px">
+      <button class="time-btn" data-time="today">Hôm nay</button>
+      <button class="time-btn" data-time="yesterday">Hôm qua</button>
+      <button class="time-btn" data-time="this_week">Tuần này</button>
+      <button class="time-btn" data-time="last_week">Tuần trước</button>
+      <button class="time-btn" data-time="this_month">Tháng này</button>
+      <button class="time-btn" data-time="last_month">Tháng trước</button>
+      <button class="time-btn" data-time="last_7d">7 ngày</button>
+      <button class="time-btn active" data-time="last_30d">30 ngày</button>
+      <button class="time-btn" data-time="last_90d">90 ngày</button>
+      <button class="time-btn" data-time="custom">⚙ Tùy chỉnh</button>
+      <div class="custom-range" id="custom-range">
+        <input type="date" id="custom-start">
+        <span>→</span>
+        <input type="date" id="custom-end">
+        <button onclick="applyCustomRange()">Áp dụng</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <label for="group-filter" style="font-weight:600;color:#92400e">🎯 Nhóm SP:</label>
+      <select id="group-filter" onchange="onFilterChange()" style="padding:6px 10px;border:1px solid #fbbf24;border-radius:6px;font-size:13.5px;min-width:220px;background:white">
+        <option value="ALL" selected>Tất cả 8 nhóm SP</option>
+        <option value="CAMERA_VIDEO_CALL">📞 Camera video call (DA8.1)</option>
+        <option value="CAMERA_4G">📡 Camera 4G</option>
+        <option value="CAMERA_WIFI">📶 Camera WiFi</option>
+        <option value="MAY_DO">🔍 Máy dò</option>
+        <option value="GHI_AM">🎙️ Máy ghi âm</option>
+        <option value="DINH_VI">📍 Định vị</option>
+        <option value="CHONG_GHI_AM">🛡️ Chống ghi âm</option>
+        <option value="NOMA">🚗 NOMA (chăm sóc xe)</option>
+      </select>
+      <span style="font-size:11.5px;color:#92400e;margin-left:auto;font-style:italic">→ Card chấm điểm · Chart trend · Bảng lợi nhuận đều lọc theo bộ lọc này</span>
+    </div>
   </div>
 
   <div class="section">
@@ -173,9 +213,10 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
   </div>
 
   <div class="section">
-    <h2>💰 Bảng lợi nhuận theo tháng — Google Ads × Pancake
-      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— VAT 10% · LN trước vốn = Doanh thu − VAT − Spend GG Ads</span>
+    <h2>💰 Bảng lợi nhuận — Google Ads × Pancake
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— VAT 10% · LN trước vốn = Doanh thu − VAT − Spend GG Ads · 3 nguồn online (Hotline + Zalo OA + Website)</span>
     </h2>
+    <div id="source-breakdown-wrap"></div>
     <div id="profit-table-wrap" style="overflow-x:auto">
       <div style="text-align:center;padding:30px;color:#9ca3af">Đang tải data...</div>
     </div>
@@ -271,61 +312,18 @@ function classifySpCode(code) {
 
 const VAT_RATE = 0.10;
 
-// Mapping nguồn -> list source_groups keys
-const SOURCE_OPTIONS = {
-  WEBSITE: ["WEBSITE"],
-  ONLINE: ["WEBSITE", "ZALO_OA", "HOTLINE"],
-  ALL: null,  // null = dùng products top-level
+// 3 nguồn online theo yêu cầu user (giống cách FB Ads aggregate revenue):
+//   - Per-group breakdown: dùng source_groups[X].products[code].by_date (per SP)
+//   - TRUE TOTAL: dùng top-level source_groups[X].order_revenue_by_status_by_date
+//     (gộp tất cả status — delivered/returning/returned/canceled — và gộp all SP)
+//     để khớp Pancake POS UI 100%, KHÔNG bỏ sót SP ngoài 8 nhóm classify.
+const ONLINE_SOURCE_KEYS = ["WEBSITE", "ZALO_OA", "HOTLINE"];
+const SOURCE_LABEL_VN = {
+  WEBSITE: "🌐 Website",
+  ZALO_OA: "💬 Zalo OA",
+  HOTLINE: "📞 Hotline",
 };
-// Mapping trạng thái -> list status keys
-const STATUS_OPTIONS = {
-  ALL: null,  // null = dùng products (tổng all status)
-  DELIVERED: ["delivered"],
-  DELIVERED_RETURNING: ["delivered", "returning"],
-  EXCLUDE_RETURNED: ["delivered", "returning", "other"],
-};
-// Default cứng theo yêu cầu user: Online (Website + ZaloOA + Hotline), tất cả status
-function getSourceFilter() { return 'ONLINE'; }
-function getStatusFilter() { return 'ALL'; }
-// Gộp products từ multiple sources × statuses → unified {code: {by_date, orders_by_date, units_by_date}}
-function buildRevenueProductSet(rev, srcKey, statusKey) {
-  if (!rev) return {};
-  const sources = SOURCE_OPTIONS[srcKey];  // null = ALL
-  const statuses = STATUS_OPTIONS[statusKey];  // null = ALL
-  // Case 1: source=ALL & status=ALL → top-level products
-  if (sources === null && statuses === null) {
-    return rev.products || {};
-  }
-  const merged = {};
-  const srcList = sources === null ? Object.keys(rev.source_groups || {}) : sources;
-  for (const src of srcList) {
-    const srcGroup = (rev.source_groups || {})[src];
-    if (!srcGroup) continue;
-    if (statuses === null) {
-      // status=ALL → dùng srcGroup.products
-      const sp = srcGroup.products || {};
-      for (const [code, p] of Object.entries(sp)) {
-        if (!merged[code]) merged[code] = { by_date: {}, orders_by_date: {}, units_by_date: {} };
-        for (const [d, v] of Object.entries(p.by_date || {})) merged[code].by_date[d] = (merged[code].by_date[d] || 0) + Number(v || 0);
-        for (const [d, v] of Object.entries(p.orders_by_date || {})) merged[code].orders_by_date[d] = (merged[code].orders_by_date[d] || 0) + Number(v || 0);
-        for (const [d, v] of Object.entries(p.units_by_date || {})) merged[code].units_by_date[d] = (merged[code].units_by_date[d] || 0) + Number(v || 0);
-      }
-    } else {
-      // status filter → dùng products_by_status
-      const pbs = srcGroup.products_by_status || {};
-      for (const status of statuses) {
-        const sp = pbs[status] || {};
-        for (const [code, p] of Object.entries(sp)) {
-          if (!merged[code]) merged[code] = { by_date: {}, orders_by_date: {}, units_by_date: {} };
-          for (const [d, v] of Object.entries(p.by_date || {})) merged[code].by_date[d] = (merged[code].by_date[d] || 0) + Number(v || 0);
-          for (const [d, v] of Object.entries(p.orders_by_date || {})) merged[code].orders_by_date[d] = (merged[code].orders_by_date[d] || 0) + Number(v || 0);
-          for (const [d, v] of Object.entries(p.units_by_date || {})) merged[code].units_by_date[d] = (merged[code].units_by_date[d] || 0) + Number(v || 0);
-        }
-      }
-    }
-  }
-  return merged;
-}
+const SOURCE_CLS = { WEBSITE: "website", ZALO_OA: "zalo", HOTLINE: "hotline" };
 const CACHE_KEY_SCORECARD = "doscom_scorecard_v2";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 let DATA_SPEND = null, DATA_REVENUE = null;
@@ -372,22 +370,93 @@ function formatDateISO(d) {
   return d.toISOString().slice(0, 10);
 }
 
-// Lấy {startDate, endDate, label, title} từ "YYYY-MM"
-function getMonthRange(monthStr) {
-  if (!monthStr) {
-    const now = new Date();
-    monthStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+// ── Time filter state + resolver (giống FB Ads agent) ──
+const PRESET_LABELS = {
+  today: "Hôm nay",
+  yesterday: "Hôm qua",
+  this_week: "Tuần này",
+  last_week: "Tuần trước",
+  this_month: "Tháng này",
+  last_month: "Tháng trước",
+  last_7d: "7 ngày qua",
+  last_30d: "30 ngày qua",
+  last_90d: "90 ngày qua",
+  custom: "Tùy chỉnh",
+};
+let timeState = { preset: "last_30d", customStart: null, customEnd: null };
+
+// Resolve preset → {start, end, startDate, endDate, label, title, key}
+// startDate/endDate giữ alias để không break code cũ.
+function resolveTimeRange(preset, customStart, customEnd) {
+  const tzOffsetMs = 7 * 3600 * 1000;
+  const nowVN = new Date(Date.now() + tzOffsetMs);
+  const todayVN = nowVN.toISOString().slice(0, 10);
+  const today = new Date(todayVN + "T00:00:00Z");
+  const dayOfWeek = (today.getUTCDay() + 6) % 7;  // 0=Mon, 6=Sun
+  function fmt(d) { return d.toISOString().slice(0, 10); }
+  function addDays(d, n) { return new Date(d.getTime() + n * 86400000); }
+  function pack(start, end, label, key) {
+    return { start, end, startDate: start, endDate: end, label, title: `${label} (${start} → ${end})`, key };
   }
-  const [yyyyStr, mmStr] = monthStr.split('-');
-  const yyyy = parseInt(yyyyStr, 10);
-  const mm = parseInt(mmStr, 10);
-  const startDate = `${yyyy}-${String(mm).padStart(2,'0')}-01`;
-  const lastDay = new Date(yyyy, mm, 0).getDate();
-  let endDate = `${yyyy}-${String(mm).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
-  const today = new Date();
-  const todayStr = formatDateISO(today);
-  if (endDate > todayStr) endDate = todayStr;
-  return { startDate, endDate, label: `${startDate} → ${endDate}`, title: `Tháng ${mm}/${yyyy}`, monthStr };
+  switch (preset) {
+    case "today":
+      return pack(todayVN, todayVN, "Hôm nay", "today");
+    case "yesterday": {
+      const y = fmt(addDays(today, -1));
+      return pack(y, y, "Hôm qua", "yesterday");
+    }
+    case "this_week": {
+      const monday = fmt(addDays(today, -dayOfWeek));
+      return pack(monday, todayVN, "Tuần này", "this_week");
+    }
+    case "last_week": {
+      const lastMon = fmt(addDays(today, -dayOfWeek - 7));
+      const lastSun = fmt(addDays(today, -dayOfWeek - 1));
+      return pack(lastMon, lastSun, "Tuần trước", "last_week");
+    }
+    case "this_month": {
+      const start = todayVN.slice(0, 7) + "-01";
+      return pack(start, todayVN, "Tháng này", "this_month");
+    }
+    case "last_month": {
+      const y = today.getUTCFullYear();
+      const m = today.getUTCMonth(); // 0-indexed
+      const lastM = m === 0 ? 12 : m;
+      const lastY = m === 0 ? y - 1 : y;
+      const start = `${lastY}-${String(lastM).padStart(2, "0")}-01`;
+      const lastDay = new Date(Date.UTC(lastY, lastM, 0)).getUTCDate();
+      const end = `${lastY}-${String(lastM).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+      return pack(start, end, "Tháng trước", "last_month");
+    }
+    case "last_7d":
+      return pack(fmt(addDays(today, -6)), todayVN, "7 ngày qua", "last_7d");
+    case "last_30d":
+      return pack(fmt(addDays(today, -29)), todayVN, "30 ngày qua", "last_30d");
+    case "last_90d":
+      return pack(fmt(addDays(today, -89)), todayVN, "90 ngày qua", "last_90d");
+    case "custom": {
+      if (!customStart || !customEnd) return null;
+      return pack(customStart, customEnd, "Tùy chỉnh", `custom_${customStart}_${customEnd}`);
+    }
+    default:
+      return pack(fmt(addDays(today, -29)), todayVN, "30 ngày qua", "last_30d");
+  }
+}
+
+function getCurrentRange() {
+  return resolveTimeRange(timeState.preset, timeState.customStart, timeState.customEnd) || resolveTimeRange("last_30d");
+}
+
+function applyCustomRange() {
+  const s = document.getElementById('custom-start').value;
+  const e = document.getElementById('custom-end').value;
+  if (!s || !e) { alert('Chọn cả ngày bắt đầu và kết thúc'); return; }
+  if (s > e) { alert('Ngày bắt đầu phải ≤ ngày kết thúc'); return; }
+  timeState.customStart = s;
+  timeState.customEnd = e;
+  timeState.preset = 'custom';
+  document.querySelectorAll('[data-time]').forEach(b => b.classList.toggle('active', b.dataset.time === 'custom'));
+  refreshAll();
 }
 
 async function loadAllData() {
@@ -403,11 +472,11 @@ async function loadAllData() {
 }
 
 // ── SCORECARD ──
-function getScorecardCacheKey(group, monthStr) { return `${CACHE_KEY_SCORECARD}_${group}_${monthStr || 'now'}`; }
+function getScorecardCacheKey(group, rangeKey) { return `${CACHE_KEY_SCORECARD}_${group}_${rangeKey || 'now'}`; }
 
-function loadScorecardCache(group, monthStr) {
+function loadScorecardCache(group, rangeKey) {
   try {
-    const raw = localStorage.getItem(getScorecardCacheKey(group, monthStr));
+    const raw = localStorage.getItem(getScorecardCacheKey(group, rangeKey));
     if (!raw) return null;
     const obj = JSON.parse(raw);
     if (!obj.ts || (Date.now() - obj.ts) > CACHE_TTL_MS) return null;
@@ -415,17 +484,17 @@ function loadScorecardCache(group, monthStr) {
   } catch { return null; }
 }
 
-function saveScorecardCache(group, monthStr, payload) {
+function saveScorecardCache(group, rangeKey, payload) {
   try {
-    localStorage.setItem(getScorecardCacheKey(group, monthStr), JSON.stringify({
-      ts: Date.now(), group, month: monthStr, data: payload,
+    localStorage.setItem(getScorecardCacheKey(group, rangeKey), JSON.stringify({
+      ts: Date.now(), group, range_key: rangeKey, data: payload,
     }));
   } catch {}
 }
 
 function renderScorecard(payload, cacheTs, range) {
   const root = document.getElementById('scorecard-body');
-  const rangeLabel = range ? `<div style="font-size:11.5px;color:#6b7280;margin-bottom:8px">📅 Đang chấm cho: <strong>${range.title}</strong> (${range.label})</div>` : '';
+  const rangeLabel = range ? `<div style="font-size:11.5px;color:#6b7280;margin-bottom:8px">📅 Đang chấm cho: <strong>${range.title}</strong></div>` : '';
   if (!payload) {
     root.innerHTML = `${rangeLabel}<div class="scorecard-empty">Chưa có điểm cho tháng này. Bấm <strong>"🔄 Chấm bằng AI"</strong> (mất ~30-60 giây).<br><br>
       <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Chấm bằng AI</button></div>`;
@@ -487,11 +556,9 @@ function renderScorecard(payload, cacheTs, range) {
 
 async function refreshScorecard(force) {
   const group = getGroup();
-  const monthInput = document.getElementById('profit-month');
-  const monthStr = monthInput ? monthInput.value : '';
-  const range = getMonthRange(monthStr);
+  const range = getCurrentRange();
   if (!force) {
-    const cached = loadScorecardCache(group, monthStr);
+    const cached = loadScorecardCache(group, range.key);
     if (cached) { renderScorecard(cached.data, cached.ts, range); return; }
   }
   const root = document.getElementById('scorecard-body');
@@ -504,7 +571,7 @@ async function refreshScorecard(force) {
         mode: 'audit_account_json',
         context: {
           product_group: group,
-          time_range: { start: range.startDate, end: range.endDate, label: range.title },
+          time_range: { start: range.start, end: range.end, label: range.title },
         },
       }),
     });
@@ -515,7 +582,7 @@ async function refreshScorecard(force) {
       return;
     }
     const payload = j.parsed_json || { _parse_error: "Không có parsed_json", _raw_excerpt: (j.response||'').slice(0,300) };
-    saveScorecardCache(group, monthStr, payload);
+    saveScorecardCache(group, range.key, payload);
     renderScorecard(payload, Date.now(), range);
   } catch (e) {
     root.innerHTML = `<div class="error">Lỗi mạng: ${e.message}<br><br>
@@ -562,12 +629,11 @@ function aggregateSpendByDate(spendData, group, startDate, endDate) {
 function renderTrendCharts() {
   if (!DATA_SPEND) return;
   const group = getGroup();
-  const monthInput = document.getElementById('profit-month');
-  const range = getMonthRange(monthInput ? monthInput.value : null);
-  const agg = aggregateSpendByDate(DATA_SPEND, group, range.startDate, range.endDate);
+  const range = getCurrentRange();
+  const agg = aggregateSpendByDate(DATA_SPEND, group, range.start, range.end);
   const root = document.getElementById('trend-charts');
   if (!agg.dates.length) {
-    root.innerHTML = `<div class="chart-card"><h3>Không có data</h3><p style="font-size:12px;color:#9ca3af">Nhóm "${group}" không có chi tiêu Google Ads trong ${range.title} (${range.label}).</p></div>`;
+    root.innerHTML = `<div class="chart-card"><h3>Không có data</h3><p style="font-size:12px;color:#9ca3af">Nhóm "${group}" không có chi tiêu Google Ads trong ${range.title}.</p></div>`;
     return;
   }
   const cpc = agg.spend.map((s, i) => agg.clicks[i] > 0 ? s / agg.clicks[i] : 0);
@@ -610,71 +676,154 @@ function renderTrendCharts() {
   });
 }
 
-// ── BẢNG LỢI NHUẬN ──
-function aggregateProfitByGroup(spendData, revenueData, groupFilter, startDate, endDate, srcFilter, statusFilter) {
+// ── BẢNG LỢI NHUẬN — logic giống FB Ads agent ──
+//
+// Per-group breakdown (rows): classify SP code → 8 nhóm (CAMERA_*, MAY_DO, …)
+// dùng source_groups[X].products[code].by_date — chỉ bao 13 SP có code mapping.
+//
+// TRUE TOTAL row (cuối): dùng top-level fields của 3 nguồn online
+//   - source_groups[X].total_orders_by_date (đếm UNIQUE đơn, không nhân theo SP)
+//   - source_groups[X].order_revenue_by_status_by_date[status][date]
+//     (gộp TẤT CẢ status: delivered + returning + returned + canceled)
+// → khớp Pancake POS UI 100%, KHÔNG bỏ sót SP ngoài 13 SP mapping.
+
+// Aggregate spend Google Ads per-group trong khoảng thời gian
+function aggregateSpendByGroup(spendData, startDate, endDate) {
   const inRange = (d) => d >= startDate && d <= endDate;
-  const buckets = {};
-  for (const g of GROUP_DISPLAY_ORDER) {
-    buckets[g] = { spend: 0, revenue: 0, orders: 0, units: 0 };
-  }
-  // Spend (Google Ads) — không phụ thuộc source/status
-  if (spendData && spendData.by_category) {
-    for (const [winCat, payload] of Object.entries(spendData.by_category)) {
-      const grp = WINDSOR_TO_GROUP[winCat] || "OTHER";
-      if (!(grp in buckets)) continue;
-      const bd = payload.by_date || {};
-      for (const [d, v] of Object.entries(bd)) {
-        if (inRange(d)) buckets[grp].spend += Number(v || 0);
-      }
+  const out = {};
+  for (const g of GROUP_DISPLAY_ORDER) out[g] = 0;
+  if (!spendData || !spendData.by_category) return out;
+  for (const [winCat, payload] of Object.entries(spendData.by_category)) {
+    const grp = WINDSOR_TO_GROUP[winCat] || "OTHER";
+    if (!(grp in out)) continue;
+    for (const [d, v] of Object.entries(payload.by_date || {})) {
+      if (inRange(d)) out[grp] += Number(v || 0);
     }
   }
-  // Revenue — lọc theo source + status
-  const productSet = buildRevenueProductSet(revenueData, srcFilter, statusFilter);
-  for (const [code, p] of Object.entries(productSet)) {
-    const grp = classifySpCode(code);
-    if (!(grp in buckets)) continue;
-    const bd = p.by_date || {}, obd = p.orders_by_date || {}, ubd = p.units_by_date || {};
-    for (const [d, v] of Object.entries(bd))  if (inRange(d)) buckets[grp].revenue += Number(v || 0);
-    for (const [d, v] of Object.entries(obd)) if (inRange(d)) buckets[grp].orders += Number(v || 0);
-    for (const [d, v] of Object.entries(ubd)) if (inRange(d)) buckets[grp].units += Number(v || 0);
+  return out;
+}
+
+// Per-group breakdown từ source_groups[WEBSITE+ZALO_OA+HOTLINE].products[code]
+function aggregateRevenueByGroupFromOnlineSources(rev, startDate, endDate) {
+  const inRange = (d) => d >= startDate && d <= endDate;
+  const out = {};
+  for (const g of GROUP_DISPLAY_ORDER) out[g] = { revenue: 0, orders: 0, units: 0 };
+  if (!rev?.source_groups) return out;
+  for (const src of ONLINE_SOURCE_KEYS) {
+    const products = rev.source_groups[src]?.products;
+    if (!products) continue;
+    for (const [code, p] of Object.entries(products)) {
+      const grp = classifySpCode(code);
+      if (!(grp in out)) continue;
+      for (const [d, v] of Object.entries(p.by_date || {}))        if (inRange(d)) out[grp].revenue += Number(v || 0);
+      for (const [d, v] of Object.entries(p.orders_by_date || {})) if (inRange(d)) out[grp].orders  += Number(v || 0);
+      for (const [d, v] of Object.entries(p.units_by_date || {}))  if (inRange(d)) out[grp].units   += Number(v || 0);
+    }
   }
-  if (groupFilter && groupFilter !== "ALL") {
-    return { [groupFilter]: buckets[groupFilter] || { spend: 0, revenue: 0, orders: 0, units: 0 } };
+  return out;
+}
+
+// TRUE total từ top-level fields (gộp tất cả status, all SP) per source
+// Trả về { WEBSITE: {revenue, orders}, ZALO_OA: {...}, HOTLINE: {...}, _total: {...} }
+function aggregateTrueTotalsBySource(rev, startDate, endDate) {
+  const inRange = (d) => d >= startDate && d <= endDate;
+  const out = { _total: { revenue: 0, orders: 0 } };
+  for (const src of ONLINE_SOURCE_KEYS) out[src] = { revenue: 0, orders: 0 };
+  if (!rev?.source_groups) return out;
+  for (const src of ONLINE_SOURCE_KEYS) {
+    const sg = rev.source_groups[src];
+    if (!sg) continue;
+    for (const [date, cnt] of Object.entries(sg.total_orders_by_date || {})) {
+      if (inRange(date)) out[src].orders += Number(cnt || 0);
+    }
+    for (const stMap of Object.values(sg.order_revenue_by_status_by_date || {})) {
+      for (const [date, v] of Object.entries(stMap || {})) {
+        if (inRange(date)) out[src].revenue += Number(v || 0);
+      }
+    }
+    out._total.revenue += out[src].revenue;
+    out._total.orders  += out[src].orders;
   }
-  return buckets;
+  return out;
+}
+
+function renderSourceBreakdown(srcTotals) {
+  const wrap = document.getElementById('source-breakdown-wrap');
+  if (!wrap) return;
+  const total = srcTotals._total.revenue || 1;  // tránh chia 0
+  const cards = ONLINE_SOURCE_KEYS.map(src => {
+    const t = srcTotals[src] || { revenue: 0, orders: 0 };
+    const pct = total > 0 ? (t.revenue / total) * 100 : 0;
+    const aov = t.orders > 0 ? Math.round(t.revenue / t.orders) : 0;
+    return `<div class="source-card ${SOURCE_CLS[src]}">
+      <div class="label">${SOURCE_LABEL_VN[src]}</div>
+      <div class="value">${fmtMoney(t.revenue)}đ</div>
+      <div class="sub">${t.orders} đơn · AOV ${fmtMoney(aov)}đ · ${pct.toFixed(1)}%</div>
+    </div>`;
+  }).join("");
+  const totalAov = srcTotals._total.orders > 0 ? Math.round(srcTotals._total.revenue / srcTotals._total.orders) : 0;
+  const totalCard = `<div class="source-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fbbf24">
+    <div class="label" style="color:#78350f">📦 TỔNG 3 NGUỒN ONLINE</div>
+    <div class="value" style="color:#92400e">${fmtMoney(srcTotals._total.revenue)}đ</div>
+    <div class="sub" style="color:#92400e">${srcTotals._total.orders} đơn · AOV ${fmtMoney(totalAov)}đ</div>
+  </div>`;
+  wrap.innerHTML = `<div class="source-cards">${cards}${totalCard}</div>`;
 }
 
 function renderProfitTable() {
   if (!DATA_SPEND || !DATA_REVENUE) return;
   const group = getGroup();
-  const srcFilter = getSourceFilter();
-  const statusFilter = getStatusFilter();
-  const monthInput = document.getElementById('profit-month');
-  const range = getMonthRange(monthInput ? monthInput.value : null);
+  const range = getCurrentRange();
   const labelEl = document.getElementById('profit-range-label');
-  if (labelEl) labelEl.textContent = `(${range.title} · ${range.label})`;
-  const buckets = aggregateProfitByGroup(DATA_SPEND, DATA_REVENUE, group, range.startDate, range.endDate, srcFilter, statusFilter);
-  const root = document.getElementById('profit-table-wrap');
-  let totSpend = 0, totRev = 0, totOrders = 0, totUnits = 0;
+  if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
 
-  const rows = Object.entries(buckets).map(([grp, b]) => {
-    const spend = b.spend || 0, revenue = b.revenue || 0;
-    const orders = b.orders || 0, units = b.units || 0;
+  const spendByGroup = aggregateSpendByGroup(DATA_SPEND, range.start, range.end);
+  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end);
+  const srcTotals = aggregateTrueTotalsBySource(DATA_REVENUE, range.start, range.end);
+
+  // Render 3-source breakdown cards
+  renderSourceBreakdown(srcTotals);
+
+  // Build per-group rows
+  const groupsToShow = (group && group !== "ALL") ? [group] : GROUP_DISPLAY_ORDER;
+  const rows = groupsToShow.map(grp => {
+    const spend = spendByGroup[grp] || 0;
+    const r = revByGroup[grp] || { revenue: 0, orders: 0, units: 0 };
+    const revenue = r.revenue, orders = r.orders, units = r.units;
     const vat = revenue * VAT_RATE;
     const profitBeforeCost = revenue - vat - spend;
     const margin = revenue > 0 ? profitBeforeCost / revenue : 0;
-    totSpend += spend; totRev += revenue; totOrders += orders; totUnits += units;
     return { grp, spend, revenue, orders, units, vat, profitBeforeCost, margin };
   }).filter(r => r.spend > 0 || r.revenue > 0);
 
-  if (!rows.length) {
-    root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} (${range.label}) cho nhóm "${group}".</div>`;
+  const root = document.getElementById('profit-table-wrap');
+  if (!rows.length && srcTotals._total.revenue === 0) {
+    root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} cho nhóm "${group}".</div>`;
     return;
   }
   rows.sort((a, b) => b.revenue - a.revenue);
-  const totVat = totRev * VAT_RATE;
+
+  // Sum spend trong filter
+  const totSpend = rows.reduce((s, r) => s + r.spend, 0);
+
+  // ── TRUE TOTALS từ top-level fields (gộp all status, all SP, 3 nguồn online) ──
+  // Khi group filter = ALL, dùng true total để khớp Pancake POS UI.
+  // Khi group filter !== ALL, total chỉ là sum của row đang filter (per-SP).
+  const useTrueTotal = (!group || group === "ALL");
+  const totRev    = useTrueTotal ? srcTotals._total.revenue : rows.reduce((s, r) => s + r.revenue, 0);
+  const totOrders = useTrueTotal ? srcTotals._total.orders  : rows.reduce((s, r) => s + r.orders, 0);
+  const totUnits  = rows.reduce((s, r) => s + r.units, 0);  // units chỉ count được từ per-SP mapping
+  const totVat    = totRev * VAT_RATE;
   const totProfit = totRev - totVat - totSpend;
   const totMargin = totRev > 0 ? totProfit / totRev : 0;
+
+  // Coverage: bao nhiêu % rev được map về 8 nhóm SP
+  const mappedRev = rows.reduce((s, r) => s + r.revenue, 0);
+  const coverage = srcTotals._total.revenue > 0 ? (mappedRev / srcTotals._total.revenue) * 100 : 0;
+
+  const totalRowLabel = useTrueTotal
+    ? `TỔNG (3 nguồn online · all status)`
+    : `TỔNG (chỉ nhóm "${GROUP_NAMES_VN[group] || group}")`;
 
   const html = `<table class="profit-table">
     <thead><tr>
@@ -693,7 +842,7 @@ function renderProfitTable() {
         <td class="${r.margin >= 0.3 ? 'pos' : (r.margin >= 0 ? 'warn' : 'neg')}">${fmtPct(r.margin)}</td>
       </tr>`).join("")}
       <tr class="total">
-        <td>TỔNG</td>
+        <td>${totalRowLabel}</td>
         <td>${fmtMoney(totSpend)}đ</td>
         <td>${fmtMoney(totRev)}đ</td>
         <td>${fmtMoney(totVat)}đ</td>
@@ -704,10 +853,12 @@ function renderProfitTable() {
       </tr>
     </tbody>
   </table>
-  <p style="font-size:11.5px;color:#6b7280;margin-top:8px">
-    ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng + chi phí khác.<br>
-    ⚠ <strong>Doanh thu</strong>: gồm 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> · Tất cả trạng thái đơn (đã giao + đang giao + đang/đã hoàn + đã hủy).<br>
-    ⚠ Mapping nhóm: Pancake SP → group dựa prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G).
+  <p style="font-size:11.5px;color:#6b7280;margin-top:8px;line-height:1.6">
+    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> trong Pancake.
+    TỔNG dùng top-level <code>order_revenue_by_status_by_date</code> (gộp tất cả status: delivered + returning + returned + canceled) để khớp Pancake POS UI 100%.
+    Per-row breakdown classify theo SP code (chỉ bao SP có mapping → coverage <strong>${coverage.toFixed(1)}%</strong>).<br>
+    ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng (COGS) + chi phí khác (lương, kho, vận chuyển).<br>
+    ⚠ Mapping nhóm: prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G, NOMA=chăm sóc xe).
   </p>`;
   root.innerHTML = html;
 }
@@ -764,13 +915,12 @@ async function runAI(mode, question, forceRefresh) {
   const t0 = Date.now();
   try {
     const group = getGroup();
-    const monthInput = document.getElementById('profit-month');
-    const range = getMonthRange(monthInput ? monthInput.value : null);
+    const range = getCurrentRange();
     const body = {
       mode,
       context: {
         product_group: group,
-        time_range: { start: range.startDate, end: range.endDate, label: range.title },
+        time_range: { start: range.start, end: range.end, label: range.title },
       }
     };
     if (question) body.question = question;
@@ -798,7 +948,7 @@ async function runAI(mode, question, forceRefresh) {
       }
       document.getElementById('output').innerHTML = cacheBanner + md2html(j.response||"(empty)");
       const cacheTag = j.cached ? ' · <span style="color:#0891b2">📌 cached</span>' : '';
-      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Tháng: <strong>${range.title}</strong>${cacheTag}`;
+      document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Range: <strong>${range.title}</strong>${cacheTag}`;
     }
   } catch (e) {
     document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi mạng:</strong> ${e.message}</div>`;
@@ -831,17 +981,11 @@ function copyOutput() {
 // ── INIT ──
 async function refreshAll() {
   await loadAllData();
-  const monthInput = document.getElementById('profit-month');
-  if (monthInput && !monthInput.value) {
-    const now = new Date();
-    monthInput.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  }
   const group = getGroup();
-  const monthStr = monthInput ? monthInput.value : '';
-  const range = getMonthRange(monthStr);
+  const range = getCurrentRange();
   const labelEl = document.getElementById('profit-range-label');
-  if (labelEl) labelEl.textContent = `(${range.title} · ${range.label})`;
-  const cached = loadScorecardCache(group, monthStr);
+  if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
+  const cached = loadScorecardCache(group, range.key);
   if (cached) renderScorecard(cached.data, cached.ts, range);
   else renderScorecard(null, null, range);
   renderTrendCharts();
@@ -849,6 +993,24 @@ async function refreshAll() {
 }
 
 function onFilterChange() { refreshAll(); }
+
+// Time-button listeners (chained kiểu FB Ads)
+document.querySelectorAll('[data-time]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const preset = btn.dataset.time;
+    if (preset === 'custom') {
+      document.getElementById('custom-range').classList.add('show');
+      document.querySelectorAll('[data-time]').forEach(b => b.classList.toggle('active', b === btn));
+      return;  // chờ user bấm "Áp dụng"
+    }
+    document.getElementById('custom-range').classList.remove('show');
+    timeState.preset = preset;
+    timeState.customStart = null;
+    timeState.customEnd = null;
+    document.querySelectorAll('[data-time]').forEach(b => b.classList.toggle('active', b === btn));
+    refreshAll();
+  });
+});
 
 // ── GA OVERVIEW ──
 const GA_GROUP_LABELS = {
