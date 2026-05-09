@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-09 20:58",
+  "generated_at": "2026-05-09 23:27",
   "source": "FB Marketing API v21.0 (auto every 3h)",
   "date_range": {
     "start": "2026-02-08",
@@ -8,8 +8,8 @@
   "currency": "VND",
   "total_accounts": 7,
   "total_summary": {
-    "spend": 326350727.0,
-    "impressions": 3644455,
+    "spend": 326350768.0,
+    "impressions": 3644456,
     "clicks": 72159,
     "leads": 142
   },
@@ -980,8 +980,8 @@
         "end": "2026-05-08"
       },
       "summary": {
-        "spend": 116145339.0,
-        "impressions": 1461343,
+        "spend": 116145380.0,
+        "impressions": 1461344,
         "clicks": 26951,
         "reach": 1326526,
         "leads": 51,
@@ -1248,13 +1248,13 @@
         {
           "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao",
           "campaign_id": "120246745047610058",
-          "spend": 13624096.0,
-          "impressions": 217573,
+          "spend": 13624137.0,
+          "impressions": 217574,
           "clicks": 4665,
           "reach": 211399,
           "ctr": 2.1441,
-          "cpc": 2920.49,
-          "cpm": 62618.51,
+          "cpc": 2920.5,
+          "cpm": 62618.41,
           "leads": 7,
           "link_clicks": 2691,
           "landing_page_views": 2702,
@@ -1384,8 +1384,8 @@
               "messages": 3
             },
             "2026-05-08": {
-              "spend": 479913.0,
-              "impressions": 4565,
+              "spend": 479954.0,
+              "impressions": 4566,
               "clicks": 100,
               "reach": 4454,
               "leads": 0,
@@ -6635,7 +6635,7 @@
         "ctr": 2.8441,
         "cpc": 6052.79,
         "campaigns_total": 16,
-        "campaigns_active": 4
+        "campaigns_active": 3
       },
       "campaigns": [
         {
@@ -7063,8 +7063,8 @@
               "messages": 0
             }
           },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
+          "status": "PAUSED",
+          "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
         },
         {
