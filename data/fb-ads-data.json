@@ -1,37 +1,37 @@
 {
-  "generated_at": "2026-05-09 23:27",
+  "generated_at": "2026-05-10 02:40",
   "source": "FB Marketing API v21.0 (auto every 3h)",
   "date_range": {
-    "start": "2026-02-08",
-    "end": "2026-05-08"
+    "start": "2026-02-09",
+    "end": "2026-05-09"
   },
   "currency": "VND",
   "total_accounts": 7,
   "total_summary": {
-    "spend": 326350768.0,
-    "impressions": 3644456,
-    "clicks": 72159,
-    "leads": 142
+    "spend": 347585610.0,
+    "impressions": 3884908,
+    "clicks": 76775,
+    "leads": 146
   },
   "accounts": [
     {
       "account_id": "927390616363424",
       "account_name": "Doscom - Công nghệ nâng tầm cuộc sống",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
-        "spend": 31242640.0,
-        "impressions": 292102,
-        "clicks": 4398,
-        "reach": 263374,
+        "spend": 31861507.0,
+        "impressions": 297990,
+        "clicks": 4486,
+        "reach": 268156,
         "leads": 5,
-        "complete_registrations": 101,
-        "ctr": 1.5056,
-        "cpc": 7103.83,
-        "campaigns_total": 4,
-        "campaigns_active": 0
+        "complete_registrations": 102,
+        "ctr": 1.5054,
+        "cpc": 7102.43,
+        "campaigns_total": 5,
+        "campaigns_active": 1
       },
       "campaigns": [
         {
@@ -968,46 +968,244 @@
           "status": "PAUSED",
           "effective_status": "PAUSED",
           "objective": "OUTCOME_SALES"
+        },
+        {
+          "campaign_name": "8/5 - D1 - Tổng hợp video",
+          "campaign_id": "120247480189810067",
+          "spend": 618867.0,
+          "impressions": 5888,
+          "clicks": 88,
+          "reach": 4782,
+          "ctr": 1.4946,
+          "cpc": 7032.58,
+          "cpm": 105106.49,
+          "leads": 0,
+          "link_clicks": 53,
+          "landing_page_views": 47,
+          "video_views": 2056,
+          "complete_registrations": 1,
+          "messages": 0,
+          "by_date": {
+            "2026-05-09": {
+              "spend": 618867.0,
+              "impressions": 5888,
+              "clicks": 88,
+              "reach": 4782,
+              "leads": 0,
+              "complete_registrations": 1,
+              "link_clicks": 53,
+              "landing_page_views": 47,
+              "messages": 0
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
         }
       ],
-      "rows_raw": 77
+      "rows_raw": 78
     },
     {
       "account_id": "764394829882083",
       "account_name": "Doscom - Noma.vn - Giải Pháp Chăm Sóc Xe Hơi Toàn Diện",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
-        "spend": 116145380.0,
-        "impressions": 1461344,
-        "clicks": 26951,
-        "reach": 1326526,
-        "leads": 51,
-        "complete_registrations": 1119,
-        "ctr": 1.8443,
-        "cpc": 4309.5,
+        "spend": 124371823.0,
+        "impressions": 1581633,
+        "clicks": 29197,
+        "reach": 1444559,
+        "leads": 52,
+        "complete_registrations": 1239,
+        "ctr": 1.846,
+        "cpc": 4259.75,
         "campaigns_total": 28,
         "campaigns_active": 6
       },
       "campaigns": [
         {
+          "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao",
+          "campaign_id": "120246745047610058",
+          "spend": 15953237.0,
+          "impressions": 256563,
+          "clicks": 5420,
+          "reach": 250344,
+          "ctr": 2.1125,
+          "cpc": 2943.4,
+          "cpm": 62180.58,
+          "leads": 8,
+          "link_clicks": 3116,
+          "landing_page_views": 3103,
+          "video_views": 104230,
+          "complete_registrations": 231,
+          "messages": 32,
+          "by_date": {
+            "2026-04-27": {
+              "spend": 272261.0,
+              "impressions": 2926,
+              "clicks": 54,
+              "reach": 2551,
+              "leads": 0,
+              "complete_registrations": 4,
+              "link_clicks": 37,
+              "landing_page_views": 33,
+              "messages": 2
+            },
+            "2026-04-28": {
+              "spend": 1076564.0,
+              "impressions": 16631,
+              "clicks": 294,
+              "reach": 14946,
+              "leads": 0,
+              "complete_registrations": 22,
+              "link_clicks": 185,
+              "landing_page_views": 191,
+              "messages": 1
+            },
+            "2026-04-29": {
+              "spend": 965231.0,
+              "impressions": 16253,
+              "clicks": 280,
+              "reach": 15708,
+              "leads": 0,
+              "complete_registrations": 14,
+              "link_clicks": 190,
+              "landing_page_views": 199,
+              "messages": 3
+            },
+            "2026-04-30": {
+              "spend": 1121010.0,
+              "impressions": 19835,
+              "clicks": 381,
+              "reach": 19266,
+              "leads": 0,
+              "complete_registrations": 15,
+              "link_clicks": 252,
+              "landing_page_views": 253,
+              "messages": 1
+            },
+            "2026-05-01": {
+              "spend": 1021683.0,
+              "impressions": 18094,
+              "clicks": 353,
+              "reach": 17482,
+              "leads": 1,
+              "complete_registrations": 14,
+              "link_clicks": 208,
+              "landing_page_views": 207,
+              "messages": 1
+            },
+            "2026-05-02": {
+              "spend": 807483.0,
+              "impressions": 12786,
+              "clicks": 288,
+              "reach": 12210,
+              "leads": 0,
+              "complete_registrations": 12,
+              "link_clicks": 164,
+              "landing_page_views": 157,
+              "messages": 1
+            },
+            "2026-05-03": {
+              "spend": 1252141.0,
+              "impressions": 20996,
+              "clicks": 517,
+              "reach": 20501,
+              "leads": 1,
+              "complete_registrations": 23,
+              "link_clicks": 309,
+              "landing_page_views": 297,
+              "messages": 3
+            },
+            "2026-05-04": {
+              "spend": 1246233.0,
+              "impressions": 21826,
+              "clicks": 525,
+              "reach": 21689,
+              "leads": 2,
+              "complete_registrations": 19,
+              "link_clicks": 272,
+              "landing_page_views": 279,
+              "messages": 2
+            },
+            "2026-05-05": {
+              "spend": 1876451.0,
+              "impressions": 31167,
+              "clicks": 704,
+              "reach": 30098,
+              "leads": 1,
+              "complete_registrations": 21,
+              "link_clicks": 376,
+              "landing_page_views": 392,
+              "messages": 5
+            },
+            "2026-05-06": {
+              "spend": 1762635.0,
+              "impressions": 27861,
+              "clicks": 612,
+              "reach": 27861,
+              "leads": 0,
+              "complete_registrations": 20,
+              "link_clicks": 335,
+              "landing_page_views": 319,
+              "messages": 5
+            },
+            "2026-05-07": {
+              "spend": 1742491.0,
+              "impressions": 24633,
+              "clicks": 557,
+              "reach": 24633,
+              "leads": 2,
+              "complete_registrations": 25,
+              "link_clicks": 305,
+              "landing_page_views": 309,
+              "messages": 3
+            },
+            "2026-05-08": {
+              "spend": 479954.0,
+              "impressions": 4566,
+              "clicks": 100,
+              "reach": 4454,
+              "leads": 0,
+              "complete_registrations": 6,
+              "link_clicks": 58,
+              "landing_page_views": 66,
+              "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 2329100.0,
+              "impressions": 38989,
+              "clicks": 755,
+              "reach": 38945,
+              "leads": 1,
+              "complete_registrations": 36,
+              "link_clicks": 425,
+              "landing_page_views": 401,
+              "messages": 5
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
+        },
+        {
           "campaign_name": "18/4 - NOMA911 - Phương Nam - designer - v2",
           "campaign_id": "120246123574430058",
-          "spend": 14236572.0,
-          "impressions": 168022,
-          "clicks": 2510,
-          "reach": 146744,
-          "ctr": 1.4939,
-          "cpc": 5671.94,
-          "cpm": 84730.4,
+          "spend": 15390057.0,
+          "impressions": 178845,
+          "clicks": 2706,
+          "reach": 156658,
+          "ctr": 1.513,
+          "cpc": 5687.38,
+          "cpm": 86052.49,
           "leads": 6,
-          "link_clicks": 1725,
-          "landing_page_views": 1718,
-          "video_views": 40267,
-          "complete_registrations": 125,
-          "messages": 16,
+          "link_clicks": 1859,
+          "landing_page_views": 1849,
+          "video_views": 43290,
+          "complete_registrations": 135,
+          "messages": 17,
           "by_date": {
             "2026-04-18": {
               "spend": 343405.0,
@@ -1239,160 +1437,17 @@
               "link_clicks": 26,
               "landing_page_views": 26,
               "messages": 2
-            }
-          },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
-          "objective": "OUTCOME_SALES"
-        },
-        {
-          "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao",
-          "campaign_id": "120246745047610058",
-          "spend": 13624137.0,
-          "impressions": 217574,
-          "clicks": 4665,
-          "reach": 211399,
-          "ctr": 2.1441,
-          "cpc": 2920.5,
-          "cpm": 62618.41,
-          "leads": 7,
-          "link_clicks": 2691,
-          "landing_page_views": 2702,
-          "video_views": 87989,
-          "complete_registrations": 195,
-          "messages": 27,
-          "by_date": {
-            "2026-04-27": {
-              "spend": 272261.0,
-              "impressions": 2926,
-              "clicks": 54,
-              "reach": 2551,
-              "leads": 0,
-              "complete_registrations": 4,
-              "link_clicks": 37,
-              "landing_page_views": 33,
-              "messages": 2
             },
-            "2026-04-28": {
-              "spend": 1076564.0,
-              "impressions": 16631,
-              "clicks": 294,
-              "reach": 14946,
+            "2026-05-09": {
+              "spend": 1153485.0,
+              "impressions": 10823,
+              "clicks": 196,
+              "reach": 9914,
               "leads": 0,
-              "complete_registrations": 22,
-              "link_clicks": 185,
-              "landing_page_views": 191,
+              "complete_registrations": 10,
+              "link_clicks": 134,
+              "landing_page_views": 131,
               "messages": 1
-            },
-            "2026-04-29": {
-              "spend": 965231.0,
-              "impressions": 16253,
-              "clicks": 280,
-              "reach": 15708,
-              "leads": 0,
-              "complete_registrations": 14,
-              "link_clicks": 190,
-              "landing_page_views": 199,
-              "messages": 3
-            },
-            "2026-04-30": {
-              "spend": 1121010.0,
-              "impressions": 19835,
-              "clicks": 381,
-              "reach": 19266,
-              "leads": 0,
-              "complete_registrations": 15,
-              "link_clicks": 252,
-              "landing_page_views": 253,
-              "messages": 1
-            },
-            "2026-05-01": {
-              "spend": 1021683.0,
-              "impressions": 18094,
-              "clicks": 353,
-              "reach": 17482,
-              "leads": 1,
-              "complete_registrations": 14,
-              "link_clicks": 208,
-              "landing_page_views": 207,
-              "messages": 1
-            },
-            "2026-05-02": {
-              "spend": 807483.0,
-              "impressions": 12786,
-              "clicks": 288,
-              "reach": 12210,
-              "leads": 0,
-              "complete_registrations": 12,
-              "link_clicks": 164,
-              "landing_page_views": 157,
-              "messages": 1
-            },
-            "2026-05-03": {
-              "spend": 1252141.0,
-              "impressions": 20996,
-              "clicks": 517,
-              "reach": 20501,
-              "leads": 1,
-              "complete_registrations": 23,
-              "link_clicks": 309,
-              "landing_page_views": 297,
-              "messages": 3
-            },
-            "2026-05-04": {
-              "spend": 1246233.0,
-              "impressions": 21826,
-              "clicks": 525,
-              "reach": 21689,
-              "leads": 2,
-              "complete_registrations": 19,
-              "link_clicks": 272,
-              "landing_page_views": 279,
-              "messages": 2
-            },
-            "2026-05-05": {
-              "spend": 1876451.0,
-              "impressions": 31167,
-              "clicks": 704,
-              "reach": 30098,
-              "leads": 1,
-              "complete_registrations": 21,
-              "link_clicks": 376,
-              "landing_page_views": 392,
-              "messages": 5
-            },
-            "2026-05-06": {
-              "spend": 1762635.0,
-              "impressions": 27861,
-              "clicks": 612,
-              "reach": 27861,
-              "leads": 0,
-              "complete_registrations": 20,
-              "link_clicks": 335,
-              "landing_page_views": 319,
-              "messages": 5
-            },
-            "2026-05-07": {
-              "spend": 1742491.0,
-              "impressions": 24633,
-              "clicks": 557,
-              "reach": 24633,
-              "leads": 2,
-              "complete_registrations": 25,
-              "link_clicks": 305,
-              "landing_page_views": 309,
-              "messages": 3
-            },
-            "2026-05-08": {
-              "spend": 479954.0,
-              "impressions": 4566,
-              "clicks": 100,
-              "reach": 4454,
-              "leads": 0,
-              "complete_registrations": 6,
-              "link_clicks": 58,
-              "landing_page_views": 66,
-              "messages": 0
             }
           },
           "status": "ACTIVE",
@@ -1576,20 +1631,174 @@
           "objective": "OUTCOME_SALES"
         },
         {
+          "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao y hệt",
+          "campaign_id": "120246838738910058",
+          "spend": 12248248.0,
+          "impressions": 174956,
+          "clicks": 3616,
+          "reach": 170923,
+          "ctr": 2.0668,
+          "cpc": 3387.24,
+          "cpm": 70007.59,
+          "leads": 4,
+          "link_clicks": 2030,
+          "landing_page_views": 1923,
+          "video_views": 71072,
+          "complete_registrations": 175,
+          "messages": 22,
+          "by_date": {
+            "2026-04-28": {
+              "spend": 10157.0,
+              "impressions": 96,
+              "clicks": 5,
+              "reach": 94,
+              "leads": 0,
+              "complete_registrations": 1,
+              "link_clicks": 3,
+              "landing_page_views": 3,
+              "messages": 0
+            },
+            "2026-04-29": {
+              "spend": 378564.0,
+              "impressions": 4850,
+              "clicks": 89,
+              "reach": 4688,
+              "leads": 0,
+              "complete_registrations": 9,
+              "link_clicks": 51,
+              "landing_page_views": 50,
+              "messages": 0
+            },
+            "2026-04-30": {
+              "spend": 718081.0,
+              "impressions": 10321,
+              "clicks": 213,
+              "reach": 10321,
+              "leads": 0,
+              "complete_registrations": 9,
+              "link_clicks": 125,
+              "landing_page_views": 119,
+              "messages": 0
+            },
+            "2026-05-01": {
+              "spend": 790720.0,
+              "impressions": 11121,
+              "clicks": 218,
+              "reach": 10973,
+              "leads": 0,
+              "complete_registrations": 8,
+              "link_clicks": 126,
+              "landing_page_views": 116,
+              "messages": 2
+            },
+            "2026-05-02": {
+              "spend": 734243.0,
+              "impressions": 9320,
+              "clicks": 197,
+              "reach": 9107,
+              "leads": 0,
+              "complete_registrations": 7,
+              "link_clicks": 109,
+              "landing_page_views": 105,
+              "messages": 1
+            },
+            "2026-05-03": {
+              "spend": 1030464.0,
+              "impressions": 15916,
+              "clicks": 374,
+              "reach": 15248,
+              "leads": 1,
+              "complete_registrations": 20,
+              "link_clicks": 215,
+              "landing_page_views": 201,
+              "messages": 5
+            },
+            "2026-05-04": {
+              "spend": 968518.0,
+              "impressions": 14799,
+              "clicks": 356,
+              "reach": 14473,
+              "leads": 2,
+              "complete_registrations": 20,
+              "link_clicks": 194,
+              "landing_page_views": 181,
+              "messages": 5
+            },
+            "2026-05-05": {
+              "spend": 1656700.0,
+              "impressions": 24173,
+              "clicks": 509,
+              "reach": 23396,
+              "leads": 1,
+              "complete_registrations": 15,
+              "link_clicks": 268,
+              "landing_page_views": 259,
+              "messages": 0
+            },
+            "2026-05-06": {
+              "spend": 1628306.0,
+              "impressions": 23152,
+              "clicks": 522,
+              "reach": 23040,
+              "leads": 0,
+              "complete_registrations": 21,
+              "link_clicks": 285,
+              "landing_page_views": 273,
+              "messages": 1
+            },
+            "2026-05-07": {
+              "spend": 1853973.0,
+              "impressions": 26535,
+              "clicks": 514,
+              "reach": 25716,
+              "leads": 0,
+              "complete_registrations": 34,
+              "link_clicks": 300,
+              "landing_page_views": 272,
+              "messages": 3
+            },
+            "2026-05-08": {
+              "spend": 536306.0,
+              "impressions": 4421,
+              "clicks": 85,
+              "reach": 4365,
+              "leads": 0,
+              "complete_registrations": 5,
+              "link_clicks": 45,
+              "landing_page_views": 59,
+              "messages": 1
+            },
+            "2026-05-09": {
+              "spend": 1942216.0,
+              "impressions": 30252,
+              "clicks": 534,
+              "reach": 29502,
+              "leads": 0,
+              "complete_registrations": 26,
+              "link_clicks": 309,
+              "landing_page_views": 285,
+              "messages": 4
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
+        },
+        {
           "campaign_name": "20/4 - NOMA911 - Phương Nam - cụ đoành",
           "campaign_id": "120246259818140058",
-          "spend": 11167606.0,
-          "impressions": 153962,
-          "clicks": 2186,
-          "reach": 142060,
-          "ctr": 1.4198,
-          "cpc": 5108.69,
-          "cpm": 72534.82,
+          "spend": 11724171.0,
+          "impressions": 160278,
+          "clicks": 2282,
+          "reach": 148312,
+          "ctr": 1.4238,
+          "cpc": 5137.67,
+          "cpm": 73148.97,
           "leads": 4,
-          "link_clicks": 1378,
-          "landing_page_views": 1350,
-          "video_views": 40301,
-          "complete_registrations": 90,
+          "link_clicks": 1439,
+          "landing_page_views": 1408,
+          "video_views": 42132,
+          "complete_registrations": 92,
           "messages": 14,
           "by_date": {
             "2026-04-20": {
@@ -1800,149 +2009,17 @@
               "link_clicks": 18,
               "landing_page_views": 19,
               "messages": 0
-            }
-          },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
-          "objective": "OUTCOME_SALES"
-        },
-        {
-          "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao y hệt",
-          "campaign_id": "120246838738910058",
-          "spend": 10306032.0,
-          "impressions": 144704,
-          "clicks": 3082,
-          "reach": 141421,
-          "ctr": 2.1299,
-          "cpc": 3343.94,
-          "cpm": 71221.47,
-          "leads": 4,
-          "link_clicks": 1721,
-          "landing_page_views": 1638,
-          "video_views": 58804,
-          "complete_registrations": 149,
-          "messages": 18,
-          "by_date": {
-            "2026-04-28": {
-              "spend": 10157.0,
-              "impressions": 96,
-              "clicks": 5,
-              "reach": 94,
+            },
+            "2026-05-09": {
+              "spend": 556565.0,
+              "impressions": 6316,
+              "clicks": 96,
+              "reach": 6252,
               "leads": 0,
-              "complete_registrations": 1,
-              "link_clicks": 3,
-              "landing_page_views": 3,
+              "complete_registrations": 2,
+              "link_clicks": 61,
+              "landing_page_views": 58,
               "messages": 0
-            },
-            "2026-04-29": {
-              "spend": 378564.0,
-              "impressions": 4850,
-              "clicks": 89,
-              "reach": 4688,
-              "leads": 0,
-              "complete_registrations": 9,
-              "link_clicks": 51,
-              "landing_page_views": 50,
-              "messages": 0
-            },
-            "2026-04-30": {
-              "spend": 718081.0,
-              "impressions": 10321,
-              "clicks": 213,
-              "reach": 10321,
-              "leads": 0,
-              "complete_registrations": 9,
-              "link_clicks": 125,
-              "landing_page_views": 119,
-              "messages": 0
-            },
-            "2026-05-01": {
-              "spend": 790720.0,
-              "impressions": 11121,
-              "clicks": 218,
-              "reach": 10973,
-              "leads": 0,
-              "complete_registrations": 8,
-              "link_clicks": 126,
-              "landing_page_views": 116,
-              "messages": 2
-            },
-            "2026-05-02": {
-              "spend": 734243.0,
-              "impressions": 9320,
-              "clicks": 197,
-              "reach": 9107,
-              "leads": 0,
-              "complete_registrations": 7,
-              "link_clicks": 109,
-              "landing_page_views": 105,
-              "messages": 1
-            },
-            "2026-05-03": {
-              "spend": 1030464.0,
-              "impressions": 15916,
-              "clicks": 374,
-              "reach": 15248,
-              "leads": 1,
-              "complete_registrations": 20,
-              "link_clicks": 215,
-              "landing_page_views": 201,
-              "messages": 5
-            },
-            "2026-05-04": {
-              "spend": 968518.0,
-              "impressions": 14799,
-              "clicks": 356,
-              "reach": 14473,
-              "leads": 2,
-              "complete_registrations": 20,
-              "link_clicks": 194,
-              "landing_page_views": 181,
-              "messages": 5
-            },
-            "2026-05-05": {
-              "spend": 1656700.0,
-              "impressions": 24173,
-              "clicks": 509,
-              "reach": 23396,
-              "leads": 1,
-              "complete_registrations": 15,
-              "link_clicks": 268,
-              "landing_page_views": 259,
-              "messages": 0
-            },
-            "2026-05-06": {
-              "spend": 1628306.0,
-              "impressions": 23152,
-              "clicks": 522,
-              "reach": 23040,
-              "leads": 0,
-              "complete_registrations": 21,
-              "link_clicks": 285,
-              "landing_page_views": 273,
-              "messages": 1
-            },
-            "2026-05-07": {
-              "spend": 1853973.0,
-              "impressions": 26535,
-              "clicks": 514,
-              "reach": 25716,
-              "leads": 0,
-              "complete_registrations": 34,
-              "link_clicks": 300,
-              "landing_page_views": 272,
-              "messages": 3
-            },
-            "2026-05-08": {
-              "spend": 536306.0,
-              "impressions": 4421,
-              "clicks": 85,
-              "reach": 4365,
-              "leads": 0,
-              "complete_registrations": 5,
-              "link_clicks": 45,
-              "landing_page_views": 59,
-              "messages": 1
             }
           },
           "status": "ACTIVE",
@@ -1952,19 +2029,19 @@
         {
           "campaign_name": "28/4 - Noma 911 - DS - Phương Nam - Quang Tèo - Bản sao 2",
           "campaign_id": "120246812956660058",
-          "spend": 10180501.0,
-          "impressions": 149270,
-          "clicks": 2925,
-          "reach": 143832,
-          "ctr": 1.9595,
-          "cpc": 3480.51,
-          "cpm": 68201.92,
+          "spend": 11369477.0,
+          "impressions": 167039,
+          "clicks": 3277,
+          "reach": 161267,
+          "ctr": 1.9618,
+          "cpc": 3469.48,
+          "cpm": 68064.81,
           "leads": 6,
-          "link_clicks": 1749,
-          "landing_page_views": 1714,
-          "video_views": 60159,
-          "complete_registrations": 144,
-          "messages": 20,
+          "link_clicks": 1977,
+          "landing_page_views": 1934,
+          "video_views": 67459,
+          "complete_registrations": 165,
+          "messages": 24,
           "by_date": {
             "2026-04-28": {
               "spend": 403523.0,
@@ -2086,6 +2163,17 @@
               "link_clicks": 12,
               "landing_page_views": 9,
               "messages": 1
+            },
+            "2026-05-09": {
+              "spend": 1188976.0,
+              "impressions": 17769,
+              "clicks": 352,
+              "reach": 17435,
+              "leads": 0,
+              "complete_registrations": 21,
+              "link_clicks": 228,
+              "landing_page_views": 220,
+              "messages": 4
             }
           },
           "status": "ACTIVE",
@@ -2095,19 +2183,19 @@
         {
           "campaign_name": "27/4 - Noma 911 - DS - Phương Nam - Quang Tèo",
           "campaign_id": "120246730619280058",
-          "spend": 9569691.0,
-          "impressions": 142600,
-          "clicks": 2837,
-          "reach": 138366,
-          "ctr": 1.9895,
-          "cpc": 3373.17,
-          "cpm": 67108.63,
+          "spend": 10625792.0,
+          "impressions": 158740,
+          "clicks": 3150,
+          "reach": 154351,
+          "ctr": 1.9844,
+          "cpc": 3373.27,
+          "cpm": 66938.34,
           "leads": 2,
-          "link_clicks": 1730,
-          "landing_page_views": 1673,
-          "video_views": 56734,
-          "complete_registrations": 163,
-          "messages": 15,
+          "link_clicks": 1929,
+          "landing_page_views": 1858,
+          "video_views": 63249,
+          "complete_registrations": 188,
+          "messages": 18,
           "by_date": {
             "2026-04-27": {
               "spend": 310143.0,
@@ -2240,6 +2328,17 @@
               "link_clicks": 7,
               "landing_page_views": 12,
               "messages": 1
+            },
+            "2026-05-09": {
+              "spend": 1056101.0,
+              "impressions": 16140,
+              "clicks": 313,
+              "reach": 15985,
+              "leads": 0,
+              "complete_registrations": 25,
+              "link_clicks": 199,
+              "landing_page_views": 185,
+              "messages": 3
             }
           },
           "status": "ACTIVE",
@@ -3710,24 +3809,24 @@
           "objective": "OUTCOME_SALES"
         }
       ],
-      "rows_raw": 192
+      "rows_raw": 198
     },
     {
       "account_id": "1655506672244826",
       "account_name": "CÔNG TY TNHH DOSCOM HOLDINGS - Noma Việt Nam",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
-        "spend": 115302261.0,
-        "impressions": 1474354,
-        "clicks": 29014,
-        "reach": 1225026,
-        "leads": 77,
-        "complete_registrations": 1078,
-        "ctr": 1.9679,
-        "cpc": 3974.02,
+        "spend": 122725087.0,
+        "impressions": 1563385,
+        "clicks": 30559,
+        "reach": 1290895,
+        "leads": 80,
+        "complete_registrations": 1148,
+        "ctr": 1.9547,
+        "cpc": 4016.0,
         "campaigns_total": 8,
         "campaigns_active": 5
       },
@@ -3735,19 +3834,19 @@
         {
           "campaign_name": "27/3 - Noma911 - Hoàng Real + Minh biker shop",
           "campaign_id": "120244203655820388",
-          "spend": 39146001.0,
-          "impressions": 474595,
-          "clicks": 9239,
-          "reach": 435278,
-          "ctr": 1.9467,
-          "cpc": 4237.04,
-          "cpm": 82482.96,
+          "spend": 40002556.0,
+          "impressions": 484103,
+          "clicks": 9398,
+          "reach": 444206,
+          "ctr": 1.9413,
+          "cpc": 4256.5,
+          "cpm": 82632.32,
           "leads": 21,
-          "link_clicks": 5591,
-          "landing_page_views": 5256,
-          "video_views": 139646,
-          "complete_registrations": 321,
-          "messages": 70,
+          "link_clicks": 5682,
+          "landing_page_views": 5341,
+          "video_views": 142293,
+          "complete_registrations": 330,
+          "messages": 73,
           "by_date": {
             "2026-03-28": {
               "spend": 130971.0,
@@ -4199,6 +4298,17 @@
               "link_clicks": 10,
               "landing_page_views": 10,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 856555.0,
+              "impressions": 9508,
+              "clicks": 159,
+              "reach": 8928,
+              "leads": 0,
+              "complete_registrations": 9,
+              "link_clicks": 91,
+              "landing_page_views": 85,
+              "messages": 3
             }
           },
           "status": "ACTIVE",
@@ -4208,19 +4318,19 @@
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành Xe Trắng",
           "campaign_id": "120244425748800388",
-          "spend": 20180590.0,
-          "impressions": 310146,
-          "clicks": 5491,
-          "reach": 189665,
-          "ctr": 1.7705,
-          "cpc": 3675.21,
-          "cpm": 65068.03,
-          "leads": 16,
-          "link_clicks": 3542,
-          "landing_page_views": 3379,
-          "video_views": 53346,
-          "complete_registrations": 287,
-          "messages": 33,
+          "spend": 23151592.0,
+          "impressions": 352560,
+          "clicks": 6244,
+          "reach": 212931,
+          "ctr": 1.771,
+          "cpc": 3707.81,
+          "cpm": 65667.1,
+          "leads": 17,
+          "link_clicks": 4012,
+          "landing_page_views": 3811,
+          "video_views": 59646,
+          "complete_registrations": 323,
+          "messages": 37,
           "by_date": {
             "2026-04-23": {
               "spend": 441447.0,
@@ -4397,6 +4507,17 @@
               "link_clicks": 45,
               "landing_page_views": 46,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 2971002.0,
+              "impressions": 42414,
+              "clicks": 753,
+              "reach": 23266,
+              "leads": 1,
+              "complete_registrations": 36,
+              "link_clicks": 470,
+              "landing_page_views": 432,
+              "messages": 4
             }
           },
           "status": "ACTIVE",
@@ -4406,19 +4527,19 @@
         {
           "campaign_name": "15/4 - Noma911 - Dương Minh Hải",
           "campaign_id": "120244203627430388",
-          "spend": 18259618.0,
-          "impressions": 193395,
-          "clicks": 4265,
-          "reach": 165308,
-          "ctr": 2.2053,
-          "cpc": 4281.27,
-          "cpm": 94416.18,
+          "spend": 19818926.0,
+          "impressions": 205816,
+          "clicks": 4529,
+          "reach": 176565,
+          "ctr": 2.2005,
+          "cpc": 4376.0,
+          "cpm": 96294.39,
           "leads": 16,
-          "link_clicks": 2595,
-          "landing_page_views": 2400,
-          "video_views": 41698,
-          "complete_registrations": 160,
-          "messages": 33,
+          "link_clicks": 2743,
+          "landing_page_views": 2547,
+          "video_views": 44545,
+          "complete_registrations": 170,
+          "messages": 37,
           "by_date": {
             "2026-04-16": {
               "spend": 466340.0,
@@ -4672,6 +4793,17 @@
               "link_clicks": 17,
               "landing_page_views": 16,
               "messages": 1
+            },
+            "2026-05-09": {
+              "spend": 1559308.0,
+              "impressions": 12421,
+              "clicks": 264,
+              "reach": 11257,
+              "leads": 0,
+              "complete_registrations": 10,
+              "link_clicks": 148,
+              "landing_page_views": 147,
+              "messages": 4
             }
           },
           "status": "ACTIVE",
@@ -4945,19 +5077,19 @@
         {
           "campaign_name": "23/4 - Noma911 - Cụ Đoành - 2 video",
           "campaign_id": "120244425582170388",
-          "spend": 12300616.0,
-          "impressions": 163113,
-          "clicks": 2929,
-          "reach": 142773,
-          "ctr": 1.7957,
-          "cpc": 4199.6,
-          "cpm": 75411.62,
-          "leads": 4,
-          "link_clicks": 1793,
-          "landing_page_views": 1672,
-          "video_views": 56377,
-          "complete_registrations": 143,
-          "messages": 12,
+          "spend": 14336577.0,
+          "impressions": 187801,
+          "clicks": 3298,
+          "reach": 165191,
+          "ctr": 1.7561,
+          "cpc": 4347.05,
+          "cpm": 76339.19,
+          "leads": 6,
+          "link_clicks": 2031,
+          "landing_page_views": 1910,
+          "video_views": 64492,
+          "complete_registrations": 158,
+          "messages": 15,
           "by_date": {
             "2026-04-23": {
               "spend": 304442.0,
@@ -5134,6 +5266,17 @@
               "link_clicks": 21,
               "landing_page_views": 23,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 2035961.0,
+              "impressions": 24688,
+              "clicks": 369,
+              "reach": 22418,
+              "leads": 2,
+              "complete_registrations": 15,
+              "link_clicks": 238,
+              "landing_page_views": 238,
+              "messages": 3
             }
           },
           "status": "ACTIVE",
@@ -5449,24 +5592,24 @@
           "objective": "OUTCOME_SALES"
         }
       ],
-      "rows_raw": 146
+      "rows_raw": 150
     },
     {
       "account_id": "1449385949897024",
       "account_name": "CÔNG TY TNHH DOSCOM HOLDINGS - Công nghệ nâng tầm cuộc sống",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
-        "spend": 45465803.0,
-        "impressions": 310964,
-        "clicks": 8790,
-        "reach": 257535,
+        "spend": 48762177.0,
+        "impressions": 331612,
+        "clicks": 9317,
+        "reach": 274328,
         "leads": 6,
-        "complete_registrations": 187,
-        "ctr": 2.8267,
-        "cpc": 5172.45,
+        "complete_registrations": 206,
+        "ctr": 2.8096,
+        "cpc": 5233.68,
         "campaigns_total": 5,
         "campaigns_active": 3
       },
@@ -5474,19 +5617,19 @@
         {
           "campaign_name": "14/4 - Da8.1 - Reviewcotam",
           "campaign_id": "120248698825090196",
-          "spend": 17640620.0,
-          "impressions": 141386,
-          "clicks": 3211,
-          "reach": 117980,
-          "ctr": 2.2711,
-          "cpc": 5493.81,
-          "cpm": 124769.21,
+          "spend": 19108149.0,
+          "impressions": 151160,
+          "clicks": 3396,
+          "reach": 125586,
+          "ctr": 2.2466,
+          "cpc": 5626.66,
+          "cpm": 126410.09,
           "leads": 4,
-          "link_clicks": 1863,
-          "landing_page_views": 1726,
-          "video_views": 24621,
-          "complete_registrations": 80,
-          "messages": 34,
+          "link_clicks": 1988,
+          "landing_page_views": 1835,
+          "video_views": 25474,
+          "complete_registrations": 89,
+          "messages": 35,
           "by_date": {
             "2026-04-14": {
               "spend": 336487.0,
@@ -5762,6 +5905,17 @@
               "link_clicks": 6,
               "landing_page_views": 6,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 1467529.0,
+              "impressions": 9774,
+              "clicks": 185,
+              "reach": 7606,
+              "leads": 0,
+              "complete_registrations": 9,
+              "link_clicks": 125,
+              "landing_page_views": 109,
+              "messages": 1
             }
           },
           "status": "ACTIVE",
@@ -5771,18 +5925,18 @@
         {
           "campaign_name": "2/4 - DR1 - Việt Mỹ Nguyễn",
           "campaign_id": "120248039692470196",
-          "spend": 13313733.0,
-          "impressions": 96382,
-          "clicks": 3160,
-          "reach": 75697,
-          "ctr": 3.2786,
-          "cpc": 4213.21,
-          "cpm": 138135.06,
+          "spend": 13911503.0,
+          "impressions": 100735,
+          "clicks": 3259,
+          "reach": 79235,
+          "ctr": 3.2352,
+          "cpc": 4268.64,
+          "cpm": 138100.0,
           "leads": 1,
-          "link_clicks": 2044,
-          "landing_page_views": 1683,
-          "video_views": 20047,
-          "complete_registrations": 70,
+          "link_clicks": 2105,
+          "landing_page_views": 1740,
+          "video_views": 21087,
+          "complete_registrations": 73,
           "messages": 17,
           "by_date": {
             "2026-04-02": {
@@ -6136,6 +6290,17 @@
               "link_clicks": 4,
               "landing_page_views": 4,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 597770.0,
+              "impressions": 4353,
+              "clicks": 99,
+              "reach": 3538,
+              "leads": 0,
+              "complete_registrations": 3,
+              "link_clicks": 61,
+              "landing_page_views": 57,
+              "messages": 0
             }
           },
           "status": "ACTIVE",
@@ -6145,19 +6310,19 @@
         {
           "campaign_name": "14/4 - Da8.1 - Lưu Tiến Dựng",
           "campaign_id": "120248698541220196",
-          "spend": 10906021.0,
-          "impressions": 57037,
-          "clicks": 1878,
-          "reach": 48367,
-          "ctr": 3.2926,
-          "cpc": 5807.25,
-          "cpm": 191209.58,
+          "spend": 12137096.0,
+          "impressions": 63558,
+          "clicks": 2121,
+          "reach": 54016,
+          "ctr": 3.3371,
+          "cpc": 5722.35,
+          "cpm": 190960.95,
           "leads": 1,
-          "link_clicks": 1185,
-          "landing_page_views": 1058,
-          "video_views": 14054,
-          "complete_registrations": 33,
-          "messages": 10,
+          "link_clicks": 1322,
+          "landing_page_views": 1176,
+          "video_views": 16098,
+          "complete_registrations": 40,
+          "messages": 13,
           "by_date": {
             "2026-04-14": {
               "spend": 267527.0,
@@ -6422,6 +6587,17 @@
               "link_clicks": 12,
               "landing_page_views": 9,
               "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 1231075.0,
+              "impressions": 6521,
+              "clicks": 243,
+              "reach": 5649,
+              "leads": 0,
+              "complete_registrations": 7,
+              "link_clicks": 137,
+              "landing_page_views": 118,
+              "messages": 3
             }
           },
           "status": "ACTIVE",
@@ -6616,24 +6792,24 @@
           "objective": "OUTCOME_SALES"
         }
       ],
-      "rows_raw": 95
+      "rows_raw": 98
     },
     {
       "account_id": "906015559004892",
       "account_name": "Doscom Mart",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
-        "spend": 18194684.0,
-        "impressions": 105692,
-        "clicks": 3006,
-        "reach": 87308,
+        "spend": 19865016.0,
+        "impressions": 110288,
+        "clicks": 3216,
+        "reach": 91162,
         "leads": 3,
         "complete_registrations": 39,
-        "ctr": 2.8441,
-        "cpc": 6052.79,
+        "ctr": 2.916,
+        "cpc": 6176.93,
         "campaigns_total": 16,
         "campaigns_active": 3
       },
@@ -6993,17 +7169,17 @@
         {
           "campaign_name": "5/4 - D1 - DS - Phương Nam - tất cả",
           "campaign_id": "120244969775170303",
-          "spend": 1320337.0,
-          "impressions": 9304,
-          "clicks": 250,
-          "reach": 8342,
-          "ctr": 2.687,
-          "cpc": 5281.35,
-          "cpm": 141910.68,
+          "spend": 1844405.0,
+          "impressions": 10780,
+          "clicks": 297,
+          "reach": 9569,
+          "ctr": 2.7551,
+          "cpc": 6210.12,
+          "cpm": 171095.08,
           "leads": 0,
-          "link_clicks": 143,
-          "landing_page_views": 131,
-          "video_views": 3760,
+          "link_clicks": 164,
+          "landing_page_views": 152,
+          "video_views": 4306,
           "complete_registrations": 0,
           "messages": 1,
           "by_date": {
@@ -7060,6 +7236,17 @@
               "complete_registrations": 0,
               "link_clicks": 3,
               "landing_page_views": 2,
+              "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 524068.0,
+              "impressions": 1476,
+              "clicks": 47,
+              "reach": 1227,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 21,
+              "landing_page_views": 21,
               "messages": 0
             }
           },
@@ -7153,6 +7340,204 @@
           },
           "status": "PAUSED",
           "effective_status": "PAUSED",
+          "objective": "OUTCOME_SALES"
+        },
+        {
+          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm",
+          "campaign_id": "120245080810010303",
+          "spend": 1200993.0,
+          "impressions": 5788,
+          "clicks": 263,
+          "reach": 5102,
+          "ctr": 4.5439,
+          "cpc": 4566.51,
+          "cpm": 207497.06,
+          "leads": 0,
+          "link_clicks": 165,
+          "landing_page_views": 150,
+          "video_views": 2167,
+          "complete_registrations": 0,
+          "messages": 0,
+          "by_date": {
+            "2026-05-06": {
+              "spend": 323433.0,
+              "impressions": 1607,
+              "clicks": 71,
+              "reach": 1418,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 48,
+              "landing_page_views": 45,
+              "messages": 0
+            },
+            "2026-05-07": {
+              "spend": 401849.0,
+              "impressions": 2597,
+              "clicks": 107,
+              "reach": 2268,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 61,
+              "landing_page_views": 55,
+              "messages": 0
+            },
+            "2026-05-08": {
+              "spend": 76702.0,
+              "impressions": 491,
+              "clicks": 22,
+              "reach": 488,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 13,
+              "landing_page_views": 13,
+              "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 399009.0,
+              "impressions": 1093,
+              "clicks": 63,
+              "reach": 928,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 43,
+              "landing_page_views": 37,
+              "messages": 0
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
+        },
+        {
+          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm - Bản sao",
+          "campaign_id": "120245083954950303",
+          "spend": 1187613.0,
+          "impressions": 6209,
+          "clicks": 273,
+          "reach": 5448,
+          "ctr": 4.3968,
+          "cpc": 4350.23,
+          "cpm": 191272.83,
+          "leads": 0,
+          "link_clicks": 152,
+          "landing_page_views": 136,
+          "video_views": 2469,
+          "complete_registrations": 0,
+          "messages": 2,
+          "by_date": {
+            "2026-05-06": {
+              "spend": 330284.0,
+              "impressions": 1778,
+              "clicks": 75,
+              "reach": 1537,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 48,
+              "landing_page_views": 46,
+              "messages": 1
+            },
+            "2026-05-07": {
+              "spend": 397004.0,
+              "impressions": 2747,
+              "clicks": 118,
+              "reach": 2401,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 61,
+              "landing_page_views": 52,
+              "messages": 0
+            },
+            "2026-05-08": {
+              "spend": 66172.0,
+              "impressions": 482,
+              "clicks": 24,
+              "reach": 479,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 14,
+              "landing_page_views": 13,
+              "messages": 1
+            },
+            "2026-05-09": {
+              "spend": 394153.0,
+              "impressions": 1202,
+              "clicks": 56,
+              "reach": 1031,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 29,
+              "landing_page_views": 25,
+              "messages": 0
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
+          "objective": "OUTCOME_SALES"
+        },
+        {
+          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm - đổi tuổi",
+          "campaign_id": "120245084029000303",
+          "spend": 1150236.0,
+          "impressions": 5195,
+          "clicks": 241,
+          "reach": 4512,
+          "ctr": 4.6391,
+          "cpc": 4772.76,
+          "cpm": 221412.13,
+          "leads": 0,
+          "link_clicks": 133,
+          "landing_page_views": 122,
+          "video_views": 2019,
+          "complete_registrations": 0,
+          "messages": 1,
+          "by_date": {
+            "2026-05-06": {
+              "spend": 298975.0,
+              "impressions": 1488,
+              "clicks": 68,
+              "reach": 1284,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 39,
+              "landing_page_views": 35,
+              "messages": 0
+            },
+            "2026-05-07": {
+              "spend": 406534.0,
+              "impressions": 2389,
+              "clicks": 107,
+              "reach": 2096,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 60,
+              "landing_page_views": 58,
+              "messages": 1
+            },
+            "2026-05-08": {
+              "spend": 91625.0,
+              "impressions": 493,
+              "clicks": 22,
+              "reach": 464,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 15,
+              "landing_page_views": 12,
+              "messages": 0
+            },
+            "2026-05-09": {
+              "spend": 353102.0,
+              "impressions": 825,
+              "clicks": 44,
+              "reach": 668,
+              "leads": 0,
+              "complete_registrations": 0,
+              "link_clicks": 19,
+              "landing_page_views": 17,
+              "messages": 0
+            }
+          },
+          "status": "ACTIVE",
+          "effective_status": "ACTIVE",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -7285,171 +7670,6 @@
           },
           "status": "PAUSED",
           "effective_status": "PAUSED",
-          "objective": "OUTCOME_SALES"
-        },
-        {
-          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm",
-          "campaign_id": "120245080810010303",
-          "spend": 801984.0,
-          "impressions": 4695,
-          "clicks": 200,
-          "reach": 4174,
-          "ctr": 4.2599,
-          "cpc": 4009.92,
-          "cpm": 170816.61,
-          "leads": 0,
-          "link_clicks": 122,
-          "landing_page_views": 113,
-          "video_views": 1759,
-          "complete_registrations": 0,
-          "messages": 0,
-          "by_date": {
-            "2026-05-06": {
-              "spend": 323433.0,
-              "impressions": 1607,
-              "clicks": 71,
-              "reach": 1418,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 48,
-              "landing_page_views": 45,
-              "messages": 0
-            },
-            "2026-05-07": {
-              "spend": 401849.0,
-              "impressions": 2597,
-              "clicks": 107,
-              "reach": 2268,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 61,
-              "landing_page_views": 55,
-              "messages": 0
-            },
-            "2026-05-08": {
-              "spend": 76702.0,
-              "impressions": 491,
-              "clicks": 22,
-              "reach": 488,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 13,
-              "landing_page_views": 13,
-              "messages": 0
-            }
-          },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
-          "objective": "OUTCOME_SALES"
-        },
-        {
-          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm - đổi tuổi",
-          "campaign_id": "120245084029000303",
-          "spend": 797134.0,
-          "impressions": 4370,
-          "clicks": 197,
-          "reach": 3844,
-          "ctr": 4.508,
-          "cpc": 4046.37,
-          "cpm": 182410.53,
-          "leads": 0,
-          "link_clicks": 114,
-          "landing_page_views": 105,
-          "video_views": 1713,
-          "complete_registrations": 0,
-          "messages": 1,
-          "by_date": {
-            "2026-05-06": {
-              "spend": 298975.0,
-              "impressions": 1488,
-              "clicks": 68,
-              "reach": 1284,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 39,
-              "landing_page_views": 35,
-              "messages": 0
-            },
-            "2026-05-07": {
-              "spend": 406534.0,
-              "impressions": 2389,
-              "clicks": 107,
-              "reach": 2096,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 60,
-              "landing_page_views": 58,
-              "messages": 1
-            },
-            "2026-05-08": {
-              "spend": 91625.0,
-              "impressions": 493,
-              "clicks": 22,
-              "reach": 464,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 15,
-              "landing_page_views": 12,
-              "messages": 0
-            }
-          },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
-          "objective": "OUTCOME_SALES"
-        },
-        {
-          "campaign_name": "6/5 - D1 - DS - Phương Nam - Hùng Lâm - Bản sao",
-          "campaign_id": "120245083954950303",
-          "spend": 793460.0,
-          "impressions": 5007,
-          "clicks": 217,
-          "reach": 4417,
-          "ctr": 4.3339,
-          "cpc": 3656.5,
-          "cpm": 158470.14,
-          "leads": 0,
-          "link_clicks": 123,
-          "landing_page_views": 111,
-          "video_views": 2003,
-          "complete_registrations": 0,
-          "messages": 2,
-          "by_date": {
-            "2026-05-06": {
-              "spend": 330284.0,
-              "impressions": 1778,
-              "clicks": 75,
-              "reach": 1537,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 48,
-              "landing_page_views": 46,
-              "messages": 1
-            },
-            "2026-05-07": {
-              "spend": 397004.0,
-              "impressions": 2747,
-              "clicks": 118,
-              "reach": 2401,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 61,
-              "landing_page_views": 52,
-              "messages": 0
-            },
-            "2026-05-08": {
-              "spend": 66172.0,
-              "impressions": 482,
-              "clicks": 24,
-              "reach": 479,
-              "leads": 0,
-              "complete_registrations": 0,
-              "link_clicks": 14,
-              "landing_page_views": 13,
-              "messages": 1
-            }
-          },
-          "status": "ACTIVE",
-          "effective_status": "ACTIVE",
           "objective": "OUTCOME_SALES"
         },
         {
@@ -7728,14 +7948,14 @@
           "objective": "OUTCOME_SALES"
         }
       ],
-      "rows_raw": 67
+      "rows_raw": 71
     },
     {
       "account_id": "1416634670476226",
       "account_name": "CÔNG TY TNHH DOSCOM HOLDINGS - Doscom Mart",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
         "spend": 0,
@@ -7750,8 +7970,8 @@
       "account_id": "1418124406240173",
       "account_name": "DA8.1 mới (PN, chưa chạy)",
       "date_range": {
-        "start": "2026-02-08",
-        "end": "2026-05-08"
+        "start": "2026-02-09",
+        "end": "2026-05-09"
       },
       "summary": {
         "spend": 0,
