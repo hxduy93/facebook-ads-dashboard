@@ -703,15 +703,25 @@ function aggregateSpendByGroup(spendData, startDate, endDate) {
   return out;
 }
 
-// Per-group breakdown từ source_groups[WEBSITE+ZALO_OA+HOTLINE].products[code]
-function aggregateRevenueByGroupFromOnlineSources(rev, startDate, endDate) {
+// Per-group breakdown — chỉ tính status "delivered" để khớp doanh thu THỰC THU.
+// Dùng source_groups[X].products_by_status.delivered[code].by_date
+// (Cấu trúc: source_groups[X].products là sum tất cả status, products_by_status[status] tách riêng.)
+function aggregateRevenueByGroupFromOnlineSources(rev, startDate, endDate, statusFilter = "delivered") {
   const inRange = (d) => d >= startDate && d <= endDate;
   const out = {};
   for (const g of GROUP_DISPLAY_ORDER) out[g] = { revenue: 0, orders: 0, units: 0 };
   if (!rev?.source_groups) return out;
   for (const src of ONLINE_SOURCE_KEYS) {
-    const products = rev.source_groups[src]?.products;
-    if (!products) continue;
+    const sg = rev.source_groups[src];
+    if (!sg) continue;
+    // Pick products bucket per statusFilter
+    let products;
+    if (statusFilter === "all") {
+      products = sg.products || {};
+    } else {
+      const pbs = sg.products_by_status || {};
+      products = pbs[statusFilter] || {};
+    }
     for (const [code, p] of Object.entries(products)) {
       const grp = classifySpCode(code);
       if (!(grp in out)) continue;
@@ -723,12 +733,27 @@ function aggregateRevenueByGroupFromOnlineSources(rev, startDate, endDate) {
   return out;
 }
 
-// TRUE total từ top-level fields (gộp tất cả status, all SP) per source
-// Trả về { WEBSITE: {revenue, orders}, ZALO_OA: {...}, HOTLINE: {...}, _total: {...} }
+// TRUE total từ top-level fields, BREAKDOWN THEO STATUS, per source
+// Pancake status mapping (script fetch_pancake_revenue.py line 252-258):
+//   3 = Đã giao         → bucket "delivered"   ← REALIZED revenue
+//   4 = Đang hoàn       → bucket "returning"   ← chưa thực, đang xử lý hoàn
+//   5 = Đã hoàn         → bucket "returned"    ← KHÔNG tính rev (đã refund)
+//   6 = Đã hủy          → bucket "canceled"    ← KHÔNG tính rev (hủy đơn)
+//   0/1/2/8/9 (Mới/Đã duyệt/Đã shipped/Đang đóng/Pending) → bucket "other"
+//                                                    ← chưa giao, có thể giao thành công
+// Trả về:
+//   src: { orders, delivered, other, returning, returned, canceled, total }
+//   total = sum tất cả status (Pancake POS "Tất cả" tab — bao gồm cả hủy/hoàn)
 function aggregateTrueTotalsBySource(rev, startDate, endDate) {
   const inRange = (d) => d >= startDate && d <= endDate;
-  const out = { _total: { revenue: 0, orders: 0 } };
-  for (const src of ONLINE_SOURCE_KEYS) out[src] = { revenue: 0, orders: 0 };
+  const STATUSES = ["delivered", "other", "returning", "returned", "canceled"];
+  const newBucket = () => {
+    const b = { orders: 0, total: 0, orders_delivered: 0 };
+    for (const s of STATUSES) b[s] = 0;
+    return b;
+  };
+  const out = { _total: newBucket() };
+  for (const src of ONLINE_SOURCE_KEYS) out[src] = newBucket();
   if (!rev?.source_groups) return out;
   for (const src of ONLINE_SOURCE_KEYS) {
     const sg = rev.source_groups[src];
@@ -736,38 +761,98 @@ function aggregateTrueTotalsBySource(rev, startDate, endDate) {
     for (const [date, cnt] of Object.entries(sg.total_orders_by_date || {})) {
       if (inRange(date)) out[src].orders += Number(cnt || 0);
     }
-    for (const stMap of Object.values(sg.order_revenue_by_status_by_date || {})) {
+    // Đơn đã giao (delivered): đếm riêng từ order_count_by_status_by_date.delivered
+    const deliveredCnts = (sg.order_count_by_status_by_date || {}).delivered || {};
+    for (const [date, cnt] of Object.entries(deliveredCnts)) {
+      if (inRange(date)) out[src].orders_delivered += Number(cnt || 0);
+    }
+    for (const [stKey, stMap] of Object.entries(sg.order_revenue_by_status_by_date || {})) {
+      const bucket = STATUSES.includes(stKey) ? stKey : "other";
       for (const [date, v] of Object.entries(stMap || {})) {
-        if (inRange(date)) out[src].revenue += Number(v || 0);
+        if (inRange(date)) out[src][bucket] += Number(v || 0);
       }
     }
-    out._total.revenue += out[src].revenue;
-    out._total.orders  += out[src].orders;
+    out[src].total = STATUSES.reduce((s, k) => s + out[src][k], 0);
+    out._total.orders += out[src].orders;
+    out._total.orders_delivered += out[src].orders_delivered;
+    for (const s of STATUSES) out._total[s] += out[src][s];
   }
+  out._total.total = STATUSES.reduce((s, k) => s + out._total[k], 0);
   return out;
 }
 
-function renderSourceBreakdown(srcTotals) {
+// Doanh thu "đã giao thành công" — KHÔNG tính đơn hủy/hoàn/đang xử lý.
+// Đây là số khớp gần nhất với "doanh thu thật đã thu" trên Pancake POS.
+function realizedRevenue(b) { return b.delivered || 0; }
+// Doanh thu "POS Tất cả tab" — gồm Đã giao + đơn đang xử lý (Mới/Đã gửi),
+// LOẠI đơn hủy/hoàn. Khớp Pancake POS COD column với 1 chú ý:
+// nếu đơn prepaid (cod=0), script Python fallback `total_price_after_sub_discount`
+// → có thể HƠN POS COD column (nhưng cộng với "Trả trước" sẽ khớp).
+function posEquivalentRevenue(b) { return (b.delivered || 0) + (b.other || 0); }
+
+function renderSourceBreakdown(srcTotals, freshnessNote) {
   const wrap = document.getElementById('source-breakdown-wrap');
   if (!wrap) return;
-  const total = srcTotals._total.revenue || 1;  // tránh chia 0
+  const totDeliv = srcTotals._total.delivered || 0;
+  const totOther = srcTotals._total.other || 0;
+  const totRetCancel = (srcTotals._total.returning || 0) + (srcTotals._total.returned || 0) + (srcTotals._total.canceled || 0);
+  const headlineRev = realizedRevenue(srcTotals._total);          // delivered only
+  const posLikeRev = posEquivalentRevenue(srcTotals._total);      // delivered + other
+  const totalAllStatus = srcTotals._total.total || 0;             // includes hoàn/hủy
+
   const cards = ONLINE_SOURCE_KEYS.map(src => {
-    const t = srcTotals[src] || { revenue: 0, orders: 0 };
-    const pct = total > 0 ? (t.revenue / total) * 100 : 0;
-    const aov = t.orders > 0 ? Math.round(t.revenue / t.orders) : 0;
+    const t = srcTotals[src] || { delivered: 0, other: 0, returned: 0, canceled: 0, returning: 0, orders: 0, total: 0 };
+    const realized = realizedRevenue(t);
+    const pct = posLikeRev > 0 ? (realized / posLikeRev) * 100 : 0;
+    const aov = t.orders > 0 ? Math.round(t.total / t.orders) : 0;
     return `<div class="source-card ${SOURCE_CLS[src]}">
       <div class="label">${SOURCE_LABEL_VN[src]}</div>
-      <div class="value">${fmtMoney(t.revenue)}đ</div>
-      <div class="sub">${t.orders} đơn · AOV ${fmtMoney(aov)}đ · ${pct.toFixed(1)}%</div>
+      <div class="value">${fmtMoney(realized)}đ <span style="font-size:11px;color:#6b7280;font-weight:400">(đã giao)</span></div>
+      <div class="sub" style="line-height:1.5">
+        ${t.orders} đơn · AOV ${fmtMoney(aov)}đ · ${pct.toFixed(1)}% share<br>
+        <span style="color:#9ca3af">Đang xử lý: ${fmtMoney(t.other)}đ · Hoàn/hủy: ${fmtMoney((t.returning||0)+(t.returned||0)+(t.canceled||0))}đ</span>
+      </div>
     </div>`;
   }).join("");
-  const totalAov = srcTotals._total.orders > 0 ? Math.round(srcTotals._total.revenue / srcTotals._total.orders) : 0;
+  const totalAov = srcTotals._total.orders > 0 ? Math.round(totalAllStatus / srcTotals._total.orders) : 0;
   const totalCard = `<div class="source-card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#fbbf24">
-    <div class="label" style="color:#78350f">📦 TỔNG 3 NGUỒN ONLINE</div>
-    <div class="value" style="color:#92400e">${fmtMoney(srcTotals._total.revenue)}đ</div>
-    <div class="sub" style="color:#92400e">${srcTotals._total.orders} đơn · AOV ${fmtMoney(totalAov)}đ</div>
+    <div class="label" style="color:#78350f">📦 TỔNG 3 NGUỒN — ĐÃ GIAO</div>
+    <div class="value" style="color:#92400e">${fmtMoney(headlineRev)}đ</div>
+    <div class="sub" style="color:#92400e;line-height:1.5">
+      ${srcTotals._total.orders} đơn · AOV ${fmtMoney(totalAov)}đ<br>
+      <span style="color:#a16207">Pending: ${fmtMoney(totOther)}đ · Hoàn/hủy: ${fmtMoney(totRetCancel)}đ</span>
+    </div>
   </div>`;
-  wrap.innerHTML = `<div class="source-cards">${cards}${totalCard}</div>`;
+  const note = `<div style="margin-top:8px;padding:8px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;font-size:11.5px;color:#1e3a8a;line-height:1.6">
+    <strong>📖 Cách đọc:</strong>
+    <strong>"Đã giao"</strong> = doanh thu thực sự đã thu (status delivered) — số trên cards.
+    <strong>"Đang xử lý"</strong> = đơn Mới/Đã shipped/Chờ chuyển hàng (status other) — chưa giao xong, chưa thu COD.
+    <strong>"Hoàn/hủy"</strong> = đơn returning/returned/canceled — KHÔNG tính vào doanh thu thật.
+    <br>POS UI Pancake "Tất cả" tab gộp Đã giao + Đang xử lý = <strong>${fmtMoney(posLikeRev)}đ</strong>.
+    Tổng all-status (kể cả hoàn/hủy) = <strong>${fmtMoney(totalAllStatus)}đ</strong>.
+  </div>`;
+  wrap.innerHTML = (freshnessNote || '') + `<div class="source-cards">${cards}${totalCard}</div>` + note;
+}
+
+// Format snapshot freshness — show warning nếu data > 6h cũ
+function formatFreshnessNote(rev) {
+  if (!rev?.generated_at) return '';
+  const m = String(rev.generated_at).match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
+  if (!m) return '';
+  // generated_at là UTC string. Compute age in hours.
+  const utcStr = `${m[1]}T${m[2]}:${m[3]}:00Z`;
+  const utcMs = Date.parse(utcStr);
+  if (isNaN(utcMs)) return '';
+  const ageHr = (Date.now() - utcMs) / 3600000;
+  if (ageHr < 1) return '';
+  const ageLabel = ageHr < 24 ? `${ageHr.toFixed(1)} giờ` : `${(ageHr/24).toFixed(1)} ngày`;
+  if (ageHr > 6) {
+    return `<div class="warning-banner" style="background:#fef3c7;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:4px;font-size:12px;color:#78350f;margin-bottom:10px">
+      ⏱ Snapshot Pancake cập nhật cách đây <strong>${ageLabel}</strong> (${rev.generated_at}) — có thể chưa khớp POS hôm nay nếu đơn cancel/refund chưa sync.
+      Workflow auto-sync chạy mỗi 30 phút từ 9h-17h VN.
+    </div>`;
+  }
+  return `<div style="font-size:11px;color:#9ca3af;margin-bottom:6px">📡 Snapshot Pancake: ${rev.generated_at} (${ageLabel} trước)</div>`;
 }
 
 function renderProfitTable() {
@@ -778,11 +863,12 @@ function renderProfitTable() {
   if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
 
   const spendByGroup = aggregateSpendByGroup(DATA_SPEND, range.start, range.end);
-  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end);
+  // Per-row revenue: chỉ lấy status "delivered" (doanh thu thực thu)
+  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, "delivered");
   const srcTotals = aggregateTrueTotalsBySource(DATA_REVENUE, range.start, range.end);
 
-  // Render 3-source breakdown cards
-  renderSourceBreakdown(srcTotals);
+  // Render 3-source breakdown cards (kèm freshness warning)
+  renderSourceBreakdown(srcTotals, formatFreshnessNote(DATA_REVENUE));
 
   // Build per-group rows
   const groupsToShow = (group && group !== "ALL") ? [group] : GROUP_DISPLAY_ORDER;
@@ -797,7 +883,7 @@ function renderProfitTable() {
   }).filter(r => r.spend > 0 || r.revenue > 0);
 
   const root = document.getElementById('profit-table-wrap');
-  if (!rows.length && srcTotals._total.revenue === 0) {
+  if (!rows.length && srcTotals._total.delivered === 0) {
     root.innerHTML = `<div style="text-align:center;padding:30px;color:#9ca3af">Không có data trong ${range.title} cho nhóm "${group}".</div>`;
     return;
   }
@@ -806,23 +892,24 @@ function renderProfitTable() {
   // Sum spend trong filter
   const totSpend = rows.reduce((s, r) => s + r.spend, 0);
 
-  // ── TRUE TOTALS từ top-level fields (gộp all status, all SP, 3 nguồn online) ──
-  // Khi group filter = ALL, dùng true total để khớp Pancake POS UI.
-  // Khi group filter !== ALL, total chỉ là sum của row đang filter (per-SP).
+  // ── TOTAL row dùng "delivered" (doanh thu THỰC THU) — khớp POS "đã giao thành công" ──
+  // Khi group filter = ALL, lấy realized revenue từ 3 nguồn online (delivered only).
+  // Khi group filter !== ALL, total = sum row đang filter.
   const useTrueTotal = (!group || group === "ALL");
-  const totRev    = useTrueTotal ? srcTotals._total.revenue : rows.reduce((s, r) => s + r.revenue, 0);
-  const totOrders = useTrueTotal ? srcTotals._total.orders  : rows.reduce((s, r) => s + r.orders, 0);
-  const totUnits  = rows.reduce((s, r) => s + r.units, 0);  // units chỉ count được từ per-SP mapping
+  const realizedTotal = realizedRevenue(srcTotals._total);  // delivered only
+  const totRev    = useTrueTotal ? realizedTotal : rows.reduce((s, r) => s + r.revenue, 0);
+  const totOrders = useTrueTotal ? srcTotals._total.orders_delivered : rows.reduce((s, r) => s + r.orders, 0);
+  const totUnits  = rows.reduce((s, r) => s + r.units, 0);
   const totVat    = totRev * VAT_RATE;
   const totProfit = totRev - totVat - totSpend;
   const totMargin = totRev > 0 ? totProfit / totRev : 0;
 
-  // Coverage: bao nhiêu % rev được map về 8 nhóm SP
+  // Coverage: bao nhiêu % rev được map về 8 nhóm SP (so với realized total)
   const mappedRev = rows.reduce((s, r) => s + r.revenue, 0);
-  const coverage = srcTotals._total.revenue > 0 ? (mappedRev / srcTotals._total.revenue) * 100 : 0;
+  const coverage = realizedTotal > 0 ? (mappedRev / realizedTotal) * 100 : 0;
 
   const totalRowLabel = useTrueTotal
-    ? `TỔNG (3 nguồn online · all status)`
+    ? `TỔNG (Đã giao · 3 nguồn online)`
     : `TỔNG (chỉ nhóm "${GROUP_NAMES_VN[group] || group}")`;
 
   const html = `<table class="profit-table">
@@ -854,8 +941,8 @@ function renderProfitTable() {
     </tbody>
   </table>
   <p style="font-size:11.5px;color:#6b7280;margin-top:8px;line-height:1.6">
-    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> trong Pancake.
-    TỔNG dùng top-level <code>order_revenue_by_status_by_date</code> (gộp tất cả status: delivered + returning + returned + canceled) để khớp Pancake POS UI 100%.
+    ⚠ <strong>Doanh thu</strong>: lấy từ 3 nguồn online <strong>Website + Zalo OA + Hotline</strong> trong Pancake — CHỈ tính status <strong>"Đã giao"</strong> (delivered) = đơn đã giao thành công, đã thu COD.
+    KHÔNG bao gồm đơn đang xử lý (Mới/Chờ/Đã gửi) — vì chưa thực sự thu được tiền. KHÔNG bao gồm đơn hoàn/hủy.
     Per-row breakdown classify theo SP code (chỉ bao SP có mapping → coverage <strong>${coverage.toFixed(1)}%</strong>).<br>
     ⚠ <strong>LN trước vốn</strong> = Doanh thu − VAT 10% − Spend Google Ads. Chưa trừ giá vốn hàng (COGS) + chi phí khác (lương, kho, vận chuyển).<br>
     ⚠ Mapping nhóm: prefix code (D=Máy dò, DR=Ghi âm, DI=Chống ghi âm, DV/DT=Định vị, DA8.1=Video call, DA*=Camera WiFi/4G, NOMA=chăm sóc xe).
