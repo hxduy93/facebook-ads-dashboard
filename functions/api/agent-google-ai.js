@@ -658,7 +658,14 @@ Trước khi sinh JSON, mentally trả lời:
 1. Tracking: Tổng spend = ? Tổng revenue Pancake = ? Match rate ~ ?% → score.
    ⭐ Nếu có ga_group.summary.total_sessions → triangulate Ads / GA / Pancake → match 3 chiều, lệch >20% giữa Ads & GA = giảm tracking score 15-20đ
 2. Profit: Margin = (Revenue - Cost - VAT - Spend) / Revenue. >30%=80, 0-30%=50, lỗ=20-40
-3. Waste: CTR top campaigns? CPC tối đa? Có campaign CPC > 3x trung bình → 30
+3. Waste: ⭐ CTR ĐÁNH GIÁ THEO CHANNEL (KHÔNG dùng 1 ngưỡng chung):
+   - Mỗi campaign trong data có field "channel" (SEARCH / SHOPPING / DISPLAY_RMK / OTHER) + "ctr_low_threshold" + "ctr_critical_threshold".
+   - Benchmark Doscom (theo channel):
+     · SEARCH:      OK >5%, low 2-5%, critical <2%   (Doscom Search avg ~13%, baseline cao)
+     · SHOPPING:    OK >1%, low 0.5-1%, critical <0.5%
+     · DISPLAY_RMK: OK >0.5%, low 0.3-0.5%, critical <0.3%  (natural CTR thấp, không so với Search)
+   - SAI NẾU dùng 1 ngưỡng (vd "CTR 2% thấp") cho cả Search lẫn Display. Search 2% = thấp; Display 2% = tốt vượt trội.
+   - Campaign CPC > 3x trung bình cùng channel → 30. Compare CPC chỉ trong cùng channel (Search CPC khác Display CPC).
 4. RSA: bao nhiêu ad? mỗi ad bao nhiêu headline? Diversity → score
 5. KW Structure: search terms phân tier 1/2/3 ratio? Tier 3 nhiều = lãng phí → 30-50
 6. Landing: ⭐ ƯU TIÊN data GA THẬT từ ga_group.summary.
@@ -677,9 +684,11 @@ Trước khi sinh JSON, mentally trả lời:
 - Nếu ga_device cho thấy mobile dominant (>70%) + ER mobile thấp → trong top_findings thêm action "Audit mobile UX/landing"
 
 ═══ FEW-SHOT EXAMPLE ═══
-INPUT giả định: spend=20M, revenue=50M, group="MAY_DO", CTR avg=2.3%, CPC avg=8K
+INPUT giả định: spend=20M, revenue=50M, group="MAY_DO", 2 campaign:
+  - "Search - TB Dò Nghe Lén" (channel=SEARCH, CTR 12.5%, ctr_low_threshold=0.05)
+  - "RMK - Máy dò" (channel=DISPLAY_RMK, CTR 0.6%, ctr_low_threshold=0.005)
 OUTPUT mẫu (JSON, không markdown):
-{"total_score":58,"grade":"C","summary":"Lãi gross 30M (60%) tốt nhưng CTR 2.3% trung bình, có 2 campaign Tier 3 ngốn 25% spend lãng phí","breakdown":{"tracking":{"score":75,"weight":25,"note":"Có conv tracking, match Pancake 85%"},"profit":{"score":80,"weight":22,"note":"Margin 60% tốt, vượt mục tiêu 30%"},"waste":{"score":40,"weight":13,"note":"2 campaign Tier 3 ngốn 25% spend mà 0 đơn"},"rsa":{"score":55,"weight":12,"note":"Có 8 ad, đa số 5 headline, cần thêm USP"},"kw_structure":{"score":50,"weight":10,"note":"Tier 1 chỉ 40% spend, Tier 3 30% — cần tái phân bổ"},"landing":{"score":50,"weight":8,"note":"Cần data GA/heatmap"},"budget":{"score":65,"weight":5,"note":"Phân bổ tạm OK, máy dò 60% spend"},"compliance":{"score":70,"weight":5,"note":"Không có policy flag"}},"top_findings":["Pause 2 campaign Tier 3 lỗ 5M/tháng (CPC 12K, 0 đơn 30d)","Tăng bid Tier 1 từ 8K → 10K (max), dự kiến +10 đơn","Add 5 headline USP cho RSA Camera giấu — boost CTR ước +30%"]}
+{"total_score":62,"grade":"C","summary":"Lãi gross 30M (60%) tốt, Search CTR 12.5% xuất sắc (>5% baseline) nhưng RMK chỉ 0.6% sát đáy ngưỡng 0.5%, 2 campaign Tier 3 ngốn 25% spend","breakdown":{"tracking":{"score":75,"weight":25,"note":"Có conv tracking, match Pancake 85%"},"profit":{"score":80,"weight":22,"note":"Margin 60% tốt, vượt mục tiêu 30%"},"waste":{"score":50,"weight":13,"note":"Search CTR 12.5% rất tốt; RMK Máy dò 0.6% sát ngưỡng low 0.5% — cần nghĩ refresh creative"},"rsa":{"score":55,"weight":12,"note":"Có 8 ad, đa số 5 headline, cần thêm USP"},"kw_structure":{"score":50,"weight":10,"note":"Tier 1 chỉ 40% spend, Tier 3 30% — cần tái phân bổ"},"landing":{"score":50,"weight":8,"note":"Cần data GA/heatmap"},"budget":{"score":65,"weight":5,"note":"Phân bổ tạm OK, máy dò 60% spend"},"compliance":{"score":70,"weight":5,"note":"Không có policy flag"}},"top_findings":["Pause 2 campaign Tier 3 lỗ 5M/tháng (CPC 12K, 0 đơn 30d)","Refresh creative RMK Máy dò (CTR 0.6% sát đáy benchmark Display 0.5%) — A/B 3 banner mới","Add 5 headline USP cho RSA Camera giấu — boost CTR ước +30%"]}
 
 ═══ QUY TẮC ═══
 - summary: PHẢI có ít nhất 2 con số cụ thể (đ, %, tên SP/campaign).
