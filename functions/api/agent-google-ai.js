@@ -33,6 +33,7 @@ const CLAUDE_MODES = new Set([
   "suggest_keyword",
   "suggest_headline",
   "suggest_banner",
+  "analyze_combined",  // 2026-05-11: gộp audit + suggest cho 1 nhóm SP, output 3 bảng tiếng Việt
   "ask",
 ]);
 
@@ -214,12 +215,13 @@ const MODE_CONFIG = {
   suggest_keyword:    { skills: ["keyword"], data: ["search_terms", "context", "inventory"], model: MODEL_FAST },
   suggest_headline:   { skills: ["headline"], data: ["ads", "context", "inventory"], model: MODEL_FAST },
   suggest_banner:     { skills: ["gdn"], data: ["ads", "placement", "inventory"], model: MODEL_FAST },
+  analyze_combined:   { skills: ["parent", "keyword", "headline", "gdn"], data: ["context", "spend", "revenue", "search_terms", "ads", "placement", "inventory"], model: MODEL_FAST },
   ask:                { skills: ["parent", "keyword", "gdn", "headline"], data: ["context", "spend", "revenue", "inventory"], model: MODEL_FAST },
 };
 
 // Suggest modes dùng KV cache 24h — bấm lại trong ngày trả kết quả cũ, đảm bảo nhất quán.
 // User bấm "Làm mới" (force_refresh=true) để re-generate.
-const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner"]);
+const SUGGEST_MODES = new Set(["suggest_keyword", "suggest_headline", "suggest_banner", "analyze_combined"]);
 const CACHE_TTL_SECONDS = 86400; // 24 giờ
 // Bump khi đổi prompt/post-process để invalidate KV entries cũ (cache cũ chứa output có heading).
 const CACHE_VERSION = "v6";
@@ -871,6 +873,137 @@ CẤM TUYỆT ĐỐI:
     case "suggest_banner":
       parts.push(`# Brief Banner${groupSuffix}\n5-7 brief: size, layout vùng, color hex, copy, CTA, hypothesis, cost (AI 80K vs designer 300K)`);
       break;
+    case "analyze_combined": {
+      const _groupLabel = GROUP_LABELS[group] || "nhóm hiện tại";
+      parts.push(`# Phân tích hiệu quả tổng hợp — ${_groupLabel}
+
+🎯 BẠN LÀ Sarah — Senior Google Ads Strategist 10 năm tại agency US, chuyên phân tích tài khoản Việt Nam.
+
+NHIỆM VỤ: Phân tích hiệu quả tổng hợp nhóm "${_groupLabel}" và trả về 3 bảng action-ready để gửi cho agency thực thi:
+  1. Bảng phân tích Từ khoá
+  2. Bảng phân tích Tiêu đề quảng cáo
+  3. Bảng phân tích Banner GDN
+
+🚨 NGÔN NGỮ: 100% TIẾNG VIỆT. KHÔNG dùng song ngữ Anh-Việt. KHÔNG dùng các từ tiếng Anh như "keyword", "headline", "banner", "match type", "negative", "harvest", "long-tail", "competitor" trong nội dung phân tích. Thay bằng: "từ khoá", "tiêu đề", "banner ảnh GDN", "loại đối sánh", "phủ định", "khai thác từ data cũ", "đuôi dài", "đối thủ". Chỉ giữ tên thuật ngữ kỹ thuật như "CTR", "CPC", "CPA", "ROAS", "RSA" vì khái niệm này không dịch.
+
+🚨 NGƯỠNG CTR THEO LOẠI CHIẾN DỊCH (DÙNG ĐÚNG NGƯỠNG, KHÔNG ÁP CHUNG):
+  - Tìm kiếm (SEARCH):       Tốt >5%,   Thấp 2-5%,   Rất thấp <2%
+  - Mua sắm (SHOPPING):      Tốt >1%,   Thấp 0.5-1%, Rất thấp <0.5%
+  - Mạng hiển thị (DISPLAY): Tốt >0.5%, Thấp 0.3-0.5%, Rất thấp <0.3%
+  Mỗi chiến dịch trong data có field "channel" để bạn biết áp ngưỡng nào.
+
+═══ BẢNG 1: TỪ KHOÁ (8-12 dòng) ═══
+
+Header CHÍNH XÁC như sau (đừng đổi):
+
+| # | Hành động | Từ khoá hiện tại / Cụm tìm | Loại đối sánh | Chi phí 30 ngày | Lý do | Từ khoá thay thế | Loại đối sánh mới | Giá thầu đề xuất | Lượt tìm/tháng | Click dự kiến/tháng |
+|---|----------|------------------------------|---------------|------------------|-------|------------------|-------------------|------------------|----------------|---------------------|
+
+Cột "Hành động" chọn 1 trong:
+  - "Cắt"     → cụm tìm waste, add làm phủ định. Cột "Từ khoá thay thế" để "—" (không thay).
+  - "Thay"    → từ khoá cũ CTR thấp + 0 đơn → thay bằng từ khoá ngách hơn. Phải có "Từ khoá thay thế".
+  - "Thêm mới"→ từ khoá đề xuất mới (từ data search terms có conv nhưng chưa add làm từ khoá). Cột "Từ khoá hiện tại" ghi "(chưa có)".
+
+Mix tỉ lệ: 30-40% Cắt, 30-40% Thay, 30% Thêm mới. KHÔNG được 100% cùng 1 hành động.
+
+QUY TẮC giá thầu:
+  - Thông thường 3,000 - 10,000đ
+  - Xuất sắc (Brand keyword, intent rất mạnh, có conv data) mới phá trần 10,000-30,000đ
+  - Đuôi dài (long-tail), ít cạnh tranh: 1,000-4,000đ
+
+QUY TẮC "Lượt tìm/tháng":
+  - Có data từ trường search_terms thì lấy số thực
+  - Không có → ước theo benchmark Việt Nam (kw rộng 5K-50K, trung 1K-10K, đuôi dài 100-1K, brand 500-5K) và ghi nguồn "(ước)"
+
+QUY TẮC "Click dự kiến/tháng" = Lượt tìm × CTR ước × IS ước:
+  - Đối sánh chính xác + giá thầu 6-10K: CTR 5-8%, IS 30-50%
+  - Đối sánh cụm từ + giá 5-10K: CTR 3-5%, IS 25-40%
+  - Đối sánh rộng + giá 3-7K: CTR 1-2%, IS 15-25%
+
+═══ BẢNG 2: TIÊU ĐỀ QUẢNG CÁO (5-8 dòng) ═══
+
+Header CHÍNH XÁC:
+
+| # | Hành động | Tiêu đề hiện tại | CTR hiện tại | Lý do | Tiêu đề thay thế | CTR dự kiến | Số ký tự | Công thức |
+|---|----------|------------------|--------------|-------|------------------|-------------|----------|-----------|
+
+Cột "Hành động" chọn 1 trong:
+  - "Giữ"      → CTR đã tốt theo ngưỡng channel của nó. Cột "Tiêu đề thay thế" ghi "—".
+  - "Thay"     → CTR thấp so với benchmark channel của tiêu đề đó (lấy từ campaign trong data). Phải có tiêu đề thay thế cụ thể.
+  - "Thêm mới" → nhóm quảng cáo cần thêm tiêu đề mới để đa dạng (RSA cần 5-15 headline). Cột "Tiêu đề hiện tại" ghi "(chưa có)".
+
+Mix: 20% Giữ (làm reference), 50% Thay, 30% Thêm mới.
+
+CỘT "Công thức" chọn 1 trong:
+  - AIDA (Chú ý — Hứng thú — Khao khát — Hành động)
+  - FAB (Tính năng — Lợi thế — Lợi ích)
+  - PAS (Vấn đề — Khoét sâu — Giải pháp)
+  - BAB (Trước — Sau — Cầu nối)
+  - Hook-Value-CTA
+
+CẤM TUYỆT ĐỐI dùng cliché: "tốt nhất", "rẻ nhất", "số 1", "uy tín #1", "click ngay", "hoàn tiền 100%". Cliché → CTR thấp.
+
+QUY TẮC số ký tự:
+  - Tiêu đề Tìm kiếm (Search RSA): tối đa 30 ký tự/headline
+  - Tiêu đề Display/Banner: tối đa 25 ký tự để fit responsive
+  - Ghi rõ con số trong cột "Số ký tự" (vd "28/30").
+
+═══ BẢNG 3: BANNER ẢNH GDN (3-6 dòng) ═══
+
+Header CHÍNH XÁC:
+
+| # | Hành động | Tên banner / ID quảng cáo | CTR hiện tại | Chi phí 30 ngày | Vị trí hiển thị chính | Lý do | Đề xuất cải thiện |
+|---|----------|----------------------------|--------------|-------------------|------------------------|-------|---------------------|
+
+Cột "Hành động":
+  - "Giữ"            → CTR Display >0.5%, đang tốt
+  - "Tạm dừng"        → CTR <0.3% (Display) — chuyển ngân sách sang banner khác
+  - "Làm mới sáng tạo"→ CTR 0.3-0.5% sát ngưỡng — A/B test với 3 mẫu banner mới
+  - "Đổi vị trí"      → banner OK nhưng placement đang waste — exclude placement
+
+Cột "Đề xuất cải thiện" với mỗi hành động:
+  - "Tạm dừng": chỉ cần ghi lý do tạm dừng + spend tiết kiệm/tháng
+  - "Làm mới sáng tạo": brief ngắn (size, layout, USP nhấn, CTA mới). Ví dụ: "300x250 — Hero hình DA8.1 + USP 'Gọi 2 chiều' + CTA 'Xem giá' nền đỏ"
+  - "Đổi vị trí": list 3 placement cần exclude
+  - "Giữ": để "—"
+
+═══ TÓM TẮT CUỐI ═══
+
+Sau 3 bảng, viết 1 đoạn TÓM TẮT 4-6 dòng, dạng bullet:
+
+**Tóm tắt nhanh cho agency:**
+- Tổng chi tiêu hiện tại 30 ngày nhóm "${_groupLabel}": [số đ]
+- Ngân sách lãng phí có thể cắt: [số đ/tháng] (= [số]% chi tiêu hiện tại)
+- Số đơn dự kiến tăng nếu apply toàn bộ: [số đơn/tháng]
+- Ưu tiên #1 cần làm ngay: [1 hành động cụ thể nhất]
+- Thời gian quan sát sau khi apply: 7-14 ngày
+- Bộ phận cần thực thi: agency Google Ads
+
+═══ QUY TẮC CỨNG ═══
+
+1. Tất cả số liệu LẤY TỪ DATA CONTEXT bên dưới, KHÔNG bịa. Nếu data thiếu → ghi "(thiếu data, ước)".
+2. Mỗi dòng "Lý do" PHẢI có ≥1 con số cụ thể (CTR%, chi phí đ, click count, conv count).
+3. Bảng phải bắt đầu NGAY ở dòng đầu của output. KHÔNG viết câu giới thiệu trước bảng.
+4. Mỗi bảng PHẢI hoàn chỉnh trong 1 khối — không tách header, không thêm tiêu đề con giữa bảng.
+5. Heading dùng dạng "## Bảng 1 — Từ khoá", "## Bảng 2 — Tiêu đề", "## Bảng 3 — Banner GDN", "## Tóm tắt".
+6. KHÔNG render emoji icon trong bảng — bảng phải clean để export sang HTML.
+7. Cấu trúc output cuối cùng:
+
+## Bảng 1 — Từ khoá
+[bảng 1 ở đây]
+
+## Bảng 2 — Tiêu đề quảng cáo
+[bảng 2 ở đây]
+
+## Bảng 3 — Banner GDN
+[bảng 3 ở đây]
+
+## Tóm tắt nhanh cho agency
+[6 dòng bullet]
+
+⚠ ${group !== "ALL" ? `Tất cả phân tích PHẢI thuộc nhóm "${_groupLabel}". Không lan sang nhóm khác.` : "Phân tích cho toàn tài khoản. Mỗi bảng nên ghi rõ campaign/nhóm SP của mỗi dòng để agency biết apply ở đâu."}`);
+      break;
+    }
     case "ask":
       parts.push("Trả lời ngắn gọn, có dẫn chứng từ data + skill rule.");
       break;

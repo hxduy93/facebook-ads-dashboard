@@ -16,17 +16,7 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .nav-back:hover{text-decoration:underline}
 .section{background:white;padding:16px 18px;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:16px}
 .section h2{margin:0 0 12px;font-size:15px;color:#1f2937;border-bottom:1px solid #e5e7eb;padding-bottom:8px}
-.btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.btn-action{padding:14px;border-radius:8px;border:1px solid #d1d5db;background:#f9fafb;cursor:pointer;text-align:left;font-size:13px;transition:all 0.15s}
-.btn-action:hover:not(:disabled){background:#dbeafe;border-color:#2563eb}
-.btn-action:disabled{opacity:0.5;cursor:wait}
-.btn-action .ico{font-size:18px;margin-right:6px}
-.btn-action .title{font-weight:600;color:#111827;margin-bottom:4px}
-.btn-action .desc{color:#6b7280;font-size:11.5px;line-height:1.4}
-.btn-audit{background:#eff6ff;border-color:#bfdbfe}
-.btn-audit:hover:not(:disabled){background:#bfdbfe}
-.btn-suggest{background:#f0fdf4;border-color:#bbf7d0}
-.btn-suggest:hover:not(:disabled){background:#bbf7d0}
+/* btn-grid + btn-action* styles removed in 2026-05-11 refactor (audit/suggest buttons replaced by auto-analyze block) */
 .ask-box{display:flex;gap:8px;margin-top:8px}
 .ask-box input{flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px}
 .ask-box button{padding:10px 18px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer;font-weight:500}
@@ -84,6 +74,35 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .findings ol{margin:0;padding-left:22px}
 .findings li{margin:3px 0;color:#374151}
 .scorecard-empty{text-align:center;padding:24px 16px;color:#9ca3af;font-size:13px}
+/* ── Combined Analysis (Từ khoá + Tiêu đề + Banner) ── */
+.combined-empty{text-align:center;padding:30px 16px;color:#9ca3af;font-size:13px;background:#fafafa;border-radius:6px}
+.combined-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.combined-card{border:1px solid #e5e7eb;border-radius:8px;background:white;overflow:hidden}
+.combined-card-head{padding:12px 16px;background:#f9fafb;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.combined-card-head .title{font-size:14px;font-weight:600;color:#111827}
+.combined-card-head .meta{font-size:11.5px;color:#6b7280}
+.combined-card-actions{display:flex;gap:6px;align-items:center}
+.combined-card-actions button{padding:5px 10px;font-size:11.5px;border-radius:5px;border:1px solid #d1d5db;background:white;cursor:pointer;color:#374151}
+.combined-card-actions button:hover{background:#eef2ff;border-color:#6366f1;color:#4338ca}
+.combined-card-actions .btn-download{border-color:#16a34a;color:#16a34a;font-weight:500}
+.combined-card-actions .btn-download:hover{background:#16a34a;color:white}
+.combined-card-body{padding:14px 16px;font-size:13px;color:#1f2937}
+.combined-card-body table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}
+.combined-card-body table th,.combined-card-body table td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top}
+.combined-card-body table th{background:#f3f4f6;font-weight:600;white-space:nowrap}
+.combined-card-body table tr:nth-child(even) td{background:#fafafa}
+.combined-card-body h2,.combined-card-body h3{margin:14px 0 6px;font-size:13.5px;color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+.combined-card-body h2:first-child,.combined-card-body h3:first-child{margin-top:0}
+.combined-card-body p{margin:6px 0;line-height:1.5}
+.combined-card-body ul{margin:4px 0;padding-left:20px}
+.combined-card-body li{margin:2px 0}
+.combined-card-body strong{color:#111827}
+.combined-card-loading{text-align:center;padding:30px 14px;color:#6b7280;font-size:12.5px}
+.combined-card-error{padding:14px 16px;background:#fef2f2;color:#991b1b;border-left:3px solid #dc2626;font-size:12.5px}
+.combined-card-expand{padding:24px 16px;text-align:center;background:#f9fafb}
+.combined-card-expand .desc{color:#6b7280;font-size:12px;margin-bottom:10px}
+.combined-card-expand button{padding:8px 18px;font-size:13px;border:1px solid #2563eb;background:#2563eb;color:white;border-radius:6px;cursor:pointer;font-weight:500}
+.combined-card-expand button:hover{background:#1d4ed8}
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .chart-card{padding:12px;border:1px solid #e5e7eb;border-radius:6px;background:#fafafa}
 .chart-card h3{margin:0 0 8px;font-size:13px;color:#374151;font-weight:600}
@@ -235,22 +254,13 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
     </div>
   </div>
 
+  <!-- 🔍 Phân tích hiệu quả tổng hợp — auto-render theo bộ lọc nhóm SP -->
   <div class="section">
-    <h2>🎯 Audit chuyên sâu — chấm điểm 4 mảng</h2>
-    <div class="btn-grid">
-      <button class="btn-action btn-audit" onclick="runAI('audit_account')"><div class="title"><span class="ico">📊</span>Audit Tổng quan</div><div class="desc">Chấm điểm 8 nhóm, top Quick Win, cảnh báo nguy hiểm</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_keyword')"><div class="title"><span class="ico">🔍</span>Audit Từ khoá</div><div class="desc">Tier 1/2/3, từ khoá lỗ, search term ngon</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_gdn')"><div class="title"><span class="ico">🖼️</span>Audit GDN/PMax</div><div class="desc">Banner disapproved, placement lãng phí</div></button>
-      <button class="btn-action btn-audit" onclick="runAI('audit_headline')"><div class="title"><span class="ico">📝</span>Audit Tiêu đề</div><div class="desc">Headline cliché, USP chưa cover</div></button>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>💡 Đề xuất sáng tạo — sinh nội dung mới</h2>
-    <div class="btn-grid">
-      <button class="btn-action btn-suggest" onclick="runAI('suggest_keyword')"><div class="title"><span class="ico">🌱</span>Đề xuất Từ khoá mới</div><div class="desc">5 cơ chế: Harvest, Replace, Long-tail, Competitor, Seasonal</div></button>
-      <button class="btn-action btn-suggest" onclick="runAI('suggest_headline')"><div class="title"><span class="ico">✍️</span>Sinh Headline mới</div><div class="desc">5 cơ chế, công thức AIDA/FAB/PAS/BAB/Hook</div></button>
-      <button class="btn-action btn-suggest" onclick="runAI('suggest_banner')"><div class="title"><span class="ico">🎨</span>Brief Banner mới</div><div class="desc">Size, layout, color hex, hypothesis, cost dựng</div></button>
+    <h2>🔍 Phân tích hiệu quả tổng hợp
+      <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— Từ khoá · Tiêu đề · Banner GDN · Cache 24h theo (tháng × nhóm SP) · AI áp ngưỡng CTR theo loại chiến dịch</span>
+    </h2>
+    <div id="combined-analysis-body">
+      <div class="combined-empty">Chọn nhóm SP ở bộ lọc trên để xem phân tích.</div>
     </div>
   </div>
 
@@ -272,14 +282,8 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 
 <script>
 const MODE_LABELS = {
-  audit_account: "📊 Audit Tổng quan",
   audit_account_json: "🎯 Card chấm điểm",
-  audit_keyword: "🔍 Audit Từ khoá",
-  audit_gdn: "🖼️ Audit GDN/PMax",
-  audit_headline: "📝 Audit Tiêu đề",
-  suggest_keyword: "🌱 Đề xuất Từ khoá",
-  suggest_headline: "✍️ Sinh Headline",
-  suggest_banner: "🎨 Brief Banner",
+  analyze_combined: "🔍 Phân tích tổng hợp",
   analyze_ga: "🔍 Phân tích Google Analytics",
   ask: "💬 Hỏi tự do",
 };
@@ -588,6 +592,171 @@ async function refreshScorecard(force) {
     root.innerHTML = `<div class="error">Lỗi mạng: ${e.message}<br><br>
       <button class="score-action-btn" onclick="refreshScorecard(true)">🔄 Thử lại</button></div>`;
   }
+}
+
+// ── COMBINED ANALYSIS (Từ khoá + Tiêu đề + Banner GDN) ──
+const CACHE_KEY_COMBINED = "doscom_combined_v1";
+function getCombinedCacheKey(group, rangeKey) { return `${CACHE_KEY_COMBINED}_${group}_${rangeKey || 'now'}`; }
+
+function loadCombinedCache(group, rangeKey) {
+  try {
+    const raw = localStorage.getItem(getCombinedCacheKey(group, rangeKey));
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj.ts || (Date.now() - obj.ts) > CACHE_TTL_MS) return null;
+    return obj;
+  } catch { return null; }
+}
+
+function saveCombinedCache(group, rangeKey, response) {
+  try {
+    localStorage.setItem(getCombinedCacheKey(group, rangeKey), JSON.stringify({
+      ts: Date.now(), group, range_key: rangeKey, response,
+    }));
+  } catch {}
+}
+
+// Render container — 1 card cho mỗi nhóm SP đang chọn. Khi ALL → 8 card lazy-load.
+function renderCombinedAnalysis() {
+  const root = document.getElementById('combined-analysis-body');
+  if (!root) return;
+  const groupSel = getGroup();
+  const range = getCurrentRange();
+  const groups = (groupSel === 'ALL') ? GROUP_DISPLAY_ORDER : [groupSel];
+  const cards = groups.map(g => {
+    const label = GROUP_NAMES_VN[g] || g;
+    const cacheEntry = loadCombinedCache(g, range.key);
+    const hasCache = !!cacheEntry;
+    const cacheNote = hasCache
+      ? `<span class="meta">📌 Đã có phân tích từ ${new Date(cacheEntry.ts).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>`
+      : `<span class="meta">Chưa phân tích nhóm này</span>`;
+    return `
+      <div class="combined-card" data-group="${g}">
+        <div class="combined-card-head">
+          <div>
+            <div class="title">${label}</div>
+            ${cacheNote}
+          </div>
+          <div class="combined-card-actions">
+            <button onclick="runCombinedForGroup('${g}', true)" title="Chấm lại (bỏ qua cache)">🔄 Phân tích mới</button>
+            ${hasCache ? `<button class="btn-download" onclick="downloadCombinedAnalysis('${g}')" title="Tải file HTML để gửi agency">⬇ Tải file phân tích</button>` : ''}
+          </div>
+        </div>
+        <div class="combined-card-body" id="combined-body-${g}">
+          ${hasCache
+            ? md2html(cacheEntry.response || '')
+            : `<div class="combined-card-expand">
+                 <div class="desc">${groupSel === 'ALL' ? 'Bấm nút bên dưới để AI phân tích nhóm này (~30-60s).' : 'AI sẽ tự phân tích trong giây lát...'}</div>
+                 <button onclick="runCombinedForGroup('${g}', false)">🔍 Phân tích nhóm ${label}</button>
+               </div>`}
+        </div>
+      </div>`;
+  }).join('');
+  root.innerHTML = `<div class="combined-grid">${cards}</div>`;
+  // Khi chọn 1 nhóm cụ thể (không phải ALL) + không có cache → auto chạy
+  if (groupSel !== 'ALL' && !loadCombinedCache(groupSel, range.key)) {
+    runCombinedForGroup(groupSel, false);
+  }
+}
+
+async function runCombinedForGroup(group, forceRefresh) {
+  const range = getCurrentRange();
+  const bodyEl = document.getElementById(`combined-body-${group}`);
+  if (!bodyEl) return;
+  if (!forceRefresh) {
+    const cached = loadCombinedCache(group, range.key);
+    if (cached) {
+      bodyEl.innerHTML = md2html(cached.response || '');
+      return;
+    }
+  }
+  bodyEl.innerHTML = `<div class="combined-card-loading"><div class="spinner" style="display:inline-block;width:18px;height:18px;border:2px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;animation:spin 0.8s linear infinite"></div><div style="margin-top:10px">AI đang phân tích nhóm ${GROUP_NAMES_VN[group] || group}... ~30-60 giây</div></div>`;
+  try {
+    const r = await fetch('/api/agent-google-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'analyze_combined',
+        context: {
+          product_group: group,
+          time_range: { start: range.start, end: range.end, label: range.title },
+        },
+        force_refresh: !!forceRefresh,
+      }),
+    });
+    const j = await r.json();
+    if (!r.ok || j.error) {
+      bodyEl.innerHTML = `<div class="combined-card-error"><strong>Lỗi:</strong> ${(j.error || 'HTTP ' + r.status).replace(/</g,'&lt;')}<br><br><button onclick="runCombinedForGroup('${group}', true)" style="padding:6px 12px;border:1px solid #dc2626;background:white;color:#dc2626;border-radius:5px;cursor:pointer">🔄 Thử lại</button></div>`;
+      return;
+    }
+    const text = j.response || '(trống)';
+    saveCombinedCache(group, range.key, text);
+    bodyEl.innerHTML = md2html(text);
+    // Refresh header để hiện cache timestamp + nút download
+    renderCombinedAnalysis();
+  } catch (e) {
+    bodyEl.innerHTML = `<div class="combined-card-error"><strong>Lỗi mạng:</strong> ${e.message}<br><br><button onclick="runCombinedForGroup('${group}', true)" style="padding:6px 12px;border:1px solid #dc2626;background:white;color:#dc2626;border-radius:5px;cursor:pointer">🔄 Thử lại</button></div>`;
+  }
+}
+
+// Xuất file HTML standalone — agency mở bằng trình duyệt, có thể Ctrl+P -> PDF
+function downloadCombinedAnalysis(group) {
+  const range = getCurrentRange();
+  const cached = loadCombinedCache(group, range.key);
+  if (!cached) {
+    alert('Chưa có dữ liệu phân tích cho nhóm này. Bấm "Phân tích nhóm" trước.');
+    return;
+  }
+  const label = GROUP_NAMES_VN[group] || group;
+  const generatedAt = new Date(cached.ts).toLocaleString('vi-VN');
+  const contentHtml = md2html(cached.response || '');
+  const html = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Phân tích Google Ads — ${label} — Doscom</title>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:30px auto;padding:0 24px;color:#1f2937;line-height:1.55}
+  h1{color:#1e3a8a;border-bottom:2px solid #2563eb;padding-bottom:8px}
+  h2,h3{color:#1e3a8a;margin-top:24px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 18px}
+  th,td{border:1px solid #d1d5db;padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#eff6ff;font-weight:600;color:#1e3a8a}
+  tr:nth-child(even) td{background:#fafafa}
+  .meta{color:#6b7280;font-size:12px;margin-bottom:18px}
+  .footer{margin-top:30px;padding-top:14px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af}
+  ul{padding-left:22px}
+  strong{color:#111827}
+  code{background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px}
+  @media print{body{margin:0;max-width:none;padding:14px}}
+</style>
+</head>
+<body>
+<h1>📊 Phân tích hiệu quả Google Ads — ${label}</h1>
+<div class="meta">
+  <strong>Tài khoản:</strong> Doscom (MHDI · 477-705-2298)<br>
+  <strong>Khoảng thời gian:</strong> ${range.title}<br>
+  <strong>Phân tích lúc:</strong> ${generatedAt}<br>
+  <strong>Nguồn:</strong> AI phân tích nội bộ Doscom · áp ngưỡng CTR theo loại chiến dịch (Search/Shopping/Display)
+</div>
+${contentHtml}
+<div class="footer">
+  File này được sinh tự động từ agent AI nội bộ Doscom. Mọi đề xuất CẦN agency review trước khi thực thi
+  (đặc biệt là cụm có chứa brand "doscom" / "noma" — không cắt). Sau khi apply, theo dõi 7-14 ngày
+  để đánh giá hiệu quả thực tế từ data Pancake.
+</div>
+</body>
+</html>`;
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `phan-tich-google-ads-${group.toLowerCase()}-${dateStr}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ── CHART TREND ──
@@ -1028,16 +1197,12 @@ function md2html(s) {
 }
 
 function setLoading(on, mode) {
-  document.querySelectorAll('.btn-action').forEach(b => b.disabled = on);
   document.getElementById('ask-btn').disabled = on;
   if (on) {
     document.getElementById('output').innerHTML = `<div class="loading"><div class="spinner"></div><div style="margin-top:14px">${MODE_LABELS[mode] || mode} — đang chạy...</div><div style="font-size:11.5px;color:#9ca3af;margin-top:6px">~20-60 giây</div></div>`;
     document.getElementById('meta').textContent = "";
   }
 }
-
-// Last suggest mode đã chạy (để nút "Làm mới" biết gọi lại mode nào)
-let lastSuggestMode = null;
 
 async function runAI(mode, question, forceRefresh) {
   setLoading(true, mode);
@@ -1064,18 +1229,7 @@ async function runAI(mode, question, forceRefresh) {
       document.getElementById('output').innerHTML = `<div class="error"><strong>Lỗi:</strong> ${(j.error||'HTTP '+r.status).replace(/</g,"&lt;")}</div>`;
       document.getElementById('meta').textContent = `Mất ${took}s · HTTP ${r.status}`;
     } else {
-      // Banner cache: hiện trên đầu output khi backend trả từ cache, kèm nút "Làm mới"
-      let cacheBanner = "";
-      const isSuggest = mode === 'suggest_keyword' || mode === 'suggest_headline' || mode === 'suggest_banner';
-      if (isSuggest) {
-        lastSuggestMode = mode;
-        if (j.cached) {
-          cacheBanner = `<div class="cache-banner">📌 Kết quả đã lưu từ <strong>${j.cached_at || 'hôm nay'}</strong> — bấm cùng đề xuất trong ngày ra cùng kết quả. <button class="btn-refresh" onclick="refreshSuggest('${mode}')">🔄 Làm mới đề xuất</button></div>`;
-        } else {
-          cacheBanner = `<div class="cache-banner cache-fresh">✨ Đề xuất mới · sẽ giữ trong 24h. Bấm lại trong ngày ra cùng kết quả này.</div>`;
-        }
-      }
-      document.getElementById('output').innerHTML = cacheBanner + md2html(j.response||"(empty)");
+      document.getElementById('output').innerHTML = md2html(j.response||"(empty)");
       const cacheTag = j.cached ? ' · <span style="color:#0891b2">📌 cached</span>' : '';
       document.getElementById('meta').innerHTML = `Mất <strong>${took}s</strong> · Model: <code>${j.model}</code> · Nhóm: <strong>${j.group_label||'-'}</strong> · Range: <strong>${range.title}</strong>${cacheTag}`;
     }
@@ -1084,11 +1238,6 @@ async function runAI(mode, question, forceRefresh) {
   } finally {
     setLoading(false);
   }
-}
-
-function refreshSuggest(mode) {
-  if (!confirm('Tạo đề xuất MỚI? Đề xuất cũ trong ngày sẽ bị thay thế.')) return;
-  runAI(mode, null, true);
 }
 
 function askQuestion() {
@@ -1119,6 +1268,7 @@ async function refreshAll() {
   else renderScorecard(null, null, range);
   renderTrendCharts();
   renderProfitTable();
+  renderCombinedAnalysis();
 }
 
 function onFilterChange() { refreshAll(); }
