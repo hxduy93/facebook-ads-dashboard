@@ -262,6 +262,9 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
   <div class="section">
     <h2>🔍 Phân tích hiệu quả tổng hợp
       <span style="font-size:11.5px;color:#9ca3af;font-weight:400;margin-left:6px">— Từ khoá · Tiêu đề · Banner GDN · Cache 24h theo (tháng × nhóm SP) · AI áp ngưỡng CTR theo loại chiến dịch</span>
+      <span style="float:right">
+        <button onclick="clearAllCombinedCache()" style="padding:5px 12px;font-size:11.5px;border:1px solid #dc2626;background:white;color:#dc2626;border-radius:5px;cursor:pointer" title="Xoá cache 24h của TẤT CẢ 8 nhóm SP - dùng khi muốn AI chạy lại với prompt mới">🗑 Xoá cache tất cả nhóm</button>
+      </span>
     </h2>
     <div id="combined-analysis-body">
       <div class="combined-empty">Chọn nhóm SP ở bộ lọc trên để xem phân tích.</div>
@@ -599,7 +602,8 @@ async function refreshScorecard(force) {
 }
 
 // ── COMBINED ANALYSIS (Từ khoá + Tiêu đề + Banner GDN) ──
-const CACHE_KEY_COMBINED = "doscom_combined_v1";
+// v2 (2026-05-11): invalidate cache v1 do prompt da restructure 3-section + cot huong dan agency
+const CACHE_KEY_COMBINED = "doscom_combined_v2";
 function getCombinedCacheKey(group, rangeKey) { return `${CACHE_KEY_COMBINED}_${group}_${rangeKey || 'now'}`; }
 
 function loadCombinedCache(group, rangeKey) {
@@ -618,6 +622,24 @@ function saveCombinedCache(group, rangeKey, response) {
       ts: Date.now(), group, range_key: rangeKey, response,
     }));
   } catch {}
+}
+
+// Xoá cache combined cua TAT CA nhom + tat ca range. Dung khi prompt thay doi
+// va muon force re-run all groups (vd: bump prompt version, change skill).
+function clearAllCombinedCache() {
+  const keysToDelete = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(CACHE_KEY_COMBINED + '_')) keysToDelete.push(k);
+  }
+  if (keysToDelete.length === 0) {
+    alert('Không có cache nào để xoá. Bấm "🔄 Phân tích mới" trên từng card để chạy lại.');
+    return;
+  }
+  if (!confirm(`Xoá ${keysToDelete.length} cache phân tích? Lần phân tích tiếp theo sẽ chạy lại AI từ đầu (~30-60s mỗi nhóm).`)) return;
+  keysToDelete.forEach(k => localStorage.removeItem(k));
+  renderCombinedAnalysis();
+  alert(`Đã xoá ${keysToDelete.length} cache. Mở card từng nhóm và bấm "🔍 Phân tích nhóm..." để chạy lại.`);
 }
 
 // Render container — 1 card cho mỗi nhóm SP đang chọn. Khi ALL → 8 card lazy-load.
