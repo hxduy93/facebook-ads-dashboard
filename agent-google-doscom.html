@@ -87,10 +87,14 @@ body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;backgr
 .combined-card-actions .btn-download{border-color:#16a34a;color:#16a34a;font-weight:500}
 .combined-card-actions .btn-download:hover{background:#16a34a;color:white}
 .combined-card-body{padding:14px 16px;font-size:13px;color:#1f2937}
-.combined-card-body table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}
-.combined-card-body table th,.combined-card-body table td{border:1px solid #e5e7eb;padding:6px 8px;text-align:left;vertical-align:top}
-.combined-card-body table th{background:#f3f4f6;font-weight:600;white-space:nowrap}
-.combined-card-body table tr:nth-child(even) td{background:#fafafa}
+/* Bao boc table markdown — cuon ngang khi rong, khong stretch doc */
+.md-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 16px;border:1px solid #e5e7eb;border-radius:6px;background:white}
+.md-table-wrap table{min-width:1120px;width:100%;border-collapse:collapse;font-size:11.5px;line-height:1.4;margin:0;border:none}
+.md-table-wrap th,.md-table-wrap td{border:1px solid #e5e7eb;padding:5px 8px;text-align:left;vertical-align:top}
+.md-table-wrap th{background:#f3f4f6;font-weight:600;color:#1e3a8a;white-space:nowrap}
+.md-table-wrap tr:nth-child(even) td{background:#fafafa}
+.md-table-wrap td:nth-child(1),.md-table-wrap th:nth-child(1){text-align:center;width:34px;min-width:34px;font-weight:600;color:#6b7280}
+.md-table-wrap th:nth-child(2),.md-table-wrap td:nth-child(2){min-width:84px;white-space:nowrap}
 .combined-card-body h2,.combined-card-body h3{margin:14px 0 6px;font-size:13.5px;color:#1e3a8a;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
 .combined-card-body h2:first-child,.combined-card-body h3:first-child{margin-top:0}
 .combined-card-body p{margin:6px 0;line-height:1.5}
@@ -716,19 +720,27 @@ function downloadCombinedAnalysis(group) {
 <meta charset="UTF-8">
 <title>Phân tích Google Ads — ${label} — Doscom</title>
 <style>
-  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:30px auto;padding:0 24px;color:#1f2937;line-height:1.55}
+  body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:1400px;margin:30px auto;padding:0 24px;color:#1f2937;line-height:1.55}
   h1{color:#1e3a8a;border-bottom:2px solid #2563eb;padding-bottom:8px}
   h2,h3{color:#1e3a8a;margin-top:24px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
-  table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0 18px}
-  th,td{border:1px solid #d1d5db;padding:8px 10px;text-align:left;vertical-align:top}
-  th{background:#eff6ff;font-weight:600;color:#1e3a8a}
+  .md-table-wrap{overflow-x:auto;margin:10px 0 18px;border:1px solid #d1d5db;border-radius:6px}
+  table{min-width:1120px;width:100%;border-collapse:collapse;font-size:12px;margin:0}
+  th,td{border:1px solid #d1d5db;padding:6px 10px;text-align:left;vertical-align:top;line-height:1.4}
+  th{background:#eff6ff;font-weight:600;color:#1e3a8a;white-space:nowrap}
   tr:nth-child(even) td{background:#fafafa}
+  td:nth-child(1),th:nth-child(1){text-align:center;width:34px;min-width:34px;font-weight:600;color:#6b7280}
+  td:nth-child(2),th:nth-child(2){min-width:84px;white-space:nowrap}
   .meta{color:#6b7280;font-size:12px;margin-bottom:18px}
   .footer{margin-top:30px;padding-top:14px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af}
   ul{padding-left:22px}
   strong{color:#111827}
   code{background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px}
-  @media print{body{margin:0;max-width:none;padding:14px}}
+  @media print{
+    body{margin:0;max-width:none;padding:14px}
+    .md-table-wrap{overflow:visible;border:none}
+    table{min-width:0;font-size:9.5px}
+    th,td{padding:3px 4px}
+  }
 </style>
 </head>
 <body>
@@ -1186,7 +1198,8 @@ function md2html(s) {
     const splitCells = (line) => line.split("|").slice(1, -1).map(c => c.trim());
     const hrow = splitCells(headerLine).map(c => `<th>${c}</th>`).join("");
     const brows = bodyLines.map(r => "<tr>" + splitCells(r).map(c => `<td>${c}</td>`).join("") + "</tr>").join("");
-    return `\n<table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table>\n`;
+    // Wrap trong div .md-table-wrap để bảng cuộn ngang khi quá rộng (thay vì stretch dọc)
+    return `\n<div class="md-table-wrap"><table><thead><tr>${hrow}</tr></thead><tbody>${brows}</tbody></table></div>\n`;
   });
   s = s.replace(/^> (.+)$/gm,"<blockquote>$1</blockquote>");
   s = s.replace(/^- (.+)$/gm,"<li>$1</li>").replace(/(<li>.+<\/li>\n?)+/g,m=>"<ul>"+m+"</ul>");
