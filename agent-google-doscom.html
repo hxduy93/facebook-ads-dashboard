@@ -703,7 +703,32 @@ function aggregateSpendByGroup(spendData, startDate, endDate) {
   return out;
 }
 
-// Per-group breakdown từ 3 nguồn online.
+// Per-group breakdown từ web_items_flat (3 nguồn online, classify 100% SKU).
+// 2026-05-11: thay aggregateRevenueByGroupFromOnlineSources vì cái cũ chỉ cover
+// 13 SKU trong PRODUCT_LIST (coverage ~48%). web_items_flat từ Python đã classify
+// TẤT CẢ SKU vào 9 nhóm bằng classify_sku() — coverage ~100% (chỉ trừ "OTHER").
+// LẤY TẤT CẢ STATUS (gross expected revenue) để khớp với TỔNG row.
+function aggregateRevenueByGroupFromFlatItems(rev, startDate, endDate) {
+  const items = rev?.web_items_flat;
+  if (!Array.isArray(items)) return null;  // null → caller fallback
+  const acc = {};
+  for (const g of GROUP_DISPLAY_ORDER) acc[g] = { revenue: 0, orderSet: new Set(), units: 0 };
+  for (const it of items) {
+    if (it.d < startDate || it.d > endDate) continue;
+    if (!(it.c in acc)) continue;  // skip OTHER & unknown
+    acc[it.c].revenue += Number(it.r || 0);
+    acc[it.c].orderSet.add(it.oid);
+    acc[it.c].units  += Number(it.q || 0);
+  }
+  const out = {};
+  for (const g of GROUP_DISPLAY_ORDER) {
+    out[g] = { revenue: acc[g].revenue, orders: acc[g].orderSet.size, units: acc[g].units };
+  }
+  return out;
+}
+
+// (LEGACY) Per-group breakdown từ 3 nguồn online qua sg.products — chỉ cover 13 SP.
+// Giữ làm fallback khi snapshot cũ không có web_items_flat.
 // statusFilter:
 //   - "all"          → dùng sg.products (sum tất cả status, gồm cả hoàn/hủy)
 //   - string status  → chỉ status đó (vd "delivered")
@@ -876,10 +901,11 @@ function renderProfitTable() {
   if (labelEl) labelEl.textContent = `(${range.label} · ${range.start} → ${range.end})`;
 
   const spendByGroup = aggregateSpendByGroup(DATA_SPEND, range.start, range.end);
-  // Per-row revenue: GỘP TẤT CẢ STATUS (đã giao + đang xử lý + đang hoàn + đã hoàn + đã hủy)
-  // = Doanh thu TRƯỚC HOÀN từ 3 nguồn online. User chốt: phân tích quảng cáo cần nhìn
-  // gross revenue (chưa trừ hoàn/hủy) để khớp với chi tiêu Google Ads.
-  const revByGroup = aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, "all");
+  // Per-row revenue: dùng web_items_flat (classify 100% SKU bằng Python classify_sku).
+  // Fallback xuống legacy logic (13 SKU only, coverage ~48%) nếu snapshot cũ thiếu field.
+  // GỘP TẤT CẢ STATUS (gross expected revenue) để khớp với TỔNG row.
+  const revByGroup = aggregateRevenueByGroupFromFlatItems(DATA_REVENUE, range.start, range.end)
+                  || aggregateRevenueByGroupFromOnlineSources(DATA_REVENUE, range.start, range.end, "all");
   const srcTotals = aggregateTrueTotalsBySource(DATA_REVENUE, range.start, range.end);
 
   // Render 3-source breakdown cards (kèm freshness warning)
