@@ -159,8 +159,8 @@ ADS_FILE = os.path.join(REPO_ROOT, "data", "google-ads-ads.json")
 OUT_FILE = os.path.join(REPO_ROOT, "data", "google-ads-context.json")
 
 THRESHOLDS = {
-    "low_ctr": 0.005,
-    "very_low_ctr": 0.002,
+    "low_ctr": 0.005,            # legacy default (OTHER channel)
+    "very_low_ctr": 0.002,       # legacy default (OTHER channel)
     "min_impressions_to_judge": 500,
     "high_cpc_spike_pct": 0.30,
     "spend_anomaly_pct": 0.50,
@@ -170,6 +170,38 @@ THRESHOLDS = {
     "neg_gap_min_spend": 50000,
     "ad_waste_min_spend": 100000,
 }
+
+# 2026-05-11: Tach nguong CTR theo loai campaign vi natural CTR khac biet lon:
+#   - Search Doscom CTR thuc 10-21% (avg 13%) -> nguong 0.5% qua long, khong bao gio flag
+#   - Display/RMK Doscom CTR thuc 0.5-1% -> nguong 0.5% vua khit
+#   - Shopping CTR thuc 1-1.2%
+# Industry Google Ads benchmark (VN/SEA tier):
+#   Search:      "low" < 5%,   critical < 2%
+#   Shopping:    "low" < 1%,   critical < 0.5%
+#   Display/RMK: "low" < 0.5%, critical < 0.3%
+CTR_THRESHOLDS_BY_CHANNEL = {
+    "SEARCH":      {"low_ctr": 0.050, "very_low_ctr": 0.020},
+    "SHOPPING":    {"low_ctr": 0.010, "very_low_ctr": 0.005},
+    "DISPLAY_RMK": {"low_ctr": 0.005, "very_low_ctr": 0.003},
+    "OTHER":       {"low_ctr": 0.005, "very_low_ctr": 0.002},
+}
+
+
+def classify_campaign_channel(name):
+    """Suy ra loai campaign tu ten (Doscom dat ten theo prefix Search/RMK/Shopping).
+
+    Returns: "SEARCH" | "SHOPPING" | "DISPLAY_RMK" | "OTHER"
+    """
+    if not name:
+        return "OTHER"
+    n = name.lower()
+    if "shopping" in n or "perf max" in n or "pmax" in n:
+        return "SHOPPING"
+    if "rmk" in n or "remarketing" in n or "display" in n or "gdn" in n:
+        return "DISPLAY_RMK"
+    if "search" in n or "kw" in n:
+        return "SEARCH"
+    return "OTHER"
 
 
 def _load_json(path):
@@ -249,10 +281,12 @@ def compute_campaign_metrics(ga_data):
         ctr_trend_pct = ((ctr_7d - ctr_prior_7d) / ctr_prior_7d * 100) if ctr_prior_7d > 0 else 0
         cpc_trend_pct = ((cpc_7d - cpc_prior_7d) / cpc_prior_7d * 100) if cpc_prior_7d > 0 else 0
         flags = []
+        channel = classify_campaign_channel(camp)
+        ctr_thr = CTR_THRESHOLDS_BY_CHANNEL.get(channel, CTR_THRESHOLDS_BY_CHANNEL["OTHER"])
         if e["impressions_30d"] >= THRESHOLDS["min_impressions_to_judge"]:
-            if ctr_30d < THRESHOLDS["very_low_ctr"]:
+            if ctr_30d < ctr_thr["very_low_ctr"]:
                 flags.append("critical_low_ctr")
-            elif ctr_30d < THRESHOLDS["low_ctr"]:
+            elif ctr_30d < ctr_thr["low_ctr"]:
                 flags.append("low_ctr")
         if cpc_trend_pct > THRESHOLDS["high_cpc_spike_pct"] * 100:
             flags.append("cpc_spike")
@@ -260,6 +294,9 @@ def compute_campaign_metrics(ga_data):
             flags.append("spend_no_clicks")
         out[camp] = {
             "category": e["category"],
+            "channel": channel,
+            "ctr_low_threshold": ctr_thr["low_ctr"],
+            "ctr_critical_threshold": ctr_thr["very_low_ctr"],
             "spend_30d": round(e["spend_30d"], 0),
             "spend_7d": round(e["spend_7d"], 0),
             "spend_prior_7d": round(e["spend_prior_7d"], 0),
@@ -403,12 +440,12 @@ def compute_top_lists(camp_metrics):
     def fmt_camp_list(items, keys):
         return [{"campaign": c, **{k: m[k] for k in keys}} for c, m in items]
     return {
-        "top_5_spenders_30d": fmt_camp_list(top_spenders, ["category", "spend_30d", "clicks_30d", "ctr_30d", "cpc_30d"]),
-        "low_ctr_campaigns": fmt_camp_list(low_ctr_with_spend[:10], ["category", "spend_30d", "impressions_30d", "clicks_30d", "ctr_30d", "flags"]),
-        "spend_no_clicks_campaigns": fmt_camp_list(spend_no_clicks, ["category", "spend_30d", "clicks_30d", "impressions_30d"]),
-        "cpc_spike_campaigns": fmt_camp_list(cpc_spike[:5], ["category", "spend_30d", "cpc_7d", "cpc_prior_7d", "cpc_trend_pct"]),
-        "trending_up_spend_7d": fmt_camp_list(trending_up_spend, ["category", "spend_7d", "spend_prior_7d", "spend_trend_pct"]),
-        "trending_down_spend_7d": fmt_camp_list(trending_down_spend, ["category", "spend_7d", "spend_prior_7d", "spend_trend_pct"]),
+        "top_5_spenders_30d": fmt_camp_list(top_spenders, ["category", "channel", "spend_30d", "clicks_30d", "ctr_30d", "cpc_30d"]),
+        "low_ctr_campaigns": fmt_camp_list(low_ctr_with_spend[:10], ["category", "channel", "spend_30d", "impressions_30d", "clicks_30d", "ctr_30d", "ctr_low_threshold", "ctr_critical_threshold", "flags"]),
+        "spend_no_clicks_campaigns": fmt_camp_list(spend_no_clicks, ["category", "channel", "spend_30d", "clicks_30d", "impressions_30d"]),
+        "cpc_spike_campaigns": fmt_camp_list(cpc_spike[:5], ["category", "channel", "spend_30d", "cpc_7d", "cpc_prior_7d", "cpc_trend_pct"]),
+        "trending_up_spend_7d": fmt_camp_list(trending_up_spend, ["category", "channel", "spend_7d", "spend_prior_7d", "spend_trend_pct"]),
+        "trending_down_spend_7d": fmt_camp_list(trending_down_spend, ["category", "channel", "spend_7d", "spend_prior_7d", "spend_trend_pct"]),
     }
 
 
@@ -420,12 +457,15 @@ def compute_waste_estimate(camp_metrics):
             continue
         waste_reasons = []
         waste_amount = 0
+        ch = m.get("channel", "OTHER")
+        crit_pct = m.get("ctr_critical_threshold", 0.002) * 100
+        low_pct = m.get("ctr_low_threshold", 0.005) * 100
         if "critical_low_ctr" in m["flags"]:
             waste_amount += m["spend_30d"] * 0.70
-            waste_reasons.append(f"CTR {m['ctr_30d']*100:.2f}% qua thap (< 0.2%)")
+            waste_reasons.append(f"CTR {m['ctr_30d']*100:.2f}% qua thap ({ch}: < {crit_pct:.2f}%)")
         elif "low_ctr" in m["flags"]:
             waste_amount += m["spend_30d"] * 0.30
-            waste_reasons.append(f"CTR {m['ctr_30d']*100:.2f}% thap (< 0.5%)")
+            waste_reasons.append(f"CTR {m['ctr_30d']*100:.2f}% thap ({ch}: < {low_pct:.2f}%)")
         if "spend_no_clicks" in m["flags"]:
             waste_amount = max(waste_amount, m["spend_30d"] * 0.80)
             waste_reasons.append(f"Spend {m['spend_30d']:,.0f}d ma chi {m['clicks_30d']} click")
@@ -664,6 +704,7 @@ def main():
         },
         "currency": "VND",
         "thresholds_used": THRESHOLDS,
+        "ctr_thresholds_by_channel": CTR_THRESHOLDS_BY_CHANNEL,
         "summary": {
             "total_spend_30d_vnd": round(sum(m["spend_30d"] for m in camp_metrics.values()), 0),
             "total_clicks_30d": sum(m["clicks_30d"] for m in camp_metrics.values()),
