@@ -904,12 +904,15 @@ NHIỆM VỤ: Phân tích nhóm "${_groupLabel}" và trả về báo cáo agency
 
 CẤU TRÚC CỐ ĐỊNH: 3 phần con A → B → C, mỗi phần bắt đầu bằng heading cấp 3 "### 1A. ...", "### 1B. ...", "### 1C. ...". KHÔNG đảo thứ tự, KHÔNG mix giữa các phần.
 
-### 1A. Từ khoá / Cụm tìm ĐANG HIỆU QUẢ (Giữ — 2-3 dòng)
+### 1A. Từ khoá / Cụm tìm ĐANG HIỆU QUẢ (Giữ — 5-8 dòng)
+
+PHẢI list ĐẦY ĐỦ top performer thật trong data — KHÔNG cắt xuống còn 1-2 dòng. Sort theo conv giảm dần (nếu có), sau đó theo CTR × clicks giảm dần. Đây là tham chiếu để agency biết keyword nào đang sinh đơn — không được skip.
 
 | # | Loại | Cụm | Loại đối sánh | Chi phí 30 ngày | Click | Conv | CTR | Lý do giữ |
 |---|------|-----|---------------|------------------|-------|------|-----|-----------|
 
 Cột "Loại": ghi "Từ khoá" (đã mua) hoặc "Cụm tìm" (khách gõ, chưa add).
+Cột "Lý do giữ" PHẢI có số cụ thể: "CTR 15.2% cao gấp 3 ngưỡng Search, 5 đơn 30d, CPC 6.4K rẻ" — không được nói chung "tốt".
 
 ### 1B. Từ khoá / Cụm tìm ĐANG LỖ — Cắt hoặc Thay (4-6 dòng, sort theo chi phí GIẢM DẦN)
 
@@ -944,21 +947,32 @@ QUY TẮC click dự kiến = Lượt tìm × CTR × IS (Chính xác 5-8% × 30-
 
 ═══ BẢNG 2 — TIÊU ĐỀ QUẢNG CÁO ═══
 
-3 phần con A → B → C tương tự.
+🚨 GIỚI HẠN DATA QUAN TRỌNG (đọc kỹ): Windsor.ai gói hiện tại KHÔNG expose text headline thật trong RSA — chỉ có Ad ID, Ad name (vd "300x250.gif" cho banner), Campaign, Ad group, CTR, Impression, Spend. Vì vậy:
+  - Trong cột "Tiêu đề hiện tại" (bảng 2B), CẤM TUYỆT ĐỐI ghi placeholder kiểu "(tiêu đề chung nhóm 3 thiếu USP)", "(chưa có tiêu đề khai thác X)".
+  - PHẢI ghi FULL danh định để agency identify được trên Google Ads UI: "Ad ID [id] · Chiến dịch [tên] · Nhóm QC [tên] · Format [RSA/DISPLAY_BANNER] · CTR [x.xx%]". Vd "Ad ID 802551887743 · Chiến dịch RMK - thiết bị định vị · Nhóm QC nhóm 3 - 24/4 · Format RSA · CTR 0.98%".
+  - Agency sẽ dùng Ad ID này để mở Google Ads → Quảng cáo → search ID → xem text headline thực.
 
-### 2A. Tiêu đề ĐANG HIỆU QUẢ (Giữ — 2 dòng)
+3 phần con A → B → C tương tự bảng 1.
 
-| # | Tiêu đề | CTR hiện tại | Loại chiến dịch | Lý do CTR tốt | Bài học rút ra |
-|---|---------|--------------|-----------------|---------------|-----------------|
+### 2A. Quảng cáo ĐANG HIỆU QUẢ (Giữ — 4-6 dòng)
 
-### 2B. Tiêu đề ĐANG KÉM cần thay (3-5 dòng, sort theo chi phí GIẢM DẦN)
+PHẢI list ĐẦY ĐỦ top performer trong data — không skip xuống còn 1-2 dòng. Sort CTR giảm dần.
 
-| # | Tiêu đề hiện tại | CTR hiện tại | Loại chiến dịch | Lý do kém | Tiêu đề thay thế | CTR dự kiến | Công thức | Số ký tự | Hướng dẫn agency |
-|---|------------------|--------------|-----------------|-----------|------------------|-------------|-----------|----------|------------------|
+| # | Ad ID | Chiến dịch | Nhóm quảng cáo | Format | CTR hiện tại | Chi phí 30 ngày | Lý do CTR tốt | Bài học cho ad mới |
+|---|-------|-----------|----------------|--------|--------------|-------------------|---------------|---------------------|
 
-Cột "Hướng dẫn agency": "Vào Google Ads → Quảng cáo → mở RSA [tên ad / ID] → xoá tiêu đề '[cũ]' → thêm tiêu đề mới '[mới]' → Lưu"
+Cột "Bài học cho ad mới" PHẢI có gợi ý cụ thể: vd "Search RSA Brand keyword CTR 18% — pattern: USP rõ + tên SP cụ thể + CTA hành động. Áp dụng cho RSA mới."
 
-Nếu KHÔNG có data tiêu đề cụ thể trong data context: ghi "(không có data tên ad cụ thể — agency tự đối chiếu trong tài khoản, ưu tiên ad CTR < ngưỡng channel)".
+### 2B. Quảng cáo ĐANG KÉM cần thay (3-5 dòng, sort chi phí GIẢM DẦN)
+
+| # | Ad ID | Chiến dịch | Nhóm quảng cáo | Format | CTR hiện tại | Chi phí 30 ngày | Lý do kém | 3 tiêu đề thay thế đề xuất | Công thức | Hướng dẫn agency |
+|---|-------|-----------|----------------|--------|--------------|-------------------|-----------|-------------------------------|-----------|------------------|
+
+🚨 CỘT "3 tiêu đề thay thế đề xuất" PHẢI ghi đầy đủ 3 tiêu đề mỗi dòng (cách nhau bằng " // "), mỗi tiêu đề ≤ 30 ký tự cho RSA, ≤ 25 cho Display. Ghi rõ số ký tự sau mỗi tiêu đề. Vd: "Dò Camera Wifi Chuyên Sâu (26) // D1 Pro - 3 Loại Cảnh Báo (24) // Kiểm Tra Phòng Hôm Nay (22)".
+
+Cột "Hướng dẫn agency": "Vào Google Ads → Quảng cáo → search Ad ID [id] → Edit → xoá 3 tiêu đề CTR thấp → paste 3 tiêu đề thay thế từ cột bên trái → Lưu. Lưu ý: agency tự xem text tiêu đề HIỆN TẠI trên UI Google Ads (data tôi không có text thật)".
+
+Nếu nhóm này không có ad nào CTR < ngưỡng channel: ghi 1 dòng "Toàn bộ quảng cáo nhóm này đang CTR đạt ngưỡng — không cần thay" và skip bảng 2B.
 
 ### 2C. Tiêu đề MỚI nên thêm (Thêm mới — 3-5 dòng)
 
@@ -980,24 +994,26 @@ QUY TẮC số ký tự: RSA Search ≤ 30 ký tự, Display ≤ 25 ký tự. Gh
 
 ═══ BẢNG 3 — BANNER ẢNH GDN ═══
 
-### 3A. Banner ĐANG HIỆU QUẢ (Giữ — 1-2 dòng nếu có)
+### 3A. Banner ĐANG HIỆU QUẢ (Giữ — 3-5 dòng nếu có)
 
-| # | Tên banner / ID | CTR hiện tại | Chi phí 30 ngày | Vị trí chính | Lý do giữ |
-|---|------------------|--------------|-------------------|--------------|-----------|
+PHẢI list đầy đủ top banner trong data (sort CTR giảm dần). Banner Doscom phần lớn là file .gif/.jpg với tên kiểu "300x250.gif" → ghi rõ kích thước trong cột "Kích thước".
+
+| # | Ad ID | Chiến dịch | Tên file | Kích thước | CTR hiện tại | Chi phí 30 ngày | Lý do giữ |
+|---|-------|-----------|----------|------------|--------------|-------------------|-----------|
 
 Nếu nhóm này không có Display/GDN trong 30 ngày: ghi 1 dòng "Nhóm này không chạy Display/GDN trong 30 ngày qua — bỏ qua bảng 3" và skip 3B/3C.
 
-### 3B. Banner CẦN TẠM DỪNG / LÀM MỚI (2-4 dòng)
+### 3B. Banner CẦN TẠM DỪNG / LÀM MỚI (3-5 dòng, sort chi phí GIẢM DẦN)
 
-| # | Hành động | Tên banner / ID | CTR hiện tại | Chi phí 30 ngày | Vị trí | Lý do | Hướng dẫn agency |
-|---|----------|------------------|--------------|-------------------|--------|-------|------------------|
+| # | Hành động | Ad ID | Chiến dịch | Tên file | Kích thước | CTR hiện tại | Chi phí 30 ngày | Lý do | Hướng dẫn agency |
+|---|----------|-------|-----------|----------|------------|--------------|-------------------|-------|------------------|
 
 Cột "Hành động":
   - "Tạm dừng" → CTR Display <0.3%
   - "Làm mới sáng tạo" → CTR 0.3-0.5% sát đáy ngưỡng
   - "Đổi vị trí" → CTR OK nhưng placement waste
 
-Cột "Hướng dẫn agency": "Vào Google Ads → Quảng cáo → tìm ID [xxx] → Pause" hoặc "Brief designer dựng 3 banner 300x250 nội dung: [USP] + CTA '[copy CTA]' nền [color] — A/B test 7 ngày"
+Cột "Hướng dẫn agency": "Vào Google Ads → Quảng cáo → search Ad ID [xxx] → Pause" HOẶC "Brief designer dựng 3 banner [kích thước] thay thế file '[tên file cũ]' — nội dung: [USP cụ thể] + CTA '[copy CTA]' nền [color] — A/B test 7 ngày, mục tiêu CTR > 0.6%"
 
 ### 3C. Banner MỚI nên brief designer (1-3 dòng)
 
@@ -1125,8 +1141,8 @@ export async function onRequestPost(context) {
   if (cfg.data.includes("context")) tasks.push(fetchJson(origin, "/data/google-ads-context.json", cookieHeader).then(j => { if (j) dataContext.context = { date_range: j.date_range, total_campaigns: (j.campaigns_raw || []).length }; }));
   if (cfg.data.includes("spend")) tasks.push(fetchJson(origin, "/data/google-ads-spend.json", cookieHeader).then(j => dataContext.spend = compactSpend(j, group, timeRange)));
   if (cfg.data.includes("revenue")) tasks.push(fetchJson(origin, "/data/product-revenue.json", cookieHeader).then(j => dataContext.revenue = compactRevenue(j, group, timeRange)));
-  if (cfg.data.includes("search_terms")) tasks.push(fetchJson(origin, "/data/google-ads-search-terms.json", cookieHeader).then(j => dataContext.search_terms = compactSearchTerms(j, 30, group)));
-  if (cfg.data.includes("ads")) tasks.push(fetchJson(origin, "/data/google-ads-ads.json", cookieHeader).then(j => dataContext.ads = compactAds(j, 15, group)));
+  if (cfg.data.includes("search_terms")) tasks.push(fetchJson(origin, "/data/google-ads-search-terms.json", cookieHeader).then(j => dataContext.search_terms = compactSearchTerms(j, mode === "analyze_combined" ? 60 : 30, group)));
+  if (cfg.data.includes("ads")) tasks.push(fetchJson(origin, "/data/google-ads-ads.json", cookieHeader).then(j => dataContext.ads = compactAds(j, mode === "analyze_combined" ? 30 : 15, group)));
   let _perCampaignFromCtx = null;
   if (cfg.data.includes("placement")) {
     // Placement filter cần per_campaign từ context — fetch trước
