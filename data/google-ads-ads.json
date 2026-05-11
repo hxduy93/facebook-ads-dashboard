@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12 01:05",
+  "generated_at": "2026-05-12 03:04",
   "source": "Windsor.ai JSON API (ads, auto every 60min)",
   "account_name": "MHDI",
   "date_range": {
@@ -32,10 +32,10 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300x250.gif",
       "ad_format": "DISPLAY_BANNER",
-      "spend_30d": 827552.0,
-      "clicks_30d": 973,
+      "spend_30d": 827036.0,
+      "clicks_30d": 972,
       "impressions_30d": 76272,
-      "ctr_30d": 0.0128,
+      "ctr_30d": 0.0127,
       "cpc_30d": 851.0,
       "active_days_30d": 25
     },
@@ -162,11 +162,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300X50-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 208845.0,
-      "clicks_30d": 68,
+      "spend_30d": 206554.0,
+      "clicks_30d": 67,
       "impressions_30d": 19401,
       "ctr_30d": 0.0035,
-      "cpc_30d": 3071.0,
+      "cpc_30d": 3083.0,
       "active_days_30d": 21
     },
     "802551887884": {
@@ -435,11 +435,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300X600-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 906171.0,
-      "clicks_30d": 427,
+      "spend_30d": 902914.0,
+      "clicks_30d": 426,
       "impressions_30d": 48415,
       "ctr_30d": 0.0088,
-      "cpc_30d": 2122.0,
+      "cpc_30d": 2120.0,
       "active_days_30d": 26
     },
     "802509637137": {
@@ -617,11 +617,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "200X200-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 813186.0,
-      "clicks_30d": 466,
+      "spend_30d": 808554.0,
+      "clicks_30d": 465,
       "impressions_30d": 28772,
       "ctr_30d": 0.0162,
-      "cpc_30d": 1745.0,
+      "cpc_30d": 1739.0,
       "active_days_30d": 23
     },
     "802551717319": {
@@ -2109,15 +2109,15 @@
   },
   "format_aggregates": {
     "DISPLAY_BANNER": {
-      "spend_30d": 2344369.0,
-      "clicks_30d": 1676,
+      "spend_30d": 2343853.0,
+      "clicks_30d": 1675,
       "impressions_30d": 190636,
       "ctr_30d": 0.0088,
       "ad_count": 10
     },
     "OTHER": {
-      "spend_30d": 72516645.0,
-      "clicks_30d": 20698,
+      "spend_30d": 72506465.0,
+      "clicks_30d": 20695,
       "impressions_30d": 1432089,
       "ctr_30d": 0.0145,
       "ad_count": 150
