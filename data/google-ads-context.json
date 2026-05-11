@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11 11:26",
+  "generated_at": "2026-05-11 11:41",
   "source_data_date_range": {
     "start_7d": "2026-05-04",
     "end": "2026-05-10",
@@ -2552,14 +2552,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 17718,
-      "total_spend_30d": 20328083.0
+      "total_unique_placements": 17720,
+      "total_spend_30d": 20320024.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 20328920.0,
-        "clicks_30d": 12810,
-        "impressions_30d": 1005991,
+        "spend_30d": 20320861.0,
+        "clicks_30d": 12805,
+        "impressions_30d": 1005986,
         "ctr_30d": 0.0127,
         "cpc_30d": 1587.0,
         "campaign_count": 9
@@ -2575,11 +2575,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 20328083.0,
-        "clicks_30d": 12809,
-        "impressions_30d": 974454,
+        "spend_30d": 20320024.0,
+        "clicks_30d": 12804,
+        "impressions_30d": 974483,
         "ctr_30d": 0.0131,
-        "placement_count": 17718
+        "placement_count": 17720
       }
     },
     "top_waste_placements": [],
@@ -2791,28 +2791,28 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 79539981.0
+      "total_spend_30d": 77647395.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2370925.0,
-        "clicks_30d": 1710,
-        "impressions_30d": 193768,
+        "spend_30d": 2344369.0,
+        "clicks_30d": 1676,
+        "impressions_30d": 190636,
         "ctr_30d": 0.0088,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 73948693.0,
-        "clicks_30d": 20933,
-        "impressions_30d": 1434806,
-        "ctr_30d": 0.0146,
+        "spend_30d": 72516645.0,
+        "clicks_30d": 20698,
+        "impressions_30d": 1432099,
+        "ctr_30d": 0.0145,
         "ad_count": 150
       },
       "RSA": {
-        "spend_30d": 3220363.0,
-        "clicks_30d": 1053,
-        "impressions_30d": 88544,
-        "ctr_30d": 0.0119,
+        "spend_30d": 2786381.0,
+        "clicks_30d": 912,
+        "impressions_30d": 77692,
+        "ctr_30d": 0.0117,
         "ad_count": 1
       }
     },
@@ -2823,9 +2823,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 819808.0,
-        "clicks_30d": 972,
-        "ctr_30d": 0.0131
+        "spend_30d": 827552.0,
+        "clicks_30d": 973,
+        "ctr_30d": 0.0128
       },
       {
         "ad_id": "752128818627",
@@ -2833,9 +2833,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 670167.0,
-        "clicks_30d": 342,
-        "ctr_30d": 0.0079
+        "spend_30d": 660512.0,
+        "clicks_30d": 330,
+        "ctr_30d": 0.008
       },
       {
         "ad_id": "751153590183",
@@ -2843,8 +2843,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 454639.0,
-        "clicks_30d": 219,
+        "spend_30d": 434857.0,
+        "clicks_30d": 203,
         "ctr_30d": 0.0047
       },
       {
@@ -2853,8 +2853,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 223945.0,
-        "clicks_30d": 94,
+        "spend_30d": 210974.0,
+        "clicks_30d": 85,
         "ctr_30d": 0.0096
       },
       {
@@ -2863,8 +2863,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "320x50.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 96624.0,
-        "clicks_30d": 31,
+        "spend_30d": 101990.0,
+        "clicks_30d": 32,
         "ctr_30d": 0.0034
       },
       {
@@ -2873,9 +2873,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "728x90.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 54893.0,
-        "clicks_30d": 32,
-        "ctr_30d": 0.0057
+        "spend_30d": 57635.0,
+        "clicks_30d": 33,
+        "ctr_30d": 0.0056
       },
       {
         "ad_id": "751153590189",
@@ -2885,7 +2885,7 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 22353.0,
         "clicks_30d": 10,
-        "ctr_30d": 0.0061
+        "ctr_30d": 0.0063
       },
       {
         "ad_id": "751153590192",
@@ -2895,7 +2895,7 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 18724.0,
         "clicks_30d": 7,
-        "ctr_30d": 0.0023
+        "ctr_30d": 0.0024
       },
       {
         "ad_id": "752128818621",
@@ -2905,7 +2905,7 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 4902.0,
         "clicks_30d": 2,
-        "ctr_30d": 0.0034
+        "ctr_30d": 0.0033
       },
       {
         "ad_id": "751153590180",
@@ -2915,7 +2915,7 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 4870.0,
         "clicks_30d": 1,
-        "ctr_30d": 0.0034
+        "ctr_30d": 0.0036
       }
     ],
     "worst_performing_banners": [],
