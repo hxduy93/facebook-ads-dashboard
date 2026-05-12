@@ -24,20 +24,31 @@ SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"
 TABLE = "Contact"
 LOOKBACK_DAYS = 90  # match fetch_pancake_revenue.py window
-PAGE_SIZE = 300     # max safe page size (đã test, server chấp nhận)
+PAGE_SIZE = 100     # giảm từ 300 → 100: server Pancake 500 khi pull sustained 300/page
+PAGE_SLEEP_SEC = 1.0  # nghỉ giữa các page để không làm server đuối
 OUTPUT_FILE = "data/pancake-crm-contacts.json"
 
 
-def http_get_json(url, max_retries=4):
+def http_get_json(url, max_retries=6):
+    """GET + retry với backoff dài. Trên 500: chờ lâu hơn (server cần thời gian hồi)."""
     last_err = None
     for attempt in range(1, max_retries + 1):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "fb-ads-dashboard/1.0"})
-            with urllib.request.urlopen(req, timeout=30) as r:
+            with urllib.request.urlopen(req, timeout=45) as r:
                 return json.loads(r.read().decode("utf-8"))
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+        except urllib.error.HTTPError as e:
             last_err = e
-            wait = min(2 ** attempt, 16)
+            # 500/502/503: server overload — chờ lâu. 4xx khác: không retry.
+            if e.code >= 500:
+                wait = min(15 * attempt, 90)  # 15, 30, 45, 60, 75, 90
+                print(f"  [retry {attempt}/{max_retries}] HTTP {e.code} — chờ {wait}s", file=sys.stderr)
+                time.sleep(wait)
+            else:
+                raise
+        except (urllib.error.URLError, TimeoutError) as e:
+            last_err = e
+            wait = min(2 ** attempt + 5, 60)
             print(f"  [retry {attempt}/{max_retries}] {e} — chờ {wait}s", file=sys.stderr)
             time.sleep(wait)
     raise RuntimeError(f"Failed after {max_retries} retries: {last_err}")
@@ -86,11 +97,11 @@ def fetch_all_contacts():
     cutoff_str = cutoff.strftime("%Y-%m-%dT%H:%M:%S.000Z")
     # MongoDB-style filter (đã test ok)
     filter_obj = {"$and": [{"CreatedOn": {"$gte": cutoff_str}}]}
-    filter_enc = urllib.parse.quote(json.dumps(filter_obj))
 
     all_entries = []
     cursor = None
     page = 1
+    partial_failure = None
     while True:
         params = [
             ("api_key", API_KEY),
@@ -103,8 +114,15 @@ def fetch_all_contacts():
         qs = urllib.parse.urlencode(params)
         url = f"{BASE_URL}/shops/{SHOP_ID}/crm/{TABLE}/records?{qs}"
 
-        print(f"  page {page} (cursor={'yes' if cursor else 'no'}) — fetching…", file=sys.stderr)
-        data = http_get_json(url)
+        print(f"  page {page} (have {len(all_entries):,} so far) — fetching…", file=sys.stderr)
+        try:
+            data = http_get_json(url)
+        except RuntimeError as e:
+            # Server không hồi sau 6 retry — giữ partial data, không quăng error toàn bộ job
+            partial_failure = f"page {page}: {e}"
+            print(f"  [!] giữ {len(all_entries):,} contact đã lấy được, dừng pagination", file=sys.stderr)
+            break
+
         body = data.get("data", {}) if isinstance(data, dict) else {}
         entries = body.get("entries", []) or []
         new_cursor = body.get("cursor")
@@ -116,12 +134,12 @@ def fetch_all_contacts():
             break
         cursor = new_cursor
         page += 1
-        if page > 200:  # safety cap (200 * 300 = 60K, đủ cho 90 ngày)
-            print("  [warn] hit page cap 200 — break", file=sys.stderr)
+        if page > 500:  # safety cap (500 * 100 = 50K, đủ cho 90 ngày)
+            print("  [warn] hit page cap 500 — break", file=sys.stderr)
             break
-        time.sleep(0.3)  # nhẹ tay với server
+        time.sleep(PAGE_SLEEP_SEC)  # nghỉ giữa các page
 
-    return all_entries
+    return all_entries, partial_failure
 
 
 def normalize_contact(e):
@@ -187,8 +205,10 @@ def main():
         sys.exit(1)
 
     print(f"[INFO] Fetch Pancake CRM contacts — shop={SHOP_ID}, lookback={LOOKBACK_DAYS}d", file=sys.stderr)
-    raw = fetch_all_contacts()
+    raw, partial_failure = fetch_all_contacts()
     print(f"[INFO] Got {len(raw):,} raw contacts", file=sys.stderr)
+    if partial_failure:
+        print(f"[WARN] Pagination dừng sớm: {partial_failure}", file=sys.stderr)
 
     contacts = [normalize_contact(e) for e in raw]
     with_utm = sum(1 for c in contacts if c.get("utm_content"))
@@ -204,6 +224,8 @@ def main():
         "total_contacts": len(contacts),
         "contacts_with_utm_content": with_utm,
         "unique_ad_ids": len(by_utm),
+        "partial": bool(partial_failure),
+        "partial_failure_reason": partial_failure,
         "by_utm_content": by_utm,
         # Không dump toàn bộ contacts (có PII: phone, address) — chỉ dump aggregated.
         # Nếu sau này cần raw để debug, mở comment dưới:
