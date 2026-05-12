@@ -41,25 +41,48 @@ PANCAKE_STATUS = {
 }
 
 
+# Whitelist staff thực tế trong CRM Doscom (xác nhận 2026-05-12 với user).
+# Field nguoi_chay_qc trong Pancake không nhất quán — đôi khi "STAFF - PRODUCT",
+# đôi khi "PRODUCT - STAFF". Map keys = upper-case canonical, values = display name.
+# "NAM" là viết tắt của "PHƯƠNG NAM" → cùng 1 staff.
+# "WEBSITE" là entry standalone gom các nguồn Zalo OA / Hotline / Website (không phải ad FB).
+STAFF_WHITELIST = {
+    "DUY": "DUY",
+    "PHƯƠNG NAM": "PHƯƠNG NAM",
+    "PHUONG NAM": "PHƯƠNG NAM",
+    "NAM": "PHƯƠNG NAM",
+    "WEBSITE": "WEBSITE",
+}
+
+
 def staff_from_qc(qc):
-    """Bóc tên staff từ field nguoi_chay_qc có format 'STAFF - PRODUCT'.
-    'DUY - DR1' → 'DUY'. None nếu trống."""
+    """Bóc tên staff từ field nguoi_chay_qc. Check cả left/right vì format không
+    nhất quán ('STAFF - PRODUCT' hoặc 'PRODUCT - STAFF'). Return canonical name."""
     if not qc or not isinstance(qc, str):
         return None
-    parts = qc.split(" - ", 1)
-    s = parts[0].strip() if parts else ""
-    return s or None
+    qc = qc.strip()
+    if not qc:
+        return None
+    canon = STAFF_WHITELIST.get(qc.upper())
+    if canon:
+        return canon
+    if " - " in qc:
+        for p in qc.split(" - ", 1):
+            canon = STAFF_WHITELIST.get(p.strip().upper())
+            if canon:
+                return canon
+    return None
 
 
 def product_from_qc(qc):
-    """Bóc tên product từ field nguoi_chay_qc 'STAFF - PRODUCT' → 'PRODUCT'."""
-    if not qc or not isinstance(qc, str):
+    """Bóc tên product = phần KHÔNG match staff whitelist."""
+    if not qc or not isinstance(qc, str) or " - " not in qc:
         return None
-    parts = qc.split(" - ", 1)
-    if len(parts) < 2:
-        return None
-    p = parts[1].strip()
-    return p or None
+    parts = [p.strip() for p in qc.split(" - ", 1)]
+    for p in parts:
+        if p and p.upper() not in STAFF_WHITELIST:
+            return p
+    return None
 
 
 def parse_iso_date(s):
