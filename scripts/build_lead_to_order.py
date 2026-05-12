@@ -125,19 +125,19 @@ def main():
         sys.exit(2)
 
     # ── Index leads by phone9 ──
-    # Mỗi phone9 có thể có nhiều lead (khách gọi lại, nhiều ad). Sort by created_on DESC
-    # để khi attribute đơn lấy lead gần nhất trước đơn.
+    # 2026-05-12: bao gồm CẢ lead không có ad_id (vd: nguoi_chay_qc='WEBSITE' từ
+    # Zalo OA / Hotline / Website — không qua UTM Facebook). Lead vẫn có phone9
+    # nên vẫn join được với order, và staff='WEBSITE' vẫn được aggregate.
     leads_by_phone = defaultdict(list)
     for c in contacts:
         p9 = c.get("phone9")
-        ad_id = c.get("ad_id")
-        if not p9 or not ad_id:
+        if not p9:
             continue
         created = parse_iso_date(c.get("created_on"))
         if not created:
             continue
         leads_by_phone[p9].append({
-            "ad_id": ad_id,
+            "ad_id": c.get("ad_id"),
             "utm_campaign": c.get("utm_campaign"),
             "created": created,
             "trang_thai": c.get("trang_thai"),
@@ -146,7 +146,7 @@ def main():
         })
     for p9 in leads_by_phone:
         leads_by_phone[p9].sort(key=lambda x: x["created"], reverse=True)
-    print(f"[INFO] {len(leads_by_phone):,} unique phone9 có lead với ad_id")
+    print(f"[INFO] {len(leads_by_phone):,} unique phone9 trong CRM")
 
     # ── Attribute mỗi order ──
     by_ad = defaultdict(lambda: {
@@ -181,26 +181,29 @@ def main():
     for c in contacts:
         ad_id = c.get("ad_id")
         p9 = c.get("phone9")
-        if not ad_id:
-            continue
-        bucket = by_ad[ad_id]
-        bucket["leads"] += 1
-        if p9:
-            bucket["leads_phone9_set"].add(p9)
-        if not bucket["utm_campaign"]:
-            bucket["utm_campaign"] = c.get("utm_campaign")
-        if c.get("owner_name"):
-            bucket["owner_name_counter"][c["owner_name"]] += 1
-        if c.get("nguoi_chay_qc"):
-            bucket["nguoi_chay_qc_counter"][c["nguoi_chay_qc"]] += 1
 
+        # by_ad chỉ count contact có ad_id (= từ UTM Facebook ad)
+        if ad_id:
+            bucket = by_ad[ad_id]
+            bucket["leads"] += 1
+            if p9:
+                bucket["leads_phone9_set"].add(p9)
+            if not bucket["utm_campaign"]:
+                bucket["utm_campaign"] = c.get("utm_campaign")
+            if c.get("owner_name"):
+                bucket["owner_name_counter"][c["owner_name"]] += 1
+            if c.get("nguoi_chay_qc"):
+                bucket["nguoi_chay_qc_counter"][c["nguoi_chay_qc"]] += 1
+
+        # by_qc count tất cả contact match staff whitelist (bao gồm WEBSITE không có ad_id)
         staff = staff_from_qc(c.get("nguoi_chay_qc"))
         if staff:
             qb = by_qc[staff]
             qb["leads"] += 1
             if p9:
                 qb["leads_phone9_set"].add(p9)
-            qb["ad_ids_set"].add(ad_id)
+            if ad_id:
+                qb["ad_ids_set"].add(ad_id)
             prod = product_from_qc(c.get("nguoi_chay_qc"))
             if prod:
                 qb["products_counter"][prod] += 1
@@ -250,30 +253,34 @@ def main():
                 })
             continue
 
-        ad_id = attr_lead["ad_id"]
-        bucket = by_ad[ad_id]
-        bucket["orders_total"] += 1
-        bucket["leads_with_order_phone9_set"].add(p9)
-        cod = float(o.get("cod") or 0)
-        bucket["revenue_total"] += cod
-        status = o.get("status")
-        if status == 3:
-            bucket["orders_delivered"] += 1
-            bucket["revenue_delivered"] += cod
-        elif status == 6:
-            bucket["orders_canceled"] += 1
-        else:
-            bucket["orders_other"] += 1
         matched_orders += 1
+        cod = float(o.get("cod") or 0)
+        status = o.get("status")
+        ad_id = attr_lead.get("ad_id")
 
-        # Attribute đơn cho staff (= left part của nguoi_chay_qc của lead match)
+        # by_ad chỉ count đơn có ad_id (= từ UTM Facebook ad)
+        if ad_id:
+            bucket = by_ad[ad_id]
+            bucket["orders_total"] += 1
+            bucket["leads_with_order_phone9_set"].add(p9)
+            bucket["revenue_total"] += cod
+            if status == 3:
+                bucket["orders_delivered"] += 1
+                bucket["revenue_delivered"] += cod
+            elif status == 6:
+                bucket["orders_canceled"] += 1
+            else:
+                bucket["orders_other"] += 1
+
+        # by_qc count đơn theo staff — kể cả lead không có ad_id (WEBSITE)
         staff = staff_from_qc(attr_lead.get("nguoi_chay_qc"))
         if staff:
             qb = by_qc[staff]
             qb["orders_total"] += 1
             qb["leads_with_order_phone9_set"].add(p9)
             qb["revenue_total"] += cod
-            qb["ad_id_revenue"][ad_id] += cod
+            if ad_id:
+                qb["ad_id_revenue"][ad_id] += cod
             if status == 3:
                 qb["orders_delivered"] += 1
                 qb["revenue_delivered"] += cod
