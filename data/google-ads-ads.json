@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12 17:01",
+  "generated_at": "2026-05-12 19:18",
   "source": "Windsor.ai JSON API (ads, auto every 60min)",
   "account_name": "MHDI",
   "date_range": {
@@ -19,8 +19,8 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300x250.gif",
       "ad_format": "DISPLAY_BANNER",
-      "spend_30d": 847753.0,
-      "clicks_30d": 977,
+      "spend_30d": 847389.0,
+      "clicks_30d": 976,
       "impressions_30d": 79174,
       "ctr_30d": 0.0123,
       "cpc_30d": 868.0,
@@ -47,7 +47,7 @@
       "ad_format": "DISPLAY_BANNER",
       "spend_30d": 110043.0,
       "clicks_30d": 36,
-      "impressions_30d": 10237,
+      "impressions_30d": 10236,
       "ctr_30d": 0.0035,
       "cpc_30d": 3057.0,
       "active_days_30d": 19
@@ -188,10 +188,10 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "336X280-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 1599601.0,
-      "clicks_30d": 1627,
+      "spend_30d": 1598609.0,
+      "clicks_30d": 1626,
       "impressions_30d": 157112,
-      "ctr_30d": 0.0104,
+      "ctr_30d": 0.0103,
       "cpc_30d": 983.0,
       "active_days_30d": 24
     },
@@ -229,7 +229,7 @@
       "ad_format": "OTHER",
       "spend_30d": 98823.0,
       "clicks_30d": 29,
-      "impressions_30d": 10852,
+      "impressions_30d": 10850,
       "ctr_30d": 0.0027,
       "cpc_30d": 3408.0,
       "active_days_30d": 19
@@ -385,7 +385,7 @@
       "ad_format": "OTHER",
       "spend_30d": 1078987.0,
       "clicks_30d": 735,
-      "impressions_30d": 101350,
+      "impressions_30d": 101349,
       "ctr_30d": 0.0073,
       "cpc_30d": 1468.0,
       "active_days_30d": 25
@@ -411,7 +411,7 @@
       "ad_format": "OTHER",
       "spend_30d": 1654852.0,
       "clicks_30d": 1133,
-      "impressions_30d": 96422,
+      "impressions_30d": 96421,
       "ctr_30d": 0.0118,
       "cpc_30d": 1461.0,
       "active_days_30d": 25
@@ -489,7 +489,7 @@
       "ad_format": "OTHER",
       "spend_30d": 97386.0,
       "clicks_30d": 56,
-      "impressions_30d": 8390,
+      "impressions_30d": 8389,
       "ctr_30d": 0.0067,
       "cpc_30d": 1739.0,
       "active_days_30d": 19
@@ -593,7 +593,7 @@
       "ad_format": "OTHER",
       "spend_30d": 261317.0,
       "clicks_30d": 163,
-      "impressions_30d": 22688,
+      "impressions_30d": 22689,
       "ctr_30d": 0.0072,
       "cpc_30d": 1603.0,
       "active_days_30d": 18
@@ -2075,7 +2075,7 @@
       "ad_format": "OTHER",
       "spend_30d": 7548230.0,
       "clicks_30d": 2084,
-      "impressions_30d": 15678,
+      "impressions_30d": 15677,
       "ctr_30d": 0.1329,
       "cpc_30d": 3622.0,
       "active_days_30d": 17
@@ -2109,16 +2109,16 @@
   },
   "format_aggregates": {
     "DISPLAY_BANNER": {
-      "spend_30d": 2365805.0,
-      "clicks_30d": 1673,
-      "impressions_30d": 189863,
+      "spend_30d": 2365441.0,
+      "clicks_30d": 1672,
+      "impressions_30d": 189862,
       "ctr_30d": 0.0088,
       "ad_count": 10
     },
     "OTHER": {
-      "spend_30d": 70870239.0,
-      "clicks_30d": 20404,
-      "impressions_30d": 1433732,
+      "spend_30d": 70869247.0,
+      "clicks_30d": 20403,
+      "impressions_30d": 1433727,
       "ctr_30d": 0.0142,
       "ad_count": 150
     },
