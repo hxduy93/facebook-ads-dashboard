@@ -23,32 +23,33 @@ API_KEY = os.environ.get("PANCAKE_CRM_API_KEY", "").strip()
 SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"
 TABLE = "Contact"
-LOOKBACK_DAYS = 90  # match fetch_pancake_revenue.py window
-PAGE_SIZE = 100     # giảm từ 300 → 100: server Pancake 500 khi pull sustained 300/page
+LOOKBACK_DAYS = 30  # bắt đầu 30 ngày, sau khi stable sẽ tăng lên 90
+PAGE_SIZE = 100     # server Pancake 500 nếu pull sustained 300/page
 PAGE_SLEEP_SEC = 1.0  # nghỉ giữa các page để không làm server đuối
 OUTPUT_FILE = "data/pancake-crm-contacts.json"
 
 
-def http_get_json(url, max_retries=6):
-    """GET + retry với backoff dài. Trên 500: chờ lâu hơn (server cần thời gian hồi)."""
+def http_get_json(url, max_retries=3):
+    """GET + retry. Trên 500: backoff ngắn (10/20/40s) — fail-fast để không vượt timeout job.
+    Logic graceful partial ở fetch_all_contacts() sẽ save data đã pull được nếu page này fail."""
     last_err = None
     for attempt in range(1, max_retries + 1):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "fb-ads-dashboard/1.0"})
-            with urllib.request.urlopen(req, timeout=45) as r:
+            with urllib.request.urlopen(req, timeout=30) as r:
                 return json.loads(r.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
             last_err = e
-            # 500/502/503: server overload — chờ lâu. 4xx khác: không retry.
             if e.code >= 500:
-                wait = min(15 * attempt, 90)  # 15, 30, 45, 60, 75, 90
+                # Backoff ngắn: 10, 20, 40 = 70s tổng (thay vì 315s như trước)
+                wait = 10 * (2 ** (attempt - 1))
                 print(f"  [retry {attempt}/{max_retries}] HTTP {e.code} — chờ {wait}s", file=sys.stderr)
                 time.sleep(wait)
             else:
                 raise
         except (urllib.error.URLError, TimeoutError) as e:
             last_err = e
-            wait = min(2 ** attempt + 5, 60)
+            wait = 5 * attempt
             print(f"  [retry {attempt}/{max_retries}] {e} — chờ {wait}s", file=sys.stderr)
             time.sleep(wait)
     raise RuntimeError(f"Failed after {max_retries} retries: {last_err}")
