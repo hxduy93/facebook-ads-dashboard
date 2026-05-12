@@ -41,6 +41,27 @@ PANCAKE_STATUS = {
 }
 
 
+def staff_from_qc(qc):
+    """Bóc tên staff từ field nguoi_chay_qc có format 'STAFF - PRODUCT'.
+    'DUY - DR1' → 'DUY'. None nếu trống."""
+    if not qc or not isinstance(qc, str):
+        return None
+    parts = qc.split(" - ", 1)
+    s = parts[0].strip() if parts else ""
+    return s or None
+
+
+def product_from_qc(qc):
+    """Bóc tên product từ field nguoi_chay_qc 'STAFF - PRODUCT' → 'PRODUCT'."""
+    if not qc or not isinstance(qc, str):
+        return None
+    parts = qc.split(" - ", 1)
+    if len(parts) < 2:
+        return None
+    p = parts[1].strip()
+    return p or None
+
+
 def parse_iso_date(s):
     """Parse 'YYYY-MM-DDTHH:MM:SS...Z' hoặc 'YYYY-MM-DD' → date object."""
     if not s:
@@ -119,7 +140,21 @@ def main():
         "owner_name_counter": defaultdict(int),
         "nguoi_chay_qc_counter": defaultdict(int),
     })
-    # Count leads per ad_id
+    by_qc = defaultdict(lambda: {
+        "leads": 0,
+        "leads_phone9_set": set(),
+        "leads_with_order_phone9_set": set(),
+        "orders_total": 0,
+        "orders_delivered": 0,
+        "orders_canceled": 0,
+        "orders_other": 0,
+        "revenue_total": 0.0,
+        "revenue_delivered": 0.0,
+        "ad_ids_set": set(),
+        "ad_id_revenue": defaultdict(float),
+        "products_counter": defaultdict(int),
+    })
+    # Count leads per ad_id + per qc-staff
     for c in contacts:
         ad_id = c.get("ad_id")
         p9 = c.get("phone9")
@@ -135,6 +170,17 @@ def main():
             bucket["owner_name_counter"][c["owner_name"]] += 1
         if c.get("nguoi_chay_qc"):
             bucket["nguoi_chay_qc_counter"][c["nguoi_chay_qc"]] += 1
+
+        staff = staff_from_qc(c.get("nguoi_chay_qc"))
+        if staff:
+            qb = by_qc[staff]
+            qb["leads"] += 1
+            if p9:
+                qb["leads_phone9_set"].add(p9)
+            qb["ad_ids_set"].add(ad_id)
+            prod = product_from_qc(c.get("nguoi_chay_qc"))
+            if prod:
+                qb["products_counter"][prod] += 1
 
     unmatched_orders_sample = []
     matched_orders = 0
@@ -197,6 +243,22 @@ def main():
             bucket["orders_other"] += 1
         matched_orders += 1
 
+        # Attribute đơn cho staff (= left part của nguoi_chay_qc của lead match)
+        staff = staff_from_qc(attr_lead.get("nguoi_chay_qc"))
+        if staff:
+            qb = by_qc[staff]
+            qb["orders_total"] += 1
+            qb["leads_with_order_phone9_set"].add(p9)
+            qb["revenue_total"] += cod
+            qb["ad_id_revenue"][ad_id] += cod
+            if status == 3:
+                qb["orders_delivered"] += 1
+                qb["revenue_delivered"] += cod
+            elif status == 6:
+                qb["orders_canceled"] += 1
+            else:
+                qb["orders_other"] += 1
+
     # ── Finalize ──
     out_by_ad = {}
     total_leads = 0
@@ -233,6 +295,32 @@ def main():
         total_revenue += b["revenue_total"]
         total_revenue_delivered += b["revenue_delivered"]
 
+    # ── Finalize by_qc (staff-level từ nguoi_chay_qc) ──
+    out_by_qc = {}
+    for staff, q in by_qc.items():
+        leads = q["leads"]
+        leads_with_order = len(q["leads_with_order_phone9_set"])
+        top_ads = sorted(q["ad_id_revenue"].items(), key=lambda x: -x[1])[:5]
+        top_products = sorted(q["products_counter"].items(), key=lambda x: -x[1])[:5]
+        out_by_qc[staff] = {
+            "staff": staff,
+            "leads": leads,
+            "leads_with_phone9": len(q["leads_phone9_set"]),
+            "leads_with_order": leads_with_order,
+            "leads_conversion_rate": round(leads_with_order / leads * 100, 2) if leads else 0.0,
+            "orders_total": q["orders_total"],
+            "orders_delivered": q["orders_delivered"],
+            "orders_canceled": q["orders_canceled"],
+            "orders_other": q["orders_other"],
+            "revenue_total": round(q["revenue_total"]),
+            "revenue_delivered": round(q["revenue_delivered"]),
+            "unique_ad_ids": len(q["ad_ids_set"]),
+            "top_ad_ids_by_revenue": [{"ad_id": a, "revenue": round(r)} for a, r in top_ads],
+            "top_products_by_leads": [{"product": p, "leads": n} for p, n in top_products],
+        }
+    # Sort theo revenue_total DESC để dashboard render từ cao xuống thấp
+    out_by_qc = dict(sorted(out_by_qc.items(), key=lambda kv: -kv[1]["revenue_total"]))
+
     out = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "crm_generated_at": crm.get("generated_at"),
@@ -250,8 +338,10 @@ def main():
             "revenue_attributed_total": round(total_revenue),
             "revenue_attributed_delivered": round(total_revenue_delivered),
             "unique_ad_ids_with_orders": sum(1 for v in out_by_ad.values() if v["orders_total"] > 0),
+            "unique_qc_staff": len(out_by_qc),
         },
         "by_ad_id": out_by_ad,
+        "by_nguoi_chay_qc": out_by_qc,
         "unmatched_orders_sample": unmatched_orders_sample,
     }
 
@@ -266,6 +356,10 @@ def main():
           f"{len(orders) - matched_orders - skipped_no_phone:,} unmatched)")
     print(f"     Revenue attributed: {total_revenue:,.0f}đ "
           f"(delivered: {total_revenue_delivered:,.0f}đ)")
+    print(f"     {len(out_by_qc)} staff QC — top 5 by revenue:")
+    for i, (staff, v) in enumerate(list(out_by_qc.items())[:5], 1):
+        print(f"       {i}. {staff:<15s} leads={v['leads']:>4} orders={v['orders_total']:>4} "
+              f"conv={v['leads_conversion_rate']:>5.1f}% rev={v['revenue_total']:,}đ")
 
 
 if __name__ == "__main__":
