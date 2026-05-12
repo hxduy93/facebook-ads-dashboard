@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T09:21:34.843125+00:00",
+  "generated_at": "2026-05-12T10:01:45.289752+00:00",
   "crm_generated_at": "2026-05-12T09:11:59.606898+00:00",
   "pos_generated_at": "2026-05-12 08:38 UTC",
   "attribution_window_days": 60,
@@ -14,7 +14,7 @@
     "revenue_attributed_total": 604665000,
     "revenue_attributed_delivered": 367024000,
     "unique_ad_ids_with_orders": 71,
-    "unique_qc_staff": 6
+    "unique_qc_staff": 2
   },
   "by_ad_id": {
     "120245580374520388": {
@@ -1331,19 +1331,73 @@
     }
   },
   "by_nguoi_chay_qc": {
+    "DUY": {
+      "staff": "DUY",
+      "leads": 1446,
+      "leads_with_phone9": 1310,
+      "leads_with_order": 931,
+      "leads_conversion_rate": 64.38,
+      "orders_total": 940,
+      "orders_delivered": 637,
+      "orders_canceled": 3,
+      "orders_other": 300,
+      "revenue_total": 354222000,
+      "revenue_delivered": 216773000,
+      "unique_ad_ids": 41,
+      "top_ad_ids_by_revenue": [
+        {
+          "ad_id": "120248698825110196",
+          "revenue": 42143000
+        },
+        {
+          "ad_id": "120244425748830388",
+          "revenue": 39979000
+        },
+        {
+          "ad_id": "120248039692460196",
+          "revenue": 39600000
+        },
+        {
+          "ad_id": "120245707118870067",
+          "revenue": 37500000
+        },
+        {
+          "ad_id": "120244425748820388",
+          "revenue": 25770000
+        }
+      ],
+      "top_products_by_leads": [
+        {
+          "product": "NOMA 911",
+          "leads": 1149
+        },
+        {
+          "product": "DA8.1",
+          "leads": 156
+        },
+        {
+          "product": "DATA D1",
+          "leads": 82
+        },
+        {
+          "product": "DR1",
+          "leads": 59
+        }
+      ]
+    },
     "PHƯƠNG NAM": {
       "staff": "PHƯƠNG NAM",
-      "leads": 1686,
-      "leads_with_phone9": 1463,
-      "leads_with_order": 1083,
-      "leads_conversion_rate": 64.23,
-      "orders_total": 1098,
-      "orders_delivered": 629,
+      "leads": 1691,
+      "leads_with_phone9": 1466,
+      "leads_with_order": 1084,
+      "leads_conversion_rate": 64.1,
+      "orders_total": 1099,
+      "orders_delivered": 630,
       "orders_canceled": 3,
       "orders_other": 466,
-      "revenue_total": 247601000,
-      "revenue_delivered": 148205000,
-      "unique_ad_ids": 44,
+      "revenue_total": 247800000,
+      "revenue_delivered": 148404000,
+      "unique_ad_ids": 45,
       "top_ad_ids_by_revenue": [
         {
           "ad_id": "120246745047630058",
@@ -1355,7 +1409,7 @@
         },
         {
           "ad_id": "120246730619290058",
-          "revenue": 42579000
+          "revenue": 42778000
         },
         {
           "ad_id": "120246812956640058",
@@ -1369,7 +1423,7 @@
       "top_products_by_leads": [
         {
           "product": "NOMA911",
-          "leads": 1630
+          "leads": 1632
         },
         {
           "product": "DA8.1",
@@ -1378,180 +1432,10 @@
         {
           "product": "D1",
           "leads": 16
-        }
-      ]
-    },
-    "NOMA 911": {
-      "staff": "NOMA 911",
-      "leads": 1149,
-      "leads_with_phone9": 1075,
-      "leads_with_order": 835,
-      "leads_conversion_rate": 72.67,
-      "orders_total": 843,
-      "orders_delivered": 586,
-      "orders_canceled": 2,
-      "orders_other": 255,
-      "revenue_total": 197081000,
-      "revenue_delivered": 137580000,
-      "unique_ad_ids": 30,
-      "top_ad_ids_by_revenue": [
-        {
-          "ad_id": "120244425748830388",
-          "revenue": 39979000
         },
-        {
-          "ad_id": "120244425748820388",
-          "revenue": 25770000
-        },
-        {
-          "ad_id": "120244203627450388",
-          "revenue": 24668000
-        },
-        {
-          "ad_id": "120244203655790388",
-          "revenue": 22885000
-        },
-        {
-          "ad_id": "120244425647860388",
-          "revenue": 16517000
-        }
-      ],
-      "top_products_by_leads": [
-        {
-          "product": "DUY",
-          "leads": 1149
-        }
-      ]
-    },
-    "DATA D1": {
-      "staff": "DATA D1",
-      "leads": 82,
-      "leads_with_phone9": 71,
-      "leads_with_order": 25,
-      "leads_conversion_rate": 30.49,
-      "orders_total": 25,
-      "orders_delivered": 9,
-      "orders_canceled": 0,
-      "orders_other": 16,
-      "revenue_total": 62500000,
-      "revenue_delivered": 22500000,
-      "unique_ad_ids": 6,
-      "top_ad_ids_by_revenue": [
-        {
-          "ad_id": "120245707118870067",
-          "revenue": 37500000
-        },
-        {
-          "ad_id": "120246259232180067",
-          "revenue": 17500000
-        },
-        {
-          "ad_id": "120245885118130067",
-          "revenue": 5000000
-        },
-        {
-          "ad_id": "120247483532660067",
-          "revenue": 2500000
-        }
-      ],
-      "top_products_by_leads": [
-        {
-          "product": "DUY",
-          "leads": 82
-        }
-      ]
-    },
-    "DA8.1": {
-      "staff": "DA8.1",
-      "leads": 156,
-      "leads_with_phone9": 127,
-      "leads_with_order": 41,
-      "leads_conversion_rate": 26.28,
-      "orders_total": 42,
-      "orders_delivered": 26,
-      "orders_canceled": 1,
-      "orders_other": 15,
-      "revenue_total": 55041000,
-      "revenue_delivered": 35893000,
-      "unique_ad_ids": 4,
-      "top_ad_ids_by_revenue": [
-        {
-          "ad_id": "120248698825110196",
-          "revenue": 42143000
-        },
-        {
-          "ad_id": "120248698541200196",
-          "revenue": 7898000
-        },
-        {
-          "ad_id": "120248698825100196",
-          "revenue": 3750000
-        },
-        {
-          "ad_id": "120248698785960196",
-          "revenue": 1250000
-        }
-      ],
-      "top_products_by_leads": [
-        {
-          "product": "DUY",
-          "leads": 156
-        }
-      ]
-    },
-    "DR1": {
-      "staff": "DR1",
-      "leads": 59,
-      "leads_with_phone9": 49,
-      "leads_with_order": 30,
-      "leads_conversion_rate": 50.85,
-      "orders_total": 30,
-      "orders_delivered": 16,
-      "orders_canceled": 0,
-      "orders_other": 14,
-      "revenue_total": 39600000,
-      "revenue_delivered": 20800000,
-      "unique_ad_ids": 1,
-      "top_ad_ids_by_revenue": [
-        {
-          "ad_id": "120248039692460196",
-          "revenue": 39600000
-        }
-      ],
-      "top_products_by_leads": [
-        {
-          "product": "DUY",
-          "leads": 59
-        }
-      ]
-    },
-    "NAM": {
-      "staff": "NAM",
-      "leads": 5,
-      "leads_with_phone9": 5,
-      "leads_with_order": 1,
-      "leads_conversion_rate": 20.0,
-      "orders_total": 1,
-      "orders_delivered": 1,
-      "orders_canceled": 0,
-      "orders_other": 0,
-      "revenue_total": 199000,
-      "revenue_delivered": 199000,
-      "unique_ad_ids": 5,
-      "top_ad_ids_by_revenue": [
-        {
-          "ad_id": "120246730619290058",
-          "revenue": 199000
-        }
-      ],
-      "top_products_by_leads": [
         {
           "product": "NOMA 250",
           "leads": 3
-        },
-        {
-          "product": "NOMA911",
-          "leads": 2
         }
       ]
     }
