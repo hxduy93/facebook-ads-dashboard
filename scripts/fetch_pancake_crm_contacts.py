@@ -80,6 +80,17 @@ def parse_utm_from_link(link):
     return out
 
 
+def phone_last9(s):
+    """Lấy 9 số cuối của phone (sau khi strip non-digit). Dùng làm key join CRM↔POS.
+    Last9 đủ unique trong VN (so 10 hoặc 11 số đầu), né được prefix +84/0/84."""
+    if not s or not isinstance(s, str):
+        return None
+    digits = "".join(ch for ch in s if ch.isdigit())
+    if len(digits) < 9:
+        return None
+    return digits[-9:]
+
+
 def parse_runner_field(s):
     """nguoi_chay_quang_cao thường có format 'STAFF - PRODUCT' hoặc 'PRODUCT - STAFF'."""
     if not s or not isinstance(s, str):
@@ -149,10 +160,12 @@ def normalize_contact(e):
     utm = parse_utm_from_link(link)
     runner = parse_runner_field(e.get("nguoi_chay_quang_cao"))
     owner = e.get("Owner_obj") or {}
+    phone_raw = e.get("Phone")
     return {
         "id": e.get("id"),
         "name": e.get("Name"),
-        "phone": e.get("Phone"),
+        "phone": phone_raw,
+        "phone9": phone_last9(phone_raw),
         "created_on": e.get("CreatedOn"),
         "modified_on": e.get("ModifiedOn"),
         "address": e.get("Address"),
@@ -218,19 +231,37 @@ def main():
     by_utm = aggregate_by_utm_content(contacts)
     print(f"[INFO] {len(by_utm):,} unique ad_id (utm_content)", file=sys.stderr)
 
+    # contacts_minimal: dùng cho join CRM↔POS bằng phone_last9.
+    # Chỉ giữ phone9 + ad_id + status + ngày — KHÔNG dump name/address/full phone.
+    contacts_minimal = []
+    for c in contacts:
+        p9 = c.get("phone9")
+        if not p9:
+            continue
+        contacts_minimal.append({
+            "phone9": p9,
+            "ad_id": c.get("utm_content"),
+            "utm_campaign": c.get("utm_campaign"),
+            "created_on": c.get("created_on"),
+            "trang_thai": c.get("trang_thai"),
+            "source_of_leads": c.get("source_of_leads"),
+            "owner_name": c.get("owner_name"),
+            "nguoi_chay_qc": c.get("nguoi_chay_qc"),
+        })
+    print(f"[INFO] contacts_minimal: {len(contacts_minimal):,} entries có phone9", file=sys.stderr)
+
     out = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "shop_id": SHOP_ID,
         "lookback_days": LOOKBACK_DAYS,
         "total_contacts": len(contacts),
         "contacts_with_utm_content": with_utm,
+        "contacts_with_phone9": len(contacts_minimal),
         "unique_ad_ids": len(by_utm),
         "partial": bool(partial_failure),
         "partial_failure_reason": partial_failure,
         "by_utm_content": by_utm,
-        # Không dump toàn bộ contacts (có PII: phone, address) — chỉ dump aggregated.
-        # Nếu sau này cần raw để debug, mở comment dưới:
-        # "contacts": contacts,
+        "contacts_minimal": contacts_minimal,
     }
 
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)

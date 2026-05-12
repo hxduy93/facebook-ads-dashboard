@@ -1,0 +1,47 @@
+name: Build Lead-to-Order Funnel
+
+# Join CRM contacts (phone9 + ad_id) với POS orders (phone9 + cod) → funnel theo ad_id.
+# Chạy lệch 25 phút sau cron CRM/POS (cả 2 đều chạy lúc 0,30 — POS hết sau ~10p, CRM hết sau ~20p).
+# Cron: 25,55 trong khung 10:00 → 18:00 VN (= 03-11 UTC, mở rộng 1h để cover lần cuối ngày).
+on:
+  schedule:
+    - cron: "25,55 3-11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build lead-to-order funnel
+        run: python scripts/build_lead_to_order.py
+
+      - name: Commit lead-to-order data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/lead-to-order.json)" ]; then
+            git add data/lead-to-order.json
+            git commit -m "chore: auto-build lead-to-order funnel"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No lead-to-order changes to commit."
+          fi

@@ -407,6 +407,52 @@ def fetch_all_orders_for_group(group, start_dt, end_dt):
     return all_orders
 
 
+def phone_last9(s):
+    """Lấy 9 số cuối của phone — dùng làm key join với CRM contact.
+    Trùng logic với scripts/fetch_pancake_crm_contacts.py."""
+    if not s or not isinstance(s, str):
+        return None
+    digits = "".join(ch for ch in s if ch.isdigit())
+    if len(digits) < 9:
+        return None
+    return digits[-9:]
+
+
+def extract_order_phone(o):
+    """Bóc phone của khách từ 1 order Pancake POS.
+    Pancake trả phone ở nhiều chỗ tùy origin đơn — thử fallback chain.
+    Return phone_last9 (9 số) hoặc None nếu không tìm thấy."""
+    candidates = []
+    # 1. Field flat trên order
+    for k in ("bill_phone_number", "phone_number", "phone"):
+        v = o.get(k)
+        if v:
+            candidates.append(v)
+    # 2. customer object
+    cust = o.get("customer") or {}
+    for k in ("phone_number", "phone"):
+        v = cust.get(k)
+        if v:
+            candidates.append(v)
+    # phone_numbers (list)
+    pn = cust.get("phone_numbers")
+    if isinstance(pn, list):
+        for v in pn:
+            if v:
+                candidates.append(v if isinstance(v, str) else v.get("phone_number") or v.get("number"))
+    # 3. shipping_address
+    sa = o.get("shipping_address") or {}
+    for k in ("phone_number", "phone"):
+        v = sa.get(k)
+        if v:
+            candidates.append(v)
+    for c in candidates:
+        p9 = phone_last9(c)
+        if p9:
+            return p9
+    return None
+
+
 def _num(v, default=0.0):
     """Parse float an toàn — giữ số lẻ (KHÔNG int-truncate). Dùng để khớp Pancake POS."""
     if v is None or v == "":
@@ -1023,6 +1069,35 @@ def main():
             })
     print(f"\n[INFO] web_items_flat: {len(web_items_flat)} items exported cho JS dynamic compute")
 
+    # ── Build orders_minimal — phục vụ join lead→order trong build_lead_to_order.py ──
+    # Mỗi đơn 1 entry: phone9 + status + cod + sources_name + inserted_at (VN date).
+    # KHÔNG dump tên khách / địa chỉ — chỉ phone_last9 đủ để join.
+    orders_minimal = []
+    phone_hit = 0
+    for _o in all_orders_combined:
+        p9 = extract_order_phone(_o)
+        if p9:
+            phone_hit += 1
+        _ins = (_o.get("inserted_at") or "")[:26]
+        vn_date = None
+        if _ins:
+            try:
+                _dt = datetime.fromisoformat(_ins).replace(tzinfo=timezone.utc)
+                vn_date = (_dt + timedelta(hours=7)).date().isoformat()
+            except Exception:
+                pass
+        orders_minimal.append({
+            "order_id": _o.get("id"),
+            "phone9": p9,
+            "status": _o.get("status"),
+            "inserted_at": _o.get("inserted_at"),
+            "vn_date": vn_date,
+            "cod": order_revenue(_o),
+            "source_name": _o.get("order_sources_name"),
+        })
+    print(f"\n[INFO] orders_minimal: {len(orders_minimal)} đơn, {phone_hit} đơn có phone9 "
+          f"({phone_hit*100/max(1,len(orders_minimal)):.1f}%)")
+
     # ── Build category_breakdown_by_period — 9 nhóm chuẩn Doscom ──
     category_breakdown_by_period = build_category_breakdown_by_period(
         web_sources_orders, today_vn
@@ -1063,6 +1138,9 @@ def main():
         # MỚI: per-source breakdown
         "source_groups_order": [g["key"] for g in SOURCE_GROUPS],
         "source_groups": per_group,
+        # MỚI (2026-05-12): orders_minimal — phone9 + status + cod per đơn,
+        # để build_lead_to_order.py join với CRM contacts theo phone_last9.
+        "orders_minimal": orders_minimal,
     }
 
     out_path = os.path.join(os.path.dirname(__file__), "..", "data", "product-revenue.json")
