@@ -24,8 +24,8 @@ SHOP_ID = os.environ.get("PANCAKE_SHOP_ID", "").strip()
 BASE_URL = "https://pos.pancake.vn/api/v1"
 TABLE = "Contact"
 LOOKBACK_DAYS = 30  # bắt đầu 30 ngày, sau khi stable sẽ tăng lên 90
-PAGE_SIZE = 100     # server Pancake 500 nếu pull sustained 300/page
-PAGE_SLEEP_SEC = 1.0  # nghỉ giữa các page để không làm server đuối
+PAGE_SIZE = 200     # 2026-05-12: bump 100→200. Server Pancake 500 nếu 300/page nhưng 200 OK.
+PAGE_SLEEP_SEC = 0.5  # 2026-05-12: giảm 1.0→0.5. Giúp pagination dài (>100 pages) né GH Actions timeout.
 OUTPUT_FILE = "data/pancake-crm-contacts.json"
 
 
@@ -141,12 +141,26 @@ def fetch_all_contacts():
 
         if not entries:
             break
+
+        # 2026-05-12: Pancake không honor filter $gte khi cursor đi sâu —
+        # client-side cutoff check. Pancake trả DESC (newest first) → khi entry CUỐI
+        # của page < cutoff thì đã qua biên, chỉ giữ entries còn trong range rồi break.
+        # Bug này khiến 30-day lookback trả 16K+ contacts (thực tế chỉ ~3K).
+        last_created = (entries[-1].get("CreatedOn") or "")
+        if last_created and last_created < cutoff_str:
+            fresh = [e for e in entries if (e.get("CreatedOn") or "") >= cutoff_str]
+            all_entries.extend(fresh)
+            print(f"  [stop] last entry {last_created[:10]} < cutoff {cutoff_str[:10]} "
+                  f"— Pancake không honor filter, client-side cut, giữ {len(fresh)}/{len(entries)}",
+                  file=sys.stderr)
+            break
+
         all_entries.extend(entries)
         if not new_cursor or new_cursor == cursor:
             break
         cursor = new_cursor
         page += 1
-        if page > 500:  # safety cap (500 * 100 = 50K, đủ cho 90 ngày)
+        if page > 500:  # safety cap (500 * 200 = 100K, đủ cho mọi lookback)
             print("  [warn] hit page cap 500 — break", file=sys.stderr)
             break
         time.sleep(PAGE_SLEEP_SEC)  # nghỉ giữa các page
