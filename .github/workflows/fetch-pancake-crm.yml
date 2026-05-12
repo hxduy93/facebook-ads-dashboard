@@ -1,0 +1,50 @@
+name: Fetch Pancake CRM Contacts
+
+# Chạy mỗi 30 phút trong giờ hành chính VN: 10:00 → 17:30 (= 03:00 → 10:30 UTC)
+# 16 lần/ngày, đồng bộ schedule với Pancake POS (fetch-pancake.yml)
+on:
+  schedule:
+    - cron: "0,30 3-10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Pancake CRM fetch script
+        env:
+          PANCAKE_CRM_API_KEY: ${{ secrets.PANCAKE_CRM_API_KEY }}
+          PANCAKE_SHOP_ID: ${{ secrets.PANCAKE_SHOP_ID }}
+        run: python scripts/fetch_pancake_crm_contacts.py
+
+      - name: Commit updated CRM contacts data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/pancake-crm-contacts.json)" ]; then
+            git add data/pancake-crm-contacts.json
+            git commit -m "chore: auto-sync Pancake CRM contacts (UTM map)"
+            # Retry + rebase để tránh race với fetch-pancake/fetch-google-ads chạy cùng lúc
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && exit 0
+              echo "[retry $i] push bị reject, chờ $((i*5))s rồi rebase lại..."
+              sleep $((i*5))
+            done
+            echo "Push vẫn fail sau 5 lần retry"
+            exit 1
+          else
+            echo "No CRM changes to commit."
+          fi
