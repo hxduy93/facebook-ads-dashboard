@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-05-12T10:01:45.289752+00:00",
+  "generated_at": "2026-05-12T10:04:03.948870+00:00",
   "crm_generated_at": "2026-05-12T09:11:59.606898+00:00",
   "pos_generated_at": "2026-05-12 08:38 UTC",
   "attribution_window_days": 60,
   "summary": {
     "total_leads_with_ad_id": 3151,
-    "total_leads_with_order": 2025,
-    "leads_conversion_rate": 64.27,
-    "total_orders_attributed": 2047,
+    "total_leads_with_order": 2024,
+    "leads_conversion_rate": 64.23,
+    "total_orders_attributed": 2046,
     "total_orders_in_pos": 5016,
     "orders_skipped_no_phone": 1,
-    "orders_unmatched": 2968,
-    "revenue_attributed_total": 604665000,
-    "revenue_attributed_delivered": 367024000,
+    "orders_unmatched": 2891,
+    "revenue_attributed_total": 604267000,
+    "revenue_attributed_delivered": 366626000,
     "unique_ad_ids_with_orders": 71,
-    "unique_qc_staff": 2
+    "unique_qc_staff": 3
   },
   "by_ad_id": {
     "120245580374520388": {
@@ -102,14 +102,14 @@
       "utm_campaign": "120246745047610058",
       "leads": 328,
       "leads_with_phone9": 325,
-      "leads_with_order": 250,
-      "leads_conversion_rate": 76.22,
-      "orders_total": 253,
-      "orders_delivered": 136,
+      "leads_with_order": 249,
+      "leads_conversion_rate": 75.91,
+      "orders_total": 252,
+      "orders_delivered": 135,
       "orders_canceled": 2,
       "orders_other": 115,
-      "revenue_total": 54360000,
-      "revenue_delivered": 29502000,
+      "revenue_total": 53962000,
+      "revenue_delivered": 29104000,
       "top_owner": "Sale -  Lê Thị Thùy Anh",
       "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
     },
@@ -1333,16 +1333,16 @@
   "by_nguoi_chay_qc": {
     "DUY": {
       "staff": "DUY",
-      "leads": 1446,
-      "leads_with_phone9": 1310,
-      "leads_with_order": 931,
-      "leads_conversion_rate": 64.38,
-      "orders_total": 940,
-      "orders_delivered": 637,
+      "leads": 1468,
+      "leads_with_phone9": 1331,
+      "leads_with_order": 945,
+      "leads_conversion_rate": 64.37,
+      "orders_total": 954,
+      "orders_delivered": 646,
       "orders_canceled": 3,
-      "orders_other": 300,
-      "revenue_total": 354222000,
-      "revenue_delivered": 216773000,
+      "orders_other": 305,
+      "revenue_total": 366603000,
+      "revenue_delivered": 222655000,
       "unique_ad_ids": 41,
       "top_ad_ids_by_revenue": [
         {
@@ -1369,39 +1369,39 @@
       "top_products_by_leads": [
         {
           "product": "NOMA 911",
-          "leads": 1149
+          "leads": 1160
         },
         {
           "product": "DA8.1",
-          "leads": 156
+          "leads": 161
         },
         {
           "product": "DATA D1",
-          "leads": 82
+          "leads": 84
         },
         {
           "product": "DR1",
-          "leads": 59
+          "leads": 63
         }
       ]
     },
     "PHƯƠNG NAM": {
       "staff": "PHƯƠNG NAM",
-      "leads": 1691,
-      "leads_with_phone9": 1466,
-      "leads_with_order": 1084,
-      "leads_conversion_rate": 64.1,
-      "orders_total": 1099,
-      "orders_delivered": 630,
+      "leads": 1714,
+      "leads_with_phone9": 1484,
+      "leads_with_order": 1096,
+      "leads_conversion_rate": 63.94,
+      "orders_total": 1112,
+      "orders_delivered": 637,
       "orders_canceled": 3,
-      "orders_other": 466,
-      "revenue_total": 247800000,
-      "revenue_delivered": 148404000,
+      "orders_other": 472,
+      "revenue_total": 250586000,
+      "revenue_delivered": 149996000,
       "unique_ad_ids": 45,
       "top_ad_ids_by_revenue": [
         {
           "ad_id": "120246745047630058",
-          "revenue": 54360000
+          "revenue": 53962000
         },
         {
           "ad_id": "120246838738900058",
@@ -1423,11 +1423,11 @@
       "top_products_by_leads": [
         {
           "product": "NOMA911",
-          "leads": 1632
+          "leads": 1652
         },
         {
           "product": "DA8.1",
-          "leads": 40
+          "leads": 42
         },
         {
           "product": "D1",
@@ -1436,18 +1436,31 @@
         {
           "product": "NOMA 250",
           "leads": 3
+        },
+        {
+          "product": "WINKI A100",
+          "leads": 1
         }
       ]
+    },
+    "WEBSITE": {
+      "staff": "WEBSITE",
+      "leads": 73,
+      "leads_with_phone9": 65,
+      "leads_with_order": 48,
+      "leads_conversion_rate": 65.75,
+      "orders_total": 50,
+      "orders_delivered": 31,
+      "orders_canceled": 1,
+      "orders_other": 18,
+      "revenue_total": 88067000,
+      "revenue_delivered": 53724000,
+      "unique_ad_ids": 0,
+      "top_ad_ids_by_revenue": [],
+      "top_products_by_leads": []
     }
   },
   "unmatched_orders_sample": [
-    {
-      "order_id": 95232,
-      "phone9": "989168168",
-      "vn_date": "2026-05-12",
-      "source_name": "DUY - D1",
-      "cod": 2500000.0
-    },
     {
       "order_id": 95229,
       "phone9": "966686066",
@@ -1498,13 +1511,6 @@
       "cod": 199000.0
     },
     {
-      "order_id": 94537,
-      "phone9": "975696813",
-      "vn_date": "2026-05-11",
-      "source_name": "DUY - DA8.1",
-      "cod": 1250000.0
-    },
-    {
       "order_id": 94300,
       "phone9": "905340838",
       "vn_date": "2026-05-10",
@@ -1524,20 +1530,6 @@
       "vn_date": "2026-05-10",
       "source_name": "DUY - NOMA 911 MESSENGER",
       "cod": 398000.0
-    },
-    {
-      "order_id": 94258,
-      "phone9": "982648929",
-      "vn_date": "2026-05-10",
-      "source_name": "DUY - DR1",
-      "cod": 1300000.0
-    },
-    {
-      "order_id": 94240,
-      "phone9": "935876299",
-      "vn_date": "2026-05-10",
-      "source_name": "DUY - DA8.1",
-      "cod": 1250000.0
     },
     {
       "order_id": 94112,
@@ -1580,6 +1572,34 @@
       "vn_date": "2026-05-08",
       "source_name": "DUY - NOMA 911 MESSENGER",
       "cod": 398000.0
+    },
+    {
+      "order_id": 93263,
+      "phone9": "985725966",
+      "vn_date": "2026-05-08",
+      "source_name": "DUY - NOMA 911 MESSENGER",
+      "cod": 199000.0
+    },
+    {
+      "order_id": 93112,
+      "phone9": "889000067",
+      "vn_date": "2026-05-07",
+      "source_name": "DUY - NOMA 911",
+      "cod": 398000.0
+    },
+    {
+      "order_id": 93102,
+      "phone9": "975604010",
+      "vn_date": "2026-05-07",
+      "source_name": "DUY - NOMA 911 MESSENGER",
+      "cod": 199000.0
+    },
+    {
+      "order_id": 93075,
+      "phone9": "984956889",
+      "vn_date": "2026-05-07",
+      "source_name": "DUY - NOMA 911 MESSENGER",
+      "cod": 199000.0
     }
   ]
 }
