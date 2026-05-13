@@ -3,17 +3,30 @@
 //
 // Pricing GPT-4o-mini (2026-05): input $0.15/1M tokens, output $0.60/1M tokens.
 // Web search tool: $25/1000 calls (1 call/response).
+//
+// Route qua Cloudflare AI Gateway (`doscom-erp`) để né region block:
+// OpenAI 403 "unsupported_country_region_territory" khi gọi trực tiếp từ
+// Cloudflare edge ở Asia. Gateway proxy giải quyết. Fallback về api.openai.com
+// nếu env.CF_ACCOUNT_ID chưa set.
 
 const MODEL = "gpt-4o-mini";
 const PRICE_IN_PER_1M  = 0.15;
 const PRICE_OUT_PER_1M = 0.60;
 const WEB_SEARCH_COST  = 25 / 1000; // $0.025 per call
+const GATEWAY_ID = "doscom-erp";
+
+function getBaseUrl(env) {
+  if (env.CF_ACCOUNT_ID) {
+    return `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/${GATEWAY_ID}/openai`;
+  }
+  return "https://api.openai.com/v1";
+}
 
 export async function queryOpenAI(query, env) {
   if (!env.OPENAI_API_KEY) return errorResponse("OPENAI_API_KEY missing");
 
   try {
-    const res = await fetch("https://api.openai.com/v1/responses", {
+    const res = await fetch(`${getBaseUrl(env)}/responses`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
