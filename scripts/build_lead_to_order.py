@@ -180,6 +180,10 @@ def main():
     # 2026-05-13: Cross-aggregation by (staff, utm_campaign) — feed cho bảng UTM
     # trên dashboard. Key = (staff_canonical, utm_campaign_str). Mỗi bucket dùng
     # cho 1 row trong UI: leads + orders + revenue + product chính (từ nguoi_chay_qc).
+    # by_date dicts cho phép frontend filter theo dateRange:
+    #   leads_by_date     keyed by lead.created (YYYY-MM-DD)
+    #   orders_*_by_date  keyed by order.vn_date (YYYY-MM-DD)
+    #   revenue_*_by_date keyed by order.vn_date (YYYY-MM-DD)
     by_staff_utm = defaultdict(lambda: {
         "leads": 0,
         "leads_phone9_set": set(),
@@ -192,6 +196,11 @@ def main():
         "revenue_delivered": 0.0,
         "products_counter": defaultdict(int),
         "ad_ids_set": set(),
+        "leads_by_date": defaultdict(int),
+        "orders_total_by_date": defaultdict(int),
+        "orders_delivered_by_date": defaultdict(int),
+        "revenue_total_by_date": defaultdict(float),
+        "revenue_delivered_by_date": defaultdict(float),
     })
     # Count leads per ad_id + per qc-staff
     for c in contacts:
@@ -235,6 +244,9 @@ def main():
             sb["ad_ids_set"].add(ad_id)
             if prod:
                 sb["products_counter"][prod] += 1
+            lead_created = parse_iso_date(c.get("created_on"))
+            if lead_created:
+                sb["leads_by_date"][lead_created.isoformat()] += 1
 
     unmatched_orders_sample = []
     matched_orders = 0
@@ -324,9 +336,16 @@ def main():
             sb["orders_total"] += 1
             sb["leads_with_order_phone9_set"].add(p9)
             sb["revenue_total"] += cod
+            order_date_iso = order_date.isoformat() if order_date else None
+            if order_date_iso:
+                sb["orders_total_by_date"][order_date_iso] += 1
+                sb["revenue_total_by_date"][order_date_iso] += cod
             if status == 3:
                 sb["orders_delivered"] += 1
                 sb["revenue_delivered"] += cod
+                if order_date_iso:
+                    sb["orders_delivered_by_date"][order_date_iso] += 1
+                    sb["revenue_delivered_by_date"][order_date_iso] += cod
             elif status == 6:
                 sb["orders_canceled"] += 1
             else:
@@ -417,6 +436,12 @@ def main():
             "revenue_total": round(s["revenue_total"]),
             "revenue_delivered": round(s["revenue_delivered"]),
             "unique_ad_ids": len(s["ad_ids_set"]),
+            # by_date dicts cho frontend filter theo dateRange
+            "leads_by_date": dict(s["leads_by_date"]),
+            "orders_total_by_date": dict(s["orders_total_by_date"]),
+            "orders_delivered_by_date": dict(s["orders_delivered_by_date"]),
+            "revenue_total_by_date": {d: round(v) for d, v in s["revenue_total_by_date"].items()},
+            "revenue_delivered_by_date": {d: round(v) for d, v in s["revenue_delivered_by_date"].items()},
         })
     # Sort rows trong mỗi staff theo revenue_total DESC
     for staff in out_by_staff_utm:

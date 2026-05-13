@@ -1138,8 +1138,8 @@ function FacebookAdsDashboard() {
           onClose={() => setStaffFilter("ALL")}
         />
 
-        {/* 5. UTM STATS BY STAFF — bảng utm_campaign per nhân sự (DUY / PHƯƠNG NAM) */}
-        <UTMStatsByStaff />
+        {/* 5. UTM STATS BY STAFF — bảng utm_campaign per nhân sự (DUY / PHƯƠNG NAM), react theo dateRange */}
+        <UTMStatsByStaff dateRange={dateRange} />
 
         {/* CONVERSION PROGRESS + CPL CHART PER PRODUCT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
@@ -5054,23 +5054,51 @@ function RevenueByStaffDailyChart({ dateRange, staffFilter }) {
 // Nguồn data: DATA.lead_to_order.by_staff_utm[staff] = [rows]
 // Build bởi scripts/build_lead_to_order.py (cron 30p/lần).
 // =============================================================
-function UTMStatsByStaff() {
+function UTMStatsByStaff({ dateRange }) {
   const l2o = (typeof DATA !== "undefined" ? DATA.lead_to_order : null) || {}
   const byStaffUtm = l2o.by_staff_utm || {}
 
   const STAFF = [
-    { key: "DUY",          label: "Nhân sự Duy",        color: { bg: "bg-blue-50",   border: "border-blue-300",   text: "text-blue-700",   chip: "bg-blue-100 text-blue-700" } },
-    { key: "PHƯƠNG NAM",   label: "Nhân sự Phương Nam", color: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", chip: "bg-purple-100 text-purple-700" } },
+    { key: "DUY",          label: "Nhân sự Duy",        color: { bg: "bg-blue-50",   border: "border-blue-300",   text: "text-blue-700",   chip: "bg-blue-100 text-blue-700",   sub: "border-blue-200 bg-blue-50/50"   } },
+    { key: "PHƯƠNG NAM",   label: "Nhân sự Phương Nam", color: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-700", chip: "bg-purple-100 text-purple-700", sub: "border-purple-200 bg-purple-50/50" } },
   ]
 
-  const [expandedStaff, setExpandedStaff] = React.useState({})
-  const TOP_N = 20
+  const [collapsed, setCollapsed] = React.useState({})  // key: `${staff}::${product}` → bool
 
-  // Nothing to render
   if (!STAFF.some(s => (byStaffUtm[s.key] || []).length > 0)) return null
 
   const fmtMoney = (n) => (n || 0).toLocaleString("vi-VN") + "đ"
   const fmtPct = (n) => (n == null ? "—" : n.toFixed(1) + "%")
+
+  // dateRange filter — match isInRange pattern của RevenueByStaffBreakdown
+  const isInRange = (ymd) => {
+    if (!dateRange?.start || !dateRange?.end) return true
+    return ymd >= dateRange.start && ymd <= dateRange.end
+  }
+  const sumInRange = (byDate) => {
+    if (!byDate) return 0
+    let s = 0
+    for (const d in byDate) if (isInRange(d)) s += byDate[d]
+    return s
+  }
+
+  // Compute filtered totals cho 1 row dựa trên by_date dicts
+  const filterRow = (r) => {
+    const leads = sumInRange(r.leads_by_date)
+    const orders = sumInRange(r.orders_total_by_date)
+    const delivered = sumInRange(r.orders_delivered_by_date)
+    const revenue = sumInRange(r.revenue_total_by_date)
+    const revDelivered = sumInRange(r.revenue_delivered_by_date)
+    return {
+      ...r,
+      f_leads: leads,
+      f_orders: orders,
+      f_delivered: delivered,
+      f_revenue: revenue,
+      f_rev_delivered: revDelivered,
+      f_conv: leads ? (orders / leads * 100) : 0,
+    }
+  }
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm mb-6">
@@ -5080,7 +5108,12 @@ function UTMStatsByStaff() {
             <Target /> Hiệu quả UTM Campaign theo nhân sự
           </h2>
           <p className="text-xs text-gray-500 mt-0.5">
-            Mỗi row = 1 utm_campaign · Attribution last-touch 60 ngày · Sắp xếp theo doanh thu giảm dần
+            Group theo sản phẩm · Attribution last-touch 60 ngày · React theo bộ lọc thời gian
+            {dateRange?.start && dateRange?.end && (
+              <span className="ml-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-medium">
+                {dateRange.start} → {dateRange.end}
+              </span>
+            )}
           </p>
         </div>
         {l2o.generated_at && (
@@ -5092,16 +5125,44 @@ function UTMStatsByStaff() {
 
       <div className="space-y-5">
         {STAFF.map(staff => {
-          const rows = byStaffUtm[staff.key] || []
-          if (!rows.length) return null
-          const isExpanded = expandedStaff[staff.key]
-          const visible = isExpanded ? rows : rows.slice(0, TOP_N)
-          const totalLeads = rows.reduce((s, r) => s + (r.leads || 0), 0)
-          const totalOrders = rows.reduce((s, r) => s + (r.orders_total || 0), 0)
-          const totalDelivered = rows.reduce((s, r) => s + (r.orders_delivered || 0), 0)
-          const totalRevenue = rows.reduce((s, r) => s + (r.revenue_total || 0), 0)
-          const totalRevDelivered = rows.reduce((s, r) => s + (r.revenue_delivered || 0), 0)
-          const overallConv = totalLeads ? (totalOrders / totalLeads * 100) : 0
+          const rawRows = byStaffUtm[staff.key] || []
+          if (!rawRows.length) return null
+
+          // 1. Filter + apply dateRange
+          const rows = rawRows
+            .map(filterRow)
+            .filter(r => r.f_leads > 0 || r.f_orders > 0)  // ẩn UTM không có data trong range
+
+          if (!rows.length) {
+            return (
+              <div key={staff.key} className={`border-2 ${staff.color.border} ${staff.color.bg} rounded-lg p-4`}>
+                <h3 className={`text-base font-bold ${staff.color.text}`}>{staff.label}</h3>
+                <p className="text-xs text-gray-500 mt-2">Không có UTM nào có data trong khoảng thời gian đã chọn.</p>
+              </div>
+            )
+          }
+
+          // 2. Group by product
+          const byProduct = {}
+          rows.forEach(r => {
+            const p = r.product || "(chưa phân loại)"
+            if (!byProduct[p]) byProduct[p] = []
+            byProduct[p].push(r)
+          })
+          // Sort products theo tổng revenue DESC
+          const productOrder = Object.keys(byProduct).sort((a, b) => {
+            const sa = byProduct[a].reduce((s, r) => s + r.f_revenue, 0)
+            const sb = byProduct[b].reduce((s, r) => s + r.f_revenue, 0)
+            return sb - sa
+          })
+
+          // Staff totals
+          const sTotalLeads = rows.reduce((s, r) => s + r.f_leads, 0)
+          const sTotalOrders = rows.reduce((s, r) => s + r.f_orders, 0)
+          const sTotalDelivered = rows.reduce((s, r) => s + r.f_delivered, 0)
+          const sTotalRev = rows.reduce((s, r) => s + r.f_revenue, 0)
+          const sTotalRevD = rows.reduce((s, r) => s + r.f_rev_delivered, 0)
+          const sConv = sTotalLeads ? (sTotalOrders / sTotalLeads * 100) : 0
 
           return (
             <div key={staff.key} className={`border-2 ${staff.color.border} ${staff.color.bg} rounded-lg p-4`}>
@@ -5109,76 +5170,100 @@ function UTMStatsByStaff() {
                 <h3 className={`text-base font-bold ${staff.color.text}`}>
                   {staff.label}
                   <span className={`ml-2 text-[11px] font-medium px-2 py-0.5 rounded-full ${staff.color.chip}`}>
-                    {rows.length} UTM
+                    {productOrder.length} SP · {rows.length} UTM
                   </span>
                 </h3>
                 <div className="text-xs text-gray-700 flex flex-wrap gap-x-4 gap-y-1">
-                  <span><b>{totalLeads.toLocaleString("vi-VN")}</b> leads</span>
-                  <span><b>{totalOrders.toLocaleString("vi-VN")}</b> đơn chốt</span>
-                  <span><b>{totalDelivered.toLocaleString("vi-VN")}</b> đã giao</span>
-                  <span>Conv <b>{overallConv.toFixed(1)}%</b></span>
-                  <span>DT <b>{fmtMoney(totalRevenue)}</b></span>
-                  <span>(đã giao: {fmtMoney(totalRevDelivered)})</span>
+                  <span><b>{sTotalLeads.toLocaleString("vi-VN")}</b> leads</span>
+                  <span><b>{sTotalOrders.toLocaleString("vi-VN")}</b> đơn chốt</span>
+                  <span><b>{sTotalDelivered.toLocaleString("vi-VN")}</b> đã giao</span>
+                  <span>Conv <b>{sConv.toFixed(1)}%</b></span>
+                  <span>DT <b>{fmtMoney(sTotalRev)}</b></span>
+                  <span>(đã giao: {fmtMoney(sTotalRevD)})</span>
                 </div>
               </div>
 
-              <div className="overflow-x-auto bg-white rounded-md border border-gray-200">
-                <table className="w-full text-xs">
-                  <thead className="bg-gray-50 text-gray-600 uppercase text-[10px]">
-                    <tr>
-                      <th className="px-3 py-2 text-left">#</th>
-                      <th className="px-3 py-2 text-left">Sản phẩm</th>
-                      <th className="px-3 py-2 text-left">UTM Campaign</th>
-                      <th className="px-3 py-2 text-right">Leads</th>
-                      <th className="px-3 py-2 text-right">Đơn chốt</th>
-                      <th className="px-3 py-2 text-right">Đã giao</th>
-                      <th className="px-3 py-2 text-right">Conv%</th>
-                      <th className="px-3 py-2 text-right">Doanh thu</th>
-                      <th className="px-3 py-2 text-right">DT đã giao</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {visible.map((r, idx) => (
-                      <tr key={r.utm_campaign + "_" + idx} className="hover:bg-gray-50">
-                        <td className="px-3 py-1.5 text-gray-400 tabular-nums">{idx + 1}</td>
-                        <td className="px-3 py-1.5">
-                          {r.product ? (
-                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium ${staff.color.chip}`}>
-                              {r.product}
-                            </span>
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-1.5 font-mono text-[11px] text-gray-700 max-w-[300px] truncate" title={r.utm_campaign}>
-                          {r.utm_campaign}
-                        </td>
-                        <td className="px-3 py-1.5 text-right tabular-nums">{(r.leads || 0).toLocaleString("vi-VN")}</td>
-                        <td className="px-3 py-1.5 text-right tabular-nums font-semibold">{(r.orders_total || 0).toLocaleString("vi-VN")}</td>
-                        <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{(r.orders_delivered || 0).toLocaleString("vi-VN")}</td>
-                        <td className="px-3 py-1.5 text-right tabular-nums">
-                          <span className={r.leads_conversion_rate >= 60 ? "text-green-700 font-semibold" : r.leads_conversion_rate >= 30 ? "text-amber-700" : "text-gray-500"}>
-                            {fmtPct(r.leads_conversion_rate)}
+              <div className="space-y-3">
+                {productOrder.map(product => {
+                  const productRows = byProduct[product].sort((a, b) => b.f_revenue - a.f_revenue)
+                  const pLeads = productRows.reduce((s, r) => s + r.f_leads, 0)
+                  const pOrders = productRows.reduce((s, r) => s + r.f_orders, 0)
+                  const pDelivered = productRows.reduce((s, r) => s + r.f_delivered, 0)
+                  const pRev = productRows.reduce((s, r) => s + r.f_revenue, 0)
+                  const pRevD = productRows.reduce((s, r) => s + r.f_rev_delivered, 0)
+                  const pConv = pLeads ? (pOrders / pLeads * 100) : 0
+                  const key = `${staff.key}::${product}`
+                  const isCollapsed = collapsed[key]
+
+                  return (
+                    <div key={product} className={`border ${staff.color.sub} rounded-md`}>
+                      <button
+                        onClick={() => setCollapsed(prev => ({ ...prev, [key]: !prev[key] }))}
+                        className="w-full flex items-center justify-between gap-3 px-3 py-2 hover:bg-white/60 transition flex-wrap"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[10px] font-bold ${staff.color.text}`}>
+                            {isCollapsed ? "▶" : "▼"}
                           </span>
-                        </td>
-                        <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.revenue_total)}</td>
-                        <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{fmtMoney(r.revenue_delivered)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${staff.color.chip}`}>
+                            {product}
+                          </span>
+                          <span className="text-[11px] text-gray-500">({productRows.length} UTM)</span>
+                        </div>
+                        <div className="text-[11px] text-gray-700 flex flex-wrap gap-x-3 gap-y-1">
+                          <span>{pLeads.toLocaleString("vi-VN")} leads</span>
+                          <span>·</span>
+                          <span><b>{pOrders.toLocaleString("vi-VN")}</b> đơn</span>
+                          <span>·</span>
+                          <span>{fmtPct(pConv)}</span>
+                          <span>·</span>
+                          <span className="font-semibold">{fmtMoney(pRev)}</span>
+                          <span className="text-gray-400">({fmtMoney(pRevD)} đã giao)</span>
+                        </div>
+                      </button>
 
-              {rows.length > TOP_N && (
-                <div className="mt-2 text-center">
-                  <button
-                    onClick={() => setExpandedStaff(prev => ({ ...prev, [staff.key]: !prev[staff.key] }))}
-                    className={`text-xs font-medium ${staff.color.text} hover:underline`}
-                  >
-                    {isExpanded ? `↑ Thu gọn (top ${TOP_N})` : `↓ Xem tất cả ${rows.length} UTM`}
-                  </button>
-                </div>
-              )}
+                      {!isCollapsed && (
+                        <div className="overflow-x-auto bg-white border-t border-gray-100">
+                          <table className="w-full text-xs">
+                            <thead className="bg-gray-50 text-gray-600 uppercase text-[10px]">
+                              <tr>
+                                <th className="px-3 py-2 text-left">#</th>
+                                <th className="px-3 py-2 text-left">UTM Campaign</th>
+                                <th className="px-3 py-2 text-right">Leads</th>
+                                <th className="px-3 py-2 text-right">Đơn chốt</th>
+                                <th className="px-3 py-2 text-right">Đã giao</th>
+                                <th className="px-3 py-2 text-right">Conv%</th>
+                                <th className="px-3 py-2 text-right">Doanh thu</th>
+                                <th className="px-3 py-2 text-right">DT đã giao</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                              {productRows.map((r, idx) => (
+                                <tr key={r.utm_campaign + "_" + idx} className="hover:bg-gray-50">
+                                  <td className="px-3 py-1.5 text-gray-400 tabular-nums">{idx + 1}</td>
+                                  <td className="px-3 py-1.5 font-mono text-[11px] text-gray-700 max-w-[320px] truncate" title={r.utm_campaign}>
+                                    {r.utm_campaign}
+                                  </td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums">{r.f_leads.toLocaleString("vi-VN")}</td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums font-semibold">{r.f_orders.toLocaleString("vi-VN")}</td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{r.f_delivered.toLocaleString("vi-VN")}</td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums">
+                                    <span className={r.f_conv >= 60 ? "text-green-700 font-semibold" : r.f_conv >= 30 ? "text-amber-700" : "text-gray-500"}>
+                                      {fmtPct(r.f_conv)}
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.f_revenue)}</td>
+                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{fmtMoney(r.f_rev_delivered)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           )
         })}
