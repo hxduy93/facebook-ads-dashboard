@@ -508,6 +508,26 @@ def build_data():
         data["product_costs"] = {}
         data["profit_products"] = PROFIT_PRODUCTS
 
+    # --- LEAD → ORDER (injected from data/lead-to-order.json) ---
+    # Build bởi scripts/build_lead_to_order.py (cron 30p/lần). Có 3 aggregation:
+    #   by_ad_id           — leads/orders/revenue per ad
+    #   by_nguoi_chay_qc   — leads/orders/revenue per staff
+    #   by_staff_utm       — leads/orders/revenue per (staff, utm_campaign) — feed UTM table
+    try:
+        l2o = _load_json("data/lead-to-order.json") or {}
+        data["lead_to_order"] = {
+            "generated_at": l2o.get("generated_at"),
+            "attribution_window_days": l2o.get("attribution_window_days"),
+            "summary": l2o.get("summary") or {},
+            "by_staff_utm": l2o.get("by_staff_utm") or {},
+        }
+        utm_rows = sum(len(v) for v in data["lead_to_order"]["by_staff_utm"].values())
+        print(f"   ✓ loaded lead-to-order: {utm_rows} UTM rows across "
+              f"{len(data['lead_to_order']['by_staff_utm'])} staff")
+    except Exception as e:
+        print(f"   ✗ lead-to-order load failed: {e}")
+        data["lead_to_order"] = {"by_staff_utm": {}, "summary": {}}
+
     # --- COMPETITOR TRACKING (Chrome-scraped data) ---
     try:
         data["known_competitors"] = load_competitor_data()

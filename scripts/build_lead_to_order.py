@@ -177,6 +177,22 @@ def main():
         "ad_id_revenue": defaultdict(float),
         "products_counter": defaultdict(int),
     })
+    # 2026-05-13: Cross-aggregation by (staff, utm_campaign) — feed cho bảng UTM
+    # trên dashboard. Key = (staff_canonical, utm_campaign_str). Mỗi bucket dùng
+    # cho 1 row trong UI: leads + orders + revenue + product chính (từ nguoi_chay_qc).
+    by_staff_utm = defaultdict(lambda: {
+        "leads": 0,
+        "leads_phone9_set": set(),
+        "leads_with_order_phone9_set": set(),
+        "orders_total": 0,
+        "orders_delivered": 0,
+        "orders_canceled": 0,
+        "orders_other": 0,
+        "revenue_total": 0.0,
+        "revenue_delivered": 0.0,
+        "products_counter": defaultdict(int),
+        "ad_ids_set": set(),
+    })
     # Count leads per ad_id + per qc-staff
     for c in contacts:
         ad_id = c.get("ad_id")
@@ -197,6 +213,7 @@ def main():
 
         # by_qc count tất cả contact match staff whitelist (bao gồm WEBSITE không có ad_id)
         staff = staff_from_qc(c.get("nguoi_chay_qc"))
+        prod = product_from_qc(c.get("nguoi_chay_qc"))
         if staff:
             qb = by_qc[staff]
             qb["leads"] += 1
@@ -204,9 +221,20 @@ def main():
                 qb["leads_phone9_set"].add(p9)
             if ad_id:
                 qb["ad_ids_set"].add(ad_id)
-            prod = product_from_qc(c.get("nguoi_chay_qc"))
             if prod:
                 qb["products_counter"][prod] += 1
+
+        # by_staff_utm — chỉ count lead có cả staff + utm_campaign + ad_id
+        # (UTM table chỉ có ý nghĩa cho lead từ Facebook ad, có utm gắn vào campaign)
+        utm = c.get("utm_campaign")
+        if staff and utm and ad_id:
+            sb = by_staff_utm[(staff, utm)]
+            sb["leads"] += 1
+            if p9:
+                sb["leads_phone9_set"].add(p9)
+            sb["ad_ids_set"].add(ad_id)
+            if prod:
+                sb["products_counter"][prod] += 1
 
     unmatched_orders_sample = []
     matched_orders = 0
@@ -289,6 +317,21 @@ def main():
             else:
                 qb["orders_other"] += 1
 
+        # by_staff_utm — chỉ count đơn nếu lead có cả staff + utm + ad_id
+        utm = attr_lead.get("utm_campaign")
+        if staff and utm and ad_id:
+            sb = by_staff_utm[(staff, utm)]
+            sb["orders_total"] += 1
+            sb["leads_with_order_phone9_set"].add(p9)
+            sb["revenue_total"] += cod
+            if status == 3:
+                sb["orders_delivered"] += 1
+                sb["revenue_delivered"] += cod
+            elif status == 6:
+                sb["orders_canceled"] += 1
+            else:
+                sb["orders_other"] += 1
+
     # ── Finalize ──
     out_by_ad = {}
     total_leads = 0
@@ -351,6 +394,35 @@ def main():
     # Sort theo revenue_total DESC để dashboard render từ cao xuống thấp
     out_by_qc = dict(sorted(out_by_qc.items(), key=lambda kv: -kv[1]["revenue_total"]))
 
+    # ── Finalize by_staff_utm (cross: staff × utm_campaign) ──
+    # Output shape: {staff_canonical: [rows]} — frontend render 1 bảng per staff.
+    # Mỗi row: utm_campaign, product (top từ nguoi_chay_qc), leads, orders, conv%, revenue.
+    out_by_staff_utm = defaultdict(list)
+    for (staff, utm), s in by_staff_utm.items():
+        leads = s["leads"]
+        leads_with_order = len(s["leads_with_order_phone9_set"])
+        top_product = max(s["products_counter"].items(), key=lambda x: x[1])[0] \
+            if s["products_counter"] else None
+        out_by_staff_utm[staff].append({
+            "utm_campaign": utm,
+            "product": top_product,
+            "leads": leads,
+            "leads_with_phone9": len(s["leads_phone9_set"]),
+            "leads_with_order": leads_with_order,
+            "leads_conversion_rate": round(leads_with_order / leads * 100, 2) if leads else 0.0,
+            "orders_total": s["orders_total"],
+            "orders_delivered": s["orders_delivered"],
+            "orders_canceled": s["orders_canceled"],
+            "orders_other": s["orders_other"],
+            "revenue_total": round(s["revenue_total"]),
+            "revenue_delivered": round(s["revenue_delivered"]),
+            "unique_ad_ids": len(s["ad_ids_set"]),
+        })
+    # Sort rows trong mỗi staff theo revenue_total DESC
+    for staff in out_by_staff_utm:
+        out_by_staff_utm[staff].sort(key=lambda r: -r["revenue_total"])
+    out_by_staff_utm = dict(out_by_staff_utm)
+
     out = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "crm_generated_at": crm.get("generated_at"),
@@ -372,6 +444,7 @@ def main():
         },
         "by_ad_id": out_by_ad,
         "by_nguoi_chay_qc": out_by_qc,
+        "by_staff_utm": out_by_staff_utm,
         "unmatched_orders_sample": unmatched_orders_sample,
     }
 
