@@ -65,8 +65,13 @@ export async function onRequest(context) {
     return next();
   }
 
-  // Test bypass — CHỈ cho path agent-google-ai (testing prompt format)
-  if (url.pathname === "/api/agent-google-ai" && hasTestBypass(request, env)) {
+  // Test bypass — agent-google-ai (legacy) + GEO Monitor cron endpoints
+  const BYPASS_PATHS = new Set([
+    "/api/agent-google-ai",
+    "/api/geo/run-batch",
+    "/api/geo/jobs",
+  ]);
+  if (BYPASS_PATHS.has(url.pathname) && hasTestBypass(request, env)) {
     return next();
   }
 

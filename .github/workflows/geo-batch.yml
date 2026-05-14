@@ -1,0 +1,67 @@
+name: GEO Monitor — batch processor
+
+on:
+  schedule:
+    # Mỗi 30 phút (UTC). GitHub Actions cron min interval là 5 min nhưng
+    # 30 min đủ cho 90 jobs/ngày (30 query × 3 engine × 1 run).
+    # 6 jobs/batch × 48 cycles/ngày = 288 capacity → dư cho 90 jobs.
+    - cron: '*/30 * * * *'
+  workflow_dispatch:  # cho phép trigger thủ công từ Actions tab
+
+concurrency:
+  # Chỉ 1 run cùng lúc — tránh 2 cron tick chồng nhau gây duplicate processing
+  group: geo-batch
+  cancel-in-progress: false
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Create daily jobs (idempotent — skip nếu hôm nay đã tạo)
+        run: |
+          echo "::group::Create daily jobs"
+          HTTP_CODE=$(curl -s -o /tmp/jobs.json -w "%{http_code}" \
+            -X POST 'https://facebookadsallinone.pages.dev/api/geo/jobs' \
+            -H "X-Test-Token: ${{ secrets.TEST_BYPASS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"runs_per_query": 1}')
+          echo "HTTP $HTTP_CODE"
+          cat /tmp/jobs.json
+          echo ""
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::Daily jobs creation failed (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+          echo "::endgroup::"
+
+      - name: Process batch (6 jobs)
+        run: |
+          echo "::group::Process batch"
+          HTTP_CODE=$(curl -s -o /tmp/batch.json -w "%{http_code}" \
+            -X POST 'https://facebookadsallinone.pages.dev/api/geo/run-batch' \
+            -H "X-Test-Token: ${{ secrets.TEST_BYPASS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"limit": 6}')
+          echo "HTTP $HTTP_CODE"
+          cat /tmp/batch.json
+          echo ""
+          if [ "$HTTP_CODE" -ge 400 ]; then
+            echo "::error::Batch processor failed (HTTP $HTTP_CODE)"
+            exit 1
+          fi
+          echo "::endgroup::"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## GEO Monitor batch summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Daily jobs creation" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/jobs.json 2>/dev/null || echo "no output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "### Batch processor" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/batch.json 2>/dev/null || echo "no output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
