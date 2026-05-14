@@ -89,16 +89,32 @@ export async function onRequestGet(context) {
     LIMIT 5
   `).bind(from).all();
 
-  // Worst-performing queries (Doscom mention rate = 0)
-  const { results: worstQueries } = await env.DB.prepare(`
-    SELECT r.query_id, q.text as query_text,
+  // Worst Doscom queries: chỉ filter những query brand_target = doscom hoặc both
+  const { results: worstDoscom } = await env.DB.prepare(`
+    SELECT r.query_id, q.text as query_text, q.category, q.brand_target,
            COUNT(*) as runs,
            SUM(r.doscom_mentioned) as doscom_hits
     FROM geo_runs r
     LEFT JOIN geo_queries q ON q.id = r.query_id
     WHERE r.timestamp >= ?
+      AND q.brand_target IN ('doscom', 'both')
     GROUP BY r.query_id
-    HAVING runs >= 3 AND doscom_hits = 0
+    HAVING runs >= 1 AND doscom_hits = 0
+    ORDER BY runs DESC
+    LIMIT 10
+  `).bind(from).all();
+
+  // Worst NOMA queries: filter brand_target = noma hoặc both
+  const { results: worstNoma } = await env.DB.prepare(`
+    SELECT r.query_id, q.text as query_text, q.category, q.brand_target,
+           COUNT(*) as runs,
+           SUM(r.noma_mentioned) as noma_hits
+    FROM geo_runs r
+    LEFT JOIN geo_queries q ON q.id = r.query_id
+    WHERE r.timestamp >= ?
+      AND q.brand_target IN ('noma', 'both')
+    GROUP BY r.query_id
+    HAVING runs >= 1 AND noma_hits = 0
     ORDER BY runs DESC
     LIMIT 10
   `).bind(from).all();
@@ -119,6 +135,7 @@ export async function onRequestGet(context) {
     daily_sov,
     top_competitors: competitors,
     brand_citation_domains: brandDomains,
-    worst_queries_doscom: worstQueries,
+    worst_queries_doscom: worstDoscom,
+    worst_queries_noma: worstNoma,
   });
 }

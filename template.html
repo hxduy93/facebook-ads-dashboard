@@ -675,7 +675,7 @@ function CompareCard({ title, current, previous, isMoneyMetric, inverseGood }) {
 // MAIN COMPONENT
 // =============================================================
 function FacebookAdsDashboard() {
-  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator" | "agent-google"
+  const [currentView, setCurrentView] = useState("main")  // "main" | "competitors" | "ads-creator" | "fb-agent" | "gg-agent" | "geo-monitor"
   const [selectedAccount, setSelectedAccount] = useState("all")
   const [timeFilter, setTimeFilter] = useState("30d")
   // customRange — chỉ active khi timeFilter === "custom". Default 7 ngày gần nhất.
@@ -922,6 +922,16 @@ function FacebookAdsDashboard() {
             >
               <BarChart3 /> Agent Google Ads
             </button>
+            <button
+              onClick={() => setCurrentView("geo-monitor")}
+              className={`px-5 py-3 text-sm font-semibold border-b-2 transition flex items-center gap-2 ${
+                currentView === "geo-monitor"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
+              }`}
+            >
+              🤖 GEO Monitor
+            </button>
             <a
               href="/inventory.html"
               className="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 transition flex items-center gap-2"
@@ -955,6 +965,17 @@ function FacebookAdsDashboard() {
             <iframe
               src="/agent-google-doscom.html"
               title="Agent Google Ads"
+              style={{ width: "100%", height: "100%", border: "none" }}
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        {currentView === "geo-monitor" && (
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden" style={{ height: "calc(100vh - 200px)" }}>
+            <iframe
+              src="/agent-geo-doscom.html"
+              title="GEO Monitor"
               style={{ width: "100%", height: "100%", border: "none" }}
               loading="lazy"
             />
