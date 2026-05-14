@@ -1,16 +1,18 @@
 // Gemini với Google Search grounding.
 // Trả về citations URL từ groundingMetadata.groundingChunks.
 //
-// Model: Gemini 2.5 Flash (gemini-2.5-flash) — Google deprecated 2.0 cho new users
-// vào May 2026. 2.5 vẫn còn supported cho tất cả users.
-// Có thể override qua env var GEMINI_MODEL (vd "gemini-3-flash-preview").
+// Model: Gemini 3 Flash Preview — match với consumer Gemini (gemini.google.com)
+// hiện default sang Gemini 3. Có thể override qua env var GEMINI_MODEL nếu tên
+// model thay đổi (vd Google promote sang stable "gemini-3-flash" không có suffix
+// "preview").
 //
-// Pricing Gemini 2.5 Flash (2026-05): input $0.075/1M tokens, output $0.30/1M tokens.
+// Pricing Gemini 3 Flash (2026-05): tương tự 2.5 Flash range
+// input ~$0.075/1M tokens, output ~$0.30/1M tokens (sẽ update khi Google công bố giá chính thức).
 //
 // Route qua Cloudflare AI Gateway nếu env.CF_ACCOUNT_ID set (tăng reliability +
 // observability + log). Fallback về generativelanguage.googleapis.com.
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-3-flash-preview";
 const PRICE_IN_PER_1M  = 0.075;
 const PRICE_OUT_PER_1M = 0.30;
 const GATEWAY_ID = "doscom-erp";
