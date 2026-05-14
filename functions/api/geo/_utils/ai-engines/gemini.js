@@ -1,18 +1,37 @@
-// Gemini 2.0 Flash với Google Search grounding.
+// Gemini với Google Search grounding.
 // Trả về citations URL từ groundingMetadata.groundingChunks.
 //
-// Pricing Gemini 2.0 Flash (2026-05): input $0.075/1M tokens, output $0.30/1M tokens.
-// Free tier: 1500 requests/day.
+// Model: Gemini 2.5 Flash (gemini-2.5-flash) — Google deprecated 2.0 cho new users
+// vào May 2026. 2.5 vẫn còn supported cho tất cả users.
+// Có thể override qua env var GEMINI_MODEL (vd "gemini-3-flash-preview").
+//
+// Pricing Gemini 2.5 Flash (2026-05): input $0.075/1M tokens, output $0.30/1M tokens.
+//
+// Route qua Cloudflare AI Gateway nếu env.CF_ACCOUNT_ID set (tăng reliability +
+// observability + log). Fallback về generativelanguage.googleapis.com.
 
-const MODEL = "gemini-2.0-flash";
+const DEFAULT_MODEL = "gemini-2.5-flash";
 const PRICE_IN_PER_1M  = 0.075;
 const PRICE_OUT_PER_1M = 0.30;
+const GATEWAY_ID = "doscom-erp";
+
+function getModel(env) {
+  return env.GEMINI_MODEL || DEFAULT_MODEL;
+}
+
+function getBaseUrl(env) {
+  if (env.CF_ACCOUNT_ID) {
+    return `https://gateway.ai.cloudflare.com/v1/${env.CF_ACCOUNT_ID}/${GATEWAY_ID}/google-ai-studio/v1beta`;
+  }
+  return "https://generativelanguage.googleapis.com/v1beta";
+}
 
 export async function queryGemini(query, env) {
-  if (!env.GEMINI_API_KEY) return errorResponse("GEMINI_API_KEY missing");
+  const MODEL = getModel(env);
+  if (!env.GEMINI_API_KEY) return errorResponse("GEMINI_API_KEY missing", MODEL);
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
+    const url = `${getBaseUrl(env)}/models/${MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,7 +44,7 @@ export async function queryGemini(query, env) {
 
     if (!res.ok) {
       const txt = (await res.text()).slice(0, 400);
-      return errorResponse(`HTTP ${res.status}: ${txt}`);
+      return errorResponse(`HTTP ${res.status}: ${txt}`, MODEL);
     }
 
     const data = await res.json();
@@ -56,14 +75,14 @@ export async function queryGemini(query, env) {
       raw_json: data,
     };
   } catch (err) {
-    return errorResponse(err?.message || String(err));
+    return errorResponse(err?.message || String(err), MODEL);
   }
 }
 
-function errorResponse(error) {
+function errorResponse(error, model) {
   return {
     engine: "gemini",
-    model: MODEL,
+    model: model || DEFAULT_MODEL,
     response_text: "",
     citations: [],
     tokens_input: 0,
