@@ -1,10 +1,39 @@
 {
-  "generated_at": "2026-05-13 11:38 UTC",
+  "generated_at": "2026-05-14 06:13 UTC",
   "window_days": 90,
-  "total_orders": 5176,
+  "total_orders": 5268,
   "top_products_website_by_period": {
     "today": {
       "label": "Hôm nay",
+      "date_range": {
+        "start": "2026-05-14",
+        "end": "2026-05-14"
+      },
+      "total_revenue": 4150000,
+      "total_orders": 2,
+      "top_products": [
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 2600000,
+          "orders": 1,
+          "units": 2
+        },
+        {
+          "product": "Định vị DV1 mini",
+          "revenue": 1290000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Sim trắng multi 4G",
+          "revenue": 200000,
+          "orders": 1,
+          "units": 1
+        }
+      ]
+    },
+    "yesterday": {
+      "label": "Hôm qua",
       "date_range": {
         "start": "2026-05-13",
         "end": "2026-05-13"
@@ -44,55 +73,26 @@
         }
       ]
     },
-    "yesterday": {
-      "label": "Hôm qua",
-      "date_range": {
-        "start": "2026-05-12",
-        "end": "2026-05-12"
-      },
-      "total_revenue": 4328000,
-      "total_orders": 5,
-      "top_products": [
-        {
-          "product": "DV4 + Sim ĐV",
-          "revenue": 1500000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "Định vị DT5",
-          "revenue": 1360000,
-          "orders": 2,
-          "units": 2
-        },
-        {
-          "product": "Định vị DV1 mini",
-          "revenue": 1290000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "Giá đỡ camera",
-          "revenue": 49000,
-          "orders": 1,
-          "units": 1
-        }
-      ]
-    },
     "this_week": {
       "label": "Tuần này",
       "date_range": {
         "start": "2026-05-11",
-        "end": "2026-05-13"
+        "end": "2026-05-14"
       },
-      "total_revenue": 24476500,
-      "total_orders": 16,
+      "total_revenue": 28626500,
+      "total_orders": 18,
       "top_products": [
         {
           "product": "Máy dò D1",
           "revenue": 5000000,
           "orders": 2,
           "units": 2
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 3900000,
+          "orders": 2,
+          "units": 3
         },
         {
           "product": "Máy dò D2",
@@ -105,6 +105,12 @@
           "revenue": 2590000,
           "orders": 1,
           "units": 1
+        },
+        {
+          "product": "Định vị DV1 mini",
+          "revenue": 2580000,
+          "orders": 2,
+          "units": 2
         },
         {
           "product": "DV1 Pro + Sim ĐV",
@@ -135,18 +141,6 @@
           "revenue": 1360000,
           "orders": 2,
           "units": 2
-        },
-        {
-          "product": "Máy ghi âm DR1",
-          "revenue": 1300000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "Định vị DV1 mini",
-          "revenue": 1290000,
-          "orders": 1,
-          "units": 1
         }
       ]
     },
@@ -225,10 +219,10 @@
       "label": "Tháng này",
       "date_range": {
         "start": "2026-05-01",
-        "end": "2026-05-13"
+        "end": "2026-05-14"
       },
-      "total_revenue": 81125500,
-      "total_orders": 37,
+      "total_revenue": 85275500,
+      "total_orders": 39,
       "top_products": [
         {
           "product": "Máy dò D3 Doscom",
@@ -250,9 +244,9 @@
         },
         {
           "product": "Máy ghi âm DR1",
-          "revenue": 5200000,
-          "orders": 4,
-          "units": 4
+          "revenue": 7800000,
+          "orders": 5,
+          "units": 6
         },
         {
           "product": "Máy dò D1",
@@ -285,10 +279,10 @@
           "units": 1
         },
         {
-          "product": "Định vị DV1 Pro",
-          "revenue": 2500000,
-          "orders": 1,
-          "units": 1
+          "product": "Định vị DV1 mini",
+          "revenue": 2580000,
+          "orders": 2,
+          "units": 2
         }
       ]
     },
@@ -366,11 +360,11 @@
     "last_7d": {
       "label": "7 ngày qua",
       "date_range": {
-        "start": "2026-05-06",
-        "end": "2026-05-12"
+        "start": "2026-05-07",
+        "end": "2026-05-13"
       },
-      "total_revenue": 58560000,
-      "total_orders": 26,
+      "total_revenue": 61150500,
+      "total_orders": 30,
       "top_products": [
         {
           "product": "Máy dò D3 Doscom",
@@ -379,31 +373,43 @@
           "units": 1
         },
         {
-          "product": "Máy ghi âm DR9",
-          "revenue": 8400000,
-          "orders": 2,
-          "units": 4
-        },
-        {
           "product": "Chống ghi âm DI1 Pro",
           "revenue": 8000000,
           "orders": 1,
           "units": 1
         },
         {
-          "product": "Thẻ 128GB",
-          "revenue": 2760000,
+          "product": "Máy dò D1",
+          "revenue": 5000000,
           "orders": 2,
-          "units": 4
+          "units": 2
         },
         {
-          "product": "Máy dò D1",
-          "revenue": 2500000,
+          "product": "Máy dò D2",
+          "revenue": 2800000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "Máy ghi âm DR1",
+          "revenue": 2600000,
+          "orders": 2,
+          "units": 2
+        },
+        {
+          "product": "DA1 Pro + Thẻ nhớ 64GB + Sim Vstarcam",
+          "revenue": 2590000,
           "orders": 1,
           "units": 1
         },
         {
           "product": "Định vị DV1 Pro",
+          "revenue": 2500000,
+          "orders": 1,
+          "units": 1
+        },
+        {
+          "product": "DV1 Pro + Sim ĐV",
           "revenue": 2500000,
           "orders": 1,
           "units": 1
@@ -419,35 +425,23 @@
           "revenue": 2300000,
           "orders": 1,
           "units": 1
-        },
-        {
-          "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
-          "revenue": 2100000,
-          "orders": 1,
-          "units": 1
-        },
-        {
-          "product": "DV1 + Sim ĐV",
-          "revenue": 1800000,
-          "orders": 1,
-          "units": 1
         }
       ]
     },
     "last_30d": {
       "label": "30 ngày qua",
       "date_range": {
-        "start": "2026-04-13",
-        "end": "2026-05-12"
+        "start": "2026-04-14",
+        "end": "2026-05-13"
       },
-      "total_revenue": 222142000,
-      "total_orders": 110,
+      "total_revenue": 216829500,
+      "total_orders": 107,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
-          "revenue": 38500000,
-          "orders": 11,
-          "units": 11
+          "revenue": 28000000,
+          "orders": 8,
+          "units": 8
         },
         {
           "product": "Máy dò D3 Doscom",
@@ -456,22 +450,22 @@
           "units": 2
         },
         {
+          "product": "Máy ghi âm DR1",
+          "revenue": 11700000,
+          "orders": 9,
+          "units": 9
+        },
+        {
           "product": "Máy ghi âm DR9",
           "revenue": 10500000,
           "orders": 3,
           "units": 5
         },
         {
-          "product": "Máy ghi âm DR1",
-          "revenue": 10400000,
-          "orders": 8,
-          "units": 8
-        },
-        {
-          "product": "DV1 + Sim ĐV",
-          "revenue": 9000000,
-          "orders": 5,
-          "units": 5
+          "product": "Máy dò D2",
+          "revenue": 8400000,
+          "orders": 3,
+          "units": 3
         },
         {
           "product": "Máy ghi âm DR4 pro",
@@ -486,33 +480,33 @@
           "units": 1
         },
         {
-          "product": "Định vị DV1 mini",
-          "revenue": 6450000,
-          "orders": 4,
-          "units": 5
-        },
-        {
-          "product": "Camera giám sát ghi hình ảnh - DA1 pro (CB75)",
-          "revenue": 6300000,
+          "product": "Máy dò D1",
+          "revenue": 7500000,
           "orders": 3,
           "units": 3
         },
         {
-          "product": "MÁY DÒ D4",
-          "revenue": 6000000,
-          "orders": 1,
-          "units": 1
+          "product": "DV1 + Sim ĐV",
+          "revenue": 7200000,
+          "orders": 4,
+          "units": 4
+        },
+        {
+          "product": "Định vị DV1 mini",
+          "revenue": 6450000,
+          "orders": 4,
+          "units": 5
         }
       ]
     },
     "last_90d": {
       "label": "90 ngày qua",
       "date_range": {
-        "start": "2026-02-12",
-        "end": "2026-05-12"
+        "start": "2026-02-13",
+        "end": "2026-05-13"
       },
-      "total_revenue": 681952417,
-      "total_orders": 338,
+      "total_revenue": 692912917,
+      "total_orders": 343,
       "top_products": [
         {
           "product": "Máy dò D1 Pro",
@@ -528,15 +522,15 @@
         },
         {
           "product": "Máy dò D2",
-          "revenue": 36400000,
-          "orders": 13,
-          "units": 13
+          "revenue": 39200000,
+          "orders": 14,
+          "units": 14
         },
         {
           "product": "Máy ghi âm DR1",
-          "revenue": 36200000,
-          "orders": 28,
-          "units": 28
+          "revenue": 37500000,
+          "orders": 29,
+          "units": 29
         },
         {
           "product": "Máy dò D3 Doscom",
@@ -546,9 +540,9 @@
         },
         {
           "product": "Máy dò D1",
-          "revenue": 30000000,
-          "orders": 12,
-          "units": 12
+          "revenue": 32500000,
+          "orders": 13,
+          "units": 13
         },
         {
           "product": "MÁY DÒ D4",
@@ -580,6 +574,101 @@
   "category_breakdown_by_period": {
     "today": {
       "label": "Hôm nay",
+      "date_range": {
+        "start": "2026-05-14",
+        "end": "2026-05-14"
+      },
+      "total_revenue": 4090000,
+      "total_orders": 2,
+      "categories": {
+        "MAY_DO": {
+          "label": "Máy dò",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_WIFI": {
+          "label": "Camera wifi",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_4G": {
+          "label": "Camera 4G",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "CAMERA_VIDEO_CALL": {
+          "label": "Camera gọi video 2 chiều",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "GHI_AM": {
+          "label": "Máy ghi âm",
+          "revenue": 2600000,
+          "orders": 1,
+          "units": 2,
+          "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 2600000,
+              "orders": 1,
+              "units": 2
+            }
+          ]
+        },
+        "CHONG_GHI_AM": {
+          "label": "Chống ghi âm",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "DINH_VI": {
+          "label": "Định vị",
+          "revenue": 1290000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 1290000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        },
+        "NOMA": {
+          "label": "NOMA",
+          "revenue": 0,
+          "orders": 0,
+          "units": 0,
+          "top_products": []
+        },
+        "OTHER": {
+          "label": "Khác",
+          "revenue": 200000,
+          "orders": 1,
+          "units": 1,
+          "top_products": [
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 200000,
+              "orders": 1,
+              "units": 1
+            }
+          ]
+        }
+      }
+    },
+    "yesterday": {
+      "label": "Hôm qua",
       "date_range": {
         "start": "2026-05-13",
         "end": "2026-05-13"
@@ -686,114 +775,14 @@
         }
       }
     },
-    "yesterday": {
-      "label": "Hôm qua",
-      "date_range": {
-        "start": "2026-05-12",
-        "end": "2026-05-12"
-      },
-      "total_revenue": 4199000,
-      "total_orders": 5,
-      "categories": {
-        "MAY_DO": {
-          "label": "Máy dò",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "CAMERA_WIFI": {
-          "label": "Camera wifi",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "CAMERA_4G": {
-          "label": "Camera 4G",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "CAMERA_VIDEO_CALL": {
-          "label": "Camera gọi video 2 chiều",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "GHI_AM": {
-          "label": "Máy ghi âm",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "CHONG_GHI_AM": {
-          "label": "Chống ghi âm",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "DINH_VI": {
-          "label": "Định vị",
-          "revenue": 4150000,
-          "orders": 4,
-          "units": 4,
-          "top_products": [
-            {
-              "product": "DV4 + Sim ĐV",
-              "revenue": 1500000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "Định vị DT5",
-              "revenue": 1360000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "Định vị DV1 mini",
-              "revenue": 1290000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        },
-        "NOMA": {
-          "label": "NOMA",
-          "revenue": 0,
-          "orders": 0,
-          "units": 0,
-          "top_products": []
-        },
-        "OTHER": {
-          "label": "Khác",
-          "revenue": 49000,
-          "orders": 1,
-          "units": 1,
-          "top_products": [
-            {
-              "product": "Giá đỡ camera",
-              "revenue": 49000,
-              "orders": 1,
-              "units": 1
-            }
-          ]
-        }
-      }
-    },
     "this_week": {
       "label": "Tuần này",
       "date_range": {
         "start": "2026-05-11",
-        "end": "2026-05-13"
+        "end": "2026-05-14"
       },
-      "total_revenue": 25077000,
-      "total_orders": 16,
+      "total_revenue": 29167000,
+      "total_orders": 18,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -851,19 +840,19 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 4000000,
-          "orders": 3,
-          "units": 3,
+          "revenue": 6600000,
+          "orders": 4,
+          "units": 5,
           "top_products": [
+            {
+              "product": "Máy ghi âm DR1",
+              "revenue": 3900000,
+              "orders": 2,
+              "units": 3
+            },
             {
               "product": "Máy ghi âm DR4 pro",
               "revenue": 1600000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "Máy ghi âm DR1",
-              "revenue": 1300000,
               "orders": 1,
               "units": 1
             },
@@ -884,10 +873,16 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 7848000,
-          "orders": 7,
-          "units": 7,
+          "revenue": 9138000,
+          "orders": 8,
+          "units": 8,
           "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 2580000,
+              "orders": 2,
+              "units": 2
+            },
             {
               "product": "DV1 Pro + Sim ĐV",
               "revenue": 2500000,
@@ -907,12 +902,6 @@
               "units": 2
             },
             {
-              "product": "Định vị DV1 mini",
-              "revenue": 1290000,
-              "orders": 1,
-              "units": 1
-            },
-            {
               "product": "Doscom Tag DT2",
               "revenue": 1198000,
               "orders": 2,
@@ -929,13 +918,19 @@
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 539000,
-          "orders": 2,
-          "units": 2,
+          "revenue": 739000,
+          "orders": 3,
+          "units": 3,
           "top_products": [
             {
               "product": "Thẻ 64GB",
               "revenue": 490000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "Sim trắng multi 4G",
+              "revenue": 200000,
               "orders": 1,
               "units": 1
             },
@@ -1149,10 +1144,10 @@
       "label": "Tháng này",
       "date_range": {
         "start": "2026-05-01",
-        "end": "2026-05-13"
+        "end": "2026-05-14"
       },
-      "total_revenue": 82700000,
-      "total_orders": 37,
+      "total_revenue": 86790000,
+      "total_orders": 39,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
@@ -1260,9 +1255,9 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 17300000,
-          "orders": 9,
-          "units": 11,
+          "revenue": 19900000,
+          "orders": 10,
+          "units": 13,
           "top_products": [
             {
               "product": "Máy ghi âm DR9",
@@ -1272,9 +1267,9 @@
             },
             {
               "product": "Máy ghi âm DR1",
-              "revenue": 5200000,
-              "orders": 4,
-              "units": 4
+              "revenue": 7800000,
+              "orders": 5,
+              "units": 6
             },
             {
               "product": "Máy ghi âm DR4 pro",
@@ -1312,10 +1307,16 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 13945000,
-          "orders": 11,
-          "units": 12,
+          "revenue": 15235000,
+          "orders": 12,
+          "units": 13,
           "top_products": [
+            {
+              "product": "Định vị DV1 mini",
+              "revenue": 2580000,
+              "orders": 2,
+              "units": 2
+            },
             {
               "product": "Định vị DV1 Pro",
               "revenue": 2500000,
@@ -1337,12 +1338,6 @@
             {
               "product": "DV1 + Sim ĐV",
               "revenue": 1800000,
-              "orders": 1,
-              "units": 1
-            },
-            {
-              "product": "DV4 + Sim ĐV",
-              "revenue": 1500000,
               "orders": 1,
               "units": 1
             }
@@ -1376,9 +1371,9 @@
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 4679000,
-          "orders": 7,
-          "units": 10,
+          "revenue": 4879000,
+          "orders": 8,
+          "units": 11,
           "top_products": [
             {
               "product": "Thẻ 128GB",
@@ -1394,9 +1389,9 @@
             },
             {
               "product": "Sim trắng multi 4G",
-              "revenue": 200000,
-              "orders": 1,
-              "units": 1
+              "revenue": 400000,
+              "orders": 2,
+              "units": 2
             },
             {
               "product": "Giá đỡ camera",
@@ -1709,17 +1704,17 @@
     "last_7d": {
       "label": "7 ngày qua",
       "date_range": {
-        "start": "2026-05-06",
-        "end": "2026-05-12"
+        "start": "2026-05-07",
+        "end": "2026-05-13"
       },
-      "total_revenue": 58930000,
-      "total_orders": 26,
+      "total_revenue": 62250000,
+      "total_orders": 30,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "revenue": 14500000,
-          "orders": 2,
-          "units": 2,
+          "revenue": 19800000,
+          "orders": 4,
+          "units": 4,
           "top_products": [
             {
               "product": "Máy dò D3 Doscom",
@@ -1729,7 +1724,13 @@
             },
             {
               "product": "Máy dò D1",
-              "revenue": 2500000,
+              "revenue": 5000000,
+              "orders": 2,
+              "units": 2
+            },
+            {
+              "product": "Máy dò D2",
+              "revenue": 2800000,
               "orders": 1,
               "units": 1
             }
@@ -1751,10 +1752,16 @@
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "revenue": 2300000,
-          "orders": 1,
-          "units": 1,
+          "revenue": 4890000,
+          "orders": 2,
+          "units": 2,
           "top_products": [
+            {
+              "product": "DA1 Pro + Thẻ nhớ 64GB + Sim Vstarcam",
+              "revenue": 2590000,
+              "orders": 1,
+              "units": 1
+            },
             {
               "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
               "revenue": 2300000,
@@ -1785,25 +1792,25 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 13400000,
+          "revenue": 8400000,
           "orders": 6,
-          "units": 8,
+          "units": 6,
           "top_products": [
             {
-              "product": "Máy ghi âm DR9",
-              "revenue": 8400000,
+              "product": "Máy ghi âm DR1",
+              "revenue": 2600000,
               "orders": 2,
-              "units": 4
+              "units": 2
             },
             {
-              "product": "Máy ghi âm DR4 pro",
-              "revenue": 1600000,
+              "product": "Máy ghi âm DR9",
+              "revenue": 2100000,
               "orders": 1,
               "units": 1
             },
             {
-              "product": "Máy ghi âm DR1",
-              "revenue": 1300000,
+              "product": "Máy ghi âm DR4 pro",
+              "revenue": 1600000,
               "orders": 1,
               "units": 1
             },
@@ -1837,12 +1844,18 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 11445000,
-          "orders": 10,
-          "units": 11,
+          "revenue": 13945000,
+          "orders": 11,
+          "units": 12,
           "top_products": [
             {
               "product": "Định vị DV1 Pro",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "DV1 Pro + Sim ĐV",
               "revenue": 2500000,
               "orders": 1,
               "units": 1
@@ -1864,12 +1877,6 @@
               "revenue": 1500000,
               "orders": 1,
               "units": 1
-            },
-            {
-              "product": "Định vị DT5",
-              "revenue": 1360000,
-              "orders": 2,
-              "units": 2
             }
           ]
         },
@@ -1901,15 +1908,15 @@
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 3499000,
-          "orders": 5,
-          "units": 8,
+          "revenue": 1429000,
+          "orders": 4,
+          "units": 5,
           "top_products": [
             {
               "product": "Thẻ 128GB",
-              "revenue": 2760000,
-              "orders": 2,
-              "units": 4
+              "revenue": 690000,
+              "orders": 1,
+              "units": 1
             },
             {
               "product": "Thẻ 64GB",
@@ -1942,23 +1949,23 @@
     "last_30d": {
       "label": "30 ngày qua",
       "date_range": {
-        "start": "2026-04-13",
-        "end": "2026-05-12"
+        "start": "2026-04-14",
+        "end": "2026-05-13"
       },
-      "total_revenue": 224406000,
-      "total_orders": 110,
+      "total_revenue": 219349000,
+      "total_orders": 107,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "revenue": 78980000,
-          "orders": 18,
-          "units": 18,
+          "revenue": 73780000,
+          "orders": 17,
+          "units": 17,
           "top_products": [
             {
               "product": "Máy dò D1 Pro",
-              "revenue": 38500000,
-              "orders": 11,
-              "units": 11
+              "revenue": 28000000,
+              "orders": 8,
+              "units": 8
             },
             {
               "product": "Máy dò D3 Doscom",
@@ -1967,22 +1974,22 @@
               "units": 2
             },
             {
+              "product": "Máy dò D2",
+              "revenue": 8400000,
+              "orders": 3,
+              "units": 3
+            },
+            {
+              "product": "Máy dò D1",
+              "revenue": 7500000,
+              "orders": 3,
+              "units": 3
+            },
+            {
               "product": "MÁY DÒ D4",
               "revenue": 6000000,
               "orders": 1,
               "units": 1
-            },
-            {
-              "product": "Máy dò D2",
-              "revenue": 5600000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "Máy dò D1",
-              "revenue": 5000000,
-              "orders": 2,
-              "units": 2
             }
           ]
         },
@@ -2008,9 +2015,9 @@
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "revenue": 24480000,
-          "orders": 11,
-          "units": 11,
+          "revenue": 27070000,
+          "orders": 12,
+          "units": 12,
           "top_products": [
             {
               "product": "DA1 Pro ZoomX6 + Sim Vstarcam",
@@ -2083,16 +2090,16 @@
           "units": 30,
           "top_products": [
             {
+              "product": "Máy ghi âm DR1",
+              "revenue": 11700000,
+              "orders": 9,
+              "units": 9
+            },
+            {
               "product": "Máy ghi âm DR9",
               "revenue": 10500000,
               "orders": 3,
               "units": 5
-            },
-            {
-              "product": "Máy ghi âm DR1",
-              "revenue": 10400000,
-              "orders": 8,
-              "units": 8
             },
             {
               "product": "Máy ghi âm DR4 pro",
@@ -2130,15 +2137,15 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 34190000,
-          "orders": 26,
-          "units": 28,
+          "revenue": 33090000,
+          "orders": 25,
+          "units": 27,
           "top_products": [
             {
               "product": "DV1 + Sim ĐV",
-              "revenue": 9000000,
-              "orders": 5,
-              "units": 5
+              "revenue": 7200000,
+              "orders": 4,
+              "units": 4
             },
             {
               "product": "Định vị DV1 mini",
@@ -2159,18 +2166,18 @@
               "units": 2
             },
             {
-              "product": "Định vị DV1",
-              "revenue": 3600000,
-              "orders": 2,
-              "units": 2
+              "product": "DV1 Pro + Sim ĐV",
+              "revenue": 2500000,
+              "orders": 1,
+              "units": 1
             }
           ]
         },
         "NOMA": {
           "label": "NOMA",
-          "revenue": 2109000,
-          "orders": 8,
-          "units": 10,
+          "revenue": 1612000,
+          "orders": 7,
+          "units": 8,
           "top_products": [
             {
               "product": "Noma 911",
@@ -2180,19 +2187,19 @@
             },
             {
               "product": "COMBO 2 CHAI CHÀ KÍNH NOMA 911",
-              "revenue": 796000,
-              "orders": 2,
-              "units": 2
-            },
-            {
-              "product": "NOMA 250",
-              "revenue": 198000,
-              "orders": 2,
-              "units": 2
+              "revenue": 398000,
+              "orders": 1,
+              "units": 1
             },
             {
               "product": "A002 500ml - APK-8508",
               "revenue": 120000,
+              "orders": 1,
+              "units": 1
+            },
+            {
+              "product": "NOMA 250",
+              "revenue": 99000,
               "orders": 1,
               "units": 1
             }
@@ -2200,9 +2207,9 @@
         },
         "OTHER": {
           "label": "Khác",
-          "revenue": 13107000,
-          "orders": 27,
-          "units": 37,
+          "revenue": 12257000,
+          "orders": 25,
+          "units": 35,
           "top_products": [
             {
               "product": "Thẻ 128GB",
@@ -2224,9 +2231,9 @@
             },
             {
               "product": "Sim trắng multi 4G",
-              "revenue": 1400000,
-              "orders": 6,
-              "units": 7
+              "revenue": 1200000,
+              "orders": 5,
+              "units": 6
             },
             {
               "product": "Thẻ 64GB",
@@ -2241,17 +2248,17 @@
     "last_90d": {
       "label": "90 ngày qua",
       "date_range": {
-        "start": "2026-02-12",
-        "end": "2026-05-12"
+        "start": "2026-02-13",
+        "end": "2026-05-13"
       },
-      "total_revenue": 691441000,
-      "total_orders": 338,
+      "total_revenue": 703131000,
+      "total_orders": 343,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "revenue": 251280000,
-          "orders": 67,
-          "units": 67,
+          "revenue": 256580000,
+          "orders": 69,
+          "units": 69,
           "top_products": [
             {
               "product": "Máy dò D1 Pro",
@@ -2261,9 +2268,9 @@
             },
             {
               "product": "Máy dò D2",
-              "revenue": 36400000,
-              "orders": 13,
-              "units": 13
+              "revenue": 39200000,
+              "orders": 14,
+              "units": 14
             },
             {
               "product": "Máy dò D3 Doscom",
@@ -2273,9 +2280,9 @@
             },
             {
               "product": "Máy dò D1",
-              "revenue": 30000000,
-              "orders": 12,
-              "units": 12
+              "revenue": 32500000,
+              "orders": 13,
+              "units": 13
             },
             {
               "product": "MÁY DÒ D4",
@@ -2325,9 +2332,9 @@
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "revenue": 68300000,
-          "orders": 27,
-          "units": 31,
+          "revenue": 70890000,
+          "orders": 28,
+          "units": 32,
           "top_products": [
             {
               "product": "Camera giám sát ghi hình ảnh dùng trong gia đình DA1 pro zoomX6 ( CB75D)",
@@ -2395,15 +2402,15 @@
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "revenue": 104610000,
-          "orders": 69,
-          "units": 74,
+          "revenue": 105910000,
+          "orders": 70,
+          "units": 75,
           "top_products": [
             {
               "product": "Máy ghi âm DR1",
-              "revenue": 36200000,
-              "orders": 28,
-              "units": 28
+              "revenue": 37500000,
+              "orders": 29,
+              "units": 29
             },
             {
               "product": "Máy ghi âm DR4 pro",
@@ -2447,9 +2454,9 @@
         },
         "DINH_VI": {
           "label": "Định vị",
-          "revenue": 92115000,
-          "orders": 76,
-          "units": 87,
+          "revenue": 94615000,
+          "orders": 77,
+          "units": 88,
           "top_products": [
             {
               "product": "Doscom Tag DT2",
@@ -2464,16 +2471,16 @@
               "units": 10
             },
             {
+              "product": "DV1 Pro + Sim ĐV",
+              "revenue": 12500000,
+              "orders": 5,
+              "units": 5
+            },
+            {
               "product": "DV1 + Sim ĐV",
               "revenue": 10800000,
               "orders": 6,
               "units": 6
-            },
-            {
-              "product": "DV1 Pro + Sim ĐV",
-              "revenue": 10000000,
-              "orders": 4,
-              "units": 4
             },
             {
               "product": "Định vị DV1 mini",
@@ -4242,6 +4249,30 @@
       "q": 1,
       "r": 2800000,
       "c": "MAY_DO"
+    },
+    {
+      "d": "2026-05-14",
+      "oid": 95896,
+      "n": "Định vị DV1 mini",
+      "q": 1,
+      "r": 1290000,
+      "c": "DINH_VI"
+    },
+    {
+      "d": "2026-05-14",
+      "oid": 95896,
+      "n": "Sim trắng multi 4G",
+      "q": 1,
+      "r": 200000,
+      "c": "OTHER"
+    },
+    {
+      "d": "2026-05-14",
+      "oid": 95889,
+      "n": "Máy ghi âm DR1",
+      "q": 2,
+      "r": 2600000,
+      "c": "GHI_AM"
     },
     {
       "d": "2026-05-13",
@@ -6035,7 +6066,8 @@
     }
   ],
   "total_orders_by_date": {
-    "2026-05-13": 157,
+    "2026-05-14": 98,
+    "2026-05-13": 158,
     "2026-05-12": 161,
     "2026-05-11": 188,
     "2026-05-10": 228,
@@ -6115,7 +6147,7 @@
     "2026-02-24": 166,
     "2026-02-23": 172,
     "2026-02-22": 5,
-    "2026-02-13": 14,
+    "2026-02-13": 7,
     "2026-02-21": 2,
     "2026-02-20": 2,
     "2026-02-19": 1,
@@ -6126,19 +6158,19 @@
   },
   "order_revenue_by_status_by_date": {
     "delivered": {
-      "2026-05-12": 3234000.0,
-      "2026-05-11": 5373000.0,
-      "2026-05-10": 17531000.0,
-      "2026-05-09": 13684000.0,
-      "2026-05-08": 19033000.0,
-      "2026-05-07": 27494000.0,
-      "2026-05-06": 33007000.0,
-      "2026-05-05": 22699000.0,
+      "2026-05-12": 7923000.0,
+      "2026-05-11": 11704000.0,
+      "2026-05-10": 25796000.0,
+      "2026-05-09": 15929000.0,
+      "2026-05-08": 20426000.0,
+      "2026-05-07": 27693000.0,
+      "2026-05-06": 33405000.0,
+      "2026-05-05": 22898000.0,
       "2026-05-04": 31731000.0,
       "2026-05-03": 37789000.0,
       "2026-05-02": 18209000.0,
       "2026-05-01": 20495000.0,
-      "2026-04-30": 19571000.0,
+      "2026-04-30": 19770000.0,
       "2026-04-29": 22192000.0,
       "2026-04-28": 29565000.0,
       "2026-04-27": 34302000.0,
@@ -6205,17 +6237,18 @@
       "2026-02-24": 65295000.0,
       "2026-02-23": 67531000.0,
       "2026-02-22": 199000.0,
-      "2026-02-13": 4391000.0,
-      "2026-05-13": 2500000.0
+      "2026-02-13": 3595000.0,
+      "2026-05-13": 2898000.0
     },
     "returning": {
+      "2026-05-09": 199000.0,
       "2026-05-07": 597000.0,
-      "2026-05-06": 4997000.0,
-      "2026-05-05": 3097000.0,
+      "2026-05-06": 5793000.0,
+      "2026-05-05": 3296000.0,
       "2026-05-04": 796000.0,
       "2026-05-03": 1991000.0,
       "2026-05-02": 1194000.0,
-      "2026-05-01": 1194000.0,
+      "2026-05-01": 1393000.0,
       "2026-04-30": 2096000.0,
       "2026-04-29": 2998000.0,
       "2026-04-28": 4540000.0,
@@ -6264,7 +6297,6 @@
       "2026-02-26": 199000.0,
       "2026-02-24": 1990000.0,
       "2026-02-23": 3694000.0,
-      "2026-02-13": 199000.0,
       "2026-05-08": 199000.0,
       "2026-03-04": 499000.0,
       "2026-04-11": 199000.0,
@@ -6342,6 +6374,7 @@
       "2026-04-07": 199000.0
     },
     "canceled": {
+      "2026-05-14": 199000.0,
       "2026-05-12": 2578000.0,
       "2026-05-10": 398000.0,
       "2026-04-24": 1250000.0,
@@ -6361,19 +6394,20 @@
       "2026-03-17": 1200000.0
     },
     "other": {
-      "2026-05-13": 48849500.0,
-      "2026-05-12": 34555000.0,
-      "2026-05-11": 46079000.0,
-      "2026-05-10": 59842000.0,
-      "2026-05-09": 8576000.0,
-      "2026-05-08": 11879000.0,
-      "2026-05-07": 3383000.0,
-      "2026-05-06": 8539000.0,
-      "2026-05-05": 1791000.0,
+      "2026-05-14": 33802000.0,
+      "2026-05-13": 48451500.0,
+      "2026-05-12": 29866000.0,
+      "2026-05-11": 39748000.0,
+      "2026-05-10": 51577000.0,
+      "2026-05-09": 6132000.0,
+      "2026-05-08": 10486000.0,
+      "2026-05-07": 3184000.0,
+      "2026-05-06": 7345000.0,
+      "2026-05-05": 1393000.0,
       "2026-05-03": 3341000.0,
       "2026-05-02": 3036000.0,
-      "2026-05-01": 995000.0,
-      "2026-04-30": 3898000.0,
+      "2026-05-01": 796000.0,
+      "2026-04-30": 3699000.0,
       "2026-04-29": 3098000.0,
       "2026-04-28": 2898000.0,
       "2026-04-27": 199000.0,
@@ -6448,19 +6482,19 @@
   },
   "order_count_by_status_by_date": {
     "delivered": {
-      "2026-05-12": 16,
-      "2026-05-11": 26,
-      "2026-05-10": 66,
-      "2026-05-09": 40,
-      "2026-05-08": 54,
-      "2026-05-07": 101,
-      "2026-05-06": 94,
-      "2026-05-05": 95,
+      "2026-05-12": 26,
+      "2026-05-11": 46,
+      "2026-05-10": 99,
+      "2026-05-09": 45,
+      "2026-05-08": 60,
+      "2026-05-07": 102,
+      "2026-05-06": 96,
+      "2026-05-05": 96,
       "2026-05-04": 114,
       "2026-05-03": 131,
       "2026-05-02": 63,
       "2026-05-01": 71,
-      "2026-04-30": 73,
+      "2026-04-30": 74,
       "2026-04-29": 63,
       "2026-04-28": 75,
       "2026-04-27": 83,
@@ -6527,17 +6561,18 @@
       "2026-02-24": 125,
       "2026-02-23": 128,
       "2026-02-22": 1,
-      "2026-02-13": 9,
-      "2026-05-13": 1
+      "2026-02-13": 6,
+      "2026-05-13": 3
     },
     "returning": {
+      "2026-05-09": 1,
       "2026-05-07": 3,
-      "2026-05-06": 4,
-      "2026-05-05": 4,
+      "2026-05-06": 7,
+      "2026-05-05": 5,
       "2026-05-04": 4,
       "2026-05-03": 9,
       "2026-05-02": 5,
-      "2026-05-01": 6,
+      "2026-05-01": 7,
       "2026-04-30": 5,
       "2026-04-29": 4,
       "2026-04-28": 12,
@@ -6586,7 +6621,6 @@
       "2026-02-26": 1,
       "2026-02-24": 7,
       "2026-02-23": 6,
-      "2026-02-13": 1,
       "2026-05-08": 1,
       "2026-03-04": 1,
       "2026-04-11": 1,
@@ -6664,6 +6698,7 @@
       "2026-04-07": 1
     },
     "canceled": {
+      "2026-05-14": 1,
       "2026-05-12": 3,
       "2026-05-10": 2,
       "2026-04-24": 1,
@@ -6683,19 +6718,20 @@
       "2026-03-17": 1
     },
     "other": {
-      "2026-05-13": 156,
-      "2026-05-12": 142,
-      "2026-05-11": 161,
-      "2026-05-10": 160,
-      "2026-05-09": 31,
-      "2026-05-08": 24,
-      "2026-05-07": 21,
-      "2026-05-06": 17,
-      "2026-05-05": 16,
+      "2026-05-14": 97,
+      "2026-05-13": 155,
+      "2026-05-12": 132,
+      "2026-05-11": 141,
+      "2026-05-10": 127,
+      "2026-05-09": 25,
+      "2026-05-08": 18,
+      "2026-05-07": 20,
+      "2026-05-06": 12,
+      "2026-05-05": 14,
       "2026-05-03": 11,
       "2026-05-02": 9,
-      "2026-05-01": 7,
-      "2026-04-30": 4,
+      "2026-05-01": 6,
+      "2026-04-30": 3,
       "2026-04-29": 4,
       "2026-04-28": 6,
       "2026-04-27": 3,
@@ -6765,37 +6801,38 @@
       "2026-02-17": 1,
       "2026-02-16": 2,
       "2026-02-15": 1,
-      "2026-02-13": 4
+      "2026-02-13": 1
     }
   },
   "summary": {
     "delivered": {
-      "orders": 3628,
-      "total": 1817762417.0
+      "orders": 3706,
+      "total": 1841282417.0
     },
     "returning": {
-      "orders": 186,
-      "total": 104861000.0
+      "orders": 191,
+      "total": 106055000.0
     },
     "returned": {
       "orders": 287,
       "total": 283395000.0
     },
     "canceled": {
-      "orders": 23,
-      "total": 18794000.0
+      "orders": 24,
+      "total": 18993000.0
     },
     "other": {
-      "orders": 1052,
-      "total": 244401500.0
+      "orders": 1060,
+      "total": 252494500.0
     }
   },
   "products": {
     "D1": {
-      "total": 392500000.0,
-      "orders": 157,
-      "units": 157,
+      "total": 397500000.0,
+      "orders": 159,
+      "units": 159,
       "by_date": {
+        "2026-05-12": 2500000.0,
         "2026-05-07": 5000000.0,
         "2026-05-01": 2500000.0,
         "2026-04-28": 7500000.0,
@@ -6852,12 +6889,13 @@
         "2026-04-23": 5000000.0,
         "2026-04-03": 2500000.0,
         "2026-03-30": 2500000.0,
-        "2026-05-12": 2500000.0,
+        "2026-05-14": 5000000.0,
         "2026-05-10": 2500000.0,
         "2026-04-29": 2500000.0,
         "2026-05-11": 2500000.0
       },
       "orders_by_date": {
+        "2026-05-12": 1,
         "2026-05-07": 2,
         "2026-05-01": 1,
         "2026-04-28": 3,
@@ -6914,12 +6952,13 @@
         "2026-04-23": 2,
         "2026-04-03": 1,
         "2026-03-30": 1,
-        "2026-05-12": 1,
+        "2026-05-14": 2,
         "2026-05-10": 1,
         "2026-04-29": 1,
         "2026-05-11": 1
       },
       "units_by_date": {
+        "2026-05-12": 1,
         "2026-05-07": 2,
         "2026-05-01": 1,
         "2026-04-28": 3,
@@ -6976,7 +7015,7 @@
         "2026-04-23": 2,
         "2026-04-03": 1,
         "2026-03-30": 1,
-        "2026-05-12": 1,
+        "2026-05-14": 2,
         "2026-05-10": 1,
         "2026-04-29": 1,
         "2026-05-11": 1
@@ -7206,10 +7245,12 @@
       }
     },
     "DR1": {
-      "total": 190200000.0,
-      "orders": 149,
-      "units": 149,
+      "total": 196700000.0,
+      "orders": 153,
+      "units": 154,
       "by_date": {
+        "2026-05-11": 2600000.0,
+        "2026-05-10": 3900000.0,
         "2026-05-05": 2600000.0,
         "2026-05-04": 2600000.0,
         "2026-05-03": 5200000.0,
@@ -7241,7 +7282,6 @@
         "2026-02-25": 4800000.0,
         "2026-02-24": 12000000.0,
         "2026-02-23": 15600000.0,
-        "2026-05-10": 3900000.0,
         "2026-04-07": 1300000.0,
         "2026-04-06": 2600000.0,
         "2026-03-30": 1300000.0,
@@ -7255,14 +7295,16 @@
         "2026-04-29": 2600000.0,
         "2026-04-25": 1300000.0,
         "2026-03-03": 1200000.0,
+        "2026-05-14": 6500000.0,
         "2026-05-12": 1300000.0,
-        "2026-05-11": 2600000.0,
         "2026-05-09": 1300000.0,
         "2026-05-08": 1300000.0,
         "2026-05-06": 2600000.0,
         "2026-05-13": 1300000.0
       },
       "orders_by_date": {
+        "2026-05-11": 2,
+        "2026-05-10": 3,
         "2026-05-05": 2,
         "2026-05-04": 2,
         "2026-05-03": 4,
@@ -7294,7 +7336,6 @@
         "2026-02-25": 4,
         "2026-02-24": 10,
         "2026-02-23": 13,
-        "2026-05-10": 3,
         "2026-04-07": 1,
         "2026-04-06": 2,
         "2026-03-30": 1,
@@ -7308,14 +7349,16 @@
         "2026-04-29": 2,
         "2026-04-25": 1,
         "2026-03-03": 1,
+        "2026-05-14": 4,
         "2026-05-12": 1,
-        "2026-05-11": 2,
         "2026-05-09": 1,
         "2026-05-08": 1,
         "2026-05-06": 2,
         "2026-05-13": 1
       },
       "units_by_date": {
+        "2026-05-11": 2,
+        "2026-05-10": 3,
         "2026-05-05": 2,
         "2026-05-04": 2,
         "2026-05-03": 4,
@@ -7347,7 +7390,6 @@
         "2026-02-25": 4,
         "2026-02-24": 10,
         "2026-02-23": 13,
-        "2026-05-10": 3,
         "2026-04-07": 1,
         "2026-04-06": 2,
         "2026-03-30": 1,
@@ -7361,8 +7403,8 @@
         "2026-04-29": 2,
         "2026-04-25": 1,
         "2026-03-03": 1,
+        "2026-05-14": 5,
         "2026-05-12": 1,
-        "2026-05-11": 2,
         "2026-05-09": 1,
         "2026-05-08": 1,
         "2026-05-06": 2,
@@ -7434,10 +7476,11 @@
       }
     },
     "DA8.1": {
-      "total": 266250000.0,
-      "orders": 236,
-      "units": 254,
+      "total": 267500000.0,
+      "orders": 237,
+      "units": 255,
       "by_date": {
+        "2026-05-11": 3750000.0,
         "2026-05-10": 5000000.0,
         "2026-05-09": 6740000.0,
         "2026-05-06": 2500000.0,
@@ -7495,10 +7538,11 @@
         "2026-04-22": 1250000.0,
         "2026-04-26": 1250000.0,
         "2026-04-17": 1250000.0,
-        "2026-05-13": 1250000.0,
-        "2026-05-11": 3750000.0
+        "2026-05-14": 1250000.0,
+        "2026-05-13": 1250000.0
       },
       "orders_by_date": {
+        "2026-05-11": 3,
         "2026-05-10": 4,
         "2026-05-09": 5,
         "2026-05-06": 2,
@@ -7556,10 +7600,11 @@
         "2026-04-22": 1,
         "2026-04-26": 1,
         "2026-04-17": 1,
-        "2026-05-13": 1,
-        "2026-05-11": 3
+        "2026-05-14": 1,
+        "2026-05-13": 1
       },
       "units_by_date": {
+        "2026-05-11": 3,
         "2026-05-10": 4,
         "2026-05-09": 5,
         "2026-05-06": 2,
@@ -7617,8 +7662,8 @@
         "2026-04-22": 1,
         "2026-04-26": 1,
         "2026-04-17": 1,
-        "2026-05-13": 1,
-        "2026-05-11": 3
+        "2026-05-14": 1,
+        "2026-05-13": 1
       }
     },
     "DA8.1 Pro": {
@@ -7651,9 +7696,9 @@
       }
     },
     "Noma 911": {
-      "total": 885351000.0,
-      "orders": 3914,
-      "units": 4260,
+      "total": 903062000.0,
+      "orders": 3993,
+      "units": 4346,
       "by_date": {
         "2026-05-12": 31840000.0,
         "2026-05-11": 36815000.0,
@@ -7734,8 +7779,9 @@
         "2026-02-24": 27263000.0,
         "2026-02-23": 27860000.0,
         "2026-02-22": 199000.0,
-        "2026-02-13": 1791000.0,
-        "2026-05-13": 31044000.0
+        "2026-02-13": 995000.0,
+        "2026-05-13": 31044000.0,
+        "2026-05-14": 18507000.0
       },
       "orders_by_date": {
         "2026-05-12": 144,
@@ -7817,8 +7863,9 @@
         "2026-02-24": 116,
         "2026-02-23": 118,
         "2026-02-22": 1,
-        "2026-02-13": 9,
-        "2026-05-13": 141
+        "2026-02-13": 5,
+        "2026-05-13": 141,
+        "2026-05-14": 83
       },
       "units_by_date": {
         "2026-05-12": 153,
@@ -7900,16 +7947,18 @@
         "2026-02-24": 125,
         "2026-02-23": 130,
         "2026-02-22": 1,
-        "2026-02-13": 9,
-        "2026-05-13": 151
+        "2026-02-13": 5,
+        "2026-05-13": 151,
+        "2026-05-14": 90
       }
     },
     "Noma 922": {
-      "total": 12736000.0,
-      "orders": 253,
-      "units": 253,
+      "total": 12537000.0,
+      "orders": 255,
+      "units": 255,
       "by_date": {
         "2026-05-12": 199000.0,
+        "2026-05-11": 199000.0,
         "2026-05-10": 398000.0,
         "2026-05-09": 199000.0,
         "2026-05-08": 199000.0,
@@ -7967,7 +8016,6 @@
         "2026-02-25": 398000.0,
         "2026-02-24": 398000.0,
         "2026-02-23": 398000.0,
-        "2026-02-13": 199000.0,
         "2026-05-06": 0.0,
         "2026-05-01": 199000.0,
         "2026-04-30": 199000.0,
@@ -7975,11 +8023,12 @@
         "2026-04-23": 0.0,
         "2026-03-21": 0.0,
         "2026-03-26": 199000.0,
-        "2026-05-13": 597000.0,
-        "2026-05-11": 199000.0
+        "2026-05-14": 0.0,
+        "2026-05-13": 597000.0
       },
       "orders_by_date": {
         "2026-05-12": 8,
+        "2026-05-11": 9,
         "2026-05-10": 10,
         "2026-05-09": 3,
         "2026-05-08": 4,
@@ -8037,7 +8086,6 @@
         "2026-02-25": 12,
         "2026-02-24": 14,
         "2026-02-23": 12,
-        "2026-02-13": 1,
         "2026-05-06": 1,
         "2026-05-01": 1,
         "2026-04-30": 2,
@@ -8045,11 +8093,12 @@
         "2026-04-23": 1,
         "2026-03-21": 1,
         "2026-03-26": 1,
-        "2026-05-13": 8,
-        "2026-05-11": 9
+        "2026-05-14": 3,
+        "2026-05-13": 8
       },
       "units_by_date": {
         "2026-05-12": 8,
+        "2026-05-11": 9,
         "2026-05-10": 10,
         "2026-05-09": 3,
         "2026-05-08": 4,
@@ -8107,7 +8156,6 @@
         "2026-02-25": 12,
         "2026-02-24": 14,
         "2026-02-23": 12,
-        "2026-02-13": 1,
         "2026-05-06": 1,
         "2026-05-01": 1,
         "2026-04-30": 2,
@@ -8115,18 +8163,19 @@
         "2026-04-23": 1,
         "2026-03-21": 1,
         "2026-03-26": 1,
-        "2026-05-13": 8,
-        "2026-05-11": 9
+        "2026-05-14": 3,
+        "2026-05-13": 8
       }
     }
   },
   "products_by_status": {
     "delivered": {
       "D1": {
-        "total": 227500000.0,
-        "orders": 91,
-        "units": 91,
+        "total": 230000000.0,
+        "orders": 92,
+        "units": 92,
         "by_date": {
+          "2026-05-12": 2500000.0,
           "2026-05-07": 5000000.0,
           "2026-05-01": 2500000.0,
           "2026-04-28": 5000000.0,
@@ -8176,6 +8225,7 @@
           "2026-03-05": 2500000.0
         },
         "orders_by_date": {
+          "2026-05-12": 1,
           "2026-05-07": 2,
           "2026-05-01": 1,
           "2026-04-28": 2,
@@ -8225,6 +8275,7 @@
           "2026-03-05": 1
         },
         "units_by_date": {
+          "2026-05-12": 1,
           "2026-05-07": 2,
           "2026-05-01": 1,
           "2026-04-28": 2,
@@ -8468,10 +8519,12 @@
         }
       },
       "DR1": {
-        "total": 138100000.0,
-        "orders": 108,
-        "units": 108,
+        "total": 140700000.0,
+        "orders": 110,
+        "units": 110,
         "by_date": {
+          "2026-05-11": 1300000.0,
+          "2026-05-10": 2600000.0,
           "2026-05-05": 2600000.0,
           "2026-05-04": 2600000.0,
           "2026-05-03": 5200000.0,
@@ -8503,7 +8556,6 @@
           "2026-02-25": 2400000.0,
           "2026-02-24": 8400000.0,
           "2026-02-23": 9600000.0,
-          "2026-05-10": 1300000.0,
           "2026-04-07": 1300000.0,
           "2026-04-06": 2600000.0,
           "2026-03-30": 1300000.0,
@@ -8516,6 +8568,8 @@
           "2026-04-18": 1300000.0
         },
         "orders_by_date": {
+          "2026-05-11": 1,
+          "2026-05-10": 2,
           "2026-05-05": 2,
           "2026-05-04": 2,
           "2026-05-03": 4,
@@ -8547,7 +8601,6 @@
           "2026-02-25": 2,
           "2026-02-24": 7,
           "2026-02-23": 8,
-          "2026-05-10": 1,
           "2026-04-07": 1,
           "2026-04-06": 2,
           "2026-03-30": 1,
@@ -8560,6 +8613,8 @@
           "2026-04-18": 1
         },
         "units_by_date": {
+          "2026-05-11": 1,
+          "2026-05-10": 2,
           "2026-05-05": 2,
           "2026-05-04": 2,
           "2026-05-03": 4,
@@ -8591,7 +8646,6 @@
           "2026-02-25": 2,
           "2026-02-24": 7,
           "2026-02-23": 8,
-          "2026-05-10": 1,
           "2026-04-07": 1,
           "2026-04-06": 2,
           "2026-03-30": 1,
@@ -8663,12 +8717,13 @@
         }
       },
       "DA8.1": {
-        "total": 211680000.0,
-        "orders": 188,
-        "units": 203,
+        "total": 214180000.0,
+        "orders": 190,
+        "units": 205,
         "by_date": {
+          "2026-05-11": 1250000.0,
           "2026-05-10": 2500000.0,
-          "2026-05-09": 4240000.0,
+          "2026-05-09": 5490000.0,
           "2026-05-06": 1250000.0,
           "2026-05-04": 1250000.0,
           "2026-05-03": 2500000.0,
@@ -8724,8 +8779,9 @@
           "2026-04-22": 1250000.0
         },
         "orders_by_date": {
+          "2026-05-11": 1,
           "2026-05-10": 2,
-          "2026-05-09": 3,
+          "2026-05-09": 4,
           "2026-05-06": 1,
           "2026-05-04": 1,
           "2026-05-03": 2,
@@ -8781,8 +8837,9 @@
           "2026-04-22": 1
         },
         "units_by_date": {
+          "2026-05-11": 1,
           "2026-05-10": 2,
-          "2026-05-09": 3,
+          "2026-05-09": 4,
           "2026-05-06": 1,
           "2026-05-04": 1,
           "2026-05-03": 2,
@@ -8862,23 +8919,23 @@
         }
       },
       "Noma 911": {
-        "total": 670033000.0,
-        "orders": 2946,
-        "units": 3215,
+        "total": 686152000.0,
+        "orders": 3019,
+        "units": 3292,
         "by_date": {
-          "2026-05-12": 2786000.0,
-          "2026-05-11": 5373000.0,
-          "2026-05-10": 13731000.0,
-          "2026-05-09": 8756000.0,
-          "2026-05-08": 11144000.0,
-          "2026-05-07": 20895000.0,
-          "2026-05-06": 20298000.0,
-          "2026-05-05": 20099000.0,
+          "2026-05-12": 4975000.0,
+          "2026-05-11": 9154000.0,
+          "2026-05-10": 20696000.0,
+          "2026-05-09": 9751000.0,
+          "2026-05-08": 12537000.0,
+          "2026-05-07": 21094000.0,
+          "2026-05-06": 20696000.0,
+          "2026-05-05": 20298000.0,
           "2026-05-04": 23681000.0,
           "2026-05-03": 26467000.0,
           "2026-05-02": 13930000.0,
           "2026-05-01": 13930000.0,
-          "2026-04-30": 15522000.0,
+          "2026-04-30": 15721000.0,
           "2026-04-29": 13333000.0,
           "2026-04-28": 15522000.0,
           "2026-04-27": 17313000.0,
@@ -8945,22 +9002,23 @@
           "2026-02-24": 22288000.0,
           "2026-02-23": 23283000.0,
           "2026-02-22": 199000.0,
-          "2026-02-13": 1592000.0
+          "2026-02-13": 995000.0,
+          "2026-05-13": 398000.0
         },
         "orders_by_date": {
-          "2026-05-12": 13,
-          "2026-05-11": 26,
-          "2026-05-10": 63,
-          "2026-05-09": 36,
-          "2026-05-08": 51,
-          "2026-05-07": 97,
-          "2026-05-06": 90,
-          "2026-05-05": 93,
+          "2026-05-12": 22,
+          "2026-05-11": 44,
+          "2026-05-10": 95,
+          "2026-05-09": 40,
+          "2026-05-08": 57,
+          "2026-05-07": 98,
+          "2026-05-06": 92,
+          "2026-05-05": 94,
           "2026-05-04": 108,
           "2026-05-03": 121,
           "2026-05-02": 60,
           "2026-05-01": 65,
-          "2026-04-30": 69,
+          "2026-04-30": 70,
           "2026-04-29": 58,
           "2026-04-28": 67,
           "2026-04-27": 73,
@@ -9027,22 +9085,23 @@
           "2026-02-24": 96,
           "2026-02-23": 98,
           "2026-02-22": 1,
-          "2026-02-13": 8
+          "2026-02-13": 5,
+          "2026-05-13": 2
         },
         "units_by_date": {
-          "2026-05-12": 13,
-          "2026-05-11": 27,
-          "2026-05-10": 67,
-          "2026-05-09": 42,
-          "2026-05-08": 54,
-          "2026-05-07": 104,
-          "2026-05-06": 101,
-          "2026-05-05": 97,
+          "2026-05-12": 23,
+          "2026-05-11": 45,
+          "2026-05-10": 100,
+          "2026-05-09": 47,
+          "2026-05-08": 61,
+          "2026-05-07": 105,
+          "2026-05-06": 103,
+          "2026-05-05": 98,
           "2026-05-04": 115,
           "2026-05-03": 133,
           "2026-05-02": 68,
           "2026-05-01": 70,
-          "2026-04-30": 77,
+          "2026-04-30": 78,
           "2026-04-29": 67,
           "2026-04-28": 76,
           "2026-04-27": 81,
@@ -9109,15 +9168,17 @@
           "2026-02-24": 102,
           "2026-02-23": 109,
           "2026-02-22": 1,
-          "2026-02-13": 8
+          "2026-02-13": 5,
+          "2026-05-13": 2
         }
       },
       "Noma 922": {
-        "total": 9353000.0,
-        "orders": 199,
-        "units": 199,
+        "total": 9154000.0,
+        "orders": 202,
+        "units": 202,
         "by_date": {
           "2026-05-12": 199000.0,
+          "2026-05-11": 0.0,
           "2026-05-10": 0.0,
           "2026-05-09": 0.0,
           "2026-05-08": 0.0,
@@ -9175,7 +9236,6 @@
           "2026-02-25": 398000.0,
           "2026-02-24": 398000.0,
           "2026-02-23": 199000.0,
-          "2026-02-13": 199000.0,
           "2026-05-06": 0.0,
           "2026-05-01": 199000.0,
           "2026-04-30": 199000.0,
@@ -9184,8 +9244,9 @@
           "2026-03-21": 0.0
         },
         "orders_by_date": {
-          "2026-05-12": 2,
-          "2026-05-10": 2,
+          "2026-05-12": 3,
+          "2026-05-11": 1,
+          "2026-05-10": 4,
           "2026-05-09": 2,
           "2026-05-08": 2,
           "2026-05-07": 1,
@@ -9242,7 +9303,6 @@
           "2026-02-25": 12,
           "2026-02-24": 12,
           "2026-02-23": 9,
-          "2026-02-13": 1,
           "2026-05-06": 1,
           "2026-05-01": 1,
           "2026-04-30": 2,
@@ -9251,8 +9311,9 @@
           "2026-03-21": 1
         },
         "units_by_date": {
-          "2026-05-12": 2,
-          "2026-05-10": 2,
+          "2026-05-12": 3,
+          "2026-05-11": 1,
+          "2026-05-10": 4,
           "2026-05-09": 2,
           "2026-05-08": 2,
           "2026-05-07": 1,
@@ -9309,7 +9370,6 @@
           "2026-02-25": 12,
           "2026-02-24": 12,
           "2026-02-23": 9,
-          "2026-02-13": 1,
           "2026-05-06": 1,
           "2026-05-01": 1,
           "2026-04-30": 2,
@@ -9523,16 +9583,17 @@
         "units_by_date": {}
       },
       "Noma 911": {
-        "total": 31044000.0,
-        "orders": 141,
-        "units": 151,
+        "total": 32238000.0,
+        "orders": 146,
+        "units": 157,
         "by_date": {
+          "2026-05-09": 199000.0,
           "2026-05-07": 597000.0,
-          "2026-05-06": 597000.0,
+          "2026-05-06": 1393000.0,
           "2026-05-04": 796000.0,
           "2026-05-03": 1791000.0,
           "2026-05-02": 1194000.0,
-          "2026-05-01": 1194000.0,
+          "2026-05-01": 1393000.0,
           "2026-04-30": 796000.0,
           "2026-04-29": 398000.0,
           "2026-04-28": 1990000.0,
@@ -9578,19 +9639,19 @@
           "2026-02-26": 199000.0,
           "2026-02-24": 1990000.0,
           "2026-02-23": 1194000.0,
-          "2026-02-13": 199000.0,
           "2026-05-08": 199000.0,
-          "2026-05-05": 597000.0,
+          "2026-05-05": 796000.0,
           "2026-04-11": 199000.0,
           "2026-03-28": 199000.0
         },
         "orders_by_date": {
+          "2026-05-09": 1,
           "2026-05-07": 3,
-          "2026-05-06": 2,
+          "2026-05-06": 5,
           "2026-05-04": 4,
           "2026-05-03": 8,
           "2026-05-02": 5,
-          "2026-05-01": 6,
+          "2026-05-01": 7,
           "2026-04-30": 4,
           "2026-04-29": 2,
           "2026-04-28": 10,
@@ -9636,19 +9697,19 @@
           "2026-02-26": 1,
           "2026-02-24": 7,
           "2026-02-23": 5,
-          "2026-02-13": 1,
           "2026-05-08": 1,
-          "2026-05-05": 3,
+          "2026-05-05": 4,
           "2026-04-11": 1,
           "2026-03-28": 1
         },
         "units_by_date": {
+          "2026-05-09": 1,
           "2026-05-07": 3,
-          "2026-05-06": 3,
+          "2026-05-06": 7,
           "2026-05-04": 4,
           "2026-05-03": 9,
           "2026-05-02": 6,
-          "2026-05-01": 6,
+          "2026-05-01": 7,
           "2026-04-30": 4,
           "2026-04-29": 2,
           "2026-04-28": 10,
@@ -9694,9 +9755,8 @@
           "2026-02-26": 1,
           "2026-02-24": 9,
           "2026-02-23": 5,
-          "2026-02-13": 1,
           "2026-05-08": 1,
-          "2026-05-05": 3,
+          "2026-05-05": 4,
           "2026-04-11": 1,
           "2026-03-28": 1
         }
@@ -10377,10 +10437,11 @@
         }
       },
       "Noma 911": {
-        "total": 2388000.0,
-        "orders": 10,
-        "units": 11,
+        "total": 2587000.0,
+        "orders": 11,
+        "units": 12,
         "by_date": {
+          "2026-05-14": 199000.0,
           "2026-05-12": 398000.0,
           "2026-05-10": 398000.0,
           "2026-04-07": 398000.0,
@@ -10392,6 +10453,7 @@
           "2026-05-03": 199000.0
         },
         "orders_by_date": {
+          "2026-05-14": 1,
           "2026-05-12": 1,
           "2026-05-10": 2,
           "2026-04-07": 1,
@@ -10403,6 +10465,7 @@
           "2026-05-03": 1
         },
         "units_by_date": {
+          "2026-05-14": 1,
           "2026-05-12": 1,
           "2026-05-10": 2,
           "2026-04-07": 2,
@@ -10431,12 +10494,12 @@
     },
     "other": {
       "D1": {
-        "total": 22500000.0,
-        "orders": 9,
-        "units": 9,
+        "total": 25000000.0,
+        "orders": 10,
+        "units": 10,
         "by_date": {
+          "2026-05-14": 5000000.0,
           "2026-05-13": 5000000.0,
-          "2026-05-12": 2500000.0,
           "2026-05-10": 2500000.0,
           "2026-05-06": 2500000.0,
           "2026-04-29": 2500000.0,
@@ -10445,8 +10508,8 @@
           "2026-05-11": 2500000.0
         },
         "orders_by_date": {
+          "2026-05-14": 2,
           "2026-05-13": 2,
-          "2026-05-12": 1,
           "2026-05-10": 1,
           "2026-05-06": 1,
           "2026-04-29": 1,
@@ -10455,8 +10518,8 @@
           "2026-05-11": 1
         },
         "units_by_date": {
+          "2026-05-14": 2,
           "2026-05-13": 2,
-          "2026-05-12": 1,
           "2026-05-10": 1,
           "2026-05-06": 1,
           "2026-04-29": 1,
@@ -10524,31 +10587,34 @@
         "units_by_date": {}
       },
       "DR1": {
-        "total": 13000000.0,
-        "orders": 10,
-        "units": 10,
+        "total": 16900000.0,
+        "orders": 12,
+        "units": 13,
         "by_date": {
+          "2026-05-14": 6500000.0,
           "2026-05-12": 1300000.0,
-          "2026-05-11": 2600000.0,
-          "2026-05-10": 2600000.0,
+          "2026-05-11": 1300000.0,
+          "2026-05-10": 1300000.0,
           "2026-05-09": 1300000.0,
           "2026-05-08": 1300000.0,
           "2026-05-06": 2600000.0,
           "2026-05-13": 1300000.0
         },
         "orders_by_date": {
+          "2026-05-14": 4,
           "2026-05-12": 1,
-          "2026-05-11": 2,
-          "2026-05-10": 2,
+          "2026-05-11": 1,
+          "2026-05-10": 1,
           "2026-05-09": 1,
           "2026-05-08": 1,
           "2026-05-06": 2,
           "2026-05-13": 1
         },
         "units_by_date": {
+          "2026-05-14": 5,
           "2026-05-12": 1,
-          "2026-05-11": 2,
-          "2026-05-10": 2,
+          "2026-05-11": 1,
+          "2026-05-10": 1,
           "2026-05-09": 1,
           "2026-05-08": 1,
           "2026-05-06": 2,
@@ -10578,28 +10644,31 @@
         }
       },
       "DA8.1": {
-        "total": 11250000.0,
-        "orders": 9,
-        "units": 9,
+        "total": 10000000.0,
+        "orders": 8,
+        "units": 8,
         "by_date": {
+          "2026-05-14": 1250000.0,
           "2026-05-13": 1250000.0,
-          "2026-05-11": 3750000.0,
+          "2026-05-11": 2500000.0,
           "2026-05-10": 2500000.0,
-          "2026-05-09": 2500000.0,
+          "2026-05-09": 1250000.0,
           "2026-05-06": 1250000.0
         },
         "orders_by_date": {
+          "2026-05-14": 1,
           "2026-05-13": 1,
-          "2026-05-11": 3,
+          "2026-05-11": 2,
           "2026-05-10": 2,
-          "2026-05-09": 2,
+          "2026-05-09": 1,
           "2026-05-06": 1
         },
         "units_by_date": {
+          "2026-05-14": 1,
           "2026-05-13": 1,
-          "2026-05-11": 3,
+          "2026-05-11": 2,
           "2026-05-10": 2,
-          "2026-05-09": 2,
+          "2026-05-09": 1,
           "2026-05-06": 1
         }
       },
@@ -10621,23 +10690,24 @@
         }
       },
       "Noma 911": {
-        "total": 143877000.0,
+        "total": 144076000.0,
         "orders": 657,
-        "units": 698,
+        "units": 700,
         "by_date": {
-          "2026-05-13": 31044000.0,
-          "2026-05-12": 28656000.0,
-          "2026-05-11": 31442000.0,
-          "2026-05-10": 30646000.0,
-          "2026-05-09": 4577000.0,
-          "2026-05-08": 3980000.0,
-          "2026-05-07": 3383000.0,
-          "2026-05-06": 2189000.0,
-          "2026-05-05": 1791000.0,
+          "2026-05-14": 18308000.0,
+          "2026-05-13": 30646000.0,
+          "2026-05-12": 26467000.0,
+          "2026-05-11": 27661000.0,
+          "2026-05-10": 23681000.0,
+          "2026-05-09": 3383000.0,
+          "2026-05-08": 2587000.0,
+          "2026-05-07": 3184000.0,
+          "2026-05-06": 995000.0,
+          "2026-05-05": 1393000.0,
           "2026-05-03": 1592000.0,
           "2026-05-02": 796000.0,
-          "2026-05-01": 995000.0,
-          "2026-04-30": 398000.0,
+          "2026-05-01": 796000.0,
+          "2026-04-30": 199000.0,
           "2026-04-29": 398000.0,
           "2026-04-27": 199000.0,
           "2026-04-25": 199000.0,
@@ -10647,19 +10717,20 @@
           "2026-04-26": 199000.0
         },
         "orders_by_date": {
-          "2026-05-13": 141,
-          "2026-05-12": 130,
-          "2026-05-11": 142,
-          "2026-05-10": 139,
-          "2026-05-09": 21,
-          "2026-05-08": 18,
-          "2026-05-07": 17,
-          "2026-05-06": 9,
-          "2026-05-05": 9,
+          "2026-05-14": 82,
+          "2026-05-13": 139,
+          "2026-05-12": 121,
+          "2026-05-11": 124,
+          "2026-05-10": 107,
+          "2026-05-09": 16,
+          "2026-05-08": 12,
+          "2026-05-07": 16,
+          "2026-05-06": 4,
+          "2026-05-05": 7,
           "2026-05-03": 8,
           "2026-05-02": 4,
-          "2026-05-01": 5,
-          "2026-04-30": 2,
+          "2026-05-01": 4,
+          "2026-04-30": 1,
           "2026-04-29": 2,
           "2026-04-27": 1,
           "2026-04-25": 1,
@@ -10669,19 +10740,20 @@
           "2026-04-26": 1
         },
         "units_by_date": {
-          "2026-05-13": 151,
-          "2026-05-12": 139,
-          "2026-05-11": 150,
-          "2026-05-10": 148,
-          "2026-05-09": 23,
-          "2026-05-08": 19,
-          "2026-05-07": 17,
-          "2026-05-06": 11,
-          "2026-05-05": 9,
+          "2026-05-14": 89,
+          "2026-05-13": 149,
+          "2026-05-12": 129,
+          "2026-05-11": 132,
+          "2026-05-10": 115,
+          "2026-05-09": 17,
+          "2026-05-08": 12,
+          "2026-05-07": 16,
+          "2026-05-06": 5,
+          "2026-05-05": 7,
           "2026-05-03": 8,
           "2026-05-02": 4,
-          "2026-05-01": 5,
-          "2026-04-30": 2,
+          "2026-05-01": 4,
+          "2026-04-30": 1,
           "2026-04-29": 2,
           "2026-04-27": 1,
           "2026-04-25": 1,
@@ -10693,9 +10765,10 @@
       },
       "Noma 922": {
         "total": 1791000.0,
-        "orders": 34,
-        "units": 34,
+        "orders": 33,
+        "units": 33,
         "by_date": {
+          "2026-05-14": 0.0,
           "2026-05-13": 597000.0,
           "2026-05-12": 0.0,
           "2026-05-11": 199000.0,
@@ -10705,19 +10778,21 @@
           "2026-05-03": 199000.0
         },
         "orders_by_date": {
+          "2026-05-14": 3,
           "2026-05-13": 8,
-          "2026-05-12": 5,
-          "2026-05-11": 9,
-          "2026-05-10": 8,
+          "2026-05-12": 4,
+          "2026-05-11": 8,
+          "2026-05-10": 6,
           "2026-05-09": 1,
           "2026-05-08": 2,
           "2026-05-03": 1
         },
         "units_by_date": {
+          "2026-05-14": 3,
           "2026-05-13": 8,
-          "2026-05-12": 5,
-          "2026-05-11": 9,
-          "2026-05-10": 8,
+          "2026-05-12": 4,
+          "2026-05-11": 8,
+          "2026-05-10": 6,
           "2026-05-09": 1,
           "2026-05-08": 2,
           "2026-05-03": 1
@@ -10736,8 +10811,9 @@
   "source_groups": {
     "DUY": {
       "label": "DUY",
-      "total_orders": 3123,
+      "total_orders": 3156,
       "total_orders_by_date": {
+        "2026-05-14": 37,
         "2026-05-13": 50,
         "2026-05-12": 54,
         "2026-05-11": 40,
@@ -10818,23 +10894,23 @@
         "2026-02-24": 149,
         "2026-02-23": 155,
         "2026-02-22": 1,
-        "2026-02-13": 9
+        "2026-02-13": 5
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 995000.0,
-          "2026-05-11": 995000.0,
-          "2026-05-10": 7276000.0,
-          "2026-05-09": 4924000.0,
-          "2026-05-08": 4378000.0,
+          "2026-05-12": 3893000.0,
+          "2026-05-11": 3943000.0,
+          "2026-05-10": 10964000.0,
+          "2026-05-09": 6572000.0,
+          "2026-05-08": 5373000.0,
           "2026-05-07": 10261000.0,
-          "2026-05-06": 10404000.0,
+          "2026-05-06": 10802000.0,
           "2026-05-05": 7668000.0,
           "2026-05-04": 9117000.0,
           "2026-05-03": 20436000.0,
           "2026-05-02": 5273000.0,
           "2026-05-01": 10090000.0,
-          "2026-04-30": 8029000.0,
+          "2026-04-30": 8228000.0,
           "2026-04-29": 5174000.0,
           "2026-04-28": 14819000.0,
           "2026-04-27": 20335000.0,
@@ -10901,16 +10977,17 @@
           "2026-02-24": 54437000.0,
           "2026-02-23": 58663000.0,
           "2026-02-22": 199000.0,
-          "2026-02-13": 1791000.0
+          "2026-02-13": 995000.0
         },
         "returning": {
+          "2026-05-09": 199000.0,
           "2026-05-07": 199000.0,
-          "2026-05-06": 4997000.0,
+          "2026-05-06": 5793000.0,
           "2026-05-05": 2500000.0,
           "2026-05-04": 398000.0,
           "2026-05-03": 398000.0,
           "2026-05-02": 597000.0,
-          "2026-05-01": 398000.0,
+          "2026-05-01": 597000.0,
           "2026-04-30": 1698000.0,
           "2026-04-29": 2799000.0,
           "2026-04-28": 3545000.0,
@@ -10958,8 +11035,7 @@
           "2026-02-27": 199000.0,
           "2026-02-26": 199000.0,
           "2026-02-24": 1990000.0,
-          "2026-02-23": 3296000.0,
-          "2026-02-13": 199000.0
+          "2026-02-23": 3296000.0
         },
         "returned": {
           "2026-05-04": 597000.0,
@@ -11029,6 +11105,7 @@
           "2026-02-23": 21283000.0
         },
         "canceled": {
+          "2026-05-14": 199000.0,
           "2026-05-12": 398000.0,
           "2026-05-10": 199000.0,
           "2026-04-24": 1250000.0,
@@ -11043,19 +11120,20 @@
           "2026-02-23": 199000.0
         },
         "other": {
+          "2026-05-14": 16014000.0,
           "2026-05-13": 19295000.0,
-          "2026-05-12": 14546000.0,
-          "2026-05-11": 13713000.0,
-          "2026-05-10": 20137000.0,
-          "2026-05-09": 6387000.0,
-          "2026-05-08": 3489000.0,
+          "2026-05-12": 11648000.0,
+          "2026-05-11": 10765000.0,
+          "2026-05-10": 16449000.0,
+          "2026-05-09": 4540000.0,
+          "2026-05-08": 2494000.0,
           "2026-05-07": 1194000.0,
-          "2026-05-06": 8340000.0,
+          "2026-05-06": 7146000.0,
           "2026-05-05": 597000.0,
           "2026-05-03": 597000.0,
           "2026-05-02": 199000.0,
-          "2026-05-01": 597000.0,
-          "2026-04-30": 398000.0,
+          "2026-05-01": 398000.0,
+          "2026-04-30": 199000.0,
           "2026-04-29": 2699000.0,
           "2026-04-28": 2500000.0,
           "2026-04-27": 199000.0,
@@ -11067,19 +11145,19 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 4,
-          "2026-05-11": 5,
-          "2026-05-10": 21,
-          "2026-05-09": 14,
-          "2026-05-08": 20,
+          "2026-05-12": 7,
+          "2026-05-11": 8,
+          "2026-05-10": 32,
+          "2026-05-09": 16,
+          "2026-05-08": 24,
           "2026-05-07": 34,
-          "2026-05-06": 41,
+          "2026-05-06": 43,
           "2026-05-05": 28,
           "2026-05-04": 32,
           "2026-05-03": 63,
           "2026-05-02": 22,
           "2026-05-01": 26,
-          "2026-04-30": 22,
+          "2026-04-30": 23,
           "2026-04-29": 20,
           "2026-04-28": 33,
           "2026-04-27": 54,
@@ -11146,16 +11224,17 @@
           "2026-02-24": 119,
           "2026-02-23": 121,
           "2026-02-22": 1,
-          "2026-02-13": 8
+          "2026-02-13": 5
         },
         "returning": {
+          "2026-05-09": 1,
           "2026-05-07": 1,
-          "2026-05-06": 4,
+          "2026-05-06": 7,
           "2026-05-05": 1,
           "2026-05-04": 2,
           "2026-05-03": 2,
           "2026-05-02": 2,
-          "2026-05-01": 2,
+          "2026-05-01": 3,
           "2026-04-30": 3,
           "2026-04-29": 3,
           "2026-04-28": 7,
@@ -11203,8 +11282,7 @@
           "2026-02-27": 1,
           "2026-02-26": 1,
           "2026-02-24": 7,
-          "2026-02-23": 5,
-          "2026-02-13": 1
+          "2026-02-23": 5
         },
         "returned": {
           "2026-05-04": 2,
@@ -11274,6 +11352,7 @@
           "2026-02-23": 28
         },
         "canceled": {
+          "2026-05-14": 1,
           "2026-05-12": 1,
           "2026-05-10": 1,
           "2026-04-24": 1,
@@ -11288,19 +11367,20 @@
           "2026-02-23": 1
         },
         "other": {
+          "2026-05-14": 36,
           "2026-05-13": 50,
-          "2026-05-12": 49,
-          "2026-05-11": 35,
-          "2026-05-10": 56,
-          "2026-05-09": 13,
-          "2026-05-08": 9,
+          "2026-05-12": 46,
+          "2026-05-11": 32,
+          "2026-05-10": 45,
+          "2026-05-09": 10,
+          "2026-05-08": 5,
           "2026-05-07": 6,
-          "2026-05-06": 12,
+          "2026-05-06": 7,
           "2026-05-05": 3,
           "2026-05-03": 3,
           "2026-05-02": 2,
-          "2026-05-01": 3,
-          "2026-04-30": 2,
+          "2026-05-01": 2,
+          "2026-04-30": 1,
           "2026-04-29": 2,
           "2026-04-28": 1,
           "2026-04-27": 1,
@@ -11312,32 +11392,33 @@
       },
       "summary": {
         "delivered": {
-          "orders": 2483,
-          "total": 988355000.0
+          "orders": 2506,
+          "total": 1000333000.0
         },
         "returning": {
-          "orders": 139,
-          "total": 86263000.0
+          "orders": 143,
+          "total": 87258000.0
         },
         "returned": {
           "orders": 238,
           "total": 210944000.0
         },
         "canceled": {
-          "orders": 12,
-          "total": 7221000.0
+          "orders": 13,
+          "total": 7420000.0
         },
         "other": {
-          "orders": 251,
-          "total": 95285000.0
+          "orders": 256,
+          "total": 97331000.0
         }
       },
       "products": {
         "D1": {
-          "total": 317500000.0,
-          "orders": 127,
-          "units": 127,
+          "total": 322500000.0,
+          "orders": 129,
+          "units": 129,
           "by_date": {
+            "2026-05-12": 2500000.0,
             "2026-05-07": 2500000.0,
             "2026-05-01": 2500000.0,
             "2026-04-28": 5000000.0,
@@ -11388,12 +11469,13 @@
             "2026-04-18": 2500000.0,
             "2026-04-03": 2500000.0,
             "2026-03-30": 2500000.0,
+            "2026-05-14": 5000000.0,
             "2026-05-13": 5000000.0,
-            "2026-05-12": 2500000.0,
             "2026-05-10": 2500000.0,
             "2026-04-29": 2500000.0
           },
           "orders_by_date": {
+            "2026-05-12": 1,
             "2026-05-07": 1,
             "2026-05-01": 1,
             "2026-04-28": 2,
@@ -11444,12 +11526,13 @@
             "2026-04-18": 1,
             "2026-04-03": 1,
             "2026-03-30": 1,
+            "2026-05-14": 2,
             "2026-05-13": 2,
-            "2026-05-12": 1,
             "2026-05-10": 1,
             "2026-04-29": 1
           },
           "units_by_date": {
+            "2026-05-12": 1,
             "2026-05-07": 1,
             "2026-05-01": 1,
             "2026-04-28": 2,
@@ -11500,8 +11583,8 @@
             "2026-04-18": 1,
             "2026-04-03": 1,
             "2026-03-30": 1,
+            "2026-05-14": 2,
             "2026-05-13": 2,
-            "2026-05-12": 1,
             "2026-05-10": 1,
             "2026-04-29": 1
           }
@@ -11559,10 +11642,12 @@
           "units_by_date": {}
         },
         "DR1": {
-          "total": 148900000.0,
-          "orders": 117,
-          "units": 117,
+          "total": 151500000.0,
+          "orders": 119,
+          "units": 119,
           "by_date": {
+            "2026-05-11": 2600000.0,
+            "2026-05-10": 2600000.0,
             "2026-05-05": 1300000.0,
             "2026-05-04": 1300000.0,
             "2026-05-03": 5200000.0,
@@ -11597,14 +11682,15 @@
             "2026-04-29": 2600000.0,
             "2026-04-25": 1300000.0,
             "2026-03-20": 2500000.0,
+            "2026-05-14": 2600000.0,
             "2026-05-12": 1300000.0,
-            "2026-05-11": 2600000.0,
-            "2026-05-10": 2600000.0,
             "2026-05-09": 1300000.0,
             "2026-05-08": 1300000.0,
             "2026-05-06": 2600000.0
           },
           "orders_by_date": {
+            "2026-05-11": 2,
+            "2026-05-10": 2,
             "2026-05-05": 1,
             "2026-05-04": 1,
             "2026-05-03": 4,
@@ -11639,14 +11725,15 @@
             "2026-04-29": 2,
             "2026-04-25": 1,
             "2026-03-20": 2,
+            "2026-05-14": 2,
             "2026-05-12": 1,
-            "2026-05-11": 2,
-            "2026-05-10": 2,
             "2026-05-09": 1,
             "2026-05-08": 1,
             "2026-05-06": 2
           },
           "units_by_date": {
+            "2026-05-11": 2,
+            "2026-05-10": 2,
             "2026-05-05": 1,
             "2026-05-04": 1,
             "2026-05-03": 4,
@@ -11681,9 +11768,8 @@
             "2026-04-29": 2,
             "2026-04-25": 1,
             "2026-03-20": 2,
+            "2026-05-14": 2,
             "2026-05-12": 1,
-            "2026-05-11": 2,
-            "2026-05-10": 2,
             "2026-05-09": 1,
             "2026-05-08": 1,
             "2026-05-06": 2
@@ -11706,10 +11792,11 @@
           "units_by_date": {}
         },
         "DA8.1": {
-          "total": 214840000.0,
-          "orders": 194,
-          "units": 206,
+          "total": 216090000.0,
+          "orders": 195,
+          "units": 207,
           "by_date": {
+            "2026-05-11": 3750000.0,
             "2026-05-10": 5000000.0,
             "2026-05-09": 3750000.0,
             "2026-05-06": 2500000.0,
@@ -11760,10 +11847,11 @@
             "2026-02-23": 10780000.0,
             "2026-04-26": 1250000.0,
             "2026-04-17": 1250000.0,
-            "2026-05-13": 1250000.0,
-            "2026-05-11": 3750000.0
+            "2026-05-14": 1250000.0,
+            "2026-05-13": 1250000.0
           },
           "orders_by_date": {
+            "2026-05-11": 3,
             "2026-05-10": 4,
             "2026-05-09": 3,
             "2026-05-06": 2,
@@ -11814,10 +11902,11 @@
             "2026-02-23": 11,
             "2026-04-26": 1,
             "2026-04-17": 1,
-            "2026-05-13": 1,
-            "2026-05-11": 3
+            "2026-05-14": 1,
+            "2026-05-13": 1
           },
           "units_by_date": {
+            "2026-05-11": 3,
             "2026-05-10": 4,
             "2026-05-09": 3,
             "2026-05-06": 2,
@@ -11868,8 +11957,8 @@
             "2026-02-23": 11,
             "2026-04-26": 1,
             "2026-04-17": 1,
-            "2026-05-13": 1,
-            "2026-05-11": 3
+            "2026-05-14": 1,
+            "2026-05-13": 1
           }
         },
         "DA8.1 Pro": {
@@ -11881,9 +11970,9 @@
           "units_by_date": {}
         },
         "Noma 911": {
-          "total": 604761000.0,
-          "orders": 2611,
-          "units": 2876,
+          "total": 611328000.0,
+          "orders": 2639,
+          "units": 2908,
           "by_date": {
             "2026-05-12": 12139000.0,
             "2026-05-11": 8358000.0,
@@ -11964,7 +12053,8 @@
             "2026-02-24": 27064000.0,
             "2026-02-23": 27263000.0,
             "2026-02-22": 199000.0,
-            "2026-02-13": 1791000.0,
+            "2026-02-13": 995000.0,
+            "2026-05-14": 7363000.0,
             "2026-05-13": 10945000.0
           },
           "orders_by_date": {
@@ -12047,7 +12137,8 @@
             "2026-02-24": 115,
             "2026-02-23": 116,
             "2026-02-22": 1,
-            "2026-02-13": 9,
+            "2026-02-13": 5,
+            "2026-05-14": 32,
             "2026-05-13": 46
           },
           "units_by_date": {
@@ -12130,16 +12221,18 @@
             "2026-02-24": 124,
             "2026-02-23": 128,
             "2026-02-22": 1,
-            "2026-02-13": 9,
+            "2026-02-13": 5,
+            "2026-05-14": 36,
             "2026-05-13": 52
           }
         },
         "Noma 922": {
-          "total": 8955000.0,
+          "total": 8756000.0,
           "orders": 208,
           "units": 208,
           "by_date": {
             "2026-05-12": 0.0,
+            "2026-05-11": 0.0,
             "2026-05-10": 398000.0,
             "2026-05-09": 199000.0,
             "2026-05-08": 199000.0,
@@ -12197,13 +12290,13 @@
             "2026-02-25": 398000.0,
             "2026-02-24": 199000.0,
             "2026-02-23": 199000.0,
-            "2026-02-13": 199000.0,
             "2026-03-26": 199000.0,
-            "2026-05-13": 0.0,
-            "2026-05-11": 0.0
+            "2026-05-14": 0.0,
+            "2026-05-13": 0.0
           },
           "orders_by_date": {
             "2026-05-12": 5,
+            "2026-05-11": 5,
             "2026-05-10": 10,
             "2026-05-09": 2,
             "2026-05-08": 4,
@@ -12261,13 +12354,13 @@
             "2026-02-25": 12,
             "2026-02-24": 13,
             "2026-02-23": 10,
-            "2026-02-13": 1,
             "2026-03-26": 1,
-            "2026-05-13": 3,
-            "2026-05-11": 5
+            "2026-05-14": 1,
+            "2026-05-13": 3
           },
           "units_by_date": {
             "2026-05-12": 5,
+            "2026-05-11": 5,
             "2026-05-10": 10,
             "2026-05-09": 2,
             "2026-05-08": 4,
@@ -12325,20 +12418,20 @@
             "2026-02-25": 12,
             "2026-02-24": 13,
             "2026-02-23": 10,
-            "2026-02-13": 1,
             "2026-03-26": 1,
-            "2026-05-13": 3,
-            "2026-05-11": 5
+            "2026-05-14": 1,
+            "2026-05-13": 3
           }
         }
       },
       "products_by_status": {
         "delivered": {
           "D1": {
-            "total": 160000000.0,
-            "orders": 64,
-            "units": 64,
+            "total": 162500000.0,
+            "orders": 65,
+            "units": 65,
             "by_date": {
+              "2026-05-12": 2500000.0,
               "2026-05-07": 2500000.0,
               "2026-05-01": 2500000.0,
               "2026-04-28": 2500000.0,
@@ -12378,6 +12471,7 @@
               "2026-02-23": 15000000.0
             },
             "orders_by_date": {
+              "2026-05-12": 1,
               "2026-05-07": 1,
               "2026-05-01": 1,
               "2026-04-28": 1,
@@ -12417,6 +12511,7 @@
               "2026-02-23": 6
             },
             "units_by_date": {
+              "2026-05-12": 1,
               "2026-05-07": 1,
               "2026-05-01": 1,
               "2026-04-28": 1,
@@ -12503,10 +12598,12 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 100600000.0,
-            "orders": 79,
-            "units": 79,
+            "total": 103200000.0,
+            "orders": 81,
+            "units": 81,
             "by_date": {
+              "2026-05-11": 1300000.0,
+              "2026-05-10": 1300000.0,
               "2026-05-05": 1300000.0,
               "2026-05-04": 1300000.0,
               "2026-05-03": 5200000.0,
@@ -12540,6 +12637,8 @@
               "2026-02-23": 8400000.0
             },
             "orders_by_date": {
+              "2026-05-11": 1,
+              "2026-05-10": 1,
               "2026-05-05": 1,
               "2026-05-04": 1,
               "2026-05-03": 4,
@@ -12573,6 +12672,8 @@
               "2026-02-23": 7
             },
             "units_by_date": {
+              "2026-05-11": 1,
+              "2026-05-10": 1,
               "2026-05-05": 1,
               "2026-05-04": 1,
               "2026-05-03": 4,
@@ -12623,12 +12724,13 @@
             "units_by_date": {}
           },
           "DA8.1": {
-            "total": 162230000.0,
-            "orders": 148,
-            "units": 157,
+            "total": 164730000.0,
+            "orders": 150,
+            "units": 159,
             "by_date": {
+              "2026-05-11": 1250000.0,
               "2026-05-10": 2500000.0,
-              "2026-05-09": 1250000.0,
+              "2026-05-09": 2500000.0,
               "2026-05-06": 1250000.0,
               "2026-05-04": 1250000.0,
               "2026-05-03": 2500000.0,
@@ -12677,8 +12779,9 @@
               "2026-02-23": 5880000.0
             },
             "orders_by_date": {
+              "2026-05-11": 1,
               "2026-05-10": 2,
-              "2026-05-09": 1,
+              "2026-05-09": 2,
               "2026-05-06": 1,
               "2026-05-04": 1,
               "2026-05-03": 2,
@@ -12727,8 +12830,9 @@
               "2026-02-23": 6
             },
             "units_by_date": {
+              "2026-05-11": 1,
               "2026-05-10": 2,
-              "2026-05-09": 1,
+              "2026-05-09": 2,
               "2026-05-06": 1,
               "2026-05-04": 1,
               "2026-05-03": 2,
@@ -12786,23 +12890,23 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 494316000.0,
-            "orders": 2139,
-            "units": 2350,
+            "total": 498893000.0,
+            "orders": 2157,
+            "units": 2370,
             "by_date": {
-              "2026-05-12": 995000.0,
-              "2026-05-11": 995000.0,
-              "2026-05-10": 4776000.0,
-              "2026-05-09": 3184000.0,
-              "2026-05-08": 4378000.0,
+              "2026-05-12": 1393000.0,
+              "2026-05-11": 1393000.0,
+              "2026-05-10": 7164000.0,
+              "2026-05-09": 3582000.0,
+              "2026-05-08": 5373000.0,
               "2026-05-07": 7761000.0,
-              "2026-05-06": 9154000.0,
+              "2026-05-06": 9552000.0,
               "2026-05-05": 6368000.0,
               "2026-05-04": 6567000.0,
               "2026-05-03": 12537000.0,
               "2026-05-02": 5174000.0,
               "2026-05-01": 5174000.0,
-              "2026-04-30": 4179000.0,
+              "2026-04-30": 4378000.0,
               "2026-04-29": 5174000.0,
               "2026-04-28": 6766000.0,
               "2026-04-27": 10945000.0,
@@ -12869,22 +12973,22 @@
               "2026-02-24": 22089000.0,
               "2026-02-23": 23084000.0,
               "2026-02-22": 199000.0,
-              "2026-02-13": 1592000.0
+              "2026-02-13": 995000.0
             },
             "orders_by_date": {
-              "2026-05-12": 4,
-              "2026-05-11": 5,
-              "2026-05-10": 19,
-              "2026-05-09": 13,
-              "2026-05-08": 20,
+              "2026-05-12": 6,
+              "2026-05-11": 6,
+              "2026-05-10": 29,
+              "2026-05-09": 14,
+              "2026-05-08": 24,
               "2026-05-07": 33,
-              "2026-05-06": 40,
+              "2026-05-06": 42,
               "2026-05-05": 27,
               "2026-05-04": 30,
               "2026-05-03": 56,
               "2026-05-02": 21,
               "2026-05-01": 23,
-              "2026-04-30": 19,
+              "2026-04-30": 20,
               "2026-04-29": 20,
               "2026-04-28": 28,
               "2026-04-27": 47,
@@ -12951,22 +13055,22 @@
               "2026-02-24": 95,
               "2026-02-23": 97,
               "2026-02-22": 1,
-              "2026-02-13": 8
+              "2026-02-13": 5
             },
             "units_by_date": {
-              "2026-05-12": 4,
-              "2026-05-11": 5,
-              "2026-05-10": 22,
-              "2026-05-09": 15,
-              "2026-05-08": 20,
+              "2026-05-12": 6,
+              "2026-05-11": 6,
+              "2026-05-10": 32,
+              "2026-05-09": 17,
+              "2026-05-08": 25,
               "2026-05-07": 38,
-              "2026-05-06": 46,
+              "2026-05-06": 48,
               "2026-05-05": 29,
               "2026-05-04": 32,
               "2026-05-03": 63,
               "2026-05-02": 25,
               "2026-05-01": 26,
-              "2026-04-30": 21,
+              "2026-04-30": 22,
               "2026-04-29": 26,
               "2026-04-28": 33,
               "2026-04-27": 51,
@@ -13033,15 +13137,16 @@
               "2026-02-24": 101,
               "2026-02-23": 108,
               "2026-02-22": 1,
-              "2026-02-13": 8
+              "2026-02-13": 5
             }
           },
           "Noma 922": {
-            "total": 6965000.0,
-            "orders": 169,
-            "units": 169,
+            "total": 6766000.0,
+            "orders": 171,
+            "units": 171,
             "by_date": {
               "2026-05-12": 0.0,
+              "2026-05-11": 0.0,
               "2026-05-10": 0.0,
               "2026-05-09": 0.0,
               "2026-05-08": 0.0,
@@ -13098,12 +13203,12 @@
               "2026-02-26": 398000.0,
               "2026-02-25": 398000.0,
               "2026-02-24": 199000.0,
-              "2026-02-23": 0.0,
-              "2026-02-13": 199000.0
+              "2026-02-23": 0.0
             },
             "orders_by_date": {
               "2026-05-12": 1,
-              "2026-05-10": 2,
+              "2026-05-11": 1,
+              "2026-05-10": 4,
               "2026-05-09": 1,
               "2026-05-08": 2,
               "2026-05-07": 1,
@@ -13159,12 +13264,12 @@
               "2026-02-26": 3,
               "2026-02-25": 12,
               "2026-02-24": 11,
-              "2026-02-23": 8,
-              "2026-02-13": 1
+              "2026-02-23": 8
             },
             "units_by_date": {
               "2026-05-12": 1,
-              "2026-05-10": 2,
+              "2026-05-11": 1,
+              "2026-05-10": 4,
               "2026-05-09": 1,
               "2026-05-08": 2,
               "2026-05-07": 1,
@@ -13220,8 +13325,7 @@
               "2026-02-26": 3,
               "2026-02-25": 12,
               "2026-02-24": 11,
-              "2026-02-23": 8,
-              "2026-02-13": 1
+              "2026-02-23": 8
             }
           }
         },
@@ -13417,16 +13521,17 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 23084000.0,
-            "orders": 103,
-            "units": 112,
+            "total": 24079000.0,
+            "orders": 107,
+            "units": 117,
             "by_date": {
+              "2026-05-09": 199000.0,
               "2026-05-07": 199000.0,
-              "2026-05-06": 597000.0,
+              "2026-05-06": 1393000.0,
               "2026-05-04": 398000.0,
               "2026-05-03": 398000.0,
               "2026-05-02": 597000.0,
-              "2026-05-01": 398000.0,
+              "2026-05-01": 597000.0,
               "2026-04-30": 398000.0,
               "2026-04-29": 199000.0,
               "2026-04-28": 995000.0,
@@ -13471,16 +13576,16 @@
               "2026-02-27": 199000.0,
               "2026-02-26": 199000.0,
               "2026-02-24": 1990000.0,
-              "2026-02-23": 796000.0,
-              "2026-02-13": 199000.0
+              "2026-02-23": 796000.0
             },
             "orders_by_date": {
+              "2026-05-09": 1,
               "2026-05-07": 1,
-              "2026-05-06": 2,
+              "2026-05-06": 5,
               "2026-05-04": 2,
               "2026-05-03": 2,
               "2026-05-02": 2,
-              "2026-05-01": 2,
+              "2026-05-01": 3,
               "2026-04-30": 2,
               "2026-04-29": 1,
               "2026-04-28": 5,
@@ -13525,16 +13630,16 @@
               "2026-02-27": 1,
               "2026-02-26": 1,
               "2026-02-24": 7,
-              "2026-02-23": 4,
-              "2026-02-13": 1
+              "2026-02-23": 4
             },
             "units_by_date": {
+              "2026-05-09": 1,
               "2026-05-07": 1,
-              "2026-05-06": 3,
+              "2026-05-06": 7,
               "2026-05-04": 2,
               "2026-05-03": 2,
               "2026-05-02": 3,
-              "2026-05-01": 2,
+              "2026-05-01": 3,
               "2026-04-30": 2,
               "2026-04-29": 1,
               "2026-04-28": 5,
@@ -13579,8 +13684,7 @@
               "2026-02-27": 1,
               "2026-02-26": 1,
               "2026-02-24": 9,
-              "2026-02-23": 4,
-              "2026-02-13": 1
+              "2026-02-23": 4
             }
           },
           "Noma 922": {
@@ -14190,10 +14294,11 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 1791000.0,
-            "orders": 7,
-            "units": 8,
+            "total": 1990000.0,
+            "orders": 8,
+            "units": 9,
             "by_date": {
+              "2026-05-14": 199000.0,
               "2026-05-12": 398000.0,
               "2026-05-10": 199000.0,
               "2026-04-07": 398000.0,
@@ -14203,6 +14308,7 @@
               "2026-02-23": 199000.0
             },
             "orders_by_date": {
+              "2026-05-14": 1,
               "2026-05-12": 1,
               "2026-05-10": 1,
               "2026-04-07": 1,
@@ -14212,6 +14318,7 @@
               "2026-02-23": 1
             },
             "units_by_date": {
+              "2026-05-14": 1,
               "2026-05-12": 1,
               "2026-05-10": 1,
               "2026-04-07": 2,
@@ -14238,28 +14345,28 @@
         },
         "other": {
           "D1": {
-            "total": 17500000.0,
-            "orders": 7,
-            "units": 7,
+            "total": 20000000.0,
+            "orders": 8,
+            "units": 8,
             "by_date": {
+              "2026-05-14": 5000000.0,
               "2026-05-13": 5000000.0,
-              "2026-05-12": 2500000.0,
               "2026-05-10": 2500000.0,
               "2026-05-06": 2500000.0,
               "2026-04-29": 2500000.0,
               "2026-04-28": 2500000.0
             },
             "orders_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 2,
-              "2026-05-12": 1,
               "2026-05-10": 1,
               "2026-05-06": 1,
               "2026-04-29": 1,
               "2026-04-28": 1
             },
             "units_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 2,
-              "2026-05-12": 1,
               "2026-05-10": 1,
               "2026-05-06": 1,
               "2026-04-29": 1,
@@ -14311,25 +14418,28 @@
             "orders": 9,
             "units": 9,
             "by_date": {
+              "2026-05-14": 2600000.0,
               "2026-05-12": 1300000.0,
-              "2026-05-11": 2600000.0,
-              "2026-05-10": 2600000.0,
+              "2026-05-11": 1300000.0,
+              "2026-05-10": 1300000.0,
               "2026-05-09": 1300000.0,
               "2026-05-08": 1300000.0,
               "2026-05-06": 2600000.0
             },
             "orders_by_date": {
+              "2026-05-14": 2,
               "2026-05-12": 1,
-              "2026-05-11": 2,
-              "2026-05-10": 2,
+              "2026-05-11": 1,
+              "2026-05-10": 1,
               "2026-05-09": 1,
               "2026-05-08": 1,
               "2026-05-06": 2
             },
             "units_by_date": {
+              "2026-05-14": 2,
               "2026-05-12": 1,
-              "2026-05-11": 2,
-              "2026-05-10": 2,
+              "2026-05-11": 1,
+              "2026-05-10": 1,
               "2026-05-09": 1,
               "2026-05-08": 1,
               "2026-05-06": 2
@@ -14352,28 +14462,31 @@
             "units_by_date": {}
           },
           "DA8.1": {
-            "total": 11250000.0,
-            "orders": 9,
-            "units": 9,
+            "total": 10000000.0,
+            "orders": 8,
+            "units": 8,
             "by_date": {
+              "2026-05-14": 1250000.0,
               "2026-05-13": 1250000.0,
-              "2026-05-11": 3750000.0,
+              "2026-05-11": 2500000.0,
               "2026-05-10": 2500000.0,
-              "2026-05-09": 2500000.0,
+              "2026-05-09": 1250000.0,
               "2026-05-06": 1250000.0
             },
             "orders_by_date": {
+              "2026-05-14": 1,
               "2026-05-13": 1,
-              "2026-05-11": 3,
+              "2026-05-11": 2,
               "2026-05-10": 2,
-              "2026-05-09": 2,
+              "2026-05-09": 1,
               "2026-05-06": 1
             },
             "units_by_date": {
+              "2026-05-14": 1,
               "2026-05-13": 1,
-              "2026-05-11": 3,
+              "2026-05-11": 2,
               "2026-05-10": 2,
-              "2026-05-09": 2,
+              "2026-05-09": 1,
               "2026-05-06": 1
             }
           },
@@ -14386,61 +14499,64 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 51939000.0,
-            "orders": 221,
-            "units": 243,
+            "total": 52735000.0,
+            "orders": 226,
+            "units": 249,
             "by_date": {
+              "2026-05-14": 7164000.0,
               "2026-05-13": 10945000.0,
-              "2026-05-12": 10746000.0,
-              "2026-05-11": 7363000.0,
-              "2026-05-10": 12139000.0,
-              "2026-05-09": 2388000.0,
-              "2026-05-08": 1990000.0,
+              "2026-05-12": 10348000.0,
+              "2026-05-11": 6965000.0,
+              "2026-05-10": 9751000.0,
+              "2026-05-09": 1791000.0,
+              "2026-05-08": 995000.0,
               "2026-05-07": 1194000.0,
-              "2026-05-06": 1990000.0,
+              "2026-05-06": 796000.0,
               "2026-05-05": 597000.0,
               "2026-05-03": 597000.0,
               "2026-05-02": 199000.0,
-              "2026-05-01": 597000.0,
-              "2026-04-30": 398000.0,
+              "2026-05-01": 398000.0,
+              "2026-04-30": 199000.0,
               "2026-04-29": 199000.0,
               "2026-04-27": 199000.0,
               "2026-04-25": 199000.0,
               "2026-04-01": 199000.0
             },
             "orders_by_date": {
+              "2026-05-14": 31,
               "2026-05-13": 46,
-              "2026-05-12": 47,
-              "2026-05-11": 30,
-              "2026-05-10": 50,
-              "2026-05-09": 10,
-              "2026-05-08": 8,
+              "2026-05-12": 45,
+              "2026-05-11": 29,
+              "2026-05-10": 40,
+              "2026-05-09": 8,
+              "2026-05-08": 4,
               "2026-05-07": 6,
-              "2026-05-06": 8,
+              "2026-05-06": 3,
               "2026-05-05": 3,
               "2026-05-03": 3,
               "2026-05-02": 1,
-              "2026-05-01": 3,
-              "2026-04-30": 2,
+              "2026-05-01": 2,
+              "2026-04-30": 1,
               "2026-04-29": 1,
               "2026-04-27": 1,
               "2026-04-25": 1,
               "2026-04-01": 1
             },
             "units_by_date": {
+              "2026-05-14": 35,
               "2026-05-13": 52,
-              "2026-05-12": 51,
-              "2026-05-11": 32,
-              "2026-05-10": 55,
-              "2026-05-09": 12,
-              "2026-05-08": 9,
+              "2026-05-12": 49,
+              "2026-05-11": 31,
+              "2026-05-10": 45,
+              "2026-05-09": 9,
+              "2026-05-08": 4,
               "2026-05-07": 6,
-              "2026-05-06": 10,
+              "2026-05-06": 4,
               "2026-05-05": 3,
               "2026-05-03": 3,
               "2026-05-02": 1,
-              "2026-05-01": 3,
-              "2026-04-30": 2,
+              "2026-05-01": 2,
+              "2026-04-30": 1,
               "2026-04-29": 1,
               "2026-04-27": 1,
               "2026-04-25": 1,
@@ -14449,9 +14565,10 @@
           },
           "Noma 922": {
             "total": 796000.0,
-            "orders": 22,
-            "units": 22,
+            "orders": 20,
+            "units": 20,
             "by_date": {
+              "2026-05-14": 0.0,
               "2026-05-13": 0.0,
               "2026-05-12": 0.0,
               "2026-05-11": 0.0,
@@ -14460,18 +14577,20 @@
               "2026-05-08": 199000.0
             },
             "orders_by_date": {
+              "2026-05-14": 1,
               "2026-05-13": 3,
               "2026-05-12": 3,
-              "2026-05-11": 5,
-              "2026-05-10": 8,
+              "2026-05-11": 4,
+              "2026-05-10": 6,
               "2026-05-09": 1,
               "2026-05-08": 2
             },
             "units_by_date": {
+              "2026-05-14": 1,
               "2026-05-13": 3,
               "2026-05-12": 3,
-              "2026-05-11": 5,
-              "2026-05-10": 8,
+              "2026-05-11": 4,
+              "2026-05-10": 6,
               "2026-05-09": 1,
               "2026-05-08": 2
             }
@@ -14481,8 +14600,9 @@
     },
     "PHUONG_NAM": {
       "label": "PHƯƠNG NAM",
-      "total_orders": 1219,
+      "total_orders": 1271,
       "total_orders_by_date": {
+        "2026-05-14": 52,
         "2026-05-13": 96,
         "2026-05-12": 90,
         "2026-05-11": 132,
@@ -14512,14 +14632,15 @@
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 1991000.0,
-          "2026-05-11": 4378000.0,
-          "2026-05-10": 8756000.0,
-          "2026-05-09": 5970000.0,
-          "2026-05-08": 9365000.0,
-          "2026-05-07": 15236000.0,
+          "2026-05-13": 398000.0,
+          "2026-05-12": 3384000.0,
+          "2026-05-11": 7761000.0,
+          "2026-05-10": 13333000.0,
+          "2026-05-09": 6567000.0,
+          "2026-05-08": 9763000.0,
+          "2026-05-07": 15435000.0,
           "2026-05-06": 13835000.0,
-          "2026-05-05": 12736000.0,
+          "2026-05-05": 12935000.0,
           "2026-05-04": 16916000.0,
           "2026-05-03": 13731000.0,
           "2026-05-02": 8756000.0,
@@ -14541,7 +14662,7 @@
         "returning": {
           "2026-05-08": 199000.0,
           "2026-05-07": 199000.0,
-          "2026-05-05": 398000.0,
+          "2026-05-05": 597000.0,
           "2026-05-04": 398000.0,
           "2026-05-03": 1593000.0,
           "2026-05-02": 597000.0,
@@ -14571,15 +14692,16 @@
           "2026-05-03": 199000.0
         },
         "other": {
-          "2026-05-13": 20497000.0,
-          "2026-05-12": 17313000.0,
-          "2026-05-11": 23880000.0,
-          "2026-05-10": 18109000.0,
-          "2026-05-09": 2189000.0,
-          "2026-05-08": 4490000.0,
-          "2026-05-07": 2189000.0,
+          "2026-05-14": 11940000.0,
+          "2026-05-13": 20099000.0,
+          "2026-05-12": 15920000.0,
+          "2026-05-11": 20497000.0,
+          "2026-05-10": 13532000.0,
+          "2026-05-09": 1592000.0,
+          "2026-05-08": 4092000.0,
+          "2026-05-07": 1990000.0,
           "2026-05-06": 199000.0,
-          "2026-05-05": 1194000.0,
+          "2026-05-05": 796000.0,
           "2026-05-04": 796000.0,
           "2026-05-03": 1194000.0,
           "2026-05-02": 597000.0,
@@ -14590,14 +14712,15 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 10,
-          "2026-05-11": 21,
-          "2026-05-10": 43,
-          "2026-05-09": 24,
-          "2026-05-08": 32,
-          "2026-05-07": 63,
+          "2026-05-13": 2,
+          "2026-05-12": 15,
+          "2026-05-11": 38,
+          "2026-05-10": 65,
+          "2026-05-09": 27,
+          "2026-05-08": 34,
+          "2026-05-07": 64,
           "2026-05-06": 50,
-          "2026-05-05": 61,
+          "2026-05-05": 62,
           "2026-05-04": 77,
           "2026-05-03": 64,
           "2026-05-02": 39,
@@ -14619,7 +14742,7 @@
         "returning": {
           "2026-05-08": 1,
           "2026-05-07": 1,
-          "2026-05-05": 2,
+          "2026-05-05": 3,
           "2026-05-04": 2,
           "2026-05-03": 7,
           "2026-05-02": 3,
@@ -14649,15 +14772,16 @@
           "2026-05-03": 1
         },
         "other": {
-          "2026-05-13": 96,
-          "2026-05-12": 80,
-          "2026-05-11": 111,
-          "2026-05-10": 88,
-          "2026-05-09": 11,
-          "2026-05-08": 11,
-          "2026-05-07": 11,
+          "2026-05-14": 52,
+          "2026-05-13": 94,
+          "2026-05-12": 75,
+          "2026-05-11": 94,
+          "2026-05-10": 66,
+          "2026-05-09": 8,
+          "2026-05-08": 9,
+          "2026-05-07": 10,
           "2026-05-06": 1,
-          "2026-05-05": 6,
+          "2026-05-05": 4,
           "2026-05-04": 4,
           "2026-05-03": 6,
           "2026-05-02": 3,
@@ -14668,12 +14792,12 @@
       },
       "summary": {
         "delivered": {
-          "orders": 733,
-          "total": 170849000.0
+          "orders": 786,
+          "total": 181993000.0
         },
         "returning": {
-          "orders": 34,
-          "total": 6966000.0
+          "orders": 35,
+          "total": 7165000.0
         },
         "returned": {
           "orders": 15,
@@ -14684,8 +14808,8 @@
           "total": 597000.0
         },
         "other": {
-          "orders": 434,
-          "total": 93842000.0
+          "orders": 432,
+          "total": 94439000.0
         }
       },
       "products": {
@@ -14805,10 +14929,11 @@
           "units_by_date": {}
         },
         "Noma 911": {
-          "total": 255317000.0,
-          "orders": 1191,
-          "units": 1264,
+          "total": 266063000.0,
+          "orders": 1240,
+          "units": 1316,
           "by_date": {
+            "2026-05-13": 19701000.0,
             "2026-05-12": 18905000.0,
             "2026-05-11": 28059000.0,
             "2026-05-10": 27064000.0,
@@ -14834,9 +14959,10 @@
             "2026-04-20": 1592000.0,
             "2026-04-19": 1791000.0,
             "2026-04-18": 796000.0,
-            "2026-05-13": 19701000.0
+            "2026-05-14": 10746000.0
           },
           "orders_by_date": {
+            "2026-05-13": 93,
             "2026-05-12": 88,
             "2026-05-11": 131,
             "2026-05-10": 132,
@@ -14862,9 +14988,10 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
-            "2026-05-13": 93
+            "2026-05-14": 49
           },
           "units_by_date": {
+            "2026-05-13": 97,
             "2026-05-12": 93,
             "2026-05-11": 138,
             "2026-05-10": 136,
@@ -14890,13 +15017,13 @@
             "2026-04-20": 8,
             "2026-04-19": 9,
             "2026-04-18": 4,
-            "2026-05-13": 97
+            "2026-05-14": 52
           }
         },
         "Noma 922": {
           "total": 1990000.0,
-          "orders": 29,
-          "units": 29,
+          "orders": 31,
+          "units": 31,
           "by_date": {
             "2026-05-12": 199000.0,
             "2026-05-09": 0.0,
@@ -14910,6 +15037,7 @@
             "2026-04-27": 0.0,
             "2026-04-25": 0.0,
             "2026-04-23": 0.0,
+            "2026-05-14": 0.0,
             "2026-05-13": 398000.0,
             "2026-05-11": 199000.0
           },
@@ -14926,6 +15054,7 @@
             "2026-04-27": 2,
             "2026-04-25": 1,
             "2026-04-23": 1,
+            "2026-05-14": 2,
             "2026-05-13": 4,
             "2026-05-11": 4
           },
@@ -14942,6 +15071,7 @@
             "2026-04-27": 2,
             "2026-04-25": 1,
             "2026-04-23": 1,
+            "2026-05-14": 2,
             "2026-05-13": 4,
             "2026-05-11": 4
           }
@@ -15065,18 +15195,19 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 155419000.0,
-            "orders": 716,
-            "units": 769,
+            "total": 166563000.0,
+            "orders": 769,
+            "units": 824,
             "by_date": {
-              "2026-05-12": 1592000.0,
-              "2026-05-11": 4378000.0,
-              "2026-05-10": 8756000.0,
-              "2026-05-09": 5572000.0,
-              "2026-05-08": 6766000.0,
-              "2026-05-07": 12736000.0,
+              "2026-05-13": 398000.0,
+              "2026-05-12": 2985000.0,
+              "2026-05-11": 7761000.0,
+              "2026-05-10": 13333000.0,
+              "2026-05-09": 6169000.0,
+              "2026-05-08": 7164000.0,
+              "2026-05-07": 12935000.0,
               "2026-05-06": 10746000.0,
-              "2026-05-05": 12736000.0,
+              "2026-05-05": 12935000.0,
               "2026-05-04": 16716000.0,
               "2026-05-03": 13532000.0,
               "2026-05-02": 8756000.0,
@@ -15096,14 +15227,15 @@
               "2026-04-18": 796000.0
             },
             "orders_by_date": {
-              "2026-05-12": 8,
-              "2026-05-11": 21,
-              "2026-05-10": 43,
-              "2026-05-09": 23,
-              "2026-05-08": 31,
-              "2026-05-07": 62,
+              "2026-05-13": 2,
+              "2026-05-12": 13,
+              "2026-05-11": 38,
+              "2026-05-10": 65,
+              "2026-05-09": 26,
+              "2026-05-08": 33,
+              "2026-05-07": 63,
               "2026-05-06": 48,
-              "2026-05-05": 61,
+              "2026-05-05": 62,
               "2026-05-04": 76,
               "2026-05-03": 63,
               "2026-05-02": 39,
@@ -15123,14 +15255,15 @@
               "2026-04-18": 4
             },
             "units_by_date": {
-              "2026-05-12": 8,
-              "2026-05-11": 22,
-              "2026-05-10": 44,
-              "2026-05-09": 27,
-              "2026-05-08": 34,
-              "2026-05-07": 64,
+              "2026-05-13": 2,
+              "2026-05-12": 14,
+              "2026-05-11": 39,
+              "2026-05-10": 67,
+              "2026-05-09": 30,
+              "2026-05-08": 36,
+              "2026-05-07": 65,
               "2026-05-06": 53,
-              "2026-05-05": 63,
+              "2026-05-05": 64,
               "2026-05-04": 81,
               "2026-05-03": 68,
               "2026-05-02": 43,
@@ -15152,8 +15285,8 @@
           },
           "Noma 922": {
             "total": 796000.0,
-            "orders": 16,
-            "units": 16,
+            "orders": 17,
+            "units": 17,
             "by_date": {
               "2026-05-12": 199000.0,
               "2026-05-09": 0.0,
@@ -15169,7 +15302,7 @@
               "2026-04-23": 0.0
             },
             "orders_by_date": {
-              "2026-05-12": 1,
+              "2026-05-12": 2,
               "2026-05-09": 1,
               "2026-05-06": 1,
               "2026-05-05": 1,
@@ -15183,7 +15316,7 @@
               "2026-04-23": 1
             },
             "units_by_date": {
-              "2026-05-12": 1,
+              "2026-05-12": 2,
               "2026-05-09": 1,
               "2026-05-06": 1,
               "2026-05-05": 1,
@@ -15288,13 +15421,13 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 6766000.0,
-            "orders": 33,
-            "units": 34,
+            "total": 6965000.0,
+            "orders": 34,
+            "units": 35,
             "by_date": {
               "2026-05-08": 199000.0,
               "2026-05-07": 199000.0,
-              "2026-05-05": 398000.0,
+              "2026-05-05": 597000.0,
               "2026-05-04": 398000.0,
               "2026-05-03": 1393000.0,
               "2026-05-02": 597000.0,
@@ -15309,7 +15442,7 @@
             "orders_by_date": {
               "2026-05-08": 1,
               "2026-05-07": 1,
-              "2026-05-05": 2,
+              "2026-05-05": 3,
               "2026-05-04": 2,
               "2026-05-03": 6,
               "2026-05-02": 3,
@@ -15324,7 +15457,7 @@
             "units_by_date": {
               "2026-05-08": 1,
               "2026-05-07": 1,
-              "2026-05-05": 2,
+              "2026-05-05": 3,
               "2026-05-04": 2,
               "2026-05-03": 7,
               "2026-05-02": 3,
@@ -15705,19 +15838,20 @@
             "units_by_date": {}
           },
           "Noma 911": {
-            "total": 89948000.0,
-            "orders": 427,
-            "units": 445,
+            "total": 89351000.0,
+            "orders": 422,
+            "units": 441,
             "by_date": {
-              "2026-05-13": 19701000.0,
-              "2026-05-12": 17313000.0,
-              "2026-05-11": 23681000.0,
-              "2026-05-10": 18109000.0,
-              "2026-05-09": 2189000.0,
-              "2026-05-08": 1990000.0,
-              "2026-05-07": 2189000.0,
+              "2026-05-14": 10746000.0,
+              "2026-05-13": 19303000.0,
+              "2026-05-12": 15920000.0,
+              "2026-05-11": 20298000.0,
+              "2026-05-10": 13532000.0,
+              "2026-05-09": 1592000.0,
+              "2026-05-08": 1592000.0,
+              "2026-05-07": 1990000.0,
               "2026-05-06": 199000.0,
-              "2026-05-05": 1194000.0,
+              "2026-05-05": 796000.0,
               "2026-05-04": 796000.0,
               "2026-05-03": 995000.0,
               "2026-05-02": 597000.0,
@@ -15726,15 +15860,16 @@
               "2026-04-28": 398000.0
             },
             "orders_by_date": {
-              "2026-05-13": 93,
-              "2026-05-12": 80,
-              "2026-05-11": 110,
-              "2026-05-10": 88,
-              "2026-05-09": 11,
-              "2026-05-08": 10,
-              "2026-05-07": 11,
+              "2026-05-14": 49,
+              "2026-05-13": 91,
+              "2026-05-12": 75,
+              "2026-05-11": 93,
+              "2026-05-10": 66,
+              "2026-05-09": 8,
+              "2026-05-08": 8,
+              "2026-05-07": 10,
               "2026-05-06": 1,
-              "2026-05-05": 6,
+              "2026-05-05": 4,
               "2026-05-04": 4,
               "2026-05-03": 5,
               "2026-05-02": 3,
@@ -15743,15 +15878,16 @@
               "2026-04-28": 2
             },
             "units_by_date": {
-              "2026-05-13": 97,
-              "2026-05-12": 85,
-              "2026-05-11": 116,
-              "2026-05-10": 91,
-              "2026-05-09": 11,
-              "2026-05-08": 10,
-              "2026-05-07": 11,
+              "2026-05-14": 52,
+              "2026-05-13": 95,
+              "2026-05-12": 79,
+              "2026-05-11": 99,
+              "2026-05-10": 68,
+              "2026-05-09": 8,
+              "2026-05-08": 8,
+              "2026-05-07": 10,
               "2026-05-06": 1,
-              "2026-05-05": 6,
+              "2026-05-05": 4,
               "2026-05-04": 4,
               "2026-05-03": 5,
               "2026-05-02": 3,
@@ -15762,23 +15898,26 @@
           },
           "Noma 922": {
             "total": 796000.0,
-            "orders": 11,
-            "units": 11,
+            "orders": 12,
+            "units": 12,
             "by_date": {
+              "2026-05-14": 0.0,
               "2026-05-13": 398000.0,
               "2026-05-12": 0.0,
               "2026-05-11": 199000.0,
               "2026-05-03": 199000.0
             },
             "orders_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 4,
-              "2026-05-12": 2,
+              "2026-05-12": 1,
               "2026-05-11": 4,
               "2026-05-03": 1
             },
             "units_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 4,
-              "2026-05-12": 2,
+              "2026-05-12": 1,
               "2026-05-11": 4,
               "2026-05-03": 1
             }
@@ -17156,8 +17295,9 @@
     },
     "ZALO_OA": {
       "label": "Zalo OA",
-      "total_orders": 106,
+      "total_orders": 108,
       "total_orders_by_date": {
+        "2026-05-14": 2,
         "2026-05-13": 1,
         "2026-05-12": 2,
         "2026-05-07": 2,
@@ -17282,6 +17422,7 @@
           "2026-03-14": 2800000.0
         },
         "other": {
+          "2026-05-14": 4150000.0,
           "2026-05-13": 2500000.0,
           "2026-05-12": 1419000.0
         }
@@ -17355,6 +17496,7 @@
           "2026-03-14": 1
         },
         "other": {
+          "2026-05-14": 2,
           "2026-05-13": 1,
           "2026-05-12": 1
         }
@@ -17377,8 +17519,8 @@
           "total": 4300000.0
         },
         "other": {
-          "orders": 2,
-          "total": 3919000.0
+          "orders": 4,
+          "total": 8069000.0
         }
       },
       "products": {
@@ -17512,9 +17654,9 @@
           }
         },
         "DR1": {
-          "total": 20700000.0,
-          "orders": 16,
-          "units": 16,
+          "total": 23300000.0,
+          "orders": 17,
+          "units": 18,
           "by_date": {
             "2026-05-05": 1300000.0,
             "2026-05-04": 1300000.0,
@@ -17528,7 +17670,8 @@
             "2026-03-24": 1300000.0,
             "2026-03-22": 1300000.0,
             "2026-03-20": 1300000.0,
-            "2026-03-11": 1200000.0
+            "2026-03-11": 1200000.0,
+            "2026-05-14": 2600000.0
           },
           "orders_by_date": {
             "2026-05-05": 1,
@@ -17543,7 +17686,8 @@
             "2026-03-24": 1,
             "2026-03-22": 1,
             "2026-03-20": 1,
-            "2026-03-11": 1
+            "2026-03-11": 1,
+            "2026-05-14": 1
           },
           "units_by_date": {
             "2026-05-05": 1,
@@ -17558,7 +17702,8 @@
             "2026-03-24": 1,
             "2026-03-22": 1,
             "2026-03-20": 1,
-            "2026-03-11": 1
+            "2026-03-11": 1,
+            "2026-05-14": 2
           }
         },
         "DR4 Plus": {
@@ -18415,12 +18560,18 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 0.0,
-            "orders": 0,
-            "units": 0,
-            "by_date": {},
-            "orders_by_date": {},
-            "units_by_date": {}
+            "total": 2600000.0,
+            "orders": 1,
+            "units": 2,
+            "by_date": {
+              "2026-05-14": 2600000.0
+            },
+            "orders_by_date": {
+              "2026-05-14": 1
+            },
+            "units_by_date": {
+              "2026-05-14": 2
+            }
           },
           "DR4 Plus": {
             "total": 0.0,
@@ -19595,9 +19746,10 @@
     },
     "FB_PAGE": {
       "label": "Page Facebook",
-      "total_orders": 491,
+      "total_orders": 496,
       "total_orders_by_date": {
-        "2026-05-13": 6,
+        "2026-05-14": 7,
+        "2026-05-13": 7,
         "2026-05-12": 12,
         "2026-05-11": 10,
         "2026-05-10": 12,
@@ -19683,11 +19835,11 @@
         "2026-02-17": 1,
         "2026-02-16": 2,
         "2026-02-15": 1,
-        "2026-02-13": 4
+        "2026-02-13": 1
       },
       "order_revenue_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 199000.0,
+          "2026-05-12": 597000.0,
           "2026-05-07": 398000.0,
           "2026-05-06": 398000.0,
           "2026-05-05": 995000.0,
@@ -19763,8 +19915,9 @@
           "2026-02-25": 1300000.0
         },
         "other": {
+          "2026-05-14": 1698000.0,
           "2026-05-13": 597000.0,
-          "2026-05-12": 597000.0,
+          "2026-05-12": 199000.0,
           "2026-05-11": 398000.0,
           "2026-05-10": 0.0,
           "2026-05-09": 0.0,
@@ -19849,7 +20002,7 @@
       },
       "order_count_by_status_by_date": {
         "delivered": {
-          "2026-05-12": 1,
+          "2026-05-12": 3,
           "2026-05-07": 2,
           "2026-05-06": 2,
           "2026-05-05": 5,
@@ -19925,8 +20078,9 @@
           "2026-02-25": 1
         },
         "other": {
-          "2026-05-13": 6,
-          "2026-05-12": 11,
+          "2026-05-14": 7,
+          "2026-05-13": 7,
+          "2026-05-12": 9,
           "2026-05-11": 10,
           "2026-05-10": 12,
           "2026-05-09": 7,
@@ -20006,13 +20160,13 @@
           "2026-02-17": 1,
           "2026-02-16": 2,
           "2026-02-15": 1,
-          "2026-02-13": 4
+          "2026-02-13": 1
         }
       },
       "summary": {
         "delivered": {
-          "orders": 131,
-          "total": 100104000.0
+          "orders": 133,
+          "total": 100502000.0
         },
         "returning": {
           "orders": 5,
@@ -20027,8 +20181,8 @@
           "total": 2500000.0
         },
         "other": {
-          "orders": 347,
-          "total": 3341000.0
+          "orders": 350,
+          "total": 4641000.0
         }
       },
       "products": {
@@ -20132,23 +20286,26 @@
           "units_by_date": {}
         },
         "DR1": {
-          "total": 3800000.0,
-          "orders": 3,
-          "units": 3,
+          "total": 5100000.0,
+          "orders": 4,
+          "units": 4,
           "by_date": {
             "2026-03-23": 1300000.0,
             "2026-03-17": 1300000.0,
-            "2026-02-23": 1200000.0
+            "2026-02-23": 1200000.0,
+            "2026-05-14": 1300000.0
           },
           "orders_by_date": {
             "2026-03-23": 1,
             "2026-03-17": 1,
-            "2026-02-23": 1
+            "2026-02-23": 1,
+            "2026-05-14": 1
           },
           "units_by_date": {
             "2026-03-23": 1,
             "2026-03-17": 1,
-            "2026-02-23": 1
+            "2026-02-23": 1,
+            "2026-05-14": 1
           }
         },
         "DR4 Plus": {
@@ -20250,9 +20407,9 @@
           }
         },
         "Noma 911": {
-          "total": 20895000.0,
-          "orders": 98,
-          "units": 101,
+          "total": 21293000.0,
+          "orders": 100,
+          "units": 103,
           "by_date": {
             "2026-05-12": 796000.0,
             "2026-05-07": 597000.0,
@@ -20295,6 +20452,7 @@
             "2026-04-11": 199000.0,
             "2026-03-28": 199000.0,
             "2026-03-21": 199000.0,
+            "2026-05-14": 398000.0,
             "2026-05-13": 398000.0,
             "2026-05-11": 398000.0
           },
@@ -20340,6 +20498,7 @@
             "2026-04-11": 1,
             "2026-03-28": 1,
             "2026-03-21": 1,
+            "2026-05-14": 2,
             "2026-05-13": 2,
             "2026-05-11": 2
           },
@@ -20385,6 +20544,7 @@
             "2026-04-11": 1,
             "2026-03-28": 1,
             "2026-03-21": 1,
+            "2026-05-14": 2,
             "2026-05-13": 2,
             "2026-05-11": 2
           }
@@ -20630,11 +20790,11 @@
             }
           },
           "Noma 911": {
-            "total": 17512000.0,
-            "orders": 82,
-            "units": 84,
+            "total": 17910000.0,
+            "orders": 84,
+            "units": 86,
             "by_date": {
-              "2026-05-12": 199000.0,
+              "2026-05-12": 597000.0,
               "2026-05-07": 398000.0,
               "2026-05-06": 398000.0,
               "2026-05-05": 995000.0,
@@ -20674,7 +20834,7 @@
               "2026-02-24": 199000.0
             },
             "orders_by_date": {
-              "2026-05-12": 1,
+              "2026-05-12": 3,
               "2026-05-07": 2,
               "2026-05-06": 2,
               "2026-05-05": 5,
@@ -20714,7 +20874,7 @@
               "2026-02-24": 1
             },
             "units_by_date": {
-              "2026-05-12": 1,
+              "2026-05-12": 3,
               "2026-05-07": 2,
               "2026-05-06": 2,
               "2026-05-05": 5,
@@ -21197,12 +21357,18 @@
             "units_by_date": {}
           },
           "DR1": {
-            "total": 0.0,
-            "orders": 0,
-            "units": 0,
-            "by_date": {},
-            "orders_by_date": {},
-            "units_by_date": {}
+            "total": 1300000.0,
+            "orders": 1,
+            "units": 1,
+            "by_date": {
+              "2026-05-14": 1300000.0
+            },
+            "orders_by_date": {
+              "2026-05-14": 1
+            },
+            "units_by_date": {
+              "2026-05-14": 1
+            }
           },
           "DR4 Plus": {
             "total": 0.0,
@@ -21247,20 +21413,23 @@
             "orders": 8,
             "units": 8,
             "by_date": {
+              "2026-05-14": 398000.0,
               "2026-05-13": 398000.0,
-              "2026-05-12": 597000.0,
+              "2026-05-12": 199000.0,
               "2026-05-11": 398000.0,
               "2026-04-26": 199000.0
             },
             "orders_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 2,
-              "2026-05-12": 3,
+              "2026-05-12": 1,
               "2026-05-11": 2,
               "2026-04-26": 1
             },
             "units_by_date": {
+              "2026-05-14": 2,
               "2026-05-13": 2,
-              "2026-05-12": 3,
+              "2026-05-12": 1,
               "2026-05-11": 2,
               "2026-04-26": 1
             }
@@ -21285,9 +21454,342 @@
   },
   "orders_minimal": [
     {
+      "order_id": 96005,
+      "phone9": "866499902",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:26:40.878701",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 96004,
+      "phone9": "948733441",
+      "status": 0,
+      "inserted_at": "2026-05-14T04:24:49.914959",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 96003,
+      "phone9": "967093688",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:22:49.393616",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 96002,
+      "phone9": "945129456",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:21:02.585049",
+      "vn_date": "2026-05-14",
+      "cod": 2500000.0,
+      "source_name": "DUY - D1"
+    },
+    {
+      "order_id": 95997,
+      "phone9": "909085084",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:10:37.223288",
+      "vn_date": "2026-05-14",
+      "cod": 1250000.0,
+      "source_name": "DUY - DA8.1"
+    },
+    {
+      "order_id": 95994,
+      "phone9": "907636348",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:08:46.828891",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95990,
+      "phone9": "867909876",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:07:39.086760",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95984,
+      "phone9": "968060888",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:06:35.306806",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95983,
+      "phone9": "969512215",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:05:45.959552",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95982,
+      "phone9": "932616656",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:05:35.360602",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95981,
+      "phone9": "332121801",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:05:23.596089",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95980,
+      "phone9": "979732725",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:05:12.379238",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95979,
+      "phone9": "971167607",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:04:25.299789",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95976,
+      "phone9": "905039579",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:02:14.902580",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95975,
+      "phone9": "826968999",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:01:59.156397",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95972,
+      "phone9": "886929787",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:59:09.182560",
+      "vn_date": "2026-05-14",
+      "cod": 1300000.0,
+      "source_name": "DUY - DR1"
+    },
+    {
+      "order_id": 95971,
+      "phone9": "967994941",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:58:39.024020",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95970,
+      "phone9": "903841459",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:56:23.061497",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95963,
+      "phone9": "972943666",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:47:57.186126",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95957,
+      "phone9": "328559817",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:43:02.263938",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95956,
+      "phone9": "985624322",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:40:55.935108",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95951,
+      "phone9": "968998558",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:34:00.853169",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95950,
+      "phone9": "908881943",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:33:14.142331",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95949,
+      "phone9": "968998558",
+      "status": 6,
+      "inserted_at": "2026-05-14T03:32:33.544840",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95946,
+      "phone9": "766638368",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:20:31.248452",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95943,
+      "phone9": "903614147",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:11:47.768605",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95940,
+      "phone9": "945787710",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:10:03.591491",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95929,
+      "phone9": "979260596",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:01:13.834219",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95923,
+      "phone9": "979784199",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:14.643641",
+      "vn_date": "2026-05-14",
+      "cod": 2500000.0,
+      "source_name": "DUY - D1"
+    },
+    {
+      "order_id": 95915,
+      "phone9": "913225177",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:57:07.596966",
+      "vn_date": "2026-05-14",
+      "cod": 1300000.0,
+      "source_name": "DUY - DR1"
+    },
+    {
+      "order_id": 95914,
+      "phone9": "347224489",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:57:02.194932",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95904,
+      "phone9": "976709988",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:50:36.852791",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95898,
+      "phone9": "971111619",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:20:30.320905",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95897,
+      "phone9": "981564799",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:19:39.921915",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95894,
+      "phone9": "915618696",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:17:35.776986",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911"
+    },
+    {
+      "order_id": 95884,
+      "phone9": "935833298",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:00:13.717534",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911 MESSENGER"
+    },
+    {
+      "order_id": 95878,
+      "phone9": "977154834",
+      "status": 9,
+      "inserted_at": "2026-05-14T01:49:56.117843",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "DUY - NOMA 911 MESSENGER"
+    },
+    {
       "order_id": 95720,
       "phone9": "879186945",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T09:24:26.840159",
       "vn_date": "2026-05-13",
       "cod": 2100000.0,
@@ -21296,7 +21798,7 @@
     {
       "order_id": 95719,
       "phone9": "914336263",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T09:17:58.655537",
       "vn_date": "2026-05-13",
       "cod": 2500000.0,
@@ -21305,7 +21807,7 @@
     {
       "order_id": 95706,
       "phone9": "935969797",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T08:53:03.215656",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21314,7 +21816,7 @@
     {
       "order_id": 95702,
       "phone9": "912178957",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T08:47:26.476335",
       "vn_date": "2026-05-13",
       "cod": 2500000.0,
@@ -21323,7 +21825,7 @@
     {
       "order_id": 95701,
       "phone9": "962892566",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T08:46:24.935816",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21332,7 +21834,7 @@
     {
       "order_id": 95696,
       "phone9": "979509463",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T08:39:14.472725",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21341,7 +21843,7 @@
     {
       "order_id": 95691,
       "phone9": "345572796",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T08:21:31.209242",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21350,7 +21852,7 @@
     {
       "order_id": 95681,
       "phone9": "945725999",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:49:06.003301",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21359,7 +21861,7 @@
     {
       "order_id": 95679,
       "phone9": "989938966",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:48:48.924392",
       "vn_date": "2026-05-13",
       "cod": 1250000.0,
@@ -21368,7 +21870,7 @@
     {
       "order_id": 95667,
       "phone9": "945789708",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:33:14.491085",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21377,7 +21879,7 @@
     {
       "order_id": 95666,
       "phone9": "916123181",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:32:23.920262",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21386,7 +21888,7 @@
     {
       "order_id": 95662,
       "phone9": "969145043",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:27:41.669924",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21395,7 +21897,7 @@
     {
       "order_id": 95661,
       "phone9": "981551318",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:27:09.187837",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21404,7 +21906,7 @@
     {
       "order_id": 95657,
       "phone9": "818060555",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:23:11.746046",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21413,7 +21915,7 @@
     {
       "order_id": 95651,
       "phone9": "915217882",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:14:28.969845",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21422,7 +21924,7 @@
     {
       "order_id": 95650,
       "phone9": "985360885",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:14:11.524429",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21431,7 +21933,7 @@
     {
       "order_id": 95647,
       "phone9": "777888008",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:12:39.990985",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21440,7 +21942,7 @@
     {
       "order_id": 95641,
       "phone9": "934100539",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:09:51.068579",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21449,7 +21951,7 @@
     {
       "order_id": 95639,
       "phone9": "349107986",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:09:32.214221",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21458,7 +21960,7 @@
     {
       "order_id": 95627,
       "phone9": "342865208",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:01:02.203571",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21467,7 +21969,7 @@
     {
       "order_id": 95626,
       "phone9": "941387868",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:59:34.738404",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21476,7 +21978,7 @@
     {
       "order_id": 95620,
       "phone9": "918177543",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:56:50.796471",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21485,7 +21987,7 @@
     {
       "order_id": 95619,
       "phone9": "988871290",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:56:27.020375",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21494,7 +21996,7 @@
     {
       "order_id": 95612,
       "phone9": "903167383",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:52:51.343768",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21503,7 +22005,7 @@
     {
       "order_id": 95611,
       "phone9": "986644410",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:52:36.769500",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21512,7 +22014,7 @@
     {
       "order_id": 95606,
       "phone9": "989334275",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:37:53.596638",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21521,7 +22023,7 @@
     {
       "order_id": 95604,
       "phone9": "889169604",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:34:07.722315",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21530,7 +22032,7 @@
     {
       "order_id": 95576,
       "phone9": "912814898",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:51:24.630193",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21539,7 +22041,7 @@
     {
       "order_id": 95572,
       "phone9": "769477456",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:47:28.241109",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21548,7 +22050,7 @@
     {
       "order_id": 95568,
       "phone9": "919674234",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:41:30.866899",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21557,7 +22059,7 @@
     {
       "order_id": 95567,
       "phone9": "944572177",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:41:08.429745",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21566,7 +22068,7 @@
     {
       "order_id": 95566,
       "phone9": "975686954",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:38:28.345349",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -21575,7 +22077,7 @@
     {
       "order_id": 95555,
       "phone9": "824722777",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:24:19.254128",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -21809,7 +22311,7 @@
     {
       "order_id": 95239,
       "phone9": "947339966",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T07:53:27.730822",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -21827,7 +22329,7 @@
     {
       "order_id": 95232,
       "phone9": "989168168",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T07:51:59.242456",
       "vn_date": "2026-05-12",
       "cod": 2500000.0,
@@ -22070,7 +22572,7 @@
     {
       "order_id": 95073,
       "phone9": "969412727",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-12T03:04:05.717828",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -22124,7 +22626,7 @@
     {
       "order_id": 95036,
       "phone9": "865659628",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T02:47:11.735205",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -22259,7 +22761,7 @@
     {
       "order_id": 94860,
       "phone9": "913106620",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T09:27:46.266003",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -22268,7 +22770,7 @@
     {
       "order_id": 94840,
       "phone9": "989056112",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T08:39:30.654431",
       "vn_date": "2026-05-11",
       "cod": 398000.0,
@@ -22286,7 +22788,7 @@
     {
       "order_id": 94793,
       "phone9": "982168822",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T07:48:53.962961",
       "vn_date": "2026-05-11",
       "cod": 1250000.0,
@@ -22295,7 +22797,7 @@
     {
       "order_id": 94785,
       "phone9": "969656462",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T07:34:26.983497",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -22349,7 +22851,7 @@
     {
       "order_id": 94753,
       "phone9": "903595178",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T07:01:17.572316",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -22367,7 +22869,7 @@
     {
       "order_id": 94684,
       "phone9": "918613464",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T03:51:22.790797",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -22394,7 +22896,7 @@
     {
       "order_id": 94658,
       "phone9": "979969630",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T03:13:52.581241",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -22439,7 +22941,7 @@
     {
       "order_id": 94635,
       "phone9": "983536789",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:59:56.884785",
       "vn_date": "2026-05-11",
       "cod": 1300000.0,
@@ -22655,7 +23157,7 @@
     {
       "order_id": 94288,
       "phone9": "937232811",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-10T08:17:24.856524",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22664,7 +23166,7 @@
     {
       "order_id": 94287,
       "phone9": "967523568",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T08:17:04.099735",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22709,7 +23211,7 @@
     {
       "order_id": 94273,
       "phone9": "983832929",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T08:04:06.144964",
       "vn_date": "2026-05-10",
       "cod": 398000.0,
@@ -22736,7 +23238,7 @@
     {
       "order_id": 94259,
       "phone9": "913332288",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:57:30.499588",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22745,7 +23247,7 @@
     {
       "order_id": 94258,
       "phone9": "982648929",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:57:22.643628",
       "vn_date": "2026-05-10",
       "cod": 1300000.0,
@@ -22799,7 +23301,7 @@
     {
       "order_id": 94249,
       "phone9": "986412139",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:53:37.542741",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22835,7 +23337,7 @@
     {
       "order_id": 94244,
       "phone9": "906413817",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-10T07:51:54.775707",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22880,7 +23382,7 @@
     {
       "order_id": 94233,
       "phone9": "946979627",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:47:50.307657",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22925,7 +23427,7 @@
     {
       "order_id": 94219,
       "phone9": "985383983",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:42:42.490278",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -22988,7 +23490,7 @@
     {
       "order_id": 94175,
       "phone9": "979362226",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:01:28.293732",
       "vn_date": "2026-05-10",
       "cod": 398000.0,
@@ -23006,7 +23508,7 @@
     {
       "order_id": 94173,
       "phone9": "866870158",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T06:59:40.496424",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -23204,7 +23706,7 @@
     {
       "order_id": 94013,
       "phone9": "982451635",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:16:46.482336",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -23276,7 +23778,7 @@
     {
       "order_id": 93978,
       "phone9": "979873672",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T02:49:34.401084",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -23339,7 +23841,7 @@
     {
       "order_id": 93693,
       "phone9": "914914686",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-09T07:03:58.070596",
       "vn_date": "2026-05-09",
       "cod": 1250000.0,
@@ -23474,7 +23976,7 @@
     {
       "order_id": 93603,
       "phone9": "971858558",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-09T03:57:50.380883",
       "vn_date": "2026-05-09",
       "cod": 199000.0,
@@ -23492,7 +23994,7 @@
     {
       "order_id": 93601,
       "phone9": "972137612",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-09T03:56:56.314537",
       "vn_date": "2026-05-09",
       "cod": 398000.0,
@@ -23546,7 +24048,7 @@
     {
       "order_id": 93416,
       "phone9": "973383940",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T08:07:19.533135",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -23555,7 +24057,7 @@
     {
       "order_id": 93412,
       "phone9": "388381680",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T08:05:49.665318",
       "vn_date": "2026-05-08",
       "cod": 398000.0,
@@ -23618,7 +24120,7 @@
     {
       "order_id": 93366,
       "phone9": "981136017",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T07:02:24.790549",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -23726,7 +24228,7 @@
     {
       "order_id": 93288,
       "phone9": "394827577",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T03:12:52.879443",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -24194,7 +24696,7 @@
     {
       "order_id": 92716,
       "phone9": "944858999",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-06T10:02:28.219998",
       "vn_date": "2026-05-06",
       "cod": 199000.0,
@@ -24383,7 +24885,7 @@
     {
       "order_id": 92633,
       "phone9": "981413101",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-06T07:34:05.081438",
       "vn_date": "2026-05-06",
       "cod": 398000.0,
@@ -24410,7 +24912,7 @@
     {
       "order_id": 92629,
       "phone9": "386166991",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-06T07:32:23.763736",
       "vn_date": "2026-05-06",
       "cod": 199000.0,
@@ -24635,7 +25137,7 @@
     {
       "order_id": 92484,
       "phone9": "918011910",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-06T02:12:05.687916",
       "vn_date": "2026-05-06",
       "cod": 199000.0,
@@ -24662,7 +25164,7 @@
     {
       "order_id": 92478,
       "phone9": "961701979",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-06T02:09:57.662179",
       "vn_date": "2026-05-06",
       "cod": 199000.0,
@@ -26228,7 +26730,7 @@
     {
       "order_id": 90815,
       "phone9": "966328226",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-01T07:17:24.453790",
       "vn_date": "2026-05-01",
       "cod": 199000.0,
@@ -26498,7 +27000,7 @@
     {
       "order_id": 90519,
       "phone9": "372114936",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-04-30T07:01:20.706474",
       "vn_date": "2026-04-30",
       "cod": 199000.0,
@@ -49356,45 +49858,477 @@
       "source_name": "DUY - NOMA 911"
     },
     {
-      "order_id": 69016,
-      "phone9": "856360556",
-      "status": 4,
-      "inserted_at": "2026-02-13T04:31:31.488390",
-      "vn_date": "2026-02-13",
+      "order_id": 95996,
+      "phone9": "982166521",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:09:22.894511",
+      "vn_date": "2026-05-14",
       "cod": 199000.0,
-      "source_name": "DUY - NOMA 911"
+      "source_name": "PHƯƠNG NAM - NOMA911"
     },
     {
-      "order_id": 69015,
-      "phone9": "961627768",
-      "status": 3,
-      "inserted_at": "2026-02-13T04:28:48.800550",
-      "vn_date": "2026-02-13",
-      "cod": 199000.0,
-      "source_name": "DUY - NOMA 911"
-    },
-    {
-      "order_id": 69013,
-      "phone9": "943942662",
-      "status": 3,
-      "inserted_at": "2026-02-13T04:21:25.998627",
-      "vn_date": "2026-02-13",
-      "cod": 199000.0,
-      "source_name": "DUY - NOMA 911"
-    },
-    {
-      "order_id": 69012,
-      "phone9": "969506155",
-      "status": 3,
-      "inserted_at": "2026-02-13T04:19:06.630976",
-      "vn_date": "2026-02-13",
+      "order_id": 95993,
+      "phone9": "819865758",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:08:25.693978",
+      "vn_date": "2026-05-14",
       "cod": 398000.0,
-      "source_name": "DUY - NOMA 911"
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95992,
+      "phone9": "967077138",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:08:05.669390",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95991,
+      "phone9": "941568199",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:07:47.751487",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95988,
+      "phone9": "912338357",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:07:09.811340",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95986,
+      "phone9": "963637476",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:07:01.438116",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95985,
+      "phone9": "936582941",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:06:47.113602",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95978,
+      "phone9": "968163888",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:03:43.293272",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95974,
+      "phone9": "913282621",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:01:46.246741",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95973,
+      "phone9": "868616787",
+      "status": 9,
+      "inserted_at": "2026-05-14T04:01:10.028520",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95969,
+      "phone9": "985454299",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:56:22.689189",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95968,
+      "phone9": "909551979",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:55:45.415756",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95967,
+      "phone9": "368151168",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:55:14.425597",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95964,
+      "phone9": "913271034",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:48:59.186304",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95962,
+      "phone9": "984807777",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:46:29.428698",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95961,
+      "phone9": "367481905",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:45:55.162975",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95959,
+      "phone9": "967266656",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:44:54.996285",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95955,
+      "phone9": "986396238",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:38:01.304783",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95954,
+      "phone9": "356163699",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:36:21.123618",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95953,
+      "phone9": "827475747",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:34:56.707294",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95952,
+      "phone9": "911559366",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:34:31.787645",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95947,
+      "phone9": "912281135",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:21:06.915736",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95944,
+      "phone9": "989701878",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:12:33.524404",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95942,
+      "phone9": "968253338",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:11:23.244298",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95939,
+      "phone9": "971617222",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:09:23.577143",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95937,
+      "phone9": "976229882",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:08:36.586527",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95936,
+      "phone9": "356140922",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:08:02.636338",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95935,
+      "phone9": "399895282",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:06:43.649167",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95934,
+      "phone9": "989022472",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:06:28.376456",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95933,
+      "phone9": "968892262",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:04:57.510853",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95932,
+      "phone9": "386904561",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:04:35.655946",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95931,
+      "phone9": "353017025",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:04:14.740571",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95928,
+      "phone9": "984249259",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:01:09.709862",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95927,
+      "phone9": "967198188",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:56.531751",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95926,
+      "phone9": "388682868",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:49.993878",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95925,
+      "phone9": "869244993",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:38.082341",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95924,
+      "phone9": "935041938",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:30.088322",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95922,
+      "phone9": "348145329",
+      "status": 9,
+      "inserted_at": "2026-05-14T03:00:07.095248",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95921,
+      "phone9": "879264222",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:59:20.487926",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95920,
+      "phone9": "984583442",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:59:07.669093",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95919,
+      "phone9": "397575192",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:58:51.744762",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95917,
+      "phone9": "916051075",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:58:30.992613",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95916,
+      "phone9": "358161838",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:57:35.612282",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95911,
+      "phone9": "933312456",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:55:38.650887",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95910,
+      "phone9": "846803292",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:54:32.492755",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95909,
+      "phone9": "968010136",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:54:16.767021",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95908,
+      "phone9": "949685293",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:53:51.287526",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95907,
+      "phone9": "903801455",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:53:03.159698",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95906,
+      "phone9": "972019882",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:51:57.567105",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95905,
+      "phone9": "374671652",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:50:51.857698",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95903,
+      "phone9": "947256226",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:49:41.886085",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "order_id": 95902,
+      "phone9": "852717174",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:49:08.674593",
+      "vn_date": "2026-05-14",
+      "cod": 398000.0,
+      "source_name": "PHƯƠNG NAM - NOMA911"
     },
     {
       "order_id": 95755,
       "phone9": "984935555",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T10:56:59.044675",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49403,7 +50337,7 @@
     {
       "order_id": 95751,
       "phone9": "916149081",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T10:47:33.411010",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49412,7 +50346,7 @@
     {
       "order_id": 95750,
       "phone9": "975551059",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T10:46:17.122388",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49421,7 +50355,7 @@
     {
       "order_id": 95748,
       "phone9": "988322223",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T10:43:17.788620",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49430,7 +50364,7 @@
     {
       "order_id": 95718,
       "phone9": "979945688",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T09:17:42.030343",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49439,7 +50373,7 @@
     {
       "order_id": 95669,
       "phone9": "911595250",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:40:14.200630",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49448,7 +50382,7 @@
     {
       "order_id": 95660,
       "phone9": "984315823",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:25:47.898941",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49457,7 +50391,7 @@
     {
       "order_id": 95659,
       "phone9": "962161695",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:25:23.688201",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49466,7 +50400,7 @@
     {
       "order_id": 95658,
       "phone9": "906449928",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:23:53.939157",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49475,7 +50409,7 @@
     {
       "order_id": 95656,
       "phone9": "387986621",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:22:50.698904",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49484,7 +50418,7 @@
     {
       "order_id": 95655,
       "phone9": "981558585",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:21:11.893788",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49493,7 +50427,7 @@
     {
       "order_id": 95654,
       "phone9": "969680668",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:17:33.630892",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49502,7 +50436,7 @@
     {
       "order_id": 95652,
       "phone9": "856372779",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:15:25.131845",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49511,7 +50445,7 @@
     {
       "order_id": 95649,
       "phone9": "945689098",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:13:58.561783",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49520,7 +50454,7 @@
     {
       "order_id": 95648,
       "phone9": "373000899",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:13:57.250283",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49529,7 +50463,7 @@
     {
       "order_id": 95646,
       "phone9": "978495790",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:11:53.591867",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49538,7 +50472,7 @@
     {
       "order_id": 95645,
       "phone9": "394932929",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:10:50.873978",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49547,7 +50481,7 @@
     {
       "order_id": 95644,
       "phone9": "943696899",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:10:50.481809",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49556,7 +50490,7 @@
     {
       "order_id": 95643,
       "phone9": "368112877",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:10:23.395983",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49565,7 +50499,7 @@
     {
       "order_id": 95637,
       "phone9": "919189648",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:09:16.614699",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49574,7 +50508,7 @@
     {
       "order_id": 95636,
       "phone9": "813580366",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:09:05.354751",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49583,7 +50517,7 @@
     {
       "order_id": 95635,
       "phone9": "903061323",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:08:19.201104",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49592,7 +50526,7 @@
     {
       "order_id": 95633,
       "phone9": "868994979",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:06:11.951985",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49601,7 +50535,7 @@
     {
       "order_id": 95632,
       "phone9": "398759883",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:05:57.153864",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49610,7 +50544,7 @@
     {
       "order_id": 95629,
       "phone9": "988662291",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:03:19.278013",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49619,7 +50553,7 @@
     {
       "order_id": 95628,
       "phone9": "909080408",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:02:23.283850",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49628,7 +50562,7 @@
     {
       "order_id": 95625,
       "phone9": "912413488",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:59:04.298293",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49637,7 +50571,7 @@
     {
       "order_id": 95622,
       "phone9": "912332754",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:57:10.602638",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49646,7 +50580,7 @@
     {
       "order_id": 95621,
       "phone9": "989609079",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:56:54.265765",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49655,7 +50589,7 @@
     {
       "order_id": 95617,
       "phone9": "971158716",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:54:39.800358",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49664,7 +50598,7 @@
     {
       "order_id": 95616,
       "phone9": "969278339",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:54:26.958583",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49673,7 +50607,7 @@
     {
       "order_id": 95615,
       "phone9": "915093959",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:54:06.092560",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49682,7 +50616,7 @@
     {
       "order_id": 95614,
       "phone9": "823844327",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:53:52.245494",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49691,7 +50625,7 @@
     {
       "order_id": 95613,
       "phone9": "969276789",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:53:34.437575",
       "vn_date": "2026-05-13",
       "cod": 398000.0,
@@ -49700,7 +50634,7 @@
     {
       "order_id": 95609,
       "phone9": "977114231",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T06:50:35.520652",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49709,7 +50643,7 @@
     {
       "order_id": 95579,
       "phone9": "976834638",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:54:15.412246",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49718,7 +50652,7 @@
     {
       "order_id": 95578,
       "phone9": "982564320",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:52:50.609961",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49727,7 +50661,7 @@
     {
       "order_id": 95571,
       "phone9": "912752629",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:46:32.755409",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49736,7 +50670,7 @@
     {
       "order_id": 95570,
       "phone9": "977472332",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:46:04.341381",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49745,7 +50679,7 @@
     {
       "order_id": 95564,
       "phone9": "971332195",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:37:48.969711",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49754,7 +50688,7 @@
     {
       "order_id": 95563,
       "phone9": "973636466",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:37:38.097657",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49763,7 +50697,7 @@
     {
       "order_id": 95562,
       "phone9": "979593193",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:36:56.324351",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -49772,7 +50706,7 @@
     {
       "order_id": 95556,
       "phone9": "333308277",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T04:27:41.522216",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -50087,7 +51021,7 @@
     {
       "order_id": 95495,
       "phone9": "981500567",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-13T02:54:55.721280",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -50150,7 +51084,7 @@
     {
       "order_id": 95477,
       "phone9": "768557688",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-13T02:40:45.427073",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -50546,7 +51480,7 @@
     {
       "order_id": 95131,
       "phone9": "962008025",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T03:59:03.242326",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -50591,7 +51525,7 @@
     {
       "order_id": 95100,
       "phone9": "968978976",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-12T03:13:26.020722",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -50600,7 +51534,7 @@
     {
       "order_id": 95098,
       "phone9": "914616234",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T03:12:53.829036",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -50636,7 +51570,7 @@
     {
       "order_id": 95087,
       "phone9": "941027779",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-12T03:08:03.978105",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -50735,7 +51669,7 @@
     {
       "order_id": 95068,
       "phone9": "978278300",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-12T03:01:19.257854",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -50969,7 +51903,7 @@
     {
       "order_id": 95027,
       "phone9": "985522071",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T02:32:13.419032",
       "vn_date": "2026-05-12",
       "cod": 398000.0,
@@ -50987,7 +51921,7 @@
     {
       "order_id": 95025,
       "phone9": "977995085",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T02:30:51.967047",
       "vn_date": "2026-05-12",
       "cod": 398000.0,
@@ -50996,7 +51930,7 @@
     {
       "order_id": 95023,
       "phone9": "964190080",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T02:29:26.400665",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -51131,7 +52065,7 @@
     {
       "order_id": 94854,
       "phone9": "982053650",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T09:15:28.594537",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51185,7 +52119,7 @@
     {
       "order_id": 94827,
       "phone9": "982989597",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T08:25:49.600288",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51221,7 +52155,7 @@
     {
       "order_id": 94819,
       "phone9": "917002799",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T08:11:36.851763",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51239,7 +52173,7 @@
     {
       "order_id": 94816,
       "phone9": "983743507",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T08:10:00.220215",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51257,7 +52191,7 @@
     {
       "order_id": 94813,
       "phone9": "982413359",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T08:08:13.269995",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51275,7 +52209,7 @@
     {
       "order_id": 94811,
       "phone9": "979236236",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T08:05:27.520333",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51329,7 +52263,7 @@
     {
       "order_id": 94797,
       "phone9": "337280977",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T08:00:25.943260",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51365,7 +52299,7 @@
     {
       "order_id": 94779,
       "phone9": "989094911",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T07:30:18.818262",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51392,7 +52326,7 @@
     {
       "order_id": 94761,
       "phone9": "965287870",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T07:11:39.237131",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51419,7 +52353,7 @@
     {
       "order_id": 94752,
       "phone9": "918148768",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T07:00:27.246855",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51437,7 +52371,7 @@
     {
       "order_id": 94745,
       "phone9": "989966924",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T06:49:54.866016",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51509,7 +52443,7 @@
     {
       "order_id": 94669,
       "phone9": "982668689",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T03:28:44.985232",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51554,7 +52488,7 @@
     {
       "order_id": 94648,
       "phone9": "778729008",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T03:05:37.774472",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51572,7 +52506,7 @@
     {
       "order_id": 94646,
       "phone9": "973858586",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T03:05:03.475895",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51599,7 +52533,7 @@
     {
       "order_id": 94636,
       "phone9": "965114567",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T03:00:08.612780",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51626,7 +52560,7 @@
     {
       "order_id": 94628,
       "phone9": "979402382",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:57:52.234269",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51653,7 +52587,7 @@
     {
       "order_id": 94625,
       "phone9": "982123483",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T02:56:23.682398",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51689,7 +52623,7 @@
     {
       "order_id": 94620,
       "phone9": "968710899",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:54:24.501755",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51716,7 +52650,7 @@
     {
       "order_id": 94617,
       "phone9": "941074268",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:53:31.037055",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51725,7 +52659,7 @@
     {
       "order_id": 94616,
       "phone9": "983137337",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:53:11.402177",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51743,7 +52677,7 @@
     {
       "order_id": 94613,
       "phone9": "915081823",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:51:50.870224",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51842,7 +52776,7 @@
     {
       "order_id": 94597,
       "phone9": "965228136",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:44:21.376253",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51869,7 +52803,7 @@
     {
       "order_id": 94589,
       "phone9": "979408422",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:37:58.052690",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51905,7 +52839,7 @@
     {
       "order_id": 94583,
       "phone9": "949862513",
-      "status": 9,
+      "status": 2,
       "inserted_at": "2026-05-11T02:34:58.492349",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -51986,7 +52920,7 @@
     {
       "order_id": 94567,
       "phone9": "911630113",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:24:55.636763",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -52220,7 +53154,7 @@
     {
       "order_id": 94529,
       "phone9": "396046919",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T02:03:32.023212",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -52238,7 +53172,7 @@
     {
       "order_id": 94526,
       "phone9": "886031688",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-11T01:58:21.680396",
       "vn_date": "2026-05-11",
       "cod": 199000.0,
@@ -52355,7 +53289,7 @@
     {
       "order_id": 94269,
       "phone9": "914631888",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T08:03:01.285946",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52400,7 +53334,7 @@
     {
       "order_id": 94260,
       "phone9": "976421918",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:57:50.894055",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52427,7 +53361,7 @@
     {
       "order_id": 94253,
       "phone9": "915071981",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:55:18.411398",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52499,7 +53433,7 @@
     {
       "order_id": 94228,
       "phone9": "978889316",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:46:54.811549",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52508,7 +53442,7 @@
     {
       "order_id": 94226,
       "phone9": "975162079",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:46:39.205263",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52526,7 +53460,7 @@
     {
       "order_id": 94224,
       "phone9": "976385888",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:45:37.370287",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52625,7 +53559,7 @@
     {
       "order_id": 94203,
       "phone9": "971918566",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:36:02.778179",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52670,7 +53604,7 @@
     {
       "order_id": 94186,
       "phone9": "385108040",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:07:03.849254",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52688,7 +53622,7 @@
     {
       "order_id": 94182,
       "phone9": "979355339",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:05:23.542144",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52706,7 +53640,7 @@
     {
       "order_id": 94178,
       "phone9": "971678628",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T07:03:00.243908",
       "vn_date": "2026-05-10",
       "cod": 398000.0,
@@ -52823,7 +53757,7 @@
     {
       "order_id": 94115,
       "phone9": "969339556",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T04:41:19.041594",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52859,7 +53793,7 @@
     {
       "order_id": 94105,
       "phone9": "336361009",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T04:32:12.770772",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -52976,7 +53910,7 @@
     {
       "order_id": 94070,
       "phone9": "359508888",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:51:44.500859",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53021,7 +53955,7 @@
     {
       "order_id": 94065,
       "phone9": "389252335",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:49:24.337045",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53030,7 +53964,7 @@
     {
       "order_id": 94064,
       "phone9": "947199688",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:48:49.354799",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53039,7 +53973,7 @@
     {
       "order_id": 94063,
       "phone9": "886017745",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:48:11.708068",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53048,7 +53982,7 @@
     {
       "order_id": 94062,
       "phone9": "915317358",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:48:02.954088",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53246,7 +54180,7 @@
     {
       "order_id": 94016,
       "phone9": "866493668",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:17:13.680069",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53318,7 +54252,7 @@
     {
       "order_id": 94003,
       "phone9": "989768635",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T03:10:06.840865",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53363,7 +54297,7 @@
     {
       "order_id": 93991,
       "phone9": "989161836",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T02:59:26.114453",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53381,7 +54315,7 @@
     {
       "order_id": 93989,
       "phone9": "838457422",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T02:57:08.021111",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53417,7 +54351,7 @@
     {
       "order_id": 93980,
       "phone9": "368126866",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-10T02:50:32.055087",
       "vn_date": "2026-05-10",
       "cod": 199000.0,
@@ -53462,7 +54396,7 @@
     {
       "order_id": 93719,
       "phone9": "988736971",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-09T07:57:44.869556",
       "vn_date": "2026-05-09",
       "cod": 199000.0,
@@ -53633,7 +54567,7 @@
     {
       "order_id": 93597,
       "phone9": "932470975",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-09T03:55:03.067980",
       "vn_date": "2026-05-09",
       "cod": 199000.0,
@@ -53687,7 +54621,7 @@
     {
       "order_id": 93588,
       "phone9": "913616474",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-09T03:50:08.690684",
       "vn_date": "2026-05-09",
       "cod": 199000.0,
@@ -53858,7 +54792,7 @@
     {
       "order_id": 93377,
       "phone9": "827202552",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-08T07:21:53.697453",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -53885,7 +54819,7 @@
     {
       "order_id": 93368,
       "phone9": "968097979",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T07:04:01.094448",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -53921,7 +54855,7 @@
     {
       "order_id": 93362,
       "phone9": "964081163",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-08T06:59:30.433714",
       "vn_date": "2026-05-08",
       "cod": 199000.0,
@@ -54506,7 +55440,7 @@
     {
       "order_id": 92935,
       "phone9": "392472558",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-07T03:52:46.242335",
       "vn_date": "2026-05-07",
       "cod": 199000.0,
@@ -55307,7 +56241,7 @@
     {
       "order_id": 92293,
       "phone9": "965506638",
-      "status": 2,
+      "status": 4,
       "inserted_at": "2026-05-05T09:54:49.396021",
       "vn_date": "2026-05-05",
       "cod": 199000.0,
@@ -55685,7 +56619,7 @@
     {
       "order_id": 92196,
       "phone9": "962722311",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-05T07:06:31.250678",
       "vn_date": "2026-05-05",
       "cod": 199000.0,
@@ -60365,7 +61299,7 @@
     {
       "order_id": 95653,
       "phone9": "982918181",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:16:46.417872",
       "vn_date": "2026-05-13",
       "cod": 2800000.0,
@@ -61900,6 +62834,24 @@
       "vn_date": "2026-02-24",
       "cod": 2800000.0,
       "source_name": "WEBSITE"
+    },
+    {
+      "order_id": 95896,
+      "phone9": "914255678",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:18:52.826005",
+      "vn_date": "2026-05-14",
+      "cod": 1290000.0,
+      "source_name": "Zalo OA"
+    },
+    {
+      "order_id": 95889,
+      "phone9": "909061692",
+      "status": 0,
+      "inserted_at": "2026-05-14T02:07:29.888170",
+      "vn_date": "2026-05-14",
+      "cod": 2860000.0,
+      "source_name": "Zalo OA"
     },
     {
       "order_id": 95442,
@@ -63450,9 +64402,81 @@
       "source_name": "Hotline"
     },
     {
+      "order_id": 95895,
+      "phone9": "975684818",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:18:22.498066",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95893,
+      "phone9": "386280999",
+      "status": 9,
+      "inserted_at": "2026-05-14T02:16:51.211887",
+      "vn_date": "2026-05-14",
+      "cod": 199000.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95883,
+      "phone9": "934995999",
+      "status": 0,
+      "inserted_at": "2026-05-14T01:55:22.375019",
+      "vn_date": "2026-05-14",
+      "cod": 1300000.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95882,
+      "phone9": "935833298",
+      "status": 0,
+      "inserted_at": "2026-05-14T01:51:42.644970",
+      "vn_date": "2026-05-14",
+      "cod": 0.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95881,
+      "phone9": "934995999",
+      "status": 0,
+      "inserted_at": "2026-05-14T01:51:39.730049",
+      "vn_date": "2026-05-14",
+      "cod": 0.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95866,
+      "phone9": "977154834",
+      "status": 0,
+      "inserted_at": "2026-05-14T00:38:24.551603",
+      "vn_date": "2026-05-14",
+      "cod": 0.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95862,
+      "phone9": "946463337",
+      "status": 0,
+      "inserted_at": "2026-05-14T00:06:16.131002",
+      "vn_date": "2026-05-14",
+      "cod": 0.0,
+      "source_name": "Facebook"
+    },
+    {
+      "order_id": 95802,
+      "phone9": "915042226",
+      "status": 0,
+      "inserted_at": "2026-05-13T14:12:19.594153",
+      "vn_date": "2026-05-13",
+      "cod": 0.0,
+      "source_name": "Facebook"
+    },
+    {
       "order_id": 95665,
       "phone9": "965889788",
-      "status": 0,
+      "status": 9,
       "inserted_at": "2026-05-13T07:32:03.979667",
       "vn_date": "2026-05-13",
       "cod": 199000.0,
@@ -63578,7 +64602,7 @@
     {
       "order_id": 95169,
       "phone9": "357628668",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T05:38:38.222715",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -63596,7 +64620,7 @@
     {
       "order_id": 95149,
       "phone9": "969173777",
-      "status": 2,
+      "status": 3,
       "inserted_at": "2026-05-12T04:36:42.038383",
       "vn_date": "2026-05-12",
       "cod": 199000.0,
@@ -67838,33 +68862,6 @@
       "status": 0,
       "inserted_at": "2026-02-13T17:51:24.553940",
       "vn_date": "2026-02-14",
-      "cod": 0.0,
-      "source_name": "Facebook"
-    },
-    {
-      "order_id": 69030,
-      "phone9": "585558111",
-      "status": 0,
-      "inserted_at": "2026-02-13T06:10:33.625266",
-      "vn_date": "2026-02-13",
-      "cod": 0.0,
-      "source_name": "Facebook"
-    },
-    {
-      "order_id": 69010,
-      "phone9": "383677529",
-      "status": 0,
-      "inserted_at": "2026-02-13T03:52:55.178589",
-      "vn_date": "2026-02-13",
-      "cod": 0.0,
-      "source_name": "Facebook"
-    },
-    {
-      "order_id": 68988,
-      "phone9": "913467868",
-      "status": 0,
-      "inserted_at": "2026-02-13T01:17:23.511012",
-      "vn_date": "2026-02-13",
       "cod": 0.0,
       "source_name": "Facebook"
     }
