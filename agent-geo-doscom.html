@@ -30,6 +30,37 @@
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
   details[open] summary .triangle { transform: rotate(90deg); }
   details summary .triangle { display: inline-block; transition: transform 0.15s; }
+
+  /* Tab nav */
+  .tab-btn { padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; }
+  .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
+  .tab-btn:hover:not(.active) { color: #374151; }
+
+  /* Severity badges */
+  .sev-A { background: #fee2e2; color: #991b1b; }
+  .sev-B { background: #fef3c7; color: #92400e; }
+  .sev-C { background: #e0f2fe; color: #075985; }
+
+  /* Status badges */
+  .st-idea          { background: #f3f4f6; color: #4b5563; }
+  .st-drafting      { background: #fef3c7; color: #92400e; }
+  .st-pending_review{ background: #dbeafe; color: #1e40af; }
+  .st-edited        { background: #d1fae5; color: #065f46; }
+  .st-publishing    { background: #fef3c7; color: #92400e; }
+  .st-published     { background: #d1fae5; color: #065f46; }
+  .st-rejected      { background: #f3f4f6; color: #6b7280; text-decoration: line-through; }
+  .st-failed        { background: #fee2e2; color: #991b1b; }
+
+  /* Modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; display: none; }
+  .modal-bg.open { display: flex; align-items: center; justify-content: center; }
+  .modal-box { background: #fff; border-radius: 0.75rem; max-width: 95vw; width: 1100px; max-height: 92vh; display: flex; flex-direction: column; }
+  .modal-tab { padding: 0.5rem 1rem; border-bottom: 2px solid transparent; font-size: 0.85rem; font-weight: 600; color: #6b7280; cursor: pointer; }
+  .modal-tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+
+  /* Spin */
+  .spin { animation: spin 0.8s linear infinite; }
+  @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -37,14 +68,14 @@
 <div class="p-6 max-w-7xl mx-auto">
 
   <!-- ═══════════════ HEADER ═══════════════ -->
-  <div class="flex items-start justify-between mb-6">
+  <div class="flex items-start justify-between mb-4">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">GEO Monitor — AI Share-of-Voice</h1>
       <p class="text-sm text-gray-500 mt-1">
         Theo dõi brand Doscom + NOMA trên ChatGPT, Gemini, Meta AI · <span id="status-text">Đang tải…</span>
       </p>
     </div>
-    <div class="flex gap-2 items-center">
+    <div id="header-actions" class="flex gap-2 items-center">
       <select id="days-filter" class="px-3 py-2 rounded-lg border border-gray-300 text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <option value="1">Hôm nay</option>
         <option value="7" selected>7 ngày</option>
@@ -57,6 +88,15 @@
       </button>
     </div>
   </div>
+
+  <!-- ═══════════════ TAB NAV ═══════════════ -->
+  <div class="flex gap-1 border-b border-gray-200 mb-6">
+    <button class="tab-btn active" data-tab="monitor">📊 Monitor</button>
+    <button class="tab-btn" data-tab="pipeline">📝 Content Pipeline</button>
+  </div>
+
+  <!-- ═══════════════ VIEW: MONITOR ═══════════════ -->
+  <div id="view-monitor">
 
   <!-- ═══════════════ KPI CARDS ═══════════════ -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -145,7 +185,186 @@
   </div>
 
   <div class="mt-6 text-xs text-gray-400 text-center">
-    Module GEO Monitor · D1 + Workers AI + AI Gateway · Cron mỗi 30 phút qua GitHub Actions
+    Module GEO Monitor · D1 + Workers AI + AI Gateway
+  </div>
+  </div><!-- /view-monitor -->
+
+  <!-- ═══════════════ VIEW: CONTENT PIPELINE ═══════════════ -->
+  <div id="view-pipeline" style="display:none">
+
+    <!-- Pipeline KPI -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div class="kpi-card"><div class="kpi-label">Ideas</div><div class="kpi-value tabular-nums" id="pkpi-idea">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Pending review</div><div class="kpi-value tabular-nums" id="pkpi-review">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Published</div><div class="kpi-value tabular-nums" id="pkpi-pub">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Total cost</div><div class="kpi-value tabular-nums" id="pkpi-cost">$0</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btn-analyze" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold flex items-center gap-2">
+          🔍 Analyze gaps now
+        </button>
+        <button id="btn-refresh-queue" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold">🔄 Refresh queue</button>
+
+        <div class="flex-1"></div>
+
+        <select id="pfilter-brand" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          <option value="all">All brands</option>
+          <option value="doscom">Doscom</option>
+          <option value="noma">NOMA</option>
+        </select>
+        <select id="pfilter-status" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          <option value="">Active (chưa published)</option>
+          <option value="idea">Idea</option>
+          <option value="pending_review,edited">Pending review</option>
+          <option value="published">Published</option>
+          <option value="rejected">Rejected</option>
+          <option value="failed">Failed</option>
+        </select>
+      </div>
+      <div id="analyze-output" class="mt-3 text-sm hidden"></div>
+    </div>
+
+    <!-- Articles list -->
+    <div id="pipeline-list" class="space-y-3"></div>
+  </div><!-- /view-pipeline -->
+
+</div>
+
+<!-- ═══════════════ EDIT/PREVIEW MODAL ═══════════════ -->
+<div id="article-modal" class="modal-bg">
+  <div class="modal-box">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <div>
+        <h3 class="font-bold text-gray-900" id="modal-title">Article</h3>
+        <p class="text-xs text-gray-500" id="modal-subtitle">—</p>
+      </div>
+      <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">×</button>
+    </div>
+
+    <!-- Modal tabs -->
+    <div class="flex border-b border-gray-200 px-4">
+      <div class="modal-tab active" data-mtab="content">📝 Content</div>
+      <div class="modal-tab" data-mtab="seo">🔍 SEO Meta</div>
+      <div class="modal-tab" data-mtab="image">🎨 Image</div>
+      <div class="modal-tab" data-mtab="faq">❓ FAQ</div>
+      <div class="modal-tab" data-mtab="schema">⚙️ Schema</div>
+      <div class="modal-tab" data-mtab="publish">🚀 Publish</div>
+    </div>
+
+    <!-- Modal body -->
+    <div class="overflow-y-auto flex-1 p-4">
+
+      <!-- Tab: content -->
+      <div class="mtab-pane" data-mtab-pane="content">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Title</label>
+        <input id="m-title" type="text" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm" />
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Excerpt (200 ký tự)</label>
+        <textarea id="m-excerpt" rows="2" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+        <div class="flex justify-between items-center mb-1">
+          <label class="block text-xs font-semibold text-gray-700">Body (Markdown)</label>
+          <span class="text-xs text-gray-500" id="m-wordcount">—</span>
+        </div>
+        <textarea id="m-markdown" rows="22" class="w-full px-3 py-2 border border-gray-300 rounded text-xs font-mono"></textarea>
+      </div>
+
+      <!-- Tab: SEO -->
+      <div class="mtab-pane hidden" data-mtab-pane="seo">
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Slug</label>
+        <input id="m-slug" type="text" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm font-mono" />
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Meta description (155 ký tự)</label>
+        <textarea id="m-meta" rows="2" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm" maxlength="200"></textarea>
+        <div class="text-xs text-gray-500 -mt-2 mb-3" id="m-meta-count">0 / 155</div>
+
+        <label class="block text-xs font-semibold text-gray-700 mb-1">WordPress categories (1 cái/dòng)</label>
+        <textarea id="m-cats" rows="3" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+
+        <label class="block text-xs font-semibold text-gray-700 mb-1">WordPress tags (1 cái/dòng)</label>
+        <textarea id="m-tags" rows="4" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+      </div>
+
+      <!-- Tab: image -->
+      <div class="mtab-pane hidden" data-mtab-pane="image">
+        <div id="m-image-preview" class="mb-3 bg-gray-50 border border-gray-200 rounded p-3 text-center text-gray-400 text-sm">Chưa có ảnh</div>
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Image prompt (English, no text in image)</label>
+        <textarea id="m-img-prompt" rows="4" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Alt text (tiếng Việt)</label>
+        <input id="m-img-alt" type="text" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm" />
+
+        <div class="flex gap-2 items-end flex-wrap">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1">Dimensions</label>
+            <select id="m-img-size" class="px-2 py-2 border border-gray-300 rounded text-sm">
+              <option value="1280x720">Landscape 1280×720 (recommend)</option>
+              <option value="1024x1024">Square 1024×1024</option>
+              <option value="768x1024">Portrait 768×1024</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 mb-1">Quality steps</label>
+            <select id="m-img-quality" class="px-2 py-2 border border-gray-300 rounded text-sm">
+              <option value="4" selected>Fast (4 steps)</option>
+              <option value="6">Balanced (6 steps)</option>
+              <option value="8">Best (8 steps)</option>
+            </select>
+          </div>
+          <button id="m-gen-image" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold">🎨 Generate image</button>
+          <span class="text-xs text-emerald-600 font-semibold ml-1">FREE (Flux Schnell)</span>
+        </div>
+      </div>
+
+      <!-- Tab: FAQ -->
+      <div class="mtab-pane hidden" data-mtab-pane="faq">
+        <p class="text-xs text-gray-500 mb-3">FAQ schema được AI rất ưu tiên trích. Mỗi Q&A nên 50-100 từ.</p>
+        <div id="m-faq-list" class="space-y-3"></div>
+        <button id="m-add-faq" class="mt-3 text-xs text-blue-600 hover:underline">+ Thêm Q&A</button>
+      </div>
+
+      <!-- Tab: schema -->
+      <div class="mtab-pane hidden" data-mtab-pane="schema">
+        <p class="text-xs text-gray-500 mb-2">JSON-LD sẽ inject vào cuối content khi publish lên WP.</p>
+        <textarea id="m-schema" rows="20" class="w-full px-3 py-2 border border-gray-300 rounded text-xs font-mono" readonly></textarea>
+      </div>
+
+      <!-- Tab: publish -->
+      <div class="mtab-pane hidden" data-mtab-pane="publish">
+        <div class="bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-900 mb-4">
+          ⚠️ Đảm bảo đã review kỹ content + image. Sau khi publish, có thể unpublish trên WP admin.
+        </div>
+
+        <label class="block text-xs font-semibold text-gray-700 mb-1">Target site</label>
+        <select id="m-target-site" class="w-full mb-3 px-3 py-2 border border-gray-300 rounded text-sm">
+          <option value="doscom">🏪 Doscom (doscom.vn)</option>
+          <option value="noma">🚗 NOMA (noma.vn)</option>
+        </select>
+
+        <label class="block text-xs font-semibold text-gray-700 mb-1">WordPress status</label>
+        <select id="m-wp-status" class="w-full mb-4 px-3 py-2 border border-gray-300 rounded text-sm">
+          <option value="draft">Draft (an toàn — admin WP review trước khi go-live)</option>
+          <option value="publish">Publish ngay (live trên web)</option>
+          <option value="pending">Pending (chờ admin WP duyệt)</option>
+        </select>
+
+        <button id="m-publish-btn" class="w-full px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold">
+          🚀 Publish to WordPress
+        </button>
+        <div id="m-publish-result" class="mt-3 hidden"></div>
+      </div>
+
+    </div><!-- /modal body -->
+
+    <!-- Modal footer -->
+    <div class="border-t border-gray-200 p-3 flex justify-between items-center bg-gray-50">
+      <div class="text-xs text-gray-500" id="m-cost-info">—</div>
+      <div class="flex gap-2">
+        <button onclick="closeModal()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-sm">Đóng</button>
+        <button id="m-reject-btn" class="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded text-sm">❌ Reject</button>
+        <button id="m-save-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm font-semibold">💾 Save edits</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -428,6 +647,477 @@ document.querySelectorAll(".worst-tab").forEach(btn => {
     // Re-render only worst queries (use cached SoV? simpler: full reload)
     loadAll();
   });
+});
+
+// ============================================================
+// TAB SWITCHING: Monitor vs Pipeline
+// ============================================================
+let currentTab = "monitor";
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.getElementById("view-monitor").style.display = tab === "monitor" ? "" : "none";
+  document.getElementById("view-pipeline").style.display = tab === "pipeline" ? "" : "none";
+
+  // Hide monitor controls when on pipeline
+  document.getElementById("days-filter").style.display = tab === "monitor" ? "" : "none";
+
+  if (tab === "pipeline") {
+    document.getElementById("refresh-btn").textContent = "↻ Reload queue";
+    loadQueue();
+  } else {
+    document.getElementById("refresh-btn").innerHTML = '<svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Refresh';
+    loadAll();
+  }
+}
+document.querySelectorAll(".tab-btn").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
+
+// ============================================================
+// CONTENT PIPELINE: Queue loading + rendering
+// ============================================================
+let pipelineItems = [];
+let currentArticle = null;  // article being edited in modal
+
+const STATUS_LABELS = {
+  idea: "💡 Idea",
+  drafting: "✍️ Drafting...",
+  pending_review: "👁 Pending review",
+  edited: "✏️ Edited",
+  publishing: "🚀 Publishing...",
+  published: "✅ Published",
+  rejected: "❌ Rejected",
+  failed: "⚠️ Failed",
+};
+
+async function loadQueue() {
+  const brand = document.getElementById("pfilter-brand").value;
+  const status = document.getElementById("pfilter-status").value;
+  const params = new URLSearchParams();
+  if (brand && brand !== "all") params.set("brand", brand);
+  if (status) params.set("status", status);
+  if (status === "published" || status === "rejected") params.set("include_published", "1");
+  params.set("limit", "100");
+
+  const container = document.getElementById("pipeline-list");
+  container.innerHTML = `<div class="text-center text-gray-400 py-8">Đang tải queue…</div>`;
+
+  try {
+    const data = await fetchJson(`/api/geo/queue?${params}`);
+    pipelineItems = data.items || [];
+
+    // KPI
+    document.getElementById("pkpi-idea").textContent  = fmtNum(data.summary?.idea || 0);
+    document.getElementById("pkpi-review").textContent = fmtNum((data.summary?.pending_review || 0) + (data.summary?.edited || 0));
+    document.getElementById("pkpi-pub").textContent   = fmtNum(data.summary?.published || 0);
+    document.getElementById("pkpi-cost").textContent  = "$" + (data.total_cost_usd || 0).toFixed(2);
+
+    if (pipelineItems.length === 0) {
+      container.innerHTML = `
+        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500">
+          <div class="text-4xl mb-2">📭</div>
+          <div class="text-sm">Chưa có article nào trong queue.</div>
+          <div class="text-xs mt-2">Click "🔍 Analyze gaps now" để agent tìm lỗ hổng + sinh ý tưởng bài viết.</div>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = pipelineItems.map(renderArticleRow).join("");
+    bindRowEvents();
+  } catch (err) {
+    container.innerHTML = `<div class="text-red-600 text-sm p-4">Lỗi: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderArticleRow(a) {
+  const sev = a.gap_severity || "C";
+  const hasContent = !!a.content_markdown;
+  const hasImage = !!a.image_base64 || !!a.image_url;
+  const brandLabel = a.brand === "doscom" ? "🏪 Doscom" : "🚗 NOMA";
+
+  let actions = "";
+  if (a.status === "idea") {
+    actions = `<button class="btn-gen-content px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold" data-id="${a.id}">✍️ Generate content</button>`;
+  } else if (a.status === "drafting" || a.status === "publishing") {
+    actions = `<span class="text-xs text-amber-600 font-semibold"><span class="spin inline-block">⏳</span> ${STATUS_LABELS[a.status]}</span>`;
+  } else if (a.status === "pending_review" || a.status === "edited") {
+    actions = `
+      <button class="btn-open-article px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold" data-id="${a.id}">👁 Preview & Edit</button>
+      ${!hasImage ? `<button class="btn-gen-image px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-semibold" data-id="${a.id}">🎨 Gen image</button>` : ""}
+    `;
+  } else if (a.status === "published") {
+    actions = `<a href="${escapeHtml(a.wp_post_url || "#")}" target="_blank" class="text-xs text-emerald-600 hover:underline font-semibold">🔗 View on WP →</a>`;
+  } else if (a.status === "failed") {
+    actions = `
+      <button class="btn-retry px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-semibold" data-id="${a.id}">🔄 Retry</button>
+      <span class="text-xs text-red-600 ml-2" title="${escapeHtml(a.last_error || "")}">⚠️ ${escapeHtml(truncate(a.last_error || "Lỗi không rõ", 60))}</span>
+    `;
+  }
+
+  const queryText = a.query_text ? truncate(a.query_text, 80) : "";
+
+  return `
+    <div class="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-300 transition">
+      <div class="flex items-start gap-3">
+        <div class="flex flex-col gap-1 items-start flex-shrink-0">
+          <span class="badge sev-${sev}">Sev ${sev}</span>
+          <span class="badge st-${a.status}">${STATUS_LABELS[a.status] || a.status}</span>
+          <span class="text-xs text-gray-500">${brandLabel}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-gray-900 text-sm leading-snug">${escapeHtml(a.title || "(chưa có title)")}</h3>
+          ${queryText ? `<p class="text-xs text-gray-500 mt-1">📌 Query gốc: "${escapeHtml(queryText)}"</p>` : ""}
+          ${a.word_count ? `<p class="text-xs text-gray-400 mt-1">${a.word_count} từ · ${a.reading_time_min} phút đọc · ${a.faq_json ? JSON.parse(a.faq_json || "[]").length + ' FAQ' : ''} · $${(a.cost_total_usd || 0).toFixed(4)}</p>` : ""}
+        </div>
+        <div class="flex gap-2 flex-shrink-0">${actions}</div>
+      </div>
+    </div>
+  `;
+}
+
+function bindRowEvents() {
+  document.querySelectorAll(".btn-gen-content").forEach(b => b.addEventListener("click", () => generateContent(b.dataset.id)));
+  document.querySelectorAll(".btn-gen-image").forEach(b => b.addEventListener("click", () => quickGenImage(b.dataset.id)));
+  document.querySelectorAll(".btn-open-article").forEach(b => b.addEventListener("click", () => openArticle(b.dataset.id)));
+  document.querySelectorAll(".btn-retry").forEach(b => b.addEventListener("click", () => generateContent(b.dataset.id)));
+}
+
+// ============================================================
+// PIPELINE: Analyze gaps
+// ============================================================
+async function analyzeGaps() {
+  const btn = document.getElementById("btn-analyze");
+  const out = document.getElementById("analyze-output");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin inline-block">⏳</span> Đang phân tích...';
+  out.classList.remove("hidden");
+  out.innerHTML = '<div class="text-gray-600">🔎 Đọc data 7 ngày + gọi Claude sinh title đề xuất...</div>';
+
+  try {
+    const r = await fetch("/api/geo/analyze-gaps", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ days: 7, max_ideas: 10, severity: ["A","B"] }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+
+    out.innerHTML = `
+      <div class="text-emerald-700 bg-emerald-50 border border-emerald-200 rounded p-3">
+        ✅ Phân tích xong. ${data.gaps_total} lỗ hổng tổng, ${data.gaps_analyzed} được phân tích sâu →
+        sinh ${data.ideas_generated} ý tưởng bài viết, lưu ${data.ideas_inserted} vào queue.
+        Cost: $${(data.total_cost_usd || 0).toFixed(4)}
+      </div>`;
+    setTimeout(() => loadQueue(), 600);
+  } catch (err) {
+    out.innerHTML = `<div class="text-red-600 bg-red-50 border border-red-200 rounded p-3">❌ ${escapeHtml(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = "🔍 Analyze gaps now";
+  }
+}
+
+// ============================================================
+// PIPELINE: Generate content for 1 article
+// ============================================================
+async function generateContent(id) {
+  // Optimistic UI
+  const item = pipelineItems.find(p => p.id === id);
+  if (item) item.status = "drafting";
+  loadQueue();
+
+  try {
+    const r = await fetch("/api/geo/generate-content", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ article_id: id, model: "haiku", target_words: 2000 }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+    setTimeout(loadQueue, 400);
+  } catch (err) {
+    alert("Lỗi sinh content: " + err.message);
+    loadQueue();
+  }
+}
+
+async function quickGenImage(id) {
+  // Quick gen với prompt mặc định từ DB (Flux Schnell, fast 4 steps, landscape)
+  try {
+    const r = await fetch("/api/geo/generate-image", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ article_id: id, steps: 4, width: 1280, height: 720 }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+    setTimeout(loadQueue, 400);
+  } catch (err) {
+    alert("Lỗi sinh ảnh: " + err.message);
+  }
+}
+
+// ============================================================
+// MODAL: Edit article
+// ============================================================
+async function openArticle(id) {
+  try {
+    const a = await fetchJson(`/api/geo/queue/${id}?include_image=1`);
+    currentArticle = a;
+    populateModal(a);
+    document.getElementById("article-modal").classList.add("open");
+  } catch (err) {
+    alert("Lỗi load article: " + err.message);
+  }
+}
+
+function populateModal(a) {
+  document.getElementById("modal-title").textContent = a.title || "(chưa có title)";
+  document.getElementById("modal-subtitle").textContent = `${a.brand?.toUpperCase()} · ${a.word_count || 0} từ · Cost: $${(a.cost_total_usd || 0).toFixed(4)} · Model: ${a.content_model || "—"}`;
+
+  document.getElementById("m-title").value = a.title || "";
+  document.getElementById("m-excerpt").value = a.excerpt || "";
+  document.getElementById("m-markdown").value = a.content_markdown || "";
+  document.getElementById("m-wordcount").textContent = `${a.word_count || 0} từ · ${a.reading_time_min || 0} phút`;
+
+  document.getElementById("m-slug").value = a.slug || "";
+  document.getElementById("m-meta").value = a.meta_description || "";
+  updateMetaCount();
+
+  document.getElementById("m-cats").value = (JSON.parse(a.wp_categories || "[]")).join("\n");
+  document.getElementById("m-tags").value = (JSON.parse(a.wp_tags || "[]")).join("\n");
+
+  // Image
+  const imgPreview = document.getElementById("m-image-preview");
+  if (a.image_base64) {
+    imgPreview.innerHTML = `<img src="data:image/png;base64,${a.image_base64}" class="max-w-full h-auto rounded" alt="${escapeHtml(a.image_alt || "")}" />`;
+  } else if (a.image_url) {
+    imgPreview.innerHTML = `<img src="${escapeHtml(a.image_url)}" class="max-w-full h-auto rounded" alt="${escapeHtml(a.image_alt || "")}" />`;
+  } else {
+    imgPreview.innerHTML = '<span class="text-gray-400">Chưa có ảnh — click "Generate image"</span>';
+  }
+  document.getElementById("m-img-prompt").value = a.image_prompt || "";
+  document.getElementById("m-img-alt").value = a.image_alt || "";
+
+  // FAQ
+  renderFaqEditor(JSON.parse(a.faq_json || "[]"));
+
+  // Schema
+  let schemaText = "";
+  try { schemaText = JSON.stringify(JSON.parse(a.schema_jsonld || "[]"), null, 2); }
+  catch { schemaText = a.schema_jsonld || ""; }
+  document.getElementById("m-schema").value = schemaText;
+
+  // Publish defaults
+  document.getElementById("m-target-site").value = a.brand || "doscom";
+  document.getElementById("m-publish-result").classList.add("hidden");
+  document.getElementById("m-cost-info").textContent = `Content: $${(a.cost_content_usd || 0).toFixed(4)} · Image: $${(a.cost_image_usd || 0).toFixed(4)} · Total: $${(a.cost_total_usd || 0).toFixed(4)}`;
+}
+
+function renderFaqEditor(faqs) {
+  const wrap = document.getElementById("m-faq-list");
+  wrap.innerHTML = (faqs || []).map((f, i) => `
+    <div class="border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="flex justify-between mb-2">
+        <span class="text-xs font-bold text-gray-500">Q&A #${i + 1}</span>
+        <button class="text-xs text-red-600 hover:underline faq-del" data-idx="${i}">Xóa</button>
+      </div>
+      <input class="w-full mb-2 px-2 py-1 border border-gray-300 rounded text-sm faq-q" value="${escapeHtml(f.q || "")}" placeholder="Câu hỏi..." />
+      <textarea class="w-full px-2 py-1 border border-gray-300 rounded text-sm faq-a" rows="3" placeholder="Trả lời...">${escapeHtml(f.a || "")}</textarea>
+    </div>
+  `).join("");
+
+  wrap.querySelectorAll(".faq-del").forEach(b => b.addEventListener("click", () => {
+    const idx = parseInt(b.dataset.idx);
+    const current = collectFaqsFromUI();
+    current.splice(idx, 1);
+    renderFaqEditor(current);
+  }));
+}
+
+function collectFaqsFromUI() {
+  const items = document.querySelectorAll("#m-faq-list > div");
+  return Array.from(items).map(div => ({
+    q: div.querySelector(".faq-q").value,
+    a: div.querySelector(".faq-a").value,
+  }));
+}
+
+function updateMetaCount() {
+  const len = document.getElementById("m-meta").value.length;
+  document.getElementById("m-meta-count").textContent = `${len} / 155`;
+  document.getElementById("m-meta-count").className = "text-xs -mt-2 mb-3 " + (len > 160 ? "text-red-600 font-semibold" : "text-gray-500");
+}
+
+function closeModal() {
+  document.getElementById("article-modal").classList.remove("open");
+  currentArticle = null;
+}
+
+// Modal tabs
+document.querySelectorAll(".modal-tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".modal-tab").forEach(x => x.classList.toggle("active", x === t));
+  document.querySelectorAll(".mtab-pane").forEach(p => p.classList.toggle("hidden", p.dataset.mtabPane !== t.dataset.mtab));
+}));
+
+document.getElementById("m-meta").addEventListener("input", updateMetaCount);
+
+document.getElementById("m-add-faq").addEventListener("click", () => {
+  const current = collectFaqsFromUI();
+  current.push({ q: "", a: "" });
+  renderFaqEditor(current);
+});
+
+// Save edits
+document.getElementById("m-save-btn").addEventListener("click", async () => {
+  if (!currentArticle) return;
+  const payload = {
+    title: document.getElementById("m-title").value,
+    slug: document.getElementById("m-slug").value,
+    meta_description: document.getElementById("m-meta").value,
+    excerpt: document.getElementById("m-excerpt").value,
+    content_markdown: document.getElementById("m-markdown").value,
+    image_alt: document.getElementById("m-img-alt").value,
+    image_prompt: document.getElementById("m-img-prompt").value,
+    faq_json: JSON.stringify(collectFaqsFromUI()),
+    wp_categories: JSON.stringify(document.getElementById("m-cats").value.split("\n").map(s => s.trim()).filter(Boolean)),
+    wp_tags: JSON.stringify(document.getElementById("m-tags").value.split("\n").map(s => s.trim()).filter(Boolean)),
+    status: "edited",
+  };
+
+  try {
+    const r = await fetch(`/api/geo/queue/${currentArticle.id}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+    alert("Đã lưu sửa.");
+    loadQueue();
+  } catch (err) {
+    alert("Lỗi save: " + err.message);
+  }
+});
+
+// Reject article
+document.getElementById("m-reject-btn").addEventListener("click", async () => {
+  if (!currentArticle) return;
+  if (!confirm("Reject article này? Sẽ ẩn khỏi queue active (vẫn giữ trong DB).")) return;
+  const reason = prompt("Lý do reject (optional):") || "User rejected";
+  try {
+    const r = await fetch(`/api/geo/queue/${currentArticle.id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+    closeModal();
+    loadQueue();
+  } catch (err) {
+    alert("Lỗi reject: " + err.message);
+  }
+});
+
+// Generate image from modal
+document.getElementById("m-gen-image").addEventListener("click", async () => {
+  if (!currentArticle) return;
+  const btn = document.getElementById("m-gen-image");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin inline-block">⏳</span> Đang sinh ảnh...';
+
+  try {
+    const [w, h] = document.getElementById("m-img-size").value.split("x").map(Number);
+    const r = await fetch("/api/geo/generate-image", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        article_id: currentArticle.id,
+        prompt_override: document.getElementById("m-img-prompt").value,
+        steps: parseInt(document.getElementById("m-img-quality").value),
+        width: w,
+        height: h,
+      }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+    // Reload article in modal
+    const updated = await fetchJson(`/api/geo/queue/${currentArticle.id}?include_image=1`);
+    currentArticle = updated;
+    populateModal(updated);
+    alert(`Đã sinh ảnh. Provider: ${data.provider} · ${data.free_tier ? "FREE" : "$" + data.cost_usd.toFixed(4)}`);
+  } catch (err) {
+    alert("Lỗi gen ảnh: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = "🎨 Generate image";
+  }
+});
+
+// Publish to WordPress
+document.getElementById("m-publish-btn").addEventListener("click", async () => {
+  if (!currentArticle) return;
+  const btn = document.getElementById("m-publish-btn");
+  const result = document.getElementById("m-publish-result");
+  const target = document.getElementById("m-target-site").value;
+  const wpStatus = document.getElementById("m-wp-status").value;
+
+  if (!confirm(`Publish bài "${currentArticle.title}" lên ${target.toUpperCase()} với status="${wpStatus}"?`)) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin inline-block">⏳</span> Đang publish...';
+  result.classList.add("hidden");
+
+  try {
+    // Save edits first (in case user changed something)
+    document.getElementById("m-save-btn").click();
+    await new Promise(r => setTimeout(r, 500));
+
+    const r = await fetch("/api/geo/publish-wp", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        article_id: currentArticle.id,
+        target_site: target,
+        wp_status: wpStatus,
+      }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || "Failed");
+
+    result.classList.remove("hidden");
+    result.innerHTML = `
+      <div class="bg-emerald-50 border border-emerald-200 rounded p-3 text-sm">
+        ✅ Đã publish! WP post ID: ${data.wp_post_id}<br>
+        <a href="${escapeHtml(data.wp_post_url)}" target="_blank" class="text-emerald-700 font-semibold underline">→ Xem bài trên ${target.toUpperCase()}</a>
+      </div>`;
+    loadQueue();
+  } catch (err) {
+    result.classList.remove("hidden");
+    result.innerHTML = `<div class="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">❌ ${escapeHtml(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = "🚀 Publish to WordPress";
+  }
+});
+
+// Pipeline events
+document.getElementById("btn-analyze").addEventListener("click", analyzeGaps);
+document.getElementById("btn-refresh-queue").addEventListener("click", loadQueue);
+document.getElementById("pfilter-brand").addEventListener("change", loadQueue);
+document.getElementById("pfilter-status").addEventListener("change", loadQueue);
+
+// Close modal on backdrop click
+document.getElementById("article-modal").addEventListener("click", e => {
+  if (e.target.id === "article-modal") closeModal();
 });
 
 // Initial load

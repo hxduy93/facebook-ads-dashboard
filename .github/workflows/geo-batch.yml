@@ -1,12 +1,11 @@
 name: GEO Monitor — batch processor
 
 on:
-  schedule:
-    # Mỗi 30 phút (UTC). GitHub Actions cron min interval là 5 min nhưng
-    # 30 min đủ cho 90 jobs/ngày (30 query × 3 engine × 1 run).
-    # 6 jobs/batch × 48 cycles/ngày = 288 capacity → dư cho 90 jobs.
-    - cron: '*/30 * * * *'
-  workflow_dispatch:  # cho phép trigger thủ công từ Actions tab
+  # Cron disabled 2026-05-14 (user request: chỉ chạy khi bấm Run thủ công để tiết kiệm chi phí).
+  # Bật lại bằng cách uncomment khối schedule dưới đây.
+  # schedule:
+  #   - cron: '*/30 * * * *'
+  workflow_dispatch:  # trigger thủ công từ Actions tab
 
 concurrency:
   # Chỉ 1 run cùng lúc — tránh 2 cron tick chồng nhau gây duplicate processing
