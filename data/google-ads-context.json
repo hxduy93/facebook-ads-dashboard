@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14 09:32",
+  "generated_at": "2026-05-14 13:18",
   "source_data_date_range": {
     "start_7d": "2026-05-07",
     "end": "2026-05-13",
@@ -2510,14 +2510,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19142,
-      "total_spend_30d": 21990606.0
+      "total_unique_placements": 19141,
+      "total_spend_30d": 21980728.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 21991443.0,
-        "clicks_30d": 13544,
-        "impressions_30d": 1085053,
+        "spend_30d": 21981564.0,
+        "clicks_30d": 13538,
+        "impressions_30d": 1085049,
         "ctr_30d": 0.0125,
         "cpc_30d": 1624.0,
         "campaign_count": 9
@@ -2533,11 +2533,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 21990606.0,
-        "clicks_30d": 13543,
-        "impressions_30d": 1048830,
+        "spend_30d": 21980728.0,
+        "clicks_30d": 13537,
+        "impressions_30d": 1048831,
         "ctr_30d": 0.0129,
-        "placement_count": 19142
+        "placement_count": 19141
       }
     },
     "top_waste_placements": [],
@@ -2749,28 +2749,28 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 77573546.0
+      "total_spend_30d": 76070943.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2503747.0,
-        "clicks_30d": 1762,
-        "impressions_30d": 202143,
-        "ctr_30d": 0.0087,
+        "spend_30d": 2510177.0,
+        "clicks_30d": 1701,
+        "impressions_30d": 198596,
+        "ctr_30d": 0.0086,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 72729082.0,
-        "clicks_30d": 21210,
-        "impressions_30d": 1501928,
-        "ctr_30d": 0.0141,
+        "spend_30d": 71409435.0,
+        "clicks_30d": 21279,
+        "impressions_30d": 1536850,
+        "ctr_30d": 0.0138,
         "ad_count": 150
       },
       "RSA": {
-        "spend_30d": 2340717.0,
-        "clicks_30d": 766,
-        "impressions_30d": 67454,
-        "ctr_30d": 0.0114,
+        "spend_30d": 2151331.0,
+        "clicks_30d": 704,
+        "impressions_30d": 62535,
+        "ctr_30d": 0.0113,
         "ad_count": 1
       }
     },
@@ -2781,9 +2781,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 931771.0,
-        "clicks_30d": 1045,
-        "ctr_30d": 0.0119
+        "spend_30d": 956560.0,
+        "clicks_30d": 1010,
+        "ctr_30d": 0.0113
       },
       {
         "ad_id": "752128818627",
@@ -2791,9 +2791,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 746146.0,
-        "clicks_30d": 365,
-        "ctr_30d": 0.0084
+        "spend_30d": 784119.0,
+        "clicks_30d": 369,
+        "ctr_30d": 0.0085
       },
       {
         "ad_id": "751153590183",
@@ -2801,9 +2801,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 390990.0,
-        "clicks_30d": 183,
-        "ctr_30d": 0.0046
+        "spend_30d": 347362.0,
+        "clicks_30d": 159,
+        "ctr_30d": 0.0044
       },
       {
         "ad_id": "751153590186",
@@ -2811,9 +2811,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 189392.0,
-        "clicks_30d": 72,
-        "ctr_30d": 0.0091
+        "spend_30d": 173984.0,
+        "clicks_30d": 65,
+        "ctr_30d": 0.0093
       },
       {
         "ad_id": "752128818630",
@@ -2821,9 +2821,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "320x50.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 110043.0,
-        "clicks_30d": 36,
-        "ctr_30d": 0.0032
+        "spend_30d": 113056.0,
+        "clicks_30d": 39,
+        "ctr_30d": 0.0035
       },
       {
         "ad_id": "752128818633",
@@ -2831,19 +2831,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "728x90.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 85048.0,
-        "clicks_30d": 42,
-        "ctr_30d": 0.0058
-      },
-      {
-        "ad_id": "751153590189",
-        "campaign": "RMK - Camera wifi",
-        "ad_group_name": "Ad group 1",
-        "ad_name": "320x50.gif",
-        "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 22353.0,
-        "clicks_30d": 10,
-        "ctr_30d": 0.0069
+        "spend_30d": 91860.0,
+        "clicks_30d": 44,
+        "ctr_30d": 0.0057
       },
       {
         "ad_id": "751153590192",
@@ -2853,7 +2843,17 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 18724.0,
         "clicks_30d": 7,
-        "ctr_30d": 0.0027
+        "ctr_30d": 0.0028
+      },
+      {
+        "ad_id": "751153590189",
+        "campaign": "RMK - Camera wifi",
+        "ad_group_name": "Ad group 1",
+        "ad_name": "320x50.gif",
+        "ad_format": "DISPLAY_BANNER",
+        "spend_30d": 15232.0,
+        "clicks_30d": 6,
+        "ctr_30d": 0.0054
       },
       {
         "ad_id": "751153590180",
@@ -2883,7 +2883,7 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "160x600.gif",
         "spend_30d": 4410.0,
-        "impressions_30d": 605,
+        "impressions_30d": 606,
         "ctr_30d": 0.0017
       }
     ],
