@@ -704,7 +704,12 @@ function FetchDataButton() {
         setTimeout(() => { window.location.reload() }, 90000)
       } else {
         setStatus("error")
-        setMessage(data.error || data.summary || `Lỗi HTTP ${r.status}`)
+        // Show first failed workflow's status + message để debug GitHub API issue
+        const firstFail = (data.results || []).find(x => !x.ok)
+        const detail = firstFail
+          ? `${firstFail.workflow}: HTTP ${firstFail.status || "?"} — ${firstFail.message || "no message"}`
+          : (data.error || data.summary || `HTTP ${r.status}`)
+        setMessage(detail)
       }
     } catch (e) {
       setStatus("error")
