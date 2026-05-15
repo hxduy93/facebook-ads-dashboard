@@ -377,6 +377,7 @@ const TIME_FILTERS = [
   { key: "today",     label: "Hôm nay",       days: 0 },
   { key: "yesterday", label: "Hôm qua",       days: 1 },
   { key: "7d",        label: "7 ngày",        days: 7 },
+  { key: "thisweek",  label: "Tuần này",      days: 0 },
   { key: "lastweek",  label: "Tuần trước",    days: 7 },
   { key: "thismonth", label: "Tháng này",     days: 0 },
   { key: "lastmonth", label: "Tháng trước",   days: 0 },
@@ -433,6 +434,13 @@ function getDateRange(filterKey, customRange) {
     const y = new Date(today); y.setUTCDate(y.getUTCDate() - 1)
     const ys = y.toISOString().slice(0, 10)
     return { start: ys, end: ys }
+  }
+  if (filterKey === "thisweek") {
+    // Tuần này: thứ 2 → hôm nay (theo lịch ISO, tính ở UTC)
+    const dow = today.getUTCDay() // 0=CN, 1=T2, ..., 6=T7
+    const toMon = (dow === 0 ? 6 : dow - 1)
+    const monThis = new Date(today); monThis.setUTCDate(monThis.getUTCDate() - toMon)
+    return { start: monThis.toISOString().slice(0, 10), end: TODAY }
   }
   if (filterKey === "lastweek") {
     // Tuần trước: thứ 2 → chủ nhật của tuần liền trước (theo lịch ISO, tính ở UTC)
@@ -672,6 +680,74 @@ function CompareCard({ title, current, previous, isMoneyMetric, inverseGood }) {
 }
 
 // =============================================================
+// FETCH DATA BUTTON — trigger 3 GitHub Actions workflows on demand
+// Endpoint: POST /api/admin/trigger-fetch (yêu cầu level ≥ 40)
+// =============================================================
+function FetchDataButton() {
+  const [status, setStatus] = useState("idle") // "idle" | "loading" | "success" | "error"
+  const [message, setMessage] = useState("")
+
+  const handleFetch = async () => {
+    if (status === "loading") return
+    setStatus("loading")
+    setMessage("Đang trigger workflows...")
+    try {
+      const r = await fetch("/api/admin/trigger-fetch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      })
+      const data = await r.json()
+      if (r.ok && data.ok) {
+        setStatus("success")
+        setMessage(`✓ ${data.summary} · Dashboard sẽ refresh sau 90s`)
+        setTimeout(() => { window.location.reload() }, 90000)
+      } else {
+        setStatus("error")
+        setMessage(data.error || data.summary || `Lỗi HTTP ${r.status}`)
+      }
+    } catch (e) {
+      setStatus("error")
+      setMessage("Lỗi mạng: " + e.message)
+    }
+  }
+
+  const stateClass =
+    status === "loading" ? "bg-amber-500 text-white cursor-wait"
+    : status === "success" ? "bg-emerald-600 text-white"
+    : status === "error"   ? "bg-red-600 text-white hover:bg-red-700"
+    : "bg-orange-500 text-white hover:bg-orange-600"
+
+  const label =
+    status === "loading" ? "⏳ Đang fetch..."
+    : status === "success" ? "✓ Đã trigger"
+    : status === "error" ? "✗ Lỗi — bấm lại"
+    : "🔄 Fetch dữ liệu"
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <button
+        onClick={handleFetch}
+        disabled={status === "loading"}
+        className={`px-4 py-2 rounded-lg text-sm font-bold shadow-md transition ${stateClass}`}
+        title="Trigger fetch ngay: Chi tiêu FB Ads + Google Ads + Doanh thu Pancake"
+      >
+        {label}
+      </button>
+      {message && (
+        <p className={`text-xs max-w-xs text-right ${
+          status === "error" ? "text-red-600"
+          : status === "success" ? "text-emerald-700"
+          : "text-gray-600"
+        }`}>
+          {message}
+        </p>
+      )}
+    </div>
+  )
+}
+
+// =============================================================
 // MAIN COMPONENT
 // =============================================================
 function FacebookAdsDashboard() {
@@ -855,8 +931,8 @@ function FacebookAdsDashboard() {
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
-        <div className="mb-4">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-600 rounded-lg">
               <BarChart3 className="w-6 h-6 text-white" />
             </div>
@@ -867,6 +943,7 @@ function FacebookAdsDashboard() {
               </p>
             </div>
           </div>
+          <FetchDataButton />
         </div>
 
         {/* MAIN TAB NAVIGATION */}

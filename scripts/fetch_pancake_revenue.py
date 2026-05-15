@@ -308,6 +308,34 @@ PRODUCT_LIST = [
 # = 13 sản phẩm
 
 
+def _load_retail_prices():
+    """Đọc gia_ban_vnd của 13 SP chính từ data/product-costs.json.
+
+    Dùng để phân bổ doanh thu combo nhiều SP theo retail-price weight
+    (vd: combo-103 = Noma 911 + Noma 922 → chia line_rev theo tỉ lệ 199k/199k).
+    Fallback {} nếu file thiếu — khi đó aggregate() sẽ chia đều cho mọi entry.
+    """
+    path = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), "..", "data", "product-costs.json"
+    ))
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            costs = json.load(f).get("products", {})
+    except Exception as e:
+        print(f"[WARN] Khong doc duoc product-costs.json: {e} -> fallback chia deu combo", file=sys.stderr)
+        return {}
+    out = {}
+    for entry in costs.values():
+        name  = (entry.get("ma_ten_goi") or "").strip()
+        price = entry.get("gia_ban_vnd")
+        if name in PRODUCT_LIST and price:
+            out[name] = float(price)
+    return out
+
+
+RETAIL_PRICES = _load_retail_prices()
+
+
 def fetch_orders(group, page=1, page_size=100, start_date=None, end_date=None, max_retries=4):
     """Fetch 1 page đơn từ Pancake cho 1 source group."""
     params = [
@@ -639,11 +667,25 @@ def aggregate(orders):
                 if not UNMAPPED_VARIATIONS[key]["name"] and name:
                     UNMAPPED_VARIATIONS[key]["name"] = name
                 continue
-            # Nếu combo có N sản phẩm + thẻ nhớ, line_rev là của cả combo.
-            # Entry đầu tiên trong mapping nhận full revenue; entry sau = 0 (tránh double count).
+            # Phân bổ line_rev của combo theo retail_price × qty_per_unit của từng SP component.
+            # Combo 1 SP (vd combo-058 DA8.1+thẻ nhớ, combo-092 2 chai 911) → full line_rev về SP đó.
+            # Combo nhiều SP (vd combo-103 = 911+922) → chia theo retail price (911=199k, 922=199k → 50/50).
+            # Fallback chia đều nếu thiếu retail price. Đổi từ logic cũ "idx 0 nhận full, idx sau = 0"
+            # vì logic cũ làm doanh thu Noma 922 bị 0 trong combo-103, không khớp units × giá_bán.
+            weights = [
+                RETAIL_PRICES.get(product, 0.0) * qty_per_unit
+                for product, qty_per_unit in mapping
+            ]
+            total_weight = sum(weights)
+            n_entries = len(mapping)
             for idx, (product, qty_per_unit) in enumerate(mapping):
                 total_units = qty_per_unit * qty
-                revenue = float(line_rev) if idx == 0 else 0.0
+                if n_entries == 1:
+                    revenue = float(line_rev)
+                elif total_weight > 0:
+                    revenue = float(line_rev) * (weights[idx] / total_weight)
+                else:
+                    revenue = float(line_rev) / n_entries
                 bucket[product]["total"] += revenue
                 bucket[product]["units"] += total_units
                 bucket[product]["by_date"][date] = bucket[product]["by_date"].get(date, 0.0) + revenue
