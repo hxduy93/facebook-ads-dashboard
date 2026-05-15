@@ -23,6 +23,7 @@ import {
   compactFbAccounts,
   compactFbCampaigns,
   getUtmAnalysisForStaff,
+  computeCvrThresholdsPerProduct,
 } from "../lib/fbAdsHelpers.js";
 
 const SESSION_COOKIE = "doscom_session";
@@ -52,7 +53,7 @@ const MODEL_MAP = {
   claude_haiku: MODEL_CLAUDE_HAIKU,
 };
 
-const CACHE_VERSION = "v7";  // bumped: staff_overview now includes utm_analysis section (last 30d)
+const CACHE_VERSION = "v8";  // bumped: utm_analysis dùng CVR threshold cứng (CPL thực 30d) — phân loại SCALE/KEEP/REJECT_PAUSE
 const CACHE_TTL_SECONDS = 86400;  // 24h. Cache key đã include todayVN nên thực tế = đến hết ngày VN. F5 cùng ngày + click lại = HIT, KHÔNG tốn Claude credit.
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
@@ -405,16 +406,32 @@ Bạn sẽ thấy:
    Mỗi entry trong .utms: { utm, product, leads, orders, delivered, revenue,
    conv_rate_pct, delivered_rate_pct, aov_vnd }. Đây là attribution last-touch 60d
    từ lead → order qua phone_last9. Dùng để phân tích UTM nào convert tốt/yếu.
+- cvr_thresholds_30d: NGƯỠNG CVR CỨNG để phân loại UTM (rất quan trọng — DÙNG LUÔN,
+   không tự bịa). Schema:
+     thresholds: { "<product>": {
+       cpl_vnd: <CPL thực 30d>,
+       p_order_vnd: <lãi gộp 1 đơn = giá_bán × 0.9 − giá_nhập>,
+       cvr_breakeven_pct: <CVR để hoà vốn>,
+       cvr_scale_pct: <CVR để lãi ≥ 50% chi ads (= SCALE tier)>,
+       ...
+     }}
+   Phân loại 1 UTM theo bảng:
+     - UTM.conv_rate_pct < cvr_breakeven_pct  → REJECT_PAUSE (đang lỗ)
+     - cvr_breakeven_pct ≤ UTM.conv_rate_pct < cvr_scale_pct  → KEEP (lãi nhỏ)
+     - UTM.conv_rate_pct ≥ cvr_scale_pct  → SCALE (lãi tốt, đẩy budget)
 
 ═══ MỤC TIÊU PHÂN TÍCH ═══
 1. Tổng quan: nhân sự đang đứng ở đâu so với KPI và so với nhân sự còn lại
 2. SP nào đang ngon (winner) → đề xuất scale làm key chính tháng
 3. SP nào yếu/lỗ → đề xuất pause/refresh/audience
 4. Action plan tuần để đạt KPI
-5. UTM tối ưu: từ utm_analysis_last_30d, nhận diện UTM winner (conv cao + revenue cao)
-   để scale + UTM loser (leads nhiều nhưng conv thấp / spend cao mà ít delivered)
-   để pause hoặc refresh. CHỈ cho phép UTM có ≥ 10 leads vào winners để tránh
-   small-sample-size bias (vd 2 leads → 100% conv không có ý nghĩa thống kê).
+5. UTM tối ưu: áp dụng QUY TẮC TỪ cvr_thresholds_30d:
+   - WINNERS = UTM có conv_rate_pct ≥ cvr_scale_pct của SP đó (đảm bảo SP ấy có
+     threshold; nếu cvr_scale_pct > 100% thì SP đó về mặt toán không scale được —
+     vẫn show top UTM nhưng note "SP cận lỗ").
+   - LOSERS = UTM có conv_rate_pct < cvr_breakeven_pct của SP đó (đang lỗ ròng).
+   - CHỈ phân loại UTM có ≥ 10 leads (tránh small-sample bias).
+   - UTM giữa 2 ngưỡng = KEEP, không vào winners/losers nhưng có thể mention trong patterns.
 
 ═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
 
@@ -479,46 +496,74 @@ Bạn sẽ thấy:
   },
 
   "utm_analysis": {
-    // Phân tích hiệu quả utm_campaign của nhân sự trong 30 NGÀY GẦN NHẤT (utm_analysis_last_30d).
-    // KHÁC khoảng thời gian các metric khác (MTD). Mục đích: nhận diện UTM tốt/yếu để scale/cắt.
-    // Nếu utm_analysis_last_30d = null hoặc utms = [] → trả `null` cho cả block này (đừng bịa).
+    // Phân tích hiệu quả utm_campaign trong 30 NGÀY GẦN NHẤT, ÁP DỤNG cvr_thresholds_30d
+    // làm chuẩn cứng để phân SCALE/KEEP/REJECT_PAUSE. Nếu utm_analysis_last_30d = null
+    // hoặc utms = [] → trả `null` cho cả block này (đừng bịa).
     "date_range_label": "30 ngày gần nhất (vd: 16/04 → 15/05)",
+    "thresholds_applied": {
+      // Tóm tắt ngưỡng đã áp dụng (lấy từ cvr_thresholds_30d.thresholds).
+      // Cho user thấy bạn dùng ngưỡng nào để phân loại.
+      // Mỗi SP có dữ liệu CPL: { product, cpl_vnd, cvr_breakeven_pct, cvr_scale_pct, note? }
+      "<product>": {
+        "cpl_vnd": <int>,
+        "cvr_breakeven_pct": <float>,
+        "cvr_scale_pct": <float>,
+        "note": "[optional] Vd: 'SCALE không khả thi (CVR scale > 100%) — đang cận lỗ'"
+      }
+    },
     "winners": [
-      // 2-5 UTM hiệu quả nhất (chỉ chọn UTM có leads ≥ 10 để conv_rate đáng tin)
+      // UTM có conv_rate_pct ≥ cvr_scale_pct CỦA SP TƯƠNG ỨNG. Bỏ qua nếu leads < 10.
+      // Nếu không có UTM nào đạt SCALE → return [] (đừng bịa).
       {
         "utm": "<utm_campaign string từ data>",
-        "product": "<product từ data>",
+        "product": "<product>",
         "leads": <int>,
         "orders": <int>,
         "delivered": <int>,
         "revenue_vnd": <int>,
-        "conv_rate_pct": <float — % leads → orders>,
+        "conv_rate_pct": <float>,
         "aov_vnd": <int>,
-        "verdict": "SCALE" | "KEEP_PUSH",
-        "why": "[≥25 từ] Cụ thể vì sao là winner — số liệu + so sánh với UTM khác cùng nhân sự"
+        "verdict": "SCALE",
+        "vs_threshold": "[ngắn] Vd: 'CVR 65% > ngưỡng SCALE 45% của D1 (vượt 20pp)'",
+        "why": "[≥25 từ] Cụ thể vì sao là winner — số liệu thực"
+      }
+    ],
+    "keeps": [
+      // UTM có cvr_breakeven_pct ≤ conv_rate_pct < cvr_scale_pct. Lãi nhỏ nhưng dương.
+      // Optional: chỉ liệt kê 2-3 UTM tiêu biểu để tham khảo (nếu nhiều, summary trong patterns).
+      {
+        "utm": "<utm>",
+        "product": "<product>",
+        "leads": <int>,
+        "conv_rate_pct": <float>,
+        "verdict": "KEEP",
+        "vs_threshold": "[ngắn] Vd: 'CVR 38% trong khoảng KEEP (30-45%) của D1'",
+        "hint": "[≥15 từ] Gợi ý tăng CVR (vd refresh creative, A/B test audience)"
       }
     ],
     "losers": [
-      // 2-5 UTM yếu (high leads but low conv, hoặc spend cao mà ít delivered)
+      // UTM có conv_rate_pct < cvr_breakeven_pct → đang LỖ ròng (revenue < ads spend after VAT+COGS).
+      // Bỏ qua nếu leads < 10. Nếu không có UTM nào lỗ → return [].
       {
-        "utm": "<utm_campaign>",
+        "utm": "<utm>",
         "product": "<product>",
         "leads": <int>,
         "orders": <int>,
         "conv_rate_pct": <float>,
-        "verdict": "PAUSE" | "REFRESH_CREATIVE" | "REFINE_AUDIENCE",
-        "why": "[≥25 từ] Vì sao yếu",
-        "fix": "[≥20 từ] Đề xuất cụ thể"
+        "verdict": "REJECT_PAUSE" | "REFRESH_CREATIVE" | "REFINE_AUDIENCE",
+        "vs_threshold": "[ngắn] Vd: 'CVR 45% < ngưỡng break-even 58% của DA8.1 → đang lỗ'",
+        "why": "[≥25 từ] Vì sao yếu — root cause cụ thể",
+        "fix": "[≥20 từ] Đề xuất cụ thể (pause / refresh / đổi audience / etc.)"
       }
     ],
     "patterns": [
-      // 1-3 nhận xét về xu hướng: vd "UTM chứa keyword 'video' chuyển đổi cao 1.5x trung bình"
+      // 1-3 nhận xét về xu hướng cross-UTM (vd: 'UTM chứa keyword X chuyển đổi cao hơn 1.5x mean')
       "[≥20 từ] Mỗi pattern dạng câu đầy đủ + số liệu"
     ],
     "next_actions": [
-      // 2-4 hành động cụ thể với UTM, ưu tiên cao trước
+      // 2-4 hành động cụ thể, ưu tiên cao trước
       {
-        "action": "[≥20 từ] Vd: 'Tăng budget UTM 14/05-dr1-anhha thêm 30% (đang convert 18% cao gấp đôi mean)'",
+        "action": "[≥20 từ] Vd: 'PAUSE 3 UTM Noma 911 có CVR < 70% — đang lỗ, ngốn ~5tr/ngày không hồi'",
         "target_utms": ["<utm1>", "<utm2>"],
         "priority": "HIGH" | "MEDIUM" | "LOW"
       }
@@ -1343,6 +1388,11 @@ export async function onRequestPost(context) {
     const utmRange = resolveTimeRange("last_30d");
     dataContext.utm_analysis_last_30d = await getUtmAnalysisForStaff(
       env, origin, cookieHeader, staff, utmRange
+    );
+    // CVR threshold per product — AI dùng để so CVR thực tế của UTM với ngưỡng cứng
+    // và phân loại SCALE / KEEP / REJECT. Compute từ CPL thực 30d + product cost.
+    dataContext.cvr_thresholds_30d = await computeCvrThresholdsPerProduct(
+      env, origin, cookieHeader, { days: 30, deliverAssumed: 0.8, scaleMultiplier: 1.5 }
     );
   }
 

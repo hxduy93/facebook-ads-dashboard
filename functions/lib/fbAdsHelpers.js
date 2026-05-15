@@ -791,3 +791,207 @@ export async function getUtmAnalysisForStaff(env, origin, cookieHeader, staff, d
     utms: filtered.slice(0, 30),  // cap 30 để prompt không quá dài
   };
 }
+
+// ════════════════════════════════════════════════════════════════
+// CVR THRESHOLDS PER PRODUCT — hard-coded SCALE/KEEP/REJECT rule
+// ════════════════════════════════════════════════════════════════
+// Lấy spend + complete_registrations 30d gần nhất per SP từ fb-ads-data.json,
+// kết hợp với gia_ban/gia_nhap từ product-costs.json → tính:
+//   CPL = spend / complete_registrations
+//   P_order = giá_bán × 0.9 − giá_nhập
+//   CVR_break_even = CPL / (P_order × Deliver_assumed)
+//   CVR_scale = 1.5 × CPL / (P_order × Deliver_assumed)  (= cần lãi ≥ 50% chi ads)
+//
+// Phân loại:
+//   - REJECT: actual CVR < CVR_break_even  (lỗ)
+//   - KEEP:   CVR_break_even ≤ actual CVR < CVR_scale  (lãi 0-50% chi ads)
+//   - SCALE:  actual CVR ≥ CVR_scale  (lãi ≥ 50% chi ads)
+//
+// Detect product từ campaign_name (matches Doscom convention):
+//   - "noma\s*911" → Noma 911 (Noma 922 chia sẻ CPL vì bán kèm combo-103)
+//   - "noma\s*922" → Noma 922 (rare standalone)
+//   - "da\s*8\.1" → DA8.1
+//   - "dr\s*1\b" → DR1
+//   - "d1" (không phải "d1 pro") → D1
+//   - + có thể mở rộng SP khác sau
+
+const FB_PRODUCT_DETECT = [
+  { product: "Noma 911", regex: /noma\s*911/i },
+  { product: "Noma 922", regex: /noma\s*922/i },
+  { product: "DA8.1",    regex: /da\s*8\.1/i },
+  { product: "DR1",      regex: /\bdr\s*1\b/i },
+  { product: "D1",       regex: /\bd\s*1\b/i, exclude: /\bd\s*1\s*pro\b/i },
+];
+
+function detectProductFromCampaign(name) {
+  const n = String(name || "");
+  for (const rule of FB_PRODUCT_DETECT) {
+    if (rule.exclude && rule.exclude.test(n)) continue;
+    if (rule.regex.test(n)) return rule.product;
+  }
+  return null;
+}
+
+// Aggregate spend + complete_registrations per product trong N ngày gần nhất.
+// Returns { "D1": { spend, regs, cpl, n_campaigns }, ... } hoặc {} nếu fail.
+async function aggregateFbCplPerProduct(env, origin, cookieHeader, days = 30) {
+  let fb = null;
+  try {
+    const r = await fetch(new URL("/data/fb-ads-data.json", origin).toString(), {
+      headers: { Cookie: cookieHeader || "" },
+    });
+    if (!r.ok) return {};
+    fb = await r.json();
+  } catch { return {}; }
+
+  if (!fb?.accounts) return {};
+
+  // Window: last N days based on fb data's end date (giữ consistent với data snapshot).
+  const endDateStr = fb?.date_range?.end;
+  if (!endDateStr) return {};
+  const end = new Date(endDateStr + "T00:00:00Z");
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - (days - 1));
+  const inRange = (dStr) => {
+    const d = new Date(dStr + "T00:00:00Z");
+    return d >= start && d <= end;
+  };
+
+  const agg = {};  // { product: { spend, regs, n_campaigns_seen } }
+  for (const acc of fb.accounts || []) {
+    for (const c of acc.campaigns || []) {
+      const product = detectProductFromCampaign(c.campaign_name || "");
+      if (!product) continue;
+      let sp = 0, regs = 0;
+      const byDate = c.by_date || {};
+      for (const dStr in byDate) {
+        if (!inRange(dStr)) continue;
+        const row = byDate[dStr] || {};
+        sp += Number(row.spend || 0);
+        regs += Number(row.complete_registrations || 0);
+      }
+      if (sp <= 0 && regs <= 0) continue;
+      if (!agg[product]) agg[product] = { spend: 0, regs: 0, n_campaigns: 0 };
+      agg[product].spend += sp;
+      agg[product].regs += regs;
+      agg[product].n_campaigns += 1;
+    }
+  }
+
+  // Compute CPL per product
+  const out = {};
+  for (const product in agg) {
+    const { spend, regs, n_campaigns } = agg[product];
+    out[product] = {
+      spend_vnd: Math.round(spend),
+      complete_registrations: regs,
+      cpl_vnd: regs > 0 ? Math.round(spend / regs) : null,
+      n_campaigns,
+    };
+  }
+  return out;
+}
+
+// Combine CPL + product cost → CVR thresholds per product.
+// Returns { "D1": { cpl_vnd, p_order_vnd, cvr_breakeven_pct, cvr_scale_pct, ... }, ... }
+//
+// Deliver_assumed default 80% (= avg Doscom). Có thể truyền `deliverAssumed`
+// khác (vd 0.7 nếu thực tế thấp hơn) để tính lại threshold.
+//
+// Logic phân tier:
+//   REJECT < cvr_breakeven_pct < KEEP < cvr_scale_pct < SCALE
+//   cvr_breakeven_pct = CPL / (P_order × deliver) × 100
+//   cvr_scale_pct     = 1.5 × CPL / (P_order × deliver) × 100  (lãi ≥ 50% chi ads)
+//
+// Special case: Noma 922 không có campaign riêng → chia sẻ CPL với Noma 911
+// (vì cả 2 bán kèm trong combo-103).
+export async function computeCvrThresholdsPerProduct(env, origin, cookieHeader, opts = {}) {
+  const days = opts.days || 30;
+  const deliver = opts.deliverAssumed || 0.8;
+  const scaleMultiplier = opts.scaleMultiplier || 1.5;  // SCALE khi lãi ≥ 50% chi ads
+
+  const cplMap = await aggregateFbCplPerProduct(env, origin, cookieHeader, days);
+
+  let costsJson = null;
+  try {
+    const r = await fetch(new URL("/data/product-costs.json", origin).toString(), {
+      headers: { Cookie: cookieHeader || "" },
+    });
+    if (r.ok) costsJson = await r.json();
+  } catch { /* ignore */ }
+  const costs = costsJson?.products || {};
+
+  // Find cost entry by ma_ten_goi (case-insensitive)
+  const findCost = (productName) => {
+    const target = productName.toLowerCase().trim();
+    for (const k in costs) {
+      const c = costs[k];
+      if ((c.ma_ten_goi || "").toLowerCase().trim() === target) return c;
+    }
+    return null;
+  };
+
+  const thresholds = {};
+
+  // First pass: products with own CPL data
+  for (const product in cplMap) {
+    const { cpl_vnd, spend_vnd, complete_registrations, n_campaigns } = cplMap[product];
+    const cost = findCost(product);
+    if (!cost?.gia_ban_vnd || !cost?.gia_nhap_vnd) continue;
+    const giaBan = Number(cost.gia_ban_vnd);
+    const giaNhap = Number(cost.gia_nhap_vnd);
+    const pOrder = giaBan * 0.9 - giaNhap;
+    if (pOrder <= 0 || !cpl_vnd) continue;
+    const cvrBreakeven = (cpl_vnd / (pOrder * deliver)) * 100;
+    const cvrScale = scaleMultiplier * (cpl_vnd / (pOrder * deliver)) * 100;
+    thresholds[product] = {
+      cpl_vnd,
+      spend_vnd_last_30d: spend_vnd,
+      complete_registrations_last_30d: complete_registrations,
+      n_campaigns,
+      gia_ban_vnd: giaBan,
+      gia_nhap_vnd: giaNhap,
+      p_order_vnd: Math.round(pOrder),
+      cvr_breakeven_pct: Math.round(cvrBreakeven * 10) / 10,
+      cvr_scale_pct: Math.round(cvrScale * 10) / 10,
+      deliver_assumed_pct: deliver * 100,
+      scale_multiplier: scaleMultiplier,
+    };
+  }
+
+  // Noma 922 chia sẻ CPL với Noma 911 (vì bán kèm combo-103, không có campaign riêng)
+  if (thresholds["Noma 911"] && !thresholds["Noma 922"]) {
+    const cost922 = findCost("Noma 922");
+    if (cost922?.gia_ban_vnd && cost922?.gia_nhap_vnd) {
+      const giaBan = Number(cost922.gia_ban_vnd);
+      const giaNhap = Number(cost922.gia_nhap_vnd);
+      const pOrder = giaBan * 0.9 - giaNhap;
+      const cpl = thresholds["Noma 911"].cpl_vnd;
+      if (pOrder > 0) {
+        thresholds["Noma 922"] = {
+          cpl_vnd: cpl,
+          spend_vnd_last_30d: 0,
+          complete_registrations_last_30d: 0,
+          n_campaigns: 0,
+          shared_cpl_with: "Noma 911 (combo-103 bundle)",
+          gia_ban_vnd: giaBan,
+          gia_nhap_vnd: giaNhap,
+          p_order_vnd: Math.round(pOrder),
+          cvr_breakeven_pct: Math.round((cpl / (pOrder * deliver)) * 1000) / 10,
+          cvr_scale_pct: Math.round((scaleMultiplier * cpl / (pOrder * deliver)) * 1000) / 10,
+          deliver_assumed_pct: deliver * 100,
+          scale_multiplier: scaleMultiplier,
+        };
+      }
+    }
+  }
+
+  return {
+    computed_at: new Date().toISOString(),
+    window_days: days,
+    deliver_assumed_pct: deliver * 100,
+    scale_rule: `SCALE if CVR ≥ ${scaleMultiplier}× break-even (= lãi ≥ ${Math.round((scaleMultiplier - 1) * 100)}% chi ads)`,
+    formula_note: "CVR_breakeven = CPL / (P_order × deliver). P_order = giá_bán × 0.9 − giá_nhập (sau VAT 10%).",
+    thresholds,
+  };
+}

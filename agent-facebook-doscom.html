@@ -649,23 +649,56 @@ function renderStaffOverview(json, elapsed, cacheLabel, claudeUsed) {
 
   const claudeBadge = claudeUsed ? '🤖 Claude Sonnet' : '⚠ Llama';
 
-  // ── UTM analysis block (mới — 30d rolling, AI nhận diện UTM winner/loser) ──
+  // ── UTM analysis block — 30d rolling, AI phân loại theo cvr_thresholds_30d cứng ──
   const utm = json.utm_analysis;
   let utmHtml = '';
-  if (utm && (Array.isArray(utm.winners) && utm.winners.length || Array.isArray(utm.losers) && utm.losers.length)) {
-    const utmRowFmt = (r) => `
+  const hasUtm = utm && (
+    (Array.isArray(utm.winners) && utm.winners.length) ||
+    (Array.isArray(utm.keeps)   && utm.keeps.length) ||
+    (Array.isArray(utm.losers)  && utm.losers.length)
+  );
+  if (hasUtm) {
+    // Thresholds_applied — show as compact reference badge per SP
+    let thresholdsBadge = '';
+    if (utm.thresholds_applied && typeof utm.thresholds_applied === 'object') {
+      const badges = Object.entries(utm.thresholds_applied).map(([prod, th]) => {
+        const note = th.note ? ` · ${escapeHtml(th.note)}` : '';
+        return `<span style="display:inline-block;padding:3px 8px;margin:2px;background:white;border:1px solid #d1d5db;border-radius:6px;font-size:11px">
+          <strong>${escapeHtml(prod)}</strong>: CPL ${(th.cpl_vnd || 0).toLocaleString()}đ ·
+          <span style="color:#dc2626">Lỗ&lt;${(th.cvr_breakeven_pct || 0).toFixed(0)}%</span> ·
+          <span style="color:#16a34a">Scale≥${(th.cvr_scale_pct || 0).toFixed(0)}%</span>${note}
+        </span>`;
+      }).join('');
+      if (badges) {
+        thresholdsBadge = `
+          <div style="margin:6px 0 10px;padding:6px 8px;background:#fffbeb;border:1px dashed #fde68a;border-radius:4px">
+            <div style="font-size:10.5px;color:#92400e;font-weight:600;margin-bottom:4px">📐 NGƯỠNG CVR ÁP DỤNG (CPL thực 30d · Deliver 80% · Scale = lãi ≥ 50% chi ads):</div>
+            ${badges}
+          </div>
+        `;
+      }
+    }
+
+    const utmRowFmt = (r, showFix) => `
       <tr>
         <td style="padding:6px 8px;font-family:Consolas,monospace;font-size:11px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(r.utm || '')}">${escapeHtml(r.utm || '?')}</td>
         <td style="padding:6px 8px;font-size:11px">${escapeHtml(r.product || '?')}</td>
         <td style="padding:6px 8px;text-align:right;font-size:11.5px">${r.leads || 0}</td>
         <td style="padding:6px 8px;text-align:right;font-size:11.5px">${r.orders || 0}${r.delivered != null ? ' / ' + r.delivered : ''}</td>
         <td style="padding:6px 8px;text-align:right;font-weight:600;font-size:11.5px">${(r.conv_rate_pct || 0).toFixed(1)}%</td>
-        <td style="padding:6px 8px;text-align:right;font-size:11.5px">${(r.revenue_vnd || 0).toLocaleString()}đ</td>
-        <td style="padding:6px 8px;font-size:11px;color:#374151;line-height:1.4">${escapeHtml(r.verdict || '')}<br/><span style="color:#6b7280">${escapeHtml(r.why || '')}</span>${r.fix ? `<br/><span style="color:#7f1d1d;font-weight:600">🔧 ${escapeHtml(r.fix)}</span>` : ''}</td>
+        ${r.revenue_vnd != null ? `<td style="padding:6px 8px;text-align:right;font-size:11.5px">${(r.revenue_vnd || 0).toLocaleString()}đ</td>` : '<td></td>'}
+        <td style="padding:6px 8px;font-size:11px;color:#374151;line-height:1.4">
+          <span style="font-weight:700">${escapeHtml(r.verdict || '')}</span>
+          ${r.vs_threshold ? `<br/><span style="color:#4b5563;font-style:italic">${escapeHtml(r.vs_threshold)}</span>` : ''}
+          ${r.why ? `<br/><span style="color:#6b7280">${escapeHtml(r.why)}</span>` : ''}
+          ${r.hint ? `<br/><span style="color:#92400e;font-weight:600">💡 ${escapeHtml(r.hint)}</span>` : ''}
+          ${showFix && r.fix ? `<br/><span style="color:#7f1d1d;font-weight:600">🔧 ${escapeHtml(r.fix)}</span>` : ''}
+        </td>
       </tr>
     `;
-    const winnersRows = (utm.winners || []).map(utmRowFmt).join('');
-    const losersRows  = (utm.losers  || []).map(utmRowFmt).join('');
+    const winnersRows = (utm.winners || []).map(r => utmRowFmt(r, false)).join('');
+    const keepsRows   = (utm.keeps   || []).map(r => utmRowFmt(r, false)).join('');
+    const losersRows  = (utm.losers  || []).map(r => utmRowFmt(r, true)).join('');
     const patternsHtml = (utm.patterns || []).map(p => `<li style="margin-bottom:4px">${escapeHtml(p)}</li>`).join('');
     const actionsHtml = (utm.next_actions || []).map(a => {
       const prioColor = a.priority === 'HIGH' ? '#dc2626' : a.priority === 'MEDIUM' ? '#d97706' : '#6b7280';
@@ -694,18 +727,26 @@ function renderStaffOverview(json, elapsed, cacheLabel, claudeUsed) {
     `;
     utmHtml = `
       <div class="action-plan" style="background:#fefce8;border-left-color:#ca8a04;margin-top:12px">
-        <h4 style="color:#854d0e">🎯 Phân tích UTM Campaign (30 ngày gần nhất)</h4>
-        ${utm.date_range_label ? `<div style="font-size:11px;color:#92400e;margin-bottom:8px">📅 ${escapeHtml(utm.date_range_label)}</div>` : ''}
+        <h4 style="color:#854d0e">🎯 Phân tích UTM Campaign (30 ngày · CVR threshold cứng)</h4>
+        ${utm.date_range_label ? `<div style="font-size:11px;color:#92400e;margin-bottom:4px">📅 ${escapeHtml(utm.date_range_label)}</div>` : ''}
+        ${thresholdsBadge}
 
         ${winnersRows ? `
-          <h5 style="margin:8px 0 4px;font-size:12.5px;color:#16a34a">⭐ UTM Winner — SCALE / KEEP</h5>
+          <h5 style="margin:8px 0 4px;font-size:12.5px;color:#16a34a">⭐ SCALE — CVR ≥ ngưỡng scale (lãi ≥ 50% chi ads)</h5>
           <div style="overflow-x:auto;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px">
             <table style="width:100%;border-collapse:collapse">${tableHeader}<tbody>${winnersRows}</tbody></table>
           </div>
         ` : ''}
 
+        ${keepsRows ? `
+          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#ca8a04">🟡 KEEP — CVR trong khoảng break-even đến scale (lãi nhỏ)</h5>
+          <div style="overflow-x:auto;background:#fefce8;border:1px solid #fde68a;border-radius:6px">
+            <table style="width:100%;border-collapse:collapse">${tableHeader}<tbody>${keepsRows}</tbody></table>
+          </div>
+        ` : ''}
+
         ${losersRows ? `
-          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#dc2626">⚠ UTM Loser — PAUSE / REFRESH / REFINE</h5>
+          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#dc2626">🔴 REJECT_PAUSE — CVR &lt; break-even (đang LỖ ròng)</h5>
           <div style="overflow-x:auto;background:#fef2f2;border:1px solid #fecaca;border-radius:6px">
             <table style="width:100%;border-collapse:collapse">${tableHeader}<tbody>${losersRows}</tbody></table>
           </div>
