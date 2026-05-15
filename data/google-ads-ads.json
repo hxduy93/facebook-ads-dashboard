@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15 11:19",
+  "generated_at": "2026-05-15 14:35",
   "source": "Windsor.ai JSON API (ads, auto every 60min)",
   "account_name": "MHDI",
   "date_range": {
@@ -45,11 +45,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300x600.gif",
       "ad_format": "DISPLAY_BANNER",
-      "spend_30d": 808458.0,
-      "clicks_30d": 375,
+      "spend_30d": 806849.0,
+      "clicks_30d": 374,
       "impressions_30d": 43528,
       "ctr_30d": 0.0086,
-      "cpc_30d": 2156.0,
+      "cpc_30d": 2157.0,
       "active_days_30d": 25
     },
     "752128818630": {
@@ -190,7 +190,7 @@
       "ad_format": "OTHER",
       "spend_30d": 209055.0,
       "clicks_30d": 71,
-      "impressions_30d": 10332,
+      "impressions_30d": 10331,
       "ctr_30d": 0.0069,
       "cpc_30d": 2944.0,
       "active_days_30d": 21
@@ -2109,8 +2109,8 @@
   },
   "format_aggregates": {
     "DISPLAY_BANNER": {
-      "spend_30d": 2464080.0,
-      "clicks_30d": 1643,
+      "spend_30d": 2462471.0,
+      "clicks_30d": 1642,
       "impressions_30d": 195222,
       "ctr_30d": 0.0084,
       "ad_count": 10
@@ -2118,7 +2118,7 @@
     "OTHER": {
       "spend_30d": 69429881.0,
       "clicks_30d": 21019,
-      "impressions_30d": 1541307,
+      "impressions_30d": 1541306,
       "ctr_30d": 0.0136,
       "ad_count": 150
     },
