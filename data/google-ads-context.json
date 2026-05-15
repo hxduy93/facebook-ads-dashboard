@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16 04:32",
+  "generated_at": "2026-05-16 05:48",
   "source_data_date_range": {
     "start_7d": "2026-05-08",
     "end": "2026-05-14",
@@ -2545,14 +2545,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19319,
-      "total_spend_30d": 21981484.0
+      "total_unique_placements": 19322,
+      "total_spend_30d": 21976664.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 21982321.0,
-        "clicks_30d": 13475,
-        "impressions_30d": 1088583,
+        "spend_30d": 21977501.0,
+        "clicks_30d": 13473,
+        "impressions_30d": 1088579,
         "ctr_30d": 0.0124,
         "cpc_30d": 1631.0,
         "campaign_count": 9
@@ -2568,11 +2568,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 21981484.0,
-        "clicks_30d": 13474,
-        "impressions_30d": 1052179,
+        "spend_30d": 21976664.0,
+        "clicks_30d": 13472,
+        "impressions_30d": 1052213,
         "ctr_30d": 0.0128,
-        "placement_count": 19319
+        "placement_count": 19322
       }
     },
     "top_waste_placements": [],
@@ -2784,19 +2784,19 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 73710130.0
+      "total_spend_30d": 73703074.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2462471.0,
-        "clicks_30d": 1642,
+        "spend_30d": 2459178.0,
+        "clicks_30d": 1641,
         "impressions_30d": 195222,
         "ctr_30d": 0.0084,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 69427944.0,
-        "clicks_30d": 21018,
+        "spend_30d": 69424181.0,
+        "clicks_30d": 21015,
         "impressions_30d": 1541306,
         "ctr_30d": 0.0136,
         "ad_count": 150
@@ -2816,9 +2816,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 968081.0,
-        "clicks_30d": 991,
-        "ctr_30d": 0.0108
+        "spend_30d": 964788.0,
+        "clicks_30d": 990,
+        "ctr_30d": 0.0107
       },
       {
         "ad_id": "752128818627",
