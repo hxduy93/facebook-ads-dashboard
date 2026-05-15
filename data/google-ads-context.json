@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15 16:41",
+  "generated_at": "2026-05-15 18:49",
   "source_data_date_range": {
     "start_7d": "2026-05-08",
     "end": "2026-05-14",
@@ -60,8 +60,8 @@
     "orders_30d": 106,
     "by_status": {
       "delivered": {
-        "revenue": 151670000.0,
-        "orders": 76
+        "revenue": 152269000.0,
+        "orders": 77
       },
       "returning": {
         "revenue": 2399000.0,
@@ -76,8 +76,8 @@
         "orders": 3
       },
       "other": {
-        "revenue": 35643500.0,
-        "orders": 17
+        "revenue": 35044500.0,
+        "orders": 16
       }
     },
     "by_source": {
@@ -2545,14 +2545,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19299,
-      "total_spend_30d": 21984110.0
+      "total_unique_placements": 19304,
+      "total_spend_30d": 21981484.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 21984947.0,
-        "clicks_30d": 13477,
-        "impressions_30d": 1088582,
+        "spend_30d": 21982321.0,
+        "clicks_30d": 13475,
+        "impressions_30d": 1088584,
         "ctr_30d": 0.0124,
         "cpc_30d": 1631.0,
         "campaign_count": 9
@@ -2568,11 +2568,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 21984110.0,
-        "clicks_30d": 13476,
-        "impressions_30d": 1051874,
+        "spend_30d": 21981484.0,
+        "clicks_30d": 13474,
+        "impressions_30d": 1051947,
         "ctr_30d": 0.0128,
-        "placement_count": 19299
+        "placement_count": 19304
       }
     },
     "top_waste_placements": [],
@@ -2613,7 +2613,7 @@
         "placement": "giavang.org/the-gioi",
         "spend_30d": 56610.0,
         "clicks_30d": 18,
-        "impressions_30d": 9890,
+        "impressions_30d": 9892,
         "ctr_30d": 0.0018,
         "placement_type": "WEBSITE"
       },
