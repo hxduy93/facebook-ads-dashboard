@@ -716,3 +716,78 @@ export function compactFbDailyTrend(productRevenueJson, days = 30, opts = {}) {
     wow_revenue_pct: Math.round(wowRevenue * 1000) / 10,
   };
 }
+
+// ════════════════════════════════════════════════════════════════
+// UTM ANALYSIS for staff_overview
+// ════════════════════════════════════════════════════════════════
+// Đọc data/lead-to-order.json → by_staff_utm[staff] → filter by date range,
+// tính per-UTM: leads / conv_rate / orders / delivered / revenue / AOV.
+// Sort theo revenue_total desc, cap top 30 để không bloat Claude prompt.
+//
+// staff: "DUY" | "PHUONG_NAM" (key dùng trong agent-fb-ai).
+// dateRange: { start, end } ISO YYYY-MM-DD.
+//
+// Returns null nếu không fetch được data; otherwise:
+//   {
+//     date_range: { start, end, label },
+//     total_utms_in_range: int,
+//     utms: [
+//       { utm, product, leads, orders, delivered, revenue, rev_delivered,
+//         conv_rate_pct, delivered_rate_pct, aov_vnd },
+//       ...
+//     ]
+//   }
+export async function getUtmAnalysisForStaff(env, origin, cookieHeader, staff, dateRange) {
+  // lead-to-order.json dùng "PHƯƠNG NAM" (có dấu, có space) làm key — agent-fb-ai dùng "PHUONG_NAM"
+  const STAFF_KEY_MAP = { DUY: "DUY", PHUONG_NAM: "PHƯƠNG NAM" };
+  const dataKey = STAFF_KEY_MAP[staff] || staff;
+  if (!dateRange?.start || !dateRange?.end) return null;
+
+  let json = null;
+  try {
+    const r = await fetch(new URL("/data/lead-to-order.json", origin).toString(), {
+      headers: { Cookie: cookieHeader || "" },
+    });
+    if (!r.ok) return null;
+    json = await r.json();
+  } catch {
+    return null;
+  }
+
+  const rows = json?.by_staff_utm?.[dataKey];
+  if (!Array.isArray(rows) || !rows.length) return null;
+
+  const isInRange = (d) => d >= dateRange.start && d <= dateRange.end;
+  const sumInRange = (byDate) => {
+    if (!byDate) return 0;
+    let s = 0;
+    for (const d in byDate) if (isInRange(d)) s += (byDate[d] || 0);
+    return s;
+  };
+
+  const filtered = rows
+    .map(r => {
+      const leads     = sumInRange(r.leads_by_date);
+      const orders    = sumInRange(r.orders_total_by_date);
+      const delivered = sumInRange(r.orders_delivered_by_date);
+      const revenue   = sumInRange(r.revenue_total_by_date);
+      const revDel    = sumInRange(r.revenue_delivered_by_date);
+      return {
+        utm: r.utm_campaign,
+        product: r.product,
+        leads, orders, delivered,
+        revenue, rev_delivered: revDel,
+        conv_rate_pct:      leads  > 0 ? Math.round((orders / leads) * 1000) / 10    : 0,
+        delivered_rate_pct: orders > 0 ? Math.round((delivered / orders) * 1000) / 10 : 0,
+        aov_vnd:            delivered > 0 ? Math.round(revDel / delivered)            : 0,
+      };
+    })
+    .filter(r => r.leads > 0 || r.orders > 0)
+    .sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
+
+  return {
+    date_range: { ...dateRange },
+    total_utms_in_range: filtered.length,
+    utms: filtered.slice(0, 30),  // cap 30 để prompt không quá dài
+  };
+}

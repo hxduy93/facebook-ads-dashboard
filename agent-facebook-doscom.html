@@ -649,6 +649,81 @@ function renderStaffOverview(json, elapsed, cacheLabel, claudeUsed) {
 
   const claudeBadge = claudeUsed ? '🤖 Claude Sonnet' : '⚠ Llama';
 
+  // ── UTM analysis block (mới — 30d rolling, AI nhận diện UTM winner/loser) ──
+  const utm = json.utm_analysis;
+  let utmHtml = '';
+  if (utm && (Array.isArray(utm.winners) && utm.winners.length || Array.isArray(utm.losers) && utm.losers.length)) {
+    const utmRowFmt = (r) => `
+      <tr>
+        <td style="padding:6px 8px;font-family:Consolas,monospace;font-size:11px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(r.utm || '')}">${escapeHtml(r.utm || '?')}</td>
+        <td style="padding:6px 8px;font-size:11px">${escapeHtml(r.product || '?')}</td>
+        <td style="padding:6px 8px;text-align:right;font-size:11.5px">${r.leads || 0}</td>
+        <td style="padding:6px 8px;text-align:right;font-size:11.5px">${r.orders || 0}${r.delivered != null ? ' / ' + r.delivered : ''}</td>
+        <td style="padding:6px 8px;text-align:right;font-weight:600;font-size:11.5px">${(r.conv_rate_pct || 0).toFixed(1)}%</td>
+        <td style="padding:6px 8px;text-align:right;font-size:11.5px">${(r.revenue_vnd || 0).toLocaleString()}đ</td>
+        <td style="padding:6px 8px;font-size:11px;color:#374151;line-height:1.4">${escapeHtml(r.verdict || '')}<br/><span style="color:#6b7280">${escapeHtml(r.why || '')}</span>${r.fix ? `<br/><span style="color:#7f1d1d;font-weight:600">🔧 ${escapeHtml(r.fix)}</span>` : ''}</td>
+      </tr>
+    `;
+    const winnersRows = (utm.winners || []).map(utmRowFmt).join('');
+    const losersRows  = (utm.losers  || []).map(utmRowFmt).join('');
+    const patternsHtml = (utm.patterns || []).map(p => `<li style="margin-bottom:4px">${escapeHtml(p)}</li>`).join('');
+    const actionsHtml = (utm.next_actions || []).map(a => {
+      const prioColor = a.priority === 'HIGH' ? '#dc2626' : a.priority === 'MEDIUM' ? '#d97706' : '#6b7280';
+      const targets = Array.isArray(a.target_utms) && a.target_utms.length
+        ? `<div style="font-size:10.5px;color:#6b7280;margin-top:3px;font-family:Consolas,monospace">→ ${a.target_utms.map(escapeHtml).join(', ')}</div>` : '';
+      return `
+        <div style="padding:8px 10px;background:#f9fafb;border-left:3px solid ${prioColor};border-radius:4px;margin-bottom:6px">
+          <span style="display:inline-block;padding:1px 6px;background:${prioColor};color:white;font-size:9.5px;font-weight:700;border-radius:3px;margin-right:6px">${escapeHtml(a.priority || 'LOW')}</span>
+          <span style="font-size:12.5px;line-height:1.5">${escapeHtml(a.action || '')}</span>
+          ${targets}
+        </div>
+      `;
+    }).join('');
+    const tableHeader = `
+      <thead>
+        <tr style="background:#f3f4f6">
+          <th style="padding:6px 8px;text-align:left;font-size:10.5px;text-transform:uppercase;color:#6b7280">UTM</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10.5px;text-transform:uppercase;color:#6b7280">SP</th>
+          <th style="padding:6px 8px;text-align:right;font-size:10.5px;text-transform:uppercase;color:#6b7280">Leads</th>
+          <th style="padding:6px 8px;text-align:right;font-size:10.5px;text-transform:uppercase;color:#6b7280">Đơn/Giao</th>
+          <th style="padding:6px 8px;text-align:right;font-size:10.5px;text-transform:uppercase;color:#6b7280">Conv%</th>
+          <th style="padding:6px 8px;text-align:right;font-size:10.5px;text-transform:uppercase;color:#6b7280">Revenue</th>
+          <th style="padding:6px 8px;text-align:left;font-size:10.5px;text-transform:uppercase;color:#6b7280">Verdict + Lý do</th>
+        </tr>
+      </thead>
+    `;
+    utmHtml = `
+      <div class="action-plan" style="background:#fefce8;border-left-color:#ca8a04;margin-top:12px">
+        <h4 style="color:#854d0e">🎯 Phân tích UTM Campaign (30 ngày gần nhất)</h4>
+        ${utm.date_range_label ? `<div style="font-size:11px;color:#92400e;margin-bottom:8px">📅 ${escapeHtml(utm.date_range_label)}</div>` : ''}
+
+        ${winnersRows ? `
+          <h5 style="margin:8px 0 4px;font-size:12.5px;color:#16a34a">⭐ UTM Winner — SCALE / KEEP</h5>
+          <div style="overflow-x:auto;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px">
+            <table style="width:100%;border-collapse:collapse">${tableHeader}<tbody>${winnersRows}</tbody></table>
+          </div>
+        ` : ''}
+
+        ${losersRows ? `
+          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#dc2626">⚠ UTM Loser — PAUSE / REFRESH / REFINE</h5>
+          <div style="overflow-x:auto;background:#fef2f2;border:1px solid #fecaca;border-radius:6px">
+            <table style="width:100%;border-collapse:collapse">${tableHeader}<tbody>${losersRows}</tbody></table>
+          </div>
+        ` : ''}
+
+        ${patternsHtml ? `
+          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#374151">🔍 Patterns nhận diện</h5>
+          <ul style="margin:0;padding-left:18px;font-size:12px;color:#4b5563;line-height:1.5">${patternsHtml}</ul>
+        ` : ''}
+
+        ${actionsHtml ? `
+          <h5 style="margin:10px 0 4px;font-size:12.5px;color:#374151">📋 Next actions (theo priority)</h5>
+          ${actionsHtml}
+        ` : ''}
+      </div>
+    `;
+  }
+
   return `
     <div class="staff-card">
       <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">${elapsed}s · ${cacheLabel} · ${claudeBadge}</div>
@@ -684,6 +759,8 @@ function renderStaffOverview(json, elapsed, cacheLabel, claudeUsed) {
         ${plan.expected_kpi_impact ? `<div class="impact">📈 Kỳ vọng: ${escapeHtml(plan.expected_kpi_impact)}</div>` : ''}
       </div>
       ` : ''}
+
+      ${utmHtml}
     </div>
   `;
 }

@@ -22,6 +22,7 @@ import {
   computeFbProfitInRange,
   compactFbAccounts,
   compactFbCampaigns,
+  getUtmAnalysisForStaff,
 } from "../lib/fbAdsHelpers.js";
 
 const SESSION_COOKIE = "doscom_session";
@@ -51,7 +52,7 @@ const MODEL_MAP = {
   claude_haiku: MODEL_CLAUDE_HAIKU,
 };
 
-const CACHE_VERSION = "v6";  // bumped: comparison-period analysis + scale_plan + 100% TV
+const CACHE_VERSION = "v7";  // bumped: staff_overview now includes utm_analysis section (last 30d)
 const CACHE_TTL_SECONDS = 86400;  // 24h. Cache key đã include todayVN nên thực tế = đến hết ngày VN. F5 cùng ngày + click lại = HIT, KHÔNG tốn Claude credit.
 
 const SUGGEST_MODES = new Set([]);  // không có suggest mode trong v1
@@ -400,12 +401,20 @@ Bạn sẽ thấy:
 - weak_campaigns: 3-5 campaign yếu (low margin/high CPA)
 - monthly_kpi_context: KPI tổng + tiến độ
 - kpi_share: % nhân sự đóng góp vào KPI
+- utm_analysis_last_30d: per-UTM stats trong 30 NGÀY ROLLING của nhân sự này.
+   Mỗi entry trong .utms: { utm, product, leads, orders, delivered, revenue,
+   conv_rate_pct, delivered_rate_pct, aov_vnd }. Đây là attribution last-touch 60d
+   từ lead → order qua phone_last9. Dùng để phân tích UTM nào convert tốt/yếu.
 
 ═══ MỤC TIÊU PHÂN TÍCH ═══
 1. Tổng quan: nhân sự đang đứng ở đâu so với KPI và so với nhân sự còn lại
 2. SP nào đang ngon (winner) → đề xuất scale làm key chính tháng
 3. SP nào yếu/lỗ → đề xuất pause/refresh/audience
 4. Action plan tuần để đạt KPI
+5. UTM tối ưu: từ utm_analysis_last_30d, nhận diện UTM winner (conv cao + revenue cao)
+   để scale + UTM loser (leads nhiều nhưng conv thấp / spend cao mà ít delivered)
+   để pause hoặc refresh. CHỈ cho phép UTM có ≥ 10 leads vào winners để tránh
+   small-sample-size bias (vd 2 leads → 100% conv không có ý nghĩa thống kê).
 
 ═══ FORMAT OUTPUT (JSON BẮT BUỘC) ═══
 
@@ -467,6 +476,53 @@ Bạn sẽ thấy:
       "Tuần 4: ..."
     ],
     "expected_kpi_impact": "[≥30 từ] Nếu thực hiện đầy đủ → KPI sẽ đạt bao nhiêu %, tăng X% so hiện tại"
+  },
+
+  "utm_analysis": {
+    // Phân tích hiệu quả utm_campaign của nhân sự trong 30 NGÀY GẦN NHẤT (utm_analysis_last_30d).
+    // KHÁC khoảng thời gian các metric khác (MTD). Mục đích: nhận diện UTM tốt/yếu để scale/cắt.
+    // Nếu utm_analysis_last_30d = null hoặc utms = [] → trả `null` cho cả block này (đừng bịa).
+    "date_range_label": "30 ngày gần nhất (vd: 16/04 → 15/05)",
+    "winners": [
+      // 2-5 UTM hiệu quả nhất (chỉ chọn UTM có leads ≥ 10 để conv_rate đáng tin)
+      {
+        "utm": "<utm_campaign string từ data>",
+        "product": "<product từ data>",
+        "leads": <int>,
+        "orders": <int>,
+        "delivered": <int>,
+        "revenue_vnd": <int>,
+        "conv_rate_pct": <float — % leads → orders>,
+        "aov_vnd": <int>,
+        "verdict": "SCALE" | "KEEP_PUSH",
+        "why": "[≥25 từ] Cụ thể vì sao là winner — số liệu + so sánh với UTM khác cùng nhân sự"
+      }
+    ],
+    "losers": [
+      // 2-5 UTM yếu (high leads but low conv, hoặc spend cao mà ít delivered)
+      {
+        "utm": "<utm_campaign>",
+        "product": "<product>",
+        "leads": <int>,
+        "orders": <int>,
+        "conv_rate_pct": <float>,
+        "verdict": "PAUSE" | "REFRESH_CREATIVE" | "REFINE_AUDIENCE",
+        "why": "[≥25 từ] Vì sao yếu",
+        "fix": "[≥20 từ] Đề xuất cụ thể"
+      }
+    ],
+    "patterns": [
+      // 1-3 nhận xét về xu hướng: vd "UTM chứa keyword 'video' chuyển đổi cao 1.5x trung bình"
+      "[≥20 từ] Mỗi pattern dạng câu đầy đủ + số liệu"
+    ],
+    "next_actions": [
+      // 2-4 hành động cụ thể với UTM, ưu tiên cao trước
+      {
+        "action": "[≥20 từ] Vd: 'Tăng budget UTM 14/05-dr1-anhha thêm 30% (đang convert 18% cao gấp đôi mean)'",
+        "target_utms": ["<utm1>", "<utm2>"],
+        "priority": "HIGH" | "MEDIUM" | "LOW"
+      }
+    ]
   },
 
   "warnings": []  // optional, có thể empty
@@ -1282,6 +1338,12 @@ export async function onRequestPost(context) {
         expected_share_pct: 50,  // 2 staff = 50% mỗi người (heuristic đơn giản)
       };
     }
+    // UTM analysis 30 ngày rolling — để AI nhận diện UTM nào convert tốt/yếu cho staff này.
+    // Dùng last_30d (không phải this_month) để luôn có ~30 ngày data dù đang đầu tháng.
+    const utmRange = resolveTimeRange("last_30d");
+    dataContext.utm_analysis_last_30d = await getUtmAnalysisForStaff(
+      env, origin, cookieHeader, staff, utmRange
+    );
   }
 
   const skills = cfg.skills;
