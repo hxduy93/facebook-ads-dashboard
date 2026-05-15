@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15 13:26",
+  "generated_at": "2026-05-15 16:41",
   "source_data_date_range": {
     "start_7d": "2026-05-08",
     "end": "2026-05-14",
@@ -2545,14 +2545,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19272,
+      "total_unique_placements": 19299,
       "total_spend_30d": 21984110.0
     },
     "network_breakdown": {
       "CONTENT": {
         "spend_30d": 21984947.0,
         "clicks_30d": 13477,
-        "impressions_30d": 1088581,
+        "impressions_30d": 1088582,
         "ctr_30d": 0.0124,
         "cpc_30d": 1631.0,
         "campaign_count": 9
@@ -2570,9 +2570,9 @@
       "WEBSITE": {
         "spend_30d": 21984110.0,
         "clicks_30d": 13476,
-        "impressions_30d": 1051625,
+        "impressions_30d": 1051874,
         "ctr_30d": 0.0128,
-        "placement_count": 19272
+        "placement_count": 19299
       }
     },
     "top_waste_placements": [],
@@ -2784,12 +2784,12 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 73713676.0
+      "total_spend_30d": 73712067.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2464080.0,
-        "clicks_30d": 1643,
+        "spend_30d": 2462471.0,
+        "clicks_30d": 1642,
         "impressions_30d": 195222,
         "ctr_30d": 0.0084,
         "ad_count": 10
@@ -2797,7 +2797,7 @@
       "OTHER": {
         "spend_30d": 69429881.0,
         "clicks_30d": 21019,
-        "impressions_30d": 1541307,
+        "impressions_30d": 1541306,
         "ctr_30d": 0.0136,
         "ad_count": 150
       },
@@ -2826,8 +2826,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 808458.0,
-        "clicks_30d": 375,
+        "spend_30d": 806849.0,
+        "clicks_30d": 374,
         "ctr_30d": 0.0086
       },
       {
