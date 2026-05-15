@@ -498,7 +498,7 @@ Bạn sẽ thấy:
   "utm_analysis": {
     // Phân tích hiệu quả utm_campaign trong 30 NGÀY GẦN NHẤT, ÁP DỤNG cvr_thresholds_30d
     // làm chuẩn cứng để phân SCALE/KEEP/REJECT_PAUSE. Nếu utm_analysis_last_30d = null
-    // hoặc utms = [] → trả `null` cho cả block này (đừng bịa).
+    // hoặc utms = [] → trả null cho cả block này (đừng bịa).
     "date_range_label": "30 ngày gần nhất (vd: 16/04 → 15/05)",
     "thresholds_applied": {
       // Tóm tắt ngưỡng đã áp dụng (lấy từ cvr_thresholds_30d.thresholds).
