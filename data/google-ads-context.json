@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15 06:50",
+  "generated_at": "2026-05-15 09:38",
   "source_data_date_range": {
     "start_7d": "2026-05-07",
     "end": "2026-05-13",
@@ -60,12 +60,12 @@
     "orders_30d": 107,
     "by_status": {
       "delivered": {
-        "revenue": 154112000.0,
-        "orders": 77
+        "revenue": 168600000.0,
+        "orders": 80
       },
       "returning": {
-        "revenue": 1599000.0,
-        "orders": 2
+        "revenue": 3399000.0,
+        "orders": 3
       },
       "returned": {
         "revenue": 10455000.0,
@@ -76,8 +76,8 @@
         "orders": 3
       },
       "other": {
-        "revenue": 47383500.0,
-        "orders": 18
+        "revenue": 31095500.0,
+        "orders": 14
       }
     },
     "by_source": {
@@ -2510,219 +2510,219 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19198,
-      "total_spend_30d": 21974382.0
+      "total_unique_placements": 19271,
+      "total_spend_30d": 21995290.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 21975217.0,
-        "clicks_30d": 13534,
-        "impressions_30d": 1085049,
-        "ctr_30d": 0.0125,
-        "cpc_30d": 1624.0,
+        "spend_30d": 21996127.0,
+        "clicks_30d": 13481,
+        "impressions_30d": 1088586,
+        "ctr_30d": 0.0124,
+        "cpc_30d": 1632.0,
         "campaign_count": 9
       },
       "SEARCH": {
-        "spend_30d": 54106778.0,
-        "clicks_30d": 10154,
-        "impressions_30d": 134695,
-        "ctr_30d": 0.0754,
-        "cpc_30d": 5329.0,
+        "spend_30d": 51740902.0,
+        "clicks_30d": 9786,
+        "impressions_30d": 123605,
+        "ctr_30d": 0.0792,
+        "cpc_30d": 5287.0,
         "campaign_count": 10
       }
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 21974382.0,
-        "clicks_30d": 13533,
-        "impressions_30d": 1049614,
-        "ctr_30d": 0.0129,
-        "placement_count": 19198
+        "spend_30d": 21995290.0,
+        "clicks_30d": 13480,
+        "impressions_30d": 1051603,
+        "ctr_30d": 0.0128,
+        "placement_count": 19271
       }
     },
     "top_waste_placements": [],
     "low_ctr_placements": [
       {
         "placement": "dantri.com.vn",
-        "spend_30d": 242549.0,
-        "clicks_30d": 62,
-        "impressions_30d": 29359,
-        "ctr_30d": 0.0021,
+        "spend_30d": 245272.0,
+        "clicks_30d": 63,
+        "impressions_30d": 28631,
+        "ctr_30d": 0.0022,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xsmn.mobi",
-        "spend_30d": 159080.0,
-        "clicks_30d": 126,
-        "impressions_30d": 33989,
-        "ctr_30d": 0.0037,
+        "spend_30d": 153791.0,
+        "clicks_30d": 121,
+        "impressions_30d": 33669,
+        "ctr_30d": 0.0036,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
-        "spend_30d": 138818.0,
+        "spend_30d": 134968.0,
         "clicks_30d": 41,
-        "impressions_30d": 19234,
+        "impressions_30d": 19293,
         "ctr_30d": 0.0021,
         "placement_type": "WEBSITE"
       },
       {
-        "placement": "giavang.org/the-gioi",
-        "spend_30d": 64346.0,
-        "clicks_30d": 20,
-        "impressions_30d": 10049,
-        "ctr_30d": 0.002,
+        "placement": "phatnguoi.com",
+        "spend_30d": 59289.0,
+        "clicks_30d": 21,
+        "impressions_30d": 4856,
+        "ctr_30d": 0.0043,
         "placement_type": "WEBSITE"
       },
       {
-        "placement": "phatnguoi.com",
-        "spend_30d": 61650.0,
-        "clicks_30d": 22,
-        "impressions_30d": 4789,
-        "ctr_30d": 0.0046,
+        "placement": "giavang.org/the-gioi",
+        "spend_30d": 56610.0,
+        "clicks_30d": 18,
+        "impressions_30d": 9890,
+        "ctr_30d": 0.0018,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "xskt.com.vn/xsmn",
-        "spend_30d": 57052.0,
+        "spend_30d": 56368.0,
         "clicks_30d": 26,
-        "impressions_30d": 5271,
+        "impressions_30d": 5322,
         "ctr_30d": 0.0049,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "rongbachkim.net",
-        "spend_30d": 56021.0,
-        "clicks_30d": 33,
-        "impressions_30d": 7543,
-        "ctr_30d": 0.0044,
+        "spend_30d": 55596.0,
+        "clicks_30d": 32,
+        "impressions_30d": 7540,
+        "ctr_30d": 0.0042,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "giacaphe.com/gia-ca-phe-noi-dia",
+        "spend_30d": 44120.0,
+        "clicks_30d": 24,
+        "impressions_30d": 5318,
+        "ctr_30d": 0.0045,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "giacaphe.com/gia-ca-phe-truc-tuyen",
-        "spend_30d": 40687.0,
-        "clicks_30d": 25,
-        "impressions_30d": 7018,
-        "ctr_30d": 0.0036,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "webgia.com/gia-vang/the-gioi",
-        "spend_30d": 38688.0,
-        "clicks_30d": 10,
-        "impressions_30d": 2689,
-        "ctr_30d": 0.0037,
+        "spend_30d": 36860.0,
+        "clicks_30d": 24,
+        "impressions_30d": 7072,
+        "ctr_30d": 0.0034,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "m.thethao247.vn",
-        "spend_30d": 31216.0,
-        "clicks_30d": 12,
-        "impressions_30d": 2622,
-        "ctr_30d": 0.0046,
+        "spend_30d": 36094.0,
+        "clicks_30d": 13,
+        "impressions_30d": 2745,
+        "ctr_30d": 0.0047,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "vietnamnet.vn",
-        "spend_30d": 29211.0,
-        "clicks_30d": 13,
-        "impressions_30d": 3409,
-        "ctr_30d": 0.0038,
+        "spend_30d": 32925.0,
+        "clicks_30d": 14,
+        "impressions_30d": 3410,
+        "ctr_30d": 0.0041,
         "placement_type": "WEBSITE"
       },
       {
-        "placement": "home.vn",
-        "spend_30d": 28103.0,
-        "clicks_30d": 11,
-        "impressions_30d": 3753,
-        "ctr_30d": 0.0029,
+        "placement": "webgia.com/gia-vang/the-gioi",
+        "spend_30d": 32395.0,
+        "clicks_30d": 8,
+        "impressions_30d": 2609,
+        "ctr_30d": 0.0031,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "vnexpress.net",
-        "spend_30d": 26255.0,
-        "clicks_30d": 6,
-        "impressions_30d": 2847,
-        "ctr_30d": 0.0021,
+        "spend_30d": 30647.0,
+        "clicks_30d": 7,
+        "impressions_30d": 3020,
+        "ctr_30d": 0.0023,
+        "placement_type": "WEBSITE"
+      },
+      {
+        "placement": "xsmn.mobi/xsmb-xo-so-mien-bac.html",
+        "spend_30d": 29952.0,
+        "clicks_30d": 19,
+        "impressions_30d": 6983,
+        "ctr_30d": 0.0027,
         "placement_type": "WEBSITE"
       },
       {
         "placement": "www.24h.com.vn",
         "spend_30d": 26067.0,
         "clicks_30d": 7,
-        "impressions_30d": 2917,
-        "ctr_30d": 0.0024,
-        "placement_type": "WEBSITE"
-      },
-      {
-        "placement": "xsmn.mobi/xsmb-xo-so-mien-bac.html",
-        "spend_30d": 25627.0,
-        "clicks_30d": 18,
-        "impressions_30d": 6920,
-        "ctr_30d": 0.0026,
+        "impressions_30d": 3179,
+        "ctr_30d": 0.0022,
         "placement_type": "WEBSITE"
       }
     ],
     "top_spend_placements": [
       {
         "placement": "xosodaiphat.com/xsmn-xo-so-mien-nam.html",
-        "spend_30d": 835605.0,
-        "clicks_30d": 1320,
-        "ctr_30d": 0.0174,
+        "spend_30d": 819441.0,
+        "clicks_30d": 1308,
+        "ctr_30d": 0.0175,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xosodaiphat.com/xsmb-xo-so-mien-bac.html",
-        "spend_30d": 730284.0,
-        "clicks_30d": 1134,
-        "ctr_30d": 0.0119,
+        "spend_30d": 698754.0,
+        "clicks_30d": 1092,
+        "ctr_30d": 0.0117,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "az24.vn/xsmb-sxmb-xo-so-mien-bac.html",
-        "spend_30d": 325513.0,
-        "clicks_30d": 308,
-        "ctr_30d": 0.0075,
+        "spend_30d": 317151.0,
+        "clicks_30d": 299,
+        "ctr_30d": 0.0073,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "dantri.com.vn",
-        "spend_30d": 242549.0,
-        "clicks_30d": 62,
-        "ctr_30d": 0.0021,
+        "spend_30d": 245272.0,
+        "clicks_30d": 63,
+        "ctr_30d": 0.0022,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xosodaiphat.com/xsmt-xo-so-mien-trung.html",
-        "spend_30d": 186177.0,
-        "clicks_30d": 261,
-        "ctr_30d": 0.0114,
+        "spend_30d": 170981.0,
+        "clicks_30d": 253,
+        "ctr_30d": 0.0112,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xsmn.mobi",
-        "spend_30d": 159080.0,
-        "clicks_30d": 126,
-        "ctr_30d": 0.0037,
+        "spend_30d": 153791.0,
+        "clicks_30d": 121,
+        "ctr_30d": 0.0036,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "az24.vn/xsmn-sxmn-xo-so-mien-nam.html",
-        "spend_30d": 152524.0,
-        "clicks_30d": 191,
-        "ctr_30d": 0.0103,
+        "spend_30d": 150470.0,
+        "clicks_30d": 186,
+        "ctr_30d": 0.0101,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "icdn.24h.com.vn/upload/1-2025/images/2025-01-22/html5_banner_thuong_1737514797_519/1737514797_index.html",
-        "spend_30d": 138818.0,
+        "spend_30d": 134968.0,
         "clicks_30d": 41,
         "ctr_30d": 0.0021,
         "placement_type": "WEBSITE",
@@ -2730,17 +2730,17 @@
       },
       {
         "placement": "masothue.com",
-        "spend_30d": 101990.0,
+        "spend_30d": 102037.0,
         "clicks_30d": 49,
-        "ctr_30d": 0.0372,
+        "ctr_30d": 0.0382,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       },
       {
         "placement": "xoso.com.vn/xo-so-mien-bac/xsmb-p1.html",
-        "spend_30d": 91884.0,
-        "clicks_30d": 63,
-        "ctr_30d": 0.0066,
+        "spend_30d": 96608.0,
+        "clicks_30d": 69,
+        "ctr_30d": 0.007,
         "placement_type": "WEBSITE",
         "ad_network_type": "CONTENT"
       }
@@ -2749,28 +2749,28 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 76070943.0
+      "total_spend_30d": 73713676.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2510177.0,
-        "clicks_30d": 1701,
-        "impressions_30d": 198594,
-        "ctr_30d": 0.0086,
+        "spend_30d": 2464080.0,
+        "clicks_30d": 1643,
+        "impressions_30d": 195222,
+        "ctr_30d": 0.0084,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 71409435.0,
-        "clicks_30d": 21279,
-        "impressions_30d": 1536843,
-        "ctr_30d": 0.0138,
+        "spend_30d": 69429881.0,
+        "clicks_30d": 21019,
+        "impressions_30d": 1541307,
+        "ctr_30d": 0.0136,
         "ad_count": 150
       },
       "RSA": {
-        "spend_30d": 2151331.0,
-        "clicks_30d": 704,
-        "impressions_30d": 62535,
-        "ctr_30d": 0.0113,
+        "spend_30d": 1819715.0,
+        "clicks_30d": 596,
+        "impressions_30d": 53518,
+        "ctr_30d": 0.0111,
         "ad_count": 1
       }
     },
@@ -2781,9 +2781,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 956560.0,
-        "clicks_30d": 1010,
-        "ctr_30d": 0.0113
+        "spend_30d": 968081.0,
+        "clicks_30d": 991,
+        "ctr_30d": 0.0108
       },
       {
         "ad_id": "752128818627",
@@ -2791,9 +2791,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 784119.0,
-        "clicks_30d": 369,
-        "ctr_30d": 0.0085
+        "spend_30d": 808458.0,
+        "clicks_30d": 375,
+        "ctr_30d": 0.0086
       },
       {
         "ad_id": "751153590183",
@@ -2801,9 +2801,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 347362.0,
-        "clicks_30d": 159,
-        "ctr_30d": 0.0044
+        "spend_30d": 277689.0,
+        "clicks_30d": 121,
+        "ctr_30d": 0.0041
       },
       {
         "ad_id": "751153590186",
@@ -2811,9 +2811,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 173984.0,
-        "clicks_30d": 65,
-        "ctr_30d": 0.0093
+        "spend_30d": 152180.0,
+        "clicks_30d": 56,
+        "ctr_30d": 0.0096
       },
       {
         "ad_id": "752128818630",
@@ -2821,9 +2821,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "320x50.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 113056.0,
+        "spend_30d": 114984.0,
         "clicks_30d": 39,
-        "ctr_30d": 0.0035
+        "ctr_30d": 0.0034
       },
       {
         "ad_id": "752128818633",
@@ -2831,9 +2831,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "728x90.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 91860.0,
-        "clicks_30d": 44,
-        "ctr_30d": 0.0057
+        "spend_30d": 99013.0,
+        "clicks_30d": 46,
+        "ctr_30d": 0.0054
       },
       {
         "ad_id": "751153590192",
@@ -2841,8 +2841,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "728x90.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 18724.0,
-        "clicks_30d": 7,
+        "spend_30d": 16400.0,
+        "clicks_30d": 6,
         "ctr_30d": 0.0028
       },
       {
@@ -2853,7 +2853,17 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 15232.0,
         "clicks_30d": 6,
-        "ctr_30d": 0.0054
+        "ctr_30d": 0.0061
+      },
+      {
+        "ad_id": "752128818621",
+        "campaign": "RMK - chống ghi âm",
+        "ad_group_name": "Ad group 1",
+        "ad_name": "160x600.gif",
+        "ad_format": "DISPLAY_BANNER",
+        "spend_30d": 7173.0,
+        "clicks_30d": 2,
+        "ctr_30d": 0.0033
       },
       {
         "ad_id": "751153590180",
@@ -2863,30 +2873,10 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 4870.0,
         "clicks_30d": 1,
-        "ctr_30d": 0.004
-      },
-      {
-        "ad_id": "752128818621",
-        "campaign": "RMK - chống ghi âm",
-        "ad_group_name": "Ad group 1",
-        "ad_name": "160x600.gif",
-        "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 4410.0,
-        "clicks_30d": 1,
-        "ctr_30d": 0.0017
+        "ctr_30d": 0.0042
       }
     ],
-    "worst_performing_banners": [
-      {
-        "ad_id": "752128818621",
-        "campaign": "RMK - chống ghi âm",
-        "ad_group_name": "Ad group 1",
-        "ad_name": "160x600.gif",
-        "spend_30d": 4410.0,
-        "impressions_30d": 606,
-        "ctr_30d": 0.0017
-      }
-    ],
+    "worst_performing_banners": [],
     "money_pit_ads": []
   }
 }
