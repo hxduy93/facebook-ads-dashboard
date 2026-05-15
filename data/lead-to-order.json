@@ -1,22 +1,134 @@
 {
-  "generated_at": "2026-05-15T11:44:52.543858+00:00",
-  "crm_generated_at": "2026-05-15T09:33:59.868535+00:00",
+  "generated_at": "2026-05-15T13:19:27.410210+00:00",
+  "crm_generated_at": "2026-05-15T11:53:11.551652+00:00",
   "pos_generated_at": "2026-05-15 11:32 UTC",
   "attribution_window_days": 60,
   "summary": {
-    "total_leads_with_ad_id": 3640,
-    "total_leads_with_order": 2315,
-    "leads_conversion_rate": 63.6,
-    "total_orders_attributed": 2337,
+    "total_leads_with_ad_id": 3650,
+    "total_leads_with_order": 2317,
+    "leads_conversion_rate": 63.48,
+    "total_orders_attributed": 2339,
     "total_orders_in_pos": 5417,
     "orders_skipped_no_phone": 0,
-    "orders_unmatched": 2999,
-    "revenue_attributed_total": 673293000,
+    "orders_unmatched": 2997,
+    "revenue_attributed_total": 673691000,
     "revenue_attributed_delivered": 454828000,
     "unique_ad_ids_with_orders": 67,
     "unique_qc_staff": 3
   },
   "by_ad_id": {
+    "120250754003180196": {
+      "ad_id": "120250754003180196",
+      "utm_campaign": "14/4-da8.1-reviewcotambaianh",
+      "leads": 4,
+      "leads_with_phone9": 3,
+      "leads_with_order": 0,
+      "leads_conversion_rate": 0.0,
+      "orders_total": 0,
+      "orders_delivered": 0,
+      "orders_canceled": 0,
+      "orders_other": 0,
+      "revenue_total": 0,
+      "revenue_delivered": 0,
+      "top_owner": "Sale - Nguyễn Quốc Huy ",
+      "top_nguoi_chay_qc": "DA8.1 - DUY"
+    },
+    "120246838738900058": {
+      "ad_id": "120246838738900058",
+      "utm_campaign": "120246838738910058",
+      "leads": 373,
+      "leads_with_phone9": 362,
+      "leads_with_order": 269,
+      "leads_conversion_rate": 72.12,
+      "orders_total": 274,
+      "orders_delivered": 175,
+      "orders_canceled": 0,
+      "orders_other": 99,
+      "revenue_total": 59600000,
+      "revenue_delivered": 37511000,
+      "top_owner": "Sale -  Lê Thị Thùy Anh",
+      "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
+    },
+    "120244425748820388": {
+      "ad_id": "120244425748820388",
+      "utm_campaign": "23/4-noma911-cudoanhxetrangbaianh",
+      "leads": 198,
+      "leads_with_phone9": 186,
+      "leads_with_order": 131,
+      "leads_conversion_rate": 66.16,
+      "orders_total": 132,
+      "orders_delivered": 93,
+      "orders_canceled": 1,
+      "orders_other": 38,
+      "revenue_total": 31541000,
+      "revenue_delivered": 22188000,
+      "top_owner": "Sale -  Lê Thị Thùy Anh",
+      "top_nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    "120246123574410058": {
+      "ad_id": "120246123574410058",
+      "utm_campaign": "120246123574430058",
+      "leads": 376,
+      "leads_with_phone9": 188,
+      "leads_with_order": 141,
+      "leads_conversion_rate": 37.5,
+      "orders_total": 144,
+      "orders_delivered": 103,
+      "orders_canceled": 0,
+      "orders_other": 41,
+      "revenue_total": 29850000,
+      "revenue_delivered": 21492000,
+      "top_owner": "Sale - Tống Thị Huyền",
+      "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
+    },
+    "120244425647860388": {
+      "ad_id": "120244425647860388",
+      "utm_campaign": "23/4-noma911-nghiaoto",
+      "leads": 142,
+      "leads_with_phone9": 137,
+      "leads_with_order": 98,
+      "leads_conversion_rate": 69.01,
+      "orders_total": 98,
+      "orders_delivered": 56,
+      "orders_canceled": 0,
+      "orders_other": 42,
+      "revenue_total": 21691000,
+      "revenue_delivered": 12537000,
+      "top_owner": "Sale -  Lê Thị Thùy Anh",
+      "top_nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    "120244425748830388": {
+      "ad_id": "120244425748830388",
+      "utm_campaign": "23/4-noma911-cudoanhxetrang",
+      "leads": 262,
+      "leads_with_phone9": 251,
+      "leads_with_order": 179,
+      "leads_conversion_rate": 68.32,
+      "orders_total": 180,
+      "orders_delivered": 127,
+      "orders_canceled": 0,
+      "orders_other": 53,
+      "revenue_total": 45352000,
+      "revenue_delivered": 31422000,
+      "top_owner": "Sale -  Lê Thị Thùy Anh",
+      "top_nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    "120247483532660067": {
+      "ad_id": "120247483532660067",
+      "utm_campaign": "120247480189810067",
+      "leads": 18,
+      "leads_with_phone9": 17,
+      "leads_with_order": 6,
+      "leads_conversion_rate": 33.33,
+      "orders_total": 6,
+      "orders_delivered": 1,
+      "orders_canceled": 0,
+      "orders_other": 5,
+      "revenue_total": 15000000,
+      "revenue_delivered": 2500000,
+      "top_owner": "Sale - Nguyễn Quốc Huy ",
+      "top_nguoi_chay_qc": "DATA D1 - DUY"
+    },
     "120244203655790388": {
       "ad_id": "120244203655790388",
       "utm_campaign": "16/3-noma911-hoangreal1",
@@ -32,54 +144,6 @@
       "revenue_delivered": 19502000,
       "top_owner": "Sale -  Lê Thị Thùy Anh",
       "top_nguoi_chay_qc": "NOMA 911 - DUY"
-    },
-    "120246123574410058": {
-      "ad_id": "120246123574410058",
-      "utm_campaign": "120246123574430058",
-      "leads": 374,
-      "leads_with_phone9": 187,
-      "leads_with_order": 141,
-      "leads_conversion_rate": 37.7,
-      "orders_total": 144,
-      "orders_delivered": 103,
-      "orders_canceled": 0,
-      "orders_other": 41,
-      "revenue_total": 29850000,
-      "revenue_delivered": 21492000,
-      "top_owner": "Sale - Tống Thị Huyền",
-      "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
-    },
-    "120247483532660067": {
-      "ad_id": "120247483532660067",
-      "utm_campaign": "120247480189810067",
-      "leads": 17,
-      "leads_with_phone9": 17,
-      "leads_with_order": 6,
-      "leads_conversion_rate": 35.29,
-      "orders_total": 6,
-      "orders_delivered": 1,
-      "orders_canceled": 0,
-      "orders_other": 5,
-      "revenue_total": 15000000,
-      "revenue_delivered": 2500000,
-      "top_owner": "Sale - Tống Thị Huyền",
-      "top_nguoi_chay_qc": "DATA D1 - DUY"
-    },
-    "120246838738900058": {
-      "ad_id": "120246838738900058",
-      "utm_campaign": "120246838738910058",
-      "leads": 370,
-      "leads_with_phone9": 359,
-      "leads_with_order": 268,
-      "leads_conversion_rate": 72.43,
-      "orders_total": 273,
-      "orders_delivered": 175,
-      "orders_canceled": 0,
-      "orders_other": 98,
-      "revenue_total": 59401000,
-      "revenue_delivered": 37511000,
-      "top_owner": "Sale -  Lê Thị Thùy Anh",
-      "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
     },
     "120246812956640058": {
       "ad_id": "120246812956640058",
@@ -111,38 +175,6 @@
       "revenue_total": 1990000,
       "revenue_delivered": 398000,
       "top_owner": "Sale - Tống Thị Huyền",
-      "top_nguoi_chay_qc": "NOMA 911 - DUY"
-    },
-    "120244425748830388": {
-      "ad_id": "120244425748830388",
-      "utm_campaign": "23/4-noma911-cudoanhxetrang",
-      "leads": 261,
-      "leads_with_phone9": 250,
-      "leads_with_order": 178,
-      "leads_conversion_rate": 68.2,
-      "orders_total": 179,
-      "orders_delivered": 127,
-      "orders_canceled": 0,
-      "orders_other": 52,
-      "revenue_total": 45153000,
-      "revenue_delivered": 31422000,
-      "top_owner": "Sale -  Lê Thị Thùy Anh",
-      "top_nguoi_chay_qc": "NOMA 911 - DUY"
-    },
-    "120244425748820388": {
-      "ad_id": "120244425748820388",
-      "utm_campaign": "23/4-noma911-cudoanhxetrangbaianh",
-      "leads": 197,
-      "leads_with_phone9": 185,
-      "leads_with_order": 131,
-      "leads_conversion_rate": 66.5,
-      "orders_total": 132,
-      "orders_delivered": 93,
-      "orders_canceled": 1,
-      "orders_other": 38,
-      "revenue_total": 31541000,
-      "revenue_delivered": 22188000,
-      "top_owner": "Sale -  Lê Thị Thùy Anh",
       "top_nguoi_chay_qc": "NOMA 911 - DUY"
     },
     "120245517440170388": {
@@ -209,22 +241,6 @@
       "top_owner": "Sale -  Lê Thị Thùy Anh",
       "top_nguoi_chay_qc": "NOMA 911 - DUY"
     },
-    "120244425647860388": {
-      "ad_id": "120244425647860388",
-      "utm_campaign": "23/4-noma911-nghiaoto",
-      "leads": 141,
-      "leads_with_phone9": 136,
-      "leads_with_order": 98,
-      "leads_conversion_rate": 69.5,
-      "orders_total": 98,
-      "orders_delivered": 56,
-      "orders_canceled": 0,
-      "orders_other": 42,
-      "revenue_total": 21691000,
-      "revenue_delivered": 12537000,
-      "top_owner": "Sale -  Lê Thị Thùy Anh",
-      "top_nguoi_chay_qc": "NOMA 911 - DUY"
-    },
     "120246259818160058": {
       "ad_id": "120246259818160058",
       "utm_campaign": "120246259818140058",
@@ -256,22 +272,6 @@
       "revenue_delivered": 36808000,
       "top_owner": "Sale -  Lê Thị Thùy Anh",
       "top_nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
-    },
-    "120250754003180196": {
-      "ad_id": "120250754003180196",
-      "utm_campaign": "14/4-da8.1-reviewcotambaianh",
-      "leads": 3,
-      "leads_with_phone9": 2,
-      "leads_with_order": 0,
-      "leads_conversion_rate": 0.0,
-      "orders_total": 0,
-      "orders_delivered": 0,
-      "orders_canceled": 0,
-      "orders_other": 0,
-      "revenue_total": 0,
-      "revenue_delivered": 0,
-      "top_owner": "Sale - Nguyễn Quốc Huy ",
-      "top_nguoi_chay_qc": "DA8.1 - DUY"
     },
     "120245517397270388": {
       "ad_id": "120245517397270388",
@@ -1317,21 +1317,21 @@
   "by_nguoi_chay_qc": {
     "DUY": {
       "staff": "DUY",
-      "leads": 1595,
-      "leads_with_phone9": 1442,
-      "leads_with_order": 1004,
-      "leads_conversion_rate": 62.95,
-      "orders_total": 1012,
+      "leads": 1600,
+      "leads_with_phone9": 1446,
+      "leads_with_order": 1005,
+      "leads_conversion_rate": 62.81,
+      "orders_total": 1013,
       "orders_delivered": 717,
       "orders_canceled": 4,
-      "orders_other": 291,
-      "revenue_total": 384685000,
+      "orders_other": 292,
+      "revenue_total": 384884000,
       "revenue_delivered": 249782000,
       "unique_ad_ids": 38,
       "top_ad_ids_by_revenue": [
         {
           "ad_id": "120244425748830388",
-          "revenue": 45153000
+          "revenue": 45352000
         },
         {
           "ad_id": "120248039692460196",
@@ -1353,15 +1353,15 @@
       "top_products_by_leads": [
         {
           "product": "NOMA 911",
-          "leads": 1283
+          "leads": 1286
         },
         {
           "product": "DA8.1",
-          "leads": 165
+          "leads": 166
         },
         {
           "product": "DATA D1",
-          "leads": 84
+          "leads": 85
         },
         {
           "product": "DR1",
@@ -1371,15 +1371,15 @@
     },
     "PHƯƠNG NAM": {
       "staff": "PHƯƠNG NAM",
-      "leads": 2082,
-      "leads_with_phone9": 1799,
-      "leads_with_order": 1332,
-      "leads_conversion_rate": 63.98,
-      "orders_total": 1349,
+      "leads": 2086,
+      "leads_with_phone9": 1802,
+      "leads_with_order": 1333,
+      "leads_conversion_rate": 63.9,
+      "orders_total": 1350,
       "orders_delivered": 949,
       "orders_canceled": 3,
-      "orders_other": 397,
-      "revenue_total": 302525000,
+      "orders_other": 398,
+      "revenue_total": 302724000,
       "revenue_delivered": 215667000,
       "unique_ad_ids": 47,
       "top_ad_ids_by_revenue": [
@@ -1389,7 +1389,7 @@
         },
         {
           "ad_id": "120246838738900058",
-          "revenue": 59202000
+          "revenue": 59401000
         },
         {
           "ad_id": "120246812956640058",
@@ -1407,7 +1407,7 @@
       "top_products_by_leads": [
         {
           "product": "NOMA911",
-          "leads": 2018
+          "leads": 2022
         },
         {
           "product": "DA8.1",
@@ -1449,19 +1449,19 @@
       {
         "utm_campaign": "23/4-noma911-cudoanhxetrang",
         "product": "NOMA 911",
-        "leads": 253,
-        "leads_with_phone9": 244,
-        "leads_with_order": 173,
-        "leads_conversion_rate": 68.38,
-        "orders_total": 174,
+        "leads": 254,
+        "leads_with_phone9": 245,
+        "leads_with_order": 174,
+        "leads_conversion_rate": 68.5,
+        "orders_total": 175,
         "orders_delivered": 121,
         "orders_canceled": 0,
-        "orders_other": 53,
-        "revenue_total": 43760000,
+        "orders_other": 54,
+        "revenue_total": 43959000,
         "revenue_delivered": 29830000,
         "unique_ad_ids": 2,
         "leads_by_date": {
-          "2026-05-15": 7,
+          "2026-05-15": 8,
           "2026-05-14": 10,
           "2026-05-13": 16,
           "2026-05-12": 11,
@@ -1487,7 +1487,7 @@
           "2026-04-22": 3
         },
         "orders_total_by_date": {
-          "2026-05-15": 5,
+          "2026-05-15": 6,
           "2026-05-14": 7,
           "2026-05-13": 6,
           "2026-05-12": 6,
@@ -1535,7 +1535,7 @@
           "2026-04-23": 3
         },
         "revenue_total_by_date": {
-          "2026-05-15": 1393000,
+          "2026-05-15": 1592000,
           "2026-05-14": 2189000,
           "2026-05-13": 1592000,
           "2026-05-12": 1393000,
@@ -1801,10 +1801,10 @@
       {
         "utm_campaign": "23/4-noma911-cudoanhxetrangbaianh",
         "product": "NOMA 911",
-        "leads": 207,
-        "leads_with_phone9": 195,
+        "leads": 208,
+        "leads_with_phone9": 196,
         "leads_with_order": 133,
-        "leads_conversion_rate": 64.25,
+        "leads_conversion_rate": 63.94,
         "orders_total": 134,
         "orders_delivered": 90,
         "orders_canceled": 1,
@@ -1813,7 +1813,7 @@
         "revenue_delivered": 21591000,
         "unique_ad_ids": 2,
         "leads_by_date": {
-          "2026-05-15": 10,
+          "2026-05-15": 11,
           "2026-05-14": 14,
           "2026-05-13": 18,
           "2026-05-12": 12,
@@ -2293,10 +2293,10 @@
       {
         "utm_campaign": "23/4-noma911-nghiaoto",
         "product": "NOMA 911",
-        "leads": 134,
-        "leads_with_phone9": 129,
+        "leads": 135,
+        "leads_with_phone9": 130,
         "leads_with_order": 93,
-        "leads_conversion_rate": 69.4,
+        "leads_conversion_rate": 68.89,
         "orders_total": 93,
         "orders_delivered": 53,
         "orders_canceled": 0,
@@ -2305,7 +2305,7 @@
         "revenue_delivered": 11940000,
         "unique_ad_ids": 1,
         "leads_by_date": {
-          "2026-05-15": 3,
+          "2026-05-15": 4,
           "2026-05-14": 13,
           "2026-05-13": 11,
           "2026-05-12": 12,
@@ -2726,10 +2726,10 @@
       {
         "utm_campaign": "120247480189810067",
         "product": "DATA D1",
-        "leads": 17,
+        "leads": 18,
         "leads_with_phone9": 17,
         "leads_with_order": 6,
-        "leads_conversion_rate": 35.29,
+        "leads_conversion_rate": 33.33,
         "orders_total": 6,
         "orders_delivered": 1,
         "orders_canceled": 0,
@@ -2738,7 +2738,7 @@
         "revenue_delivered": 2500000,
         "unique_ad_ids": 1,
         "leads_by_date": {
-          "2026-05-15": 2,
+          "2026-05-15": 3,
           "2026-05-14": 1,
           "2026-05-13": 5,
           "2026-05-12": 2,
@@ -3054,10 +3054,10 @@
       {
         "utm_campaign": "14/4-da8.1-reviewcotambaianh",
         "product": "DA8.1",
-        "leads": 29,
-        "leads_with_phone9": 22,
+        "leads": 30,
+        "leads_with_phone9": 23,
         "leads_with_order": 3,
-        "leads_conversion_rate": 10.34,
+        "leads_conversion_rate": 10.0,
         "orders_total": 3,
         "orders_delivered": 3,
         "orders_canceled": 0,
@@ -3066,6 +3066,7 @@
         "revenue_delivered": 3750000,
         "unique_ad_ids": 2,
         "leads_by_date": {
+          "2026-05-15": 1,
           "2026-05-14": 1,
           "2026-05-13": 2,
           "2026-05-12": 2,
@@ -3747,19 +3748,19 @@
       {
         "utm_campaign": "120246838738910058",
         "product": "NOMA911",
-        "leads": 367,
-        "leads_with_phone9": 357,
-        "leads_with_order": 267,
-        "leads_conversion_rate": 72.75,
-        "orders_total": 272,
+        "leads": 369,
+        "leads_with_phone9": 359,
+        "leads_with_order": 268,
+        "leads_conversion_rate": 72.63,
+        "orders_total": 273,
         "orders_delivered": 174,
         "orders_canceled": 0,
-        "orders_other": 98,
-        "revenue_total": 59202000,
+        "orders_other": 99,
+        "revenue_total": 59401000,
         "revenue_delivered": 37312000,
         "unique_ad_ids": 2,
         "leads_by_date": {
-          "2026-05-15": 14,
+          "2026-05-15": 16,
           "2026-05-14": 25,
           "2026-05-13": 29,
           "2026-05-12": 25,
@@ -3783,7 +3784,7 @@
           "2026-05-07": 20,
           "2026-05-06": 16,
           "2026-05-05": 18,
-          "2026-05-15": 17,
+          "2026-05-15": 18,
           "2026-05-13": 18,
           "2026-05-12": 21,
           "2026-05-11": 34,
@@ -3820,7 +3821,7 @@
           "2026-05-07": 4378000,
           "2026-05-06": 3781000,
           "2026-05-05": 3582000,
-          "2026-05-15": 4776000,
+          "2026-05-15": 4975000,
           "2026-05-13": 3582000,
           "2026-05-12": 4378000,
           "2026-05-11": 6965000,
@@ -4086,10 +4087,10 @@
       {
         "utm_campaign": "120246123574430058",
         "product": "NOMA911",
-        "leads": 388,
-        "leads_with_phone9": 198,
+        "leads": 390,
+        "leads_with_phone9": 199,
         "leads_with_order": 150,
-        "leads_conversion_rate": 38.66,
+        "leads_conversion_rate": 38.46,
         "orders_total": 153,
         "orders_delivered": 111,
         "orders_canceled": 0,
@@ -4098,7 +4099,7 @@
         "revenue_delivered": 23283000,
         "unique_ad_ids": 3,
         "leads_by_date": {
-          "2026-05-15": 10,
+          "2026-05-15": 12,
           "2026-05-14": 30,
           "2026-05-13": 20,
           "2026-05-12": 24,
@@ -5104,13 +5105,6 @@
   },
   "unmatched_orders_sample": [
     {
-      "order_id": 96509,
-      "phone9": "392665399",
-      "vn_date": "2026-05-15",
-      "source_name": "DUY - NOMA 911",
-      "cod": 199000.0
-    },
-    {
       "order_id": 96481,
       "phone9": "982527939",
       "vn_date": "2026-05-15",
@@ -5242,6 +5236,13 @@
       "vn_date": "2026-05-12",
       "source_name": "DUY - NOMA 911 MESSENGER",
       "cod": 199000.0
+    },
+    {
+      "order_id": 94877,
+      "phone9": "969098886",
+      "vn_date": "2026-05-11",
+      "source_name": "DUY - DR1",
+      "cod": 1300000.0
     }
   ]
 }
