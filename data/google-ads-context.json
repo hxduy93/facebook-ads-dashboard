@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17 17:59",
+  "generated_at": "2026-05-17 19:09",
   "source_data_date_range": {
     "start_7d": "2026-05-10",
     "end": "2026-05-16",
@@ -2538,14 +2538,14 @@
   },
   "placement_insights": {
     "summary": {
-      "total_unique_placements": 19408,
-      "total_spend_30d": 22183784.0
+      "total_unique_placements": 19411,
+      "total_spend_30d": 22173756.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 22184622.0,
-        "clicks_30d": 13413,
-        "impressions_30d": 1093579,
+        "spend_30d": 22174592.0,
+        "clicks_30d": 13407,
+        "impressions_30d": 1093575,
         "ctr_30d": 0.0123,
         "cpc_30d": 1654.0,
         "campaign_count": 9
@@ -2561,11 +2561,11 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 22183784.0,
-        "clicks_30d": 13412,
-        "impressions_30d": 1056179,
+        "spend_30d": 22173756.0,
+        "clicks_30d": 13406,
+        "impressions_30d": 1056313,
         "ctr_30d": 0.0127,
-        "placement_count": 19408
+        "placement_count": 19411
       }
     },
     "top_waste_placements": [],
@@ -2777,20 +2777,20 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 70599179.0
+      "total_spend_30d": 70596352.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2491380.0,
-        "clicks_30d": 1599,
+        "spend_30d": 2488777.0,
+        "clicks_30d": 1598,
         "impressions_30d": 189468,
         "ctr_30d": 0.0084,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 66930342.0,
-        "clicks_30d": 20607,
-        "impressions_30d": 1548922,
+        "spend_30d": 66930118.0,
+        "clicks_30d": 20606,
+        "impressions_30d": 1548920,
         "ctr_30d": 0.0133,
         "ad_count": 150
       },
@@ -2819,8 +2819,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 880303.0,
-        "clicks_30d": 399,
+        "spend_30d": 877700.0,
+        "clicks_30d": 398,
         "ctr_30d": 0.0092
       },
       {
