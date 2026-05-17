@@ -1,21 +1,99 @@
 {
-  "generated_at": "2026-05-17T10:22:01.797876+00:00",
+  "generated_at": "2026-05-17T11:40:01.039855+00:00",
   "shop_id": "1942196207",
   "lookback_days": 30,
-  "total_contacts": 4056,
-  "contacts_with_utm_content": 3935,
-  "contacts_with_phone9": 4056,
+  "total_contacts": 4072,
+  "contacts_with_utm_content": 3951,
+  "contacts_with_phone9": 4072,
   "unique_ad_ids": 78,
   "partial": false,
   "partial_failure_reason": null,
   "by_utm_content": {
+    "120246259818160058": {
+      "utm_content": "120246259818160058",
+      "utm_campaign": "120246259818140058",
+      "utm_term": "120246259818130058",
+      "total_contacts": 153,
+      "contacts_by_date": {
+        "2026-05-17": 3,
+        "2026-05-16": 4,
+        "2026-05-15": 4,
+        "2026-05-14": 11,
+        "2026-05-13": 7,
+        "2026-05-12": 11,
+        "2026-05-11": 11,
+        "2026-05-10": 7,
+        "2026-05-09": 3,
+        "2026-05-07": 5,
+        "2026-05-06": 2,
+        "2026-05-05": 5,
+        "2026-05-04": 6,
+        "2026-05-03": 8,
+        "2026-05-02": 8,
+        "2026-05-01": 6,
+        "2026-04-30": 3,
+        "2026-04-29": 6,
+        "2026-04-28": 7,
+        "2026-04-27": 6,
+        "2026-04-26": 4,
+        "2026-04-25": 5,
+        "2026-04-24": 10,
+        "2026-04-23": 2,
+        "2026-04-22": 3,
+        "2026-04-21": 4,
+        "2026-04-20": 2
+      },
+      "runners": {
+        "(none)": 4,
+        "PHƯƠNG NAM - NOMA911": 149
+      },
+      "sources": {
+        "LAU KÍNH NOMA 911": 153
+      }
+    },
+    "120246838738900058": {
+      "utm_content": "120246838738900058",
+      "utm_campaign": "120246838738910058",
+      "utm_term": "120246838738920058",
+      "total_contacts": 434,
+      "contacts_by_date": {
+        "2026-05-17": 14,
+        "2026-05-16": 29,
+        "2026-05-15": 35,
+        "2026-05-14": 25,
+        "2026-05-13": 29,
+        "2026-05-12": 25,
+        "2026-05-11": 31,
+        "2026-05-10": 46,
+        "2026-05-09": 40,
+        "2026-05-08": 1,
+        "2026-05-07": 33,
+        "2026-05-06": 27,
+        "2026-05-05": 15,
+        "2026-05-04": 27,
+        "2026-05-03": 18,
+        "2026-05-02": 10,
+        "2026-05-01": 9,
+        "2026-04-30": 8,
+        "2026-04-29": 11,
+        "2026-04-28": 1
+      },
+      "runners": {
+        "(none)": 6,
+        "PHƯƠNG NAM - NOMA911": 427,
+        "NAM - NOMA 250": 1
+      },
+      "sources": {
+        "LAU KÍNH NOMA 911": 434
+      }
+    },
     "120244425748830388": {
       "utm_content": "120244425748830388",
       "utm_campaign": "23/4-noma911-cudoanhxetrang",
       "utm_term": "120244425748810388",
-      "total_contacts": 294,
+      "total_contacts": 297,
       "contacts_by_date": {
-        "2026-05-17": 12,
+        "2026-05-17": 15,
         "2026-05-16": 18,
         "2026-05-15": 10,
         "2026-05-14": 8,
@@ -43,19 +121,91 @@
         "2026-04-22": 3
       },
       "runners": {
-        "NOMA 911 - DUY": 294
+        "NOMA 911 - DUY": 297
       },
       "sources": {
-        "LAU KÍNH NOMA 911": 294
+        "LAU KÍNH NOMA 911": 297
+      }
+    },
+    "120246730619290058": {
+      "utm_content": "120246730619290058",
+      "utm_campaign": "120246730619280058",
+      "utm_term": "120246730619300058",
+      "total_contacts": 324,
+      "contacts_by_date": {
+        "2026-05-17": 5,
+        "2026-05-16": 10,
+        "2026-05-15": 8,
+        "2026-05-14": 12,
+        "2026-05-13": 12,
+        "2026-05-12": 14,
+        "2026-05-11": 30,
+        "2026-05-10": 29,
+        "2026-05-09": 31,
+        "2026-05-08": 1,
+        "2026-05-07": 2,
+        "2026-05-06": 19,
+        "2026-05-05": 24,
+        "2026-05-04": 25,
+        "2026-05-03": 25,
+        "2026-05-02": 15,
+        "2026-05-01": 14,
+        "2026-04-30": 8,
+        "2026-04-29": 6,
+        "2026-04-28": 17,
+        "2026-04-27": 17
+      },
+      "runners": {
+        "(none)": 3,
+        "PHƯƠNG NAM - NOMA911": 320,
+        "NAM - NOMA 250": 1
+      },
+      "sources": {
+        "LAU KÍNH NOMA 911": 324
+      }
+    },
+    "120248039692460196": {
+      "utm_content": "120248039692460196",
+      "utm_campaign": "2/4-dr1-vietmynguyen",
+      "utm_term": "120248039692480196",
+      "total_contacts": 61,
+      "contacts_by_date": {
+        "2026-05-17": 3,
+        "2026-05-16": 2,
+        "2026-05-13": 4,
+        "2026-05-12": 2,
+        "2026-05-10": 1,
+        "2026-05-09": 4,
+        "2026-05-07": 3,
+        "2026-05-06": 4,
+        "2026-05-05": 4,
+        "2026-05-04": 3,
+        "2026-05-03": 2,
+        "2026-05-02": 8,
+        "2026-05-01": 2,
+        "2026-04-30": 3,
+        "2026-04-29": 2,
+        "2026-04-28": 2,
+        "2026-04-27": 4,
+        "2026-04-26": 1,
+        "2026-04-25": 2,
+        "2026-04-24": 2,
+        "2026-04-23": 3
+      },
+      "runners": {
+        "DR1 - DUY": 61
+      },
+      "sources": {
+        "LAU KÍNH NOMA 911": 61
       }
     },
     "120244203655790388": {
       "utm_content": "120244203655790388",
       "utm_campaign": "16/3-noma911-hoangreal1",
       "utm_term": "120244203655810388",
-      "total_contacts": 174,
+      "total_contacts": 180,
       "contacts_by_date": {
-        "2026-05-17": 5,
+        "2026-05-17": 11,
         "2026-05-16": 11,
         "2026-05-15": 10,
         "2026-05-14": 9,
@@ -84,10 +234,45 @@
         "2026-04-19": 11
       },
       "runners": {
-        "NOMA 911 - DUY": 174
+        "NOMA 911 - DUY": 180
       },
       "sources": {
-        "LAU KÍNH NOMA 911": 174
+        "LAU KÍNH NOMA 911": 180
+      }
+    },
+    "120246812956640058": {
+      "utm_content": "120246812956640058",
+      "utm_campaign": "120246812956660058",
+      "utm_term": "120246812956650058",
+      "total_contacts": 356,
+      "contacts_by_date": {
+        "2026-05-17": 17,
+        "2026-05-16": 23,
+        "2026-05-15": 23,
+        "2026-05-14": 19,
+        "2026-05-13": 26,
+        "2026-05-12": 23,
+        "2026-05-11": 19,
+        "2026-05-10": 21,
+        "2026-05-09": 29,
+        "2026-05-07": 10,
+        "2026-05-06": 10,
+        "2026-05-05": 26,
+        "2026-05-04": 16,
+        "2026-05-03": 17,
+        "2026-05-02": 23,
+        "2026-05-01": 21,
+        "2026-04-30": 10,
+        "2026-04-29": 12,
+        "2026-04-28": 11
+      },
+      "runners": {
+        "PHƯƠNG NAM - NOMA911": 354,
+        "(none)": 1,
+        "NAM - NOMA 250": 1
+      },
+      "sources": {
+        "LAU KÍNH NOMA 911": 356
       }
     },
     "120245633210730303": {
@@ -99,8 +284,7 @@
         "2026-05-17": 2
       },
       "runners": {
-        "(none)": 1,
-        "PHƯƠNG NAM - NOMA911": 1
+        "PHƯƠNG NAM - NOMA911": 2
       },
       "sources": {
         "MÁY DÒ ĐỊNH VỊ, NGHE LÉN, GHI ÂM D1 DOSCOM": 2
@@ -134,8 +318,7 @@
         "2026-04-27": 10
       },
       "runners": {
-        "(none)": 1,
-        "PHƯƠNG NAM - NOMA911": 428
+        "PHƯƠNG NAM - NOMA911": 429
       },
       "sources": {
         "LAU KÍNH NOMA 911": 429
@@ -239,77 +422,6 @@
         "LAU KÍNH NOMA 911": 402
       }
     },
-    "120246812956640058": {
-      "utm_content": "120246812956640058",
-      "utm_campaign": "120246812956660058",
-      "utm_term": "120246812956650058",
-      "total_contacts": 355,
-      "contacts_by_date": {
-        "2026-05-17": 16,
-        "2026-05-16": 23,
-        "2026-05-15": 23,
-        "2026-05-14": 19,
-        "2026-05-13": 26,
-        "2026-05-12": 23,
-        "2026-05-11": 19,
-        "2026-05-10": 21,
-        "2026-05-09": 29,
-        "2026-05-07": 10,
-        "2026-05-06": 10,
-        "2026-05-05": 26,
-        "2026-05-04": 16,
-        "2026-05-03": 17,
-        "2026-05-02": 23,
-        "2026-05-01": 21,
-        "2026-04-30": 10,
-        "2026-04-29": 12,
-        "2026-04-28": 11
-      },
-      "runners": {
-        "PHƯƠNG NAM - NOMA911": 353,
-        "(none)": 1,
-        "NAM - NOMA 250": 1
-      },
-      "sources": {
-        "LAU KÍNH NOMA 911": 355
-      }
-    },
-    "120246838738900058": {
-      "utm_content": "120246838738900058",
-      "utm_campaign": "120246838738910058",
-      "utm_term": "120246838738920058",
-      "total_contacts": 431,
-      "contacts_by_date": {
-        "2026-05-17": 11,
-        "2026-05-16": 29,
-        "2026-05-15": 35,
-        "2026-05-14": 25,
-        "2026-05-13": 29,
-        "2026-05-12": 25,
-        "2026-05-11": 31,
-        "2026-05-10": 46,
-        "2026-05-09": 40,
-        "2026-05-08": 1,
-        "2026-05-07": 33,
-        "2026-05-06": 27,
-        "2026-05-05": 15,
-        "2026-05-04": 27,
-        "2026-05-03": 18,
-        "2026-05-02": 10,
-        "2026-05-01": 9,
-        "2026-04-30": 8,
-        "2026-04-29": 11,
-        "2026-04-28": 1
-      },
-      "runners": {
-        "PHƯƠNG NAM - NOMA911": 426,
-        "(none)": 4,
-        "NAM - NOMA 250": 1
-      },
-      "sources": {
-        "LAU KÍNH NOMA 911": 431
-      }
-    },
     "120244425647860388": {
       "utm_content": "120244425647860388",
       "utm_campaign": "23/4-noma911-nghiaoto",
@@ -347,85 +459,6 @@
         "LAU KÍNH NOMA 911": 180
       }
     },
-    "120246730619290058": {
-      "utm_content": "120246730619290058",
-      "utm_campaign": "120246730619280058",
-      "utm_term": "120246730619300058",
-      "total_contacts": 323,
-      "contacts_by_date": {
-        "2026-05-17": 4,
-        "2026-05-16": 10,
-        "2026-05-15": 8,
-        "2026-05-14": 12,
-        "2026-05-13": 12,
-        "2026-05-12": 14,
-        "2026-05-11": 30,
-        "2026-05-10": 29,
-        "2026-05-09": 31,
-        "2026-05-08": 1,
-        "2026-05-07": 2,
-        "2026-05-06": 19,
-        "2026-05-05": 24,
-        "2026-05-04": 25,
-        "2026-05-03": 25,
-        "2026-05-02": 15,
-        "2026-05-01": 14,
-        "2026-04-30": 8,
-        "2026-04-29": 6,
-        "2026-04-28": 17,
-        "2026-04-27": 17
-      },
-      "runners": {
-        "PHƯƠNG NAM - NOMA911": 320,
-        "(none)": 2,
-        "NAM - NOMA 250": 1
-      },
-      "sources": {
-        "LAU KÍNH NOMA 911": 323
-      }
-    },
-    "120246259818160058": {
-      "utm_content": "120246259818160058",
-      "utm_campaign": "120246259818140058",
-      "utm_term": "120246259818130058",
-      "total_contacts": 152,
-      "contacts_by_date": {
-        "2026-05-17": 2,
-        "2026-05-16": 4,
-        "2026-05-15": 4,
-        "2026-05-14": 11,
-        "2026-05-13": 7,
-        "2026-05-12": 11,
-        "2026-05-11": 11,
-        "2026-05-10": 7,
-        "2026-05-09": 3,
-        "2026-05-07": 5,
-        "2026-05-06": 2,
-        "2026-05-05": 5,
-        "2026-05-04": 6,
-        "2026-05-03": 8,
-        "2026-05-02": 8,
-        "2026-05-01": 6,
-        "2026-04-30": 3,
-        "2026-04-29": 6,
-        "2026-04-28": 7,
-        "2026-04-27": 6,
-        "2026-04-26": 4,
-        "2026-04-25": 5,
-        "2026-04-24": 10,
-        "2026-04-23": 2,
-        "2026-04-22": 3,
-        "2026-04-21": 4,
-        "2026-04-20": 2
-      },
-      "runners": {
-        "PHƯƠNG NAM - NOMA911": 149,
-        "(none)": 3
-      },
-      "sources": {
-        "LAU KÍNH NOMA 911": 152
-      }
-    },
     "120245533751640388": {
       "utm_content": "120245533751640388",
       "utm_campaign": "12/5-noma911-quangteovip",
@@ -445,41 +478,6 @@
       },
       "sources": {
         "LAU KÍNH NOMA 911": 55
-      }
-    },
-    "120248039692460196": {
-      "utm_content": "120248039692460196",
-      "utm_campaign": "2/4-dr1-vietmynguyen",
-      "utm_term": "120248039692480196",
-      "total_contacts": 60,
-      "contacts_by_date": {
-        "2026-05-17": 2,
-        "2026-05-16": 2,
-        "2026-05-13": 4,
-        "2026-05-12": 2,
-        "2026-05-10": 1,
-        "2026-05-09": 4,
-        "2026-05-07": 3,
-        "2026-05-06": 4,
-        "2026-05-05": 4,
-        "2026-05-04": 3,
-        "2026-05-03": 2,
-        "2026-05-02": 8,
-        "2026-05-01": 2,
-        "2026-04-30": 3,
-        "2026-04-29": 2,
-        "2026-04-28": 2,
-        "2026-04-27": 4,
-        "2026-04-26": 1,
-        "2026-04-25": 2,
-        "2026-04-24": 2,
-        "2026-04-23": 3
-      },
-      "runners": {
-        "DR1 - DUY": 60
-      },
-      "sources": {
-        "LAU KÍNH NOMA 911": 60
       }
     },
     "120250754003180196": {
@@ -1668,6 +1666,166 @@
   },
   "contacts_minimal": [
     {
+      "phone9": "977403353",
+      "ad_id": "120246259818160058",
+      "utm_campaign": "120246259818140058",
+      "created_on": "2026-05-17 11:31:26.455470",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quang Minh",
+      "nguoi_chay_qc": null
+    },
+    {
+      "phone9": "984672064",
+      "ad_id": "120246838738900058",
+      "utm_campaign": "120246838738910058",
+      "created_on": "2026-05-17 11:27:10.497907",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale -  Lê Thị Thùy Anh",
+      "nguoi_chay_qc": null
+    },
+    {
+      "phone9": "907844968",
+      "ad_id": "120244425748830388",
+      "utm_campaign": "23/4-noma911-cudoanhxetrang",
+      "created_on": "2026-05-17 11:23:54.528677",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Tống Thị Huyền",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "343620134",
+      "ad_id": "120246730619290058",
+      "utm_campaign": "120246730619280058",
+      "created_on": "2026-05-17 11:21:22.510413",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quốc Huy ",
+      "nguoi_chay_qc": null
+    },
+    {
+      "phone9": "964832986",
+      "ad_id": "120244425748830388",
+      "utm_campaign": "23/4-noma911-cudoanhxetrang",
+      "created_on": "2026-05-17 11:17:24.310530",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quang Minh",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "352775861",
+      "ad_id": "120248039692460196",
+      "utm_campaign": "2/4-dr1-vietmynguyen",
+      "created_on": "2026-05-17 10:59:46.563420",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale -  Lê Thị Thùy Anh",
+      "nguoi_chay_qc": "DR1 - DUY"
+    },
+    {
+      "phone9": "987308226",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:58:42.648564",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quốc Huy ",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "905380892",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:53:16.991525",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quang Minh",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "906372251",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:48:40.282184",
+      "trang_thai": "eeed-dcd7-a039-0ad9-37c1-ee53-6452",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale -  Lê Thị Thùy Anh",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "982158599",
+      "ad_id": "120246838738900058",
+      "utm_campaign": "120246838738910058",
+      "created_on": "2026-05-17 10:42:42.773150",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Tống Thị Huyền",
+      "nguoi_chay_qc": null
+    },
+    {
+      "phone9": "388186666",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:39:27.764233",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quốc Huy ",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "388186666",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:39:02.670985",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quang Minh",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "988228535",
+      "ad_id": "120244425748830388",
+      "utm_campaign": "23/4-noma911-cudoanhxetrang",
+      "created_on": "2026-05-17 10:30:46.206790",
+      "trang_thai": "eeed-dcd7-a039-0ad9-37c1-ee53-6452",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale -  Lê Thị Thùy Anh",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "914285679",
+      "ad_id": "120244203655790388",
+      "utm_campaign": "16/3-noma911-hoangreal1",
+      "created_on": "2026-05-17 10:27:56.957844",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Tống Thị Huyền",
+      "nguoi_chay_qc": "NOMA 911 - DUY"
+    },
+    {
+      "phone9": "378757439",
+      "ad_id": "120246838738900058",
+      "utm_campaign": "120246838738910058",
+      "created_on": "2026-05-17 10:19:27.375081",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quốc Huy ",
+      "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
+    },
+    {
+      "phone9": "979908745",
+      "ad_id": "120246812956640058",
+      "utm_campaign": "120246812956660058",
+      "created_on": "2026-05-17 10:19:25.746328",
+      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "source_of_leads": "LAU KÍNH NOMA 911",
+      "owner_name": "Sale - Nguyễn Quang Minh",
+      "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
+    },
+    {
       "phone9": "962406458",
       "ad_id": "120244425748830388",
       "utm_campaign": "23/4-noma911-cudoanhxetrang",
@@ -1682,7 +1840,7 @@
       "ad_id": "120244203655790388",
       "utm_campaign": "16/3-noma911-hoangreal1",
       "created_on": "2026-05-17 10:14:37.144596",
-      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale - Tống Thị Huyền",
       "nguoi_chay_qc": "NOMA 911 - DUY"
@@ -1695,7 +1853,7 @@
       "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
       "source_of_leads": "MÁY DÒ ĐỊNH VỊ, NGHE LÉN, GHI ÂM D1 DOSCOM",
       "owner_name": "Sale - Nguyễn Quốc Huy ",
-      "nguoi_chay_qc": null
+      "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
     },
     {
       "phone9": "913240664",
@@ -1705,7 +1863,7 @@
       "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale - Nguyễn Quang Minh",
-      "nguoi_chay_qc": null
+      "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
     },
     {
       "phone9": "336151459",
@@ -1722,7 +1880,7 @@
       "ad_id": "120245533751630388",
       "utm_campaign": "12/5-noma911-quangteovipbaianh",
       "created_on": "2026-05-17 09:43:21.609448",
-      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale - Tống Thị Huyền",
       "nguoi_chay_qc": "NOMA 911 - DUY"
@@ -1762,7 +1920,7 @@
       "ad_id": "120246123574410058",
       "utm_campaign": "120246123574430058",
       "created_on": "2026-05-17 09:36:09.959422",
-      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale - Tống Thị Huyền",
       "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
@@ -1792,7 +1950,7 @@
       "ad_id": "120246838738900058",
       "utm_campaign": "120246838738910058",
       "created_on": "2026-05-17 09:23:25.305839",
-      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "trang_thai": "eeed-dcd7-a039-0ad9-37c1-ee53-6452",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale -  Lê Thị Thùy Anh",
       "nguoi_chay_qc": "PHƯƠNG NAM - NOMA911"
@@ -1992,7 +2150,7 @@
       "ad_id": "120245533751640388",
       "utm_campaign": "12/5-noma911-quangteovip",
       "created_on": "2026-05-17 06:05:06.697472",
-      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
+      "trang_thai": "eeed-dcd7-a039-0ad9-37c1-ee53-6452",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale -  Lê Thị Thùy Anh",
       "nguoi_chay_qc": "NOMA 911 - DUY"
@@ -2912,7 +3070,7 @@
       "ad_id": "120248039692460196",
       "utm_campaign": "2/4-dr1-vietmynguyen",
       "created_on": "2026-05-16 20:02:14.028844",
-      "trang_thai": "4092-d5ee-8d1c-d796-e133-f770-7266",
+      "trang_thai": "8084-ca99-9281-3416-a282-9129-5e55",
       "source_of_leads": "LAU KÍNH NOMA 911",
       "owner_name": "Sale - Tống Thị Huyền",
       "nguoi_chay_qc": "DR1 - DUY"
