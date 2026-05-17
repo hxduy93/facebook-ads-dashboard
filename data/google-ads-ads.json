@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17 16:59",
+  "generated_at": "2026-05-17 18:33",
   "source": "Windsor.ai JSON API (ads, auto every 60min)",
   "account_name": "MHDI",
   "date_range": {
@@ -45,11 +45,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300x600.gif",
       "ad_format": "DISPLAY_BANNER",
-      "spend_30d": 880303.0,
-      "clicks_30d": 399,
+      "spend_30d": 877700.0,
+      "clicks_30d": 398,
       "impressions_30d": 43304,
       "ctr_30d": 0.0092,
-      "cpc_30d": 2206.0,
+      "cpc_30d": 2205.0,
       "active_days_30d": 25
     },
     "752128818630": {
@@ -175,8 +175,8 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300X250-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 1055596.0,
-      "clicks_30d": 1132,
+      "spend_30d": 1055372.0,
+      "clicks_30d": 1131,
       "impressions_30d": 94033,
       "ctr_30d": 0.012,
       "cpc_30d": 933.0,
@@ -359,7 +359,7 @@
       "ad_format": "OTHER",
       "spend_30d": 414218.0,
       "clicks_30d": 273,
-      "impressions_30d": 17140,
+      "impressions_30d": 17139,
       "ctr_30d": 0.0159,
       "cpc_30d": 1517.0,
       "active_days_30d": 24
@@ -515,7 +515,7 @@
       "ad_format": "OTHER",
       "spend_30d": 1659499.0,
       "clicks_30d": 1146,
-      "impressions_30d": 103180,
+      "impressions_30d": 103179,
       "ctr_30d": 0.0111,
       "cpc_30d": 1448.0,
       "active_days_30d": 25
@@ -2109,16 +2109,16 @@
   },
   "format_aggregates": {
     "DISPLAY_BANNER": {
-      "spend_30d": 2491380.0,
-      "clicks_30d": 1599,
+      "spend_30d": 2488777.0,
+      "clicks_30d": 1598,
       "impressions_30d": 189468,
       "ctr_30d": 0.0084,
       "ad_count": 10
     },
     "OTHER": {
-      "spend_30d": 66930342.0,
-      "clicks_30d": 20607,
-      "impressions_30d": 1548922,
+      "spend_30d": 66930118.0,
+      "clicks_30d": 20606,
+      "impressions_30d": 1548920,
       "ctr_30d": 0.0133,
       "ad_count": 150
     },
