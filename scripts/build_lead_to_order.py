@@ -191,7 +191,9 @@ def main():
         "orders_total": 0,
         "orders_delivered": 0,
         "orders_canceled": 0,
-        "orders_other": 0,
+        "orders_returning": 0,  # status=4, đang hoàn
+        "orders_returned": 0,   # status=5, đã hoàn
+        "orders_other": 0,      # đang xử lý: 0/1/2/8/9
         "revenue_total": 0.0,
         "revenue_delivered": 0.0,
         "products_counter": defaultdict(int),
@@ -199,6 +201,9 @@ def main():
         "leads_by_date": defaultdict(int),
         "orders_total_by_date": defaultdict(int),
         "orders_delivered_by_date": defaultdict(int),
+        "orders_canceled_by_date": defaultdict(int),
+        "orders_returning_by_date": defaultdict(int),
+        "orders_returned_by_date": defaultdict(int),
         "revenue_total_by_date": defaultdict(float),
         "revenue_delivered_by_date": defaultdict(float),
     })
@@ -346,8 +351,18 @@ def main():
                 if order_date_iso:
                     sb["orders_delivered_by_date"][order_date_iso] += 1
                     sb["revenue_delivered_by_date"][order_date_iso] += cod
+            elif status == 4:
+                sb["orders_returning"] += 1
+                if order_date_iso:
+                    sb["orders_returning_by_date"][order_date_iso] += 1
+            elif status == 5:
+                sb["orders_returned"] += 1
+                if order_date_iso:
+                    sb["orders_returned_by_date"][order_date_iso] += 1
             elif status == 6:
                 sb["orders_canceled"] += 1
+                if order_date_iso:
+                    sb["orders_canceled_by_date"][order_date_iso] += 1
             else:
                 sb["orders_other"] += 1
 
@@ -432,6 +447,8 @@ def main():
             "orders_total": s["orders_total"],
             "orders_delivered": s["orders_delivered"],
             "orders_canceled": s["orders_canceled"],
+            "orders_returning": s["orders_returning"],
+            "orders_returned": s["orders_returned"],
             "orders_other": s["orders_other"],
             "revenue_total": round(s["revenue_total"]),
             "revenue_delivered": round(s["revenue_delivered"]),
@@ -440,6 +457,9 @@ def main():
             "leads_by_date": dict(s["leads_by_date"]),
             "orders_total_by_date": dict(s["orders_total_by_date"]),
             "orders_delivered_by_date": dict(s["orders_delivered_by_date"]),
+            "orders_canceled_by_date": dict(s["orders_canceled_by_date"]),
+            "orders_returning_by_date": dict(s["orders_returning_by_date"]),
+            "orders_returned_by_date": dict(s["orders_returned_by_date"]),
             "revenue_total_by_date": {d: round(v) for d, v in s["revenue_total_by_date"].items()},
             "revenue_delivered_by_date": {d: round(v) for d, v in s["revenue_delivered_by_date"].items()},
         })

@@ -5196,16 +5196,23 @@ function UTMStatsByStaff({ dateRange }) {
     const spend = sumInRange(r.spend_by_date)
     // Số lead chính: FB Ads Manager nếu UTM match được campaign FB, fallback Pancake CRM
     const leads = (r.spend_matched && fbLeads > 0) ? fbLeads : pancakeLeads
-    // Lợi nhuận = số đơn đã giao × (giá bán × 0.9 − giá vốn) − chi phí QC
+    // Lợi nhuận = (đơn chốt − hủy − đang hoàn − đã hoàn) × (giá bán × 0.9 − giá vốn) − CPQC
+    // = "đơn trước hoàn" × margin − chi phí QC
+    // User logic: mỗi đơn lên = đã có LN (chi phí QC đã trừ); chỉ loại đơn hoàn/hủy.
+    const canceled = sumInRange(r.orders_canceled_by_date)
+    const returning = sumInRange(r.orders_returning_by_date)
+    const returned = sumInRange(r.orders_returned_by_date)
+    const ordersBeforeRefund = Math.max(0, orders - canceled - returning - returned)
     const sp = r.product_from_utm || r.product
     const costs = (typeof DATA !== "undefined" ? DATA.product_costs : null) || {}
     const c = costs[sp] || {}
     const giaBan = c.gia_ban_vnd
     const giaNhap = c.gia_nhap_vnd
-    const profit = (giaBan && giaNhap && delivered > 0)
-      ? delivered * (giaBan * 0.9 - giaNhap) - spend
+    const profit = (giaBan && giaNhap && ordersBeforeRefund > 0)
+      ? ordersBeforeRefund * (giaBan * 0.9 - giaNhap) - spend
       : null
-    const profitPct = (profit != null && revDelivered > 0) ? (profit / revDelivered * 100) : null
+    const revenueEffective = ordersBeforeRefund * (giaBan || 0)  // DT đơn không hoàn (1 đơn = 1 sp)
+    const profitPct = (profit != null && revenueEffective > 0) ? (profit / revenueEffective * 100) : null
     return {
       ...r,
       f_pancake_leads: pancakeLeads,
@@ -5214,8 +5221,13 @@ function UTMStatsByStaff({ dateRange }) {
       f_leads_source: (r.spend_matched && fbLeads > 0) ? "fb" : "crm",
       f_orders: orders,
       f_delivered: delivered,
+      f_canceled: canceled,
+      f_returning: returning,
+      f_returned: returned,
+      f_orders_before_refund: ordersBeforeRefund,
       f_revenue: revenue,
       f_rev_delivered: revDelivered,
+      f_revenue_effective: revenueEffective,
       f_spend: spend,
       f_ctr: r.fb_ctr,  // campaign-level, không react theo dateRange
       f_profit: profit,
@@ -5389,20 +5401,22 @@ function UTMStatsByStaff({ dateRange }) {
                                 // Sort: unmatched cuối, trong group sort theo revenue DESC
                                 const groupSize = {}
                                 const groupSpend = {}
-                                const groupAgg = {}  // k → {leads, orders, spend, revenue, rev_delivered, delivered, profit, ctr}
+                                const groupAgg = {}
                                 for (const r of productRows) {
                                   const k = r.matched_campaign_name || "__UNMATCHED__"
                                   groupSize[k] = (groupSize[k] || 0) + 1
                                   groupSpend[k] = (groupSpend[k] || 0) + r.f_spend
-                                  const g = groupAgg[k] || (groupAgg[k] = {leads:0, orders:0, spend:0, revenue:0, rev_delivered:0, delivered:0, profit:0, ctr:null})
+                                  const g = groupAgg[k] || (groupAgg[k] = {leads:0, orders:0, ordersBeforeRefund:0, spend:0, revenue:0, rev_delivered:0, revenueEffective:0, delivered:0, profit:0, ctr:null})
                                   g.leads += r.f_leads
                                   g.orders += r.f_orders
+                                  g.ordersBeforeRefund += (r.f_orders_before_refund || 0)
                                   g.spend += r.f_spend
                                   g.revenue += r.f_revenue
                                   g.rev_delivered += r.f_rev_delivered
+                                  g.revenueEffective += (r.f_revenue_effective || 0)
                                   g.delivered += r.f_delivered
                                   if (r.f_profit != null) g.profit += r.f_profit
-                                  if (r.f_ctr != null && g.ctr == null) g.ctr = r.f_ctr  // CTR campaign-level: same cho mọi UTM trong group
+                                  if (r.f_ctr != null && g.ctr == null) g.ctr = r.f_ctr  // CTR campaign-level
                                 }
                                 const sorted = [...productRows].sort((a, b) => {
                                   const ca = a.matched_campaign_name || "￿UNMATCHED"
@@ -5423,7 +5437,7 @@ function UTMStatsByStaff({ dateRange }) {
                                     const gCostPct = (g.revenue > 0 && g.spend > 0) ? (g.spend / g.revenue * 100) : null
                                     const gCpl = (g.leads && g.spend) ? (g.spend / g.leads) : null
                                     const gCpo = (g.orders && g.spend) ? (g.spend / g.orders) : null
-                                    const gProfitPct = (g.profit && g.rev_delivered > 0) ? (g.profit / g.rev_delivered * 100) : null
+                                    const gProfitPct = (g.profit && g.revenueEffective > 0) ? (g.profit / g.revenueEffective * 100) : null
                                     out.push(
                                       <tr key={"hdr-" + idx} className={r.matched_campaign_name ? "bg-sky-50 border-t-2 border-sky-200 font-semibold" : "bg-amber-50 border-t-2 border-amber-200 font-semibold"}>
                                         <td colSpan={4} className="px-3 py-1.5 text-[11px]">
@@ -5529,7 +5543,7 @@ function UTMStatsByStaff({ dateRange }) {
                                       <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
                                         {r.f_cpo != null ? fmtMoney(Math.round(r.f_cpo)) : <span className="text-gray-300">—</span>}
                                       </td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.f_profit != null ? `LN = ${r.f_delivered} đơn × (giá_bán × 0.9 − giá_vốn) − ${fmtMoney(r.f_spend)} CPQC` : "Thiếu giá nhập/bán trong product_costs hoặc không có đơn đã giao"}>
+                                      <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.f_profit != null ? `LN = ${r.f_orders_before_refund} đơn trước hoàn (chốt ${r.f_orders} − hủy ${r.f_canceled} − đang hoàn ${r.f_returning} − đã hoàn ${r.f_returned}) × (giá_bán × 0.9 − giá_vốn) − ${fmtMoney(r.f_spend)} CPQC` : "Thiếu giá nhập/bán trong product_costs hoặc không có đơn trước hoàn"}>
                                         {r.f_profit != null ? (
                                           <span className={r.f_profit_pct == null ? "text-gray-500" : r.f_profit_pct >= 15 ? "text-green-700 font-semibold" : r.f_profit_pct >= 5 ? "text-amber-700" : "text-red-600 font-semibold"}>
                                             {fmtMoney(Math.round(r.f_profit))}
