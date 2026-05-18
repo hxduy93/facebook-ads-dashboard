@@ -528,6 +528,91 @@ def build_data():
         print(f"   ✗ lead-to-order load failed: {e}")
         data["lead_to_order"] = {"by_staff_utm": {}, "summary": {}}
 
+    # --- AD SPEND PER UTM CAMPAIGN ---------------------------------
+    # Match utm_campaign trong by_staff_utm với FB campaign để inject
+    # spend_by_date vào từng row → frontend tính chi phí/CPL/CPO/ROAS
+    # react theo dateRange. Match 2 chiều:
+    #   1) UTM toàn số → lookup theo campaign_id
+    #   2) UTM dạng tên → normalize (lowercase, bỏ dấu, bỏ space) rồi
+    #      lookup theo normalize(campaign_name)
+    # Pattern UTM: "23/4-noma911-cudoanhxetrang" ↔ FB camp "23/4 - Noma911 - Cụ Đoành Xe Trắng"
+    try:
+        import unicodedata, re as _re
+
+        def _norm_utm(s):
+            if not s:
+                return ""
+            s = unicodedata.normalize("NFD", s)
+            s = "".join(ch for ch in s if unicodedata.category(ch) != "Mn")
+            s = s.lower()
+            # bỏ tất cả ký tự không phải [a-z0-9/] — bao gồm space, dash, dot
+            s = _re.sub(r"[^a-z0-9/]+", "", s)
+            return s
+
+        by_norm_name = {}
+        by_camp_id = {}
+        for c in data.get("campaigns", []):
+            cid = c.get("id")
+            cname = c.get("name") or ""
+            pp = detect_profit_product(cname)
+            spend_total = 0.0
+            spend_by_date = {}
+            for d in c.get("daily", []):
+                sp = float(d.get("spend") or 0)
+                if sp <= 0:
+                    continue
+                spend_total += sp
+                spend_by_date[d["date"]] = spend_by_date.get(d["date"], 0.0) + sp
+            if cid:
+                bucket = by_camp_id.setdefault(cid, {"total": 0.0, "by_date": {}, "name": cname, "product": pp})
+                bucket["total"] += spend_total
+                for d, v in spend_by_date.items():
+                    bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
+            nk = _norm_utm(cname)
+            if nk:
+                bucket = by_norm_name.setdefault(nk, {"total": 0.0, "by_date": {}, "name": cname, "product": pp})
+                bucket["total"] += spend_total
+                for d, v in spend_by_date.items():
+                    bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
+
+        # Inject vào lead_to_order.by_staff_utm rows
+        bsu = data["lead_to_order"].get("by_staff_utm") or {}
+        matched = 0
+        unmatched = 0
+        unmatched_samples = []
+        for staff_key, rows in bsu.items():
+            for r in rows:
+                utm = r.get("utm_campaign") or ""
+                found = None
+                # 1) Pure-digit UTM → campaign_id lookup
+                if utm.isdigit() and utm in by_camp_id:
+                    found = by_camp_id[utm]
+                else:
+                    nk = _norm_utm(utm)
+                    if nk and nk in by_norm_name:
+                        found = by_norm_name[nk]
+                if found:
+                    matched += 1
+                    r["spend_total"] = round(found["total"])
+                    r["spend_by_date"] = {d: round(v) for d, v in found["by_date"].items()}
+                    r["spend_matched"] = True
+                    r["matched_campaign_name"] = found.get("name")
+                    r["product_from_utm"] = found.get("product")
+                else:
+                    unmatched += 1
+                    r["spend_total"] = 0
+                    r["spend_by_date"] = {}
+                    r["spend_matched"] = False
+                    r["matched_campaign_name"] = None
+                    r["product_from_utm"] = None
+                    if len(unmatched_samples) < 10:
+                        unmatched_samples.append(utm)
+        print(f"   ✓ ad spend per UTM: matched {matched} rows, unmatched {unmatched}")
+        if unmatched_samples:
+            print(f"     unmatched samples: {unmatched_samples[:5]}")
+    except Exception as e:
+        print(f"   ✗ ad spend per UTM injection failed: {e}")
+
     # --- COMPETITOR TRACKING (Chrome-scraped data) ---
     try:
         data["known_competitors"] = load_competitor_data()
