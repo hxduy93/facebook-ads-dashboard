@@ -5389,10 +5389,20 @@ function UTMStatsByStaff({ dateRange }) {
                                 // Sort: unmatched cuối, trong group sort theo revenue DESC
                                 const groupSize = {}
                                 const groupSpend = {}
+                                const groupAgg = {}  // k → {leads, orders, spend, revenue, rev_delivered, delivered, profit, ctr}
                                 for (const r of productRows) {
                                   const k = r.matched_campaign_name || "__UNMATCHED__"
                                   groupSize[k] = (groupSize[k] || 0) + 1
                                   groupSpend[k] = (groupSpend[k] || 0) + r.f_spend
+                                  const g = groupAgg[k] || (groupAgg[k] = {leads:0, orders:0, spend:0, revenue:0, rev_delivered:0, delivered:0, profit:0, ctr:null})
+                                  g.leads += r.f_leads
+                                  g.orders += r.f_orders
+                                  g.spend += r.f_spend
+                                  g.revenue += r.f_revenue
+                                  g.rev_delivered += r.f_rev_delivered
+                                  g.delivered += r.f_delivered
+                                  if (r.f_profit != null) g.profit += r.f_profit
+                                  if (r.f_ctr != null && g.ctr == null) g.ctr = r.f_ctr  // CTR campaign-level: same cho mọi UTM trong group
                                 }
                                 const sorted = [...productRows].sort((a, b) => {
                                   const ca = a.matched_campaign_name || "￿UNMATCHED"
@@ -5407,20 +5417,55 @@ function UTMStatsByStaff({ dateRange }) {
                                 sorted.forEach((r, idx) => {
                                   const k = r.matched_campaign_name || "__UNMATCHED__"
                                   if (k !== lastCamp) {
-                                    // Group header row
+                                    // Group header row — hiển thị campaign name + SUBTOTAL của tất cả UTM trong group
+                                    const g = groupAgg[k] || {leads:0, orders:0, spend:0, revenue:0, rev_delivered:0, profit:0, ctr:null}
+                                    const gConv = g.leads ? (g.orders / g.leads * 100) : 0
+                                    const gCostPct = (g.revenue > 0 && g.spend > 0) ? (g.spend / g.revenue * 100) : null
+                                    const gCpl = (g.leads && g.spend) ? (g.spend / g.leads) : null
+                                    const gCpo = (g.orders && g.spend) ? (g.spend / g.orders) : null
+                                    const gProfitPct = (g.profit && g.rev_delivered > 0) ? (g.profit / g.rev_delivered * 100) : null
                                     out.push(
-                                      <tr key={"hdr-" + idx} className={r.matched_campaign_name ? "bg-sky-50 border-t-2 border-sky-200" : "bg-amber-50 border-t-2 border-amber-200"}>
-                                        <td colSpan={7} className="px-3 py-1.5 text-[11px] font-semibold">
+                                      <tr key={"hdr-" + idx} className={r.matched_campaign_name ? "bg-sky-50 border-t-2 border-sky-200 font-semibold" : "bg-amber-50 border-t-2 border-amber-200 font-semibold"}>
+                                        <td colSpan={4} className="px-3 py-1.5 text-[11px]">
                                           {r.matched_campaign_name ? (
                                             <span className="text-sky-900">📦 {r.matched_campaign_name} <span className="text-gray-500 font-normal ml-1">({groupSize[k]} UTM)</span></span>
                                           ) : (
                                             <span className="text-amber-800">⚠ UTM không khớp FB campaign ({groupSize[k]})</span>
                                           )}
                                         </td>
-                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums border-l border-gray-200 text-rose-700 font-semibold">
-                                          {r.matched_campaign_name ? fmtMoney(groupSpend[k]) : <span className="text-gray-300">—</span>}
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums text-gray-800">{g.leads.toLocaleString("vi-VN")}</td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums text-gray-900">{g.orders.toLocaleString("vi-VN")}</td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums">
+                                          <span className={gConv >= 60 ? "text-green-700" : gConv >= 30 ? "text-amber-700" : "text-gray-500"}>{gConv.toFixed(1)}%</span>
                                         </td>
-                                        <td colSpan={6}></td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums border-l border-gray-200 text-rose-700">
+                                          {r.matched_campaign_name ? fmtMoney(g.spend) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums text-gray-900">{fmtMoney(g.revenue)}</td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums">
+                                          {g.ctr != null ? (
+                                            <span className={g.ctr >= 1.5 ? "text-green-700" : g.ctr >= 0.8 ? "text-amber-700" : "text-red-600"}>{g.ctr.toFixed(2)}%</span>
+                                          ) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums">
+                                          {gCostPct != null ? (
+                                            <span className={gCostPct <= 50 ? "text-green-700" : gCostPct <= 100 ? "text-amber-700" : "text-red-600"}>{gCostPct.toFixed(1)}%</span>
+                                          ) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums text-gray-700">
+                                          {gCpl != null ? fmtMoney(Math.round(gCpl)) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums text-gray-700">
+                                          {gCpo != null ? fmtMoney(Math.round(gCpo)) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums border-l border-gray-200">
+                                          {g.profit ? (
+                                            <span className={gProfitPct == null ? "text-gray-700" : gProfitPct >= 15 ? "text-green-700" : gProfitPct >= 5 ? "text-amber-700" : "text-red-600"}>
+                                              {fmtMoney(Math.round(g.profit))}
+                                              {gProfitPct != null && <span className="text-[9px] text-gray-500 ml-1">({gProfitPct.toFixed(1)}%)</span>}
+                                            </span>
+                                          ) : <span className="text-gray-300">—</span>}
+                                        </td>
                                       </tr>
                                     )
                                     lastCamp = k
