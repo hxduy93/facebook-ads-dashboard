@@ -561,23 +561,42 @@ def build_data():
             pp = detect_profit_product(cname)
             spend_total = 0.0
             spend_by_date = {}
+            reg_by_date = {}
+            imp_total = 0
+            click_total = 0
             for d in c.get("daily", []):
                 sp = float(d.get("spend") or 0)
-                if sp <= 0:
-                    continue
-                spend_total += sp
-                spend_by_date[d["date"]] = spend_by_date.get(d["date"], 0.0) + sp
+                reg = int(d.get("registrations") or 0)
+                imp = int(d.get("impressions") or 0)
+                clk = int(d.get("clicks") or 0)
+                imp_total += imp
+                click_total += clk
+                if sp > 0:
+                    spend_total += sp
+                    spend_by_date[d["date"]] = spend_by_date.get(d["date"], 0.0) + sp
+                if reg > 0:
+                    reg_by_date[d["date"]] = reg_by_date.get(d["date"], 0) + reg
+            ctr_total = (click_total / imp_total * 100) if imp_total > 0 else 0
+            base_bucket = {
+                "total": 0.0, "by_date": {}, "reg_by_date": {},
+                "ctr": ctr_total, "impressions": imp_total, "clicks": click_total,
+                "name": cname, "id": cid, "product": pp,
+            }
             if cid:
-                bucket = by_camp_id.setdefault(cid, {"total": 0.0, "by_date": {}, "name": cname, "id": cid, "product": pp})
+                bucket = by_camp_id.setdefault(cid, dict(base_bucket))
                 bucket["total"] += spend_total
                 for d, v in spend_by_date.items():
                     bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
+                for d, v in reg_by_date.items():
+                    bucket["reg_by_date"][d] = bucket["reg_by_date"].get(d, 0) + v
             nk = _norm_utm(cname)
             if nk:
-                bucket = by_norm_name.setdefault(nk, {"total": 0.0, "by_date": {}, "name": cname, "id": cid, "product": pp})
+                bucket = by_norm_name.setdefault(nk, dict(base_bucket))
                 bucket["total"] += spend_total
                 for d, v in spend_by_date.items():
                     bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
+                for d, v in reg_by_date.items():
+                    bucket["reg_by_date"][d] = bucket["reg_by_date"].get(d, 0) + v
 
         # Inject vào lead_to_order.by_staff_utm rows
         bsu = data["lead_to_order"].get("by_staff_utm") or {}
@@ -622,21 +641,30 @@ def build_data():
                     matched += 1
                     raw_total = round(found["total"])
                     raw_by_date = {d: round(v) for d, v in found["by_date"].items()}
-                    r["spend_campaign_total"] = raw_total  # raw spend của FB campaign (debug)
-                    r["spend_total"] = raw_total           # sẽ override nếu shared
-                    r["spend_by_date"] = raw_by_date       # sẽ override nếu shared
+                    raw_reg_by_date = dict(found.get("reg_by_date") or {})
+                    r["spend_campaign_total"] = raw_total       # raw spend của FB campaign (debug)
+                    r["spend_total"] = raw_total                # sẽ override nếu shared
+                    r["spend_by_date"] = raw_by_date            # sẽ override nếu shared
+                    r["fb_registrations_by_date"] = raw_reg_by_date  # FB leads — sẽ override nếu shared
+                    r["fb_ctr"] = round(found.get("ctr") or 0, 3)
+                    r["fb_impressions"] = int(found.get("impressions") or 0)
+                    r["fb_clicks"] = int(found.get("clicks") or 0)
                     r["spend_matched"] = True
-                    r["spend_match_via"] = match_via       # campaign_id/name_exact/name_strip_*
+                    r["spend_match_via"] = match_via            # campaign_id/name_exact/name_strip_*
                     r["matched_campaign_name"] = found.get("name")
                     r["matched_campaign_id"] = found.get("id")
                     r["product_from_utm"] = found.get("product")
-                    r["match_group_size"] = 1              # default, update bên dưới nếu group >1
+                    r["match_group_size"] = 1                   # default, update bên dưới nếu group >1
                     camp_group[match_key].append(r)
                 else:
                     unmatched += 1
                     r["spend_campaign_total"] = 0
                     r["spend_total"] = 0
                     r["spend_by_date"] = {}
+                    r["fb_registrations_by_date"] = {}
+                    r["fb_ctr"] = None
+                    r["fb_impressions"] = 0
+                    r["fb_clicks"] = 0
                     r["spend_matched"] = False
                     r["spend_match_via"] = None
                     r["matched_campaign_name"] = None
@@ -646,8 +674,8 @@ def build_data():
                     if len(unmatched_samples) < 10:
                         unmatched_samples.append(utm)
 
-        # Re-distribute spend theo tỉ lệ leads per-date trong các group có >1 UTM
-        # tránh double-count khi nhiều UTM share cùng 1 FB campaign.
+        # Re-distribute spend + FB registrations theo tỉ lệ leads Pancake per-date
+        # trong các group có >1 UTM tránh double-count khi nhiều UTM share cùng 1 FB campaign.
         shared_groups = 0
         for key, group in camp_group.items():
             n = len(group)
@@ -657,27 +685,42 @@ def build_data():
             all_dates = set()
             for r in group:
                 all_dates.update(r["spend_by_date"].keys())
-            spend_ref = group[0]["spend_by_date"]  # raw, tất cả row cùng campaign nên giống nhau
-            new_by_date = [dict() for _ in group]
+                all_dates.update(r.get("fb_registrations_by_date", {}).keys())
+            spend_ref = dict(group[0]["spend_by_date"])  # raw, tất cả row cùng campaign nên giống nhau
+            reg_ref = dict(group[0].get("fb_registrations_by_date") or {})
+            new_spend = [dict() for _ in group]
+            new_reg = [dict() for _ in group]
             for d in all_dates:
                 spend_d = spend_ref.get(d, 0)
-                if spend_d <= 0:
-                    continue
+                reg_d = reg_ref.get(d, 0)
                 leads_d = [int((r.get("leads_by_date") or {}).get(d, 0)) for r in group]
                 total_leads_d = sum(leads_d)
                 if total_leads_d > 0:
                     for i, r in enumerate(group):
-                        share = spend_d * leads_d[i] / total_leads_d
-                        if share > 0:
-                            new_by_date[i][d] = round(share)
+                        ratio = leads_d[i] / total_leads_d
+                        if spend_d > 0:
+                            share = round(spend_d * ratio)
+                            if share > 0:
+                                new_spend[i][d] = share
+                        if reg_d > 0:
+                            share = round(reg_d * ratio)
+                            if share > 0:
+                                new_reg[i][d] = share
                 else:
-                    # Ngày có spend nhưng 0 leads → chia đều
-                    share = spend_d / n
-                    for i in range(n):
-                        new_by_date[i][d] = round(share)
+                    # Ngày có spend/reg nhưng 0 leads Pancake → chia đều
+                    if spend_d > 0:
+                        share = round(spend_d / n)
+                        for i in range(n):
+                            new_spend[i][d] = share
+                    if reg_d > 0:
+                        share = round(reg_d / n)
+                        for i in range(n):
+                            if share > 0:
+                                new_reg[i][d] = share
             for i, r in enumerate(group):
-                r["spend_by_date"] = new_by_date[i]
-                r["spend_total"] = sum(new_by_date[i].values())
+                r["spend_by_date"] = new_spend[i]
+                r["spend_total"] = sum(new_spend[i].values())
+                r["fb_registrations_by_date"] = new_reg[i]
                 r["match_group_size"] = n
 
         print(f"   ✓ ad spend per UTM: matched {matched} rows, unmatched {unmatched}, "

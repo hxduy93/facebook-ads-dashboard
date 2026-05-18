@@ -5187,20 +5187,39 @@ function UTMStatsByStaff({ dateRange }) {
 
   // Compute filtered totals cho 1 row dựa trên by_date dicts
   const filterRow = (r) => {
-    const leads = sumInRange(r.leads_by_date)
+    const pancakeLeads = sumInRange(r.leads_by_date)
+    const fbLeads = sumInRange(r.fb_registrations_by_date)
     const orders = sumInRange(r.orders_total_by_date)
     const delivered = sumInRange(r.orders_delivered_by_date)
     const revenue = sumInRange(r.revenue_total_by_date)
     const revDelivered = sumInRange(r.revenue_delivered_by_date)
     const spend = sumInRange(r.spend_by_date)
+    // Số lead chính: FB Ads Manager nếu UTM match được campaign FB, fallback Pancake CRM
+    const leads = (r.spend_matched && fbLeads > 0) ? fbLeads : pancakeLeads
+    // Lợi nhuận = số đơn đã giao × (giá bán × 0.9 − giá vốn) − chi phí QC
+    const sp = r.product_from_utm || r.product
+    const costs = (typeof DATA !== "undefined" ? DATA.product_costs : null) || {}
+    const c = costs[sp] || {}
+    const giaBan = c.gia_ban_vnd
+    const giaNhap = c.gia_nhap_vnd
+    const profit = (giaBan && giaNhap && delivered > 0)
+      ? delivered * (giaBan * 0.9 - giaNhap) - spend
+      : null
+    const profitPct = (profit != null && revDelivered > 0) ? (profit / revDelivered * 100) : null
     return {
       ...r,
+      f_pancake_leads: pancakeLeads,
+      f_fb_leads: fbLeads,
       f_leads: leads,
+      f_leads_source: (r.spend_matched && fbLeads > 0) ? "fb" : "crm",
       f_orders: orders,
       f_delivered: delivered,
       f_revenue: revenue,
       f_rev_delivered: revDelivered,
       f_spend: spend,
+      f_ctr: r.fb_ctr,  // campaign-level, không react theo dateRange
+      f_profit: profit,
+      f_profit_pct: profitPct,
       f_cpl: (leads && spend) ? (spend / leads) : null,
       f_cpo: (orders && spend) ? (spend / orders) : null,
       f_cost_pct: (revenue > 0 && spend > 0) ? (spend / revenue * 100) : null,
@@ -5352,16 +5371,16 @@ function UTMStatsByStaff({ dateRange }) {
                                 <th className="px-3 py-2 text-left">UTM Campaign</th>
                                 <th className="px-3 py-2 text-left">SP (UTM)</th>
                                 <th className="px-3 py-2 text-left">SP (Pancake)</th>
-                                <th className="px-3 py-2 text-right">Leads</th>
+                                <th className="px-3 py-2 text-right" title="Số lead lấy từ FB Ads Manager (complete_registrations). UTM không match FB → fallback Pancake CRM">Leads</th>
                                 <th className="px-3 py-2 text-right">Đơn chốt</th>
-                                <th className="px-3 py-2 text-right">Đã giao</th>
-                                <th className="px-3 py-2 text-right">Conv%</th>
-                                <th className="px-3 py-2 text-right">Doanh thu</th>
-                                <th className="px-3 py-2 text-right">DT đã giao</th>
+                                <th className="px-3 py-2 text-right">Tỉ lệ chốt</th>
                                 <th className="px-3 py-2 text-right border-l border-gray-200">Chi phí ads</th>
+                                <th className="px-3 py-2 text-right">Doanh thu</th>
+                                <th className="px-3 py-2 text-right" title="CTR campaign-level từ FB Ads Manager">CTR</th>
+                                <th className="px-3 py-2 text-right">CP/DT %</th>
                                 <th className="px-3 py-2 text-right">CPL</th>
                                 <th className="px-3 py-2 text-right">CPO</th>
-                                <th className="px-3 py-2 text-right">CP/DT %</th>
+                                <th className="px-3 py-2 text-right border-l border-gray-200" title="Lợi nhuận = SP đã giao × (giá bán × 0.9 − giá vốn) − Chi phí QC. Màu theo LN%/Doanh thu">Lợi nhuận</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -5388,7 +5407,7 @@ function UTMStatsByStaff({ dateRange }) {
                                   if (k !== lastCamp) {
                                     out.push(
                                       <tr key={"hdr-" + idx} className={r.matched_campaign_name ? "bg-sky-50 border-t-2 border-sky-200" : "bg-amber-50 border-t-2 border-amber-200"}>
-                                        <td colSpan={8} className="px-3 py-1.5 text-[11px] font-semibold">
+                                        <td colSpan={7} className="px-3 py-1.5 text-[11px] font-semibold">
                                           {r.matched_campaign_name ? (
                                             <span className="text-sky-900">📦 {r.matched_campaign_name} <span className="text-gray-500 font-normal ml-1">({groupSize[k]} UTM)</span></span>
                                           ) : (
@@ -5398,7 +5417,7 @@ function UTMStatsByStaff({ dateRange }) {
                                         <td className="px-3 py-1.5 text-right text-[11px] tabular-nums border-l border-gray-200 text-rose-700 font-semibold">
                                           {r.matched_campaign_name ? fmtMoney(groupSpend[k]) : <span className="text-gray-300">—</span>}
                                         </td>
-                                        <td colSpan={3}></td>
+                                        <td colSpan={6}></td>
                                       </tr>
                                     )
                                     lastCamp = k
@@ -5418,19 +5437,40 @@ function UTMStatsByStaff({ dateRange }) {
                                       <td className={"px-3 py-1.5 text-[11px] " + (mismatch ? "text-red-700 font-semibold" : "text-gray-700")}>
                                         {r.product || <span className="text-gray-300">—</span>}
                                       </td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums">{r.f_leads.toLocaleString("vi-VN")}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums" title={r.f_leads_source === "fb" ? `Lead FB Ads Manager${r.match_group_size > 1 ? ` (chia ${r.match_group_size} UTM theo tỉ lệ Pancake)` : ""}` : "Fallback Pancake CRM (UTM không match FB campaign)"}>
+                                        <span className={r.f_leads_source === "fb" ? "text-gray-900" : "text-gray-500 italic"}>
+                                          {r.f_leads.toLocaleString("vi-VN")}
+                                          {r.f_leads_source === "crm" && <span className="text-[9px] text-gray-400 ml-0.5">CRM</span>}
+                                        </span>
+                                      </td>
                                       <td className="px-3 py-1.5 text-right tabular-nums font-semibold">{r.f_orders.toLocaleString("vi-VN")}</td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{r.f_delivered.toLocaleString("vi-VN")}</td>
                                       <td className="px-3 py-1.5 text-right tabular-nums">
                                         <span className={r.f_conv >= 60 ? "text-green-700 font-semibold" : r.f_conv >= 30 ? "text-amber-700" : "text-gray-500"}>
                                           {fmtPct(r.f_conv)}
                                         </span>
                                       </td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.f_revenue)}</td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{fmtMoney(r.f_rev_delivered)}</td>
                                       <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.spend_matched ? (r.match_group_size > 1 ? `Spend đã chia ${r.match_group_size} UTM theo tỉ lệ leads` : "") : "Không tìm thấy campaign FB khớp UTM này"}>
                                         {r.spend_matched ? (
                                           <span className="font-semibold text-rose-700">{fmtMoney(r.f_spend)}{r.match_group_size > 1 && <span className="text-gray-400 text-[10px] ml-0.5">⊟</span>}</span>
+                                        ) : (
+                                          <span className="text-gray-300">—</span>
+                                        )}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.f_revenue)}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums">
+                                        {r.f_ctr != null ? (
+                                          <span className={r.f_ctr >= 1.5 ? "text-green-700 font-semibold" : r.f_ctr >= 0.8 ? "text-amber-700" : "text-red-600"}>
+                                            {r.f_ctr.toFixed(2)}%
+                                          </span>
+                                        ) : (
+                                          <span className="text-gray-300">—</span>
+                                        )}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums">
+                                        {r.f_cost_pct != null ? (
+                                          <span className={r.f_cost_pct <= 50 ? "text-green-700 font-semibold" : r.f_cost_pct <= 100 ? "text-amber-700" : "text-red-600 font-semibold"}>
+                                            {r.f_cost_pct.toFixed(1)}%
+                                          </span>
                                         ) : (
                                           <span className="text-gray-300">—</span>
                                         )}
@@ -5441,10 +5481,11 @@ function UTMStatsByStaff({ dateRange }) {
                                       <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
                                         {r.f_cpo != null ? fmtMoney(Math.round(r.f_cpo)) : <span className="text-gray-300">—</span>}
                                       </td>
-                                      <td className="px-3 py-1.5 text-right tabular-nums">
-                                        {r.f_cost_pct != null ? (
-                                          <span className={r.f_cost_pct <= 50 ? "text-green-700 font-semibold" : r.f_cost_pct <= 100 ? "text-amber-700" : "text-red-600 font-semibold"}>
-                                            {r.f_cost_pct.toFixed(1)}%
+                                      <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.f_profit != null ? `LN = ${r.f_delivered} đơn × (giá_bán × 0.9 − giá_vốn) − ${fmtMoney(r.f_spend)} CPQC` : "Thiếu giá nhập/bán trong product_costs hoặc không có đơn đã giao"}>
+                                        {r.f_profit != null ? (
+                                          <span className={r.f_profit_pct == null ? "text-gray-500" : r.f_profit_pct >= 15 ? "text-green-700 font-semibold" : r.f_profit_pct >= 5 ? "text-amber-700" : "text-red-600 font-semibold"}>
+                                            {fmtMoney(Math.round(r.f_profit))}
+                                            {r.f_profit_pct != null && <span className="text-[10px] text-gray-500 ml-1">({r.f_profit_pct.toFixed(1)}%)</span>}
                                           </span>
                                         ) : (
                                           <span className="text-gray-300">—</span>
