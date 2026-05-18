@@ -553,8 +553,12 @@ def build_data():
             s = _re.sub(r"[^a-z0-9/]+", "", s)
             return s
 
-        by_norm_name = {}
-        by_camp_id = {}
+        # === Build maps ở 2 cấp ===
+        # 1) AD-level: mỗi ad là 1 entity (UTM video vs UTM ảnh → 2 ad riêng → spend chính xác)
+        # 2) CAMPAIGN-level: fallback nếu UTM không khớp tên ad nhưng khớp tên campaign
+        by_ad_norm_name = {}   # norm(ad_name) → bucket (spend cụ thể của ad đó)
+        by_camp_norm_name = {} # norm(campaign_name) → bucket (spend tổng campaign)
+        by_camp_id = {}        # campaign_id (numeric) → bucket
         for c in data.get("campaigns", []):
             cid = c.get("id")
             cname = c.get("name") or ""
@@ -580,7 +584,7 @@ def build_data():
             base_bucket = {
                 "total": 0.0, "by_date": {}, "reg_by_date": {},
                 "ctr": ctr_total, "impressions": imp_total, "clicks": click_total,
-                "name": cname, "id": cid, "product": pp,
+                "name": cname, "id": cid, "product": pp, "level": "campaign",
             }
             if cid:
                 bucket = by_camp_id.setdefault(cid, dict(base_bucket))
@@ -591,12 +595,52 @@ def build_data():
                     bucket["reg_by_date"][d] = bucket["reg_by_date"].get(d, 0) + v
             nk = _norm_utm(cname)
             if nk:
-                bucket = by_norm_name.setdefault(nk, dict(base_bucket))
+                bucket = by_camp_norm_name.setdefault(nk, dict(base_bucket))
                 bucket["total"] += spend_total
                 for d, v in spend_by_date.items():
                     bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
                 for d, v in reg_by_date.items():
                     bucket["reg_by_date"][d] = bucket["reg_by_date"].get(d, 0) + v
+
+        # Build by_ad_norm_name từ data["ads"] — match per-ad precise spend
+        for a in data.get("ads", []):
+            aname = a.get("name") or ""
+            cname = a.get("campaign") or ""
+            pp = detect_profit_product(cname)
+            spend_total = 0.0
+            spend_by_date = {}
+            reg_by_date = {}
+            imp_total = 0
+            click_total = 0
+            for d in a.get("daily", []):
+                sp = float(d.get("spend") or 0)
+                reg = int(d.get("registrations") or 0)
+                imp = int(d.get("impressions") or 0)
+                clk = int(d.get("clicks") or 0)
+                imp_total += imp
+                click_total += clk
+                if sp > 0:
+                    spend_total += sp
+                    spend_by_date[d["date"]] = spend_by_date.get(d["date"], 0.0) + sp
+                if reg > 0:
+                    reg_by_date[d["date"]] = reg_by_date.get(d["date"], 0) + reg
+            ctr_total = (click_total / imp_total * 100) if imp_total > 0 else 0
+            nk = _norm_utm(aname)
+            if not nk:
+                continue
+            base_bucket = {
+                "total": 0.0, "by_date": {}, "reg_by_date": {},
+                "ctr": ctr_total, "impressions": imp_total, "clicks": click_total,
+                "name": cname,  # hiển thị tên CAMPAIGN cho group header, không phải tên ad
+                "ad_name": aname,
+                "id": a.get("id"), "product": pp, "level": "ad",
+            }
+            bucket = by_ad_norm_name.setdefault(nk, dict(base_bucket))
+            bucket["total"] += spend_total
+            for d, v in spend_by_date.items():
+                bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
+            for d, v in reg_by_date.items():
+                bucket["reg_by_date"][d] = bucket["reg_by_date"].get(d, 0) + v
 
         # Inject vào lead_to_order.by_staff_utm rows
         bsu = data["lead_to_order"].get("by_staff_utm") or {}
@@ -615,28 +659,48 @@ def build_data():
                 found = None
                 match_key = None
                 match_via = None
-                # 1) Pure-digit UTM → campaign_id lookup
-                if utm.isdigit() and utm in by_camp_id:
+                # Priority order (cụ thể → fallback):
+                #   1) AD exact name              ← spend chính xác per-UTM
+                #   2) AD strip suffix (baianh)   ← spend chính xác per-UTM
+                #   3) campaign_id (UTM toàn số)  ← spend tổng campaign
+                #   4) Campaign exact name        ← spend tổng campaign
+                #   5) Campaign strip suffix      ← spend tổng campaign
+                nk = _norm_utm(utm)
+                # 1) AD exact name match → spend của 1 ad cụ thể (chính xác nhất)
+                if nk and nk in by_ad_norm_name:
+                    found = by_ad_norm_name[nk]
+                    match_key = "ad:" + nk
+                    match_via = "ad_name_exact"
+                # 2) AD strip suffix (baianh/bansao/...)
+                if not found and nk:
+                    for suf in SUFFIX_STRIP:
+                        if nk.endswith(suf):
+                            base = nk[:-len(suf)]
+                            if base in by_ad_norm_name:
+                                found = by_ad_norm_name[base]
+                                match_key = "ad:" + base
+                                match_via = "ad_name_strip_" + suf
+                                break
+                # 3) Pure-digit UTM → campaign_id
+                if not found and utm.isdigit() and utm in by_camp_id:
                     found = by_camp_id[utm]
-                    match_key = "id:" + utm
+                    match_key = "cmp_id:" + utm
                     match_via = "campaign_id"
-                else:
-                    nk = _norm_utm(utm)
-                    # 2a) Exact name match
-                    if nk and nk in by_norm_name:
-                        found = by_norm_name[nk]
-                        match_key = "nm:" + nk
-                        match_via = "name_exact"
-                    else:
-                        # 2b) Try strip suffix variants — bài ảnh share campaign với bài video
-                        for suf in SUFFIX_STRIP:
-                            if nk.endswith(suf):
-                                base = nk[:-len(suf)]
-                                if base in by_norm_name:
-                                    found = by_norm_name[base]
-                                    match_key = "nm:" + base
-                                    match_via = "name_strip_" + suf
-                                    break
+                # 4) Campaign name exact
+                if not found and nk and nk in by_camp_norm_name:
+                    found = by_camp_norm_name[nk]
+                    match_key = "cmp:" + nk
+                    match_via = "camp_name_exact"
+                # 5) Campaign name strip suffix
+                if not found and nk:
+                    for suf in SUFFIX_STRIP:
+                        if nk.endswith(suf):
+                            base = nk[:-len(suf)]
+                            if base in by_camp_norm_name:
+                                found = by_camp_norm_name[base]
+                                match_key = "cmp:" + base
+                                match_via = "camp_name_strip_" + suf
+                                break
                 if found:
                     matched += 1
                     raw_total = round(found["total"])
