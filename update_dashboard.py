@@ -564,13 +564,13 @@ def build_data():
                 spend_total += sp
                 spend_by_date[d["date"]] = spend_by_date.get(d["date"], 0.0) + sp
             if cid:
-                bucket = by_camp_id.setdefault(cid, {"total": 0.0, "by_date": {}, "name": cname, "product": pp})
+                bucket = by_camp_id.setdefault(cid, {"total": 0.0, "by_date": {}, "name": cname, "id": cid, "product": pp})
                 bucket["total"] += spend_total
                 for d, v in spend_by_date.items():
                     bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
             nk = _norm_utm(cname)
             if nk:
-                bucket = by_norm_name.setdefault(nk, {"total": 0.0, "by_date": {}, "name": cname, "product": pp})
+                bucket = by_norm_name.setdefault(nk, {"total": 0.0, "by_date": {}, "name": cname, "id": cid, "product": pp})
                 bucket["total"] += spend_total
                 for d, v in spend_by_date.items():
                     bucket["by_date"][d] = bucket["by_date"].get(d, 0.0) + v
@@ -580,34 +580,104 @@ def build_data():
         matched = 0
         unmatched = 0
         unmatched_samples = []
+        # Track key dùng để gom các UTM share cùng 1 FB campaign (tránh double-count)
+        from collections import defaultdict as _defaultdict
+        camp_group = _defaultdict(list)  # match_key -> list of rows cùng campaign
+        # Convention: 1 FB campaign thường chứa video + ảnh, UTM ảnh = UTM video + 'baianh'.
+        # Strip các suffix này khi exact match miss → vẫn map về cùng FB campaign.
+        SUFFIX_STRIP = ["baianh", "banh", "bansao", "bansao2"]
         for staff_key, rows in bsu.items():
             for r in rows:
                 utm = r.get("utm_campaign") or ""
                 found = None
+                match_key = None
+                match_via = None
                 # 1) Pure-digit UTM → campaign_id lookup
                 if utm.isdigit() and utm in by_camp_id:
                     found = by_camp_id[utm]
+                    match_key = "id:" + utm
+                    match_via = "campaign_id"
                 else:
                     nk = _norm_utm(utm)
+                    # 2a) Exact name match
                     if nk and nk in by_norm_name:
                         found = by_norm_name[nk]
+                        match_key = "nm:" + nk
+                        match_via = "name_exact"
+                    else:
+                        # 2b) Try strip suffix variants — bài ảnh share campaign với bài video
+                        for suf in SUFFIX_STRIP:
+                            if nk.endswith(suf):
+                                base = nk[:-len(suf)]
+                                if base in by_norm_name:
+                                    found = by_norm_name[base]
+                                    match_key = "nm:" + base
+                                    match_via = "name_strip_" + suf
+                                    break
                 if found:
                     matched += 1
-                    r["spend_total"] = round(found["total"])
-                    r["spend_by_date"] = {d: round(v) for d, v in found["by_date"].items()}
+                    raw_total = round(found["total"])
+                    raw_by_date = {d: round(v) for d, v in found["by_date"].items()}
+                    r["spend_campaign_total"] = raw_total  # raw spend của FB campaign (debug)
+                    r["spend_total"] = raw_total           # sẽ override nếu shared
+                    r["spend_by_date"] = raw_by_date       # sẽ override nếu shared
                     r["spend_matched"] = True
+                    r["spend_match_via"] = match_via       # campaign_id/name_exact/name_strip_*
                     r["matched_campaign_name"] = found.get("name")
+                    r["matched_campaign_id"] = found.get("id")
                     r["product_from_utm"] = found.get("product")
+                    r["match_group_size"] = 1              # default, update bên dưới nếu group >1
+                    camp_group[match_key].append(r)
                 else:
                     unmatched += 1
+                    r["spend_campaign_total"] = 0
                     r["spend_total"] = 0
                     r["spend_by_date"] = {}
                     r["spend_matched"] = False
+                    r["spend_match_via"] = None
                     r["matched_campaign_name"] = None
+                    r["matched_campaign_id"] = None
                     r["product_from_utm"] = None
+                    r["match_group_size"] = 0
                     if len(unmatched_samples) < 10:
                         unmatched_samples.append(utm)
-        print(f"   ✓ ad spend per UTM: matched {matched} rows, unmatched {unmatched}")
+
+        # Re-distribute spend theo tỉ lệ leads per-date trong các group có >1 UTM
+        # tránh double-count khi nhiều UTM share cùng 1 FB campaign.
+        shared_groups = 0
+        for key, group in camp_group.items():
+            n = len(group)
+            if n <= 1:
+                continue
+            shared_groups += 1
+            all_dates = set()
+            for r in group:
+                all_dates.update(r["spend_by_date"].keys())
+            spend_ref = group[0]["spend_by_date"]  # raw, tất cả row cùng campaign nên giống nhau
+            new_by_date = [dict() for _ in group]
+            for d in all_dates:
+                spend_d = spend_ref.get(d, 0)
+                if spend_d <= 0:
+                    continue
+                leads_d = [int((r.get("leads_by_date") or {}).get(d, 0)) for r in group]
+                total_leads_d = sum(leads_d)
+                if total_leads_d > 0:
+                    for i, r in enumerate(group):
+                        share = spend_d * leads_d[i] / total_leads_d
+                        if share > 0:
+                            new_by_date[i][d] = round(share)
+                else:
+                    # Ngày có spend nhưng 0 leads → chia đều
+                    share = spend_d / n
+                    for i in range(n):
+                        new_by_date[i][d] = round(share)
+            for i, r in enumerate(group):
+                r["spend_by_date"] = new_by_date[i]
+                r["spend_total"] = sum(new_by_date[i].values())
+                r["match_group_size"] = n
+
+        print(f"   ✓ ad spend per UTM: matched {matched} rows, unmatched {unmatched}, "
+              f"shared groups (>1 UTM/campaign): {shared_groups}")
         if unmatched_samples:
             print(f"     unmatched samples: {unmatched_samples[:5]}")
     except Exception as e:

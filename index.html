@@ -5203,7 +5203,7 @@ function UTMStatsByStaff({ dateRange }) {
       f_spend: spend,
       f_cpl: (leads && spend) ? (spend / leads) : null,
       f_cpo: (orders && spend) ? (spend / orders) : null,
-      f_roas: (spend > 0) ? (revenue / spend) : null,
+      f_cost_pct: (revenue > 0 && spend > 0) ? (spend / revenue * 100) : null,
       f_conv: leads ? (orders / leads * 100) : 0,
     }
   }
@@ -5272,7 +5272,7 @@ function UTMStatsByStaff({ dateRange }) {
           const sTotalRevD = rows.reduce((s, r) => s + r.f_rev_delivered, 0)
           const sTotalSpend = rows.reduce((s, r) => s + r.f_spend, 0)
           const sUnmatched = rows.filter(r => !r.spend_matched).length
-          const sROAS = sTotalSpend > 0 ? sTotalRev / sTotalSpend : null
+          const sCostPct = (sTotalRev > 0 && sTotalSpend > 0) ? (sTotalSpend / sTotalRev * 100) : null
           const sConv = sTotalLeads ? (sTotalOrders / sTotalLeads * 100) : 0
 
           return (
@@ -5291,8 +5291,8 @@ function UTMStatsByStaff({ dateRange }) {
                   <span>Conv <b>{sConv.toFixed(1)}%</b></span>
                   <span>DT <b>{fmtMoney(sTotalRev)}</b></span>
                   <span className="text-rose-700">Chi phí <b>{fmtMoney(sTotalSpend)}</b>{sUnmatched > 0 && (<span className="text-gray-400 font-normal ml-1">({sUnmatched} UTM chưa khớp)</span>)}</span>
-                  {sROAS != null && (
-                    <span>ROAS <b className={sROAS >= 2 ? "text-green-700" : sROAS >= 1 ? "text-amber-700" : "text-red-600"}>{sROAS.toFixed(2)}x</b></span>
+                  {sCostPct != null && (
+                    <span>CP/DT <b className={sCostPct <= 50 ? "text-green-700" : sCostPct <= 100 ? "text-amber-700" : "text-red-600"}>{sCostPct.toFixed(1)}%</b></span>
                   )}
                 </div>
               </div>
@@ -5306,7 +5306,7 @@ function UTMStatsByStaff({ dateRange }) {
                   const pRev = productRows.reduce((s, r) => s + r.f_revenue, 0)
                   const pRevD = productRows.reduce((s, r) => s + r.f_rev_delivered, 0)
                   const pSpend = productRows.reduce((s, r) => s + r.f_spend, 0)
-                  const pROAS = pSpend > 0 ? pRev / pSpend : null
+                  const pCostPct = (pRev > 0 && pSpend > 0) ? (pSpend / pRev * 100) : null
                   const pConv = pLeads ? (pOrders / pLeads * 100) : 0
                   const key = `${staff.key}::${product}`
                   const isCollapsed = collapsed[key]
@@ -5337,8 +5337,8 @@ function UTMStatsByStaff({ dateRange }) {
                           <span className="text-gray-400">({fmtMoney(pRevD)} đã giao)</span>
                           <span>·</span>
                           <span className="text-rose-700">Chi phí <b>{fmtMoney(pSpend)}</b></span>
-                          {pROAS != null && (
-                            <span>· ROAS <b className={pROAS >= 2 ? "text-green-700" : pROAS >= 1 ? "text-amber-700" : "text-red-600"}>{pROAS.toFixed(2)}x</b></span>
+                          {pCostPct != null && (
+                            <span>· CP/DT <b className={pCostPct <= 50 ? "text-green-700" : pCostPct <= 100 ? "text-amber-700" : "text-red-600"}>{pCostPct.toFixed(1)}%</b></span>
                           )}
                         </div>
                       </button>
@@ -5361,60 +5361,100 @@ function UTMStatsByStaff({ dateRange }) {
                                 <th className="px-3 py-2 text-right border-l border-gray-200">Chi phí ads</th>
                                 <th className="px-3 py-2 text-right">CPL</th>
                                 <th className="px-3 py-2 text-right">CPO</th>
-                                <th className="px-3 py-2 text-right">ROAS</th>
+                                <th className="px-3 py-2 text-right">CP/DT %</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                              {productRows.map((r, idx) => {
+                              {(() => {
+                                const groupSize = {}
+                                const groupSpend = {}
+                                for (const r of productRows) {
+                                  const k = r.matched_campaign_name || "__UNMATCHED__"
+                                  groupSize[k] = (groupSize[k] || 0) + 1
+                                  groupSpend[k] = (groupSpend[k] || 0) + r.f_spend
+                                }
+                                const sorted = [...productRows].sort((a, b) => {
+                                  const ca = a.matched_campaign_name || "￿UNMATCHED"
+                                  const cb = b.matched_campaign_name || "￿UNMATCHED"
+                                  if (ca !== cb) return ca.localeCompare(cb)
+                                  return b.f_revenue - a.f_revenue
+                                })
                                 const _norm = (s) => (s || "").toString().toLowerCase().replace(/\s+/g, "")
-                                const mismatch = r.product_from_utm && r.product && _norm(r.product_from_utm) !== _norm(r.product)
-                                return (
-                                <tr key={r.utm_campaign + "_" + idx} className="hover:bg-gray-50">
-                                  <td className="px-3 py-1.5 text-gray-400 tabular-nums">{idx + 1}</td>
-                                  <td className="px-3 py-1.5 font-mono text-[11px] text-gray-700 max-w-[320px] truncate" title={r.matched_campaign_name ? `FB campaign: ${r.matched_campaign_name}` : r.utm_campaign}>
-                                    {r.utm_campaign}
-                                  </td>
-                                  <td className={"px-3 py-1.5 text-[11px] " + (mismatch ? "text-red-700 font-semibold" : "text-gray-700")} title={mismatch ? `Mismatch! UTM=${r.product_from_utm} ≠ Pancake=${r.product}` : (r.product_from_utm || "(không detect được từ tên FB campaign)")}>
-                                    {r.product_from_utm || <span className="text-gray-300">—</span>}
-                                  </td>
-                                  <td className={"px-3 py-1.5 text-[11px] " + (mismatch ? "text-red-700 font-semibold" : "text-gray-700")}>
-                                    {r.product || <span className="text-gray-300">—</span>}
-                                  </td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums">{r.f_leads.toLocaleString("vi-VN")}</td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums font-semibold">{r.f_orders.toLocaleString("vi-VN")}</td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{r.f_delivered.toLocaleString("vi-VN")}</td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums">
-                                    <span className={r.f_conv >= 60 ? "text-green-700 font-semibold" : r.f_conv >= 30 ? "text-amber-700" : "text-gray-500"}>
-                                      {fmtPct(r.f_conv)}
-                                    </span>
-                                  </td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.f_revenue)}</td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{fmtMoney(r.f_rev_delivered)}</td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.spend_matched ? "" : "Không tìm thấy campaign FB khớp UTM này"}>
-                                    {r.spend_matched ? (
-                                      <span className="font-semibold text-rose-700">{fmtMoney(r.f_spend)}</span>
-                                    ) : (
-                                      <span className="text-gray-300">—</span>
-                                    )}
-                                  </td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
-                                    {r.f_cpl != null ? fmtMoney(Math.round(r.f_cpl)) : <span className="text-gray-300">—</span>}
-                                  </td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
-                                    {r.f_cpo != null ? fmtMoney(Math.round(r.f_cpo)) : <span className="text-gray-300">—</span>}
-                                  </td>
-                                  <td className="px-3 py-1.5 text-right tabular-nums">
-                                    {r.f_roas != null ? (
-                                      <span className={r.f_roas >= 2 ? "text-green-700 font-semibold" : r.f_roas >= 1 ? "text-amber-700" : "text-red-600 font-semibold"}>
-                                        {r.f_roas.toFixed(2)}x
-                                      </span>
-                                    ) : (
-                                      <span className="text-gray-300">—</span>
-                                    )}
-                                  </td>
-                                </tr>
-                              )
-                              })}
+                                let lastCamp = "__NONE__"
+                                let utmIdx = 0
+                                const out = []
+                                sorted.forEach((r, idx) => {
+                                  const k = r.matched_campaign_name || "__UNMATCHED__"
+                                  if (k !== lastCamp) {
+                                    out.push(
+                                      <tr key={"hdr-" + idx} className={r.matched_campaign_name ? "bg-sky-50 border-t-2 border-sky-200" : "bg-amber-50 border-t-2 border-amber-200"}>
+                                        <td colSpan={8} className="px-3 py-1.5 text-[11px] font-semibold">
+                                          {r.matched_campaign_name ? (
+                                            <span className="text-sky-900">📦 {r.matched_campaign_name} <span className="text-gray-500 font-normal ml-1">({groupSize[k]} UTM)</span></span>
+                                          ) : (
+                                            <span className="text-amber-800">⚠ UTM không khớp FB campaign ({groupSize[k]})</span>
+                                          )}
+                                        </td>
+                                        <td className="px-3 py-1.5 text-right text-[11px] tabular-nums border-l border-gray-200 text-rose-700 font-semibold">
+                                          {r.matched_campaign_name ? fmtMoney(groupSpend[k]) : <span className="text-gray-300">—</span>}
+                                        </td>
+                                        <td colSpan={3}></td>
+                                      </tr>
+                                    )
+                                    lastCamp = k
+                                    utmIdx = 0
+                                  }
+                                  utmIdx++
+                                  const mismatch = r.product_from_utm && r.product && _norm(r.product_from_utm) !== _norm(r.product)
+                                  out.push(
+                                    <tr key={r.utm_campaign + "_" + idx} className="hover:bg-gray-50">
+                                      <td className="px-3 py-1.5 text-gray-400 tabular-nums">{utmIdx}</td>
+                                      <td className="px-3 py-1.5 font-mono text-[11px] text-gray-700 max-w-[320px] truncate" title={r.matched_campaign_name ? `FB campaign: ${r.matched_campaign_name}${r.spend_match_via ? ` (via ${r.spend_match_via})` : ""}` : r.utm_campaign}>
+                                        {r.utm_campaign}
+                                      </td>
+                                      <td className={"px-3 py-1.5 text-[11px] " + (mismatch ? "text-red-700 font-semibold" : "text-gray-700")} title={mismatch ? `Mismatch! UTM=${r.product_from_utm} ≠ Pancake=${r.product}` : (r.product_from_utm || "(không detect được từ tên FB campaign)")}>
+                                        {r.product_from_utm || <span className="text-gray-300">—</span>}
+                                      </td>
+                                      <td className={"px-3 py-1.5 text-[11px] " + (mismatch ? "text-red-700 font-semibold" : "text-gray-700")}>
+                                        {r.product || <span className="text-gray-300">—</span>}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums">{r.f_leads.toLocaleString("vi-VN")}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums font-semibold">{r.f_orders.toLocaleString("vi-VN")}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{r.f_delivered.toLocaleString("vi-VN")}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums">
+                                        <span className={r.f_conv >= 60 ? "text-green-700 font-semibold" : r.f_conv >= 30 ? "text-amber-700" : "text-gray-500"}>
+                                          {fmtPct(r.f_conv)}
+                                        </span>
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums font-semibold text-gray-900">{fmtMoney(r.f_revenue)}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-500">{fmtMoney(r.f_rev_delivered)}</td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums border-l border-gray-200" title={r.spend_matched ? (r.match_group_size > 1 ? `Spend đã chia ${r.match_group_size} UTM theo tỉ lệ leads` : "") : "Không tìm thấy campaign FB khớp UTM này"}>
+                                        {r.spend_matched ? (
+                                          <span className="font-semibold text-rose-700">{fmtMoney(r.f_spend)}{r.match_group_size > 1 && <span className="text-gray-400 text-[10px] ml-0.5">⊟</span>}</span>
+                                        ) : (
+                                          <span className="text-gray-300">—</span>
+                                        )}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
+                                        {r.f_cpl != null ? fmtMoney(Math.round(r.f_cpl)) : <span className="text-gray-300">—</span>}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums text-gray-700">
+                                        {r.f_cpo != null ? fmtMoney(Math.round(r.f_cpo)) : <span className="text-gray-300">—</span>}
+                                      </td>
+                                      <td className="px-3 py-1.5 text-right tabular-nums">
+                                        {r.f_cost_pct != null ? (
+                                          <span className={r.f_cost_pct <= 50 ? "text-green-700 font-semibold" : r.f_cost_pct <= 100 ? "text-amber-700" : "text-red-600 font-semibold"}>
+                                            {r.f_cost_pct.toFixed(1)}%
+                                          </span>
+                                        ) : (
+                                          <span className="text-gray-300">—</span>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  )
+                                })
+                                return out
+                              })()}
                             </tbody>
                           </table>
                         </div>
