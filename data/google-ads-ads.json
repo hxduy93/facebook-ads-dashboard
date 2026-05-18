@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18 11:43",
+  "generated_at": "2026-05-18 15:53",
   "source": "Windsor.ai JSON API (ads, auto every 60min)",
   "account_name": "MHDI",
   "date_range": {
@@ -32,11 +32,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300x600.gif",
       "ad_format": "DISPLAY_BANNER",
-      "spend_30d": 884638.0,
-      "clicks_30d": 403,
+      "spend_30d": 881148.0,
+      "clicks_30d": 401,
       "impressions_30d": 44134,
       "ctr_30d": 0.0091,
-      "cpc_30d": 2195.0,
+      "cpc_30d": 2197.0,
       "active_days_30d": 25
     },
     "752128818630": {
@@ -123,11 +123,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300X250-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 1074616.0,
-      "clicks_30d": 1174,
+      "spend_30d": 1074146.0,
+      "clicks_30d": 1173,
       "impressions_30d": 97396,
-      "ctr_30d": 0.0121,
-      "cpc_30d": 915.0,
+      "ctr_30d": 0.012,
+      "cpc_30d": 916.0,
       "active_days_30d": 25
     },
     "802551887887": {
@@ -279,11 +279,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "250X360-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 767947.0,
-      "clicks_30d": 419,
+      "spend_30d": 767182.0,
+      "clicks_30d": 418,
       "impressions_30d": 43404,
-      "ctr_30d": 0.0097,
-      "cpc_30d": 1833.0,
+      "ctr_30d": 0.0096,
+      "cpc_30d": 1835.0,
       "active_days_30d": 24
     },
     "802509637128": {
@@ -333,7 +333,7 @@
       "ad_format": "OTHER",
       "spend_30d": 121808.0,
       "clicks_30d": 51,
-      "impressions_30d": 20186,
+      "impressions_30d": 20187,
       "ctr_30d": 0.0025,
       "cpc_30d": 2388.0,
       "active_days_30d": 17
@@ -357,11 +357,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "336X280-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 1300568.0,
-      "clicks_30d": 852,
+      "spend_30d": 1298047.0,
+      "clicks_30d": 851,
       "impressions_30d": 125945,
       "ctr_30d": 0.0068,
-      "cpc_30d": 1526.0,
+      "cpc_30d": 1525.0,
       "active_days_30d": 25
     },
     "802509637149": {
@@ -385,7 +385,7 @@
       "ad_format": "OTHER",
       "spend_30d": 1629208.0,
       "clicks_30d": 1130,
-      "impressions_30d": 102129,
+      "impressions_30d": 102128,
       "ctr_30d": 0.0111,
       "cpc_30d": 1442.0,
       "active_days_30d": 25
@@ -619,7 +619,7 @@
       "ad_format": "OTHER",
       "spend_30d": 287246.0,
       "clicks_30d": 189,
-      "impressions_30d": 19467,
+      "impressions_30d": 19466,
       "ctr_30d": 0.0097,
       "cpc_30d": 1520.0,
       "active_days_30d": 14
@@ -1085,12 +1085,12 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "580X400-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 51831.0,
-      "clicks_30d": 43,
+      "spend_30d": 49228.0,
+      "clicks_30d": 42,
       "impressions_30d": 7491,
-      "ctr_30d": 0.0057,
-      "cpc_30d": 1205.0,
-      "active_days_30d": 19
+      "ctr_30d": 0.0056,
+      "cpc_30d": 1172.0,
+      "active_days_30d": 18
     },
     "802509422358": {
       "campaign": "RMK - thiết bị ghi âm #2",
@@ -1150,11 +1150,11 @@
       "ad_group_name": "Ad group 1",
       "ad_name": "300X600-100.jpg",
       "ad_format": "OTHER",
-      "spend_30d": 116706.0,
-      "clicks_30d": 54,
+      "spend_30d": 115201.0,
+      "clicks_30d": 53,
       "impressions_30d": 2307,
-      "ctr_30d": 0.0234,
-      "cpc_30d": 2161.0,
+      "ctr_30d": 0.023,
+      "cpc_30d": 2174.0,
       "active_days_30d": 7
     },
     "802551763840": {
@@ -2109,16 +2109,16 @@
   },
   "format_aggregates": {
     "DISPLAY_BANNER": {
-      "spend_30d": 2548164.0,
-      "clicks_30d": 1638,
+      "spend_30d": 2544674.0,
+      "clicks_30d": 1636,
       "impressions_30d": 192519,
       "ctr_30d": 0.0085,
       "ad_count": 10
     },
     "OTHER": {
-      "spend_30d": 66890915.0,
-      "clicks_30d": 20937,
-      "impressions_30d": 1588799,
+      "spend_30d": 66883051.0,
+      "clicks_30d": 20932,
+      "impressions_30d": 1588798,
       "ctr_30d": 0.0132,
       "ad_count": 150
     },
