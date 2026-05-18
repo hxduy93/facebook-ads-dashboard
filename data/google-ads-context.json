@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-18 09:39",
+  "generated_at": "2026-05-18 13:50",
   "source_data_date_range": {
-    "start_7d": "2026-05-10",
-    "end": "2026-05-16",
-    "start_30d": "2026-04-17"
+    "start_7d": "2026-05-11",
+    "end": "2026-05-17",
+    "start_30d": "2026-04-18"
   },
   "ga_account": {
     "id": "477-705-2298",
@@ -41,27 +41,27 @@
     }
   },
   "summary": {
-    "total_spend_30d_vnd": 70589229.0,
-    "total_clicks_30d": 22586,
-    "total_impressions_30d": 1773316,
+    "total_spend_30d_vnd": 70425842.0,
+    "total_clicks_30d": 22898,
+    "total_impressions_30d": 1810368,
     "active_campaigns_30d": 19,
     "total_campaigns": 22
   },
   "roas_proxy": {
-    "google_ads_spend_30d": 70589229.0,
-    "website_revenue_30d_vnd": 193684500.0,
-    "roas_overall": 2.74,
+    "google_ads_spend_30d": 70425842.0,
+    "website_revenue_30d_vnd": 185047500.0,
+    "roas_overall": 2.63,
     "target_roas": 3.0,
     "status": "borderline",
     "note": "ROAS = Pancake Website revenue (30d) / Google Ads spend (30d). Proxy — mua qua Zalo/Hotline sau khi thay Google Ads khong count vao day."
   },
   "website_revenue_pancake": {
-    "total_30d": 193684500.0,
-    "orders_30d": 99,
+    "total_30d": 185047500.0,
+    "orders_30d": 92,
     "by_status": {
       "delivered": {
-        "revenue": 154020500.0,
-        "orders": 80
+        "revenue": 145383500.0,
+        "orders": 73
       },
       "returning": {
         "revenue": 2399000.0,
@@ -82,16 +82,16 @@
     },
     "by_source": {
       "WEBSITE": {
-        "revenue": 84508000.0,
-        "orders": 46
+        "revenue": 82220000.0,
+        "orders": 43
       },
       "ZALO_OA": {
-        "revenue": 44191000.0,
-        "orders": 27
+        "revenue": 38842000.0,
+        "orders": 24
       },
       "HOTLINE": {
-        "revenue": 64985500.0,
-        "orders": 26
+        "revenue": 63985500.0,
+        "orders": 25
       }
     },
     "note": "Gộp 3 nguồn POS: WEBSITE + ZALO_OA + HOTLINE (filter 'Website' trên POS). Loại DUY + PHUONG_NAM (team FB Ads). Match: delivered + other. Excluded returning/returned/canceled/refunded."
@@ -196,72 +196,72 @@
         "start": "2026-05-17",
         "end": "2026-05-17"
       },
-      "total_spend": 0,
-      "total_clicks": 0,
-      "total_impressions": 0,
+      "total_spend": 2483212,
+      "total_clicks": 946,
+      "total_impressions": 83526,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 439156,
+          "clicks": 243,
+          "impressions": 26129,
+          "ctr": 0.0093,
+          "cpc": 1807,
+          "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 566972,
+          "clicks": 161,
+          "impressions": 15294,
+          "ctr": 0.0105,
+          "cpc": 3522,
+          "campaigns_count": 2
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 403218,
+          "clicks": 142,
+          "impressions": 11808,
+          "ctr": 0.012,
+          "cpc": 2840,
+          "campaigns_count": 2
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 131294,
+          "clicks": 57,
+          "impressions": 6338,
+          "ctr": 0.009,
+          "cpc": 2303,
+          "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 254481,
+          "clicks": 42,
+          "impressions": 1017,
+          "ctr": 0.0413,
+          "cpc": 6059,
+          "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 160940,
+          "clicks": 90,
+          "impressions": 8365,
+          "ctr": 0.0108,
+          "cpc": 1788,
+          "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 0,
-          "clicks": 0,
-          "impressions": 0,
-          "ctr": 0,
-          "cpc": 0,
-          "campaigns_count": 0
+          "spend": 527151,
+          "clicks": 211,
+          "impressions": 14575,
+          "ctr": 0.0145,
+          "cpc": 2498,
+          "campaigns_count": 2
         },
         "NOMA": {
           "label": "NOMA",
@@ -382,71 +382,71 @@
         "start": "2026-05-11",
         "end": "2026-05-17"
       },
-      "total_spend": 13371394,
-      "total_clicks": 5235,
-      "total_impressions": 470551,
+      "total_spend": 15843252,
+      "total_clicks": 6174,
+      "total_impressions": 554077,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 2715766,
-          "clicks": 1310,
-          "impressions": 157396,
-          "ctr": 0.0083,
-          "cpc": 2073,
+          "spend": 3151636,
+          "clicks": 1551,
+          "impressions": 183525,
+          "ctr": 0.0085,
+          "cpc": 2032,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 645813,
-          "clicks": 159,
-          "impressions": 10582,
-          "ctr": 0.015,
-          "cpc": 4062,
+          "spend": 1212785,
+          "clicks": 320,
+          "impressions": 25876,
+          "ctr": 0.0124,
+          "cpc": 3790,
           "campaigns_count": 2
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 2726962,
-          "clicks": 1136,
-          "impressions": 98435,
-          "ctr": 0.0115,
-          "cpc": 2400,
+          "spend": 3130180,
+          "clicks": 1278,
+          "impressions": 110243,
+          "ctr": 0.0116,
+          "cpc": 2449,
           "campaigns_count": 2
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 115807,
-          "clicks": 56,
-          "impressions": 6989,
-          "ctr": 0.008,
-          "cpc": 2068,
+          "spend": 245595,
+          "clicks": 112,
+          "impressions": 13327,
+          "ctr": 0.0084,
+          "cpc": 2193,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 1594904,
-          "clicks": 269,
-          "impressions": 7477,
-          "ctr": 0.036,
-          "cpc": 5929,
+          "spend": 1846783,
+          "clicks": 310,
+          "impressions": 8494,
+          "ctr": 0.0365,
+          "cpc": 5957,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 1199497,
-          "clicks": 596,
-          "impressions": 59673,
-          "ctr": 0.01,
-          "cpc": 2013,
+          "spend": 1356948,
+          "clicks": 684,
+          "impressions": 68038,
+          "ctr": 0.0101,
+          "cpc": 1984,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 4372645,
-          "clicks": 1709,
-          "impressions": 129999,
-          "ctr": 0.0131,
-          "cpc": 2559,
+          "spend": 4899326,
+          "clicks": 1919,
+          "impressions": 144574,
+          "ctr": 0.0133,
+          "cpc": 2553,
           "campaigns_count": 2
         },
         "NOMA": {
@@ -475,69 +475,69 @@
         "start": "2026-05-01",
         "end": "2026-05-18"
       },
-      "total_spend": 30771581,
-      "total_clicks": 11499,
-      "total_impressions": 962097,
+      "total_spend": 33243439,
+      "total_clicks": 12438,
+      "total_impressions": 1045623,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 5585293,
-          "clicks": 2750,
-          "impressions": 314805,
-          "ctr": 0.0087,
-          "cpc": 2031,
+          "spend": 6021162,
+          "clicks": 2991,
+          "impressions": 340934,
+          "ctr": 0.0088,
+          "cpc": 2013,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 3847136,
-          "clicks": 1030,
-          "impressions": 82494,
-          "ctr": 0.0125,
-          "cpc": 3735,
+          "spend": 4414107,
+          "clicks": 1191,
+          "impressions": 97788,
+          "ctr": 0.0122,
+          "cpc": 3706,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 5853975,
-          "clicks": 2055,
-          "impressions": 170633,
+          "spend": 6257193,
+          "clicks": 2197,
+          "impressions": 182441,
           "ctr": 0.012,
-          "cpc": 2849,
+          "cpc": 2848,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 115807,
-          "clicks": 56,
-          "impressions": 6989,
-          "ctr": 0.008,
-          "cpc": 2068,
+          "spend": 245595,
+          "clicks": 112,
+          "impressions": 13327,
+          "ctr": 0.0084,
+          "cpc": 2193,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 3474236,
-          "clicks": 625,
-          "impressions": 14703,
-          "ctr": 0.0425,
-          "cpc": 5559,
+          "spend": 3726115,
+          "clicks": 666,
+          "impressions": 15720,
+          "ctr": 0.0424,
+          "cpc": 5595,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 2154421,
-          "clicks": 1095,
-          "impressions": 103988,
+          "spend": 2311872,
+          "clicks": 1183,
+          "impressions": 112353,
           "ctr": 0.0105,
-          "cpc": 1968,
+          "cpc": 1954,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 9740713,
-          "clicks": 3888,
-          "impressions": 268485,
+          "spend": 10267394,
+          "clicks": 4098,
+          "impressions": 283060,
           "ctr": 0.0145,
           "cpc": 2505,
           "campaigns_count": 2
@@ -661,71 +661,71 @@
         "start": "2026-05-11",
         "end": "2026-05-17"
       },
-      "total_spend": 13371394,
-      "total_clicks": 5235,
-      "total_impressions": 470551,
+      "total_spend": 15843252,
+      "total_clicks": 6174,
+      "total_impressions": 554077,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 2715766,
-          "clicks": 1310,
-          "impressions": 157396,
-          "ctr": 0.0083,
-          "cpc": 2073,
+          "spend": 3151636,
+          "clicks": 1551,
+          "impressions": 183525,
+          "ctr": 0.0085,
+          "cpc": 2032,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 645813,
-          "clicks": 159,
-          "impressions": 10582,
-          "ctr": 0.015,
-          "cpc": 4062,
+          "spend": 1212785,
+          "clicks": 320,
+          "impressions": 25876,
+          "ctr": 0.0124,
+          "cpc": 3790,
           "campaigns_count": 2
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 2726962,
-          "clicks": 1136,
-          "impressions": 98435,
-          "ctr": 0.0115,
-          "cpc": 2400,
+          "spend": 3130180,
+          "clicks": 1278,
+          "impressions": 110243,
+          "ctr": 0.0116,
+          "cpc": 2449,
           "campaigns_count": 2
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 115807,
-          "clicks": 56,
-          "impressions": 6989,
-          "ctr": 0.008,
-          "cpc": 2068,
+          "spend": 245595,
+          "clicks": 112,
+          "impressions": 13327,
+          "ctr": 0.0084,
+          "cpc": 2193,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 1594904,
-          "clicks": 269,
-          "impressions": 7477,
-          "ctr": 0.036,
-          "cpc": 5929,
+          "spend": 1846783,
+          "clicks": 310,
+          "impressions": 8494,
+          "ctr": 0.0365,
+          "cpc": 5957,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 1199497,
-          "clicks": 596,
-          "impressions": 59673,
-          "ctr": 0.01,
-          "cpc": 2013,
+          "spend": 1356948,
+          "clicks": 684,
+          "impressions": 68038,
+          "ctr": 0.0101,
+          "cpc": 1984,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 4372645,
-          "clicks": 1709,
-          "impressions": 129999,
-          "ctr": 0.0131,
-          "cpc": 2559,
+          "spend": 4899326,
+          "clicks": 1919,
+          "impressions": 144574,
+          "ctr": 0.0133,
+          "cpc": 2553,
           "campaigns_count": 2
         },
         "NOMA": {
@@ -754,71 +754,71 @@
         "start": "2026-04-18",
         "end": "2026-05-17"
       },
-      "total_spend": 67953983,
-      "total_clicks": 21959,
-      "total_impressions": 1726842,
+      "total_spend": 70425841,
+      "total_clicks": 22898,
+      "total_impressions": 1810368,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 13304854,
-          "clicks": 4876,
-          "impressions": 512295,
+          "spend": 13740724,
+          "clicks": 5117,
+          "impressions": 538424,
           "ctr": 0.0095,
-          "cpc": 2729,
+          "cpc": 2685,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 9104266,
-          "clicks": 2171,
-          "impressions": 178093,
-          "ctr": 0.0122,
-          "cpc": 4194,
+          "spend": 9671238,
+          "clicks": 2332,
+          "impressions": 193387,
+          "ctr": 0.0121,
+          "cpc": 4147,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 13524826,
-          "clicks": 3894,
-          "impressions": 343645,
-          "ctr": 0.0113,
-          "cpc": 3473,
+          "spend": 13928044,
+          "clicks": 4036,
+          "impressions": 355453,
+          "ctr": 0.0114,
+          "cpc": 3451,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 338369,
-          "clicks": 154,
-          "impressions": 16717,
-          "ctr": 0.0092,
-          "cpc": 2197,
+          "spend": 468158,
+          "clicks": 210,
+          "impressions": 23055,
+          "ctr": 0.0091,
+          "cpc": 2229,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 9692403,
-          "clicks": 1480,
-          "impressions": 29826,
-          "ctr": 0.0496,
-          "cpc": 6549,
+          "spend": 9944282,
+          "clicks": 1521,
+          "impressions": 30843,
+          "ctr": 0.0493,
+          "cpc": 6538,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 3310227,
-          "clicks": 1774,
-          "impressions": 160298,
-          "ctr": 0.0111,
-          "cpc": 1866,
+          "spend": 3467678,
+          "clicks": 1862,
+          "impressions": 168663,
+          "ctr": 0.011,
+          "cpc": 1862,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 18291410,
-          "clicks": 7531,
-          "impressions": 485118,
+          "spend": 18818090,
+          "clicks": 7741,
+          "impressions": 499693,
           "ctr": 0.0155,
-          "cpc": 2429,
+          "cpc": 2431,
           "campaigns_count": 3
         },
         "NOMA": {
@@ -847,70 +847,70 @@
         "start": "2026-02-17",
         "end": "2026-05-17"
       },
-      "total_spend": 273200247,
-      "total_clicks": 79894,
-      "total_impressions": 5865348,
+      "total_spend": 275672105,
+      "total_clicks": 80833,
+      "total_impressions": 5948874,
       "categories": {
         "MAY_DO": {
           "label": "Máy dò",
-          "spend": 55561064,
-          "clicks": 15875,
-          "impressions": 1423641,
-          "ctr": 0.0112,
-          "cpc": 3500,
+          "spend": 55996933,
+          "clicks": 16116,
+          "impressions": 1449770,
+          "ctr": 0.0111,
+          "cpc": 3475,
           "campaigns_count": 2
         },
         "CAMERA_WIFI": {
           "label": "Camera wifi",
-          "spend": 35896232,
-          "clicks": 8520,
-          "impressions": 751448,
+          "spend": 36463203,
+          "clicks": 8681,
+          "impressions": 766742,
           "ctr": 0.0113,
-          "cpc": 4213,
+          "cpc": 4200,
           "campaigns_count": 4
         },
         "CAMERA_4G": {
           "label": "Camera 4G",
-          "spend": 44889088,
-          "clicks": 11433,
-          "impressions": 1059589,
+          "spend": 45292306,
+          "clicks": 11575,
+          "impressions": 1071397,
           "ctr": 0.0108,
-          "cpc": 3926,
+          "cpc": 3913,
           "campaigns_count": 4
         },
         "CAMERA_VIDEO_CALL": {
           "label": "Camera gọi video 2 chiều",
-          "spend": 3836926,
-          "clicks": 2124,
-          "impressions": 223560,
+          "spend": 3966715,
+          "clicks": 2180,
+          "impressions": 229898,
           "ctr": 0.0095,
-          "cpc": 1806,
+          "cpc": 1820,
           "campaigns_count": 1
         },
         "GHI_AM": {
           "label": "Máy ghi âm",
-          "spend": 39637575,
-          "clicks": 5970,
-          "impressions": 112837,
-          "ctr": 0.0529,
-          "cpc": 6639,
+          "spend": 39889454,
+          "clicks": 6011,
+          "impressions": 113854,
+          "ctr": 0.0528,
+          "cpc": 6636,
           "campaigns_count": 2
         },
         "CHONG_GHI_AM": {
           "label": "Chống ghi âm",
-          "spend": 7649902,
-          "clicks": 4435,
-          "impressions": 386229,
+          "spend": 7807352,
+          "clicks": 4523,
+          "impressions": 394594,
           "ctr": 0.0115,
-          "cpc": 1725,
+          "cpc": 1726,
           "campaigns_count": 2
         },
         "DINH_VI": {
           "label": "Định vị",
-          "spend": 73099541,
-          "clicks": 29062,
-          "impressions": 1765808,
-          "ctr": 0.0165,
+          "spend": 73626222,
+          "clicks": 29272,
+          "impressions": 1780383,
+          "ctr": 0.0164,
           "cpc": 2515,
           "campaigns_count": 3
         },
@@ -975,82 +975,82 @@
   ],
   "per_category": {
     "CHONG_GHI_AM": {
-      "spend_30d": 3355474.0,
-      "spend_7d": 1311649.0,
-      "clicks_30d": 1803,
-      "impressions_30d": 162800,
-      "ctr_30d": 0.0111,
-      "cpc_30d": 1861.0,
-      "spend_trend_7d_pct": 55.6,
+      "spend_30d": 3467678.0,
+      "spend_7d": 1356947.0,
+      "clicks_30d": 1862,
+      "impressions_30d": 168663,
+      "ctr_30d": 0.011,
+      "cpc_30d": 1862.0,
+      "spend_trend_7d_pct": 42.1,
       "campaign_count": 2
     },
     "DINH_VI": {
-      "spend_30d": 18981273.0,
-      "spend_7d": 5123094.0,
-      "clicks_30d": 7771,
-      "impressions_30d": 502996,
-      "ctr_30d": 0.0154,
-      "cpc_30d": 2443.0,
-      "spend_trend_7d_pct": 11.3,
+      "spend_30d": 18818090.0,
+      "spend_7d": 4899325.0,
+      "clicks_30d": 7741,
+      "impressions_30d": 499693,
+      "ctr_30d": 0.0155,
+      "cpc_30d": 2431.0,
+      "spend_trend_7d_pct": -8.5,
       "campaign_count": 3
     },
     "CAMERA_4G": {
-      "spend_30d": 13722609.0,
-      "spend_7d": 3114924.0,
-      "clicks_30d": 3937,
-      "impressions_30d": 347666,
-      "ctr_30d": 0.0113,
-      "cpc_30d": 3486.0,
-      "spend_trend_7d_pct": 14.6,
+      "spend_30d": 13928043.0,
+      "spend_7d": 3130181.0,
+      "clicks_30d": 4036,
+      "impressions_30d": 355453,
+      "ctr_30d": 0.0114,
+      "cpc_30d": 3451.0,
+      "spend_trend_7d_pct": 0.8,
       "campaign_count": 4
     },
     "MAY_DO": {
-      "spend_30d": 13946936.0,
-      "spend_7d": 3115567.0,
-      "clicks_30d": 5015,
-      "impressions_30d": 522307,
-      "ctr_30d": 0.0096,
-      "cpc_30d": 2781.0,
-      "spend_trend_7d_pct": 26.4,
+      "spend_30d": 13740724.0,
+      "spend_7d": 3151636.0,
+      "clicks_30d": 5117,
+      "impressions_30d": 538424,
+      "ctr_30d": 0.0095,
+      "cpc_30d": 2685.0,
+      "spend_trend_7d_pct": 10.0,
       "campaign_count": 2
     },
     "CAMERA_WIFI": {
-      "spend_30d": 9473576.0,
-      "spend_7d": 949146.0,
-      "clicks_30d": 2248,
-      "impressions_30d": 187446,
-      "ctr_30d": 0.012,
-      "cpc_30d": 4214.0,
-      "spend_trend_7d_pct": -67.1,
+      "spend_30d": 9671238.0,
+      "spend_7d": 1212785.0,
+      "clicks_30d": 2332,
+      "impressions_30d": 193387,
+      "ctr_30d": 0.0121,
+      "cpc_30d": 4147.0,
+      "spend_trend_7d_pct": -62.0,
       "campaign_count": 4
     },
     "GHI_AM": {
-      "spend_30d": 10259578.0,
-      "spend_7d": 1854342.0,
-      "clicks_30d": 1545,
-      "impressions_30d": 30876,
-      "ctr_30d": 0.05,
-      "cpc_30d": 6641.0,
-      "spend_trend_7d_pct": 15.1,
+      "spend_30d": 9944282.0,
+      "spend_7d": 1846783.0,
+      "clicks_30d": 1521,
+      "impressions_30d": 30843,
+      "ctr_30d": 0.0493,
+      "cpc_30d": 6538.0,
+      "spend_trend_7d_pct": -1.3,
       "campaign_count": 2
     },
     "CAMERA_VIDEO_CALL": {
-      "spend_30d": 368359.0,
-      "spend_7d": 115807.0,
-      "clicks_30d": 169,
-      "impressions_30d": 18239,
-      "ctr_30d": 0.0093,
-      "cpc_30d": 2180.0,
+      "spend_30d": 468158.0,
+      "spend_7d": 245595.0,
+      "clicks_30d": 210,
+      "impressions_30d": 23055,
+      "ctr_30d": 0.0091,
+      "cpc_30d": 2229.0,
       "spend_trend_7d_pct": 0,
       "campaign_count": 1
     },
     "OTHER": {
-      "spend_30d": 481424.0,
+      "spend_30d": 387629.0,
       "spend_7d": 0.0,
-      "clicks_30d": 98,
-      "impressions_30d": 986,
-      "ctr_30d": 0.0994,
-      "cpc_30d": 4912.0,
+      "clicks_30d": 79,
+      "impressions_30d": 850,
+      "ctr_30d": 0.0929,
+      "cpc_30d": 4907.0,
       "spend_trend_7d_pct": 0,
       "campaign_count": 4
     }
@@ -1061,24 +1061,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 2132096.0,
-      "spend_7d": 887253.0,
-      "spend_prior_7d": 487985.0,
-      "clicks_30d": 1454,
-      "clicks_7d": 532,
-      "impressions_30d": 160622,
-      "impressions_7d": 65152,
-      "ctr_30d": 0.0091,
-      "ctr_7d": 0.0082,
-      "ctr_prior_7d": 0.009,
-      "cpc_30d": 1466.0,
-      "cpc_7d": 1668.0,
-      "cpc_prior_7d": 1448.0,
+      "spend_30d": 2205941.0,
+      "spend_7d": 945329.0,
+      "spend_prior_7d": 541519.0,
+      "clicks_30d": 1503,
+      "clicks_7d": 565,
+      "impressions_30d": 166453,
+      "impressions_7d": 67356,
+      "ctr_30d": 0.009,
+      "ctr_7d": 0.0084,
+      "ctr_prior_7d": 0.0087,
+      "cpc_30d": 1468.0,
+      "cpc_7d": 1673.0,
+      "cpc_prior_7d": 1425.0,
       "active_days_30d": 26,
-      "avg_daily_spend_30d": 82004.0,
-      "spend_trend_pct": 81.8,
-      "ctr_trend_pct": -9.2,
-      "cpc_trend_pct": 15.2,
+      "avg_daily_spend_30d": 84844.0,
+      "spend_trend_pct": 74.6,
+      "ctr_trend_pct": -3.9,
+      "cpc_trend_pct": 17.4,
       "flags": []
     },
     "RMK - thiết bị định vị": {
@@ -1086,24 +1086,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 5382581.0,
-      "spend_7d": 1684822.0,
-      "spend_prior_7d": 1404535.0,
-      "clicks_30d": 4008,
-      "clicks_7d": 1080,
-      "impressions_30d": 441447,
-      "impressions_7d": 139471,
+      "spend_30d": 5403326.0,
+      "spend_7d": 1667284.0,
+      "spend_prior_7d": 1581979.0,
+      "clicks_30d": 4020,
+      "clicks_7d": 1046,
+      "impressions_30d": 444098,
+      "impressions_7d": 137805,
       "ctr_30d": 0.0091,
-      "ctr_7d": 0.0077,
-      "ctr_prior_7d": 0.0084,
-      "cpc_30d": 1343.0,
-      "cpc_7d": 1560.0,
-      "cpc_prior_7d": 1457.0,
+      "ctr_7d": 0.0076,
+      "ctr_prior_7d": 0.0085,
+      "cpc_30d": 1344.0,
+      "cpc_7d": 1594.0,
+      "cpc_prior_7d": 1432.0,
       "active_days_30d": 26,
-      "avg_daily_spend_30d": 207022.0,
-      "spend_trend_pct": 20.0,
-      "ctr_trend_pct": -7.6,
-      "cpc_trend_pct": 7.1,
+      "avg_daily_spend_30d": 207820.0,
+      "spend_trend_pct": 5.4,
+      "ctr_trend_pct": -10.4,
+      "cpc_trend_pct": 11.3,
       "flags": []
     },
     "RMK - Camera 4G": {
@@ -1111,24 +1111,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 3575870.0,
-      "spend_7d": 1706362.0,
-      "spend_prior_7d": 730380.0,
-      "clicks_30d": 1898,
-      "clicks_7d": 1001,
-      "impressions_30d": 241621,
-      "impressions_7d": 108566,
+      "spend_30d": 3693382.0,
+      "spend_7d": 1713529.0,
+      "spend_prior_7d": 903051.0,
+      "clicks_30d": 1966,
+      "clicks_7d": 988,
+      "impressions_30d": 249249,
+      "impressions_7d": 108125,
       "ctr_30d": 0.0079,
-      "ctr_7d": 0.0092,
-      "ctr_prior_7d": 0.007,
-      "cpc_30d": 1884.0,
-      "cpc_7d": 1705.0,
-      "cpc_prior_7d": 1840.0,
+      "ctr_7d": 0.0091,
+      "ctr_prior_7d": 0.0073,
+      "cpc_30d": 1879.0,
+      "cpc_7d": 1734.0,
+      "cpc_prior_7d": 1799.0,
       "active_days_30d": 25,
-      "avg_daily_spend_30d": 143035.0,
-      "spend_trend_pct": 133.6,
-      "ctr_trend_pct": 31.5,
-      "cpc_trend_pct": -7.3,
+      "avg_daily_spend_30d": 147735.0,
+      "spend_trend_pct": 89.7,
+      "ctr_trend_pct": 24.9,
+      "cpc_trend_pct": -3.6,
       "flags": []
     },
     "RMK - Máy dò - 2024 - nmt": {
@@ -1136,24 +1136,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 6895918.0,
-      "spend_7d": 2317441.0,
-      "spend_prior_7d": 1794640.0,
-      "clicks_30d": 4113,
-      "clicks_7d": 1280,
-      "impressions_30d": 517354,
-      "impressions_7d": 178665,
-      "ctr_30d": 0.008,
-      "ctr_7d": 0.0072,
-      "ctr_prior_7d": 0.0081,
-      "cpc_30d": 1677.0,
-      "cpc_7d": 1811.0,
-      "cpc_prior_7d": 1660.0,
+      "spend_30d": 7083331.0,
+      "spend_7d": 2361789.0,
+      "spend_prior_7d": 2084670.0,
+      "clicks_30d": 4235,
+      "clicks_7d": 1344,
+      "impressions_30d": 533522,
+      "impressions_7d": 182239,
+      "ctr_30d": 0.0079,
+      "ctr_7d": 0.0074,
+      "ctr_prior_7d": 0.0079,
+      "cpc_30d": 1673.0,
+      "cpc_7d": 1757.0,
+      "cpc_prior_7d": 1692.0,
       "active_days_30d": 27,
-      "avg_daily_spend_30d": 255404.0,
-      "spend_trend_pct": 29.1,
-      "ctr_trend_pct": -11.5,
-      "cpc_trend_pct": 9.1,
+      "avg_daily_spend_30d": 262346.0,
+      "spend_trend_pct": 13.3,
+      "ctr_trend_pct": -6.6,
+      "cpc_trend_pct": 3.9,
       "flags": []
     },
     "RMK - Camera mini": {
@@ -1161,24 +1161,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 2101437.0,
-      "spend_7d": 324089.0,
-      "spend_prior_7d": 895967.0,
-      "clicks_30d": 1026,
-      "clicks_7d": 178,
-      "impressions_30d": 148625,
-      "impressions_7d": 17318,
+      "spend_30d": 2213792.0,
+      "spend_7d": 376812.0,
+      "spend_prior_7d": 1016565.0,
+      "clicks_30d": 1090,
+      "clicks_7d": 185,
+      "impressions_30d": 157077,
+      "impressions_7d": 24658,
       "ctr_30d": 0.0069,
-      "ctr_7d": 0.0103,
-      "ctr_prior_7d": 0.0073,
-      "cpc_30d": 2048.0,
-      "cpc_7d": 1821.0,
-      "cpc_prior_7d": 2009.0,
+      "ctr_7d": 0.0075,
+      "ctr_prior_7d": 0.0078,
+      "cpc_30d": 2031.0,
+      "cpc_7d": 2037.0,
+      "cpc_prior_7d": 1911.0,
       "active_days_30d": 22,
-      "avg_daily_spend_30d": 95520.0,
-      "spend_trend_pct": -63.8,
-      "ctr_trend_pct": 40.2,
-      "cpc_trend_pct": -9.4,
+      "avg_daily_spend_30d": 100627.0,
+      "spend_trend_pct": -62.9,
+      "ctr_trend_pct": -3.8,
+      "cpc_trend_pct": 6.6,
       "flags": []
     },
     "RMK - Camera wifi": {
@@ -1186,50 +1186,48 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 356682.0,
+      "spend_30d": 338734.0,
       "spend_7d": 0.0,
       "spend_prior_7d": 3172.0,
-      "clicks_30d": 144,
+      "clicks_30d": 133,
       "clicks_7d": 0,
-      "impressions_30d": 28846,
+      "impressions_30d": 26066,
       "impressions_7d": 0,
-      "ctr_30d": 0.005,
+      "ctr_30d": 0.0051,
       "ctr_7d": 0,
       "ctr_prior_7d": 0.0092,
-      "cpc_30d": 2477.0,
+      "cpc_30d": 2547.0,
       "cpc_7d": 0,
       "cpc_prior_7d": 1057.0,
-      "active_days_30d": 10,
-      "avg_daily_spend_30d": 35668.0,
+      "active_days_30d": 9,
+      "avg_daily_spend_30d": 37637.0,
       "spend_trend_pct": -100.0,
       "ctr_trend_pct": -100.0,
       "cpc_trend_pct": -100.0,
-      "flags": [
-        "low_ctr"
-      ]
+      "flags": []
     },
     "8/5/2025 Search - TBĐV GPS": {
       "category": "DINH_VI",
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 12428433.0,
-      "spend_7d": 3438272.0,
-      "spend_prior_7d": 3198413.0,
-      "clicks_30d": 3379,
-      "clicks_7d": 931,
-      "impressions_30d": 26627,
-      "impressions_7d": 7101,
-      "ctr_30d": 0.1269,
-      "ctr_7d": 0.1311,
-      "ctr_prior_7d": 0.1349,
-      "cpc_30d": 3678.0,
-      "cpc_7d": 3693.0,
-      "cpc_prior_7d": 3519.0,
+      "spend_30d": 12428207.0,
+      "spend_7d": 3232041.0,
+      "spend_prior_7d": 3771417.0,
+      "clicks_30d": 3396,
+      "clicks_7d": 873,
+      "impressions_30d": 26549,
+      "impressions_7d": 6769,
+      "ctr_30d": 0.1279,
+      "ctr_7d": 0.129,
+      "ctr_prior_7d": 0.1351,
+      "cpc_30d": 3660.0,
+      "cpc_7d": 3702.0,
+      "cpc_prior_7d": 3525.0,
       "active_days_30d": 27,
-      "avg_daily_spend_30d": 460312.0,
-      "spend_trend_pct": 7.5,
-      "ctr_trend_pct": -2.8,
+      "avg_daily_spend_30d": 460304.0,
+      "spend_trend_pct": -14.3,
+      "ctr_trend_pct": -4.5,
       "cpc_trend_pct": 5.0,
       "flags": []
     },
@@ -1238,24 +1236,24 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 5020942.0,
-      "spend_7d": 625057.0,
-      "spend_prior_7d": 1920990.0,
-      "clicks_30d": 742,
-      "clicks_7d": 92,
-      "impressions_30d": 6811,
-      "impressions_7d": 868,
-      "ctr_30d": 0.1089,
-      "ctr_7d": 0.106,
-      "ctr_prior_7d": 0.1019,
-      "cpc_30d": 6767.0,
-      "cpc_7d": 6794.0,
-      "cpc_prior_7d": 6446.0,
+      "spend_30d": 5257052.0,
+      "spend_7d": 835973.0,
+      "spend_prior_7d": 2103724.0,
+      "clicks_30d": 787,
+      "clicks_7d": 135,
+      "impressions_30d": 7205,
+      "impressions_7d": 1218,
+      "ctr_30d": 0.1092,
+      "ctr_7d": 0.1108,
+      "ctr_prior_7d": 0.1023,
+      "cpc_30d": 6680.0,
+      "cpc_7d": 6192.0,
+      "cpc_prior_7d": 6513.0,
       "active_days_30d": 20,
-      "avg_daily_spend_30d": 251047.0,
-      "spend_trend_pct": -67.5,
-      "ctr_trend_pct": 4.0,
-      "cpc_trend_pct": 5.4,
+      "avg_daily_spend_30d": 262853.0,
+      "spend_trend_pct": -60.3,
+      "ctr_trend_pct": 8.3,
+      "cpc_trend_pct": -4.9,
       "flags": []
     },
     "8/5/2025 Search - Cam NLMT": {
@@ -1288,21 +1286,21 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 1994515.0,
+      "spend_30d": 1861660.0,
       "spend_7d": 0.0,
       "spend_prior_7d": 68843.0,
-      "clicks_30d": 336,
+      "clicks_30d": 322,
       "clicks_7d": 0,
-      "impressions_30d": 3164,
+      "impressions_30d": 3039,
       "impressions_7d": 0,
-      "ctr_30d": 0.1062,
+      "ctr_30d": 0.106,
       "ctr_7d": 0,
       "ctr_prior_7d": 0.0877,
-      "cpc_30d": 5936.0,
+      "cpc_30d": 5782.0,
       "cpc_7d": 0,
       "cpc_prior_7d": 6884.0,
-      "active_days_30d": 15,
-      "avg_daily_spend_30d": 132968.0,
+      "active_days_30d": 14,
+      "avg_daily_spend_30d": 132976.0,
       "spend_trend_pct": -100.0,
       "ctr_trend_pct": -100.0,
       "cpc_trend_pct": -100.0,
@@ -1313,24 +1311,24 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 5763327.0,
-      "spend_7d": 1408562.0,
-      "spend_prior_7d": 1868222.0,
-      "clicks_30d": 1031,
-      "clicks_7d": 292,
-      "impressions_30d": 7058,
-      "impressions_7d": 2297,
-      "ctr_30d": 0.1461,
-      "ctr_7d": 0.1271,
-      "ctr_prior_7d": 0.1368,
-      "cpc_30d": 5590.0,
-      "cpc_7d": 4824.0,
-      "cpc_prior_7d": 5399.0,
+      "spend_30d": 5851249.0,
+      "spend_7d": 1416652.0,
+      "spend_prior_7d": 2083513.0,
+      "clicks_30d": 1062,
+      "clicks_7d": 290,
+      "impressions_30d": 7217,
+      "impressions_7d": 2118,
+      "ctr_30d": 0.1472,
+      "ctr_7d": 0.1369,
+      "ctr_prior_7d": 0.1339,
+      "cpc_30d": 5510.0,
+      "cpc_7d": 4885.0,
+      "cpc_prior_7d": 5235.0,
       "active_days_30d": 27,
-      "avg_daily_spend_30d": 213457.0,
-      "spend_trend_pct": -24.6,
-      "ctr_trend_pct": -7.1,
-      "cpc_trend_pct": -10.7,
+      "avg_daily_spend_30d": 216713.0,
+      "spend_trend_pct": -32.0,
+      "ctr_trend_pct": 2.3,
+      "cpc_trend_pct": -6.7,
       "flags": []
     },
     "RMK - thiết bị ghi âm #2": {
@@ -1338,24 +1336,24 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 169681.0,
-      "spend_7d": 24714.0,
-      "spend_prior_7d": 57419.0,
+      "spend_30d": 167025.0,
+      "spend_7d": 22035.0,
+      "spend_prior_7d": 61454.0,
       "clicks_30d": 114,
-      "clicks_7d": 17,
-      "impressions_30d": 20183,
-      "impressions_7d": 6613,
-      "ctr_30d": 0.0056,
-      "ctr_7d": 0.0026,
-      "ctr_prior_7d": 0.0066,
-      "cpc_30d": 1488.0,
-      "cpc_7d": 1454.0,
-      "cpc_prior_7d": 1852.0,
+      "clicks_7d": 18,
+      "impressions_30d": 20633,
+      "impressions_7d": 6758,
+      "ctr_30d": 0.0055,
+      "ctr_7d": 0.0027,
+      "ctr_prior_7d": 0.0061,
+      "cpc_30d": 1465.0,
+      "cpc_7d": 1224.0,
+      "cpc_prior_7d": 1920.0,
       "active_days_30d": 26,
-      "avg_daily_spend_30d": 6526.0,
-      "spend_trend_pct": -57.0,
-      "ctr_trend_pct": -61.3,
-      "cpc_trend_pct": -21.5,
+      "avg_daily_spend_30d": 6424.0,
+      "spend_trend_pct": -64.1,
+      "ctr_trend_pct": -56.0,
+      "cpc_trend_pct": -36.3,
       "flags": []
     },
     "RMK - NLMT #2": {
@@ -1390,21 +1388,21 @@
       "channel": "SHOPPING",
       "ctr_low_threshold": 0.01,
       "ctr_critical_threshold": 0.005,
-      "spend_30d": 1170259.0,
+      "spend_30d": 986557.0,
       "spend_7d": 0.0,
       "spend_prior_7d": 0.0,
-      "clicks_30d": 384,
+      "clicks_30d": 325,
       "clicks_7d": 0,
-      "impressions_30d": 34922,
+      "impressions_30d": 29046,
       "impressions_7d": 0,
-      "ctr_30d": 0.011,
+      "ctr_30d": 0.0112,
       "ctr_7d": 0,
       "ctr_prior_7d": 0,
-      "cpc_30d": 3048.0,
+      "cpc_30d": 3036.0,
       "cpc_7d": 0,
       "cpc_prior_7d": 0,
-      "active_days_30d": 7,
-      "avg_daily_spend_30d": 167180.0,
+      "active_days_30d": 6,
+      "avg_daily_spend_30d": 164426.0,
       "spend_trend_pct": 0,
       "ctr_trend_pct": 0,
       "cpc_trend_pct": 0,
@@ -1415,21 +1413,21 @@
       "channel": "DISPLAY_RMK",
       "ctr_low_threshold": 0.005,
       "ctr_critical_threshold": 0.003,
-      "spend_30d": 368359.0,
-      "spend_7d": 115807.0,
+      "spend_30d": 468158.0,
+      "spend_7d": 245595.0,
       "spend_prior_7d": 0.0,
-      "clicks_30d": 169,
-      "clicks_7d": 56,
-      "impressions_30d": 18239,
-      "impressions_7d": 6989,
-      "ctr_30d": 0.0093,
-      "ctr_7d": 0.008,
+      "clicks_30d": 210,
+      "clicks_7d": 112,
+      "impressions_30d": 23055,
+      "impressions_7d": 13327,
+      "ctr_30d": 0.0091,
+      "ctr_7d": 0.0084,
       "ctr_prior_7d": 0,
-      "cpc_30d": 2180.0,
-      "cpc_7d": 2068.0,
+      "cpc_30d": 2229.0,
+      "cpc_7d": 2193.0,
       "cpc_prior_7d": 0,
       "active_days_30d": 7,
-      "avg_daily_spend_30d": 52623.0,
+      "avg_daily_spend_30d": 66880.0,
       "spend_trend_pct": 0,
       "ctr_trend_pct": 0,
       "cpc_trend_pct": 0,
@@ -1440,24 +1438,24 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 7051018.0,
-      "spend_7d": 798126.0,
-      "spend_prior_7d": 670602.0,
-      "clicks_30d": 902,
-      "clicks_7d": 211,
-      "impressions_30d": 4953,
-      "impressions_7d": 1299,
-      "ctr_30d": 0.1821,
-      "ctr_7d": 0.1624,
-      "ctr_prior_7d": 0.1608,
-      "cpc_30d": 7817.0,
-      "cpc_7d": 3783.0,
-      "cpc_prior_7d": 3789.0,
+      "spend_30d": 6657393.0,
+      "spend_7d": 789847.0,
+      "spend_prior_7d": 780373.0,
+      "clicks_30d": 882,
+      "clicks_7d": 207,
+      "impressions_30d": 4902,
+      "impressions_7d": 1286,
+      "ctr_30d": 0.1799,
+      "ctr_7d": 0.161,
+      "ctr_prior_7d": 0.1618,
+      "cpc_30d": 7548.0,
+      "cpc_7d": 3816.0,
+      "cpc_prior_7d": 3770.0,
       "active_days_30d": 26,
-      "avg_daily_spend_30d": 271193.0,
-      "spend_trend_pct": 19.0,
-      "ctr_trend_pct": 1.0,
-      "cpc_trend_pct": -0.2,
+      "avg_daily_spend_30d": 256054.0,
+      "spend_trend_pct": 1.2,
+      "ctr_trend_pct": -0.5,
+      "cpc_trend_pct": 1.2,
       "flags": []
     },
     "8/5/2025 Search - TB Ghi Âm": {
@@ -1465,24 +1463,24 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 10089897.0,
-      "spend_7d": 1829628.0,
-      "spend_prior_7d": 1554029.0,
-      "clicks_30d": 1431,
-      "clicks_7d": 299,
-      "impressions_30d": 10693,
-      "impressions_7d": 1722,
-      "ctr_30d": 0.1338,
-      "ctr_7d": 0.1736,
-      "ctr_prior_7d": 0.1847,
-      "cpc_30d": 7051.0,
-      "cpc_7d": 6119.0,
-      "cpc_prior_7d": 5713.0,
+      "spend_30d": 9777257.0,
+      "spend_7d": 1824748.0,
+      "spend_prior_7d": 1809432.0,
+      "clicks_30d": 1407,
+      "clicks_7d": 292,
+      "impressions_30d": 10210,
+      "impressions_7d": 1736,
+      "ctr_30d": 0.1378,
+      "ctr_7d": 0.1682,
+      "ctr_prior_7d": 0.1849,
+      "cpc_30d": 6949.0,
+      "cpc_7d": 6249.0,
+      "cpc_prior_7d": 5690.0,
       "active_days_30d": 26,
-      "avg_daily_spend_30d": 388073.0,
-      "spend_trend_pct": 17.7,
-      "ctr_trend_pct": -6.0,
-      "cpc_trend_pct": 7.1,
+      "avg_daily_spend_30d": 376048.0,
+      "spend_trend_pct": 0.8,
+      "ctr_trend_pct": -9.0,
+      "cpc_trend_pct": 9.8,
       "flags": []
     },
     "8/5/2025 Search - TB Chống Ghi Âm": {
@@ -1490,24 +1488,24 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 1223378.0,
-      "spend_7d": 424396.0,
-      "spend_prior_7d": 354787.0,
-      "clicks_30d": 349,
-      "clicks_7d": 124,
-      "impressions_30d": 2178,
-      "impressions_7d": 712,
-      "ctr_30d": 0.1602,
-      "ctr_7d": 0.1742,
-      "ctr_prior_7d": 0.1609,
-      "cpc_30d": 3505.0,
-      "cpc_7d": 3423.0,
-      "cpc_prior_7d": 3478.0,
+      "spend_30d": 1261737.0,
+      "spend_7d": 411618.0,
+      "spend_prior_7d": 413406.0,
+      "clicks_30d": 359,
+      "clicks_7d": 119,
+      "impressions_30d": 2210,
+      "impressions_7d": 682,
+      "ctr_30d": 0.1624,
+      "ctr_7d": 0.1745,
+      "ctr_prior_7d": 0.1619,
+      "cpc_30d": 3515.0,
+      "cpc_7d": 3459.0,
+      "cpc_prior_7d": 3474.0,
       "active_days_30d": 25,
-      "avg_daily_spend_30d": 48935.0,
-      "spend_trend_pct": 19.6,
-      "ctr_trend_pct": 8.3,
-      "cpc_trend_pct": -1.6,
+      "avg_daily_spend_30d": 50469.0,
+      "spend_trend_pct": -0.4,
+      "ctr_trend_pct": 7.8,
+      "cpc_trend_pct": -0.4,
       "flags": []
     },
     "2026 Shopping - Thiết Bị Chăm Sóc & Gia Dụng": {
@@ -1590,21 +1588,21 @@
       "channel": "SEARCH",
       "ctr_low_threshold": 0.05,
       "ctr_critical_threshold": 0.02,
-      "spend_30d": 481424.0,
+      "spend_30d": 387629.0,
       "spend_7d": 0.0,
       "spend_prior_7d": 0.0,
-      "clicks_30d": 98,
+      "clicks_30d": 79,
       "clicks_7d": 0,
-      "impressions_30d": 986,
+      "impressions_30d": 850,
       "impressions_7d": 0,
-      "ctr_30d": 0.0994,
+      "ctr_30d": 0.0929,
       "ctr_7d": 0,
       "ctr_prior_7d": 0,
-      "cpc_30d": 4912.0,
+      "cpc_30d": 4907.0,
       "cpc_7d": 0,
       "cpc_prior_7d": 0,
-      "active_days_30d": 3,
-      "avg_daily_spend_30d": 160475.0,
+      "active_days_30d": 2,
+      "avg_daily_spend_30d": 193814.0,
       "spend_trend_pct": 0,
       "ctr_trend_pct": 0,
       "cpc_trend_pct": 0,
@@ -1617,46 +1615,46 @@
         "campaign": "8/5/2025 Search - TBĐV GPS",
         "category": "DINH_VI",
         "channel": "SEARCH",
-        "spend_30d": 12428433.0,
-        "clicks_30d": 3379,
-        "ctr_30d": 0.1269,
-        "cpc_30d": 3678.0
+        "spend_30d": 12428207.0,
+        "clicks_30d": 3396,
+        "ctr_30d": 0.1279,
+        "cpc_30d": 3660.0
       },
       {
         "campaign": "8/5/2025 Search - TB Ghi Âm",
         "category": "GHI_AM",
         "channel": "SEARCH",
-        "spend_30d": 10089897.0,
-        "clicks_30d": 1431,
-        "ctr_30d": 0.1338,
-        "cpc_30d": 7051.0
-      },
-      {
-        "campaign": "8/5/2025 Search - TB Dò Nghe Lén",
-        "category": "MAY_DO",
-        "channel": "SEARCH",
-        "spend_30d": 7051018.0,
-        "clicks_30d": 902,
-        "ctr_30d": 0.1821,
-        "cpc_30d": 7817.0
+        "spend_30d": 9777257.0,
+        "clicks_30d": 1407,
+        "ctr_30d": 0.1378,
+        "cpc_30d": 6949.0
       },
       {
         "campaign": "RMK - Máy dò - 2024 - nmt",
         "category": "MAY_DO",
         "channel": "DISPLAY_RMK",
-        "spend_30d": 6895918.0,
-        "clicks_30d": 4113,
-        "ctr_30d": 0.008,
-        "cpc_30d": 1677.0
+        "spend_30d": 7083331.0,
+        "clicks_30d": 4235,
+        "ctr_30d": 0.0079,
+        "cpc_30d": 1673.0
+      },
+      {
+        "campaign": "8/5/2025 Search - TB Dò Nghe Lén",
+        "category": "MAY_DO",
+        "channel": "SEARCH",
+        "spend_30d": 6657393.0,
+        "clicks_30d": 882,
+        "ctr_30d": 0.1799,
+        "cpc_30d": 7548.0
       },
       {
         "campaign": "8/5/2025 Search - Sim 4G",
         "category": "CAMERA_4G",
         "channel": "SEARCH",
-        "spend_30d": 5763327.0,
-        "clicks_30d": 1031,
-        "ctr_30d": 0.1461,
-        "cpc_30d": 5590.0
+        "spend_30d": 5851249.0,
+        "clicks_30d": 1062,
+        "ctr_30d": 0.1472,
+        "cpc_30d": 5510.0
       }
     ],
     "low_ctr_campaigns": [
@@ -1673,20 +1671,6 @@
         "flags": [
           "low_ctr"
         ]
-      },
-      {
-        "campaign": "RMK - Camera wifi",
-        "category": "CAMERA_WIFI",
-        "channel": "DISPLAY_RMK",
-        "spend_30d": 356682.0,
-        "impressions_30d": 28846,
-        "clicks_30d": 144,
-        "ctr_30d": 0.005,
-        "ctr_low_threshold": 0.005,
-        "ctr_critical_threshold": 0.003,
-        "flags": [
-          "low_ctr"
-        ]
       }
     ],
     "spend_no_clicks_campaigns": [],
@@ -1696,25 +1680,17 @@
         "campaign": "RMK - Camera 4G",
         "category": "CAMERA_4G",
         "channel": "DISPLAY_RMK",
-        "spend_7d": 1706362.0,
-        "spend_prior_7d": 730380.0,
-        "spend_trend_pct": 133.6
+        "spend_7d": 1713529.0,
+        "spend_prior_7d": 903051.0,
+        "spend_trend_pct": 89.7
       },
       {
         "campaign": "RMK - chống ghi âm",
         "category": "CHONG_GHI_AM",
         "channel": "DISPLAY_RMK",
-        "spend_7d": 887253.0,
-        "spend_prior_7d": 487985.0,
-        "spend_trend_pct": 81.8
-      },
-      {
-        "campaign": "RMK - Máy dò - 2024 - nmt",
-        "category": "MAY_DO",
-        "channel": "DISPLAY_RMK",
-        "spend_7d": 2317441.0,
-        "spend_prior_7d": 1794640.0,
-        "spend_trend_pct": 29.1
+        "spend_7d": 945329.0,
+        "spend_prior_7d": 541519.0,
+        "spend_trend_pct": 74.6
       }
     ],
     "trending_down_spend_7d": [
@@ -1751,12 +1727,12 @@
         "spend_trend_pct": -100.0
       },
       {
-        "campaign": "8/5/2025 Search - Cam mini",
-        "category": "CAMERA_WIFI",
-        "channel": "SEARCH",
-        "spend_7d": 625057.0,
-        "spend_prior_7d": 1920990.0,
-        "spend_trend_pct": -67.5
+        "campaign": "RMK - thiết bị ghi âm #2",
+        "category": "GHI_AM",
+        "channel": "DISPLAY_RMK",
+        "spend_7d": 22035.0,
+        "spend_prior_7d": 61454.0,
+        "spend_trend_pct": -64.1
       }
     ]
   },
@@ -1778,10 +1754,10 @@
   },
   "search_term_insights": {
     "summary": {
-      "total_unique_terms": 8455,
-      "terms_with_conversions": 50,
+      "total_unique_terms": 8068,
+      "terms_with_conversions": 46,
       "conv_rate_terms": 0.006,
-      "total_spend_30d": 26495059.0
+      "total_spend_30d": 25993282.0
     },
     "top_converting_terms": [
       {
@@ -1789,7 +1765,7 @@
         "spend_30d": 63706.0,
         "clicks_30d": 11,
         "conversions_30d": 2.67,
-        "ctr_30d": 0.6111,
+        "ctr_30d": 0.5789,
         "match_types": [
           "BROAD"
         ],
@@ -1799,10 +1775,10 @@
       },
       {
         "search_term": "thiết bị định vị",
-        "spend_30d": 548146.0,
-        "clicks_30d": 127,
+        "spend_30d": 558253.0,
+        "clicks_30d": 130,
         "conversions_30d": 2.0,
-        "ctr_30d": 0.0924,
+        "ctr_30d": 0.101,
         "match_types": [
           "EXACT"
         ],
@@ -1812,27 +1788,27 @@
         ]
       },
       {
-        "search_term": "doscom",
-        "spend_30d": 83535.0,
-        "clicks_30d": 55,
+        "search_term": "camera",
+        "spend_30d": 1546575.0,
+        "clicks_30d": 154,
         "conversions_30d": 2.0,
-        "ctr_30d": 0.2412,
+        "ctr_30d": 0.0672,
         "match_types": [
-          "BROAD",
-          "EXACT"
+          "BROAD"
         ],
         "statuses": [
           "NONE"
         ]
       },
       {
-        "search_term": "camera",
-        "spend_30d": 1529854.0,
-        "clicks_30d": 149,
+        "search_term": "doscom",
+        "spend_30d": 65270.0,
+        "clicks_30d": 58,
         "conversions_30d": 2.0,
-        "ctr_30d": 0.0684,
+        "ctr_30d": 0.2736,
         "match_types": [
-          "BROAD"
+          "BROAD",
+          "EXACT"
         ],
         "statuses": [
           "NONE"
@@ -1853,10 +1829,10 @@
       },
       {
         "search_term": "định vị ô tô loại nào tốt",
-        "spend_30d": 15383.0,
-        "clicks_30d": 5,
+        "spend_30d": 12198.0,
+        "clicks_30d": 4,
         "conversions_30d": 1.2,
-        "ctr_30d": 0.1562,
+        "ctr_30d": 0.1905,
         "match_types": [
           "BROAD",
           "EXACT",
@@ -1867,41 +1843,39 @@
         ]
       },
       {
-        "search_term": "mua thiết bị định vị ở đâu",
-        "spend_30d": 25792.0,
-        "clicks_30d": 7,
+        "search_term": "máy dò thiết bị nghe lén",
+        "spend_30d": 23872.0,
+        "clicks_30d": 4,
         "conversions_30d": 1.0,
-        "ctr_30d": 0.1842,
-        "match_types": [
-          "BROAD",
-          "EXACT",
-          "NEAR_PHRASE",
-          "PHRASE"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "máy chống ghi âm",
-        "spend_30d": 92169.0,
-        "clicks_30d": 35,
-        "conversions_30d": 1.0,
-        "ctr_30d": 0.2482,
+        "ctr_30d": 0.1818,
         "match_types": [
           "EXACT"
         ],
         "statuses": [
-          "ADDED",
+          "ADDED"
+        ]
+      },
+      {
+        "search_term": "thiết bị định vị cúc áo",
+        "spend_30d": 35791.0,
+        "clicks_30d": 8,
+        "conversions_30d": 1.0,
+        "ctr_30d": 0.0672,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "PHRASE"
+        ],
+        "statuses": [
           "NONE"
         ]
       },
       {
-        "search_term": "máy ghi âm philips",
-        "spend_30d": 102133.0,
-        "clicks_30d": 20,
+        "search_term": "thiết bị định vị gắn xe máy",
+        "spend_30d": 6463.0,
+        "clicks_30d": 3,
         "conversions_30d": 1.0,
-        "ctr_30d": 0.1942,
+        "ctr_30d": 0.1071,
         "match_types": [
           "EXACT",
           "PHRASE"
@@ -1911,15 +1885,14 @@
         ]
       },
       {
-        "search_term": "máy định vị mini",
-        "spend_30d": 59385.0,
-        "clicks_30d": 17,
+        "search_term": "thiết bị định vị xe máy qua điện thoại",
+        "spend_30d": 121636.0,
+        "clicks_30d": 38,
         "conversions_30d": 1.0,
-        "ctr_30d": 0.1339,
+        "ctr_30d": 0.1008,
         "match_types": [
-          "BROAD",
           "EXACT",
-          "NEAR_PHRASE"
+          "PHRASE"
         ],
         "statuses": [
           "NONE"
@@ -1929,10 +1902,10 @@
     "top_waste_terms": [
       {
         "search_term": "thiết bị định vị xe máy",
-        "spend_30d": 396682.0,
-        "clicks_30d": 109,
+        "spend_30d": 398814.0,
+        "clicks_30d": 111,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1128,
+        "ctr_30d": 0.1194,
         "match_types": [
           "EXACT"
         ],
@@ -1950,7 +1923,7 @@
         "spend_30d": 277217.0,
         "clicks_30d": 58,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1286,
+        "ctr_30d": 0.125,
         "match_types": [
           "BROAD",
           "EXACT"
@@ -1967,10 +1940,10 @@
       },
       {
         "search_term": "định vị xe",
-        "spend_30d": 261140.0,
-        "clicks_30d": 68,
+        "spend_30d": 267393.0,
+        "clicks_30d": 69,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1073,
+        "ctr_30d": 0.1122,
         "match_types": [
           "BROAD",
           "EXACT",
@@ -1986,10 +1959,10 @@
       },
       {
         "search_term": "máy dò định vị trên xe ô tô",
-        "spend_30d": 190057.0,
-        "clicks_30d": 24,
+        "spend_30d": 194037.0,
+        "clicks_30d": 25,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.2286,
+        "ctr_30d": 0.2427,
         "match_types": [
           "EXACT",
           "NEAR_PHRASE",
@@ -2006,10 +1979,10 @@
       },
       {
         "search_term": "camera mini",
-        "spend_30d": 186773.0,
-        "clicks_30d": 33,
+        "spend_30d": 188168.0,
+        "clicks_30d": 34,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1352,
+        "ctr_30d": 0.1333,
         "match_types": [
           "BROAD",
           "EXACT"
@@ -2026,29 +1999,11 @@
         ]
       },
       {
-        "search_term": "ghi âm",
-        "spend_30d": 163478.0,
-        "clicks_30d": 29,
-        "conversions_30d": 0.0,
-        "ctr_30d": 0.0262,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
         "search_term": "thiết bị định vị mini",
-        "spend_30d": 162289.0,
-        "clicks_30d": 35,
+        "spend_30d": 168997.0,
+        "clicks_30d": 37,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1195,
+        "ctr_30d": 0.1285,
         "match_types": [
           "EXACT"
         ],
@@ -2062,31 +2017,32 @@
         ]
       },
       {
-        "search_term": "máy ghi âm nhỏ",
-        "spend_30d": 155647.0,
-        "clicks_30d": 17,
+        "search_term": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+        "spend_30d": 160850.0,
+        "clicks_30d": 46,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1223,
+        "ctr_30d": 0.1159,
         "match_types": [
+          "BROAD",
           "EXACT",
           "NEAR_PHRASE",
           "PHRASE"
         ],
         "statuses": [
-          "ADDED",
           "NONE"
         ],
         "campaigns": [
-          "8/5/2025 Search - TB Ghi Âm",
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "8/5/2025 Search - TBĐV GPS",
           "Shopping - 6/6 - ĐV"
         ]
       },
       {
         "search_term": "camera không dây",
-        "spend_30d": 144995.0,
+        "spend_30d": 147577.0,
         "clicks_30d": 31,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1265,
+        "ctr_30d": 0.127,
         "match_types": [
           "BROAD",
           "NEAR_EXACT",
@@ -2103,11 +2059,86 @@
         ]
       },
       {
-        "search_term": "thiết bị định vị theo dõi người",
-        "spend_30d": 143889.0,
-        "clicks_30d": 50,
+        "search_term": "ghi âm",
+        "spend_30d": 143959.0,
+        "clicks_30d": 26,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.125,
+        "ctr_30d": 0.0279,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy ghi âm nhỏ",
+        "spend_30d": 139663.0,
+        "clicks_30d": 15,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.1282,
+        "match_types": [
+          "EXACT",
+          "NEAR_PHRASE",
+          "PHRASE"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy dò camera",
+        "spend_30d": 137557.0,
+        "clicks_30d": 18,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.1636,
+        "match_types": [
+          "EXACT",
+          "PHRASE"
+        ],
+        "statuses": [
+          "ADDED",
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy phá sóng ghi âm",
+        "spend_30d": 137211.0,
+        "clicks_30d": 41,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.1775,
+        "match_types": [
+          "BROAD",
+          "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "thiết bị định vị theo dõi người",
+        "spend_30d": 136674.0,
+        "clicks_30d": 48,
+        "conversions_30d": 0.0,
+        "ctr_30d": 0.1253,
         "match_types": [
           "BROAD",
           "EXACT",
@@ -2124,10 +2155,10 @@
       },
       {
         "search_term": "máy cạo râu",
-        "spend_30d": 140884.0,
-        "clicks_30d": 35,
+        "spend_30d": 126177.0,
+        "clicks_30d": 31,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.0462,
+        "ctr_30d": 0.0502,
         "match_types": [
           "EXACT"
         ],
@@ -2141,78 +2172,22 @@
         ]
       },
       {
-        "search_term": "máy dò camera",
-        "spend_30d": 137557.0,
-        "clicks_30d": 18,
+        "search_term": "máy nghe lén",
+        "spend_30d": 118073.0,
+        "clicks_30d": 25,
         "conversions_30d": 0.0,
-        "ctr_30d": 0.1607,
+        "ctr_30d": 0.0996,
         "match_types": [
+          "BROAD",
           "EXACT",
-          "PHRASE"
+          "NEAR_PHRASE"
         ],
         "statuses": [
-          "ADDED",
           "NONE"
         ],
         "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
           "8/5/2025 Search - TB Dò Nghe Lén",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "định vị",
-        "spend_30d": 135221.0,
-        "clicks_30d": 26,
-        "conversions_30d": 0.0,
-        "ctr_30d": 0.0224,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TBĐV GPS",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "máy phá sóng ghi âm",
-        "spend_30d": 133383.0,
-        "clicks_30d": 40,
-        "conversions_30d": 0.0,
-        "ctr_30d": 0.1681,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "máy ghi âm giấu kín",
-        "spend_30d": 121897.0,
-        "clicks_30d": 18,
-        "conversions_30d": 0.0,
-        "ctr_30d": 0.1208,
-        "match_types": [
-          "BROAD",
-          "EXACT",
-          "NEAR_PHRASE",
-          "PHRASE"
-        ],
-        "statuses": [
-          "ADDED",
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
           "8/5/2025 Search - TB Ghi Âm",
           "Shopping - 6/6 - ĐV"
         ]
@@ -2221,8 +2196,8 @@
     "negative_keyword_gap": [
       {
         "search_term": "thiết bị định vị xe máy",
-        "spend_30d": 396682.0,
-        "clicks_30d": 109,
+        "spend_30d": 398814.0,
+        "clicks_30d": 111,
         "conversions_30d": 0.0,
         "match_types": [
           "EXACT"
@@ -2257,8 +2232,8 @@
       },
       {
         "search_term": "định vị xe",
-        "spend_30d": 261140.0,
-        "clicks_30d": 68,
+        "spend_30d": 267393.0,
+        "clicks_30d": 69,
         "conversions_30d": 0.0,
         "match_types": [
           "BROAD",
@@ -2275,8 +2250,8 @@
       },
       {
         "search_term": "máy dò định vị trên xe ô tô",
-        "spend_30d": 190057.0,
-        "clicks_30d": 24,
+        "spend_30d": 194037.0,
+        "clicks_30d": 25,
         "conversions_30d": 0.0,
         "match_types": [
           "EXACT",
@@ -2294,8 +2269,8 @@
       },
       {
         "search_term": "camera mini",
-        "spend_30d": 186773.0,
-        "clicks_30d": 33,
+        "spend_30d": 188168.0,
+        "clicks_30d": 34,
         "conversions_30d": 0.0,
         "match_types": [
           "BROAD",
@@ -2313,26 +2288,9 @@
         ]
       },
       {
-        "search_term": "ghi âm",
-        "spend_30d": 163478.0,
-        "clicks_30d": 29,
-        "conversions_30d": 0.0,
-        "match_types": [
-          "BROAD",
-          "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
         "search_term": "thiết bị định vị mini",
-        "spend_30d": 162289.0,
-        "clicks_30d": 35,
+        "spend_30d": 168997.0,
+        "clicks_30d": 37,
         "conversions_30d": 0.0,
         "match_types": [
           "EXACT"
@@ -2347,27 +2305,28 @@
         ]
       },
       {
-        "search_term": "máy ghi âm nhỏ",
-        "spend_30d": 155647.0,
-        "clicks_30d": 17,
+        "search_term": "thiết bị định vị siêu nhỏ gắn vào điện thoại",
+        "spend_30d": 160850.0,
+        "clicks_30d": 46,
         "conversions_30d": 0.0,
         "match_types": [
+          "BROAD",
           "EXACT",
           "NEAR_PHRASE",
           "PHRASE"
         ],
         "statuses": [
-          "ADDED",
           "NONE"
         ],
         "campaigns": [
-          "8/5/2025 Search - TB Ghi Âm",
+          "8/5/2025 Search - TB Dò Nghe Lén",
+          "8/5/2025 Search - TBĐV GPS",
           "Shopping - 6/6 - ĐV"
         ]
       },
       {
         "search_term": "camera không dây",
-        "spend_30d": 144995.0,
+        "spend_30d": 147577.0,
         "clicks_30d": 31,
         "conversions_30d": 0.0,
         "match_types": [
@@ -2386,38 +2345,38 @@
         ]
       },
       {
-        "search_term": "thiết bị định vị theo dõi người",
-        "spend_30d": 143889.0,
-        "clicks_30d": 50,
+        "search_term": "ghi âm",
+        "spend_30d": 143959.0,
+        "clicks_30d": 26,
         "conversions_30d": 0.0,
         "match_types": [
           "BROAD",
-          "EXACT",
-          "NEAR_PHRASE",
-          "PHRASE"
+          "EXACT"
         ],
         "statuses": [
           "NONE"
         ],
         "campaigns": [
-          "8/5/2025 Search - TBĐV GPS",
+          "8/5/2025 Search - TB Ghi Âm",
           "Shopping - 6/6 - ĐV"
         ]
       },
       {
-        "search_term": "máy cạo râu",
-        "spend_30d": 140884.0,
-        "clicks_30d": 35,
+        "search_term": "máy ghi âm nhỏ",
+        "spend_30d": 139663.0,
+        "clicks_30d": 15,
         "conversions_30d": 0.0,
         "match_types": [
-          "EXACT"
+          "EXACT",
+          "NEAR_PHRASE",
+          "PHRASE"
         ],
         "statuses": [
           "ADDED",
           "NONE"
         ],
         "campaigns": [
-          "7/3/26 Search - Máy Cạo Râu",
+          "8/5/2025 Search - TB Ghi Âm",
           "Shopping - 6/6 - ĐV"
         ]
       },
@@ -2440,13 +2399,32 @@
         ]
       },
       {
-        "search_term": "định vị",
-        "spend_30d": 135221.0,
-        "clicks_30d": 26,
+        "search_term": "máy phá sóng ghi âm",
+        "spend_30d": 137211.0,
+        "clicks_30d": 41,
         "conversions_30d": 0.0,
         "match_types": [
           "BROAD",
           "EXACT"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
+          "8/5/2025 Search - TB Chống Ghi Âm",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "thiết bị định vị theo dõi người",
+        "spend_30d": 136674.0,
+        "clicks_30d": 48,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "NEAR_PHRASE",
+          "PHRASE"
         ],
         "statuses": [
           "NONE"
@@ -2457,39 +2435,38 @@
         ]
       },
       {
-        "search_term": "máy phá sóng ghi âm",
-        "spend_30d": 133383.0,
-        "clicks_30d": 40,
+        "search_term": "máy cạo râu",
+        "spend_30d": 126177.0,
+        "clicks_30d": 31,
         "conversions_30d": 0.0,
         "match_types": [
-          "BROAD",
           "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ],
-        "campaigns": [
-          "8/5/2025 Search - TB Chống Ghi Âm",
-          "Shopping - 6/6 - ĐV"
-        ]
-      },
-      {
-        "search_term": "máy ghi âm giấu kín",
-        "spend_30d": 121897.0,
-        "clicks_30d": 18,
-        "conversions_30d": 0.0,
-        "match_types": [
-          "BROAD",
-          "EXACT",
-          "NEAR_PHRASE",
-          "PHRASE"
         ],
         "statuses": [
           "ADDED",
           "NONE"
         ],
         "campaigns": [
+          "7/3/26 Search - Máy Cạo Râu",
+          "Shopping - 6/6 - ĐV"
+        ]
+      },
+      {
+        "search_term": "máy nghe lén",
+        "spend_30d": 118073.0,
+        "clicks_30d": 25,
+        "conversions_30d": 0.0,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "NEAR_PHRASE"
+        ],
+        "statuses": [
+          "NONE"
+        ],
+        "campaigns": [
           "8/5/2025 Search - TB Chống Ghi Âm",
+          "8/5/2025 Search - TB Dò Nghe Lén",
           "8/5/2025 Search - TB Ghi Âm",
           "Shopping - 6/6 - ĐV"
         ]
@@ -2497,31 +2474,31 @@
     ],
     "match_type_breakdown": {
       "EXACT": {
-        "spend_30d": 15425445.0,
-        "clicks_30d": 3407,
-        "conversions_30d": 30.1,
-        "term_count": 4124
-      },
-      "NEAR_PHRASE": {
-        "spend_30d": 10089174.0,
-        "clicks_30d": 2345,
-        "conversions_30d": 13.03,
-        "term_count": 1932
-      },
-      "PHRASE": {
-        "spend_30d": 8312156.0,
-        "clicks_30d": 1599,
-        "conversions_30d": 14.07,
-        "term_count": 1102
+        "spend_30d": 14381200.0,
+        "clicks_30d": 3261,
+        "conversions_30d": 26.1,
+        "term_count": 3672
       },
       "BROAD": {
-        "spend_30d": 16244836.0,
-        "clicks_30d": 2984,
-        "conversions_30d": 36.08,
-        "term_count": 3388
+        "spend_30d": 15879650.0,
+        "clicks_30d": 2942,
+        "conversions_30d": 33.08,
+        "term_count": 3292
+      },
+      "NEAR_PHRASE": {
+        "spend_30d": 9930063.0,
+        "clicks_30d": 2326,
+        "conversions_30d": 11.03,
+        "term_count": 1929
+      },
+      "PHRASE": {
+        "spend_30d": 8165731.0,
+        "clicks_30d": 1608,
+        "conversions_30d": 12.07,
+        "term_count": 1094
       },
       "NEAR_EXACT": {
-        "spend_30d": 144995.0,
+        "spend_30d": 147577.0,
         "clicks_30d": 31,
         "conversions_30d": 0.0,
         "term_count": 3
@@ -2531,15 +2508,15 @@
   "placement_insights": {
     "summary": {
       "total_unique_placements": 19650,
-      "total_spend_30d": 22773144.0
+      "total_spend_30d": 22762704.0
     },
     "network_breakdown": {
       "CONTENT": {
-        "spend_30d": 22773976.0,
-        "clicks_30d": 13756,
-        "impressions_30d": 1124901,
+        "spend_30d": 22763536.0,
+        "clicks_30d": 13751,
+        "impressions_30d": 1124894,
         "ctr_30d": 0.0122,
-        "cpc_30d": 1656.0,
+        "cpc_30d": 1655.0,
         "campaign_count": 9
       },
       "SEARCH": {
@@ -2553,9 +2530,9 @@
     },
     "placement_type_breakdown": {
       "WEBSITE": {
-        "spend_30d": 22773144.0,
-        "clicks_30d": 13755,
-        "impressions_30d": 1085550,
+        "spend_30d": 22762704.0,
+        "clicks_30d": 13750,
+        "impressions_30d": 1085586,
         "ctr_30d": 0.0127,
         "placement_count": 19650
       }
