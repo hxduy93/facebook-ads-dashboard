@@ -545,6 +545,10 @@ def build_data():
             s = unicodedata.normalize("NFD", s)
             s = "".join(ch for ch in s if unicodedata.category(ch) != "Mn")
             s = s.lower()
+            # Đ/đ là single letter Latin với stroke embedded — NFD KHÔNG decompose
+            # thành d + combining, nên phải replace thủ công sau lowercase.
+            # Bug từng làm "Cụ Đoành" → "cuoanh" (mất chữ d) → không match utm "cudoanh"
+            s = s.replace("đ", "d")
             # bỏ tất cả ký tự không phải [a-z0-9/] — bao gồm space, dash, dot
             s = _re.sub(r"[^a-z0-9/]+", "", s)
             return s
