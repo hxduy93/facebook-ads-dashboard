@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-19 11:39",
+  "generated_at": "2026-05-19 15:21",
   "source_data_date_range": {
     "start_7d": "2026-05-12",
     "end": "2026-05-18",
@@ -60,8 +60,8 @@
     "orders_30d": 93,
     "by_status": {
       "delivered": {
-        "revenue": 143383500.0,
-        "orders": 71
+        "revenue": 145521500.0,
+        "orders": 73
       },
       "returning": {
         "revenue": 2399000.0,
@@ -76,8 +76,8 @@
         "orders": 3
       },
       "other": {
-        "revenue": 38316500.0,
-        "orders": 13
+        "revenue": 36178500.0,
+        "orders": 11
       }
     },
     "by_source": {
@@ -1755,7 +1755,7 @@
   "search_term_insights": {
     "summary": {
       "total_unique_terms": 8123,
-      "terms_with_conversions": 48,
+      "terms_with_conversions": 49,
       "conv_rate_terms": 0.006,
       "total_spend_30d": 26752496.0
     },
@@ -1871,6 +1871,21 @@
         ]
       },
       {
+        "search_term": "bút ghi âm điện máy xanh",
+        "spend_30d": 42114.0,
+        "clicks_30d": 10,
+        "conversions_30d": 1.0,
+        "ctr_30d": 0.3571,
+        "match_types": [
+          "BROAD",
+          "EXACT",
+          "NEAR_PHRASE"
+        ],
+        "statuses": [
+          "NONE"
+        ]
+      },
+      {
         "search_term": "camera doscom",
         "spend_30d": 170892.0,
         "clicks_30d": 23,
@@ -1879,19 +1894,6 @@
         "match_types": [
           "BROAD",
           "EXACT"
-        ],
-        "statuses": [
-          "NONE"
-        ]
-      },
-      {
-        "search_term": "camera nhà dân",
-        "spend_30d": 14756.0,
-        "clicks_30d": 2,
-        "conversions_30d": 1.0,
-        "ctr_30d": 2.0,
-        "match_types": [
-          "BROAD"
         ],
         "statuses": [
           "NONE"
@@ -2477,19 +2479,19 @@
       "EXACT": {
         "spend_30d": 14695645.0,
         "clicks_30d": 3332,
-        "conversions_30d": 27.1,
+        "conversions_30d": 28.1,
         "term_count": 3643
       },
       "NEAR_PHRASE": {
         "spend_30d": 10391802.0,
         "clicks_30d": 2417,
-        "conversions_30d": 12.03,
+        "conversions_30d": 13.03,
         "term_count": 1964
       },
       "BROAD": {
         "spend_30d": 16410578.0,
         "clicks_30d": 3038,
-        "conversions_30d": 34.08,
+        "conversions_30d": 35.08,
         "term_count": 3333
       },
       "PHRASE": {
@@ -2747,28 +2749,28 @@
   "ad_insights": {
     "summary": {
       "total_ads": 161,
-      "total_spend_30d": 70421480.0
+      "total_spend_30d": 72740559.0
     },
     "format_breakdown": {
       "DISPLAY_BANNER": {
-        "spend_30d": 2544674.0,
-        "clicks_30d": 1636,
-        "impressions_30d": 192519,
+        "spend_30d": 2643469.0,
+        "clicks_30d": 1716,
+        "impressions_30d": 202119,
         "ctr_30d": 0.0085,
         "ad_count": 10
       },
       "OTHER": {
-        "spend_30d": 66883051.0,
-        "clicks_30d": 20932,
-        "impressions_30d": 1588788,
-        "ctr_30d": 0.0132,
+        "spend_30d": 69120131.0,
+        "clicks_30d": 21711,
+        "impressions_30d": 1665708,
+        "ctr_30d": 0.013,
         "ad_count": 150
       },
       "RSA": {
-        "spend_30d": 993755.0,
-        "clicks_30d": 327,
-        "impressions_30d": 29043,
-        "ctr_30d": 0.0113,
+        "spend_30d": 976959.0,
+        "clicks_30d": 319,
+        "impressions_30d": 28524,
+        "ctr_30d": 0.0112,
         "ad_count": 1
       }
     },
@@ -2779,8 +2781,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x250.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 1091121.0,
-        "clicks_30d": 1009,
+        "spend_30d": 1165335.0,
+        "clicks_30d": 1075,
         "ctr_30d": 0.01
       },
       {
@@ -2789,9 +2791,9 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "300x600.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 881148.0,
-        "clicks_30d": 401,
-        "ctr_30d": 0.0091
+        "spend_30d": 896445.0,
+        "clicks_30d": 412,
+        "ctr_30d": 0.0089
       },
       {
         "ad_id": "751153590183",
@@ -2819,8 +2821,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "320x50.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 117787.0,
-        "clicks_30d": 41,
+        "spend_30d": 121231.0,
+        "clicks_30d": 42,
         "ctr_30d": 0.0035
       },
       {
@@ -2829,8 +2831,8 @@
         "ad_group_name": "Ad group 1",
         "ad_name": "728x90.gif",
         "ad_format": "DISPLAY_BANNER",
-        "spend_30d": 108711.0,
-        "clicks_30d": 50,
+        "spend_30d": 114551.0,
+        "clicks_30d": 52,
         "ctr_30d": 0.0052
       },
       {
@@ -2861,7 +2863,7 @@
         "ad_format": "DISPLAY_BANNER",
         "spend_30d": 7173.0,
         "clicks_30d": 2,
-        "ctr_30d": 0.0031
+        "ctr_30d": 0.0029
       },
       {
         "ad_id": "751153590180",
